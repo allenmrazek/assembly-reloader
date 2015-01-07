@@ -8,22 +8,21 @@ using Mono.Cecil.Metadata;
 using ReeperCommon.Extensions;
 using ReeperCommon.FileSystem;
 using ReeperCommon.FileSystem.Implementations;
-using ReeperCommon.Log.Implementations;
+using ReeperCommon.Logging;
 using UnityEngine;
 using Mono.Cecil;
-using ReeperCommon.Log;
 
 namespace AssemblyReloader
 {
 
-    [KSPAddon(KSPAddon.Startup.Instantly, true)]
-    public class AssemblyReloader : MonoBehaviour
+    //[KSPAddon(KSPAddon.Startup.Instantly, true)]
+    public class AssemblyReloaderOld : MonoBehaviour
     {
         private static Assembly MyResolveEventHandler(object sender, ResolveEventArgs args)
         {
             print("MyResolveeventHandler called");
 
-            return typeof(AssemblyReloader).Assembly;
+            return typeof(AssemblyReloaderOld).Assembly;
         }
 
         System.Collections.IEnumerator Start()
@@ -149,32 +148,36 @@ namespace AssemblyReloader
             //var nameDef = new AssemblyNameDefinition("Constructed", new Version("0.1.2"));
 
 
-            foreach (TypeDefinition srcType in source.MainModule.Types)
-            {
-                if (srcType.Name == "<Module>") continue;
+            //foreach (TypeDefinition srcType in source.MainModule.Types)
+            //{
+            //    if (srcType.Name == "<Module>") continue;
 
-                srcType.Namespace = "Modded." + srcType.Namespace;
-            }
+            //    srcType.Namespace = "Modded." + srcType.Namespace;
+            //}
 
 
-            //Required to update the constructor arguments
-            foreach (var item in source.MainModule.Types)
-            {
-                foreach (var attr in item.CustomAttributes)
-                {
-                    if (attr.HasConstructorArguments)
-                    {
-                        if (attr.ConstructorArguments.Any(a => a.Type.Name == "Type"))
-                        {
+            ////Required to update the constructor arguments
+            //foreach (var item in source.MainModule.Types)
+            //{
+            //    foreach (var attr in item.CustomAttributes)
+            //    {
+            //        if (attr.HasConstructorArguments)
+            //        {
+            //            if (attr.ConstructorArguments.Any(a => a.Type.Name == "Type"))
+            //            {
 
-                        }
+            //            }
 
-                    }
-                }
-            }
+            //        }
+            //    }
+            //}
 
 
             source.Name.Name = "Modded." + source.Name.Name;
+
+            var id = new AddonTypeIdentifier();
+            
+            //id.IdentifyAssembly(log, source);
 
             source.Write(file.FullPath + ".edit");
 

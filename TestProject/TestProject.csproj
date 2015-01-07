@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="SecondClass.cs" />
+    <Compile Include="SubclassOfSubclassMB.cs" />
     <Compile Include="TestReloadProject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

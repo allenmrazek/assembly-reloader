@@ -52,8 +52,22 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AssemblyReloader.cs" />
+    <Compile Include="AddonTracking\ReloadableContainer.cs" />
+    <Compile Include="AddonTracking\AddonInfo.cs" />
+    <Compile Include="Factory\LoaderFactory.cs" />
+    <Compile Include="Loaders\ILoader.cs" />
+    <Compile Include="Mothballed\AssemblyReloaderUnused.cs" />
+    <Compile Include="ILModifications\ModifyPluginIdentity.cs" />
+    <Compile Include="Loaders\KspAddonLoader.cs" />
+    <Compile Include="Mothballed\AssemblyReloaderOld.cs" />
+    <Compile Include="Mothballed\AddonTypeIdentifier.cs" />
+    <Compile Include="MonoBehaviours\Core.cs" />
+    <Compile Include="AddonTracking\ReloadableAssembly.cs" />
+    <Compile Include="GUI\ViewLogic.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Providers\KspAddonProvider.cs" />
+    <Compile Include="Providers\KspStartupSceneFromGameSceneQuery.cs" />
+    <Compile Include="Providers\ReloadableProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -64,6 +78,7 @@
       <Name>ReeperCommon</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>set ksp=D:\For New Computer\Kerbal Space Program\GameData
