@@ -2,28 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using AssemblyReloader.AddonTracking;
 using ReeperCommon.Containers;
 using UnityEngine;
 
-namespace AssemblyReloader.Providers
+namespace AssemblyReloader.Queries
 {
-    class KspAddonProvider
+    class KspAddonsFromAssemblyQuery
     {
-        private readonly Assembly _assembly;
-
-        public KspAddonProvider(Assembly assembly)
+        public IEnumerable<Type> Get(Assembly assembly)
         {
-            if (assembly == null) throw new ArgumentNullException("assembly");
-
-            _assembly = assembly;
-        }
-
-
-        public IEnumerable<Type> Get()
-        {
-            return _assembly
+            return assembly
                 .GetTypes()
                 .Where(t => GetKSPAddonFromType(t).Any());
         }

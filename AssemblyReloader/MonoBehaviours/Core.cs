@@ -1,7 +1,10 @@
 ﻿using System.Linq;
 using AssemblyReloader.AddonTracking;
+using AssemblyReloader.Factory;
 using AssemblyReloader.GUI;
+using AssemblyReloader.Logging;
 using AssemblyReloader.Providers;
+using AssemblyReloader.Queries;
 using ReeperCommon.FileSystem;
 using ReeperCommon.FileSystem.Implementations;
 using ReeperCommon.Gui.Window;
@@ -25,13 +28,43 @@ namespace AssemblyReloader.MonoBehaviours
         {
             DontDestroyOnLoad(this);
 
+#if DEBUG
+            var log = LogFactory.Create(LogLevel.Debug);
+#else
+            var log = LogFactory.Create(LogLevel.Standard);
+#endif
+
+
+            var gameDataProvider = new KSPGameDataDirectoryProvider();
+            var startupSceneFromGameScene = new KspStartupSceneFromGameSceneQuery();
+
+            var currentSceneProvider = new KspCurrentStartupSceneProvider(startupSceneFromGameScene);
+
+            var reloadableAssemblyFactory = new Factory.ReloadableAssemblyFactory(new KspAddonsFromAssemblyQuery());
+
+            var reloaderLog = new ReloaderLog(log, 25);
+
+            var fileFactory = new KSPFileFactory();
+            var loaderFactory = new LoaderFactory(reloaderLog, currentSceneProvider);
+
+            var reloadableAssemblyFileQuery = new ReloadableAssemblyFileQuery(
+                fileFactory,
+                gameDataProvider
+                );
+
+            var infoFactory = new AddonInfoFactory(new KspAddonsFromAssemblyQuery());
+
             _container = new ReloadableContainer(
-                                                    new ReloadableProvider(),
-                                                    new KspStartupSceneFromGameSceneQuery()
+                                                    reloadableAssemblyFactory, 
+                                                    loaderFactory,
+                                                    infoFactory,
+                                                    reloadableAssemblyFileQuery,
+                                                    startupSceneFromGameScene,
+                                                    reloaderLog
                                                 );
 
             GameEvents.onLevelWasLoaded.Add(_container.HandleLevelLoad);
-
+            
             CreateWindow();
         }
 
@@ -77,8 +110,8 @@ namespace AssemblyReloader.MonoBehaviours
 
 
             IDirectory gamedata = new KSPDirectory(new KSPFileFactory(), new KSPGameDataDirectoryProvider());
-            var ra = new ReloadableAssembly(gamedata.RecursiveFiles("reloadable").Single(),
-                LogFactory.Create(LogLevel.Debug));
+            //var ra = new ReloadableAssembly(gamedata.RecursiveFiles("reloadable").Single(),
+            //    LogFactory.Create(LogLevel.Debug));
         }
     }
 }

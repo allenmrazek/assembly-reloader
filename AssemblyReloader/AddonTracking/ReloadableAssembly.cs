@@ -3,7 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using AssemblyReloader.Factory;
 using AssemblyReloader.ILModifications;
+using AssemblyReloader.Loaders;
+using AssemblyReloader.Providers;
+using AssemblyReloader.Queries;
 using Mono.Cecil;
 using ReeperCommon.Extensions;
 using ReeperCommon.FileSystem;
@@ -24,23 +28,40 @@ namespace AssemblyReloader.AddonTracking
     {
         private System.Reflection.Assembly _loaded;
         private readonly IFile _file;
+        private readonly List<ILoader> _loaders;
         private readonly Log _log;
 
 
 
 
 
-        public ReloadableAssembly(IFile file, Log log)
+        public ReloadableAssembly(
+            IFile file, 
+            LoaderFactory loaderFactory,
+            AddonInfoFactory infoFactory,
+            Log log,
+            KspAddonsFromAssemblyQuery assemblyQuery)
         {
             if (file == null) throw new ArgumentNullException("file");
+            if (loaderFactory == null) throw new ArgumentNullException("loaderFactory");
             if (log == null) throw new ArgumentNullException("log");
+            if (assemblyQuery == null) throw new ArgumentNullException("assemblyQuery");
 
             _file = file;
             _log = log;
 
+            // load assembly into memory; needs to be done before loaders for those
+            // types can be created
             Load();
+
+            _loaders = loaderFactory.CreateLoaders(this, infoFactory, assemblyQuery);
         }
 
+
+        public ~ReloadableAssembly()
+        {
+            
+        }
 
 
         private void ApplyModifications(System.IO.MemoryStream stream)
@@ -59,19 +80,9 @@ namespace AssemblyReloader.AddonTracking
 
 
 
-        public void Unload()
-        {
-
-            // todo: PartModules
-
-            // todo: ScenarioModules
-
-            // todo: InternalModules (?)
-
-        }
 
 
-        public void Load()
+        private void Load()
         {
 
             using (var stream = new System.IO.MemoryStream())
@@ -99,8 +110,9 @@ namespace AssemblyReloader.AddonTracking
 
         public IEnumerable<Type> Types { get { return _loaded.GetTypes(); }}
         public Assembly Loaded { get { return _loaded; }}
-        
-        
+        public IFile File { get { return _file; } }
+        public List<ILoader> Loaders { get { return new List<ILoader>(_loaders); }}
+
         //private void LoadKSPAddon()
         //{
         //    _log.Normal("loading kspaddons");
