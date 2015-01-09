@@ -2,7 +2,7 @@
 
 namespace AssemblyReloader.Queries
 {
-    class KspStartupSceneFromGameSceneQuery
+    class StartupSceneFromGameSceneQuery
     {
         public KSPAddon.Startup Query(GameScenes scene)
         {

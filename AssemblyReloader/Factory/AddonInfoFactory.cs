@@ -11,9 +11,9 @@ namespace AssemblyReloader.Factory
 {
     class AddonInfoFactory
     {
-        private readonly KspAddonsFromAssemblyQuery _provider;
+        private readonly AddonsFromAssemblyQuery _provider;
         
-        public AddonInfoFactory(KspAddonsFromAssemblyQuery provider)
+        public AddonInfoFactory(AddonsFromAssemblyQuery provider)
         {
             if (provider == null) throw new ArgumentNullException("provider");
 

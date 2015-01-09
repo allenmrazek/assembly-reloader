@@ -6,11 +6,11 @@ using AssemblyReloader.Queries;
 
 namespace AssemblyReloader.Providers
 {
-    class KspCurrentStartupSceneProvider
+    class CurrentStartupSceneProvider
     {
-        private readonly KspStartupSceneFromGameSceneQuery _query;
+        private readonly StartupSceneFromGameSceneQuery _query;
 
-        public KspCurrentStartupSceneProvider(KspStartupSceneFromGameSceneQuery query)
+        public CurrentStartupSceneProvider(StartupSceneFromGameSceneQuery query)
         {
             if (query == null) throw new ArgumentNullException("query");
             _query = query;

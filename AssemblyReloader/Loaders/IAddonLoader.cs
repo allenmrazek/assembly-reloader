@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using AssemblyReloader.AddonTracking;
+using UnityEngine;
 
 namespace AssemblyReloader.Loaders
 {
-    interface ILoader
+    interface IAddonLoader
     {
-        void DoLevelLoad(KSPAddon.Startup startup);
-        void Initialize();
+        void StartTrackingAddon(GameObject go);
+        void StopTrackingAddon(GameObject go);
     }
 }

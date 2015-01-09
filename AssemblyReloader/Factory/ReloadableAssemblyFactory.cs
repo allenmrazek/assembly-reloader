@@ -11,23 +11,23 @@ namespace AssemblyReloader.Factory
 {
     class ReloadableAssemblyFactory
     {
-        private readonly KspAddonsFromAssemblyQuery _assemblyQuery;
+        private readonly AddonsFromAssemblyQuery _assemblyQuery;
 
-        public ReloadableAssemblyFactory(KspAddonsFromAssemblyQuery assemblyQuery)
+        public ReloadableAssemblyFactory(AddonsFromAssemblyQuery assemblyQuery)
         {
             if (assemblyQuery == null) throw new ArgumentNullException("assemblyQuery");
             _assemblyQuery = assemblyQuery;
         }
 
 
-        public ReloadableAssembly Create(IFile file, LoaderFactory loaderFactory, AddonInfoFactory infoFactory, Log log)
+        public ReloadableAssembly Create(IFile file, LoaderProvider loaderProvider, AddonInfoFactory infoFactory, Log log)
         {
             if (file == null) throw new ArgumentNullException("file");
-            if (loaderFactory == null) throw new ArgumentNullException("loaderFactory");
+            if (loaderProvider == null) throw new ArgumentNullException("loaderProvider");
             if (infoFactory == null) throw new ArgumentNullException("infoFactory");
             if (log == null) throw new ArgumentNullException("log");
 
-            return new ReloadableAssembly(file, loaderFactory, infoFactory, log, _assemblyQuery);
+            return new ReloadableAssembly(file, loaderProvider, infoFactory, log, _assemblyQuery);
         }
     }
 }

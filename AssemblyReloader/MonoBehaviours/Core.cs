@@ -36,23 +36,26 @@ namespace AssemblyReloader.MonoBehaviours
 
 
             var gameDataProvider = new KSPGameDataDirectoryProvider();
-            var startupSceneFromGameScene = new KspStartupSceneFromGameSceneQuery();
+            var startupSceneFromGameScene = new StartupSceneFromGameSceneQuery();
 
-            var currentSceneProvider = new KspCurrentStartupSceneProvider(startupSceneFromGameScene);
+            var currentSceneProvider = new CurrentStartupSceneProvider(startupSceneFromGameScene);
 
-            var reloadableAssemblyFactory = new Factory.ReloadableAssemblyFactory(new KspAddonsFromAssemblyQuery());
+            var reloadableAssemblyFactory = new Factory.ReloadableAssemblyFactory(new AddonsFromAssemblyQuery());
 
             var reloaderLog = new ReloaderLog(log, 25);
-
+            var commandFactory = new CommandFactory();
             var fileFactory = new KSPFileFactory();
-            var loaderFactory = new LoaderFactory(reloaderLog, currentSceneProvider);
+
+            var loaderFactory = new LoaderProvider(commandFactory, reloaderLog, currentSceneProvider);
 
             var reloadableAssemblyFileQuery = new ReloadableAssemblyFileQuery(
                 fileFactory,
                 gameDataProvider
                 );
 
-            var infoFactory = new AddonInfoFactory(new KspAddonsFromAssemblyQuery());
+            var infoFactory = new AddonInfoFactory(new AddonsFromAssemblyQuery());
+
+            
 
             _container = new ReloadableContainer(
                                                     reloadableAssemblyFactory, 

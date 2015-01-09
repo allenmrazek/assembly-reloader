@@ -52,25 +52,28 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddonTracking\AddonLifetimeTracker.cs" />
     <Compile Include="AddonTracking\ReloadableContainer.cs" />
     <Compile Include="AddonTracking\AddonInfo.cs" />
+    <Compile Include="Factory\CommandFactory.cs" />
     <Compile Include="Factory\AddonInfoFactory.cs" />
-    <Compile Include="Factory\LoaderFactory.cs" />
+    <Compile Include="Factory\LoaderProvider.cs" />
     <Compile Include="Factory\ReloadableAssemblyFactory.cs" />
+    <Compile Include="Loaders\IAddonLoader.cs" />
     <Compile Include="Loaders\ILoader.cs" />
     <Compile Include="Logging\ReloaderLog.cs" />
     <Compile Include="Mothballed\AssemblyReloaderUnused.cs" />
     <Compile Include="ILModifications\ModifyPluginIdentity.cs" />
-    <Compile Include="Loaders\KspAddonLoader.cs" />
+    <Compile Include="Loaders\Implementations\AddonLoader.cs" />
     <Compile Include="Mothballed\AssemblyReloaderOld.cs" />
     <Compile Include="Mothballed\AddonTypeIdentifier.cs" />
     <Compile Include="MonoBehaviours\Core.cs" />
     <Compile Include="AddonTracking\ReloadableAssembly.cs" />
     <Compile Include="GUI\ViewLogic.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Queries\KspAddonsFromAssemblyQuery.cs" />
-    <Compile Include="Providers\KspCurrentStartupSceneProvider.cs" />
-    <Compile Include="Queries\KspStartupSceneFromGameSceneQuery.cs" />
+    <Compile Include="Queries\AddonsFromAssemblyQuery.cs" />
+    <Compile Include="Providers\CurrentStartupSceneProvider.cs" />
+    <Compile Include="Queries\StartupSceneFromGameSceneQuery.cs" />
     <Compile Include="Queries\ReloadableAssemblyFileQuery.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -82,7 +85,9 @@
       <Name>ReeperCommon</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Mediators\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>set ksp=D:\For New Computer\Kerbal Space Program\GameData

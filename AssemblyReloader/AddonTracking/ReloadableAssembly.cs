@@ -37,13 +37,13 @@ namespace AssemblyReloader.AddonTracking
 
         public ReloadableAssembly(
             IFile file, 
-            LoaderFactory loaderFactory,
+            LoaderProvider loaderProvider,
             AddonInfoFactory infoFactory,
             Log log,
-            KspAddonsFromAssemblyQuery assemblyQuery)
+            AddonsFromAssemblyQuery assemblyQuery)
         {
             if (file == null) throw new ArgumentNullException("file");
-            if (loaderFactory == null) throw new ArgumentNullException("loaderFactory");
+            if (loaderProvider == null) throw new ArgumentNullException("loaderProvider");
             if (log == null) throw new ArgumentNullException("log");
             if (assemblyQuery == null) throw new ArgumentNullException("assemblyQuery");
 
@@ -54,7 +54,7 @@ namespace AssemblyReloader.AddonTracking
             // types can be created
             Load();
 
-            _loaders = loaderFactory.CreateLoaders(this, infoFactory, assemblyQuery);
+            _loaders = loaderProvider.CreateLoaders(this, infoFactory, assemblyQuery);
         }
 
 
@@ -112,44 +112,5 @@ namespace AssemblyReloader.AddonTracking
         public Assembly Loaded { get { return _loaded; }}
         public IFile File { get { return _file; } }
         public List<ILoader> Loaders { get { return new List<ILoader>(_loaders); }}
-
-        //private void LoadKSPAddon()
-        //{
-        //    _log.Normal("loading kspaddons");
-
-        //    // identify all KSPAddons in this type
-        //    var found = _loaded.GetTypes()
-        //                    .Where(ty =>
-        //                        ty.IsClass && 
-        //                        ty.IsSubclassOf(typeof(MonoBehaviour)) &&
-        //                        ty.GetCustomAttributes(true).Any(attr => attr.GetType().IsAssignableFrom(typeof(KSPAddon))));
-
-        //    // if we already have loaded types from the list (which is highly likely), we might need
-        //    // to deal with unloading them
-        //    var loaded = found.Where(fType => _addonList.Any(t => t.FullName == fType.FullName)).ToList();
-
-        //    // now, some types might no longer exist. Those need to be unloaded as well
-        //    var loadedButDeleted = _addonList.Where(addon => !found.Any(f => addon.FullName == f.FullName)).ToList();
-
-
-        //    _log.Normal("print already loaded...");
-        //    loaded.ForEach(l => _log.Normal("Already loaded and needs unload: " + l.FullName));
-        //    _log.Normal("done");
-
-        //    // todo: unload found items
-
-        //    // todo: unload deleted items
-            
-            
-        //    // todo: load new items
-
-        //    // and update state so we've got a list of all items loaded in memory again
-        //    _addonList = found.ToList();
-
-
-        //    found.ToList().ForEach(f => _log.Normal("KSPAddon: " + f.FullName));
-
-
-        //}
     }
 }

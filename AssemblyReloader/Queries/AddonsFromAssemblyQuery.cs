@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace AssemblyReloader.Queries
 {
-    class KspAddonsFromAssemblyQuery
+    class AddonsFromAssemblyQuery
     {
         public IEnumerable<Type> Get(Assembly assembly)
         {
