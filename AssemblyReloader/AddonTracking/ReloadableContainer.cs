@@ -16,28 +16,28 @@ namespace AssemblyReloader.AddonTracking
     class ReloadableContainer
     {
         private readonly ReloadableAssemblyFactory _reloadableAssemblyFactory;
-        private readonly LoaderProvider _loaderProvider;
+        private readonly LoaderFactory _loaderFactory;
         private readonly StartupSceneFromGameSceneQuery _sceneQuery;
         private readonly List<ReloadableAssembly> _reloadables = new List<ReloadableAssembly>();
         private readonly Log _log;
 
         public ReloadableContainer(
             ReloadableAssemblyFactory reloadableAssemblyFactory,
-            LoaderProvider loaderProvider,
+            LoaderFactory loaderFactory,
             AddonInfoFactory infoFactory,
             ReloadableAssemblyFileQuery reloadableAssemblyFileQuery,
             StartupSceneFromGameSceneQuery sceneQuery,
             Log log)
         {
             if (reloadableAssemblyFactory == null) throw new ArgumentNullException("reloadableAssemblyFactory");
-            if (loaderProvider == null) throw new ArgumentNullException("loaderProvider");
+            if (loaderFactory == null) throw new ArgumentNullException("loaderFactory");
             if (infoFactory == null) throw new ArgumentNullException("infoFactory");
             if (reloadableAssemblyFileQuery == null) throw new ArgumentNullException("reloadableAssemblyFileQuery");
             if (sceneQuery == null) throw new ArgumentNullException("sceneQuery");
             if (log == null) throw new ArgumentNullException("log");
 
             _reloadableAssemblyFactory = reloadableAssemblyFactory;
-            _loaderProvider = loaderProvider;
+            _loaderFactory = loaderFactory;
             _sceneQuery = sceneQuery;
             _log = log;
 
@@ -45,7 +45,7 @@ namespace AssemblyReloader.AddonTracking
             var reloadableFiles = reloadableAssemblyFileQuery.Get().ToList();
             log.Normal("ReloadableContainer: Located {0} reloadable plugins", reloadableFiles.Count.ToString());
 
-            reloadableFiles.ForEach(file => _reloadables.Add(reloadableAssemblyFactory.Create(file, loaderProvider, infoFactory, log)));
+            reloadableFiles.ForEach(file => _reloadables.Add(reloadableAssemblyFactory.Create(file, loaderFactory, infoFactory, log)));
         }
 
 

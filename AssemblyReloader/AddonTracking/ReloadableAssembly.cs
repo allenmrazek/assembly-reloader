@@ -37,13 +37,13 @@ namespace AssemblyReloader.AddonTracking
 
         public ReloadableAssembly(
             IFile file, 
-            LoaderProvider loaderProvider,
+            LoaderFactory loaderFactory,
             AddonInfoFactory infoFactory,
             Log log,
             AddonsFromAssemblyQuery assemblyQuery)
         {
             if (file == null) throw new ArgumentNullException("file");
-            if (loaderProvider == null) throw new ArgumentNullException("loaderProvider");
+            if (loaderFactory == null) throw new ArgumentNullException("loaderFactory");
             if (log == null) throw new ArgumentNullException("log");
             if (assemblyQuery == null) throw new ArgumentNullException("assemblyQuery");
 
@@ -54,7 +54,7 @@ namespace AssemblyReloader.AddonTracking
             // types can be created
             Load();
 
-            _loaders = loaderProvider.CreateLoaders(this, infoFactory, assemblyQuery);
+            _loaders = loaderFactory.CreateLoaders(this, infoFactory, assemblyQuery);
         }
 
 

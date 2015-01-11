@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using AssemblyReloader.AddonTracking;
 using AssemblyReloader.Factory;
+using AssemblyReloader.Messages;
+using AssemblyReloader.Messages.Implementation;
 using AssemblyReloader.Providers;
 using AssemblyReloader.Queries;
 using ReeperCommon.Logging;
@@ -10,12 +12,13 @@ using UnityEngine;
 
 namespace AssemblyReloader.Loaders.Implementations
 {
-    class AddonLoader : ILoader, IAddonLoader
+    class AddonLoader : ILoader, IAddonLoader, IConsumer<AddonCreated>, IConsumer<AddonDestroyed>
     {
         // Mainly required so we can flag addons when they've
         // been created in the case of runOnce = true
         private readonly List<AddonInfo> _addons;
 
+        private readonly IChannel _messageChannel;
         private readonly ReloadableAssembly _assembly;
         private readonly AddonInfoFactory _infoFactory;
         private readonly CommandFactory _commandFactory;
@@ -28,6 +31,7 @@ namespace AssemblyReloader.Loaders.Implementations
 
 
         public AddonLoader(
+            IChannel messageChannel,
             ReloadableAssembly assembly,
             AddonInfoFactory infoFactory,
             CommandFactory commandFactory,
@@ -35,6 +39,7 @@ namespace AssemblyReloader.Loaders.Implementations
             CurrentStartupSceneProvider currentStartupSceneProvider,
             Log log)
         {
+            if (messageChannel == null) throw new ArgumentNullException("messageChannel");
             if (assembly == null) throw new ArgumentNullException("assembly");
             if (infoFactory == null) throw new ArgumentNullException("infoFactory");
             if (commandFactory == null) throw new ArgumentNullException("commandFactory");
@@ -42,6 +47,7 @@ namespace AssemblyReloader.Loaders.Implementations
             if (currentStartupSceneProvider == null) throw new ArgumentNullException("currentStartupSceneProvider");
             if (log == null) throw new ArgumentNullException("log");
 
+            _messageChannel = messageChannel;
             _assembly = assembly;
             _infoFactory = infoFactory;
             _commandFactory = commandFactory;
@@ -106,10 +112,7 @@ namespace AssemblyReloader.Loaders.Implementations
             
             info.created = true;
 
-            addon.AddComponent<AddonLifetimeTracker>()
-                .OnDestroyed = _commandFactory.CreateUntrackAddon(addon, this);
-
-            StartTrackingAddon(addon);
+  
         }
 
 
@@ -118,7 +121,9 @@ namespace AssemblyReloader.Loaders.Implementations
         {
             if (_created.Contains(go))
                 throw new ArgumentException(go.name + " is already being tracked");
-            
+
+            _log.Verbose("AddonLoader: started tracking " + go.name);
+
             _created.Add(go);
         }
 
@@ -129,7 +134,23 @@ namespace AssemblyReloader.Loaders.Implementations
             if (!_created.Contains(go))
                 throw new ArgumentException(go.name + " is not being tracked");
 
+            _log.Verbose("AddonLoader: stopped tracking " + go.name);
+
             _created.Remove(go);
+        }
+
+
+
+        public void Consume(AddonCreated message)
+        {
+            StartTrackingAddon(message.Addon);
+        }
+
+
+
+        public void Consume(AddonDestroyed message)
+        {
+            StopTrackingAddon(message.Addon);
         }
     }
 }

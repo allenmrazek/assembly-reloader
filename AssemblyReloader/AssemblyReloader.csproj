@@ -55,9 +55,14 @@
     <Compile Include="AddonTracking\AddonLifetimeTracker.cs" />
     <Compile Include="AddonTracking\ReloadableContainer.cs" />
     <Compile Include="AddonTracking\AddonInfo.cs" />
+    <Compile Include="Messages\IChannel.cs" />
+    <Compile Include="Messages\IConsumer.cs" />
+    <Compile Include="Messages\Implementation\AddonCreated.cs" />
+    <Compile Include="Messages\Implementation\AddonDestroyed.cs" />
+    <Compile Include="Factory\AddonGameObject\AddonGameObjectFactory.cs" />
     <Compile Include="Factory\CommandFactory.cs" />
     <Compile Include="Factory\AddonInfoFactory.cs" />
-    <Compile Include="Factory\LoaderProvider.cs" />
+    <Compile Include="Factory\LoaderFactory.cs" />
     <Compile Include="Factory\ReloadableAssemblyFactory.cs" />
     <Compile Include="Loaders\IAddonLoader.cs" />
     <Compile Include="Loaders\ILoader.cs" />
@@ -86,6 +91,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Commands\" />
     <Folder Include="Mediators\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

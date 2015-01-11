@@ -1,8 +1,11 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using AssemblyReloader.AddonTracking;
 using AssemblyReloader.Factory;
 using AssemblyReloader.GUI;
 using AssemblyReloader.Logging;
+using AssemblyReloader.Messages;
 using AssemblyReloader.Providers;
 using AssemblyReloader.Queries;
 using ReeperCommon.FileSystem;
@@ -24,6 +27,62 @@ namespace AssemblyReloader.MonoBehaviours
         private ReloadableContainer _container;
 
 
+
+        private interface IConsumer
+        {
+            void Consume(object message);
+        }
+
+
+        private class MessageChannel : IChannel
+        {
+            private readonly List<IConsumer> _consumers = new List<IConsumer>();
+
+            public MessageChannel(params IConsumer[] consumers)
+            {
+                foreach (var t in consumers)
+                    _consumers.Add(t);
+            }
+
+
+            public void Send<T>(T message)
+            {
+                _consumers.ForEach(consumer => consumer.Consume(message));
+            }
+
+
+
+            public void AddConsumer(IConsumer consumer)
+            {
+                if (consumer == null) throw new ArgumentNullException("consumer");
+
+                if (!_consumers.Contains(consumer))
+                    _consumers.Add(consumer);
+            }
+        }
+
+
+
+        private class Consumer<T> : IConsumer
+        {
+            private readonly IConsumer _consumer;
+
+            public Consumer(IConsumer consumer)
+            {
+                if (consumer == null) throw new ArgumentNullException("consumer");
+                _consumer = consumer;
+            }
+
+
+            public void Consume(object message)
+            {
+                if (message is T)
+                    _consumer.Consume(message);
+            }
+        }
+
+
+
         private void Start()
         {
             DontDestroyOnLoad(this);
@@ -34,6 +93,7 @@ namespace AssemblyReloader.MonoBehaviours
             var log = LogFactory.Create(LogLevel.Standard);
 #endif
 
+            var channel = new MessageChannel();
 
             var gameDataProvider = new KSPGameDataDirectoryProvider();
             var startupSceneFromGameScene = new StartupSceneFromGameSceneQuery();
@@ -46,7 +106,7 @@ namespace AssemblyReloader.MonoBehaviours
             var commandFactory = new CommandFactory();
             var fileFactory = new KSPFileFactory();
 
-            var loaderFactory = new LoaderProvider(commandFactory, reloaderLog, currentSceneProvider);
+            var loaderFactory = new LoaderFactory(channel, commandFactory, reloaderLog, currentSceneProvider);
 
             var reloadableAssemblyFileQuery = new ReloadableAssemblyFileQuery(
                 fileFactory,

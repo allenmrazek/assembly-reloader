@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using AssemblyReloader.Loaders;
+﻿using AssemblyReloader.Messages;
+using AssemblyReloader.Messages.Implementation;
 using ReeperCommon.Extensions;
 using UnityEngine;
 
@@ -10,12 +7,18 @@ namespace AssemblyReloader.AddonTracking
 {
     class AddonLifetimeTracker : MonoBehaviour
     {
-        public Action OnDestroyed;
+        public IChannel messageChannel;
+
+        private void Start()
+        {
+            if (!messageChannel.IsNull())
+                messageChannel.Send(new AddonCreated(gameObject, this));
+        }
 
         private void OnDestroy()
         {
-            if (!OnDestroyed.IsNull())
-                OnDestroyed();
+            if (!messageChannel.IsNull())
+                messageChannel.Send(new AddonDestroyed(gameObject, this));
         }
     }
 }
