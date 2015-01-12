@@ -28,10 +28,10 @@ namespace AssemblyReloader.AddonTracking
     {
         private System.Reflection.Assembly _loaded;
         private readonly IFile _file;
-        private readonly List<ILoader> _loaders;
+        private readonly LoaderFactory _loaderFactory;
+        private List<ILoader> _loaders;
         private readonly Log _log;
-
-
+        private readonly AddonsFromAssemblyQuery _assemblyQuery;
 
 
         public ReloadableAssembly(
@@ -46,13 +46,9 @@ namespace AssemblyReloader.AddonTracking
             if (assemblyQuery == null) throw new ArgumentNullException("assemblyQuery");
 
             _file = file;
+            _loaderFactory = loaderFactory;
             _log = log;
-
-            // load assembly into memory; needs to be done before loaders for those
-            // types can be created
-            Load();
-
-            _loaders = loaderFactory.CreateLoaders(this, assemblyQuery);
+            _assemblyQuery = assemblyQuery;
         }
 
 
@@ -60,6 +56,15 @@ namespace AssemblyReloader.AddonTracking
         ~ReloadableAssembly()
         {
             
+        }
+
+        public void Initialize()
+        {
+            // load assembly into memory; needs to be done before loaders for those
+            // types can be created
+            Load();
+
+            _loaders = _loaderFactory.CreateLoaders(this, _assemblyQuery);
         }
 
 

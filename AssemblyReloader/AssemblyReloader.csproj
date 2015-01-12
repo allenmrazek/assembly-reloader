@@ -52,17 +52,18 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AddonTracking\AddonLifetimeTracker.cs" />
-    <Compile Include="AddonTracking\ReloadableContainer.cs" />
-    <Compile Include="AddonTracking\AddonInfo.cs" />
+    <Compile Include="Commands\ICommand.cs" />
+    <Compile Include="Services\GameObjectLifetimeService.cs" />
+    <Compile Include="Tracking\Messages\DestroyAllTrackedObjects.cs" />
+    <Compile Include="Tracking\Messages\TrackedObjectCreated.cs" />
+    <Compile Include="Tracking\Messages\TrackedObjectDestroyed.cs" />
+    <Compile Include="Messages\ITrackedItemMessage.cs" />
+    <Compile Include="MonoBehaviours\TrackLifetime.cs" />
+    <Compile Include="Tracking\ReloadableContainer.cs" />
+    <Compile Include="Tracking\AddonInfo.cs" />
     <Compile Include="Messages\IChannel.cs" />
     <Compile Include="Messages\IConsumer.cs" />
     <Compile Include="Messages\IMessage.cs" />
-    <Compile Include="Messages\Implementation\AddonCreated.cs" />
-    <Compile Include="Messages\Implementation\AddonDestroyed.cs" />
-    <Compile Include="Factory\AddonGameObject\AddonGameObjectFactory.cs" />
-    <Compile Include="Factory\CommandFactory.cs" />
-    <Compile Include="Factory\AddonInfoFactory.cs" />
     <Compile Include="Factory\LoaderFactory.cs" />
     <Compile Include="Factory\ReloadableAssemblyFactory.cs" />
     <Compile Include="Loaders\IAddonLoader.cs" />
@@ -71,11 +72,11 @@
     <Compile Include="Messages\Implementation\TestEvent.cs" />
     <Compile Include="Mothballed\AssemblyReloaderUnused.cs" />
     <Compile Include="ILModifications\ModifyPluginIdentity.cs" />
-    <Compile Include="Loaders\Implementations\AddonLoader.cs" />
+    <Compile Include="Loaders\Addon\AddonLoader.cs" />
     <Compile Include="Mothballed\AssemblyReloaderOld.cs" />
     <Compile Include="Mothballed\AddonTypeIdentifier.cs" />
     <Compile Include="MonoBehaviours\Core.cs" />
-    <Compile Include="AddonTracking\ReloadableAssembly.cs" />
+    <Compile Include="Tracking\ReloadableAssembly.cs" />
     <Compile Include="GUI\ViewLogic.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Queries\AddonsFromAssemblyQuery.cs" />
@@ -93,7 +94,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Commands\" />
     <Folder Include="Mediators\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

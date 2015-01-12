@@ -24,7 +24,7 @@ namespace TestProject
 
         public static void WriteString(string str)
         {
-            print(str);
+            //print(str);
         }
     }
 }

@@ -17,6 +17,7 @@ namespace AssemblyReloader.AddonTracking
     {
         private readonly ReloadableAssemblyFactory _reloadableAssemblyFactory;
         private readonly LoaderFactory _loaderFactory;
+        private readonly ReloadableAssemblyFileQuery _reloadableAssemblyFileQuery;
         private readonly StartupSceneFromGameSceneQuery _sceneQuery;
         private readonly List<ReloadableAssembly> _reloadables = new List<ReloadableAssembly>();
         private readonly Log _log;
@@ -36,17 +37,27 @@ namespace AssemblyReloader.AddonTracking
 
             _reloadableAssemblyFactory = reloadableAssemblyFactory;
             _loaderFactory = loaderFactory;
+            _reloadableAssemblyFileQuery = reloadableAssemblyFileQuery;
             _sceneQuery = sceneQuery;
-            _log = log;
-
-
-            var reloadableFiles = reloadableAssemblyFileQuery.Get().ToList();
-            log.Normal("ReloadableContainer: Located {0} reloadable plugins", reloadableFiles.Count.ToString());
-
-            reloadableFiles.ForEach(file => _reloadables.Add(reloadableAssemblyFactory.Create(file, loaderFactory, log)));
+            _log = log; 
         }
 
 
+
+        public void Initialize()
+        {
+            var reloadableFiles = _reloadableAssemblyFileQuery.Get().ToList();
+            _log.Normal("ReloadableContainer: Located {0} reloadable plugins", reloadableFiles.Count.ToString());
+
+            reloadableFiles.ForEach(file =>
+            {
+                var reloadable = _reloadableAssemblyFactory.Create(file, _loaderFactory, _log);
+
+                reloadable.Initialize();
+
+                _reloadables.Add(reloadable);
+            });
+        }
 
 
 

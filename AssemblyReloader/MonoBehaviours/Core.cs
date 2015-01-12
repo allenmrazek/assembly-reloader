@@ -9,6 +9,8 @@ using AssemblyReloader.Messages;
 using AssemblyReloader.Messages.Implementation;
 using AssemblyReloader.Providers;
 using AssemblyReloader.Queries;
+using AssemblyReloader.Services;
+using AssemblyReloader.Tracking.Messages;
 using ReeperCommon.FileSystem;
 using ReeperCommon.FileSystem.Implementations;
 using ReeperCommon.Gui.Window;
@@ -114,20 +116,7 @@ namespace AssemblyReloader.MonoBehaviours
             }
         }
 
-        class OtherConsumer : IConsumer<AddonCreated>
-        {
-            private readonly Log _log;
 
-            public OtherConsumer(Log log)
-            {
-                _log = log;
-            }
-
-            public void Consume(AddonCreated message)
-            {
-                _log.Error("received addoncreated");
-            }
-        }
 
         private void Start()
         {
@@ -139,6 +128,7 @@ namespace AssemblyReloader.MonoBehaviours
             var log = LogFactory.Create(LogLevel.Standard);
 #endif
             
+
             log.Normal("Testing it out ...");
 
             var msg = new MessageChannel(new Consumer<TestEvent>(new TestConsumer(log)));
@@ -149,6 +139,19 @@ namespace AssemblyReloader.MonoBehaviours
             msg.Send(new TestEvent());
             log.Normal("test complete");
 
+            log.Normal("Testing duplication mechanics");
+            var lifetimeService = new GameObjectLifetimeService(msg);
+
+            var testGo = new GameObject();
+
+            log.Normal("registering");
+            lifetimeService.RegisterAddon(testGo);
+            log.Normal("destroying");
+
+            Destroy(testGo);
+
+            log.Normal("destroy sent");
+
             var gameDataProvider = new KSPGameDataDirectoryProvider();
             var startupSceneFromGameScene = new StartupSceneFromGameSceneQuery();
 
@@ -157,10 +160,9 @@ namespace AssemblyReloader.MonoBehaviours
             var reloadableAssemblyFactory = new Factory.ReloadableAssemblyFactory(new AddonsFromAssemblyQuery());
 
             var reloaderLog = new ReloaderLog(log, 25);
-            var commandFactory = new CommandFactory();
             var fileFactory = new KSPFileFactory();
 
-            var loaderFactory = new LoaderFactory(commandFactory, reloaderLog, currentSceneProvider);
+            var loaderFactory = new LoaderFactory(reloaderLog, currentSceneProvider);
 
             var reloadableAssemblyFileQuery = new ReloadableAssemblyFileQuery(
                 fileFactory,
@@ -178,7 +180,11 @@ namespace AssemblyReloader.MonoBehaviours
                                                 );
 
             GameEvents.onLevelWasLoaded.Add(_container.HandleLevelLoad);
-            
+
+            log.Normal("Initializing container...");
+
+            _container.Initialize();
+
             CreateWindow();
         }
 

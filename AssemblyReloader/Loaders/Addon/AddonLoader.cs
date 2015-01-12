@@ -2,15 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using AssemblyReloader.AddonTracking;
-using AssemblyReloader.Factory;
-using AssemblyReloader.Messages;
-using AssemblyReloader.Messages.Implementation;
 using AssemblyReloader.Providers;
 using AssemblyReloader.Queries;
+using ReeperCommon.Extensions;
 using ReeperCommon.Logging;
 using UnityEngine;
 
-namespace AssemblyReloader.Loaders.Implementations
+namespace AssemblyReloader.Loaders.Addon
 {
     class AddonLoader : ILoader, IAddonLoader
     {
@@ -19,7 +17,6 @@ namespace AssemblyReloader.Loaders.Implementations
         private readonly List<AddonInfo> _addons;
 
         private readonly ReloadableAssembly _assembly;
-        private readonly CommandFactory _commandFactory;
         private readonly AddonsFromAssemblyQuery _getAddonsFromAssembly;
         private readonly CurrentStartupSceneProvider _currentStartupSceneProvider;
         private readonly Log _log;
@@ -30,19 +27,16 @@ namespace AssemblyReloader.Loaders.Implementations
 
         public AddonLoader(
             ReloadableAssembly assembly,
-            CommandFactory commandFactory,
             AddonsFromAssemblyQuery getAddonsFromAssembly,
             CurrentStartupSceneProvider currentStartupSceneProvider,
             Log log)
         {
             if (assembly == null) throw new ArgumentNullException("assembly");
-            if (commandFactory == null) throw new ArgumentNullException("commandFactory");
             if (getAddonsFromAssembly == null) throw new ArgumentNullException("getAddonsFromAssembly");
             if (currentStartupSceneProvider == null) throw new ArgumentNullException("currentStartupSceneProvider");
             if (log == null) throw new ArgumentNullException("log");
 
             _assembly = assembly;
-            _commandFactory = commandFactory;
             _getAddonsFromAssembly = getAddonsFromAssembly;
             _currentStartupSceneProvider = currentStartupSceneProvider;
             _log = log;
@@ -71,6 +65,8 @@ namespace AssemblyReloader.Loaders.Implementations
 
         public void DoLevelLoad(KSPAddon.Startup scene)
         {
+            _log.Verbose("AddonLoader: handling level load for " + scene.ToString());
+
             var addons = GetAddonsForScene(scene)
                 .Select(ty => _addons.Single(t => t.type == ty))
                 .ToList();
@@ -87,6 +83,45 @@ namespace AssemblyReloader.Loaders.Implementations
 
         private IEnumerable<Type> GetAddonsForScene(KSPAddon.Startup scene)
         {
+            //_log.Normal("getting types");
+
+            //var allTypes = _getAddonsFromAssembly.Get(_assembly.Loaded);
+
+
+            //var kspAddons = allTypes
+            //    .Where(type =>
+            //    {
+
+            //        var addontest = type.GetCustomAttributes(true)
+            //                    .FirstOrDefault(attr => attr is KSPAddon) as KSPAddon;
+            //        if (addontest.IsNull())
+            //            _log.Normal(" is not kspaddon");
+            //        else _log.Normal("is kspaddon");
+
+            //        var addon = _getAddonsFromAssembly.GetKSPAddonFromType(type);
+
+            //        if (addon.IsNull())
+            //            _log.Error("uh oh addon is null");
+
+            //        if (addon.Any())
+            //        {
+            //            _log.Normal("has a value, printing it");
+            //            _log.Normal("found an addon with startup " + addon.First().startup.ToString());
+            //            _log.Normal("done printing");
+            //        }
+
+                    
+            //        return addon.Any() &&
+            //               addon.First().startup == scene;
+            //    });
+
+
+            //var list = kspAddons.ToList();
+
+            
+
+            //return list;
+
             return
                 _getAddonsFromAssembly.Get(_assembly.Loaded)
                     .Where(type =>
@@ -112,44 +147,6 @@ namespace AssemblyReloader.Loaders.Implementations
             info.created = true;
 
   
-        }
-
-
-
-        public void StartTrackingAddon(GameObject go)
-        {
-            if (_created.Contains(go))
-                throw new ArgumentException(go.name + " is already being tracked");
-
-            _log.Verbose("AddonLoader: started tracking " + go.name);
-
-            _created.Add(go);
-        }
-
-
-
-        public void StopTrackingAddon(GameObject go)
-        {
-            if (!_created.Contains(go))
-                throw new ArgumentException(go.name + " is not being tracked");
-
-            _log.Verbose("AddonLoader: stopped tracking " + go.name);
-
-            _created.Remove(go);
-        }
-
-
-
-        public void Consume(AddonCreated message)
-        {
-            StartTrackingAddon(message.Addon);
-        }
-
-
-
-        public void Consume(AddonDestroyed message)
-        {
-            StopTrackingAddon(message.Addon);
         }
     }
 }
