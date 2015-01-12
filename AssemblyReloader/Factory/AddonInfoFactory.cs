@@ -9,11 +9,11 @@ using AssemblyReloader.Queries;
 
 namespace AssemblyReloader.Factory
 {
-    class AddonInfoFactory
+    class AddonInfoFactoryDead
     {
         private readonly AddonsFromAssemblyQuery _provider;
-        
-        public AddonInfoFactory(AddonsFromAssemblyQuery provider)
+
+        public AddonInfoFactoryDead(AddonsFromAssemblyQuery provider)
         {
             if (provider == null) throw new ArgumentNullException("provider");
 

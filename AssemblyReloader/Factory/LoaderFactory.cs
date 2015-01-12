@@ -15,24 +15,20 @@ namespace AssemblyReloader.Factory
 {
     class LoaderFactory
     {
-        private readonly IChannel _channel;
         private readonly CommandFactory _commandFactory;
         private readonly Log _log;
         private readonly CurrentStartupSceneProvider _currentScene;
 
 
         public LoaderFactory(
-            IChannel channel,
             CommandFactory commandFactory,
             Log log,
             CurrentStartupSceneProvider currentScene)
         {
-            if (channel == null) throw new ArgumentNullException("channel");
             if (commandFactory == null) throw new ArgumentNullException("commandFactory");
             if (log == null) throw new ArgumentNullException("log");
             if (currentScene == null) throw new ArgumentNullException("currentScene");
 
-            _channel = channel;
             _commandFactory = commandFactory;
             _log = log;
             _currentScene = currentScene;
@@ -40,16 +36,14 @@ namespace AssemblyReloader.Factory
 
 
 
-        public List<ILoader> CreateLoaders(ReloadableAssembly assembly, AddonInfoFactory infoFactory,
+        public List<ILoader> CreateLoaders(
+            ReloadableAssembly assembly,
             AddonsFromAssemblyQuery assemblyQuery)
         {
             if (assembly == null) throw new ArgumentNullException("assembly");
-            if (infoFactory == null) throw new ArgumentNullException("infoFactory");
 
             var addonLoader = new Loaders.Implementations.AddonLoader(
-                _channel,
                 assembly,
-                infoFactory,
                 _commandFactory,
                 assemblyQuery,
                 _currentScene,

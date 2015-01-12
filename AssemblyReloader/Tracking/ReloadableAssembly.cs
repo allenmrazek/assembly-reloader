@@ -34,11 +34,9 @@ namespace AssemblyReloader.AddonTracking
 
 
 
-
         public ReloadableAssembly(
             IFile file, 
             LoaderFactory loaderFactory,
-            AddonInfoFactory infoFactory,
             Log log,
             AddonsFromAssemblyQuery assemblyQuery)
         {
@@ -54,14 +52,16 @@ namespace AssemblyReloader.AddonTracking
             // types can be created
             Load();
 
-            _loaders = loaderFactory.CreateLoaders(this, infoFactory, assemblyQuery);
+            _loaders = loaderFactory.CreateLoaders(this, assemblyQuery);
         }
 
 
-        public ~ReloadableAssembly()
+
+        ~ReloadableAssembly()
         {
             
         }
+
 
 
         private void ApplyModifications(System.IO.MemoryStream stream)

@@ -24,14 +24,12 @@ namespace AssemblyReloader.AddonTracking
         public ReloadableContainer(
             ReloadableAssemblyFactory reloadableAssemblyFactory,
             LoaderFactory loaderFactory,
-            AddonInfoFactory infoFactory,
             ReloadableAssemblyFileQuery reloadableAssemblyFileQuery,
             StartupSceneFromGameSceneQuery sceneQuery,
             Log log)
         {
             if (reloadableAssemblyFactory == null) throw new ArgumentNullException("reloadableAssemblyFactory");
             if (loaderFactory == null) throw new ArgumentNullException("loaderFactory");
-            if (infoFactory == null) throw new ArgumentNullException("infoFactory");
             if (reloadableAssemblyFileQuery == null) throw new ArgumentNullException("reloadableAssemblyFileQuery");
             if (sceneQuery == null) throw new ArgumentNullException("sceneQuery");
             if (log == null) throw new ArgumentNullException("log");
@@ -45,7 +43,7 @@ namespace AssemblyReloader.AddonTracking
             var reloadableFiles = reloadableAssemblyFileQuery.Get().ToList();
             log.Normal("ReloadableContainer: Located {0} reloadable plugins", reloadableFiles.Count.ToString());
 
-            reloadableFiles.ForEach(file => _reloadables.Add(reloadableAssemblyFactory.Create(file, loaderFactory, infoFactory, log)));
+            reloadableFiles.ForEach(file => _reloadables.Add(reloadableAssemblyFactory.Create(file, loaderFactory, log)));
         }
 
 

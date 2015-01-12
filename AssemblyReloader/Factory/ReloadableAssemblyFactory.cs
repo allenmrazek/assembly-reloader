@@ -20,14 +20,16 @@ namespace AssemblyReloader.Factory
         }
 
 
-        public ReloadableAssembly Create(IFile file, LoaderFactory loaderFactory, AddonInfoFactory infoFactory, Log log)
+        public ReloadableAssembly Create(
+            IFile file, 
+            LoaderFactory loaderFactory, 
+            Log log)
         {
             if (file == null) throw new ArgumentNullException("file");
             if (loaderFactory == null) throw new ArgumentNullException("loaderFactory");
-            if (infoFactory == null) throw new ArgumentNullException("infoFactory");
             if (log == null) throw new ArgumentNullException("log");
 
-            return new ReloadableAssembly(file, loaderFactory, infoFactory, log, _assemblyQuery);
+            return new ReloadableAssembly(file, loaderFactory, log, _assemblyQuery);
         }
     }
 }

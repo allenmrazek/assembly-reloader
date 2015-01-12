@@ -12,15 +12,13 @@ using UnityEngine;
 
 namespace AssemblyReloader.Loaders.Implementations
 {
-    class AddonLoader : ILoader, IAddonLoader, IConsumer<AddonCreated>, IConsumer<AddonDestroyed>
+    class AddonLoader : ILoader, IAddonLoader
     {
         // Mainly required so we can flag addons when they've
         // been created in the case of runOnce = true
         private readonly List<AddonInfo> _addons;
 
-        private readonly IChannel _messageChannel;
         private readonly ReloadableAssembly _assembly;
-        private readonly AddonInfoFactory _infoFactory;
         private readonly CommandFactory _commandFactory;
         private readonly AddonsFromAssemblyQuery _getAddonsFromAssembly;
         private readonly CurrentStartupSceneProvider _currentStartupSceneProvider;
@@ -31,25 +29,19 @@ namespace AssemblyReloader.Loaders.Implementations
 
 
         public AddonLoader(
-            IChannel messageChannel,
             ReloadableAssembly assembly,
-            AddonInfoFactory infoFactory,
             CommandFactory commandFactory,
             AddonsFromAssemblyQuery getAddonsFromAssembly,
             CurrentStartupSceneProvider currentStartupSceneProvider,
             Log log)
         {
-            if (messageChannel == null) throw new ArgumentNullException("messageChannel");
             if (assembly == null) throw new ArgumentNullException("assembly");
-            if (infoFactory == null) throw new ArgumentNullException("infoFactory");
             if (commandFactory == null) throw new ArgumentNullException("commandFactory");
             if (getAddonsFromAssembly == null) throw new ArgumentNullException("getAddonsFromAssembly");
             if (currentStartupSceneProvider == null) throw new ArgumentNullException("currentStartupSceneProvider");
             if (log == null) throw new ArgumentNullException("log");
 
-            _messageChannel = messageChannel;
             _assembly = assembly;
-            _infoFactory = infoFactory;
             _commandFactory = commandFactory;
             _getAddonsFromAssembly = getAddonsFromAssembly;
             _currentStartupSceneProvider = currentStartupSceneProvider;
@@ -62,8 +54,15 @@ namespace AssemblyReloader.Loaders.Implementations
 
         public void Initialize()
         {
-            foreach (var addon in _getAddonsFromAssembly.Get(_assembly.Loaded))
-                _addons.Add(_infoFactory.Create(addon, _assembly));
+            foreach (var addonType in _getAddonsFromAssembly.Get(_assembly.Loaded))
+            {
+                var kspAddon = _getAddonsFromAssembly.GetKSPAddonFromType(addonType);
+
+                if (!kspAddon.Any())
+                    throw new InvalidOperationException(addonType.FullName + " does not have KSPAddon Attribute");
+
+                _addons.Add(new AddonInfo(addonType, kspAddon.First(), _assembly));
+            }
 
             DoLevelLoad(_currentStartupSceneProvider.Get());
         }

@@ -57,6 +57,7 @@
     <Compile Include="AddonTracking\AddonInfo.cs" />
     <Compile Include="Messages\IChannel.cs" />
     <Compile Include="Messages\IConsumer.cs" />
+    <Compile Include="Messages\IMessage.cs" />
     <Compile Include="Messages\Implementation\AddonCreated.cs" />
     <Compile Include="Messages\Implementation\AddonDestroyed.cs" />
     <Compile Include="Factory\AddonGameObject\AddonGameObjectFactory.cs" />
@@ -67,6 +68,7 @@
     <Compile Include="Loaders\IAddonLoader.cs" />
     <Compile Include="Loaders\ILoader.cs" />
     <Compile Include="Logging\ReloaderLog.cs" />
+    <Compile Include="Messages\Implementation\TestEvent.cs" />
     <Compile Include="Mothballed\AssemblyReloaderUnused.cs" />
     <Compile Include="ILModifications\ModifyPluginIdentity.cs" />
     <Compile Include="Loaders\Implementations\AddonLoader.cs" />

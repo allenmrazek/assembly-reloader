@@ -1,6 +1,6 @@
 ﻿namespace AssemblyReloader.Messages
 {
-    public interface IConsumer<T>
+    public interface IConsumer<in T>
     {
         void Consume(T message);
     }

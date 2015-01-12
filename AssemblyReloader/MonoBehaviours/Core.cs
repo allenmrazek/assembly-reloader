@@ -6,6 +6,7 @@ using AssemblyReloader.Factory;
 using AssemblyReloader.GUI;
 using AssemblyReloader.Logging;
 using AssemblyReloader.Messages;
+using AssemblyReloader.Messages.Implementation;
 using AssemblyReloader.Providers;
 using AssemblyReloader.Queries;
 using ReeperCommon.FileSystem;
@@ -36,12 +37,11 @@ namespace AssemblyReloader.MonoBehaviours
 
         private class MessageChannel : IChannel
         {
-            private readonly List<IConsumer> _consumers = new List<IConsumer>();
+            private readonly List<IConsumer> _consumers;
 
             public MessageChannel(params IConsumer[] consumers)
             {
-                foreach (var t in consumers)
-                    _consumers.Add(t);
+                _consumers = new List<IConsumer>(consumers);
             }
 
 
@@ -50,38 +50,84 @@ namespace AssemblyReloader.MonoBehaviours
                 _consumers.ForEach(consumer => consumer.Consume(message));
             }
 
+            public void AddListener<T>(object listener)
+            {
+                AddConsumer(new Consumer<T>(listener));
+            }
 
 
-            public void AddConsumer(IConsumer consumer)
+            private void AddConsumer(IConsumer consumer)
             {
                 if (consumer == null) throw new ArgumentNullException("consumer");
 
                 if (!_consumers.Contains(consumer))
                     _consumers.Add(consumer);
             }
+
+
         }
+
+
 
 
 
         private class Consumer<T> : IConsumer
         {
-            private readonly IConsumer _consumer;
+            private readonly object _consumer;
 
-            public Consumer(IConsumer consumer)
+            public Consumer(object consumer)
             {
                 if (consumer == null) throw new ArgumentNullException("consumer");
+                if (!(consumer is IConsumer<T>)) throw new InvalidOperationException("consumer is not a " + typeof (T).Name);
+
                 _consumer = consumer;
             }
 
 
             public void Consume(object message)
             {
-                if (message is T)
-                    _consumer.Consume(message);
+                if (message is T && _consumer is IConsumer<T>)
+                    (_consumer as IConsumer<T>).Consume((T)message);
             }
         }
 
 
+        class TestConsumer : IConsumer<TestEvent>
+        {
+            private readonly Log _log;
+
+            public TestConsumer(Log log)
+            {
+                if (log == null) throw new ArgumentNullException("log");
+                _log = log;
+            }
+
+
+            public void Consume(object message)
+            {
+                _log.Warning("GOT THE (generic) MESSAGE!");
+            }
+
+            public void Consume(TestEvent message)
+            {
+                _log.Warning("GOT THE MESSAGE!");
+            }
+        }
+
+        class OtherConsumer : IConsumer<AddonCreated>
+        {
+            private readonly Log _log;
+
+            public OtherConsumer(Log log)
+            {
+                _log = log;
+            }
+
+            public void Consume(AddonCreated message)
+            {
+                _log.Error("received addoncreated");
+            }
+        }
 
         private void Start()
         {
@@ -92,8 +138,16 @@ namespace AssemblyReloader.MonoBehaviours
 #else
             var log = LogFactory.Create(LogLevel.Standard);
 #endif
+            
+            log.Normal("Testing it out ...");
 
-            var channel = new MessageChannel();
+            var msg = new MessageChannel(new Consumer<TestEvent>(new TestConsumer(log)));
+            //msg.AddConsumer(new Consumer<TestEvent>(new TestConsumer(log)));
+            //msg.AddConsumer(new Consumer<AddonCreated>(new OtherConsumer(log)));
+            msg.AddListener<TestEvent>(new TestConsumer(log));
+
+            msg.Send(new TestEvent());
+            log.Normal("test complete");
 
             var gameDataProvider = new KSPGameDataDirectoryProvider();
             var startupSceneFromGameScene = new StartupSceneFromGameSceneQuery();
@@ -106,21 +160,18 @@ namespace AssemblyReloader.MonoBehaviours
             var commandFactory = new CommandFactory();
             var fileFactory = new KSPFileFactory();
 
-            var loaderFactory = new LoaderFactory(channel, commandFactory, reloaderLog, currentSceneProvider);
+            var loaderFactory = new LoaderFactory(commandFactory, reloaderLog, currentSceneProvider);
 
             var reloadableAssemblyFileQuery = new ReloadableAssemblyFileQuery(
                 fileFactory,
                 gameDataProvider
                 );
 
-            var infoFactory = new AddonInfoFactory(new AddonsFromAssemblyQuery());
-
             
 
             _container = new ReloadableContainer(
                                                     reloadableAssemblyFactory, 
                                                     loaderFactory,
-                                                    infoFactory,
                                                     reloadableAssemblyFileQuery,
                                                     startupSceneFromGameScene,
                                                     reloaderLog
