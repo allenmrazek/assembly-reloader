@@ -18,30 +18,15 @@ namespace AssemblyReloader.MonoBehaviours
 
     class TrackLifetime : MonoBehaviour, IConsumer<DestroyAllTrackedObjects>
     {
-        public IMessage StartMessage;
+        [SerializeField] public IMessage StartMessage;
+
+        [SerializeField]
         public IMessage DestroyMessage;
+
+        [SerializeField]
         public IChannel Channel;
+
         private bool _destroyable = true;
-
-
-
-        //public static TrackLifetime Track(
-        //    GameObject go,
-        //    IChannel channel,
-        //    IMessage startMessage,
-        //    IMessage destroyMessage)
-        //{
-        //    if (go == null) throw new ArgumentNullException("go");
-        //    if (channel == null) throw new ArgumentNullException("channel");
-
-        //    var tracker = go.AddComponent<TrackLifetime>();
-
-        //    tracker.Channel = channel;
-        //    tracker.StartMessage = startMessage;
-        //    tracker.DestroyMessage = destroyMessage;
-
-        //    return tracker;
-        //}
 
 
 
@@ -59,7 +44,7 @@ namespace AssemblyReloader.MonoBehaviours
 
         private void OnDestroy()
         {
-            print("TrackLifetime ended");
+            print("TrackLifetime ended: " + gameObject.name);
 
             if (!DestroyMessage.IsNull())
                 if (!Channel.IsNull())
@@ -70,10 +55,12 @@ namespace AssemblyReloader.MonoBehaviours
 
         public void Consume(DestroyAllTrackedObjects message)
         {
+            print("TrackLifetime.Consume");
+
             var ltTrackersOnThisGo = gameObject.GetComponents<TrackLifetime>().ToList();
 
             if (!message.InvokeDestructionEvent)
-                ltTrackersOnThisGo.ForEach(tl => tl.DestroyMessage = null);
+                ltTrackersOnThisGo.ForEach(tl => tl.DestroyMessage = tl.StartMessage = null); // if created and destroyed in one frame, start and then destroy will be called
 
             if (!_destroyable) return; // GameObject already being destroyed; duplicate will cause errors in unity log
 

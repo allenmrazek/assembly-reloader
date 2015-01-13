@@ -5,6 +5,7 @@ using System.Runtime.Remoting.Messaging;
 using System.Text;
 using AssemblyReloader.AddonTracking;
 using AssemblyReloader.Loaders;
+using AssemblyReloader.Mediators;
 using AssemblyReloader.Messages;
 using AssemblyReloader.Providers;
 using AssemblyReloader.Queries;
@@ -14,17 +15,21 @@ namespace AssemblyReloader.Factory
 {
     class LoaderFactory
     {
+        private readonly IDestructionMediator _destructionMediator;
         private readonly Log _log;
         private readonly CurrentStartupSceneProvider _currentScene;
 
 
         public LoaderFactory(
+            IDestructionMediator destructionMediator,
             Log log,
             CurrentStartupSceneProvider currentScene)
         {
+            if (destructionMediator == null) throw new ArgumentNullException("destructionMediator");
             if (log == null) throw new ArgumentNullException("log");
             if (currentScene == null) throw new ArgumentNullException("currentScene");
 
+            _destructionMediator = destructionMediator;
             _log = log;
             _currentScene = currentScene;
         }
@@ -41,6 +46,7 @@ namespace AssemblyReloader.Factory
 
             var addonLoader = new Loaders.Addon.AddonLoader(
                 assembly,
+                _destructionMediator,
                 assemblyQuery,
                 _currentScene,
                 _log);

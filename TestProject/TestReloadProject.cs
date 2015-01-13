@@ -26,5 +26,10 @@ namespace TestProject
         {
             //print(str);
         }
+
+        private void OnAssemblyReload()
+        {
+            print("TestReloadProject.OnAssemblyReload received!");
+        }
     }
 }

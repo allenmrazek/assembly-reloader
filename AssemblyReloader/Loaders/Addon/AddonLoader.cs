@@ -2,21 +2,24 @@
 using System.Collections.Generic;
 using System.Linq;
 using AssemblyReloader.AddonTracking;
+using AssemblyReloader.Mediators;
 using AssemblyReloader.Providers;
 using AssemblyReloader.Queries;
 using ReeperCommon.Extensions;
 using ReeperCommon.Logging;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace AssemblyReloader.Loaders.Addon
 {
-    class AddonLoader : ILoader, IAddonLoader
+    class AddonLoader : ILoader
     {
         // Mainly required so we can flag addons when they've
         // been created in the case of runOnce = true
         private readonly List<AddonInfo> _addons;
 
         private readonly ReloadableAssembly _assembly;
+        private readonly IDestructionMediator _destructionMediator;
         private readonly AddonsFromAssemblyQuery _getAddonsFromAssembly;
         private readonly CurrentStartupSceneProvider _currentStartupSceneProvider;
         private readonly Log _log;
@@ -27,21 +30,40 @@ namespace AssemblyReloader.Loaders.Addon
 
         public AddonLoader(
             ReloadableAssembly assembly,
+            IDestructionMediator destructionMediator,
             AddonsFromAssemblyQuery getAddonsFromAssembly,
             CurrentStartupSceneProvider currentStartupSceneProvider,
             Log log)
         {
             if (assembly == null) throw new ArgumentNullException("assembly");
+            if (destructionMediator == null) throw new ArgumentNullException("destructionMediator");
             if (getAddonsFromAssembly == null) throw new ArgumentNullException("getAddonsFromAssembly");
             if (currentStartupSceneProvider == null) throw new ArgumentNullException("currentStartupSceneProvider");
             if (log == null) throw new ArgumentNullException("log");
 
             _assembly = assembly;
+            _destructionMediator = destructionMediator;
             _getAddonsFromAssembly = getAddonsFromAssembly;
             _currentStartupSceneProvider = currentStartupSceneProvider;
             _log = log;
             _addons = new List<AddonInfo>();
             _created = new List<GameObject>();
+        }
+
+
+
+        ~AddonLoader()
+        {
+            var instantiatedAddons = _getAddonsFromAssembly.Get(_assembly.Loaded)
+                .SelectMany(Object.FindObjectsOfType)
+                .Select(obj => obj as GameObject)
+                .ToList();
+
+            _log.Verbose("AddonLoader: Destroying " + instantiatedAddons.Count + " instantiated addons from " +
+                         _assembly.Loaded.FullName);
+
+            instantiatedAddons.ForEach(_destructionMediator.InformTargetOfDestruction);
+            instantiatedAddons.ForEach(Object.Destroy);
         }
 
 
@@ -55,7 +77,7 @@ namespace AssemblyReloader.Loaders.Addon
                 if (!kspAddon.Any())
                     throw new InvalidOperationException(addonType.FullName + " does not have KSPAddon Attribute");
 
-                _addons.Add(new AddonInfo(addonType, kspAddon.First(), _assembly));
+                _addons.Add(new AddonInfo(addonType, kspAddon.First()));
             }
 
             DoLevelLoad(_currentStartupSceneProvider.Get());
@@ -83,45 +105,6 @@ namespace AssemblyReloader.Loaders.Addon
 
         private IEnumerable<Type> GetAddonsForScene(KSPAddon.Startup scene)
         {
-            //_log.Normal("getting types");
-
-            //var allTypes = _getAddonsFromAssembly.Get(_assembly.Loaded);
-
-
-            //var kspAddons = allTypes
-            //    .Where(type =>
-            //    {
-
-            //        var addontest = type.GetCustomAttributes(true)
-            //                    .FirstOrDefault(attr => attr is KSPAddon) as KSPAddon;
-            //        if (addontest.IsNull())
-            //            _log.Normal(" is not kspaddon");
-            //        else _log.Normal("is kspaddon");
-
-            //        var addon = _getAddonsFromAssembly.GetKSPAddonFromType(type);
-
-            //        if (addon.IsNull())
-            //            _log.Error("uh oh addon is null");
-
-            //        if (addon.Any())
-            //        {
-            //            _log.Normal("has a value, printing it");
-            //            _log.Normal("found an addon with startup " + addon.First().startup.ToString());
-            //            _log.Normal("done printing");
-            //        }
-
-                    
-            //        return addon.Any() &&
-            //               addon.First().startup == scene;
-            //    });
-
-
-            //var list = kspAddons.ToList();
-
-            
-
-            //return list;
-
             return
                 _getAddonsFromAssembly.Get(_assembly.Loaded)
                     .Where(type =>
@@ -145,8 +128,6 @@ namespace AssemblyReloader.Loaders.Addon
             addon.AddComponent(info.type);
             
             info.created = true;
-
-  
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using AssemblyReloader.AddonTracking;
 using ReeperCommon.Gui.Window;
 using ReeperCommon.Gui.Window.Logic;
 using ReeperCommon.Logging;
@@ -9,18 +10,22 @@ namespace AssemblyReloader.GUI
     class ViewLogic : IWindowLogic
     {
         private IWindowComponent _window;
+        private readonly ReloadableContainer _container;
         private readonly Log _log;
 
         // gui
         private Vector2 _scroll = default(Vector2);
 
 
-        public ViewLogic(Log log)
+        public ViewLogic(ReloadableContainer container, Log log)
         {
+            if (container == null) throw new ArgumentNullException("container");
             if (log == null) throw new ArgumentNullException("log");
+
+            _container = container;
             _log = log;
 
-            _log.Normal("ViewLogic created");
+            _log.Verbose("ViewLogic created");
         }
 
 
@@ -31,6 +36,12 @@ namespace AssemblyReloader.GUI
             GUILayout.BeginVertical();
             {
                 GUILayout.Label("Reloadable assemblies:");
+
+                if (GUILayout.Button("Reload all"))
+                    _container.ReloadAllAssemblies();
+
+                if (GUILayout.Button("Unload All"))
+                    _container.UnloadAll();
 
                 _scroll = GUILayout.BeginScrollView(_scroll);
                 {
@@ -52,7 +63,7 @@ namespace AssemblyReloader.GUI
 
         public void Update()
         {
-            _log.Normal("ViewLogic.Update");
+            //_log.Normal("ViewLogic.Update");
         }
 
 

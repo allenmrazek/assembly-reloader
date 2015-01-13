@@ -60,11 +60,7 @@ namespace AssemblyReloader.AddonTracking
 
         public void Initialize()
         {
-            // load assembly into memory; needs to be done before loaders for those
-            // types can be created
-            Load();
-
-            _loaders = _loaderFactory.CreateLoaders(this, _assemblyQuery);
+            Reload();
         }
 
 
@@ -83,6 +79,16 @@ namespace AssemblyReloader.AddonTracking
             _log.Normal("done");
         }
 
+
+
+        public void Reload()
+        {
+            // load assembly into memory; needs to be done before loaders for those
+            // types can be created
+            Load();
+
+            _loaders = _loaderFactory.CreateLoaders(this, _assemblyQuery);
+        }
 
 
 

@@ -8,15 +8,13 @@ namespace AssemblyReloader.Loaders
         public readonly Type type;
         public readonly KSPAddon addon;
         public bool created;
-        public ReloadableAssembly source;
 
-        internal AddonInfo(Type t, KSPAddon add, ReloadableAssembly src)
+        internal AddonInfo(Type t, KSPAddon add)
         {
             type = t;
             created = false;
 
             addon = add;
-            source = src;
         }
 
         internal bool RunOnce

@@ -53,12 +53,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands\ICommand.cs" />
-    <Compile Include="Services\GameObjectLifetimeService.cs" />
-    <Compile Include="Tracking\Messages\DestroyAllTrackedObjects.cs" />
-    <Compile Include="Tracking\Messages\TrackedObjectCreated.cs" />
-    <Compile Include="Tracking\Messages\TrackedObjectDestroyed.cs" />
-    <Compile Include="Messages\ITrackedItemMessage.cs" />
-    <Compile Include="MonoBehaviours\TrackLifetime.cs" />
+    <Compile Include="Mediators\Destruction\GameObjectDestroyForReload.cs" />
+    <Compile Include="Mediators\IDestructionMediator.cs" />
+    <Compile Include="Mothball\GameObjectLifetimeService.cs" />
+    <Compile Include="Mothball\DestroyAllTrackedObjects.cs" />
+    <Compile Include="Mothball\TrackedObjectCreated.cs" />
+    <Compile Include="Mothball\TrackedObjectDestroyed.cs" />
+    <Compile Include="Mothball\ITrackedItemMessage.cs" />
+    <Compile Include="Mothball\TrackLifetime.cs" />
     <Compile Include="Tracking\ReloadableContainer.cs" />
     <Compile Include="Tracking\AddonInfo.cs" />
     <Compile Include="Messages\IChannel.cs" />
@@ -66,15 +68,11 @@
     <Compile Include="Messages\IMessage.cs" />
     <Compile Include="Factory\LoaderFactory.cs" />
     <Compile Include="Factory\ReloadableAssemblyFactory.cs" />
-    <Compile Include="Loaders\IAddonLoader.cs" />
     <Compile Include="Loaders\ILoader.cs" />
     <Compile Include="Logging\ReloaderLog.cs" />
     <Compile Include="Messages\Implementation\TestEvent.cs" />
-    <Compile Include="Mothballed\AssemblyReloaderUnused.cs" />
     <Compile Include="ILModifications\ModifyPluginIdentity.cs" />
     <Compile Include="Loaders\Addon\AddonLoader.cs" />
-    <Compile Include="Mothballed\AssemblyReloaderOld.cs" />
-    <Compile Include="Mothballed\AddonTypeIdentifier.cs" />
     <Compile Include="MonoBehaviours\Core.cs" />
     <Compile Include="Tracking\ReloadableAssembly.cs" />
     <Compile Include="GUI\ViewLogic.cs" />
@@ -94,7 +92,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Mediators\" />
+    <Folder Include="Services\" />
+    <Folder Include="Tracking\Messages\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

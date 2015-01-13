@@ -75,5 +75,19 @@ namespace AssemblyReloader.AddonTracking
                     )
                 );
         }
+
+
+        public void ReloadAllAssemblies()
+        {
+            _log.Normal("Container: Reloading all " + _reloadables.Count + " assemblies");
+
+            _reloadables.ForEach(ra => ra.Reload());
+        }
+
+        public void UnloadAll()
+        {
+            _log.Normal("Container: Unloading all assemblies");
+            _reloadables.Clear();
+        }
     }
 }

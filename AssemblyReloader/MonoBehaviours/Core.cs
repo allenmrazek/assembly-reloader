@@ -5,12 +5,11 @@ using AssemblyReloader.AddonTracking;
 using AssemblyReloader.Factory;
 using AssemblyReloader.GUI;
 using AssemblyReloader.Logging;
+using AssemblyReloader.Mediators.Destruction;
 using AssemblyReloader.Messages;
 using AssemblyReloader.Messages.Implementation;
 using AssemblyReloader.Providers;
 using AssemblyReloader.Queries;
-using AssemblyReloader.Services;
-using AssemblyReloader.Tracking.Messages;
 using ReeperCommon.FileSystem;
 using ReeperCommon.FileSystem.Implementations;
 using ReeperCommon.Gui.Window;
@@ -129,28 +128,7 @@ namespace AssemblyReloader.MonoBehaviours
 #endif
             
 
-            log.Normal("Testing it out ...");
 
-            var msg = new MessageChannel(new Consumer<TestEvent>(new TestConsumer(log)));
-            //msg.AddConsumer(new Consumer<TestEvent>(new TestConsumer(log)));
-            //msg.AddConsumer(new Consumer<AddonCreated>(new OtherConsumer(log)));
-            msg.AddListener<TestEvent>(new TestConsumer(log));
-
-            msg.Send(new TestEvent());
-            log.Normal("test complete");
-
-            log.Normal("Testing duplication mechanics");
-            var lifetimeService = new GameObjectLifetimeService(msg);
-
-            var testGo = new GameObject();
-
-            log.Normal("registering");
-            lifetimeService.RegisterAddon(testGo);
-            log.Normal("destroying");
-
-            Destroy(testGo);
-
-            log.Normal("destroy sent");
 
             var gameDataProvider = new KSPGameDataDirectoryProvider();
             var startupSceneFromGameScene = new StartupSceneFromGameSceneQuery();
@@ -161,8 +139,9 @@ namespace AssemblyReloader.MonoBehaviours
 
             var reloaderLog = new ReloaderLog(log, 25);
             var fileFactory = new KSPFileFactory();
+            var destructionMediator = new GameObjectDestroyForReload();
 
-            var loaderFactory = new LoaderFactory(reloaderLog, currentSceneProvider);
+            var loaderFactory = new LoaderFactory(destructionMediator, reloaderLog, currentSceneProvider);
 
             var reloadableAssemblyFileQuery = new ReloadableAssemblyFileQuery(
                 fileFactory,
@@ -205,7 +184,7 @@ namespace AssemblyReloader.MonoBehaviours
             var wfactory = new WindowFactory(HighLogic.Skin);
 
 
-            var logic = new ViewLogic(LogFactory.Create(LogLevel.Debug));
+            var logic = new ViewLogic(_container, LogFactory.Create(LogLevel.Debug));
 
             var basicWindow = new BasicWindow(
                 logic,

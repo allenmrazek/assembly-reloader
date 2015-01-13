@@ -26,6 +26,9 @@ namespace AssemblyReloader.Services
             tracker.StartMessage = new TrackedObjectCreated(tracker, TrackedItemType.Addon);
             tracker.DestroyMessage = new TrackedObjectDestroyed(tracker, TrackedItemType.Addon);
             tracker.Channel = _messageChannel;
+
+            _messageChannel.AddListener<DestroyAllTrackedObjects>(tracker);
+
         }
     }
 }
