@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using AssemblyReloader.AddonTracking;
+using AssemblyReloader.Messages;
+using AssemblyReloader.Messages.Implementation;
 
 namespace AssemblyReloader.Loaders
 {
-    interface ILoader
+    interface ILoader : IDisposable
     {
-        void DoLevelLoad(KSPAddon.Startup startup);
         void Initialize();
+        void Deinitialize();
     }
 }

@@ -10,27 +10,24 @@ namespace AssemblyReloader.Queries
 {
     class AddonsFromAssemblyQuery
     {
-        public IEnumerable<Type> Get(Assembly assembly)
+        private readonly Assembly _assembly;
+        private readonly AddonAttributeFromTypeQuery _attributeQuery;
+
+        public AddonsFromAssemblyQuery(Assembly assembly, AddonAttributeFromTypeQuery attributeQuery)
         {
             if (assembly == null) throw new ArgumentNullException("assembly");
-
-            return assembly
-                .GetTypes()
-                .Where(t => GetKSPAddonFromType(t).Any());
+            if (attributeQuery == null) throw new ArgumentNullException("attributeQuery");
+            _assembly = assembly;
+            _attributeQuery = attributeQuery;
         }
 
 
-        public Maybe<KSPAddon> GetKSPAddonFromType(Type type)
+
+        public IEnumerable<Type> Get()
         {
-            if (type == null) throw new ArgumentNullException("type");
-
-            if (!type.IsClass || !type.IsSubclassOf(typeof(MonoBehaviour)))
-                return Maybe<KSPAddon>.None;
-
-            var addon = type.GetCustomAttributes(true)
-                            .FirstOrDefault(attr => attr is KSPAddon) as KSPAddon;
-
-            return addon.IsNull() ? Maybe<KSPAddon>.None : Maybe<KSPAddon>.With(addon);
+            return _assembly
+                .GetTypes()
+                .Where(t => _attributeQuery.GetKspAddonAttribute(t).Any());
         }
     }
 }

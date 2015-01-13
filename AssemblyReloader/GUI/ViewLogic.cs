@@ -1,5 +1,6 @@
 ﻿using System;
 using AssemblyReloader.AddonTracking;
+using AssemblyReloader.AssemblyTracking.Implementations;
 using ReeperCommon.Gui.Window;
 using ReeperCommon.Gui.Window.Logic;
 using ReeperCommon.Logging;

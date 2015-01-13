@@ -2,7 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using AssemblyReloader.AddonTracking;
+using AssemblyReloader.Events;
+using AssemblyReloader.Events.Implementations;
+using AssemblyReloader.Factory;
 using AssemblyReloader.Mediators;
+using AssemblyReloader.Messages.Implementation;
 using AssemblyReloader.Providers;
 using AssemblyReloader.Queries;
 using ReeperCommon.Extensions;
@@ -18,78 +22,44 @@ namespace AssemblyReloader.Loaders.Addon
         // been created in the case of runOnce = true
         private readonly List<AddonInfo> _addons;
 
-        private readonly ReloadableAssembly _assembly;
         private readonly IDestructionMediator _destructionMediator;
-        private readonly AddonsFromAssemblyQuery _getAddonsFromAssembly;
-        private readonly CurrentStartupSceneProvider _currentStartupSceneProvider;
+        private readonly QueryProvider _queryProvider;
+        private readonly IEnumerable<Type> _typesWhichAreAddons;
         private readonly Log _log;
-
-        private readonly List<GameObject> _created;
+        private readonly IGameEventSubscription _eventSubscription;
 
 
 
         public AddonLoader(
-            ReloadableAssembly assembly,
+            IEnumerable<Type> typesWhichAreAddons,
+            IGameEventSource<LevelWasLoadedDelegate> sceneChangeEvent,
             IDestructionMediator destructionMediator,
-            AddonsFromAssemblyQuery getAddonsFromAssembly,
-            CurrentStartupSceneProvider currentStartupSceneProvider,
+            QueryProvider queryProvider,
             Log log)
         {
-            if (assembly == null) throw new ArgumentNullException("assembly");
             if (destructionMediator == null) throw new ArgumentNullException("destructionMediator");
-            if (getAddonsFromAssembly == null) throw new ArgumentNullException("getAddonsFromAssembly");
-            if (currentStartupSceneProvider == null) throw new ArgumentNullException("currentStartupSceneProvider");
+            if (queryProvider == null) throw new ArgumentNullException("queryProvider");
+            if (typesWhichAreAddons == null) throw new ArgumentNullException("typesWhichAreAddons");
             if (log == null) throw new ArgumentNullException("log");
 
-            _assembly = assembly;
             _destructionMediator = destructionMediator;
-            _getAddonsFromAssembly = getAddonsFromAssembly;
-            _currentStartupSceneProvider = currentStartupSceneProvider;
+            _queryProvider = queryProvider;
+            _typesWhichAreAddons = typesWhichAreAddons;
             _log = log;
             _addons = new List<AddonInfo>();
-            _created = new List<GameObject>();
+
+            _eventSubscription = sceneChangeEvent.Add(OnSceneChanged);
         }
 
 
 
-        ~AddonLoader()
+        public void Consume(SceneChange message)
         {
-            var instantiatedAddons = _getAddonsFromAssembly.Get(_assembly.Loaded)
-                .SelectMany(Object.FindObjectsOfType)
-                .Select(obj => obj as GameObject)
-                .ToList();
+            _log.Verbose("AddonLoader: handling level load for " + message.Scene.ToString());
 
-            _log.Verbose("AddonLoader: Destroying " + instantiatedAddons.Count + " instantiated addons from " +
-                         _assembly.Loaded.FullName);
+            var startupScene = _queryProvider.GetStartupSceneFromGameSceneQuery().Query(message.Scene);
 
-            instantiatedAddons.ForEach(_destructionMediator.InformTargetOfDestruction);
-            instantiatedAddons.ForEach(Object.Destroy);
-        }
-
-
-
-        public void Initialize()
-        {
-            foreach (var addonType in _getAddonsFromAssembly.Get(_assembly.Loaded))
-            {
-                var kspAddon = _getAddonsFromAssembly.GetKSPAddonFromType(addonType);
-
-                if (!kspAddon.Any())
-                    throw new InvalidOperationException(addonType.FullName + " does not have KSPAddon Attribute");
-
-                _addons.Add(new AddonInfo(addonType, kspAddon.First()));
-            }
-
-            DoLevelLoad(_currentStartupSceneProvider.Get());
-        }
-
-
-
-        public void DoLevelLoad(KSPAddon.Startup scene)
-        {
-            _log.Verbose("AddonLoader: handling level load for " + scene.ToString());
-
-            var addons = GetAddonsForScene(scene)
+            var addons = GetAddonsForScene(startupScene)
                 .Select(ty => _addons.Single(t => t.type == ty))
                 .ToList();
 
@@ -97,8 +67,34 @@ namespace AssemblyReloader.Loaders.Addon
             addons.RemoveAll(ai => ai.RunOnce && ai.created);
 
             addons.ForEach(CreateAddon);
-            
-            
+        }
+
+
+
+        ~AddonLoader()
+        {
+            Dispose();
+        }
+
+
+
+        public void Dispose()
+        {
+            var instantiatedAddons = _typesWhichAreAddons
+                .SelectMany(Object.FindObjectsOfType)
+                .Select(obj => obj as GameObject)
+                .ToList();
+
+            _log.Verbose("AddonLoader: Destroying " + instantiatedAddons.Count + " instantiated addons");
+
+            instantiatedAddons.ForEach(_destructionMediator.InformTargetOfDestruction);
+            instantiatedAddons.ForEach(Object.Destroy);
+
+            instantiatedAddons.Clear();
+
+            _eventSubscription.Dispose();
+
+            GC.SuppressFinalize(this);
         }
 
 
@@ -106,10 +102,10 @@ namespace AssemblyReloader.Loaders.Addon
         private IEnumerable<Type> GetAddonsForScene(KSPAddon.Startup scene)
         {
             return
-                _getAddonsFromAssembly.Get(_assembly.Loaded)
+                _typesWhichAreAddons
                     .Where(type =>
                     {
-                        var addon = _getAddonsFromAssembly.GetKSPAddonFromType(type);
+                        var addon = _queryProvider.GetAddonAttributeQuery().GetKspAddonAttribute(type);
 
                         return addon.Any() &&
                                addon.First().startup == scene;
@@ -128,6 +124,27 @@ namespace AssemblyReloader.Loaders.Addon
             addon.AddComponent(info.type);
             
             info.created = true;
+        }
+
+
+
+        public void Initialize()
+        {
+            _log.Debug("AddonLoader.Initialize");
+        }
+
+
+
+        public void Deinitialize()
+        {
+            _log.Debug("AddonLoader.Deinitialize");
+        }
+
+
+
+        private void OnSceneChanged(GameScenes newScene)
+        {
+            _log.Debug("AddonLoader: OnSceneChanged to " + newScene);
         }
     }
 }

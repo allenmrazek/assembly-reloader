@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.Remoting.Messaging;
 using System.Text;
 using AssemblyReloader.AddonTracking;
@@ -15,50 +16,58 @@ namespace AssemblyReloader.Factory
 {
     class LoaderFactory
     {
+        private readonly GameEventProvider _eventProvider;
         private readonly IDestructionMediator _destructionMediator;
         private readonly Log _log;
-        private readonly CurrentStartupSceneProvider _currentScene;
+        private readonly QueryProvider _queryProvider;
 
 
         public LoaderFactory(
+            GameEventProvider eventProvider,
             IDestructionMediator destructionMediator,
             Log log,
-            CurrentStartupSceneProvider currentScene)
+            QueryProvider queryProvider)
         {
+            if (eventProvider == null) throw new ArgumentNullException("eventProvider");
             if (destructionMediator == null) throw new ArgumentNullException("destructionMediator");
             if (log == null) throw new ArgumentNullException("log");
-            if (currentScene == null) throw new ArgumentNullException("currentScene");
+            if (queryProvider == null) throw new ArgumentNullException("queryProvider");
 
+            _eventProvider = eventProvider;
             _destructionMediator = destructionMediator;
             _log = log;
-            _currentScene = currentScene;
+            _queryProvider = queryProvider;
         }
 
 
 
-        public List<ILoader> CreateLoaders(
-            ReloadableAssembly assembly,
-            AddonsFromAssemblyQuery assemblyQuery)
+        public List<ILoader> CreateLoaders(Assembly assembly, QueryProvider queryProvider)
         {
-            if (assembly == null) throw new ArgumentNullException("assembly");
+            if (queryProvider == null) throw new ArgumentNullException("queryProvider");
 
-            _log.Verbose("Creating loaders for assembly '{0}'", assembly.File.FileName);
+            _log.Verbose("Creating loaders for assembly '{0}'", assembly.FullName);
 
-            var addonLoader = new Loaders.Addon.AddonLoader(
-                assembly,
-                _destructionMediator,
-                assemblyQuery,
-                _currentScene,
-                _log);
-
-
-            addonLoader.Initialize();
-
-
-            return new List<ILoader>
+            var loaders = new List<ILoader>
             {
-                addonLoader
+                CreateAddonLoader(assembly)
             };
+
+
+            loaders.ForEach(loader => loader.Initialize());
+
+
+            return loaders;
+        }
+
+
+        private ILoader CreateAddonLoader(Assembly assembly)
+        {
+            var typesThatAreAddons = _queryProvider.GetAddonsFromAssemblyQuery(assembly).Get();
+
+            var loader = new Loaders.Addon.AddonLoader(typesThatAreAddons, _eventProvider.GetLevelLoadedEvent(), _destructionMediator, 
+                _queryProvider, _log);
+
+            return loader;
         }
     }
 }

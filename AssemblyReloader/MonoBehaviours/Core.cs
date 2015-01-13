@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using AssemblyReloader.AddonTracking;
+using AssemblyReloader.AssemblyTracking.Implementations;
 using AssemblyReloader.Factory;
 using AssemblyReloader.GUI;
 using AssemblyReloader.Logging;
@@ -27,7 +28,10 @@ namespace AssemblyReloader.MonoBehaviours
     {
         private WindowView _view;
         private ReloadableContainer _container;
+        private MessageChannel _messageChannel;
+        private GameEventProvider _eventProvider;
 
+        private Log _log;
 
 
         private interface IConsumer
@@ -54,6 +58,11 @@ namespace AssemblyReloader.MonoBehaviours
             public void AddListener<T>(object listener)
             {
                 AddConsumer(new Consumer<T>(listener));
+            }
+
+            public void RemoveListener(object listener)
+            {
+                _consumers.RemoveAll(ic => ReferenceEquals(ic, listener));
             }
 
 
@@ -122,50 +131,63 @@ namespace AssemblyReloader.MonoBehaviours
             DontDestroyOnLoad(this);
 
 #if DEBUG
-            var log = LogFactory.Create(LogLevel.Debug);
+            _log = LogFactory.Create(LogLevel.Debug);
 #else
-            var log = LogFactory.Create(LogLevel.Standard);
+            _log = LogFactory.Create(LogLevel.Standard);
 #endif
             
 
 
-
+            
             var gameDataProvider = new KSPGameDataDirectoryProvider();
-            var startupSceneFromGameScene = new StartupSceneFromGameSceneQuery();
+   
+            var queryProvider = new QueryProvider();
 
-            var currentSceneProvider = new CurrentStartupSceneProvider(startupSceneFromGameScene);
 
-            var reloadableAssemblyFactory = new Factory.ReloadableAssemblyFactory(new AddonsFromAssemblyQuery());
-
-            var reloaderLog = new ReloaderLog(log, 25);
+            var reloaderLog = new ReloaderLog(_log, 25);
             var fileFactory = new KSPFileFactory();
             var destructionMediator = new GameObjectDestroyForReload();
 
-            var loaderFactory = new LoaderFactory(destructionMediator, reloaderLog, currentSceneProvider);
+            _eventProvider = new GameEventProvider();
 
-            var reloadableAssemblyFileQuery = new ReloadableAssemblyFileQuery(
-                fileFactory,
-                gameDataProvider
-                );
+            var loaderFactory = new LoaderFactory(_eventProvider, destructionMediator, reloaderLog, queryProvider);
+
+
 
             
 
-            _container = new ReloadableContainer(
-                                                    reloadableAssemblyFactory, 
-                                                    loaderFactory,
-                                                    reloadableAssemblyFileQuery,
-                                                    startupSceneFromGameScene,
-                                                    reloaderLog
-                                                );
 
-            GameEvents.onLevelWasLoaded.Add(_container.HandleLevelLoad);
 
-            log.Normal("Initializing container...");
+            
 
-            _container.Initialize();
+            _log.Normal("Initializing container...");
 
-            CreateWindow();
+            var reloadableAssemblyFileQuery = new ReloadableAssemblyFileQuery(
+                                                        fileFactory,
+                                                        gameDataProvider
+                                                        );
+
+
+            var asm = new ReloadableAssembly(reloadableAssemblyFileQuery.Get().First(), loaderFactory, _log,
+                queryProvider);
+
+            _container = new ReloadableContainer(reloaderLog, asm);
+
+
+            //CreateWindow();
+
+            Destroy(this);
         }
+
+
+
+        private void OnDestroy()
+        {
+            _log.Debug("Core.OnDestroy");
+            _eventProvider.Dispose();
+            
+        }
+
 
 
 

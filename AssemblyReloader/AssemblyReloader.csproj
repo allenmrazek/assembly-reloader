@@ -52,29 +52,38 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AssemblyTracking\IReloadableContainer.cs" />
     <Compile Include="Commands\ICommand.cs" />
+    <Compile Include="Events\IGameEventSource.cs" />
+    <Compile Include="Events\IGameEventSubscription.cs" />
+    <Compile Include="Events\Implementations\GameEventLevelWasLoaded.cs" />
+    <Compile Include="Events\Implementations\GameEventSubscription.cs" />
+    <Compile Include="Providers\GameEventProvider.cs" />
+    <Compile Include="Providers\QueryProvider.cs" />
     <Compile Include="Mediators\Destruction\GameObjectDestroyForReload.cs" />
     <Compile Include="Mediators\IDestructionMediator.cs" />
+    <Compile Include="Messages\Implementation\SceneChange.cs" />
     <Compile Include="Mothball\GameObjectLifetimeService.cs" />
     <Compile Include="Mothball\DestroyAllTrackedObjects.cs" />
     <Compile Include="Mothball\TrackedObjectCreated.cs" />
     <Compile Include="Mothball\TrackedObjectDestroyed.cs" />
     <Compile Include="Mothball\ITrackedItemMessage.cs" />
     <Compile Include="Mothball\TrackLifetime.cs" />
-    <Compile Include="Tracking\ReloadableContainer.cs" />
-    <Compile Include="Tracking\AddonInfo.cs" />
+    <Compile Include="AssemblyTracking\IReloadableAssembly.cs" />
+    <Compile Include="AssemblyTracking\Implementations\ReloadableContainer.cs" />
+    <Compile Include="Queries\AddonAttributeFromTypeQuery.cs" />
+    <Compile Include="TypeTracking\AddonInfo.cs" />
     <Compile Include="Messages\IChannel.cs" />
     <Compile Include="Messages\IConsumer.cs" />
     <Compile Include="Messages\IMessage.cs" />
     <Compile Include="Factory\LoaderFactory.cs" />
-    <Compile Include="Factory\ReloadableAssemblyFactory.cs" />
     <Compile Include="Loaders\ILoader.cs" />
     <Compile Include="Logging\ReloaderLog.cs" />
     <Compile Include="Messages\Implementation\TestEvent.cs" />
     <Compile Include="ILModifications\ModifyPluginIdentity.cs" />
     <Compile Include="Loaders\Addon\AddonLoader.cs" />
     <Compile Include="MonoBehaviours\Core.cs" />
-    <Compile Include="Tracking\ReloadableAssembly.cs" />
+    <Compile Include="AssemblyTracking\Implementations\ReloadableAssembly.cs" />
     <Compile Include="GUI\ViewLogic.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Queries\AddonsFromAssemblyQuery.cs" />
@@ -93,7 +102,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Services\" />
-    <Folder Include="Tracking\Messages\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
