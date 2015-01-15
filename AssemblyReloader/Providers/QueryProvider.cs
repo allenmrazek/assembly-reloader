@@ -17,6 +17,7 @@ namespace AssemblyReloader.Factory
         public QueryProvider()
         {
             _attributeQuery = new AddonAttributeFromTypeQuery();
+            _startupSceneConverter = new StartupSceneFromGameSceneQuery();
         }
 
 

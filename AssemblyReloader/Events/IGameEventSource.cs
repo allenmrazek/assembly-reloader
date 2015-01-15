@@ -9,5 +9,7 @@ namespace AssemblyReloader.Events
     {
         IGameEventSubscription Add(T callback);
         void Remove(T callback);
+
+        
     }
 }

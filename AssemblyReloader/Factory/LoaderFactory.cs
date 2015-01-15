@@ -63,8 +63,13 @@ namespace AssemblyReloader.Factory
         {
             var typesThatAreAddons = _queryProvider.GetAddonsFromAssemblyQuery(assembly).Get();
 
-            var loader = new Loaders.Addon.AddonLoader(typesThatAreAddons, _eventProvider.GetLevelLoadedEvent(), _destructionMediator, 
-                _queryProvider, _log.CreateTag("AddonLoader"));
+            var loader = new Loaders.Addon.AddonLoader(
+                typesThatAreAddons, 
+                _eventProvider.GetLevelLoadedEvent(), 
+                _destructionMediator,
+                _queryProvider.GetStartupSceneFromGameSceneQuery(),
+                _queryProvider.GetAddonAttributeQuery(), 
+                _log.CreateTag("AddonLoader"));
 
             return loader;
         }
