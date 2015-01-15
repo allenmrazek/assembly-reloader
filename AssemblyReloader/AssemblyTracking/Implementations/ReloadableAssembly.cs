@@ -1,22 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Reflection;
 using AssemblyReloader.Factory;
 using AssemblyReloader.ILModifications;
 using AssemblyReloader.Loaders;
-using AssemblyReloader.Providers;
-using AssemblyReloader.Queries;
 using AssemblyReloader.Tracking;
 using Mono.Cecil;
 using ReeperCommon.Extensions;
 using ReeperCommon.FileSystem;
 using ReeperCommon.Logging;
-using UnityEngine;
-using Object = UnityEngine.Object;
 
-namespace AssemblyReloader.AddonTracking
+namespace AssemblyReloader.AssemblyTracking.Implementations
 {
 
     /// <summary>
@@ -30,15 +24,15 @@ namespace AssemblyReloader.AddonTracking
         private System.Reflection.Assembly _loaded;
         private readonly IFile _file;
         private readonly LoaderFactory _loaderFactory;
-        private List<ILoader> _loaders;
-        private readonly Log _log;
+        private List<ILoader> _loaders = new List<ILoader>();
+        private readonly ILog _log;
         private readonly QueryProvider _queryProvider;
 
 
         public ReloadableAssembly(
             IFile file, 
             LoaderFactory loaderFactory,
-            Log log,
+            ILog log,
             QueryProvider queryProvider)
         {
             if (file == null) throw new ArgumentNullException("file");
@@ -57,11 +51,16 @@ namespace AssemblyReloader.AddonTracking
         ~ReloadableAssembly()
         {
             _log.Debug("Reloadable assembly " + _file.FileName + " destructing");
-            //throw new Exception("can you see me?");
+            Dispose();
         }
 
 
 
+        public void Dispose()
+        {
+            Unload();
+            GC.SuppressFinalize(this);
+        }
 
 
 
@@ -85,24 +84,29 @@ namespace AssemblyReloader.AddonTracking
 
         public void Load()
         {
-
-            //using (var stream = new System.IO.MemoryStream())
-            //{
-            //    ApplyModifications(stream); // modified assembly written to memory
-
-            //    // load dll from byte stream. This is done simply to avoid unnecessary file i/o;
-            //    // File.ReadAllBytes works too but then we waste time writing a file and then immediately
-            //    // reading it again a single time
-
-            //    _log.Normal("loading assembly");
-            //    _loaded = Assembly.Load(stream.GetBuffer());
-            //    _log.Normal("load finished");
-            //    if (_loaded.IsNull())
-            //        throw new InvalidOperationException("Failed to load byte stream as Assembly");
+            // better if we don't do things the caller wasn't expecting, like quietly
+            // unloading a previous version if we weren't told to
+            if (_loaders.Count > 0)
+                throw new InvalidOperationException("Previous assembly was not Unloaded");
 
 
-                
-            //}
+            using (var stream = new System.IO.MemoryStream())
+            {
+                ApplyModifications(stream); // modified assembly written to memory
+
+                // load dll from byte stream. This is done simply to avoid unnecessary file i/o;
+                // File.ReadAllBytes works too but then we waste time writing a file and then immediately
+                // reading it again a single time
+
+                _log.Normal("loading assembly");
+                _loaded = Assembly.Load(stream.GetBuffer());
+                _log.Normal("load finished");
+                if (_loaded.IsNull())
+                    throw new InvalidOperationException("Failed to load byte stream as Assembly");
+
+                _loaders = _loaderFactory.CreateLoaders(_loaded, _queryProvider);
+
+            }
         }
 
 

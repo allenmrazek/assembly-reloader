@@ -8,19 +8,19 @@ namespace AssemblyReloader.Logging
     /// <summary>
     /// Essentially a decorator that caches log messages for display in the view
     /// </summary>
-    class ReloaderLog : StandardLog
+    class ReloaderLog : ILog
     {
-        private readonly Log _main;
+        private readonly ILog _mainLog;
         private readonly Queue<string> _messages = new Queue<string>();
         private readonly int _messageBuffer = 100;
 
 
 
-        public ReloaderLog(Log mainLog, int buffer = 50)
+        public ReloaderLog(ILog mainBaseLog, int buffer = 50)
         {
-            if (mainLog == null) throw new ArgumentNullException("mainLog");
+            if (mainBaseLog == null) throw new ArgumentNullException("mainBaseLog");
 
-            _main = mainLog;
+            _mainLog = mainBaseLog;
             _messageBuffer = buffer;
         }
 
@@ -36,56 +36,61 @@ namespace AssemblyReloader.Logging
 
 
 
-        public override void Debug(string format, params string[] args)
+        public void Debug(string format, params string[] args)
         {
             var msg = string.Format("[DBG] " + format, args);
             AddEntry(msg);
-            base.Debug(format, args);
+            _mainLog.Debug(format, args);
         }
 
 
 
-        public override void Normal(string format, params string[] args)
+        public void Normal(string format, params string[] args)
         {
             var msg = string.Format(format, args);
             AddEntry(msg);
-            base.Normal(format, args);
+            _mainLog.Normal(format, args);
         }
 
 
 
-        public override void Warning(string format, params string[] args)
+        public void Warning(string format, params string[] args)
         {
             var msg = string.Format("[WRN] " + format, args);
             AddEntry(msg);
-            base.Warning(format, args);
+            _mainLog.Warning(format, args);
         }
 
 
 
-        public override void Error(string format, params string[] args)
+        public void Error(string format, params string[] args)
         {
             var msg = string.Format("[ERR] " + format, args);
             AddEntry(msg);
-            base.Error(format, args);
+            _mainLog.Error(format, args);
         }
 
 
 
-        public override void Performance(string format, params string[] args)
+        public void Performance(string format, params string[] args)
         {
             var msg = string.Format("[PERF] " + format, args);
             AddEntry(msg);
-            base.Performance(format, args);
+            _mainLog.Performance(format, args);
         }
 
 
 
-        public override void Verbose(string format, params string[] args)
+        public void Verbose(string format, params string[] args)
         {
             var msg = string.Format(format, args);
             AddEntry(msg);
-            base.Verbose(format, args);
+            _mainLog.Verbose(format, args);
+        }
+
+        public ILog CreateTag(string tag)
+        {
+            return new TaggedLog(this, tag);
         }
     }
 }

@@ -4,17 +4,25 @@ using System.Linq;
 using System.Text;
 using AssemblyReloader.Events;
 using AssemblyReloader.Events.Implementations;
+using ReeperCommon.Logging;
 
 namespace AssemblyReloader.Providers
 {
     class GameEventProvider : IDisposable
     {
+        private readonly ILog _log;
+
         private readonly IGameEventSource<LevelWasLoadedDelegate> _levelLoadedSource;
 
 
-        public GameEventProvider()
+        public GameEventProvider(ILog log)
         {
-            _levelLoadedSource = new GameEventLevelWasLoaded();
+            if (log == null) throw new ArgumentNullException("log");
+
+            _log = log;
+            _levelLoadedSource = new GameEventLevelWasLoaded(_log);
+
+            SubscribeProxiesToGameEvents();
         }
 
 
@@ -32,9 +40,19 @@ namespace AssemblyReloader.Providers
         
         public void Dispose()
         {
-            _levelLoadedSource.Dispose();
-
+            UnsubscribeProxiesToGameEvents();
             GC.SuppressFinalize(this);
+        }
+
+
+        private void SubscribeProxiesToGameEvents()
+        {
+            GameEvents.onLevelWasLoaded.Add((_levelLoadedSource as GameEventLevelWasLoaded).OnLevelWasLoaded);
+        }
+
+        private void UnsubscribeProxiesToGameEvents()
+        {
+            GameEvents.onLevelWasLoaded.Remove((_levelLoadedSource as GameEventLevelWasLoaded).OnLevelWasLoaded);
         }
     }
 }

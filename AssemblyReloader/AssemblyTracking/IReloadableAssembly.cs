@@ -5,7 +5,7 @@ using System.Text;
 
 namespace AssemblyReloader.Tracking
 {
-    interface IReloadableAssembly
+    interface IReloadableAssembly : IDisposable
     {
         void Load();
         void Unload();

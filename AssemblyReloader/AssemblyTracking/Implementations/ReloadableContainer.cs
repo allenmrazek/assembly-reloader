@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using AssemblyReloader.AddonTracking;
 using AssemblyReloader.Queries;
 using ReeperCommon.Logging;
 
@@ -11,10 +10,10 @@ namespace AssemblyReloader.AssemblyTracking.Implementations
     class ReloadableContainer : IReloadableContainer
     {
         private readonly IEnumerable<ReloadableAssembly> _reloadables;
-        private readonly Log _log;
+        private readonly ILog _log;
 
         public ReloadableContainer(
-            Log log,
+            ILog log,
             params ReloadableAssembly[] reloadables)
         {
             if (log == null) throw new ArgumentNullException("log");
@@ -26,23 +25,15 @@ namespace AssemblyReloader.AssemblyTracking.Implementations
 
 
 
-
-
-        public void ReloadAllAssemblies()
+        ~ReloadableContainer()
         {
-            throw new NotImplementedException();
-
-            _log.Normal("Container: Reloading all " + _reloadables.Count() + " assemblies");
+            foreach (var reloadable in _reloadables)
+                reloadable.Dispose();
         }
 
 
 
-        public void UnloadAll()
-        {
-            //_log.Normal("Container: Unloading all assemblies");
-            //foreach (var reloadable in _reloadables)
-            //    reloadable.
-        }
+
 
     }
 }

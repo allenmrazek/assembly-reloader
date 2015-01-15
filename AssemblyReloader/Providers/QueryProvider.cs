@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using AssemblyReloader.AddonTracking;
 using AssemblyReloader.Queries;
 
 namespace AssemblyReloader.Factory

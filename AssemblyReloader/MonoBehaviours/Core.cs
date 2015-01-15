@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using AssemblyReloader.AddonTracking;
 using AssemblyReloader.AssemblyTracking.Implementations;
 using AssemblyReloader.Factory;
 using AssemblyReloader.GUI;
@@ -18,6 +17,7 @@ using ReeperCommon.Gui.Window.Decorators;
 using ReeperCommon.Gui.Window.Factory;
 using ReeperCommon.Gui.Window.View;
 using ReeperCommon.Logging;
+using ReeperCommon.Logging.Implementations;
 using UnityEngine;
 
 namespace AssemblyReloader.MonoBehaviours
@@ -31,7 +31,7 @@ namespace AssemblyReloader.MonoBehaviours
         private MessageChannel _messageChannel;
         private GameEventProvider _eventProvider;
 
-        private Log _log;
+        private ILog _log;
 
 
         private interface IConsumer
@@ -104,23 +104,23 @@ namespace AssemblyReloader.MonoBehaviours
 
         class TestConsumer : IConsumer<TestEvent>
         {
-            private readonly Log _log;
+            private readonly BaseLog _baseLog;
 
-            public TestConsumer(Log log)
+            public TestConsumer(BaseLog baseLog)
             {
-                if (log == null) throw new ArgumentNullException("log");
-                _log = log;
+                if (baseLog == null) throw new ArgumentNullException("baseLog");
+                _baseLog = baseLog;
             }
 
 
             public void Consume(object message)
             {
-                _log.Warning("GOT THE (generic) MESSAGE!");
+                _baseLog.Warning("GOT THE (generic) MESSAGE!");
             }
 
             public void Consume(TestEvent message)
             {
-                _log.Warning("GOT THE MESSAGE!");
+                _baseLog.Warning("GOT THE MESSAGE!");
             }
         }
 
@@ -131,7 +131,7 @@ namespace AssemblyReloader.MonoBehaviours
             DontDestroyOnLoad(this);
 
 #if DEBUG
-            _log = LogFactory.Create(LogLevel.Debug);
+            _log = new DebugLog("ART");
 #else
             _log = LogFactory.Create(LogLevel.Standard);
 #endif
@@ -148,17 +148,17 @@ namespace AssemblyReloader.MonoBehaviours
             var fileFactory = new KSPFileFactory();
             var destructionMediator = new GameObjectDestroyForReload();
 
-            _eventProvider = new GameEventProvider();
+            _eventProvider = new GameEventProvider(_log.CreateTag("GameEventProvider"));
 
             var loaderFactory = new LoaderFactory(_eventProvider, destructionMediator, reloaderLog, queryProvider);
 
 
 
-            
 
 
 
-            
+
+
 
             _log.Normal("Initializing container...");
 
@@ -168,15 +168,18 @@ namespace AssemblyReloader.MonoBehaviours
                                                         );
 
 
-            var asm = new ReloadableAssembly(reloadableAssemblyFileQuery.Get().First(), loaderFactory, _log,
+            var asm = new ReloadableAssembly(reloadableAssemblyFileQuery.Get().First(), loaderFactory, _log.CreateTag("ReloadableAssembly"),
                 queryProvider);
+
+            asm.Load();
 
             _container = new ReloadableContainer(reloaderLog, asm);
 
+            GameEvents.onLevelWasLoaded.Add(Test);
+            GameEvents.onLevelWasLoaded.Fire(GameScenes.LOADING);
 
             //CreateWindow();
 
-            Destroy(this);
         }
 
 
@@ -188,6 +191,11 @@ namespace AssemblyReloader.MonoBehaviours
             
         }
 
+
+        private void Test(GameScenes scene)
+        {
+            _log.Normal("Core.GameEventTest");
+        }
 
 
 

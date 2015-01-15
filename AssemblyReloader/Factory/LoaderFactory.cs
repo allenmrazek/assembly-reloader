@@ -4,7 +4,6 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.Remoting.Messaging;
 using System.Text;
-using AssemblyReloader.AddonTracking;
 using AssemblyReloader.Loaders;
 using AssemblyReloader.Mediators;
 using AssemblyReloader.Messages;
@@ -18,19 +17,19 @@ namespace AssemblyReloader.Factory
     {
         private readonly GameEventProvider _eventProvider;
         private readonly IDestructionMediator _destructionMediator;
-        private readonly Log _log;
+        private readonly ILog _log;
         private readonly QueryProvider _queryProvider;
 
 
         public LoaderFactory(
             GameEventProvider eventProvider,
             IDestructionMediator destructionMediator,
-            Log log,
+            ILog log,
             QueryProvider queryProvider)
         {
             if (eventProvider == null) throw new ArgumentNullException("eventProvider");
             if (destructionMediator == null) throw new ArgumentNullException("destructionMediator");
-            if (log == null) throw new ArgumentNullException("log");
+            if (log == null) throw new ArgumentNullException("baseLog");
             if (queryProvider == null) throw new ArgumentNullException("queryProvider");
 
             _eventProvider = eventProvider;
@@ -65,7 +64,7 @@ namespace AssemblyReloader.Factory
             var typesThatAreAddons = _queryProvider.GetAddonsFromAssemblyQuery(assembly).Get();
 
             var loader = new Loaders.Addon.AddonLoader(typesThatAreAddons, _eventProvider.GetLevelLoadedEvent(), _destructionMediator, 
-                _queryProvider, _log);
+                _queryProvider, _log.CreateTag("AddonLoader"));
 
             return loader;
         }

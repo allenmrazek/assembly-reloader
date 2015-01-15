@@ -1,7 +1,6 @@
 using System;
-using AssemblyReloader.AddonTracking;
 
-namespace AssemblyReloader.Loaders
+namespace AssemblyReloader.TypeTracking
 {
     class AddonInfo
     {

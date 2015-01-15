@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using AssemblyReloader.AddonTracking;
 using AssemblyReloader.Events;
 using AssemblyReloader.Events.Implementations;
 using AssemblyReloader.Factory;
@@ -9,6 +8,7 @@ using AssemblyReloader.Mediators;
 using AssemblyReloader.Messages.Implementation;
 using AssemblyReloader.Providers;
 using AssemblyReloader.Queries;
+using AssemblyReloader.TypeTracking;
 using ReeperCommon.Extensions;
 using ReeperCommon.Logging;
 using UnityEngine;
@@ -25,21 +25,22 @@ namespace AssemblyReloader.Loaders.Addon
         private readonly IDestructionMediator _destructionMediator;
         private readonly QueryProvider _queryProvider;
         private readonly IEnumerable<Type> _typesWhichAreAddons;
-        private readonly Log _log;
+        private readonly ILog _log;
         private readonly IGameEventSubscription _eventSubscription;
 
 
 
         public AddonLoader(
             IEnumerable<Type> typesWhichAreAddons,
-            IGameEventSource<LevelWasLoadedDelegate> sceneChangeEvent,
+            IGameEventSource<LevelWasLoadedDelegate> levelLoadedEvent,
             IDestructionMediator destructionMediator,
             QueryProvider queryProvider,
-            Log log)
+            ILog log)
         {
             if (destructionMediator == null) throw new ArgumentNullException("destructionMediator");
             if (queryProvider == null) throw new ArgumentNullException("queryProvider");
             if (typesWhichAreAddons == null) throw new ArgumentNullException("typesWhichAreAddons");
+            if (levelLoadedEvent == null) throw new ArgumentNullException("levelLoadedEvent");
             if (log == null) throw new ArgumentNullException("log");
 
             _destructionMediator = destructionMediator;
@@ -47,15 +48,14 @@ namespace AssemblyReloader.Loaders.Addon
             _typesWhichAreAddons = typesWhichAreAddons;
             _log = log;
             _addons = new List<AddonInfo>();
-
-            _eventSubscription = sceneChangeEvent.Add(OnSceneChanged);
+            _eventSubscription = levelLoadedEvent.Add(OnSceneChanged);
         }
 
 
 
         public void Consume(SceneChange message)
         {
-            _log.Verbose("AddonLoader: handling level load for " + message.Scene.ToString());
+            _log.Verbose("handling level load for " + message.Scene.ToString());
 
             var startupScene = _queryProvider.GetStartupSceneFromGameSceneQuery().Query(message.Scene);
 
@@ -80,19 +80,19 @@ namespace AssemblyReloader.Loaders.Addon
 
         public void Dispose()
         {
+            _eventSubscription.Dispose();
+
             var instantiatedAddons = _typesWhichAreAddons
                 .SelectMany(Object.FindObjectsOfType)
                 .Select(obj => obj as GameObject)
                 .ToList();
 
-            _log.Verbose("AddonLoader: Destroying " + instantiatedAddons.Count + " instantiated addons");
+            _log.Verbose("Destroying " + instantiatedAddons.Count + " instantiated addons");
 
             instantiatedAddons.ForEach(_destructionMediator.InformTargetOfDestruction);
             instantiatedAddons.ForEach(Object.Destroy);
 
             instantiatedAddons.Clear();
-
-            _eventSubscription.Dispose();
 
             GC.SuppressFinalize(this);
         }
@@ -117,7 +117,7 @@ namespace AssemblyReloader.Loaders.Addon
 
         private void CreateAddon(AddonInfo info)
         {
-            _log.Verbose("AddonLoader: Creating KSPAddon '{0}'", info.type.FullName);
+            _log.Verbose("Creating KSPAddon '{0}'", info.type.FullName);
 
             var addon = new GameObject(info.type.Name);
 
@@ -130,21 +130,21 @@ namespace AssemblyReloader.Loaders.Addon
 
         public void Initialize()
         {
-            _log.Debug("AddonLoader.Initialize");
+            _log.Debug("Initialize");
         }
 
 
 
         public void Deinitialize()
         {
-            _log.Debug("AddonLoader.Deinitialize");
+            _log.Debug("Deinitialize");
         }
 
 
 
         private void OnSceneChanged(GameScenes newScene)
         {
-            _log.Debug("AddonLoader: OnSceneChanged to " + newScene);
+            _log.Debug("OnSceneChanged to " + newScene);
         }
     }
 }
