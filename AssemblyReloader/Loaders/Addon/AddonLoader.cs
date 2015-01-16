@@ -35,7 +35,7 @@ namespace AssemblyReloader.Loaders.Addon
 
         public AddonLoader(
             IEnumerable<Type> typesWhichAreAddons,
-            IGameEventSource<LevelWasLoadedDelegate> levelLoadedEvent,
+            IGameEventSubscriber<GameScenes> levelLoadedEvent,
             IDestructionMediator destructionMediator,
             IMonoBehaviourFactory addonFactory,
             StartupSceneFromGameSceneQuery startupSceneFromGameSceneQuery,
@@ -59,7 +59,7 @@ namespace AssemblyReloader.Loaders.Addon
             _log = log;
             _addons = new Dictionary<Type, AddonInfo>();
 
-            _eventSubscription = levelLoadedEvent.Add(OnSceneChanged);
+            _eventSubscription = levelLoadedEvent.AddListener(OnSceneChanged);
         }
 
 
@@ -82,10 +82,42 @@ namespace AssemblyReloader.Loaders.Addon
 
 
 
+        public void Initialize()
+        {
+            _log.Debug("Initialize");
+
+            if (_addons.Count > 0)
+                throw new InvalidOperationException("AddonLoader was not deinitialized");
+
+            foreach (var addonType in _typesWhichAreAddons)
+            {
+                var addonAttr = _addonAttributeFromType.GetKspAddonAttribute(addonType);
+
+                if (!addonAttr.Any())
+                    throw new InvalidOperationException(addonType.FullName + " does not have KSPAddon attribute");
+
+                _addons.Add(addonType, new AddonInfo(addonType, addonAttr.Single()));
+            }
+
+            _log.Debug(_addons.Count + " total addons found");
+
+        }
+
+
+
+        public void Deinitialize()
+        {
+            _log.Debug("Deinitialize");
+            DestroyLiveAddons();
+            _addons.Clear();
+        }
+
+
+
         private IEnumerable<KeyValuePair<Type, AddonInfo>> GetAddonsForScene(KSPAddon.Startup scene)
         {
             return ShouldBeCreated(_addons
-                .Where(ty => ty.Value.addon.startup == scene));
+                .Where(ty => ty.Value.addon.startup == scene || ty.Value.addon.startup == KSPAddon.Startup.Instantly));
         }
 
 
@@ -122,43 +154,11 @@ namespace AssemblyReloader.Loaders.Addon
         }
 
 
-
-        public void Initialize()
+        public void LoadAddonsForScene(GameScenes scene)
         {
-            _log.Debug("Initialize");
+            _log.Debug("Loading addons for " + scene);
 
-            if (_addons.Count > 0)
-                throw new InvalidOperationException("AddonLoader was not deinitialized");
-
-            foreach (var addonType in _typesWhichAreAddons)
-            {
-                var addonAttr = _addonAttributeFromType.GetKspAddonAttribute(addonType);
-
-                if (!addonAttr.Any())
-                    throw new InvalidOperationException(addonType.FullName + " does not have KSPAddon attribute");
-
-                _addons.Add(addonType, new AddonInfo(addonType, addonAttr.Single()));
-            }
-
-            _log.Debug(_addons.Count + " total addons found");
-        }
-
-
-
-        public void Deinitialize()
-        {
-            _log.Debug("Deinitialize");
-            DestroyLiveAddons();
-            _addons.Clear(); 
-        }
-
-
-
-        private void OnSceneChanged(GameScenes newScene)
-        {
-            _log.Debug("OnSceneChanged to " + newScene);
-
-            var startupScene = _startupSceneFromGameSceneQuery.Query(newScene);
+            var startupScene = _startupSceneFromGameSceneQuery.Query(scene);
             var addonsThatMatchScene = GetAddonsForScene(startupScene);
             var thatMatchScene = addonsThatMatchScene as IList<KeyValuePair<Type, AddonInfo>> ?? addonsThatMatchScene.ToList();
 
@@ -167,7 +167,14 @@ namespace AssemblyReloader.Loaders.Addon
             foreach (var addonType in thatMatchScene)
                 _addonFactory.Create(addonType.Key, true);
             
+        }
 
+
+        private void OnSceneChanged(GameScenes newScene)
+        {
+            _log.Debug("OnSceneChanged");
+            _addonFactory.RemoveDeadMonoBehaviours();
+            LoadAddonsForScene(newScene);
         }
     }
 }

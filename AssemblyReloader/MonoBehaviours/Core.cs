@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using AssemblyReloader.AssemblyTracking.Implementations;
+using AssemblyReloader.Events.Implementations;
 using AssemblyReloader.Factory;
 using AssemblyReloader.Factory.Implementations;
 using AssemblyReloader.GUI;
@@ -31,7 +32,6 @@ namespace AssemblyReloader.MonoBehaviours
         private WindowView _view;
         private ReloadableController _controller;
         private MessageChannel _messageChannel;
-        private GameEventProvider _eventProvider;
 
         private ILog _log;
 
@@ -131,9 +131,12 @@ namespace AssemblyReloader.MonoBehaviours
             var destructionMediator = new GameObjectDestroyForReload();
             var addonFactory = new MonoBehaviourFactory(log.CreateTag("AddonFactory"));
 
-            _eventProvider = new GameEventProvider(log.CreateTag("GameEventProvider"));
+            //_eventProvider = new GameEventProvider(log.CreateTag("GameEventProvider"));
 
-            var loaderFactory = new LoaderFactory(_eventProvider, destructionMediator, addonFactory, reloaderLog, queryProvider);
+            var levelLoadedEvent = new GameEventSubscriber<GameScenes>(log.CreateTag("OnLevelWasLoaded"));
+            levelLoadedEvent.SubscribeTo(GameEvents.onLevelWasLoaded);
+
+            var loaderFactory = new LoaderFactory(destructionMediator, addonFactory, levelLoadedEvent, reloaderLog, queryProvider);
 
 
 
@@ -151,7 +154,7 @@ namespace AssemblyReloader.MonoBehaviours
                                                         );
 
 
-            var asm = new ReloadableAssembly(reloadableAssemblyFileQuery.Get().First(), loaderFactory, log.CreateTag("ReloadableAssembly"),
+            var asm = new ReloadableAssembly(reloadableAssemblyFileQuery.Get().First(), loaderFactory, log.CreateTag("Reloadable:" + reloadableAssemblyFileQuery.Get().First().Name),
                 queryProvider);
 
             asm.Load();
@@ -160,11 +163,11 @@ namespace AssemblyReloader.MonoBehaviours
             _controller = new ReloadableController(reloaderLog, asm);
 
 
+            GameEvents.onLevelWasLoaded.Add(LevelWasLoaded);
 
-            _eventProvider.GetLevelLoadedEvent().Trigger(GameScenes.LOADING);
 
             _controller.ReloadAll();
-            
+
 
             CreateWindow();
 
@@ -175,10 +178,13 @@ namespace AssemblyReloader.MonoBehaviours
         private void OnDestroy()
         {
             _log.Debug("OnDestroy");
-            _eventProvider.Dispose();
         }
 
 
+        private void LevelWasLoaded(GameScenes scene)
+        {
+            _log.Warning("LevelWasLoaded: " + scene);
+        }
 
 
         private void CreateWindow()

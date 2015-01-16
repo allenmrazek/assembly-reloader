@@ -54,12 +54,13 @@
   <ItemGroup>
     <Compile Include="AssemblyTracking\IReloadableController.cs" />
     <Compile Include="Commands\ICommand.cs" />
-    <Compile Include="Events\IGameEventSource.cs" />
+    <Compile Include="Events\IGameEventSubscriber.cs" />
     <Compile Include="Events\IGameEventSubscription.cs" />
-    <Compile Include="Events\Implementations\GameEventLevelWasLoaded.cs" />
+    <Compile Include="Events\Implementations\GameEventSubscriber.cs" />
     <Compile Include="Events\Implementations\GameEventSubscription.cs" />
     <Compile Include="Factory\IMonoBehaviourFactory.cs" />
     <Compile Include="Factory\Implementations\MonoBehaviourFactory.cs" />
+    <Compile Include="Providers\CurrentGameSceneProvider.cs" />
     <Compile Include="Providers\GameEventProvider.cs" />
     <Compile Include="Providers\QueryProvider.cs" />
     <Compile Include="Mediators\Destruction\GameObjectDestroyForReload.cs" />

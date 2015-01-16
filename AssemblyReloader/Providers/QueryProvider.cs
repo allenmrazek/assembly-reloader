@@ -8,13 +8,14 @@ namespace AssemblyReloader.Providers
     {
         private readonly AddonAttributeFromTypeQuery _attributeQuery;
         private readonly StartupSceneFromGameSceneQuery _startupSceneConverter;
-
+        private readonly CurrentGameSceneProvider _currentGameSceneProvider;
 
 
         public QueryProvider()
         {
             _attributeQuery = new AddonAttributeFromTypeQuery();
             _startupSceneConverter = new StartupSceneFromGameSceneQuery();
+            _currentGameSceneProvider = new CurrentGameSceneProvider();
         }
 
 
@@ -37,6 +38,11 @@ namespace AssemblyReloader.Providers
         public StartupSceneFromGameSceneQuery GetStartupSceneFromGameSceneQuery()
         {
             return _startupSceneConverter;
+        }
+
+        public CurrentGameSceneProvider GetCurrentGameSceneProvider()
+        {
+            return _currentGameSceneProvider;
         }
     }
 }

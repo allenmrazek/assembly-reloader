@@ -7,12 +7,12 @@ namespace AssemblyReloader.Events.Implementations
 {
     class GameEventSubscription<T> : IGameEventSubscription
     {
-        private readonly IGameEventSource<T> _src;
-        private readonly T _callback;
+        private readonly IGameEventSubscriber<T> _src;
+        private readonly Action<T> _callback;
 
 
 
-        public GameEventSubscription(IGameEventSource<T> src, T callback)
+        public GameEventSubscription(IGameEventSubscriber<T> src, Action<T> callback)
         {
             if (src == null) throw new ArgumentNullException("src");
 
@@ -40,7 +40,7 @@ namespace AssemblyReloader.Events.Implementations
         {
             if (disposing)
             {
-                _src.Remove(_callback);
+                _src.RemoveListener(_callback);
             }
         }
     }

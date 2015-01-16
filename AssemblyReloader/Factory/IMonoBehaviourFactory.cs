@@ -10,5 +10,6 @@ namespace AssemblyReloader.Factory
     {
         MonoBehaviour Create(Type type, bool track);
         IEnumerable<MonoBehaviour> GetLiveMonoBehaviours();
+        void RemoveDeadMonoBehaviours();
     }
 }

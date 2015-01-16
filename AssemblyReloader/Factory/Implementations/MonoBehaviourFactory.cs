@@ -44,13 +44,18 @@ namespace AssemblyReloader.Factory.Implementations
 
         public IEnumerable<MonoBehaviour> GetLiveMonoBehaviours()
         {
-            var removed = _trackedItems.RemoveAll(mb => ReferenceEquals(mb, null) || mb.Equals(null));
-
-            _log.Debug(removed + " items no longer tracked because they have been destroyed");
+            RemoveDeadMonoBehaviours();
 
             return _trackedItems.AsEnumerable<MonoBehaviour>();
         }
 
+
+        public void RemoveDeadMonoBehaviours()
+        {
+            var removed = _trackedItems.RemoveAll(mb => ReferenceEquals(mb, null) || mb.Equals(null));
+
+            _log.Debug(removed + " items no longer tracked because they have been destroyed");
+        }
 
    
     }

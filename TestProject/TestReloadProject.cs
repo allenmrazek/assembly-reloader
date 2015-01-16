@@ -10,22 +10,42 @@ namespace TestProject
     [KSPAddon(KSPAddon.Startup.Instantly, false)]
     public class TestReloadProject : MonoBehaviour
     {
-        void Start()
+        private Rect _windowRect = new Rect(400f, 400f, 200f, 200f);
+
+        private void OnGUI()
         {
-            //gameObject.GetComponents<Component>().ToList().ForEach(c => print("Have component: " + c.name));
-            WriteString("TestReloadProject: " + typeof(TestReloadProject).FullName);
+            _windowRect =
+                KSPUtil.ClampRectToScreen(GUILayout.Window(GetInstanceID(), _windowRect, DrawWindow, "Test Window"));
         }
 
-        void Update()
+        private void DrawWindow(int winid)
         {
-            WriteString("TestReloadProject: " + typeof(TestReloadProject).FullName + " from " + Assembly.GetExecutingAssembly().Location);
-            //var r = new SecondClass("secondclass create"); // to verify namespace change hasn't broken something internally
+            GUILayout.BeginVertical();
+
+            if (GUILayout.Button("Destroy This"))
+                Destroy(this);
+
+            GUILayout.EndVertical();
+
+            GUI.DragWindow();
         }
 
-        public static void WriteString(string str)
-        {
-            //print(str);
-        }
+        //void Start()
+        //{
+        //    //gameObject.GetComponents<Component>().ToList().ForEach(c => print("Have component: " + c.name));
+        //    WriteString("TestReloadProject: " + typeof(TestReloadProject).FullName);
+        //}
+
+        //void Update()
+        //{
+        //    WriteString("TestReloadProject: " + typeof(TestReloadProject).FullName + " from " + Assembly.GetExecutingAssembly().Location);
+        //    //var r = new SecondClass("secondclass create"); // to verify namespace change hasn't broken something internally
+        //}
+
+        //public static void WriteString(string str)
+        //{
+        //    //print(str);
+        //}
 
         private void OnAssemblyReloadRequested()
         {
