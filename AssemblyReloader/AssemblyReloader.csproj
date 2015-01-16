@@ -52,12 +52,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AssemblyTracking\IReloadableContainer.cs" />
+    <Compile Include="AssemblyTracking\IReloadableController.cs" />
     <Compile Include="Commands\ICommand.cs" />
     <Compile Include="Events\IGameEventSource.cs" />
     <Compile Include="Events\IGameEventSubscription.cs" />
     <Compile Include="Events\Implementations\GameEventLevelWasLoaded.cs" />
     <Compile Include="Events\Implementations\GameEventSubscription.cs" />
+    <Compile Include="Factory\IMonoBehaviourFactory.cs" />
+    <Compile Include="Factory\Implementations\MonoBehaviourFactory.cs" />
     <Compile Include="Providers\GameEventProvider.cs" />
     <Compile Include="Providers\QueryProvider.cs" />
     <Compile Include="Mediators\Destruction\GameObjectDestroyForReload.cs" />
@@ -70,7 +72,8 @@
     <Compile Include="Mothball\ITrackedItemMessage.cs" />
     <Compile Include="Mothball\TrackLifetime.cs" />
     <Compile Include="AssemblyTracking\IReloadableAssembly.cs" />
-    <Compile Include="AssemblyTracking\Implementations\ReloadableContainer.cs" />
+    <Compile Include="AssemblyTracking\Implementations\ReloadableController.cs" />
+    <Compile Include="Providers\UniqueIdSupplier.cs" />
     <Compile Include="Queries\AddonAttributeFromTypeQuery.cs" />
     <Compile Include="TypeTracking\AddonInfo.cs" />
     <Compile Include="Messages\IChannel.cs" />
@@ -101,6 +104,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Commands\Implementations\" />
     <Folder Include="Services\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

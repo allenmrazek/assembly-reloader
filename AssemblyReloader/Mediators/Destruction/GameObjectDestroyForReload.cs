@@ -14,7 +14,7 @@ namespace AssemblyReloader.Mediators.Destruction
         {
             if (target == null) throw new ArgumentNullException("target");
 
-            target.SendMessage("OnAssemblyReload");
+            target.SendMessage("OnAssemblyReloadRequested");
         }
     }
 }

@@ -5,8 +5,8 @@ using System.Text;
 
 namespace AssemblyReloader.AssemblyTracking
 {
-    interface IReloadableContainer
+    interface IReloadableController
     {
-
+        void ReloadAll();
     }
 }

@@ -4,6 +4,7 @@ using System.Reflection;
 using AssemblyReloader.Factory;
 using AssemblyReloader.ILModifications;
 using AssemblyReloader.Loaders;
+using AssemblyReloader.Providers;
 using AssemblyReloader.Tracking;
 using Mono.Cecil;
 using ReeperCommon.Extensions;
@@ -58,7 +59,11 @@ namespace AssemblyReloader.AssemblyTracking.Implementations
 
         public void Dispose()
         {
-            Unload();
+            // note: do not call Unload() from here, as it will invoke
+            // AddonLoader.Deinitialize which will then call DestroyLiveAddons--
+            // since Unity3D is shutting down, this causes a crash
+
+            _loaders.ForEach(il => il.Dispose());
             GC.SuppressFinalize(this);
         }
 
@@ -113,7 +118,12 @@ namespace AssemblyReloader.AssemblyTracking.Implementations
 
         public void Unload()
         {
-            _loaders.ForEach(il => il.Dispose());
+            _loaders.ForEach(il =>
+            {
+                il.Deinitialize();
+                il.Dispose();
+            });
+
             _loaders.Clear();
         }
 

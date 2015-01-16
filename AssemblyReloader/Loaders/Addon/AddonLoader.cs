@@ -4,6 +4,7 @@ using System.Linq;
 using AssemblyReloader.Events;
 using AssemblyReloader.Events.Implementations;
 using AssemblyReloader.Factory;
+using AssemblyReloader.Factory.Implementations;
 using AssemblyReloader.Mediators;
 using AssemblyReloader.Messages.Implementation;
 using AssemblyReloader.Providers;
@@ -24,6 +25,7 @@ namespace AssemblyReloader.Loaders.Addon
         private readonly Dictionary<Type, AddonInfo> _addons;
 
         private readonly IDestructionMediator _destructionMediator;
+        private readonly IMonoBehaviourFactory _addonFactory;
         private readonly IEnumerable<Type> _typesWhichAreAddons;
         private readonly ILog _log;
         private readonly IGameEventSubscription _eventSubscription;
@@ -35,11 +37,13 @@ namespace AssemblyReloader.Loaders.Addon
             IEnumerable<Type> typesWhichAreAddons,
             IGameEventSource<LevelWasLoadedDelegate> levelLoadedEvent,
             IDestructionMediator destructionMediator,
+            IMonoBehaviourFactory addonFactory,
             StartupSceneFromGameSceneQuery startupSceneFromGameSceneQuery,
             AddonAttributeFromTypeQuery addonAttributeFromType,
             ILog log)
         {
             if (destructionMediator == null) throw new ArgumentNullException("destructionMediator");
+            if (addonFactory == null) throw new ArgumentNullException("addonFactory");
             if (startupSceneFromGameSceneQuery == null)
                 throw new ArgumentNullException("startupSceneFromGameSceneQuery");
             if (addonAttributeFromType == null) throw new ArgumentNullException("addonAttributeFromType");
@@ -48,6 +52,7 @@ namespace AssemblyReloader.Loaders.Addon
             if (log == null) throw new ArgumentNullException("log");
 
             _destructionMediator = destructionMediator;
+            _addonFactory = addonFactory;
             _startupSceneFromGameSceneQuery = startupSceneFromGameSceneQuery;
             _addonAttributeFromType = addonAttributeFromType;
             _typesWhichAreAddons = typesWhichAreAddons;
@@ -56,24 +61,6 @@ namespace AssemblyReloader.Loaders.Addon
 
             _eventSubscription = levelLoadedEvent.Add(OnSceneChanged);
         }
-
-
-
-        //public void Consume(SceneChange message)
-        //{
-        //    _log.Verbose("handling level load for " + message.Scene.ToString());
-
-        //    var startupScene = _startupSceneFromGameSceneQuery.Query(message.Scene);
-
-        //    var addons = GetAddonsForScene(startupScene)
-        //        .Select(ty => _addons.Single(t => t.type == ty))
-        //        .ToList();
-
-        //    // exclude any that are marked runOnce and were already created previously
-        //    addons.RemoveAll(ai => ai.RunOnce && ai.created);
-
-        //    addons.ForEach(CreateAddon);
-        //}
 
 
 
@@ -86,7 +73,7 @@ namespace AssemblyReloader.Loaders.Addon
 
         public void Dispose()
         {
-            DestroyLiveAddons();
+            // note: do not destroy live addons here; if KSP is shutting down it'll cause a crash
 
             _eventSubscription.Dispose();
             
@@ -111,6 +98,7 @@ namespace AssemblyReloader.Loaders.Addon
 
 
 
+
         private void CreateAddon(AddonInfo info)
         {
             var addon = new GameObject(info.type.Name);
@@ -124,12 +112,10 @@ namespace AssemblyReloader.Loaders.Addon
 
         private void DestroyLiveAddons()
         {
-            var instantiatedAddons = _typesWhichAreAddons
-                .SelectMany(Object.FindObjectsOfType)
-                .Select(obj => obj as GameObject)
-                .ToList();
+            var instantiatedAddons = _addonFactory.GetLiveMonoBehaviours().Select(mb => mb.gameObject).ToList();
 
             _log.Verbose("Destroying " + instantiatedAddons.Count + " instantiated addons");
+            instantiatedAddons.ForEach(go => _log.Normal("addon: " + (go.IsNull() ? "<null>" : go.name)));
 
             instantiatedAddons.ForEach(_destructionMediator.InformTargetOfDestruction);
             instantiatedAddons.ForEach(Object.Destroy);
@@ -154,7 +140,7 @@ namespace AssemblyReloader.Loaders.Addon
                 _addons.Add(addonType, new AddonInfo(addonType, addonAttr.Single()));
             }
 
-            _log.Debug(_addons.Count + " found");
+            _log.Debug(_addons.Count + " total addons found");
         }
 
 
@@ -162,8 +148,8 @@ namespace AssemblyReloader.Loaders.Addon
         public void Deinitialize()
         {
             _log.Debug("Deinitialize");
-            _addons.Clear();
             DestroyLiveAddons();
+            _addons.Clear(); 
         }
 
 
@@ -172,24 +158,15 @@ namespace AssemblyReloader.Loaders.Addon
         {
             _log.Debug("OnSceneChanged to " + newScene);
 
-            _log.Debug("querying");
-            if (_startupSceneFromGameSceneQuery.IsNull())
-                _log.Error("is null");
             var startupScene = _startupSceneFromGameSceneQuery.Query(newScene);
-
-            _log.Debug("query2");
             var addonsThatMatchScene = GetAddonsForScene(startupScene);
-
-            _log.Debug("output");
             var thatMatchScene = addonsThatMatchScene as IList<KeyValuePair<Type, AddonInfo>> ?? addonsThatMatchScene.ToList();
 
-            _log.Verbose(thatMatchScene.Count + " addons eligible");
+            _log.Verbose(thatMatchScene.Count + " addons eligible for instantiation");
 
             foreach (var addonType in thatMatchScene)
-            {
-                _log.Verbose("Creating addon " + addonType.Key.FullName);
-                CreateAddon(addonType.Value);
-            }
+                _addonFactory.Create(addonType.Key, true);
+            
 
         }
     }

@@ -7,12 +7,12 @@ using ReeperCommon.Logging;
 namespace AssemblyReloader.AssemblyTracking.Implementations
 {
 
-    class ReloadableContainer : IReloadableContainer
+    class ReloadableController : IReloadableController
     {
         private readonly IEnumerable<ReloadableAssembly> _reloadables;
         private readonly ILog _log;
 
-        public ReloadableContainer(
+        public ReloadableController(
             ILog log,
             params ReloadableAssembly[] reloadables)
         {
@@ -25,15 +25,19 @@ namespace AssemblyReloader.AssemblyTracking.Implementations
 
 
 
-        ~ReloadableContainer()
+        ~ReloadableController()
         {
             foreach (var reloadable in _reloadables)
                 reloadable.Dispose();
         }
 
-
-
-
-
+        public void ReloadAll()
+        {
+            foreach (var r in _reloadables)
+            {
+                r.Unload();
+                r.Load();
+            }
+        }
     }
 }

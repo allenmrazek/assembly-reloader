@@ -37,6 +37,14 @@ namespace AssemblyReloader.Events.Implementations
             SceneChanged -= callback;
         }
 
+        public void Trigger(object arg)
+        {
+            if (!(arg is GameScenes))
+                throw new ArgumentException("arg is not a GameScenes object");
+
+            SceneChanged((GameScenes)arg);
+        }
+
 
         public void OnLevelWasLoaded(GameScenes scene)
         {

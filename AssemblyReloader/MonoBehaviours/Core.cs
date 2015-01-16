@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using AssemblyReloader.AssemblyTracking.Implementations;
 using AssemblyReloader.Factory;
+using AssemblyReloader.Factory.Implementations;
 using AssemblyReloader.GUI;
 using AssemblyReloader.Logging;
 using AssemblyReloader.Mediators.Destruction;
@@ -14,6 +15,7 @@ using ReeperCommon.FileSystem;
 using ReeperCommon.FileSystem.Implementations;
 using ReeperCommon.Gui.Window;
 using ReeperCommon.Gui.Window.Decorators;
+using ReeperCommon.Gui.Window.Decorators.Buttons;
 using ReeperCommon.Gui.Window.Factory;
 using ReeperCommon.Gui.Window.View;
 using ReeperCommon.Logging;
@@ -27,7 +29,7 @@ namespace AssemblyReloader.MonoBehaviours
     class Core : MonoBehaviour
     {
         private WindowView _view;
-        private ReloadableContainer _container;
+        private ReloadableController _controller;
         private MessageChannel _messageChannel;
         private GameEventProvider _eventProvider;
 
@@ -102,27 +104,7 @@ namespace AssemblyReloader.MonoBehaviours
         }
 
 
-        class TestConsumer : IConsumer<TestEvent>
-        {
-            private readonly BaseLog _baseLog;
 
-            public TestConsumer(BaseLog baseLog)
-            {
-                if (baseLog == null) throw new ArgumentNullException("baseLog");
-                _baseLog = baseLog;
-            }
-
-
-            public void Consume(object message)
-            {
-                _baseLog.Warning("GOT THE (generic) MESSAGE!");
-            }
-
-            public void Consume(TestEvent message)
-            {
-                _baseLog.Warning("GOT THE MESSAGE!");
-            }
-        }
 
 
 
@@ -131,26 +113,27 @@ namespace AssemblyReloader.MonoBehaviours
             DontDestroyOnLoad(this);
 
 #if DEBUG
-            _log = new DebugLog("ART");
+            var log = new DebugLog("ART");
 #else
-            _log = LogFactory.Create(LogLevel.Standard);
+            var log = LogFactory.Create(LogLevel.Standard);
 #endif
-            
+
+            _log = log.CreateTag("Core");
 
 
-            
             var gameDataProvider = new KSPGameDataDirectoryProvider();
-   
+
             var queryProvider = new QueryProvider();
 
 
-            var reloaderLog = new ReloaderLog(_log, 25);
+            var reloaderLog = new ReloaderLog(log, 25);
             var fileFactory = new KSPFileFactory();
             var destructionMediator = new GameObjectDestroyForReload();
+            var addonFactory = new MonoBehaviourFactory(log.CreateTag("AddonFactory"));
 
-            _eventProvider = new GameEventProvider(_log.CreateTag("GameEventProvider"));
+            _eventProvider = new GameEventProvider(log.CreateTag("GameEventProvider"));
 
-            var loaderFactory = new LoaderFactory(_eventProvider, destructionMediator, reloaderLog, queryProvider);
+            var loaderFactory = new LoaderFactory(_eventProvider, destructionMediator, addonFactory, reloaderLog, queryProvider);
 
 
 
@@ -168,17 +151,22 @@ namespace AssemblyReloader.MonoBehaviours
                                                         );
 
 
-            var asm = new ReloadableAssembly(reloadableAssemblyFileQuery.Get().First(), loaderFactory, _log.CreateTag("ReloadableAssembly"),
+            var asm = new ReloadableAssembly(reloadableAssemblyFileQuery.Get().First(), loaderFactory, log.CreateTag("ReloadableAssembly"),
                 queryProvider);
 
             asm.Load();
 
-            _container = new ReloadableContainer(reloaderLog, asm);
 
-            GameEvents.onLevelWasLoaded.Add(Test);
-            GameEvents.onLevelWasLoaded.Fire(GameScenes.LOADING);
+            _controller = new ReloadableController(reloaderLog, asm);
 
-            //CreateWindow();
+
+
+            _eventProvider.GetLevelLoadedEvent().Trigger(GameScenes.LOADING);
+
+            _controller.ReloadAll();
+            
+
+            CreateWindow();
 
         }
 
@@ -186,15 +174,8 @@ namespace AssemblyReloader.MonoBehaviours
 
         private void OnDestroy()
         {
-            _log.Debug("Core.OnDestroy");
+            _log.Debug("OnDestroy");
             _eventProvider.Dispose();
-            
-        }
-
-
-        private void Test(GameScenes scene)
-        {
-            _log.Normal("Core.GameEventTest");
         }
 
 
@@ -214,7 +195,7 @@ namespace AssemblyReloader.MonoBehaviours
             var wfactory = new WindowFactory(HighLogic.Skin);
 
 
-            var logic = new ViewLogic(_container, LogFactory.Create(LogLevel.Debug));
+            var logic = new ViewLogic(_controller, _log.CreateTag("View"));
 
             var basicWindow = new BasicWindow(
                 logic,
@@ -226,10 +207,10 @@ namespace AssemblyReloader.MonoBehaviours
 
 
             var tbButtons = new TitleBarButtons(basicWindow, new Vector2(4f, 4f));
-            tbButtons.AddButton(style, (string str) =>
-            {
-            }
-        , "Test");
+
+
+            tbButtons.AddButton(new TitleBarButton(style, s => { }, "Test"));
+
 
             var hiding = new HideOnF2(tbButtons);
 
@@ -237,10 +218,6 @@ namespace AssemblyReloader.MonoBehaviours
 
             DontDestroyOnLoad(_view);
 
-
-            IDirectory gamedata = new KSPDirectory(new KSPFileFactory(), new KSPGameDataDirectoryProvider());
-            //var ra = new ReloadableAssembly(gamedata.RecursiveFiles("reloadable").Single(),
-            //    LogFactory.Create(LogLevel.Debug));
         }
     }
 }

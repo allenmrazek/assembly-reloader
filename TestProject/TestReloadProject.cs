@@ -27,9 +27,9 @@ namespace TestProject
             //print(str);
         }
 
-        private void OnAssemblyReload()
+        private void OnAssemblyReloadRequested()
         {
-            print("TestReloadProject.OnAssemblyReload received!");
+            print("TestReloadProject.OnAssemblyReloadRequested received!");
         }
     }
 }
