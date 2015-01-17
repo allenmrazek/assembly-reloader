@@ -42,44 +42,38 @@ namespace AssemblyReloader.Factory
 
 
 
-        public List<ILoader> CreateLoaders(Assembly assembly, QueryProvider queryProvider)
+        //public List<ILoader> CreateLoaders(Assembly assembly, QueryProvider queryProvider)
+        //{
+        //    if (queryProvider == null) throw new ArgumentNullException("queryProvider");
+
+        //    _log.Verbose("Creating loaders for assembly '{0}'", assembly.FullName);
+
+        //    var loaders = new List<ILoader>();
+
+        //    var addonLoader = CreateAddonLoader(assembly);
+        //    loaders.Add(addonLoader);
+
+
+
+        //    loaders.ForEach(loader => loader.Initialize());
+
+
+        //    addonLoader.LoadAddonsForScene(queryProvider.GetCurrentGameSceneProvider().Get());
+
+
+        //    return loaders;
+        //}
+
+
+        public IAddonLoader GetAddonLoader(IEnumerable<Type> addonTypesInAssembly)
         {
-            if (queryProvider == null) throw new ArgumentNullException("queryProvider");
-
-            _log.Verbose("Creating loaders for assembly '{0}'", assembly.FullName);
-
-            var loaders = new List<ILoader>();
-
-            var addonLoader = CreateAddonLoader(assembly);
-            loaders.Add(addonLoader);
-
-
-
-            loaders.ForEach(loader => loader.Initialize());
-
-
-            addonLoader.LoadAddonsForScene(queryProvider.GetCurrentGameSceneProvider().Get());
-
-
-            return loaders;
-        }
-
-
-        private AddonLoader CreateAddonLoader(Assembly assembly)
-        {
-            var typesThatAreAddons = _queryProvider.GetAddonsFromAssemblyQuery(assembly).Get();
-
             var loader = new Loaders.Addon.AddonLoader(
-                typesThatAreAddons, 
-                _levelLoadedEvent, 
+                addonTypesInAssembly, 
                 _destructionMediator,
                 _addonFactory,
                 _queryProvider.GetStartupSceneFromGameSceneQuery(),
                 _queryProvider.GetAddonAttributeQuery(), 
                 _log.CreateTag("AddonLoader"));
-
-            // note: instantiating types is deferred until we've got all loaders in place, and then
-            // types/objects are created in same order as KSP would normally load them
 
             return loader;
         }

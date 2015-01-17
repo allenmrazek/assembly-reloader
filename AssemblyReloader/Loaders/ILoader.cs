@@ -7,7 +7,7 @@ using AssemblyReloader.Messages.Implementation;
 
 namespace AssemblyReloader.Loaders
 {
-    interface ILoader : IDisposable
+    interface ILoader
     {
         void Initialize();
         void Deinitialize();

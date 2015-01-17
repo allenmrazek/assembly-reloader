@@ -2,7 +2,7 @@
 
 namespace AssemblyReloader.AssemblyTracking
 {
-    interface IReloadableAssembly : IDisposable
+    interface IReloadableAssembly
     {
         void Load();
         void Unload();

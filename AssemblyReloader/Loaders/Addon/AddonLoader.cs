@@ -17,7 +17,7 @@ using Object = UnityEngine.Object;
 
 namespace AssemblyReloader.Loaders.Addon
 {
-    class AddonLoader : ILoader
+    class AddonLoader : ILoader, IAddonLoader
     {
         // Mainly required so we can flag addons when they've
         // been created in the case of runOnce = true
@@ -28,14 +28,12 @@ namespace AssemblyReloader.Loaders.Addon
         private readonly IMonoBehaviourFactory _addonFactory;
         private readonly IEnumerable<Type> _typesWhichAreAddons;
         private readonly ILog _log;
-        private readonly IGameEventSubscription _eventSubscription;
         private readonly StartupSceneFromGameSceneQuery _startupSceneFromGameSceneQuery;
         private readonly AddonAttributeFromTypeQuery _addonAttributeFromType;
 
 
         public AddonLoader(
             IEnumerable<Type> typesWhichAreAddons,
-            IGameEventSubscriber<GameScenes> levelLoadedEvent,
             IDestructionMediator destructionMediator,
             IMonoBehaviourFactory addonFactory,
             StartupSceneFromGameSceneQuery startupSceneFromGameSceneQuery,
@@ -48,7 +46,6 @@ namespace AssemblyReloader.Loaders.Addon
                 throw new ArgumentNullException("startupSceneFromGameSceneQuery");
             if (addonAttributeFromType == null) throw new ArgumentNullException("addonAttributeFromType");
             if (typesWhichAreAddons == null) throw new ArgumentNullException("typesWhichAreAddons");
-            if (levelLoadedEvent == null) throw new ArgumentNullException("levelLoadedEvent");
             if (log == null) throw new ArgumentNullException("log");
 
             _destructionMediator = destructionMediator;
@@ -58,27 +55,8 @@ namespace AssemblyReloader.Loaders.Addon
             _typesWhichAreAddons = typesWhichAreAddons;
             _log = log;
             _addons = new Dictionary<Type, AddonInfo>();
-
-            _eventSubscription = levelLoadedEvent.AddListener(OnSceneChanged);
         }
 
-
-
-        ~AddonLoader()
-        {
-            Dispose();
-        }
-
-
-
-        public void Dispose()
-        {
-            // note: do not destroy live addons here; if KSP is shutting down it'll cause a crash
-
-            _eventSubscription.Dispose();
-            
-            GC.SuppressFinalize(this);
-        }
 
 
 
@@ -175,6 +153,14 @@ namespace AssemblyReloader.Loaders.Addon
             _log.Debug("OnSceneChanged");
             _addonFactory.RemoveDeadMonoBehaviours();
             LoadAddonsForScene(newScene);
+        }
+
+
+
+        public void Dispose()
+        {
+            DestroyLiveAddons();
+            GC.SuppressFinalize(this);
         }
     }
 }

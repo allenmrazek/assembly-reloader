@@ -58,8 +58,10 @@
     <Compile Include="Events\IGameEventSubscription.cs" />
     <Compile Include="Events\Implementations\GameEventSubscriber.cs" />
     <Compile Include="Events\Implementations\GameEventSubscription.cs" />
+    <Compile Include="Events\Implementations\Override\GameEventOnLevelWasLoaded.cs" />
     <Compile Include="Factory\IMonoBehaviourFactory.cs" />
     <Compile Include="Factory\Implementations\MonoBehaviourFactory.cs" />
+    <Compile Include="Loaders\IAddonLoader.cs" />
     <Compile Include="Providers\CurrentGameSceneProvider.cs" />
     <Compile Include="Providers\GameEventProvider.cs" />
     <Compile Include="Providers\QueryProvider.cs" />

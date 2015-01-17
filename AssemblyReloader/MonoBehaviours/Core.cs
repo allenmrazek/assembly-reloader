@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using AssemblyReloader.AssemblyTracking.Implementations;
+using AssemblyReloader.Events;
 using AssemblyReloader.Events.Implementations;
 using AssemblyReloader.Factory;
 using AssemblyReloader.Factory.Implementations;
@@ -32,6 +33,8 @@ namespace AssemblyReloader.MonoBehaviours
         private WindowView _view;
         private ReloadableController _controller;
         private MessageChannel _messageChannel;
+        private CurrentGameSceneProvider _currentSceneProvider;
+        private IGameEventSubscriber<GameScenes> _eventOnLevelWasLoaded;
 
         private ILog _log;
 
@@ -124,19 +127,19 @@ namespace AssemblyReloader.MonoBehaviours
             var gameDataProvider = new KSPGameDataDirectoryProvider();
 
             var queryProvider = new QueryProvider();
-
+            _currentSceneProvider = queryProvider.GetCurrentGameSceneProvider();
 
             var reloaderLog = new ReloaderLog(log, 25);
             var fileFactory = new KSPFileFactory();
             var destructionMediator = new GameObjectDestroyForReload();
             var addonFactory = new MonoBehaviourFactory(log.CreateTag("AddonFactory"));
 
-            //_eventProvider = new GameEventProvider(log.CreateTag("GameEventProvider"));
 
-            var levelLoadedEvent = new GameEventSubscriber<GameScenes>(log.CreateTag("OnLevelWasLoaded"));
-            levelLoadedEvent.SubscribeTo(GameEvents.onLevelWasLoaded);
+            _eventOnLevelWasLoaded = new GameEventSubscriber<GameScenes>(log.CreateTag("OnLevelWasLoaded"));
+                // do not subscribe to GameEvents version of this event because it can be invoked twice in succession due to a KSP bug
+                // instead, it is invoked by Core.OnLevelWasLoaded
 
-            var loaderFactory = new LoaderFactory(destructionMediator, addonFactory, levelLoadedEvent, reloaderLog, queryProvider);
+            var loaderFactory = new LoaderFactory(destructionMediator, addonFactory, _eventOnLevelWasLoaded, reloaderLog, queryProvider);
 
 
 
@@ -160,10 +163,8 @@ namespace AssemblyReloader.MonoBehaviours
             asm.Load();
 
 
-            _controller = new ReloadableController(reloaderLog, asm);
+            _controller = new ReloadableController(queryProvider, reloaderLog, asm);
 
-
-            GameEvents.onLevelWasLoaded.Add(LevelWasLoaded);
 
 
             _controller.ReloadAll();
@@ -181,10 +182,13 @@ namespace AssemblyReloader.MonoBehaviours
         }
 
 
-        private void LevelWasLoaded(GameScenes scene)
+
+        // Unity MonoBehaviour callback
+        private void OnLevelWasLoaded(int level)
         {
-            _log.Warning("LevelWasLoaded: " + scene);
+            _eventOnLevelWasLoaded.OnEvent(_currentSceneProvider.Get());
         }
+
 
 
         private void CreateWindow()

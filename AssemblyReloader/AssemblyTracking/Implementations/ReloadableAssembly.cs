@@ -23,15 +23,16 @@ namespace AssemblyReloader.AssemblyTracking.Implementations
     class ReloadableAssembly : IReloadableAssembly
     {
         private System.Reflection.Assembly _loaded;
+        private IAddonLoader _addonLoader;
+
         private readonly IFile _file;
         private readonly LoaderFactory _loaderFactory;
-        private List<ILoader> _loaders = new List<ILoader>();
         private readonly ILog _log;
         private readonly QueryProvider _queryProvider;
 
 
         public ReloadableAssembly(
-            IFile file, 
+            IFile file,
             LoaderFactory loaderFactory,
             ILog log,
             QueryProvider queryProvider)
@@ -47,25 +48,6 @@ namespace AssemblyReloader.AssemblyTracking.Implementations
             _queryProvider = queryProvider;
         }
 
-
-
-        ~ReloadableAssembly()
-        {
-            _log.Debug("Reloadable assembly " + _file.FileName + " destructing");
-            Dispose();
-        }
-
-
-
-        public void Dispose()
-        {
-            // note: do not call Unload() from here, as it will invoke
-            // AddonLoader.Deinitialize which will then call DestroyLiveAddons--
-            // since Unity3D is shutting down, this causes a crash
-
-            _loaders.ForEach(il => il.Dispose());
-            GC.SuppressFinalize(this);
-        }
 
 
 
@@ -89,12 +71,6 @@ namespace AssemblyReloader.AssemblyTracking.Implementations
 
         public void Load()
         {
-            // better if we don't do things the caller wasn't expecting, like quietly
-            // unloading a previous version if we weren't told to
-            if (_loaders.Count > 0)
-                throw new InvalidOperationException("Previous assembly was not Unloaded");
-
-
             using (var stream = new System.IO.MemoryStream())
             {
                 ApplyModifications(stream); // modified assembly written to memory
@@ -109,8 +85,7 @@ namespace AssemblyReloader.AssemblyTracking.Implementations
                 if (_loaded.IsNull())
                     throw new InvalidOperationException("Failed to load byte stream as Assembly");
 
-                _loaders = _loaderFactory.CreateLoaders(_loaded, _queryProvider);
-
+                _addonLoader = _loaderFactory.GetAddonLoader(_queryProvider.GetAddonsFromAssemblyQuery(_loaded).Get());
             }
         }
 
@@ -118,17 +93,15 @@ namespace AssemblyReloader.AssemblyTracking.Implementations
 
         public void Unload()
         {
-            _loaders.ForEach(il =>
-            {
-                il.Deinitialize();
-                il.Dispose();
-            });
-
-            _loaders.Clear();
+            _addonLoader.Deinitialize();
+            _addonLoader.Dispose();
         }
 
 
 
-  
+        public void StartAddons(GameScenes scene)
+        {
+            _addonLoader.LoadAddonsForScene(scene);
+        }
     }
 }

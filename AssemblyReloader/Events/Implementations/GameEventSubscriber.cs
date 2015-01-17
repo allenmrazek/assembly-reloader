@@ -30,7 +30,7 @@ namespace AssemblyReloader.Events.Implementations
 
 
 
-        public void Dispose()
+        public virtual void Dispose()
         {
             if (!_subscribed.IsNull() && _subscribed.IsAlive)
             {
@@ -42,7 +42,7 @@ namespace AssemblyReloader.Events.Implementations
 
 
 
-        public IGameEventSubscription AddListener(Action<T> callback)
+        public virtual IGameEventSubscription AddListener(Action<T> callback)
         {
             if (callback == null) throw new ArgumentNullException("callback");
 
@@ -53,7 +53,7 @@ namespace AssemblyReloader.Events.Implementations
 
 
 
-        public void RemoveListener(Action<T> callback)
+        public virtual void RemoveListener(Action<T> callback)
         {
             if (callback == null) throw new ArgumentNullException("callback");
 
@@ -63,7 +63,7 @@ namespace AssemblyReloader.Events.Implementations
 
 
 
-        public void OnEvent(T arg)
+        public virtual void OnEvent(T arg)
         {
             _log.Debug("Triggered with arg " + arg.ToString());
             _actions(arg);

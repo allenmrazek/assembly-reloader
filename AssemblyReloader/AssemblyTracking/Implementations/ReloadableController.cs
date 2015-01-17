@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using AssemblyReloader.Providers;
 using AssemblyReloader.Queries;
 using ReeperCommon.Logging;
 
@@ -10,26 +11,24 @@ namespace AssemblyReloader.AssemblyTracking.Implementations
     class ReloadableController : IReloadableController
     {
         private readonly IEnumerable<ReloadableAssembly> _reloadables;
+        private readonly QueryProvider _queryProvider;
         private readonly ILog _log;
 
         public ReloadableController(
+            QueryProvider queryProvider,
             ILog log,
             params ReloadableAssembly[] reloadables)
         {
+            if (queryProvider == null) throw new ArgumentNullException("queryProvider");
             if (log == null) throw new ArgumentNullException("log");
             if (reloadables == null) throw new ArgumentNullException("reloadables");
 
+            _queryProvider = queryProvider;
             _log = log;
             _reloadables = reloadables;
         }
 
 
-
-        ~ReloadableController()
-        {
-            foreach (var reloadable in _reloadables)
-                reloadable.Dispose();
-        }
 
         public void ReloadAll()
         {
@@ -37,6 +36,7 @@ namespace AssemblyReloader.AssemblyTracking.Implementations
             {
                 r.Unload();
                 r.Load();
+                r.StartAddons(_queryProvider.GetCurrentGameSceneProvider().Get());
             }
         }
     }
