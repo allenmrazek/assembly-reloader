@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using AssemblyReloader.Events;
 using AssemblyReloader.Factory;
 using AssemblyReloader.ILModifications;
 using AssemblyReloader.Loaders;
@@ -27,23 +28,30 @@ namespace AssemblyReloader.AssemblyTracking.Implementations
 
         private readonly IFile _file;
         private readonly LoaderFactory _loaderFactory;
+        private readonly IGameEventSubscriber<GameScenes> _levelLoadedEvent;
         private readonly ILog _log;
         private readonly QueryProvider _queryProvider;
+
+        private IGameEventSubscription _addonSceneChangeSubscription;
+
 
 
         public ReloadableAssembly(
             IFile file,
             LoaderFactory loaderFactory,
-            ILog log,
+            IGameEventSubscriber<GameScenes> levelLoadedEvent,
+                ILog log,
             QueryProvider queryProvider)
         {
             if (file == null) throw new ArgumentNullException("file");
             if (loaderFactory == null) throw new ArgumentNullException("loaderFactory");
+            if (levelLoadedEvent == null) throw new ArgumentNullException("levelLoadedEvent");
             if (log == null) throw new ArgumentNullException("log");
             if (queryProvider == null) throw new ArgumentNullException("queryProvider");
 
             _file = file;
             _loaderFactory = loaderFactory;
+            _levelLoadedEvent = levelLoadedEvent;
             _log = log;
             _queryProvider = queryProvider;
         }
@@ -86,6 +94,9 @@ namespace AssemblyReloader.AssemblyTracking.Implementations
                     throw new InvalidOperationException("Failed to load byte stream as Assembly");
 
                 _addonLoader = _loaderFactory.GetAddonLoader(_queryProvider.GetAddonsFromAssemblyQuery(_loaded).Get());
+
+
+                _addonSceneChangeSubscription = _levelLoadedEvent.AddListener(_addonLoader.LoadAddonsForScene);
             }
         }
 
@@ -93,9 +104,15 @@ namespace AssemblyReloader.AssemblyTracking.Implementations
 
         public void Unload()
         {
+            _addonSceneChangeSubscription.Dispose(); _addonSceneChangeSubscription = null;
             _addonLoader.Deinitialize();
-            _addonLoader.Dispose();
+
+
+            _addonLoader.Dispose(); _addonLoader = null;
         }
+
+
+
 
 
 

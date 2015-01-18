@@ -62,6 +62,7 @@
     <Compile Include="Factory\IMonoBehaviourFactory.cs" />
     <Compile Include="Factory\Implementations\MonoBehaviourFactory.cs" />
     <Compile Include="Loaders\IAddonLoader.cs" />
+    <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Providers\CurrentGameSceneProvider.cs" />
     <Compile Include="Providers\GameEventProvider.cs" />
     <Compile Include="Providers\QueryProvider.cs" />

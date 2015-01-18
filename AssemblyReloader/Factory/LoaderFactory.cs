@@ -23,19 +23,16 @@ namespace AssemblyReloader.Factory
         public LoaderFactory(
             IDestructionMediator destructionMediator,
             IMonoBehaviourFactory addonFactory,
-            IGameEventSubscriber<GameScenes> levelLoadedEvent,
             ILog log,
             QueryProvider queryProvider)
         {
             if (destructionMediator == null) throw new ArgumentNullException("destructionMediator");
             if (addonFactory == null) throw new ArgumentNullException("addonFactory");
-            if (levelLoadedEvent == null) throw new ArgumentNullException("levelLoadedEvent");
             if (log == null) throw new ArgumentNullException("log");
             if (queryProvider == null) throw new ArgumentNullException("queryProvider");
 
             _destructionMediator = destructionMediator;
             _addonFactory = addonFactory;
-            _levelLoadedEvent = levelLoadedEvent;
             _log = log;
             _queryProvider = queryProvider;
         }

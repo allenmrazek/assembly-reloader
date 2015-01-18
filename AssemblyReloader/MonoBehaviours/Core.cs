@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using AssemblyReloader.Annotations;
 using AssemblyReloader.AssemblyTracking.Implementations;
 using AssemblyReloader.Events;
 using AssemblyReloader.Events.Implementations;
@@ -139,7 +140,7 @@ namespace AssemblyReloader.MonoBehaviours
                 // do not subscribe to GameEvents version of this event because it can be invoked twice in succession due to a KSP bug
                 // instead, it is invoked by Core.OnLevelWasLoaded
 
-            var loaderFactory = new LoaderFactory(destructionMediator, addonFactory, _eventOnLevelWasLoaded, reloaderLog, queryProvider);
+            var loaderFactory = new LoaderFactory(destructionMediator, addonFactory, reloaderLog, queryProvider);
 
 
 
@@ -157,7 +158,11 @@ namespace AssemblyReloader.MonoBehaviours
                                                         );
 
 
-            var asm = new ReloadableAssembly(reloadableAssemblyFileQuery.Get().First(), loaderFactory, log.CreateTag("Reloadable:" + reloadableAssemblyFileQuery.Get().First().Name),
+            var asm = new ReloadableAssembly(
+                reloadableAssemblyFileQuery.Get().First(),
+                loaderFactory, 
+                _eventOnLevelWasLoaded,
+                log.CreateTag("Reloadable:" + reloadableAssemblyFileQuery.Get().First().Name),
                 queryProvider);
 
             asm.Load();
@@ -184,6 +189,7 @@ namespace AssemblyReloader.MonoBehaviours
 
 
         // Unity MonoBehaviour callback
+        [UsedImplicitly]
         private void OnLevelWasLoaded(int level)
         {
             _eventOnLevelWasLoaded.OnEvent(_currentSceneProvider.Get());

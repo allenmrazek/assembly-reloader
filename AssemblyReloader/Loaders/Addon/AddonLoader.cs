@@ -17,7 +17,7 @@ using Object = UnityEngine.Object;
 
 namespace AssemblyReloader.Loaders.Addon
 {
-    class AddonLoader : ILoader, IAddonLoader
+    class AddonLoader : ILoader, IAddonLoader, IDisposable
     {
         // Mainly required so we can flag addons when they've
         // been created in the case of runOnce = true
@@ -122,6 +122,7 @@ namespace AssemblyReloader.Loaders.Addon
 
         private void DestroyLiveAddons()
         {
+            _addonFactory.RemoveDeadMonoBehaviours();
             var instantiatedAddons = _addonFactory.GetLiveMonoBehaviours().Select(mb => mb.gameObject).ToList();
 
             _log.Verbose("Destroying " + instantiatedAddons.Count + " instantiated addons");
@@ -136,6 +137,7 @@ namespace AssemblyReloader.Loaders.Addon
         {
             _log.Debug("Loading addons for " + scene);
 
+           
             var startupScene = _startupSceneFromGameSceneQuery.Query(scene);
             var addonsThatMatchScene = GetAddonsForScene(startupScene);
             var thatMatchScene = addonsThatMatchScene as IList<KeyValuePair<Type, AddonInfo>> ?? addonsThatMatchScene.ToList();
@@ -147,13 +149,6 @@ namespace AssemblyReloader.Loaders.Addon
             
         }
 
-
-        private void OnSceneChanged(GameScenes newScene)
-        {
-            _log.Debug("OnSceneChanged");
-            _addonFactory.RemoveDeadMonoBehaviours();
-            LoadAddonsForScene(newScene);
-        }
 
 
 
