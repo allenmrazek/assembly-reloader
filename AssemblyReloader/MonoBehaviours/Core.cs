@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using AssemblyReloader.Annotations;
 using AssemblyReloader.AssemblyTracking.Implementations;
 using AssemblyReloader.Events;
 using AssemblyReloader.Events.Implementations;
@@ -112,6 +111,7 @@ namespace AssemblyReloader.MonoBehaviours
 
 
 
+        // ReSharper disable once UnusedMember.Local
         private void Start()
         {
             DontDestroyOnLoad(this);
@@ -133,14 +133,15 @@ namespace AssemblyReloader.MonoBehaviours
             var reloaderLog = new ReloaderLog(log, 25);
             var fileFactory = new KSPFileFactory();
             var destructionMediator = new GameObjectDestroyForReload();
-            var addonFactory = new MonoBehaviourFactory(log.CreateTag("AddonFactory"));
+            var addonFactory = new AddonFactory(destructionMediator, log.CreateTag("AddonFactory"));
 
+            var infoFactory = new AddonInfoFactory(queryProvider.GetAddonAttributeQuery());
 
             _eventOnLevelWasLoaded = new GameEventSubscriber<GameScenes>(log.CreateTag("OnLevelWasLoaded"));
                 // do not subscribe to GameEvents version of this event because it can be invoked twice in succession due to a KSP bug
                 // instead, it is invoked by Core.OnLevelWasLoaded
 
-            var loaderFactory = new LoaderFactory(destructionMediator, addonFactory, reloaderLog, queryProvider);
+            var loaderFactory = new LoaderFactory(addonFactory, infoFactory, reloaderLog, queryProvider);
 
 
 
@@ -181,6 +182,7 @@ namespace AssemblyReloader.MonoBehaviours
 
 
 
+        // ReSharper disable once UnusedMember.Local
         private void OnDestroy()
         {
             _log.Debug("OnDestroy");
@@ -189,7 +191,7 @@ namespace AssemblyReloader.MonoBehaviours
 
 
         // Unity MonoBehaviour callback
-        [UsedImplicitly]
+        // ReSharper disable once UnusedMember.Local
         private void OnLevelWasLoaded(int level)
         {
             _eventOnLevelWasLoaded.OnEvent(_currentSceneProvider.Get());

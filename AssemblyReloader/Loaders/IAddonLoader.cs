@@ -5,9 +5,8 @@ using System.Text;
 
 namespace AssemblyReloader.Loaders
 {
-    interface IAddonLoader : ILoader
+    interface IAddonLoader : IDisposable
     {
         void LoadAddonsForScene(GameScenes scene);
-        void Dispose();
     }
 }

@@ -58,11 +58,13 @@
     <Compile Include="Events\IGameEventSubscription.cs" />
     <Compile Include="Events\Implementations\GameEventSubscriber.cs" />
     <Compile Include="Events\Implementations\GameEventSubscription.cs" />
-    <Compile Include="Events\Implementations\Override\GameEventOnLevelWasLoaded.cs" />
-    <Compile Include="Factory\IMonoBehaviourFactory.cs" />
-    <Compile Include="Factory\Implementations\MonoBehaviourFactory.cs" />
+    <Compile Include="Factory\IAddonFactory.cs" />
+    <Compile Include="Factory\IAddonInfoFactory.cs" />
+    <Compile Include="Factory\ILoaderFactory.cs" />
+    <Compile Include="Factory\Implementations\AddonFactory.cs" />
+    <Compile Include="Factory\Implementations\AddonInfoFactory.cs" />
+    <Compile Include="Loaders\Addon\Addon.cs" />
     <Compile Include="Loaders\IAddonLoader.cs" />
-    <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Providers\CurrentGameSceneProvider.cs" />
     <Compile Include="Providers\GameEventProvider.cs" />
     <Compile Include="Providers\QueryProvider.cs" />
@@ -83,8 +85,7 @@
     <Compile Include="Messages\IChannel.cs" />
     <Compile Include="Messages\IConsumer.cs" />
     <Compile Include="Messages\IMessage.cs" />
-    <Compile Include="Factory\LoaderFactory.cs" />
-    <Compile Include="Loaders\ILoader.cs" />
+    <Compile Include="Factory\Implementations\LoaderFactory.cs" />
     <Compile Include="Logging\ReloaderLog.cs" />
     <Compile Include="Messages\Implementation\TestEvent.cs" />
     <Compile Include="ILModifications\ModifyPluginIdentity.cs" />
@@ -109,6 +110,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Commands\Implementations\" />
+    <Folder Include="Events\Implementations\Override\" />
     <Folder Include="Services\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

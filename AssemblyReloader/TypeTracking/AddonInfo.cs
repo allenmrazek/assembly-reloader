@@ -24,7 +24,7 @@ namespace AssemblyReloader.TypeTracking
             }
         }
 
-        internal KSPAddon.Startup Scenes
+        internal KSPAddon.Startup Scene
         {
             get
             {

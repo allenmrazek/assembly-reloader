@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using AssemblyReloader.Events;
 using AssemblyReloader.Factory;
+using AssemblyReloader.Factory.Implementations;
 using AssemblyReloader.ILModifications;
 using AssemblyReloader.Loaders;
 using AssemblyReloader.Providers;
@@ -27,7 +28,7 @@ namespace AssemblyReloader.AssemblyTracking.Implementations
         private IAddonLoader _addonLoader;
 
         private readonly IFile _file;
-        private readonly LoaderFactory _loaderFactory;
+        private readonly ILoaderFactory _loaderFactory;
         private readonly IGameEventSubscriber<GameScenes> _levelLoadedEvent;
         private readonly ILog _log;
         private readonly QueryProvider _queryProvider;
@@ -38,7 +39,7 @@ namespace AssemblyReloader.AssemblyTracking.Implementations
 
         public ReloadableAssembly(
             IFile file,
-            LoaderFactory loaderFactory,
+            ILoaderFactory loaderFactory,
             IGameEventSubscriber<GameScenes> levelLoadedEvent,
                 ILog log,
             QueryProvider queryProvider)
@@ -74,8 +75,7 @@ namespace AssemblyReloader.AssemblyTracking.Implementations
         }
 
 
-
-
+        
 
         public void Load()
         {
@@ -93,7 +93,7 @@ namespace AssemblyReloader.AssemblyTracking.Implementations
                 if (_loaded.IsNull())
                     throw new InvalidOperationException("Failed to load byte stream as Assembly");
 
-                _addonLoader = _loaderFactory.GetAddonLoader(_queryProvider.GetAddonsFromAssemblyQuery(_loaded).Get());
+                _addonLoader = _loaderFactory.CreateAddonLoader(_queryProvider.GetAddonsFromAssemblyQuery(_loaded).Get());
 
 
                 _addonSceneChangeSubscription = _levelLoadedEvent.AddListener(_addonLoader.LoadAddonsForScene);
@@ -105,9 +105,6 @@ namespace AssemblyReloader.AssemblyTracking.Implementations
         public void Unload()
         {
             _addonSceneChangeSubscription.Dispose(); _addonSceneChangeSubscription = null;
-            _addonLoader.Deinitialize();
-
-
             _addonLoader.Dispose(); _addonLoader = null;
         }
 

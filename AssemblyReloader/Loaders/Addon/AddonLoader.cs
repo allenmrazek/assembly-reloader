@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using AssemblyReloader.Events;
-using AssemblyReloader.Events.Implementations;
 using AssemblyReloader.Factory;
 using AssemblyReloader.Factory.Implementations;
 using AssemblyReloader.Mediators;
-using AssemblyReloader.Messages.Implementation;
-using AssemblyReloader.Providers;
 using AssemblyReloader.Queries;
 using AssemblyReloader.TypeTracking;
 using ReeperCommon.Extensions;
@@ -17,120 +13,65 @@ using Object = UnityEngine.Object;
 
 namespace AssemblyReloader.Loaders.Addon
 {
-    class AddonLoader : ILoader, IAddonLoader, IDisposable
+    class AddonLoader : IAddonLoader
     {
         // Mainly required so we can flag addons when they've
         // been created in the case of runOnce = true
-        //private readonly List<AddonInfo> _addons;
-        private readonly Dictionary<Type, AddonInfo> _addons;
 
-        private readonly IDestructionMediator _destructionMediator;
-        private readonly IMonoBehaviourFactory _addonFactory;
-        private readonly IEnumerable<Type> _typesWhichAreAddons;
-        private readonly ILog _log;
         private readonly StartupSceneFromGameSceneQuery _startupSceneFromGameSceneQuery;
-        private readonly AddonAttributeFromTypeQuery _addonAttributeFromType;
+        private readonly IAddonFactory _addonFactory;
+        private readonly IEnumerable<AddonInfo> _addons;
+        private readonly ILog _log;
+        private readonly List<IDisposable> _created;
 
 
         public AddonLoader(
-            IEnumerable<Type> typesWhichAreAddons,
-            IDestructionMediator destructionMediator,
-            IMonoBehaviourFactory addonFactory,
+            IAddonFactory addonFactory,
+            IEnumerable<AddonInfo> addons,
             StartupSceneFromGameSceneQuery startupSceneFromGameSceneQuery,
-            AddonAttributeFromTypeQuery addonAttributeFromType,
             ILog log)
         {
-            if (destructionMediator == null) throw new ArgumentNullException("destructionMediator");
+            if (addons == null) throw new ArgumentNullException("addons");
             if (addonFactory == null) throw new ArgumentNullException("addonFactory");
             if (startupSceneFromGameSceneQuery == null)
                 throw new ArgumentNullException("startupSceneFromGameSceneQuery");
-            if (addonAttributeFromType == null) throw new ArgumentNullException("addonAttributeFromType");
-            if (typesWhichAreAddons == null) throw new ArgumentNullException("typesWhichAreAddons");
             if (log == null) throw new ArgumentNullException("log");
 
-            _destructionMediator = destructionMediator;
+
             _addonFactory = addonFactory;
+            _addons = addons;
+
             _startupSceneFromGameSceneQuery = startupSceneFromGameSceneQuery;
-            _addonAttributeFromType = addonAttributeFromType;
-            _typesWhichAreAddons = typesWhichAreAddons;
             _log = log;
-            _addons = new Dictionary<Type, AddonInfo>();
+            _created = new List<IDisposable>();
         }
 
 
 
-
-        public void Initialize()
+        ~AddonLoader()
         {
-            _log.Debug("Initialize");
-
-            if (_addons.Count > 0)
-                throw new InvalidOperationException("AddonLoader was not deinitialized");
-
-            foreach (var addonType in _typesWhichAreAddons)
-            {
-                var addonAttr = _addonAttributeFromType.GetKspAddonAttribute(addonType);
-
-                if (!addonAttr.Any())
-                    throw new InvalidOperationException(addonType.FullName + " does not have KSPAddon attribute");
-
-                _addons.Add(addonType, new AddonInfo(addonType, addonAttr.Single()));
-            }
-
-            _log.Debug(_addons.Count + " total addons found");
-
+            Dispose();
         }
 
 
 
-        public void Deinitialize()
+        public void Dispose()
         {
-            _log.Debug("Deinitialize");
-            DestroyLiveAddons();
-            _addons.Clear();
+            _created.ForEach(d => d.Dispose());
+            GC.SuppressFinalize(this);
         }
 
 
 
-        private IEnumerable<KeyValuePair<Type, AddonInfo>> GetAddonsForScene(KSPAddon.Startup scene)
+
+
+        private IEnumerable<AddonInfo> GetAddonsForStartup(KSPAddon.Startup startup)
         {
-            return ShouldBeCreated(_addons
-                .Where(ty => ty.Value.addon.startup == scene || ty.Value.addon.startup == KSPAddon.Startup.Instantly));
+            return _addons
+                .Where(info => info.Scene == startup)
+                .Where(info => !info.RunOnce || (info.RunOnce && !info.created));
         }
 
-
-
-        private IEnumerable<KeyValuePair<Type, AddonInfo>> ShouldBeCreated(IEnumerable<KeyValuePair<Type, AddonInfo>> addonTypes)
-        {
-            return addonTypes
-                .Where(kvp => (kvp.Value.addon.once && !kvp.Value.created) || !kvp.Value.addon.once);
-        }
-
-
-
-
-        private void CreateAddon(AddonInfo info)
-        {
-            var addon = new GameObject(info.type.Name);
-
-            addon.AddComponent(info.type);
-            
-            info.created = true;
-        }
-
-
-
-        private void DestroyLiveAddons()
-        {
-            _addonFactory.RemoveDeadMonoBehaviours();
-            var instantiatedAddons = _addonFactory.GetLiveMonoBehaviours().Select(mb => mb.gameObject).ToList();
-
-            _log.Verbose("Destroying " + instantiatedAddons.Count + " instantiated addons");
-            instantiatedAddons.ForEach(go => _log.Normal("addon: " + (go.IsNull() ? "<null>" : go.name)));
-
-            instantiatedAddons.ForEach(_destructionMediator.InformTargetOfDestruction);
-            instantiatedAddons.ForEach(Object.Destroy);
-        }
 
 
         public void LoadAddonsForScene(GameScenes scene)
@@ -139,23 +80,19 @@ namespace AssemblyReloader.Loaders.Addon
 
            
             var startupScene = _startupSceneFromGameSceneQuery.Query(scene);
-            var addonsThatMatchScene = GetAddonsForScene(startupScene);
-            var thatMatchScene = addonsThatMatchScene as IList<KeyValuePair<Type, AddonInfo>> ?? addonsThatMatchScene.ToList();
+            var addonsThatMatchScene = GetAddonsForStartup(startupScene);
 
-            _log.Verbose(thatMatchScene.Count + " addons eligible for instantiation");
+            var thatMatchScene = addonsThatMatchScene as AddonInfo[] ?? addonsThatMatchScene.ToArray();
+
+            _log.Verbose(thatMatchScene.Count() + " addons eligible for instantiation");
 
             foreach (var addonType in thatMatchScene)
-                _addonFactory.Create(addonType.Key, true);
-            
+                _created.Add(_addonFactory.Create(addonType));
+           
         }
 
 
 
 
-        public void Dispose()
-        {
-            DestroyLiveAddons();
-            GC.SuppressFinalize(this);
-        }
     }
 }
