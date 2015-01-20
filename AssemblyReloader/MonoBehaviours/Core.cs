@@ -167,13 +167,13 @@ namespace AssemblyReloader.MonoBehaviours
                 queryProvider);
 
             asm.Load();
-
+            asm.StartAddons(GameScenes.LOADING);
 
             _controller = new ReloadableController(queryProvider, reloaderLog, asm);
 
 
 
-            _controller.ReloadAll();
+            //_controller.ReloadAll();
 
 
             CreateWindow();

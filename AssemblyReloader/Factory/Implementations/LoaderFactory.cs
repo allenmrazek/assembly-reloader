@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using AssemblyReloader.Events;
 using AssemblyReloader.Loaders;
 using AssemblyReloader.Mediators;
@@ -38,9 +39,10 @@ namespace AssemblyReloader.Factory.Implementations
 
 
 
-        public IAddonLoader CreateAddonLoader(IEnumerable<Type> addonTypesInAssembly)
+        public IAddonLoader CreateAddonLoader(Assembly assembly)
         {
-            var typeInfo = addonTypesInAssembly.Select(ty => _infoFactory.Create(ty));
+            var typeInfo =
+                _queryProvider.GetAddonsFromAssemblyQuery(assembly).Get().Select(ty => _infoFactory.Create(ty));
 
             var loader = new Loaders.Addon.AddonLoader(
                 _addonFactory,

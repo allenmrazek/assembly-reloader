@@ -93,7 +93,7 @@ namespace AssemblyReloader.AssemblyTracking.Implementations
                 if (_loaded.IsNull())
                     throw new InvalidOperationException("Failed to load byte stream as Assembly");
 
-                _addonLoader = _loaderFactory.CreateAddonLoader(_queryProvider.GetAddonsFromAssemblyQuery(_loaded).Get());
+                _addonLoader = _loaderFactory.CreateAddonLoader(_loaded);
 
 
                 _addonSceneChangeSubscription = _levelLoadedEvent.AddListener(_addonLoader.LoadAddonsForScene);
@@ -104,8 +104,11 @@ namespace AssemblyReloader.AssemblyTracking.Implementations
 
         public void Unload()
         {
-            _addonSceneChangeSubscription.Dispose(); _addonSceneChangeSubscription = null;
-            _addonLoader.Dispose(); _addonLoader = null;
+            _addonSceneChangeSubscription.Dispose(); 
+            _addonSceneChangeSubscription = null;
+
+            _addonLoader.Dispose();
+            _addonLoader = null;
         }
 
 
