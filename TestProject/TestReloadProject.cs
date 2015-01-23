@@ -10,7 +10,7 @@ namespace TestProject
     [KSPAddon(KSPAddon.Startup.Instantly, false)]
     public class TestReloadProject : MonoBehaviour
     {
-        private Rect _windowRect = new Rect(400f, 400f, 200f, 200f);
+        private Rect _windowRect = new Rect(000f, 000f, 200f, 200f);
 
         private void OnGUI()
         {

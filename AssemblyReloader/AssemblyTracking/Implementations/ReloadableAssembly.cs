@@ -1,16 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Reflection;
 using AssemblyReloader.Events;
 using AssemblyReloader.Factory;
-using AssemblyReloader.Factory.Implementations;
 using AssemblyReloader.ILModifications;
 using AssemblyReloader.Loaders;
 using AssemblyReloader.Providers;
-using AssemblyReloader.Tracking;
 using Mono.Cecil;
 using ReeperCommon.Extensions;
-using ReeperCommon.FileSystem;
 using ReeperCommon.Logging;
 
 namespace AssemblyReloader.AssemblyTracking.Implementations
@@ -27,7 +23,8 @@ namespace AssemblyReloader.AssemblyTracking.Implementations
         private System.Reflection.Assembly _loaded;
         private IAddonLoader _addonLoader;
 
-        private readonly IFile _file;
+
+        private readonly IReloadableIdentity _reloadableIdentity;
         private readonly ILoaderFactory _loaderFactory;
         private readonly IGameEventSubscriber<GameScenes> _levelLoadedEvent;
         private readonly ILog _log;
@@ -38,19 +35,19 @@ namespace AssemblyReloader.AssemblyTracking.Implementations
 
 
         public ReloadableAssembly(
-            IFile file,
+            IReloadableIdentity reloadableIdentity,
             ILoaderFactory loaderFactory,
             IGameEventSubscriber<GameScenes> levelLoadedEvent,
                 ILog log,
             QueryProvider queryProvider)
         {
-            if (file == null) throw new ArgumentNullException("file");
+            if (reloadableIdentity == null) throw new ArgumentNullException("reloadableIdentity");
             if (loaderFactory == null) throw new ArgumentNullException("loaderFactory");
             if (levelLoadedEvent == null) throw new ArgumentNullException("levelLoadedEvent");
             if (log == null) throw new ArgumentNullException("log");
             if (queryProvider == null) throw new ArgumentNullException("queryProvider");
 
-            _file = file;
+            _reloadableIdentity = reloadableIdentity;
             _loaderFactory = loaderFactory;
             _levelLoadedEvent = levelLoadedEvent;
             _log = log;
@@ -62,7 +59,7 @@ namespace AssemblyReloader.AssemblyTracking.Implementations
 
         private void ApplyModifications(System.IO.MemoryStream stream)
         {
-            var definition = AssemblyDefinition.ReadAssembly(_file.FullPath);
+            var definition = AssemblyDefinition.ReadAssembly(_reloadableIdentity.Location);
 
             var modifier = new ModifyPluginIdentity();
 
@@ -111,9 +108,10 @@ namespace AssemblyReloader.AssemblyTracking.Implementations
             _addonLoader = null;
         }
 
-
-
-
+        public IReloadableIdentity ReloadableIdentity
+        {
+            get { return _reloadableIdentity; }
+        }
 
 
         public void StartAddons(GameScenes scene)

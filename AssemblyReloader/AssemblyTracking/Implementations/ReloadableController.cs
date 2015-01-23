@@ -8,7 +8,7 @@ using ReeperCommon.Logging;
 namespace AssemblyReloader.AssemblyTracking.Implementations
 {
 
-    class ReloadableController : IReloadableController
+    internal class ReloadableController : IReloadableController
     {
         private readonly IEnumerable<ReloadableAssembly> _reloadables;
         private readonly QueryProvider _queryProvider;
@@ -38,6 +38,11 @@ namespace AssemblyReloader.AssemblyTracking.Implementations
                 r.Load();
                 r.StartAddons(_queryProvider.GetCurrentGameSceneProvider().Get());
             }
+        }
+
+        public IEnumerable<IReloadableIdentity> ReloadableAssemblies
+        {
+            get { return _reloadables.Select(r => r.ReloadableIdentity); }
         }
     }
 }

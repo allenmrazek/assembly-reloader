@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using AssemblyReloader.AssemblyTracking.Implementations;
 using AssemblyReloader.Events;
 using AssemblyReloader.Events.Implementations;
@@ -8,6 +9,7 @@ using AssemblyReloader.Factory;
 using AssemblyReloader.Factory.Implementations;
 using AssemblyReloader.GUI;
 using AssemblyReloader.Logging;
+using AssemblyReloader.Logging.Implementations;
 using AssemblyReloader.Mediators.Destruction;
 using AssemblyReloader.Messages;
 using AssemblyReloader.Messages.Implementation;
@@ -20,6 +22,9 @@ using ReeperCommon.Gui.Window.Decorators;
 using ReeperCommon.Gui.Window.Decorators.Buttons;
 using ReeperCommon.Gui.Window.Factory;
 using ReeperCommon.Gui.Window.View;
+using ReeperCommon.Gui.Window.Providers;
+using ReeperCommon.Locators.Resources;
+using ReeperCommon.Locators.Resources.Implementations;
 using ReeperCommon.Logging;
 using ReeperCommon.Logging.Implementations;
 using UnityEngine;
@@ -31,6 +36,8 @@ namespace AssemblyReloader.MonoBehaviours
     class Core : MonoBehaviour
     {
         private WindowView _view;
+        private WindowView _logView;
+
         private ReloadableController _controller;
         private MessageChannel _messageChannel;
         private CurrentGameSceneProvider _currentSceneProvider;
@@ -117,12 +124,14 @@ namespace AssemblyReloader.MonoBehaviours
             DontDestroyOnLoad(this);
 
 #if DEBUG
-            var log = new DebugLog("ART");
+            var primaryLog = new DebugLog("ART");
 #else
-            var log = LogFactory.Create(LogLevel.Standard);
+            var primaryLog = LogFactory.Create(LogLevel.Standard);
 #endif
 
-            _log = log.CreateTag("Core");
+            var cachedLog = new CachedLog(primaryLog, 100);
+
+            _log = cachedLog;
 
 
             var gameDataProvider = new KSPGameDataDirectoryProvider();
@@ -130,18 +139,25 @@ namespace AssemblyReloader.MonoBehaviours
             var queryProvider = new QueryProvider();
             _currentSceneProvider = queryProvider.GetCurrentGameSceneProvider();
 
-            var reloaderLog = new ReloaderLog(log, 25);
+
+            var resourceProvider = new ResourceProvider(
+                                        new ResourceLocatorComposite(
+                                            new ResourceFromEmbeddedResource(Assembly.GetExecutingAssembly())
+                                        )
+                                    );
+
+
             var fileFactory = new KSPFileFactory();
             var destructionMediator = new GameObjectDestroyForReload();
-            var addonFactory = new AddonFactory(destructionMediator, log.CreateTag("AddonFactory"));
+            var addonFactory = new AddonFactory(destructionMediator, cachedLog.CreateTag("AddonFactory"));
 
             var infoFactory = new AddonInfoFactory(queryProvider.GetAddonAttributeQuery());
 
-            _eventOnLevelWasLoaded = new GameEventSubscriber<GameScenes>(log.CreateTag("OnLevelWasLoaded"));
+            _eventOnLevelWasLoaded = new GameEventSubscriber<GameScenes>(cachedLog.CreateTag("OnLevelWasLoaded"));
                 // do not subscribe to GameEvents version of this event because it can be invoked twice in succession due to a KSP bug
                 // instead, it is invoked by Core.OnLevelWasLoaded
 
-            var loaderFactory = new LoaderFactory(addonFactory, infoFactory, reloaderLog, queryProvider);
+            var loaderFactory = new LoaderFactory(addonFactory, infoFactory, cachedLog, queryProvider);
 
 
 
@@ -160,24 +176,49 @@ namespace AssemblyReloader.MonoBehaviours
 
 
             var asm = new ReloadableAssembly(
-                reloadableAssemblyFileQuery.Get().First(),
+                new ReloadableReloadableIdentity(reloadableAssemblyFileQuery.Get().First()),
                 loaderFactory, 
                 _eventOnLevelWasLoaded,
-                log.CreateTag("Reloadable:" + reloadableAssemblyFileQuery.Get().First().Name),
+                cachedLog.CreateTag("Reloadable:" + reloadableAssemblyFileQuery.Get().First().Name),
                 queryProvider);
 
             asm.Load();
             asm.StartAddons(GameScenes.LOADING);
 
-            _controller = new ReloadableController(queryProvider, reloaderLog, asm);
+            _controller = new ReloadableController(queryProvider, cachedLog, asm);
 
 
 
             //_controller.ReloadAll();
 
+            var logWindow = CreateLogWindow(cachedLog);
+            var mainWindow = CreateMainWindow(logWindow, resourceProvider);
 
-            CreateWindow();
+            _view = WindowView.Create(mainWindow);
+            _logView = WindowView.Create(logWindow);
 
+            DontDestroyOnLoad(_view);
+            DontDestroyOnLoad(_logView);
+
+
+            var ab = FindObjectsOfType<AssetBase>();
+
+            if (ab.Length == 0)
+                _log.Error("Didn't find AssetBase");
+
+            ab.Single().guiSkins.ToList().ForEach(skin => _log.Normal("GUISkin: " + skin.name));
+
+            var fonts = Resources.FindObjectsOfTypeAll<Font>();
+
+            if (fonts.Length == 0)
+                _log.Error("Didn't find any fonts");
+
+            fonts.ToList().ForEach(f => _log.Normal("font: " + f.name));
+
+            var result = resourceProvider.GetTexture("AssemblyReloader.Resources.btnClose.png");
+            if (!result.Any())
+                _log.Error("Wasn't able to load from resource");
+            else _log.Normal("Successfully loaded from resource");
         }
 
 
@@ -199,43 +240,60 @@ namespace AssemblyReloader.MonoBehaviours
 
 
 
-        private void CreateWindow()
+        private IWindowComponent CreateMainWindow(IWindowComponent logWindowLogic, IResourceProvider resourceProvider)
         {
-            var tempTexture = new Texture2D(16, 16, TextureFormat.ARGB32, false);
-            var pixels = Enumerable.Repeat<Color>(new Color(1f, 0f, 0f), 16 * 16);
-
-            tempTexture.SetPixels(pixels.ToArray());
-            tempTexture.Apply();
-
-            var style = GUIStyle.none;
-            style.active.background = style.normal.background = style.hover.background = tempTexture;
-
-            var wfactory = new WindowFactory(HighLogic.Skin);
+            var idProvider = new UniqueWindowIdProvider();
 
 
-            var logic = new ViewLogic(_controller, _log.CreateTag("View"));
+            //var style = new GUIStyle(AssetBase.GetGUISkin("KSP window 3").button);
+            var style = new GUIStyle(HighLogic.Skin.button);
+
+            var btnBackground = resourceProvider.GetTexture("AssemblyReloader.Resources.btnBackground.png");
+            var btnClose = resourceProvider.GetTexture("AssemblyReloader.Resources.btnClose.png");
+
+            if (btnBackground.Any() && btnClose.Any())
+            {
+                //style.active.background = style.normal.background = btnClose.First();
+                style.hover.background = btnBackground.First();
+
+                //style.active.background = style.normal.background = style.hover.background = tempTexture;//
+            }
+            else _log.Error("Failed to find MainWindow button textures");
+
+            var logic = new MainViewLogic(_controller, logWindowLogic);
 
             var basicWindow = new BasicWindow(
                 logic,
                 new Rect(400f, 400f, 300f, 300f),
-                2424, HighLogic.Skin,
+                idProvider.Get(), AssetBase.GetGUISkin("KSP window 6"),
                 true,
                 true
-                );
+                ) {Title = "ART: Assembly Reloading Tool"};
 
 
             var tbButtons = new TitleBarButtons(basicWindow, new Vector2(4f, 4f));
 
 
-            tbButtons.AddButton(new TitleBarButton(style, s => { }, "Test"));
+            tbButtons.AddButton(new TitleBarButton(style, btnClose.First(), s => { }, "Test"));
 
 
             var hiding = new HideOnF2(tbButtons);
 
-            _view = WindowView.Create(hiding);
+            return hiding;
+        }
 
-            DontDestroyOnLoad(_view);
 
+
+        private IWindowComponent CreateLogWindow(ICachedLog cachedLog)
+        {
+            var logWindowLogic = new LogViewLogic(cachedLog);
+            var idProvider = new UniqueWindowIdProvider();
+
+            var logWindow = new BasicWindow(logWindowLogic, new Rect(400f, 0f, 200f, 128f), idProvider.Get(),
+                HighLogic.Skin, true, true) {Title = "ART Log", Visible = false};
+
+
+            return logWindow;
         }
     }
 }

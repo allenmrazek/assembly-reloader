@@ -1,6 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using AssemblyReloader.AssemblyTracking;
-using AssemblyReloader.AssemblyTracking.Implementations;
+using AssemblyReloader.Logging;
 using ReeperCommon.Gui.Window;
 using ReeperCommon.Gui.Window.Logic;
 using ReeperCommon.Logging;
@@ -8,25 +9,24 @@ using UnityEngine;
 
 namespace AssemblyReloader.GUI
 {
-    class ViewLogic : IWindowLogic
+    class MainViewLogic : IWindowLogic
     {
         private IWindowComponent _window;
         private readonly IReloadableController _controller;
-        private readonly ILog _log;
+        private readonly IWindowComponent _logWindow;
 
         // gui
         private Vector2 _scroll = default(Vector2);
 
 
-        public ViewLogic(IReloadableController controller, ILog log)
+
+        public MainViewLogic(IReloadableController controller, IWindowComponent logWindow)
         {
             if (controller == null) throw new ArgumentNullException("controller");
-            if (log == null) throw new ArgumentNullException("log");
+            if (logWindow == null) throw new ArgumentNullException("logWindow");
 
             _controller = controller;
-            _log = log;
-
-            _log.Debug("ViewLogic created");
+            _logWindow = logWindow;
         }
 
 
@@ -37,6 +37,8 @@ namespace AssemblyReloader.GUI
             GUILayout.BeginVertical();
             {
                 GUILayout.Label("Reloadable assemblies:");
+
+                DrawReloadableItems(_controller.ReloadableAssemblies);
 
                 if (GUILayout.Button("Reload all"))
                     _controller.ReloadAll();
@@ -56,9 +58,34 @@ namespace AssemblyReloader.GUI
                 GUILayout.Toggle(true, "KSPAddon");
                 GUILayout.Toggle(true, "PartModule");
                 GUILayout.Toggle(true, "ScenarioModule");
+
+                if (GUILayout.Button(_logWindow.Visible ? "Hide Log" : "Show Log"))
+                    _logWindow.Visible = !_logWindow.Visible;
             }
             GUILayout.EndVertical();
         }
+
+
+
+        private void DrawReloadableItems(IEnumerable<IReloadableIdentity> items)
+        {
+            foreach (var item in items)
+                DrawReloadableItem(item);
+        }
+
+
+
+        private void DrawReloadableItem(IReloadableIdentity reloadable)
+        {
+            GUILayout.BeginHorizontal(GUILayout.MinWidth(300f));
+            {
+                GUILayout.Label(reloadable.Name);
+                GUILayout.FlexibleSpace();
+                GUILayout.Button("Reload", GUILayout.ExpandWidth(false), GUILayout.ExpandHeight(false));
+            }
+            GUILayout.EndHorizontal();
+        }
+
 
 
 
@@ -72,13 +99,12 @@ namespace AssemblyReloader.GUI
         public void OnAttached(IWindowComponent component)
         {
             _window = component;
-            _log.Normal("ViewLogic.OnAttached");
 
         }
 
         public void OnDetached(IWindowComponent component)
         {
-            _log.Normal("ViewLogic.OnDetached");
+
         }
     }
 }

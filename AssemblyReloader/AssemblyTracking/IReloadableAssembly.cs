@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using ReeperCommon.FileSystem;
 
 namespace AssemblyReloader.AssemblyTracking
 {
@@ -9,5 +10,6 @@ namespace AssemblyReloader.AssemblyTracking
     {
         void Load();
         void Unload();
+        IReloadableIdentity ReloadableIdentity { get; }
     }
 }

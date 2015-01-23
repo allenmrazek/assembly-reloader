@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using ReeperCommon.Logging;
 using ReeperCommon.Logging.Implementations;
+using System.Linq;
 
-namespace AssemblyReloader.Logging
+namespace AssemblyReloader.Logging.Implementations
 {
-    /// <summary>
+    /// <summary>I
     /// Essentially a decorator that caches log messages for display in the view
     /// </summary>
-    class ReloaderLog : ILog
+    class CachedLog : ICachedLog
     {
         private readonly ILog _mainLog;
         private readonly Queue<string> _messages = new Queue<string>();
@@ -16,7 +17,7 @@ namespace AssemblyReloader.Logging
 
 
 
-        public ReloaderLog(ILog mainBaseLog, int buffer = 50)
+        public CachedLog(ILog mainBaseLog, int buffer = 50)
         {
             if (mainBaseLog == null) throw new ArgumentNullException("mainBaseLog");
 
@@ -88,9 +89,15 @@ namespace AssemblyReloader.Logging
             _mainLog.Verbose(format, args);
         }
 
+
+
         public ILog CreateTag(string tag)
         {
-            return new TaggedLog(this, tag);
+            return new CachedLog(new TaggedLog(this, tag), _messageBuffer);
         }
+
+
+
+        public string[] Messages { get { return _messages.ToArray().Reverse().ToArray(); } }
     }
 }
