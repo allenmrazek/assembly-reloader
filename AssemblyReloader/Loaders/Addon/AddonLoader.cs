@@ -1,15 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using AssemblyReloader.Factory;
-using AssemblyReloader.Factory.Implementations;
-using AssemblyReloader.Mediators;
+using AssemblyReloader.Loaders.Addon.Factories;
 using AssemblyReloader.Queries;
 using AssemblyReloader.TypeTracking;
-using ReeperCommon.Extensions;
 using ReeperCommon.Logging;
-using UnityEngine;
-using Object = UnityEngine.Object;
 
 namespace AssemblyReloader.Loaders.Addon
 {

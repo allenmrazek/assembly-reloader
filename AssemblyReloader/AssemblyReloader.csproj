@@ -56,19 +56,23 @@
     <Compile Include="AssemblyTracking\Implementations\ReloadableReloadableIdentity.cs" />
     <Compile Include="AssemblyTracking\IReloadableController.cs" />
     <Compile Include="Commands\ICommand.cs" />
+    <Compile Include="CompositeRoot\MonoBehaviours\CoreView.cs" />
     <Compile Include="Events\IGameEventSubscriber.cs" />
     <Compile Include="Events\IGameEventSubscription.cs" />
     <Compile Include="Events\Implementations\GameEventSubscriber.cs" />
     <Compile Include="Events\Implementations\GameEventSubscription.cs" />
-    <Compile Include="Factory\IAddonFactory.cs" />
-    <Compile Include="Factory\IAddonInfoFactory.cs" />
-    <Compile Include="Factory\ILoaderFactory.cs" />
-    <Compile Include="Factory\Implementations\AddonFactory.cs" />
-    <Compile Include="Factory\Implementations\AddonInfoFactory.cs" />
+    <Compile Include="Loaders\Addon\Factories\IAddonFactory.cs" />
+    <Compile Include="Loaders\Addon\Factories\IAddonInfoFactory.cs" />
+    <Compile Include="Loaders\Factories\ILoaderFactory.cs" />
+    <Compile Include="Loaders\Addon\Factories\Implementations\AddonFactory.cs" />
+    <Compile Include="Loaders\Addon\Factories\Implementations\AddonInfoFactory.cs" />
+    <Compile Include="GUI\Window\Factories\LogWindowFactory.cs" />
+    <Compile Include="GUI\Window\Factories\MainWindowFactory.cs" />
     <Compile Include="GUI\LogViewLogic.cs" />
     <Compile Include="Loaders\Addon\Addon.cs" />
     <Compile Include="Loaders\IAddonLoader.cs" />
     <Compile Include="Logging\ICachedLog.cs" />
+    <Compile Include="Providers\AssemblyDirectoryProvider.cs" />
     <Compile Include="Providers\CurrentGameSceneProvider.cs" />
     <Compile Include="Providers\GameEventProvider.cs" />
     <Compile Include="Providers\QueryProvider.cs" />
@@ -83,14 +87,14 @@
     <Compile Include="Messages\IChannel.cs" />
     <Compile Include="Messages\IConsumer.cs" />
     <Compile Include="Messages\IMessage.cs" />
-    <Compile Include="Factory\Implementations\LoaderFactory.cs" />
+    <Compile Include="Loaders\Factories\Implementations\LoaderFactory.cs" />
     <Compile Include="Logging\Implementations\CachedLog.cs" />
     <Compile Include="Messages\Implementation\TestEvent.cs" />
     <Compile Include="ILModifications\ModifyPluginIdentity.cs" />
     <Compile Include="Loaders\Addon\AddonLoader.cs" />
-    <Compile Include="MonoBehaviours\Core.cs" />
+    <Compile Include="CompositeRoot\Core.cs" />
     <Compile Include="AssemblyTracking\Implementations\ReloadableAssembly.cs" />
-    <Compile Include="GUI\MainViewLogic.cs" />
+    <Compile Include="GUI\MainViewWindowLogic.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Queries\AddonsFromAssemblyQuery.cs" />
     <Compile Include="Providers\CurrentStartupSceneProvider.cs" />
@@ -101,19 +105,20 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\ReeperCommon\ReeperCommon\ReeperCommon.csproj">
-      <Project>{fecfa8fc-cf80-4685-a2ba-1566e0f3c26e}</Project>
-      <Name>ReeperCommon</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Folder Include="Commands\Implementations\" />
+    <Folder Include="CompositeRoot\MessageChannel\" />
     <Folder Include="Events\Implementations\Override\" />
     <Folder Include="Services\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\btnBackground.png" />
     <EmbeddedResource Include="Resources\btnClose.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\ReeperCommon\ReeperCommon\ReeperCommon.csproj">
+      <Project>{fecfa8fc-cf80-4685-a2ba-1566e0f3c26e}</Project>
+      <Name>ReeperCommon</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

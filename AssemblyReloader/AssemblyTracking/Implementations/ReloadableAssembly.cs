@@ -1,12 +1,14 @@
 ﻿using System;
+using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using AssemblyReloader.Events;
-using AssemblyReloader.Factory;
 using AssemblyReloader.ILModifications;
 using AssemblyReloader.Loaders;
+using AssemblyReloader.Loaders.Factories;
 using AssemblyReloader.Providers;
 using Mono.Cecil;
-using ReeperCommon.Extensions;
+using ReeperCommon.Extensions.Object;
 using ReeperCommon.Logging;
 
 namespace AssemblyReloader.AssemblyTracking.Implementations
@@ -20,7 +22,7 @@ namespace AssemblyReloader.AssemblyTracking.Implementations
     /// </summary>
     class ReloadableAssembly : IReloadableAssembly
     {
-        private System.Reflection.Assembly _loaded;
+        private Assembly _loaded;
         private IAddonLoader _addonLoader;
 
 
@@ -59,15 +61,50 @@ namespace AssemblyReloader.AssemblyTracking.Implementations
 
         private void ApplyModifications(System.IO.MemoryStream stream)
         {
+            if (stream == null) throw new ArgumentNullException("stream");
+
             var definition = AssemblyDefinition.ReadAssembly(_reloadableIdentity.Location);
 
             var modifier = new ModifyPluginIdentity();
 
             modifier.Rename(definition, Guid.NewGuid());
 
+            definition.MainModule.GetTypes().ToList().ForEach(td =>
+            {
+                td.Namespace = Guid.NewGuid() + "." + td.Namespace;
+                td.Name = Guid.NewGuid() + "." + td.Name;
+            });
+
+            _log.Debug("CustomAttributes");
+
+            definition.CustomAttributes.ToList().ForEach(ca => _log.Normal("Attr: " + ca.AttributeType.Name));
+
+            var attr = definition.CustomAttributes.FirstOrDefault(ca => ca.AttributeType.Name == "GuidAttribute");
+            _log.Normal("GuidAttribute: " + attr.ConstructorArguments[0].Value);
+
+            //attr.ConstructorArguments[0].Value = Guid.NewGuid();
+
+            //definition.CustomAttributes.Remove(attr);
+
+            ////var newAttr = new CustomAttribute(attr.Constructor)
+            ////{
+            ////    ConstructorArguments = 
+            ////        {
+            ////            new CustomAttributeArgument(
+            ////                 attr.ConstructorArguments[0].Type, 
+            ////                 Guid.NewGuid())
+            ////         }
+            ////};
+
+
+            //definition.CustomAttributes.Add(newAttr);
+            
+
             _log.Normal("Finished modifications; writing to stream");
             definition.Write(stream);
-            //definition.Write(_file.FullPath + ".edit");
+
+            definition.Write(_reloadableIdentity.Location + ".modified");
+
             _log.Normal("done");
         }
 
@@ -89,6 +126,15 @@ namespace AssemblyReloader.AssemblyTracking.Implementations
                 _log.Normal("load finished");
                 if (_loaded.IsNull())
                     throw new InvalidOperationException("Failed to load byte stream as Assembly");
+
+                // note: looks like if we already have a dependency in memory, the new version of DLL won't
+                // be correctly loaded. Might need to tweak dependencies as well, even if they're not reloadable
+                // note: but we only want those in GameData of course, otherwise we'll epicfail by duplicating
+                // mscorlib, Assembly-CSharp etc
+                _log.Normal("Dependencies of " + _loaded.GetName().Name + ":" + System.Environment.NewLine +
+                            string.Join(System.Environment.NewLine,
+                                _loaded.GetReferencedAssemblies().Select(ra => ra.Name).ToArray()));
+
 
                 _addonLoader = _loaderFactory.CreateAddonLoader(_loaded);
 

@@ -1,0 +1,9 @@
+D:\For New Computer\KSPCustomMods\AssemblyReloader\AssemblyReloaderUnitTests\bin\Debug\AssemblyReloaderUnitTests.dll
+D:\For New Computer\KSPCustomMods\AssemblyReloader\AssemblyReloaderUnitTests\bin\Debug\AssemblyReloaderUnitTests.pdb
+D:\For New Computer\KSPCustomMods\AssemblyReloader\AssemblyReloaderUnitTests\bin\Debug\NSubstitute.dll
+D:\For New Computer\KSPCustomMods\AssemblyReloader\AssemblyReloaderUnitTests\bin\Debug\xunit.dll
+D:\For New Computer\KSPCustomMods\AssemblyReloader\AssemblyReloaderUnitTests\bin\Debug\NSubstitute.xml
+D:\For New Computer\KSPCustomMods\AssemblyReloader\AssemblyReloaderUnitTests\bin\Debug\xunit.xml
+D:\For New Computer\KSPCustomMods\AssemblyReloader\AssemblyReloaderUnitTests\obj\Debug\AssemblyReloaderUnitTests.dll
+D:\For New Computer\KSPCustomMods\AssemblyReloader\AssemblyReloaderUnitTests\obj\Debug\AssemblyReloaderUnitTests.pdb
+D:\For New Computer\KSPCustomMods\AssemblyReloader\AssemblyReloaderUnitTests\obj\Debug\AssemblyReloaderUnitTests.csprojResolveAssemblyReference.cache

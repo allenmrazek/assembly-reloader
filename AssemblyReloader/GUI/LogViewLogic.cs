@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using AssemblyReloader.Logging;
+using ReeperCommon.Gui.Logic;
 using ReeperCommon.Gui.Window;
-using ReeperCommon.Gui.Window.Logic;
 using UnityEngine;
 
 namespace AssemblyReloader.GUI

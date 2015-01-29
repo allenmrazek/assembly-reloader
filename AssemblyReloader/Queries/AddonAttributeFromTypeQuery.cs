@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using ReeperCommon.Containers;
 using ReeperCommon.Extensions;
+using ReeperCommon.Extensions.Object;
 using UnityEngine;
 
 namespace AssemblyReloader.Queries

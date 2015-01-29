@@ -7,25 +7,18 @@ namespace AssemblyReloader.Queries
 {
     class ReloadableAssemblyFileQuery
     {
-        private readonly IFileFactory _fileFactory;
-        private readonly IGameDataPathQuery _gdQuery;
+        private readonly IDirectory _topDirectory;
 
-        public ReloadableAssemblyFileQuery(IFileFactory fileFactory, IGameDataPathQuery gdQuery)
+        public ReloadableAssemblyFileQuery(IDirectory topDirectory)
         {
-            if (fileFactory == null) throw new ArgumentNullException("fileFactory");
-            if (gdQuery == null) throw new ArgumentNullException("gdQuery");
-
-            _gdQuery = gdQuery;
-            _fileFactory = fileFactory;
+            if (topDirectory == null) throw new ArgumentNullException("topDirectory");
+            _topDirectory = topDirectory;
         }
-
 
 
         public IEnumerable<IFile> Get()
         {
-            var d = new KSPDirectory(_fileFactory, _gdQuery);
-
-            return d.RecursiveFiles("reloadable");
+            return _topDirectory.RecursiveFiles("reloadable");
         }
     }
 }
