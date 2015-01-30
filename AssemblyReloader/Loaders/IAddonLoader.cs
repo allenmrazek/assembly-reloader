@@ -2,8 +2,8 @@
 
 namespace AssemblyReloader.Loaders
 {
-    interface IAddonLoader : IDisposable
+    public interface IAddonLoader : IDisposable
     {
-        void LoadAddonsForScene(GameScenes scene);
+        void LoadAddonsForScene(KSPAddon.Startup scene);
     }
 }

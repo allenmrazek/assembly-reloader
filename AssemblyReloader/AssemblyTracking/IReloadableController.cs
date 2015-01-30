@@ -6,7 +6,7 @@ using AssemblyReloader.AssemblyTracking.Implementations;
 
 namespace AssemblyReloader.AssemblyTracking
 {
-    interface IReloadableController
+    public interface IReloadableController
     {
         void ReloadAll();
 

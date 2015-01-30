@@ -1,17 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using ReeperCommon.Containers;
-using ReeperCommon.Extensions;
 using ReeperCommon.Extensions.Object;
 using UnityEngine;
 
-namespace AssemblyReloader.Queries
+namespace AssemblyReloader.Queries.Implementations
 {
-    class AddonAttributeFromTypeQuery
+    public class AddonAttributeFromTypeQuery : IAddonAttributeFromTypeQuery
     {
-        public Maybe<KSPAddon> GetKspAddonAttribute(Type type)
+        public Maybe<KSPAddon> Get(Type type)
         {
             if (type == null) throw new ArgumentNullException("type");
 

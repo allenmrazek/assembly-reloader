@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using AssemblyReloader.Loaders.Addon.Factories;
 using AssemblyReloader.Queries;
+using AssemblyReloader.Queries.Implementations;
 using AssemblyReloader.TypeTracking;
 using ReeperCommon.Logging;
 
@@ -13,7 +14,6 @@ namespace AssemblyReloader.Loaders.Addon
         // Mainly required so we can flag addons when they've
         // been created in the case of runOnce = true
 
-        private readonly StartupSceneFromGameSceneQuery _startupSceneFromGameSceneQuery;
         private readonly IAddonFactory _addonFactory;
         private readonly IEnumerable<AddonInfo> _addons;
         private readonly ILog _log;
@@ -23,20 +23,16 @@ namespace AssemblyReloader.Loaders.Addon
         public AddonLoader(
             IAddonFactory addonFactory,
             IEnumerable<AddonInfo> addons,
-            StartupSceneFromGameSceneQuery startupSceneFromGameSceneQuery,
             ILog log)
         {
             if (addons == null) throw new ArgumentNullException("addons");
             if (addonFactory == null) throw new ArgumentNullException("addonFactory");
-            if (startupSceneFromGameSceneQuery == null)
-                throw new ArgumentNullException("startupSceneFromGameSceneQuery");
             if (log == null) throw new ArgumentNullException("log");
 
 
             _addonFactory = addonFactory;
             _addons = addons;
 
-            _startupSceneFromGameSceneQuery = startupSceneFromGameSceneQuery;
             _log = log;
             _created = new List<IDisposable>();
         }
@@ -69,13 +65,11 @@ namespace AssemblyReloader.Loaders.Addon
 
 
 
-        public void LoadAddonsForScene(GameScenes scene)
+        public void LoadAddonsForScene(KSPAddon.Startup scene)
         {
             _log.Debug("Loading addons for " + scene);
 
-           
-            var startupScene = _startupSceneFromGameSceneQuery.Query(scene);
-            var addonsThatMatchScene = GetAddonsForStartup(startupScene);
+            var addonsThatMatchScene = GetAddonsForStartup(scene);
 
             var thatMatchScene = addonsThatMatchScene as AddonInfo[] ?? addonsThatMatchScene.ToArray();
 
@@ -85,9 +79,5 @@ namespace AssemblyReloader.Loaders.Addon
                 _created.Add(_addonFactory.Create(addonType));
            
         }
-
-
-
-
     }
 }

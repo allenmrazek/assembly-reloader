@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using AssemblyReloader.Queries;
 
 namespace AssemblyReloader.Providers
 {
-    class CurrentGameSceneProvider
+    public class CurrentGameSceneQuery : ICurrentGameSceneQuery
     {
         public GameScenes Get()
         {

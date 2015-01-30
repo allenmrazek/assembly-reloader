@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using AssemblyReloader.AssemblyTracking;
 using AssemblyReloader.AssemblyTracking.Implementations;
 using AssemblyReloader.Events;
 using AssemblyReloader.Events.Implementations;
@@ -12,10 +13,12 @@ using AssemblyReloader.Loaders.Addon.Factories.Implementations;
 using AssemblyReloader.Loaders.Factories.Implementations;
 using AssemblyReloader.Logging;
 using AssemblyReloader.Logging.Implementations;
-using AssemblyReloader.Mediators.Destruction;
+using AssemblyReloader.Mediators.Implementations;
 using AssemblyReloader.Messages;
 using AssemblyReloader.Providers;
+using AssemblyReloader.Providers.Implementations;
 using AssemblyReloader.Queries;
+using AssemblyReloader.Queries.Implementations;
 using ReeperCommon.FileSystem;
 using ReeperCommon.FileSystem.Factories;
 using ReeperCommon.FileSystem.Implementations;
@@ -41,9 +44,9 @@ namespace AssemblyReloader.CompositeRoot
         private readonly WindowView _view;
         private readonly WindowView _logView;
 
-        private readonly ReloadableController _controller;
+        private readonly IReloadableController _controller;
         private readonly MessageChannel _messageChannel;
-        private readonly CurrentGameSceneProvider _currentSceneProvider;
+        private readonly ICurrentGameSceneQuery _currentSceneQuery;
         private readonly IGameEventSubscriber<GameScenes> _eventOnLevelWasLoaded;
 
         private readonly ILog _log;
@@ -137,11 +140,11 @@ namespace AssemblyReloader.CompositeRoot
             var fsFactory = new KSPFileSystemFactory(
                 new KSPUrlDir(new KSPGameDataUrlDirProvider().Get()));
 
-            var ourDirProvider = new AssemblyDirectoryProvider(Assembly.GetExecutingAssembly(), fsFactory.GetGameDataDirectory(), _log);
+            var ourDirProvider = new AssemblyDirectoryQuery(Assembly.GetExecutingAssembly(), fsFactory.GetGameDataDirectory(), _log);
                 
 
-            var queryProvider = new QueryProvider();
-            _currentSceneProvider = queryProvider.GetCurrentGameSceneProvider();
+            var queryProvider = new QueryFactory();
+            _currentSceneQuery = queryProvider.GetCurrentGameSceneProvider();
 
 
 
@@ -172,24 +175,23 @@ namespace AssemblyReloader.CompositeRoot
 
             _log.Normal("Initializing container...");
 
-            var reloadableAssemblyFileQuery = new ReloadableAssemblyFileQuery(fsFactory.GetGameDataDirectory());
+            var reloadableAssemblyFileQuery = new ReloadableAssemblyFilesInDirectoryQuery(fsFactory.GetGameDataDirectory());
 
-
-            var asm = new ReloadableAssembly(
-                new ReloadableReloadableIdentity(reloadableAssemblyFileQuery.Get().First()),
-                loaderFactory, 
+            var reloadables = reloadableAssemblyFileQuery.Get().Select(raFile =>
+                new ReloadableAssembly(new ReloadableReloadableIdentity(raFile),
+                loaderFactory,
                 _eventOnLevelWasLoaded,
-                cachedLog.CreateTag("Reloadable:" + reloadableAssemblyFileQuery.Get().First().Name),
-                queryProvider);
-
-            asm.Load();
-            asm.StartAddons(GameScenes.LOADING);
-
-            _controller = new ReloadableController(queryProvider, cachedLog, asm);
+                cachedLog.CreateTag("Reloadable:" + raFile.Name),
+                queryProvider)).Cast<IReloadableAssembly>().ToList();
 
 
+            reloadables.ForEach(r =>
+            {
+                r.Load();
+                r.StartAddons(KSPAddon.Startup.Instantly);
+            });
 
-            //_controller.ReloadAll();
+            _controller = new ReloadableController(queryProvider, cachedLog, reloadables);
 
             var logWindowFactory = new LogWindowFactory(cachedLog);
             var mainWindowFactory = new MainWindowFactory(resourceLocator);
@@ -212,7 +214,7 @@ namespace AssemblyReloader.CompositeRoot
         // ReSharper disable once UnusedMember.Local
         public void LevelWasLoaded(int level)
         {
-            _eventOnLevelWasLoaded.OnEvent(_currentSceneProvider.Get());
+            _eventOnLevelWasLoaded.OnEvent(_currentSceneQuery.Get());
         }
 
 

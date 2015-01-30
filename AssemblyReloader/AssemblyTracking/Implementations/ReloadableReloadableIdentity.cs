@@ -7,7 +7,7 @@ using ReeperCommon.FileSystem;
 
 namespace AssemblyReloader.AssemblyTracking.Implementations
 {
-    internal struct ReloadableReloadableIdentity : IReloadableIdentity
+    public struct ReloadableReloadableIdentity : IReloadableIdentity
     {
         private readonly IFile _location;
 

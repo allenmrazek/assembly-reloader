@@ -2,13 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using ReeperCommon.Containers;
-using ReeperCommon.Extensions;
-using UnityEngine;
 
-namespace AssemblyReloader.Queries
+namespace AssemblyReloader.Queries.Implementations
 {
-    class AddonsFromAssemblyQuery
+    public class AddonsFromAssemblyQuery : IAddonsFromAssemblyQuery
     {
         private readonly Assembly _assembly;
         private readonly AddonAttributeFromTypeQuery _attributeQuery;
@@ -27,7 +24,7 @@ namespace AssemblyReloader.Queries
         {
             return _assembly
                 .GetTypes()
-                .Where(t => _attributeQuery.GetKspAddonAttribute(t).Any());
+                .Where(t => _attributeQuery.Get(t).Any());
         }
     }
 }

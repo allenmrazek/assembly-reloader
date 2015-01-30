@@ -5,7 +5,7 @@ using System.Text;
 
 namespace AssemblyReloader.Events
 {
-    interface IGameEventSubscriber<T> : IDisposable
+    public interface IGameEventSubscriber<T> : IDisposable
     {
         IGameEventSubscription AddListener(Action<T> callback);
         void RemoveListener(Action<T> callback);

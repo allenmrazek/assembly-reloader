@@ -3,6 +3,8 @@ using System.Linq;
 using System.Reflection;
 using AssemblyReloader.Loaders.Addon.Factories;
 using AssemblyReloader.Providers;
+using AssemblyReloader.Providers.Implementations;
+using AssemblyReloader.Queries.Implementations;
 using ReeperCommon.Logging;
 
 namespace AssemblyReloader.Loaders.Factories.Implementations
@@ -12,24 +14,24 @@ namespace AssemblyReloader.Loaders.Factories.Implementations
         private readonly IAddonFactory _addonFactory;
         private readonly IAddonInfoFactory _infoFactory;
         private readonly ILog _log;
-        private readonly QueryProvider _queryProvider;
+        private readonly QueryFactory _queryFactory;
 
 
         public LoaderFactory(
             IAddonFactory addonFactory,
             IAddonInfoFactory infoFactory,
             ILog log,
-            QueryProvider queryProvider)
+            QueryFactory queryFactory)
         {
             if (addonFactory == null) throw new ArgumentNullException("addonFactory");
             if (infoFactory == null) throw new ArgumentNullException("infoFactory");
             if (log == null) throw new ArgumentNullException("log");
-            if (queryProvider == null) throw new ArgumentNullException("queryProvider");
+            if (queryFactory == null) throw new ArgumentNullException("queryFactory");
 
             _addonFactory = addonFactory;
             _infoFactory = infoFactory;
             _log = log;
-            _queryProvider = queryProvider;
+            _queryFactory = queryFactory;
         }
 
 
@@ -39,12 +41,11 @@ namespace AssemblyReloader.Loaders.Factories.Implementations
         public IAddonLoader CreateAddonLoader(Assembly assembly)
         {
             var typeInfo =
-                _queryProvider.GetAddonsFromAssemblyQuery(assembly).Get().Select(ty => _infoFactory.Create(ty));
+                _queryFactory.GetAddonsFromAssemblyQuery(assembly).Get().Select(ty => _infoFactory.Create(ty));
 
             var loader = new Loaders.Addon.AddonLoader(
                 _addonFactory,
                 typeInfo,
-                _queryProvider.GetStartupSceneFromGameSceneQuery(),
                 _log.CreateTag("AddonLoader"));
 
             return loader;

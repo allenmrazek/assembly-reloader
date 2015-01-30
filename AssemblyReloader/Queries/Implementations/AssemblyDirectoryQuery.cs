@@ -1,26 +1,22 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using ReeperCommon.Extensions;
+using AssemblyReloader.Providers;
 using ReeperCommon.Extensions.Object;
 using ReeperCommon.FileSystem;
 using ReeperCommon.Logging;
 
-namespace AssemblyReloader.Providers
+namespace AssemblyReloader.Queries.Implementations
 {
-    class AssemblyDirectoryProvider
+    class AssemblyDirectoryQuery : IAssemblyDirectoryQuery
     {
         private readonly Assembly _assembly;
         private readonly IDirectory _gameData;
         private readonly ILog _log;
 
-        private IDirectory _location = null;
+        private IDirectory _location;
 
-        public AssemblyDirectoryProvider(Assembly assembly, IDirectory gameData, ILog log)
+        public AssemblyDirectoryQuery(Assembly assembly, IDirectory gameData, ILog log)
         {
             if (assembly == null) throw new ArgumentNullException("assembly");
             if (gameData == null) throw new ArgumentNullException("gameData");

@@ -6,7 +6,7 @@ using System.Text;
 namespace AssemblyReloader.Events
 {
    
-    interface IGameEventSubscription : IDisposable
+    public interface IGameEventSubscription : IDisposable
     {
         
     }

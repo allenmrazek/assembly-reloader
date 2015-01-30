@@ -7,6 +7,9 @@ using AssemblyReloader.ILModifications;
 using AssemblyReloader.Loaders;
 using AssemblyReloader.Loaders.Factories;
 using AssemblyReloader.Providers;
+using AssemblyReloader.Providers.Implementations;
+using AssemblyReloader.Queries;
+using AssemblyReloader.Queries.Implementations;
 using Mono.Cecil;
 using ReeperCommon.Extensions.Object;
 using ReeperCommon.Logging;
@@ -20,7 +23,7 @@ namespace AssemblyReloader.AssemblyTracking.Implementations
     /// specifically, we may need to modify changes the previous version made such as removing PartModules
     /// from prefabs
     /// </summary>
-    class ReloadableAssembly : IReloadableAssembly
+    public class ReloadableAssembly : IReloadableAssembly
     {
         private Assembly _loaded;
         private IAddonLoader _addonLoader;
@@ -30,7 +33,7 @@ namespace AssemblyReloader.AssemblyTracking.Implementations
         private readonly ILoaderFactory _loaderFactory;
         private readonly IGameEventSubscriber<GameScenes> _levelLoadedEvent;
         private readonly ILog _log;
-        private readonly QueryProvider _queryProvider;
+        private readonly IQueryFactory _queryFactory;
 
         private IGameEventSubscription _addonSceneChangeSubscription;
 
@@ -40,20 +43,20 @@ namespace AssemblyReloader.AssemblyTracking.Implementations
             IReloadableIdentity reloadableIdentity,
             ILoaderFactory loaderFactory,
             IGameEventSubscriber<GameScenes> levelLoadedEvent,
-                ILog log,
-            QueryProvider queryProvider)
+            ILog log,
+            IQueryFactory queryFactory)
         {
             if (reloadableIdentity == null) throw new ArgumentNullException("reloadableIdentity");
             if (loaderFactory == null) throw new ArgumentNullException("loaderFactory");
             if (levelLoadedEvent == null) throw new ArgumentNullException("levelLoadedEvent");
             if (log == null) throw new ArgumentNullException("log");
-            if (queryProvider == null) throw new ArgumentNullException("queryProvider");
+            if (queryFactory == null) throw new ArgumentNullException("queryFactory");
 
             _reloadableIdentity = reloadableIdentity;
             _loaderFactory = loaderFactory;
             _levelLoadedEvent = levelLoadedEvent;
             _log = log;
-            _queryProvider = queryProvider;
+            _queryFactory = queryFactory;
         }
 
 
@@ -69,11 +72,11 @@ namespace AssemblyReloader.AssemblyTracking.Implementations
 
             modifier.Rename(definition, Guid.NewGuid());
 
-            definition.MainModule.GetTypes().ToList().ForEach(td =>
-            {
-                td.Namespace = Guid.NewGuid() + "." + td.Namespace;
-                td.Name = Guid.NewGuid() + "." + td.Name;
-            });
+            //definition.MainModule.GetTypes().ToList().ForEach(td =>
+            //{
+            //    td.Namespace = Guid.NewGuid() + "." + td.Namespace;
+            //    td.Name = Guid.NewGuid() + "." + td.Name;
+            //});
 
             _log.Debug("CustomAttributes");
 
@@ -127,7 +130,7 @@ namespace AssemblyReloader.AssemblyTracking.Implementations
                 if (_loaded.IsNull())
                     throw new InvalidOperationException("Failed to load byte stream as Assembly");
 
-                // note: looks like if we already have a dependency in memory, the new version of DLL won't
+                // note: looks like if we already have a dependency in memory, the new version of DLL might not
                 // be correctly loaded. Might need to tweak dependencies as well, even if they're not reloadable
                 // note: but we only want those in GameData of course, otherwise we'll epicfail by duplicating
                 // mscorlib, Assembly-CSharp etc
@@ -139,7 +142,7 @@ namespace AssemblyReloader.AssemblyTracking.Implementations
                 _addonLoader = _loaderFactory.CreateAddonLoader(_loaded);
 
 
-                _addonSceneChangeSubscription = _levelLoadedEvent.AddListener(_addonLoader.LoadAddonsForScene);
+                _addonSceneChangeSubscription = _levelLoadedEvent.AddListener(OnGameSceneWasLoaded);
             }
         }
 
@@ -160,9 +163,16 @@ namespace AssemblyReloader.AssemblyTracking.Implementations
         }
 
 
-        public void StartAddons(GameScenes scene)
+
+        public void StartAddons(KSPAddon.Startup scene)
         {
             _addonLoader.LoadAddonsForScene(scene);
+        }
+
+
+        private void OnGameSceneWasLoaded(GameScenes scene)
+        {
+            _addonLoader.LoadAddonsForScene(_queryFactory.GetStartupSceneFromGameSceneQuery().Get(scene));
         }
     }
 }

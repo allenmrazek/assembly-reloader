@@ -2,7 +2,7 @@
 
 namespace AssemblyReloader.Loaders.Factories
 {
-    interface ILoaderFactory
+    public interface ILoaderFactory
     {
         IAddonLoader CreateAddonLoader(Assembly assembly);
     }

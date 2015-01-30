@@ -1,10 +1,10 @@
 ﻿using System;
 
-namespace AssemblyReloader.Queries
+namespace AssemblyReloader.Queries.Implementations
 {
-    class StartupSceneFromGameSceneQuery
+    public class StartupSceneFromGameSceneQuery : IStartupSceneFromGameSceneQuery
     {
-        public KSPAddon.Startup Query(GameScenes scene)
+        public KSPAddon.Startup Get(GameScenes scene)
         {
             switch (scene)
             {

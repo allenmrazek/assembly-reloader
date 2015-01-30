@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using UnityEngine;
 
-namespace AssemblyReloader.Mediators.Destruction
+namespace AssemblyReloader.Mediators.Implementations
 {
     // inform the target (generic GameObject) that we'll be destroying it to make way for
     // a new instance from an assembly that is about to be loaded

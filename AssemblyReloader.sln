@@ -15,6 +15,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReeperCommonUnitTests", "..\ReeperCommon\UnitTests\ReeperCommonUnitTests.csproj", "{1357D99D-A242-4418-AEF8-460C02A46EA0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssemblyReloaderUnitTests", "AssemblyReloaderUnitTests\AssemblyReloaderUnitTests.csproj", "{F3968345-6C9C-4503-93DE-B06432DE449E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{70F9F908-CCC3-41B4-944D-EA3DE3EF55BD} = {70F9F908-CCC3-41B4-944D-EA3DE3EF55BD}
+		{FECFA8FC-CF80-4685-A2BA-1566E0F3C26E} = {FECFA8FC-CF80-4685-A2BA-1566E0F3C26E}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

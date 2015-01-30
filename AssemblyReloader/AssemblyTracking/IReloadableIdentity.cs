@@ -5,7 +5,7 @@ using System.Text;
 
 namespace AssemblyReloader.AssemblyTracking
 {
-    interface IReloadableIdentity
+    public interface IReloadableIdentity
     {
         string Name { get; }
         string Location { get; }
