@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using AssemblyReloader.AssemblyTracking;
+using AssemblyReloader.Controllers;
 using AssemblyReloader.Logging;
+using AssemblyReloader.PluginTracking;
 using ReeperCommon.Gui.Logic;
 using ReeperCommon.Gui.Window;
 using ReeperCommon.Logging;
@@ -39,7 +40,7 @@ namespace AssemblyReloader.GUI
 
                 _scroll = GUILayout.BeginScrollView(_scroll, GUILayout.MinWidth(250f), GUILayout.MinHeight(200f));
                 {
-                    DrawReloadableItems(_controller.ReloadableAssemblies);
+                    DrawReloadableItems(_controller.Plugins);
                 }
                 GUILayout.EndScrollView();
 
@@ -56,7 +57,7 @@ namespace AssemblyReloader.GUI
 
 
 
-        private void DrawReloadableItems(IEnumerable<IReloadableAssembly> items)
+        private void DrawReloadableItems(IEnumerable<IReloadablePlugin> items)
         {
             foreach (var item in items)
                 DrawReloadableItem(item);
@@ -64,7 +65,7 @@ namespace AssemblyReloader.GUI
 
 
 
-        private void DrawReloadableItem(IReloadableAssembly reloadable)
+        private void DrawReloadableItem(IReloadablePlugin reloadable)
         {
             GUILayout.BeginHorizontal();
             {

@@ -1,4 +1,6 @@
 ﻿using System.Reflection;
+using AssemblyReloader.Queries.AssemblyQueries;
+using AssemblyReloader.Queries.ConversionQueries;
 
 namespace AssemblyReloader.Queries
 {
@@ -7,6 +9,5 @@ namespace AssemblyReloader.Queries
         IAddonsFromAssemblyQuery GetAddonsFromAssemblyQuery(Assembly assembly);
         IAddonAttributeFromTypeQuery GetAddonAttributeQuery();
         IStartupSceneFromGameSceneQuery GetStartupSceneFromGameSceneQuery();
-        ICurrentGameSceneQuery GetCurrentGameSceneProvider();
     }
 }

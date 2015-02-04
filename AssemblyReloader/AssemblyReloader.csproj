@@ -54,60 +54,55 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AssemblyTracking\IReloadableController.cs" />
+    <Compile Include="Controllers\IReloadableController.cs" />
     <Compile Include="CompositeRoot\MonoBehaviours\CoreView.cs" />
-    <Compile Include="Loaders\Addon\Factories\IAddonFactory.cs" />
-    <Compile Include="Loaders\Addon\Factories\IAddonInfoFactory.cs" />
-    <Compile Include="Loaders\Factories\ILoaderFactory.cs" />
-    <Compile Include="Loaders\Addon\Factories\Implementations\AddonFactory.cs" />
-    <Compile Include="Loaders\Addon\Factories\Implementations\AddonInfoFactory.cs" />
-    <Compile Include="GUI\Window\Factories\WindowFactory.cs" />
-    <Compile Include="GUI\LogViewLogic.cs" />
-    <Compile Include="Loaders\Addon\Addon.cs" />
+    <Compile Include="Addon\IAddonFactory.cs" />
     <Compile Include="Loaders\IAddonLoader.cs" />
+    <Compile Include="Loaders\ILoaderFactory.cs" />
+    <Compile Include="Addon\AddonFactory.cs" />
+    <Compile Include="GUI\WindowFactory.cs" />
+    <Compile Include="GUI\LogViewLogic.cs" />
+    <Compile Include="Addon\Addon.cs" />
     <Compile Include="Logging\ICachedLog.cs" />
-    <Compile Include="Queries\IAddonAttributeFromTypeQuery.cs" />
-    <Compile Include="Queries\IAddonsFromAssemblyQuery.cs" />
-    <Compile Include="Queries\IAssemblyDirectoryQuery.cs" />
-    <Compile Include="Queries\ICurrentGameSceneQuery.cs" />
-    <Compile Include="Queries\ICurrentKSPStartupSceneQuery.cs" />
-    <Compile Include="Queries\Implementations\AssemblyDirectoryQuery.cs" />
-    <Compile Include="Queries\Implementations\CurrentGameSceneQuery.cs" />
-    <Compile Include="Queries\Implementations\QueryFactory.cs" />
-    <Compile Include="Mediators\Implementations\GameObjectDestroyForReload.cs" />
-    <Compile Include="Mediators\IDestructionMediator.cs" />
-    <Compile Include="Messages\Implementation\SceneChange.cs" />
-    <Compile Include="AssemblyTracking\IReloadableAssembly.cs" />
-    <Compile Include="AssemblyTracking\Implementations\ReloadableController.cs" />
-    <Compile Include="Providers\Implementations\UniqueIdSupplier.cs" />
+    <Compile Include="Queries\ConversionQueries\IAddonAttributeFromTypeQuery.cs" />
+    <Compile Include="Queries\AssemblyQueries\IAddonsFromAssemblyQuery.cs" />
+    <Compile Include="Queries\FileSystemQueries\IAssemblyDirectoryQuery.cs" />
+    <Compile Include="Providers\ICurrentGameSceneProvider.cs" />
+    <Compile Include="Providers\ICurrentKSPStartupSceneProvider.cs" />
+    <Compile Include="Queries\FileSystemQueries\AssemblyDirectoryQuery.cs" />
+    <Compile Include="Providers\CurrentGameSceneProvider.cs" />
+    <Compile Include="Queries\QueryFactory.cs" />
+    <Compile Include="Addon\Destruction\GameObjectDestroyForReload.cs" />
+    <Compile Include="Addon\Destruction\IDestructionMediator.cs" />
+    <Compile Include="PluginTracking\IReloadablePlugin.cs" />
+    <Compile Include="Controllers\ReloadableController.cs" />
     <Compile Include="Queries\IQueryFactory.cs" />
-    <Compile Include="Queries\Implementations\AddonAttributeFromTypeQuery.cs" />
-    <Compile Include="Queries\IReloadableAssemblyFileLocationQuery.cs" />
-    <Compile Include="Queries\IStartupSceneFromGameSceneQuery.cs" />
-    <Compile Include="TypeTracking\AddonInfo.cs" />
+    <Compile Include="Queries\ConversionQueries\AddonAttributeFromTypeQuery.cs" />
+    <Compile Include="Queries\FileSystemQueries\IReloadableAssemblyFileLocationQuery.cs" />
+    <Compile Include="Queries\ConversionQueries\IStartupSceneFromGameSceneQuery.cs" />
+    <Compile Include="Addon\AddonInfo.cs" />
     <Compile Include="Messages\IChannel.cs" />
     <Compile Include="Messages\IConsumer.cs" />
     <Compile Include="Messages\IMessage.cs" />
-    <Compile Include="Loaders\Factories\Implementations\LoaderFactory.cs" />
-    <Compile Include="Logging\Implementations\CachedLog.cs" />
-    <Compile Include="Messages\Implementation\TestEvent.cs" />
+    <Compile Include="Loaders\LoaderFactory.cs" />
+    <Compile Include="Logging\CachedLog.cs" />
     <Compile Include="ILModifications\ModifyPluginIdentity.cs" />
-    <Compile Include="Loaders\Addon\AddonLoader.cs" />
+    <Compile Include="Loaders\AddonLoader.cs" />
     <Compile Include="CompositeRoot\Core.cs" />
-    <Compile Include="AssemblyTracking\Implementations\ReloadableAssembly.cs" />
+    <Compile Include="PluginTracking\ReloadablePlugin.cs" />
     <Compile Include="GUI\MainViewWindowLogic.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Queries\Implementations\AddonsFromAssemblyQuery.cs" />
-    <Compile Include="Queries\Implementations\CurrentStartupSceneQuery.cs" />
-    <Compile Include="Queries\Implementations\StartupSceneFromGameSceneQuery.cs" />
-    <Compile Include="Queries\Implementations\ReloadableAssemblyFilesInDirectoryQuery.cs" />
+    <Compile Include="Queries\AssemblyQueries\AddonsFromAssemblyQuery.cs" />
+    <Compile Include="Providers\CurrentStartupSceneProvider.cs" />
+    <Compile Include="Queries\ConversionQueries\StartupSceneFromGameSceneQuery.cs" />
+    <Compile Include="Queries\FileSystemQueries\ReloadableAssemblyFilesInDirectoryQuery.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="CompositeRoot\MessageChannel\" />
-    <Folder Include="Services\" />
+    <Folder Include="PartModule\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\btnBackground.png" />

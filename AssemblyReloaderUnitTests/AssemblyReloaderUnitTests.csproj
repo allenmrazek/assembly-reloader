@@ -63,6 +63,7 @@
   <ItemGroup>
     <Compile Include="AssemblyTracking\TestReloadableController.cs" />
     <Compile Include="Class1.cs" />
+    <Compile Include="Loaders\Addon\AddonLoader_Test.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

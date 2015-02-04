@@ -3,25 +3,23 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using AssemblyReloader.AssemblyTracking;
-using AssemblyReloader.AssemblyTracking.Implementations;
+using AssemblyReloader.Addon;
+using AssemblyReloader.Addon.Destruction;
+using AssemblyReloader.Controllers;
 using AssemblyReloader.GUI;
-using AssemblyReloader.GUI.Window.Factories;
-using AssemblyReloader.Loaders.Addon.Factories.Implementations;
-using AssemblyReloader.Loaders.Factories.Implementations;
-using AssemblyReloader.Logging.Implementations;
-using AssemblyReloader.Mediators.Implementations;
+using AssemblyReloader.Loaders;
+using AssemblyReloader.Logging;
 using AssemblyReloader.Messages;
+using AssemblyReloader.PluginTracking;
+using AssemblyReloader.Providers;
 using AssemblyReloader.Queries;
-using AssemblyReloader.Queries.Implementations;
-using ReeperCommon.Events;
+using AssemblyReloader.Queries.FileSystemQueries;
 using ReeperCommon.Events.Implementations;
 using ReeperCommon.FileSystem;
 using ReeperCommon.FileSystem.Implementations;
 using ReeperCommon.FileSystem.Implementations.Providers;
 using ReeperCommon.Gui.Window.View;
 using ReeperCommon.Logging;
-using ReeperCommon.Logging.Factories;
 using ReeperCommon.Logging.Implementations;
 using ReeperCommon.Repositories.Resources;
 using ReeperCommon.Repositories.Resources.Implementations;
@@ -38,7 +36,7 @@ namespace AssemblyReloader.CompositeRoot
 
         private readonly IReloadableController _controller;
         private readonly MessageChannel _messageChannel;
-        private readonly ICurrentGameSceneQuery _currentSceneQuery;
+        private readonly ICurrentGameSceneProvider _currentSceneProvider;
         private readonly EventSubscriber<GameScenes> _eventOnLevelWasLoaded;
 
         private readonly ILog _log;
@@ -136,7 +134,6 @@ namespace AssemblyReloader.CompositeRoot
                 
 
             var queryProvider = new QueryFactory();
-            _currentSceneQuery = queryProvider.GetCurrentGameSceneProvider();
 
 
 
@@ -147,18 +144,13 @@ namespace AssemblyReloader.CompositeRoot
 
             
             var destructionMediator = new GameObjectDestroyForReload();
-            var addonFactory = new AddonFactory(destructionMediator, cachedLog.CreateTag("AddonFactory"));
+            var addonFactory = new AddonFactory(destructionMediator, cachedLog.CreateTag("AddonFactory"), queryProvider.GetAddonAttributeQuery());
 
-            var infoFactory = new AddonInfoFactory(queryProvider.GetAddonAttributeQuery());
-
+    
             _eventOnLevelWasLoaded = new EventSubscriber<GameScenes>();
                 GameEvents.onLevelWasLoaded.Add(_eventOnLevelWasLoaded.OnEvent);
 
-
-                // do not subscribe to GameEvents version of this event because it can be invoked twice in succession due to a KSP bug
-                // instead, it is invoked by Core.OnLevelWasLoaded
-
-            var loaderFactory = new LoaderFactory(addonFactory, infoFactory, cachedLog, queryProvider);
+            var loaderFactory = new LoaderFactory(addonFactory, queryProvider);
 
 
 
@@ -173,12 +165,12 @@ namespace AssemblyReloader.CompositeRoot
             var reloadableAssemblyFileQuery = new ReloadableAssemblyFilesInDirectoryQuery(fsFactory.GetGameDataDirectory());
 
             var reloadables = reloadableAssemblyFileQuery.Get().Select(raFile =>
-                new ReloadableAssembly(
+                new ReloadablePlugin(
                     raFile,
                 loaderFactory,
                 _eventOnLevelWasLoaded,
                 cachedLog.CreateTag("Reloadable:" + raFile.Name),
-                queryProvider)).Cast<IReloadableAssembly>().ToList();
+                queryProvider)).Cast<IReloadablePlugin>().ToList();
 
 
             reloadables.ForEach(r =>
@@ -187,7 +179,7 @@ namespace AssemblyReloader.CompositeRoot
                 r.StartAddons(KSPAddon.Startup.Instantly);
             });
 
-            _controller = new ReloadableController(queryProvider, reloadables);
+            _controller = new ReloadableController(reloadables, queryProvider, new CurrentGameSceneProvider());
 
             var windowFactory = new WindowFactory(resourceLocator, cachedLog);
 

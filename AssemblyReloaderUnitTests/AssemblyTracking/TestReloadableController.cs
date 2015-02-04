@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using AssemblyReloader.AssemblyTracking;
-using AssemblyReloader.AssemblyTracking.Implementations;
+using AssemblyReloader.Controllers;
+using AssemblyReloader.PluginTracking;
+using AssemblyReloader.Providers;
 using AssemblyReloader.Queries;
 using NSubstitute;
 using Xunit;
@@ -16,11 +17,12 @@ namespace AssemblyReloaderUnitTests.AssemblyTracking
             public static ReloadableController Create()
             {
                 return new ReloadableController(
-                    Substitute.For<IQueryFactory>(),
                     new[]
                     {
-                        Substitute.For<ReloadableAssembly>(), Substitute.For<ReloadableAssembly>()
-                    });
+                        Substitute.For<IReloadablePlugin>(), Substitute.For<IReloadablePlugin>()
+                    },
+                    Substitute.For<IQueryFactory>(),
+                    Substitute.For<ICurrentGameSceneProvider>());
             }
         }
 
@@ -31,13 +33,24 @@ namespace AssemblyReloaderUnitTests.AssemblyTracking
         {
             Assert.Throws<ArgumentNullException>(() =>
                 new ReloadableController(
-                    null, 
+                     
                     Substitute.For<
-                        IEnumerable<IReloadableAssembly>
-                    >()));
+                        IEnumerable<IReloadablePlugin>
+                    >(),
+                    null,
+                    Substitute.For<ICurrentGameSceneProvider>()));
 
             Assert.Throws<ArgumentNullException>(() =>
                 new ReloadableController(
+                    null,
+                    Substitute.For<IQueryFactory>(),
+                    Substitute.For<ICurrentGameSceneProvider>()));
+
+            Assert.Throws<ArgumentNullException>(() =>
+                new ReloadableController(
+                    Substitute.For<
+                                    IEnumerable<IReloadablePlugin>
+                                >(),
                     Substitute.For<IQueryFactory>(),
                     null));
         }
@@ -48,23 +61,23 @@ namespace AssemblyReloaderUnitTests.AssemblyTracking
         [Fact]
         public void ReloadableAssemblies_Returns_WhatWasContructedWith()
         {
-            var first = Substitute.For<IReloadableAssembly>();
-            var second = Substitute.For<IReloadableAssembly>();
+            var first = Substitute.For<IReloadablePlugin>();
+            var second = Substitute.For<IReloadablePlugin>();
 
             first.Name.Returns("First");
             second.Name.Returns("Second");
 
-            IEnumerable<IReloadableAssembly> reloadables = new[]
+            IEnumerable<IReloadablePlugin> reloadables = new[]
             {
                 first,
                 second
             };
 
-            var sut = new ReloadableController(Substitute.For<IQueryFactory>(), reloadables);
+            var sut = new ReloadableController(reloadables, Substitute.For<IQueryFactory>(), Substitute.For<ICurrentGameSceneProvider>());
 
-            Assert.NotEmpty(sut.ReloadableAssemblies);
-            Assert.Contains("First", sut.ReloadableAssemblies.Select(i => i.Name));
-            Assert.Contains("Second", sut.ReloadableAssemblies.Select(i => i.Name));
+            Assert.NotEmpty(sut.Plugins);
+            Assert.Contains("First", sut.Plugins.Select(i => i.Name));
+            Assert.Contains("Second", sut.Plugins.Select(i => i.Name));
         }
 
 
@@ -72,11 +85,11 @@ namespace AssemblyReloaderUnitTests.AssemblyTracking
         [Fact]
         public void ReloadAll_Calls_Unload_Then_Load_Then_StartAddons()
         {
-            var reloadable = Substitute.For<IReloadableAssembly>();
+            var reloadable = Substitute.For<IReloadablePlugin>();
             var query = Substitute.For<IQueryFactory>();
 
 
-            var sut = new ReloadableController(query, new[] {reloadable});
+            var sut = new ReloadableController(new[] { reloadable }, query, Substitute.For<ICurrentGameSceneProvider>());
 
             sut.ReloadAll();
 

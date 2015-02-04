@@ -14,8 +14,8 @@ D:\For New Computer\KSPCustomMods\AssemblyReloader\AssemblyReloaderUnitTests\bin
 D:\For New Computer\KSPCustomMods\AssemblyReloader\AssemblyReloaderUnitTests\bin\Debug\AssemblyReloader.pdb
 D:\For New Computer\KSPCustomMods\AssemblyReloader\AssemblyReloaderUnitTests\bin\Debug\NSubstitute.xml
 D:\For New Computer\KSPCustomMods\AssemblyReloader\AssemblyReloaderUnitTests\bin\Debug\xunit.xml
+D:\For New Computer\KSPCustomMods\AssemblyReloader\AssemblyReloader\bin\Debug\AssemblyReloaderUnitTests.dll
+D:\For New Computer\KSPCustomMods\AssemblyReloader\AssemblyReloader\bin\Debug\AssemblyReloaderUnitTests.pdb
 D:\For New Computer\KSPCustomMods\AssemblyReloader\AssemblyReloaderUnitTests\obj\Debug\AssemblyReloaderUnitTests.csprojResolveAssemblyReference.cache
 D:\For New Computer\KSPCustomMods\AssemblyReloader\AssemblyReloaderUnitTests\obj\Debug\AssemblyReloaderUnitTests.dll
 D:\For New Computer\KSPCustomMods\AssemblyReloader\AssemblyReloaderUnitTests\obj\Debug\AssemblyReloaderUnitTests.pdb
-D:\For New Computer\KSPCustomMods\AssemblyReloader\AssemblyReloader\bin\Debug\AssemblyReloaderUnitTests.dll
-D:\For New Computer\KSPCustomMods\AssemblyReloader\AssemblyReloader\bin\Debug\AssemblyReloaderUnitTests.pdb
