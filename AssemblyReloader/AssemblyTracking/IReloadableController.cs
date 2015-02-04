@@ -8,8 +8,9 @@ namespace AssemblyReloader.AssemblyTracking
 {
     public interface IReloadableController
     {
+        void Reload(IReloadableAssembly identity);
         void ReloadAll();
 
-        IEnumerable<IReloadableIdentity> ReloadableAssemblies { get; }
+        IEnumerable<IReloadableAssembly> ReloadableAssemblies { get; }
     }
 }

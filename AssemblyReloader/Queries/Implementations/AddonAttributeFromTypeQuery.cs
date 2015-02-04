@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using ReeperCommon.Containers;
-using ReeperCommon.Extensions.Object;
+using ReeperCommon.Extensions;
 using UnityEngine;
 
 namespace AssemblyReloader.Queries.Implementations

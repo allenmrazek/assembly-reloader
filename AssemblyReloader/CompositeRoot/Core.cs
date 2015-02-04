@@ -5,35 +5,27 @@ using System.Linq;
 using System.Reflection;
 using AssemblyReloader.AssemblyTracking;
 using AssemblyReloader.AssemblyTracking.Implementations;
-using AssemblyReloader.Events;
-using AssemblyReloader.Events.Implementations;
 using AssemblyReloader.GUI;
 using AssemblyReloader.GUI.Window.Factories;
 using AssemblyReloader.Loaders.Addon.Factories.Implementations;
 using AssemblyReloader.Loaders.Factories.Implementations;
-using AssemblyReloader.Logging;
 using AssemblyReloader.Logging.Implementations;
 using AssemblyReloader.Mediators.Implementations;
 using AssemblyReloader.Messages;
-using AssemblyReloader.Providers;
-using AssemblyReloader.Providers.Implementations;
 using AssemblyReloader.Queries;
 using AssemblyReloader.Queries.Implementations;
+using ReeperCommon.Events;
+using ReeperCommon.Events.Implementations;
 using ReeperCommon.FileSystem;
-using ReeperCommon.FileSystem.Factories;
 using ReeperCommon.FileSystem.Implementations;
 using ReeperCommon.FileSystem.Implementations.Providers;
-using ReeperCommon.Gui.Window;
-using ReeperCommon.Gui.Window.Buttons;
-using ReeperCommon.Gui.Window.Decorators;
-using ReeperCommon.Gui.Window.Providers;
 using ReeperCommon.Gui.Window.View;
 using ReeperCommon.Logging;
+using ReeperCommon.Logging.Factories;
 using ReeperCommon.Logging.Implementations;
 using ReeperCommon.Repositories.Resources;
 using ReeperCommon.Repositories.Resources.Implementations;
 using ReeperCommon.Repositories.Resources.Implementations.Decorators;
-using UnityEngine;
 using Object = UnityEngine.Object;
 
 namespace AssemblyReloader.CompositeRoot
@@ -47,7 +39,7 @@ namespace AssemblyReloader.CompositeRoot
         private readonly IReloadableController _controller;
         private readonly MessageChannel _messageChannel;
         private readonly ICurrentGameSceneQuery _currentSceneQuery;
-        private readonly IGameEventSubscriber<GameScenes> _eventOnLevelWasLoaded;
+        private readonly EventSubscriber<GameScenes> _eventOnLevelWasLoaded;
 
         private readonly ILog _log;
 
@@ -159,7 +151,10 @@ namespace AssemblyReloader.CompositeRoot
 
             var infoFactory = new AddonInfoFactory(queryProvider.GetAddonAttributeQuery());
 
-            _eventOnLevelWasLoaded = new GameEventSubscriber<GameScenes>(cachedLog.CreateTag("OnLevelWasLoaded"));
+            _eventOnLevelWasLoaded = new EventSubscriber<GameScenes>();
+                GameEvents.onLevelWasLoaded.Add(_eventOnLevelWasLoaded.OnEvent);
+
+
                 // do not subscribe to GameEvents version of this event because it can be invoked twice in succession due to a KSP bug
                 // instead, it is invoked by Core.OnLevelWasLoaded
 
@@ -178,7 +173,8 @@ namespace AssemblyReloader.CompositeRoot
             var reloadableAssemblyFileQuery = new ReloadableAssemblyFilesInDirectoryQuery(fsFactory.GetGameDataDirectory());
 
             var reloadables = reloadableAssemblyFileQuery.Get().Select(raFile =>
-                new ReloadableAssembly(new ReloadableReloadableIdentity(raFile),
+                new ReloadableAssembly(
+                    raFile,
                 loaderFactory,
                 _eventOnLevelWasLoaded,
                 cachedLog.CreateTag("Reloadable:" + raFile.Name),
@@ -191,13 +187,12 @@ namespace AssemblyReloader.CompositeRoot
                 r.StartAddons(KSPAddon.Startup.Instantly);
             });
 
-            _controller = new ReloadableController(queryProvider, cachedLog, reloadables);
+            _controller = new ReloadableController(queryProvider, reloadables);
 
-            var logWindowFactory = new LogWindowFactory(cachedLog);
-            var mainWindowFactory = new MainWindowFactory(resourceLocator);
+            var windowFactory = new WindowFactory(resourceLocator, cachedLog);
 
-            var logWindow = logWindowFactory.Create();
-            var mainWindow = mainWindowFactory.Create(new MainViewWindowLogic(_controller, logWindow));
+            var logWindow = windowFactory.CreateLogWindow();
+            var mainWindow = windowFactory.CreateMainWindow(new MainViewWindowLogic(_controller, logWindow));
 
             _view = WindowView.Create(mainWindow);
             _logView = WindowView.Create(logWindow);
@@ -209,78 +204,6 @@ namespace AssemblyReloader.CompositeRoot
 
 
 
-
-        // Unity MonoBehaviour callback
-        // ReSharper disable once UnusedMember.Local
-        public void LevelWasLoaded(int level)
-        {
-            _eventOnLevelWasLoaded.OnEvent(_currentSceneQuery.Get());
-        }
-
-
-
-        //private IWindowComponent CreateMainWindow(
-        //    IWindowComponent logWindowLogic, 
-        //    IResourceRepository resourceProvider,
-        //    IFileSystemFactory fsFactory)
-        //{
-        //    var idProvider = new UniqueWindowIdProvider();
-
-
-        //    //var style = new GUIStyle(AssetBase.GetGUISkin("KSP window 3").button);
-        //    var style = new GUIStyle(HighLogic.Skin.button) {border = new RectOffset(), padding = new RectOffset()};
-        //    style.fixedHeight = style.fixedWidth = 16f;
-        //    style.margin = new RectOffset();
-
-        //    var btnClose = resourceProvider.GetTexture("Resources/btnClose.png");
-
-
-        //    var logic = new MainViewLogic(_controller, logWindowLogic);
-
-        //    var basicWindow = new BasicWindow(
-        //        logic,
-        //        new Rect(400f, 400f, 300f, 300f),
-        //        idProvider.Get(), HighLogic.Skin /*AssetBase.GetGUISkin("KSP window 6")*/
-  
-                
-        //        ) { Title = "ART: Assembly Reloading Tool" };
-
-
-        //    var tbButtons = new TitleBarButtons(basicWindow, TitleBarButtons.ButtonAlignment.Right, new Vector2(3f, 3f));
-
-        //    var tex = new Texture2D(1, 1);
-        //    tex.LoadImage(
-        //        System.IO.File.ReadAllBytes(
-        //            (fsFactory.GetGameDataDirectory()).File(
-        //                "AssemblyReloader/Resources/btnClose.png").Single().FullPath));
-
-        //    tbButtons.AddButton(new TitleBarButton(style, btnClose.First(), s => { }, "Test"));
-        //    tbButtons.AddButton(new TitleBarButton(style, btnClose.First(), s => { }, "Test2"));
-        //    tbButtons.AddButton(new TitleBarButton(style, btnClose.First(), s => { }, "Test3"));
-        //    tbButtons.AddButton(new TitleBarButton(style, btnClose.First(), s => { }, "Tefsdst2"));
-        //    tbButtons.AddButton(new TitleBarButton(style, btnClose.First(), s => { }, "Tefsdfdst2"));
-        //    tbButtons.AddButton(new TitleBarButton(style, btnClose.First(), s => { }, "Tefddsffsdst2"));
-
-        //    var hiding = new HideOnF2(tbButtons);
-
-        //    var clamp = new ClampToScreen(hiding);
-
-        //    return clamp;
-        //}
-
-
-
-        //private IWindowComponent CreateLogWindow(ICachedLog cachedLog)
-        //{
-        //    var logWindowLogic = new LogViewLogic(cachedLog);
-        //    var idProvider = new UniqueWindowIdProvider();
-
-        //    var logWindow = new BasicWindow(logWindowLogic, new Rect(400f, 0f, 200f, 128f), idProvider.Get(),
-        //        HighLogic.Skin, true) {Title = "ART Log", Visible = false};
-
-
-        //    return logWindow;
-        //}
 
 
 

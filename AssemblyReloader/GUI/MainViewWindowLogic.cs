@@ -56,7 +56,7 @@ namespace AssemblyReloader.GUI
 
 
 
-        private void DrawReloadableItems(IEnumerable<IReloadableIdentity> items)
+        private void DrawReloadableItems(IEnumerable<IReloadableAssembly> items)
         {
             foreach (var item in items)
                 DrawReloadableItem(item);
@@ -64,13 +64,14 @@ namespace AssemblyReloader.GUI
 
 
 
-        private void DrawReloadableItem(IReloadableIdentity reloadable)
+        private void DrawReloadableItem(IReloadableAssembly reloadable)
         {
             GUILayout.BeginHorizontal();
             {
                 GUILayout.Label(reloadable.Name);
                 GUILayout.FlexibleSpace();
-                GUILayout.Button("Reload", GUILayout.ExpandWidth(false), GUILayout.ExpandHeight(false));
+                if (GUILayout.Button("Reload", GUILayout.ExpandWidth(false), GUILayout.ExpandHeight(false)))
+                    _controller.Reload(reloadable);
             }
             GUILayout.EndHorizontal();
         }

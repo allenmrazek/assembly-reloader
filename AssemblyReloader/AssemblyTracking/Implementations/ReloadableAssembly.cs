@@ -1,17 +1,14 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.InteropServices;
-using AssemblyReloader.Events;
 using AssemblyReloader.ILModifications;
 using AssemblyReloader.Loaders;
 using AssemblyReloader.Loaders.Factories;
-using AssemblyReloader.Providers;
-using AssemblyReloader.Providers.Implementations;
 using AssemblyReloader.Queries;
-using AssemblyReloader.Queries.Implementations;
 using Mono.Cecil;
-using ReeperCommon.Extensions.Object;
+using ReeperCommon.Events;
+using ReeperCommon.Extensions;
+using ReeperCommon.FileSystem;
 using ReeperCommon.Logging;
 
 namespace AssemblyReloader.AssemblyTracking.Implementations
@@ -29,30 +26,30 @@ namespace AssemblyReloader.AssemblyTracking.Implementations
         private IAddonLoader _addonLoader;
 
 
-        private readonly IReloadableIdentity _reloadableIdentity;
+        private readonly IFile _location;
         private readonly ILoaderFactory _loaderFactory;
-        private readonly IGameEventSubscriber<GameScenes> _levelLoadedEvent;
+        private readonly IEventSubscriber<GameScenes> _levelLoadedEvent;
         private readonly ILog _log;
         private readonly IQueryFactory _queryFactory;
 
-        private IGameEventSubscription _addonSceneChangeSubscription;
+        private IEventSubscription _addonSceneChangeSubscription;
 
 
 
         public ReloadableAssembly(
-            IReloadableIdentity reloadableIdentity,
+            IFile location,
             ILoaderFactory loaderFactory,
-            IGameEventSubscriber<GameScenes> levelLoadedEvent,
+            IEventSubscriber<GameScenes> levelLoadedEvent,
             ILog log,
             IQueryFactory queryFactory)
         {
-            if (reloadableIdentity == null) throw new ArgumentNullException("reloadableIdentity");
+            if (location == null) throw new ArgumentNullException("location");
             if (loaderFactory == null) throw new ArgumentNullException("loaderFactory");
             if (levelLoadedEvent == null) throw new ArgumentNullException("levelLoadedEvent");
             if (log == null) throw new ArgumentNullException("log");
             if (queryFactory == null) throw new ArgumentNullException("queryFactory");
 
-            _reloadableIdentity = reloadableIdentity;
+            _location = location;
             _loaderFactory = loaderFactory;
             _levelLoadedEvent = levelLoadedEvent;
             _log = log;
@@ -66,7 +63,7 @@ namespace AssemblyReloader.AssemblyTracking.Implementations
         {
             if (stream == null) throw new ArgumentNullException("stream");
 
-            var definition = AssemblyDefinition.ReadAssembly(_reloadableIdentity.Location);
+            var definition = AssemblyDefinition.ReadAssembly(_location.FullPath);
 
             var modifier = new ModifyPluginIdentity();
 
@@ -106,7 +103,7 @@ namespace AssemblyReloader.AssemblyTracking.Implementations
             _log.Normal("Finished modifications; writing to stream");
             definition.Write(stream);
 
-            definition.Write(_reloadableIdentity.Location + ".modified");
+            definition.Write(_location.FullPath + ".modified");
 
             _log.Normal("done");
         }
@@ -150,6 +147,8 @@ namespace AssemblyReloader.AssemblyTracking.Implementations
 
         public void Unload()
         {
+            _log.Normal("Unloading " + Name);
+
             _addonSceneChangeSubscription.Dispose(); 
             _addonSceneChangeSubscription = null;
 
@@ -157,15 +156,12 @@ namespace AssemblyReloader.AssemblyTracking.Implementations
             _addonLoader = null;
         }
 
-        public IReloadableIdentity ReloadableIdentity
-        {
-            get { return _reloadableIdentity; }
-        }
-
 
 
         public void StartAddons(KSPAddon.Startup scene)
         {
+            _log.Verbose("Starting addons for " + Name + " for scene " + scene);
+
             _addonLoader.LoadAddonsForScene(scene);
         }
 
@@ -173,6 +169,11 @@ namespace AssemblyReloader.AssemblyTracking.Implementations
         private void OnGameSceneWasLoaded(GameScenes scene)
         {
             _addonLoader.LoadAddonsForScene(_queryFactory.GetStartupSceneFromGameSceneQuery().Get(scene));
+        }
+
+        public string Name
+        {
+            get { return _location.Name; }
         }
     }
 }

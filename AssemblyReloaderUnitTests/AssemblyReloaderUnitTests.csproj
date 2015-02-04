@@ -11,12 +11,14 @@
     <AssemblyName>AssemblyReloaderUnitTests</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\AssemblyReloader\bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -24,12 +26,24 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>..\AssemblyReloader\bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Coverage|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>..\AssemblyReloader\bin\Coverage\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>..\..\..\Kerbal Space Program\KSP_Data\Managed\Assembly-CSharp.dll</HintPath>
+    </Reference>
     <Reference Include="NSubstitute">
       <HintPath>..\packages\NSubstitute.1.8.1.0\lib\net35\NSubstitute.dll</HintPath>
     </Reference>
@@ -39,6 +53,9 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="UnityEngine">
+      <HintPath>..\..\..\Kerbal Space Program\KSP_Data\Managed\UnityEngine.dll</HintPath>
+    </Reference>
     <Reference Include="xunit">
       <HintPath>..\packages\xunit.1.9.2\lib\net20\xunit.dll</HintPath>
     </Reference>
@@ -62,6 +79,52 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>if NOT $(Configuration) == Coverage GOTO NoCoverage
+
+CALL :DeleteCached
+CALL :GenerateCoverageReport
+set rce = %25ERROR_LEVEL%25
+
+if NOT %25rce%25 == 0 )
+ECHO OpenCover did not exit successfully
+EXIT %25rce%25
+)
+
+CALL :GenerateHTML
+
+set rce = %25ERROR_LEVEL%25
+
+if NOT %25rce%25 == 0 (
+ECHO ReportGenerator failed to generate HTML report from coverage results.
+EXIT %25rce%25
+)
+
+GOTO :eof
+
+
+:NoCoverage
+ECHO [Coverage not available in $(Configuration)]
+EXIT 0
+:end
+
+:DeleteCached
+ECHO Removing any existing coverage report data...
+RMDIR /Q /S coverage
+DEL results.xml
+:end
+
+:GenerateCoverageReport
+ECHO Running tests and generating coverage report for '$(TargetFilename)' ...
+..\..\..\packages\OpenCover.4.5.3522\OpenCover.Console.exe -target:"..\..\..\packages\xunit.runners.1.9.2\tools\xunit.console.exe" -targetargs:"$(TargetFilename)" -register:user -filter:+[AssemblyReloader]*
+:end
+
+:GenerateHTML
+ECHO Creating HTML for report
+..\..\..\packages\ReportGenerator.2.0.4.0\ReportGenerator.exe -reports:results.xml -targetdir:coverage
+:end</PostBuildEvent>
+  </PropertyGroup>
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

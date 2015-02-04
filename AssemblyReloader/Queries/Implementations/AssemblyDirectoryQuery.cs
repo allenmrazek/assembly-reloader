@@ -2,8 +2,9 @@
 using System.Linq;
 using System.Reflection;
 using AssemblyReloader.Providers;
-using ReeperCommon.Extensions.Object;
+using ReeperCommon.Extensions;
 using ReeperCommon.FileSystem;
+using ReeperCommon.FileSystem.Implementations;
 using ReeperCommon.Logging;
 
 namespace AssemblyReloader.Queries.Implementations
@@ -45,7 +46,7 @@ namespace AssemblyReloader.Queries.Implementations
             var loaded = AssemblyLoader.loadedAssemblies.FirstOrDefault(la => ReferenceEquals(la.assembly, _assembly));
             if (loaded.IsNull()) return;
 
-            var possible = _gameData.Directory(loaded.url);
+            var possible = _gameData.Directory(new KSPUrlIdentifier(loaded.url));
 
             if (possible.Any()) _location = possible.Single();
         }

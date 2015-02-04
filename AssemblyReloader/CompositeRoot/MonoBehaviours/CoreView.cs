@@ -17,20 +17,11 @@ namespace AssemblyReloader.CompositeRoot.MonoBehaviours
                 _core = new Core();
                 DontDestroyOnLoad(this);
             }
-            catch
+            catch (Exception e)
             {
-                
+                print("CoreView: Encountered an uncaught exception while creating Core: " + e);
+                Destroy(this);
             }
-        }
-
-
-        // Unity MonoBehaviour callback
-// ReSharper disable once UnusedMember.Local
-        // This is used to trigger OnLevelWasLoaded event instead of the GameEvent version
-        // because the latter can trigger twice in a row, most likely due to a ksp bug
-        private void OnLevelWasLoaded(int level)
-        {
-            _core.LevelWasLoaded(level);
         }
     }
 }

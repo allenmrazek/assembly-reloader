@@ -9,10 +9,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestProject", "TestProject\
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{DA9F799A-ECE5-49B0-AA12-66FDC3DD1CFF}"
 	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
 		.nuget\packages.config = .nuget\packages.config
 	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReeperCommonUnitTests", "..\ReeperCommon\UnitTests\ReeperCommonUnitTests.csproj", "{1357D99D-A242-4418-AEF8-460C02A46EA0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssemblyReloaderUnitTests", "AssemblyReloaderUnitTests\AssemblyReloaderUnitTests.csproj", "{F3968345-6C9C-4503-93DE-B06432DE449E}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -20,32 +21,45 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssemblyReloaderUnitTests",
 		{FECFA8FC-CF80-4685-A2BA-1566E0F3C26E} = {FECFA8FC-CF80-4685-A2BA-1566E0F3C26E}
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReeperCommonUnitTests", "..\ReeperCommon\ReeperCommonUnitTests\ReeperCommonUnitTests.csproj", "{1357D99D-A242-4418-AEF8-460C02A46EA0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Coverage|Any CPU = Coverage|Any CPU
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{70F9F908-CCC3-41B4-944D-EA3DE3EF55BD}.Coverage|Any CPU.ActiveCfg = Debug|Any CPU
+		{70F9F908-CCC3-41B4-944D-EA3DE3EF55BD}.Coverage|Any CPU.Build.0 = Debug|Any CPU
 		{70F9F908-CCC3-41B4-944D-EA3DE3EF55BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{70F9F908-CCC3-41B4-944D-EA3DE3EF55BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{70F9F908-CCC3-41B4-944D-EA3DE3EF55BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{70F9F908-CCC3-41B4-944D-EA3DE3EF55BD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FECFA8FC-CF80-4685-A2BA-1566E0F3C26E}.Coverage|Any CPU.ActiveCfg = Debug|Any CPU
+		{FECFA8FC-CF80-4685-A2BA-1566E0F3C26E}.Coverage|Any CPU.Build.0 = Debug|Any CPU
 		{FECFA8FC-CF80-4685-A2BA-1566E0F3C26E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FECFA8FC-CF80-4685-A2BA-1566E0F3C26E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FECFA8FC-CF80-4685-A2BA-1566E0F3C26E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FECFA8FC-CF80-4685-A2BA-1566E0F3C26E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{339EB07A-B1AB-4504-AEC5-8D8176784CC3}.Coverage|Any CPU.ActiveCfg = Debug|Any CPU
+		{339EB07A-B1AB-4504-AEC5-8D8176784CC3}.Coverage|Any CPU.Build.0 = Debug|Any CPU
 		{339EB07A-B1AB-4504-AEC5-8D8176784CC3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{339EB07A-B1AB-4504-AEC5-8D8176784CC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{339EB07A-B1AB-4504-AEC5-8D8176784CC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{339EB07A-B1AB-4504-AEC5-8D8176784CC3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1357D99D-A242-4418-AEF8-460C02A46EA0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1357D99D-A242-4418-AEF8-460C02A46EA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1357D99D-A242-4418-AEF8-460C02A46EA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1357D99D-A242-4418-AEF8-460C02A46EA0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F3968345-6C9C-4503-93DE-B06432DE449E}.Coverage|Any CPU.ActiveCfg = Coverage|Any CPU
+		{F3968345-6C9C-4503-93DE-B06432DE449E}.Coverage|Any CPU.Build.0 = Coverage|Any CPU
 		{F3968345-6C9C-4503-93DE-B06432DE449E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F3968345-6C9C-4503-93DE-B06432DE449E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F3968345-6C9C-4503-93DE-B06432DE449E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F3968345-6C9C-4503-93DE-B06432DE449E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1357D99D-A242-4418-AEF8-460C02A46EA0}.Coverage|Any CPU.ActiveCfg = Coverage|Any CPU
+		{1357D99D-A242-4418-AEF8-460C02A46EA0}.Coverage|Any CPU.Build.0 = Coverage|Any CPU
+		{1357D99D-A242-4418-AEF8-460C02A46EA0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1357D99D-A242-4418-AEF8-460C02A46EA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1357D99D-A242-4418-AEF8-460C02A46EA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1357D99D-A242-4418-AEF8-460C02A46EA0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

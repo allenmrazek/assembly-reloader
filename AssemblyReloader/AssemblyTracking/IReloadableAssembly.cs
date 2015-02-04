@@ -12,6 +12,6 @@ namespace AssemblyReloader.AssemblyTracking
         void Unload();
         void StartAddons(KSPAddon.Startup scene);
 
-        IReloadableIdentity ReloadableIdentity { get; }
+        string Name { get; }
     }
 }
