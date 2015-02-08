@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Linq;
-using AssemblyReloader.Addon.Destruction;
+using AssemblyReloader.Addon;
+using AssemblyReloader.Destruction;
 using AssemblyReloader.Queries.ConversionQueries;
 using ReeperCommon.Logging;
 using UnityEngine;
 
-namespace AssemblyReloader.Addon
+namespace AssemblyReloader.Loaders.Addon
 {
-    class AddonFactory : IAddonFactory
+    public class AddonFactory : IAddonFactory
     {
         private readonly IDestructionMediator _mediator;
         private readonly ILog _log;
@@ -37,7 +38,7 @@ namespace AssemblyReloader.Addon
             var addon = addonHolder.AddComponent(addonInfo.type) as MonoBehaviour;
             addonInfo.created = true;
 
-            return new Addon(addon, _mediator);
+            return new AssemblyReloader.Addon.Addon(addon, _mediator);
         }
 
 

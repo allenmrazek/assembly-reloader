@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using AssemblyReloader.Controllers;
 using AssemblyReloader.PluginTracking;
-using AssemblyReloader.Providers;
+using AssemblyReloader.Providers.SceneProviders;
 using AssemblyReloader.Queries;
 using NSubstitute;
 using Xunit;
@@ -83,7 +83,7 @@ namespace AssemblyReloaderUnitTests.AssemblyTracking
 
 
         [Fact]
-        public void ReloadAll_Calls_Unload_Then_Load_Then_StartAddons()
+        public void ReloadAll_Calls_Unload_Then_Load()
         {
             var reloadable = Substitute.For<IReloadablePlugin>();
             var query = Substitute.For<IQueryFactory>();
@@ -96,7 +96,6 @@ namespace AssemblyReloaderUnitTests.AssemblyTracking
 
             reloadable.Received(1).Unload();
             reloadable.Received(1).Load();
-            reloadable.Received(1).StartAddons(Arg.Any<KSPAddon.Startup>());
         }
     }
 }

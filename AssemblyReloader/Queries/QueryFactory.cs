@@ -1,6 +1,4 @@
-﻿using System;
-using System.Reflection;
-using AssemblyReloader.Providers;
+﻿using AssemblyReloader.Providers.SceneProviders;
 using AssemblyReloader.Queries.AssemblyQueries;
 using AssemblyReloader.Queries.ConversionQueries;
 
@@ -23,11 +21,9 @@ namespace AssemblyReloader.Queries
 
 
 
-        public IAddonsFromAssemblyQuery GetAddonsFromAssemblyQuery(Assembly assembly)
+        public IAddonsFromAssemblyQuery GetAddonsFromAssemblyQuery()
         {
-            if (assembly == null) throw new ArgumentNullException("assembly");
-
-            return new AddonsFromAssemblyQuery(assembly, _attributeQuery);
+            return new AddonsFromAssemblyQuery(_attributeQuery);
         }
 
 

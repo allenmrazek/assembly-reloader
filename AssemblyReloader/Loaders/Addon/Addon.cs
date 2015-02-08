@@ -1,5 +1,5 @@
 ﻿using System;
-using AssemblyReloader.Addon.Destruction;
+using AssemblyReloader.Destruction;
 using UnityEngine;
 
 namespace AssemblyReloader.Addon

@@ -3,16 +3,18 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using AssemblyReloader.Addon;
-using AssemblyReloader.Addon.Destruction;
 using AssemblyReloader.Controllers;
+using AssemblyReloader.Destruction;
 using AssemblyReloader.GUI;
 using AssemblyReloader.Loaders;
+using AssemblyReloader.Loaders.Addon;
 using AssemblyReloader.Logging;
 using AssemblyReloader.Messages;
 using AssemblyReloader.PluginTracking;
-using AssemblyReloader.Providers;
+using AssemblyReloader.Providers.SceneProviders;
 using AssemblyReloader.Queries;
+using AssemblyReloader.Queries.AssemblyQueries;
+using AssemblyReloader.Queries.ConversionQueries;
 using AssemblyReloader.Queries.FileSystemQueries;
 using ReeperCommon.Events.Implementations;
 using ReeperCommon.FileSystem;
@@ -150,7 +152,14 @@ namespace AssemblyReloader.CompositeRoot
             _eventOnLevelWasLoaded = new EventSubscriber<GameScenes>();
                 GameEvents.onLevelWasLoaded.Add(_eventOnLevelWasLoaded.OnEvent);
 
-            var loaderFactory = new LoaderFactory(addonFactory, queryProvider);
+            var loaderFactory = new LoaderFactory(
+                addonFactory,
+                queryProvider.GetAddonsFromAssemblyQuery(),
+                new PartModulesFromAssemblyQuery(),
+                new CurrentStartupSceneProvider(
+                    new StartupSceneFromGameSceneQuery(),
+                    new CurrentGameSceneProvider())
+                );
 
 
 
@@ -173,11 +182,7 @@ namespace AssemblyReloader.CompositeRoot
                 queryProvider)).Cast<IReloadablePlugin>().ToList();
 
 
-            reloadables.ForEach(r =>
-            {
-                r.Load();
-                r.StartAddons(KSPAddon.Startup.Instantly);
-            });
+            reloadables.ForEach(r => r.Load());
 
             _controller = new ReloadableController(reloadables, queryProvider, new CurrentGameSceneProvider());
 

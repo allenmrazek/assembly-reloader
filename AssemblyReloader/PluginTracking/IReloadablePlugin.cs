@@ -8,7 +8,6 @@ namespace AssemblyReloader.PluginTracking
     {
         void Load();
         void Unload();
-        void StartAddons(KSPAddon.Startup scene);
 
         string Name { get; }
     }

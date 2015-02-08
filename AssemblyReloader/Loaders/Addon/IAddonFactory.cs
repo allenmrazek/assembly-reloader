@@ -1,8 +1,9 @@
 ﻿using System;
+using AssemblyReloader.Addon;
 
-namespace AssemblyReloader.Addon
+namespace AssemblyReloader.Loaders.Addon
 {
-    interface IAddonFactory
+    public interface IAddonFactory
     {
         IDisposable CreateAddon(AddonInfo addonInfo);
         AddonInfo CreateInfoForAddonType(Type type);

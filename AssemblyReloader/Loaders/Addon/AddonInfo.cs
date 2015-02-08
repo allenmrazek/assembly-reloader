@@ -2,7 +2,7 @@ using System;
 
 namespace AssemblyReloader.Addon
 {
-    class AddonInfo
+    public class AddonInfo
     {
         public readonly Type type;
         public readonly KSPAddon addon;

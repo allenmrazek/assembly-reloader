@@ -8,22 +8,22 @@ namespace AssemblyReloader.Queries.AssemblyQueries
 {
     public class AddonsFromAssemblyQuery : IAddonsFromAssemblyQuery
     {
-        private readonly Assembly _assembly;
-        private readonly AddonAttributeFromTypeQuery _attributeQuery;
+        private readonly IAddonAttributeFromTypeQuery _attributeQuery;
 
-        public AddonsFromAssemblyQuery(Assembly assembly, AddonAttributeFromTypeQuery attributeQuery)
+        public AddonsFromAssemblyQuery(IAddonAttributeFromTypeQuery attributeQuery)
         {
-            if (assembly == null) throw new ArgumentNullException("assembly");
             if (attributeQuery == null) throw new ArgumentNullException("attributeQuery");
-            _assembly = assembly;
+
             _attributeQuery = attributeQuery;
         }
 
 
 
-        public IEnumerable<Type> Get()
+        public IEnumerable<Type> Get(Assembly assembly)
         {
-            return _assembly
+            if (assembly == null) throw new ArgumentNullException("assembly");
+
+            return assembly
                 .GetTypes()
                 .Where(t => _attributeQuery.Get(t).Any());
         }

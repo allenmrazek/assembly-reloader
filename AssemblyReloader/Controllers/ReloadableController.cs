@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using AssemblyReloader.PluginTracking;
-using AssemblyReloader.Providers;
+using AssemblyReloader.Providers.SceneProviders;
 using AssemblyReloader.Queries;
 
 namespace AssemblyReloader.Controllers
@@ -35,8 +35,6 @@ namespace AssemblyReloader.Controllers
 
             toReload.Unload();
             toReload.Load();
-            toReload.StartAddons(
-                _queryFactory.GetStartupSceneFromGameSceneQuery().Get(_currentSceneProvider.Get()));
         }
 
 

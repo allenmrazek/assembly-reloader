@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
+using AssemblyReloader.Addon;
 using AssemblyReloader.ILModifications;
 using AssemblyReloader.Loaders;
+using AssemblyReloader.Loaders.Addon;
 using AssemblyReloader.Queries;
 using Mono.Cecil;
 using ReeperCommon.Events;
@@ -157,17 +159,9 @@ namespace AssemblyReloader.PluginTracking
 
 
 
-        public void StartAddons(KSPAddon.Startup scene)
-        {
-            _log.Verbose("Starting addons for " + Name + " for scene " + scene);
-
-            _addonLoader.LoadAddonsForScene(scene);
-        }
-
-
         private void OnGameSceneWasLoaded(GameScenes scene)
         {
-            _addonLoader.LoadAddonsForScene(_queryFactory.GetStartupSceneFromGameSceneQuery().Get(scene));
+            _addonLoader.LoadForScene(_queryFactory.GetStartupSceneFromGameSceneQuery().Get(scene));
         }
 
         public string Name

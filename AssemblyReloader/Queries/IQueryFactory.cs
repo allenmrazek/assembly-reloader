@@ -6,7 +6,7 @@ namespace AssemblyReloader.Queries
 {
     public interface IQueryFactory
     {
-        IAddonsFromAssemblyQuery GetAddonsFromAssemblyQuery(Assembly assembly);
+        IAddonsFromAssemblyQuery GetAddonsFromAssemblyQuery();
         IAddonAttributeFromTypeQuery GetAddonAttributeQuery();
         IStartupSceneFromGameSceneQuery GetStartupSceneFromGameSceneQuery();
     }

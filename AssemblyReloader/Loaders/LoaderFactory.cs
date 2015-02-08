@@ -1,28 +1,38 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
-using AssemblyReloader.Addon;
-using AssemblyReloader.Queries;
+using AssemblyReloader.Loaders.Addon;
+using AssemblyReloader.Loaders.PartModule;
+using AssemblyReloader.Providers.SceneProviders;
+using AssemblyReloader.Queries.AssemblyQueries;
 using ReeperCommon.Logging;
 
 namespace AssemblyReloader.Loaders
 {
-    class LoaderFactory : ILoaderFactory
+    public class LoaderFactory : ILoaderFactory
     {
         private readonly IAddonFactory _addonFactory;
-        private readonly IQueryFactory _queryFactory;
+        private readonly IAddonsFromAssemblyQuery _addonsFromAssemblyQuery;
+        private readonly IPartModulesFromAssemblyQuery _partModulesFromAssemblyQuery;
+        private readonly ICurrentStartupSceneProvider _currentStartupScene;
 
 
         public LoaderFactory(
             IAddonFactory addonFactory,
-            IQueryFactory queryFactory)
+            IAddonsFromAssemblyQuery addonsFromAssemblyQuery,
+            IPartModulesFromAssemblyQuery partModulesFromAssemblyQuery,
+            ICurrentStartupSceneProvider currentStartupScene)
         {
             if (addonFactory == null) throw new ArgumentNullException("addonFactory");
-            if (queryFactory == null) throw new ArgumentNullException("queryFactory");
+            if (addonsFromAssemblyQuery == null) throw new ArgumentNullException("addonsFromAssemblyQuery");
+            if (partModulesFromAssemblyQuery == null) throw new ArgumentNullException("partModulesFromAssemblyQuery");
+            if (currentStartupScene == null) throw new ArgumentNullException("currentStartupScene");
 
 
             _addonFactory = addonFactory;
-            _queryFactory = queryFactory;
+            _addonsFromAssemblyQuery = addonsFromAssemblyQuery;
+            _partModulesFromAssemblyQuery = partModulesFromAssemblyQuery;
+            _currentStartupScene = currentStartupScene;
         }
 
 
@@ -35,13 +45,32 @@ namespace AssemblyReloader.Loaders
             if (log == null) throw new ArgumentNullException("log");
 
             var typeInfo =
-                _queryFactory.GetAddonsFromAssemblyQuery(assembly).Get()
+                _addonsFromAssemblyQuery.Get(assembly)
                     .Select(ty => _addonFactory.CreateInfoForAddonType(ty));
 
-            var loader = new AddonLoader(
+            var loader = new Addon.AddonLoader(
                 _addonFactory,
                 typeInfo,
                 log);
+
+            loader.LoadForScene(_currentStartupScene.Get());
+
+            return loader;
+        }
+
+
+
+        public IDisposable CreatePartModuleLoader(Assembly assembly, ILog log)
+        {
+            if (assembly == null) throw new ArgumentNullException("assembly");
+            if (log == null) throw new ArgumentNullException("log");
+
+            var loader = new PartModuleLoader(_partModulesFromAssemblyQuery.Get(assembly), log.CreateTag("PartModuleLoader"));
+
+            loader.LoadPartModulesIntoPrefabs();
+
+            if (_currentStartupScene.Get() == KSPAddon.Startup.Flight)
+                loader.LoadPartModulesIntoFlight();
 
             return loader;
         }

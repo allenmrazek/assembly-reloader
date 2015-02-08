@@ -4,7 +4,7 @@ using System.Linq;
 using AssemblyReloader.Addon;
 using ReeperCommon.Logging;
 
-namespace AssemblyReloader.Loaders
+namespace AssemblyReloader.Loaders.Addon
 {
     class AddonLoader : IAddonLoader
     {
@@ -69,8 +69,13 @@ namespace AssemblyReloader.Loaders
         }
 
 
+        public void Load()
+        {
+            // nothing
+        }
 
-        public void LoadAddonsForScene(KSPAddon.Startup scene)
+
+        public void LoadForScene(KSPAddon.Startup scene)
         {
             _log.Debug("Loading addons for " + scene);
 

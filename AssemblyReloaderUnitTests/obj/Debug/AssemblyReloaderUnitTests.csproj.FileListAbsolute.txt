@@ -19,3 +19,4 @@ D:\For New Computer\KSPCustomMods\AssemblyReloader\AssemblyReloader\bin\Debug\As
 D:\For New Computer\KSPCustomMods\AssemblyReloader\AssemblyReloaderUnitTests\obj\Debug\AssemblyReloaderUnitTests.csprojResolveAssemblyReference.cache
 D:\For New Computer\KSPCustomMods\AssemblyReloader\AssemblyReloaderUnitTests\obj\Debug\AssemblyReloaderUnitTests.dll
 D:\For New Computer\KSPCustomMods\AssemblyReloader\AssemblyReloaderUnitTests\obj\Debug\AssemblyReloaderUnitTests.pdb
+D:\For New Computer\KSPCustomMods\AssemblyReloader\AssemblyReloader\bin\Debug\AssemblyReloaderUnitTests.dll.config
