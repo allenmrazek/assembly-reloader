@@ -8,12 +8,15 @@ using AssemblyReloader.Destruction;
 using AssemblyReloader.GUI;
 using AssemblyReloader.Loaders;
 using AssemblyReloader.Loaders.Addon;
+using AssemblyReloader.Loaders.PMLoader;
 using AssemblyReloader.Logging;
 using AssemblyReloader.Messages;
 using AssemblyReloader.PluginTracking;
+using AssemblyReloader.Providers.ConfigNodeProviders;
 using AssemblyReloader.Providers.SceneProviders;
 using AssemblyReloader.Queries;
 using AssemblyReloader.Queries.AssemblyQueries;
+using AssemblyReloader.Queries.ConfigNodeQueries;
 using AssemblyReloader.Queries.ConversionQueries;
 using AssemblyReloader.Queries.FileSystemQueries;
 using ReeperCommon.Events.Implementations;
@@ -158,7 +161,9 @@ namespace AssemblyReloader.CompositeRoot
                 new PartModulesFromAssemblyQuery(),
                 new CurrentStartupSceneProvider(
                     new StartupSceneFromGameSceneQuery(),
-                    new CurrentGameSceneProvider())
+                    new CurrentGameSceneProvider()),
+                new PartConfigProvider(),
+                new PartModuleInfoFactory(new PartConfigProvider(), new ModuleConfigsFromPartConfigQuery(), _log.CreateTag("PartModuleInfo"))
                 );
 
 

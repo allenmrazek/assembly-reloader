@@ -1,15 +1,14 @@
 ﻿using System;
-using UnityEngine;
 
-namespace AssemblyReloader.Queries.ConfigNodeQueries
+namespace AssemblyReloader.Loaders.PMLoader
 {
     public class PartModuleInfo
     {
-        public GameObject Prefab { get; private set; }
+        public Part Prefab { get; private set; }
         public ConfigNode Config { get; private set; }
         public Type PmType { get; private set; }
 
-        public PartModuleInfo(GameObject prefab, ConfigNode config, Type pmType)
+        public PartModuleInfo(Part prefab, ConfigNode config, Type pmType)
         {
             if (prefab == null) throw new ArgumentNullException("prefab");
             if (config == null) throw new ArgumentNullException("config");

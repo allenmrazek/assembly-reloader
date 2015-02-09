@@ -2,7 +2,8 @@
 using System.Linq;
 using System.Reflection;
 using AssemblyReloader.Loaders.Addon;
-using AssemblyReloader.Loaders.PartModule;
+using AssemblyReloader.Loaders.PMLoader;
+using AssemblyReloader.Providers.ConfigNodeProviders;
 using AssemblyReloader.Providers.SceneProviders;
 using AssemblyReloader.Queries.AssemblyQueries;
 using ReeperCommon.Logging;
@@ -15,24 +16,32 @@ namespace AssemblyReloader.Loaders
         private readonly IAddonsFromAssemblyQuery _addonsFromAssemblyQuery;
         private readonly IPartModulesFromAssemblyQuery _partModulesFromAssemblyQuery;
         private readonly ICurrentStartupSceneProvider _currentStartupScene;
+        private readonly IPartConfigProvider _partConfigProvider;
+        private readonly IPartModuleInfoFactory _partModuleInfoFactory;
 
 
         public LoaderFactory(
             IAddonFactory addonFactory,
             IAddonsFromAssemblyQuery addonsFromAssemblyQuery,
             IPartModulesFromAssemblyQuery partModulesFromAssemblyQuery,
-            ICurrentStartupSceneProvider currentStartupScene)
+            ICurrentStartupSceneProvider currentStartupScene,
+            IPartConfigProvider partConfigProvider,
+            IPartModuleInfoFactory partModuleInfoFactory)
         {
             if (addonFactory == null) throw new ArgumentNullException("addonFactory");
             if (addonsFromAssemblyQuery == null) throw new ArgumentNullException("addonsFromAssemblyQuery");
             if (partModulesFromAssemblyQuery == null) throw new ArgumentNullException("partModulesFromAssemblyQuery");
             if (currentStartupScene == null) throw new ArgumentNullException("currentStartupScene");
+            if (partConfigProvider == null) throw new ArgumentNullException("partConfigProvider");
+            if (partModuleInfoFactory == null) throw new ArgumentNullException("partModuleInfoFactory");
 
 
             _addonFactory = addonFactory;
             _addonsFromAssemblyQuery = addonsFromAssemblyQuery;
             _partModulesFromAssemblyQuery = partModulesFromAssemblyQuery;
             _currentStartupScene = currentStartupScene;
+            _partConfigProvider = partConfigProvider;
+            _partModuleInfoFactory = partModuleInfoFactory;
         }
 
 
@@ -65,7 +74,10 @@ namespace AssemblyReloader.Loaders
             if (assembly == null) throw new ArgumentNullException("assembly");
             if (log == null) throw new ArgumentNullException("log");
 
-            var loader = new PartModuleLoader(_partModulesFromAssemblyQuery.Get(assembly), log.CreateTag("PartModuleLoader"));
+            var loader = new PartModuleLoader(
+                _partModulesFromAssemblyQuery.Get(assembly), 
+                _partModuleInfoFactory,
+                log.CreateTag("PartModuleLoader"));
 
             loader.LoadPartModulesIntoPrefabs();
 

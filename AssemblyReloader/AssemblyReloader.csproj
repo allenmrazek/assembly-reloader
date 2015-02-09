@@ -54,21 +54,27 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Loaders\Addon\AddonLoader.cs" />
-    <Compile Include="Loaders\Addon\IAddonLoader.cs" />
+    <Compile Include="Loaders\AddonLoader\AddonLoader.cs" />
+    <Compile Include="Loaders\AddonLoader\IAddonLoader.cs" />
     <Compile Include="Controllers\IReloadableController.cs" />
     <Compile Include="CompositeRoot\MonoBehaviours\CoreView.cs" />
-    <Compile Include="Loaders\Addon\IAddonFactory.cs" />
+    <Compile Include="Loaders\AddonLoader\IAddonFactory.cs" />
     <Compile Include="Loaders\ILoaderFactory.cs" />
-    <Compile Include="Loaders\Addon\AddonFactory.cs" />
+    <Compile Include="Loaders\AddonLoader\AddonFactory.cs" />
     <Compile Include="GUI\WindowFactory.cs" />
     <Compile Include="GUI\LogViewLogic.cs" />
-    <Compile Include="Loaders\Addon\Addon.cs" />
-    <Compile Include="Queries\ConfigNodeQueries\PartModuleInfo.cs" />
+    <Compile Include="Loaders\AddonLoader\Addon.cs" />
+    <Compile Include="Loaders\PMLoader\IPartModuleInfoFactory.cs" />
+    <Compile Include="Loaders\PMLoader\PartModuleInfo.cs" />
+    <Compile Include="Loaders\PMLoader\PartModuleInfoFactory.cs" />
     <Compile Include="Logging\ICachedLog.cs" />
-    <Compile Include="Loaders\PartModule\PartModuleLoader.cs" />
+    <Compile Include="Loaders\PMLoader\PartModuleLoader.cs" />
+    <Compile Include="Providers\ConfigNodeProviders\IPartConfigProvider.cs" />
+    <Compile Include="Providers\ConfigNodeProviders\PartConfigProvider.cs" />
     <Compile Include="Queries\AssemblyQueries\IPartModulesFromAssemblyQuery.cs" />
     <Compile Include="Queries\AssemblyQueries\PartModulesFromAssemblyQuery.cs" />
+    <Compile Include="Queries\ConfigNodeQueries\IModuleConfigsFromPartConfigQuery.cs" />
+    <Compile Include="Queries\ConfigNodeQueries\ModuleConfigsFromPartConfigQuery.cs" />
     <Compile Include="Queries\ConversionQueries\IAddonAttributeFromTypeQuery.cs" />
     <Compile Include="Queries\AssemblyQueries\IAddonsFromAssemblyQuery.cs" />
     <Compile Include="Queries\FileSystemQueries\IAssemblyDirectoryQuery.cs" />
@@ -85,7 +91,7 @@
     <Compile Include="Queries\ConversionQueries\AddonAttributeFromTypeQuery.cs" />
     <Compile Include="Queries\FileSystemQueries\IReloadableAssemblyFileLocationQuery.cs" />
     <Compile Include="Queries\ConversionQueries\IStartupSceneFromGameSceneQuery.cs" />
-    <Compile Include="Loaders\Addon\AddonInfo.cs" />
+    <Compile Include="Loaders\AddonLoader\AddonInfo.cs" />
     <Compile Include="Messages\IChannel.cs" />
     <Compile Include="Messages\IConsumer.cs" />
     <Compile Include="Messages\IMessage.cs" />
