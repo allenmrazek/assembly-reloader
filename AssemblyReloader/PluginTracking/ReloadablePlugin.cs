@@ -25,6 +25,7 @@ namespace AssemblyReloader.PluginTracking
     {
         private Assembly _loaded;
         private IAddonLoader _addonLoader;
+        private IDisposable _partModuleLoader;
 
 
         private readonly IFile _location;
@@ -137,6 +138,7 @@ namespace AssemblyReloader.PluginTracking
                                 _loaded.GetReferencedAssemblies().Select(ra => ra.Name).ToArray()));
 
 
+                _partModuleLoader = _loaderFactory.CreatePartModuleLoader(_loaded, _log);
                 _addonLoader = _loaderFactory.CreateAddonLoader(_loaded, _log);
 
 
@@ -155,6 +157,10 @@ namespace AssemblyReloader.PluginTracking
 
             _addonLoader.Dispose();
             _addonLoader = null;
+           
+
+            _partModuleLoader.Dispose();
+            _partModuleLoader = null;
         }
 
 

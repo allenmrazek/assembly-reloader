@@ -13,7 +13,7 @@ namespace AssemblyReloader.Queries.AssemblyQueries
             if (assembly == null) throw new ArgumentNullException("assembly");
 
             return assembly.GetTypes()
-                .Where(ty => ty.IsAssignableFrom(typeof (PartModule)));
+                .Where(ty => ty.IsSubclassOf(typeof (PartModule)));
         }
     }
 }

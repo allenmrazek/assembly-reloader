@@ -74,6 +74,9 @@ namespace AssemblyReloader.Loaders
             if (assembly == null) throw new ArgumentNullException("assembly");
             if (log == null) throw new ArgumentNullException("log");
 
+            log.Normal("Listing PartModules from " + assembly.FullName);
+            _partModulesFromAssemblyQuery.Get(assembly).ToList().ForEach(t => log.Normal("PartModule: " + t.FullName));
+
             var loader = new PartModuleLoader(
                 _partModulesFromAssemblyQuery.Get(assembly), 
                 _partModuleInfoFactory,

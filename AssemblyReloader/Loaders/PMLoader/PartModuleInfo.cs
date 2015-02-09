@@ -2,6 +2,10 @@
 
 namespace AssemblyReloader.Loaders.PMLoader
 {
+    /// <summary>
+    /// Each PartModuleInfo wraps relevant data about a particular PartModule instance that
+    /// should exist on a particular Part prefab
+    /// </summary>
     public class PartModuleInfo
     {
         public Part Prefab { get; private set; }

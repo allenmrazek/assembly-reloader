@@ -201,6 +201,8 @@ namespace AssemblyReloader.CompositeRoot
 
             Object.DontDestroyOnLoad(_view);
             Object.DontDestroyOnLoad(_logView);
+
+    
         }
 
 

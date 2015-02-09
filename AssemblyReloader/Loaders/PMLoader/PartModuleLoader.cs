@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 using ReeperCommon.Logging;
 
 namespace AssemblyReloader.Loaders.PMLoader
@@ -69,6 +71,7 @@ namespace AssemblyReloader.Loaders.PMLoader
         {
             var info = _pmiFactory.Create(pm);
 
+            _log.Normal("Found {0} prefab entries for {1}", info.Count().ToString(CultureInfo.InvariantCulture), pm.FullName);
         }
 
 
