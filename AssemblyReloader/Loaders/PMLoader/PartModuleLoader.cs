@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
+using ReeperCommon.Extensions;
 using ReeperCommon.Logging;
 
 namespace AssemblyReloader.Loaders.PMLoader
@@ -12,6 +14,8 @@ namespace AssemblyReloader.Loaders.PMLoader
         private readonly IPartModuleInfoFactory _pmiFactory;
         private readonly ILog _log;
 
+        private readonly List<PartModuleInfo> _createdPartModules = new List<PartModuleInfo>();
+ 
         public PartModuleLoader(
             IEnumerable<Type> partModules, 
             IPartModuleInfoFactory pmiFactory,
@@ -43,7 +47,19 @@ namespace AssemblyReloader.Loaders.PMLoader
         {
             if (managed)
             {
-                // todo: destroy
+                _createdPartModules.ForEach(pmi =>
+                {
+                    var pm = pmi.Prefab.GetComponent(pmi.PmType);
+
+                    if (pm.IsNull())
+                    {
+                        _log.Warning("{0} no longer exists on part {1}", pmi.PmType.FullName, pmi.Prefab.name);
+                        return;
+                    }
+
+                    _log.Debug("Destroying {0} on {1}", pmi.PmType.FullName, pmi.Prefab.name);
+                    UnityEngine.Object.DestroyImmediate(pm);
+                });
             }
 
             GC.SuppressFinalize(this);
@@ -67,42 +83,47 @@ namespace AssemblyReloader.Loaders.PMLoader
         }
 
 
-        private void LoadPartModuleIntoPrefab(Type pm)
+        private void LoadPartModuleIntoPrefab(Type pmType)
         {
-            var info = _pmiFactory.Create(pm);
+            var infoList = _pmiFactory.Create(pmType).ToList();
 
-            _log.Normal("Found {0} prefab entries for {1}", info.Count().ToString(CultureInfo.InvariantCulture), pm.FullName);
+            _log.Normal("Found {0} prefab entries for {1}", infoList.Count.ToString(CultureInfo.InvariantCulture), pmType.FullName);
+
+            infoList.ForEach(info =>
+            {
+                _log.Debug("Adding {0} to {1}", pmType.FullName, info.Prefab.name);
+
+                InsertAndLoadPartModule(info);
+
+                _log.Verbose("Added {0} to Part {1}", pmType.FullName, info.Prefab.name);
+            });
         }
 
 
-        //private IEnumerable<PartModuleInfo> FindPrefabs()
-        //{
-        //    var prefabInfo = new List<PartModuleInfo>();
+        private void InsertAndLoadPartModule(PartModuleInfo pmi)
+        {
+            var pm = pmi.Prefab.gameObject.AddComponent(pmi.PmType) as PartModule;
 
-        //    PartLoader.LoadedPartsList.ForEach(ap =>
-        //    {
-        //        var cfg = _configProvider.Get(ap);
-        //        if (!cfg.Any()) return;
+            if (pm.IsNull())
+            {
+                _log.Error("Failed to add {0} to {1}; AddComponent returned null", pmi.PmType.FullName,
+                    pmi.Prefab.partInfo.name);
+                return;
+            }
 
-        //        var moduleCfgs = _partModules.SelectMany(pmType =>
-        //            _moduleConfigProvider.Get(cfg.Single(), pmType.Name));
+            pmi.Prefab.Modules.Add(pm);
 
-        //        prefabInfo.AddRange(CreatePartModuleInfoForTypeOnPart(
-        //    });
+            _log.Debug("Loading PartModule config");
 
-        //    return prefabInfo;
-        //}
+            // When PartLoader ran through these, the GameObject it was working on had to be awake; otherwise
+            // the PartModules wouldn't do some internal setup required. We're going second and the GameObject is
+            // already inactive. If we reactivate it, the PartModules will start exceptions. We need to manually
+            // force that internal setup from Awake
+            typeof(PartModule).GetMethod("Awake", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.FlattenHierarchy)
+                .Invoke(pm, null);
 
-
-        //// note: IEnumerable because it's conceivable the part has multiple duplicate entries for the same PartModule
-        //private IEnumerable<PartModuleInfo> CreatePartModuleInfoForTypeOnPart(
-        //    Type pmType, 
-        //    ConfigNode partConfig,
-        //    AvailablePart part)
-        //{
-        //    var configs =
-        //        _moduleConfigProvider.Get(partConfig, pmType.Name)
-        //            .Select(config => new PartModuleInfo(part.partPrefab, config, pmType));
-        //}
+            pm.Load(pmi.Config);
+            _createdPartModules.Add(pmi);
+        }
     }
 }

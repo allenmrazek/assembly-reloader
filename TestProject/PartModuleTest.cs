@@ -8,6 +8,11 @@ namespace TestProject
 // ReSharper disable once InconsistentNaming
     public class TestPartModule : PartModule
     {
+        ////void Awake()
+        ////{
+        ////    print("TestPartModule awake");
+        ////}
+
         public override void OnAwake()
         {
  	        base.OnAwake();
@@ -19,5 +24,9 @@ namespace TestProject
 #endif
         }
 
+        public override void OnLoad(ConfigNode node)
+        {
+            print(string.Format("TestPartModule.OnLoad: {0}", node.ToString()));
+        }
     }
 }

@@ -157,13 +157,14 @@ namespace AssemblyReloader.CompositeRoot
 
             var loaderFactory = new LoaderFactory(
                 addonFactory,
+                new PartModuleInfoFactory(new PartConfigProvider(), new ModuleConfigsFromPartConfigQuery(), _log.CreateTag("PartModuleInfo")),
+
                 queryProvider.GetAddonsFromAssemblyQuery(),
                 new PartModulesFromAssemblyQuery(),
                 new CurrentStartupSceneProvider(
                     new StartupSceneFromGameSceneQuery(),
                     new CurrentGameSceneProvider()),
-                new PartConfigProvider(),
-                new PartModuleInfoFactory(new PartConfigProvider(), new ModuleConfigsFromPartConfigQuery(), _log.CreateTag("PartModuleInfo"))
+                new CurrentGameSceneProvider()
                 );
 
 

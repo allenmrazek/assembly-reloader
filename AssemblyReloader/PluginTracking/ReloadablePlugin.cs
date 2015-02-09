@@ -27,13 +27,13 @@ namespace AssemblyReloader.PluginTracking
         private IAddonLoader _addonLoader;
         private IDisposable _partModuleLoader;
 
+        private readonly IQueryFactory _queryFactory;
 
         private readonly IFile _location;
         private readonly ILoaderFactory _loaderFactory;
         private readonly IEventSubscriber<GameScenes> _levelLoadedEvent;
         private readonly ILog _log;
-        private readonly IQueryFactory _queryFactory;
-
+        
         private IEventSubscription _addonSceneChangeSubscription;
 
 
@@ -169,6 +169,7 @@ namespace AssemblyReloader.PluginTracking
         {
             _addonLoader.LoadForScene(_queryFactory.GetStartupSceneFromGameSceneQuery().Get(scene));
         }
+
 
         public string Name
         {
