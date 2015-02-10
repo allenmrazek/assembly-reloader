@@ -22,5 +22,10 @@ namespace AssemblyReloader.Loaders.PMLoader
             Config = config;
             PmType = pmType;
         }
+
+        public string Identifier
+        {
+            get { return PmType.Name; }
+        }
     }
 }

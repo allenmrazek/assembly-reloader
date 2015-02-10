@@ -3,9 +3,9 @@ using System.Linq;
 using System.Reflection;
 using AssemblyReloader.Loaders.Addon;
 using AssemblyReloader.Loaders.PMLoader;
-using AssemblyReloader.Providers.ConfigNodeProviders;
 using AssemblyReloader.Providers.SceneProviders;
 using AssemblyReloader.Queries.AssemblyQueries;
+using AssemblyReloader.Repositories;
 using ReeperCommon.Logging;
 
 namespace AssemblyReloader.Loaders
@@ -18,11 +18,14 @@ namespace AssemblyReloader.Loaders
         private readonly ICurrentStartupSceneProvider _currentStartupSceneQuery;
         private readonly ICurrentGameSceneProvider _currentGameSceneQuery;
         private readonly IPartModuleInfoFactory _partModuleInfoFactory;
+        private readonly IPartModuleFlightConfigRepository _pmConfigRepository;
 
 
         public LoaderFactory(
             IAddonFactory addonFactory,
             IPartModuleInfoFactory partModuleInfoFactory,
+
+            IPartModuleFlightConfigRepository pmConfigRepository,
 
         
             IAddonsFromAssemblyQuery addonsFromAssemblyQuery,
@@ -37,6 +40,7 @@ namespace AssemblyReloader.Loaders
             if (currentStartupSceneQuery == null) throw new ArgumentNullException("currentStartupSceneQuery");
             if (currentGameSceneQuery == null) throw new ArgumentNullException("currentGameSceneQuery");
             if (partModuleInfoFactory == null) throw new ArgumentNullException("partModuleInfoFactory");
+            if (pmConfigRepository == null) throw new ArgumentNullException("pmConfigRepository");
 
 
             _addonFactory = addonFactory;
@@ -45,6 +49,7 @@ namespace AssemblyReloader.Loaders
             _currentStartupSceneQuery = currentStartupSceneQuery;
             _currentGameSceneQuery = currentGameSceneQuery;
             _partModuleInfoFactory = partModuleInfoFactory;
+            _pmConfigRepository = pmConfigRepository;
         }
 
 
@@ -82,6 +87,7 @@ namespace AssemblyReloader.Loaders
 
             var loader = new PartModuleLoader(
                 _partModulesFromAssemblyQuery.Get(assembly), 
+                _pmConfigRepository,
                 _partModuleInfoFactory,
                 log.CreateTag("PartModuleLoader"));
 

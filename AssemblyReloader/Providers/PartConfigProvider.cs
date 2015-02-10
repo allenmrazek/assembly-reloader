@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 using ReeperCommon.Containers;
 
-namespace AssemblyReloader.Providers.ConfigNodeProviders
+namespace AssemblyReloader.Providers
 {
     public class PartConfigProvider : IPartConfigProvider
     {

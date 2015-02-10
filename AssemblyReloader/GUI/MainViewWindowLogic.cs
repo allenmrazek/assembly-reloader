@@ -51,6 +51,8 @@ namespace AssemblyReloader.GUI
 
                 if (GUILayout.Button(_logWindow.Visible ? "Hide Log" : "Show Log"))
                     _logWindow.Visible = !_logWindow.Visible;
+
+                GUILayout.Toggle(true, "Re-create KSPAddons for this scene");
             }
             GUILayout.EndVertical();
         }

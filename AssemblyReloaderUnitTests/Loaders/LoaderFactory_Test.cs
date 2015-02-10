@@ -1,7 +1,6 @@
 ﻿using System.Reflection;
 using AssemblyReloader.Loaders;
 using AssemblyReloader.Loaders.Addon;
-using AssemblyReloader.Providers.ConfigNodeProviders;
 using AssemblyReloader.Providers.SceneProviders;
 using AssemblyReloader.Queries.AssemblyQueries;
 using NSubstitute;

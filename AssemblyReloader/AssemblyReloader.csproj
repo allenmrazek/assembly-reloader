@@ -69,8 +69,10 @@
     <Compile Include="Loaders\PMLoader\PartModuleInfoFactory.cs" />
     <Compile Include="Logging\ICachedLog.cs" />
     <Compile Include="Loaders\PMLoader\PartModuleLoader.cs" />
-    <Compile Include="Providers\ConfigNodeProviders\IPartConfigProvider.cs" />
-    <Compile Include="Providers\ConfigNodeProviders\PartConfigProvider.cs" />
+    <Compile Include="Providers\IPartConfigProvider.cs" />
+    <Compile Include="Providers\PartConfigProvider.cs" />
+    <Compile Include="Providers\ILoadedVesselProvider.cs" />
+    <Compile Include="Providers\LoadedVesselProvider.cs" />
     <Compile Include="Queries\AssemblyQueries\IPartModulesFromAssemblyQuery.cs" />
     <Compile Include="Queries\AssemblyQueries\PartModulesFromAssemblyQuery.cs" />
     <Compile Include="Queries\ConfigNodeQueries\IModuleConfigsFromPartConfigQuery.cs" />
@@ -106,6 +108,8 @@
     <Compile Include="Providers\SceneProviders\CurrentStartupSceneProvider.cs" />
     <Compile Include="Queries\ConversionQueries\StartupSceneFromGameSceneQuery.cs" />
     <Compile Include="Queries\FileSystemQueries\ReloadableAssemblyFilesInDirectoryQuery.cs" />
+    <Compile Include="Repositories\IPartModuleFlightConfigRepository.cs" />
+    <Compile Include="Repositories\PartModuleFlightConfigRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

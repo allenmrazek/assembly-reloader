@@ -12,13 +12,14 @@ using AssemblyReloader.Loaders.PMLoader;
 using AssemblyReloader.Logging;
 using AssemblyReloader.Messages;
 using AssemblyReloader.PluginTracking;
-using AssemblyReloader.Providers.ConfigNodeProviders;
+using AssemblyReloader.Providers;
 using AssemblyReloader.Providers.SceneProviders;
 using AssemblyReloader.Queries;
 using AssemblyReloader.Queries.AssemblyQueries;
 using AssemblyReloader.Queries.ConfigNodeQueries;
 using AssemblyReloader.Queries.ConversionQueries;
 using AssemblyReloader.Queries.FileSystemQueries;
+using AssemblyReloader.Repositories;
 using ReeperCommon.Events.Implementations;
 using ReeperCommon.FileSystem;
 using ReeperCommon.FileSystem.Implementations;
@@ -158,6 +159,8 @@ namespace AssemblyReloader.CompositeRoot
             var loaderFactory = new LoaderFactory(
                 addonFactory,
                 new PartModuleInfoFactory(new PartConfigProvider(), new ModuleConfigsFromPartConfigQuery(), _log.CreateTag("PartModuleInfo")),
+
+                new PartModuleFlightConfigRepository(),
 
                 queryProvider.GetAddonsFromAssemblyQuery(),
                 new PartModulesFromAssemblyQuery(),

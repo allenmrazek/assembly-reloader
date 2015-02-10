@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using AssemblyReloader.Providers.ConfigNodeProviders;
+using AssemblyReloader.Providers;
 using AssemblyReloader.Queries.ConfigNodeQueries;
 using ReeperCommon.Logging;
 
