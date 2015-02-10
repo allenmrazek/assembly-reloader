@@ -95,7 +95,12 @@ namespace AssemblyReloader.Loaders.PMLoader
 
             _log.Debug("Destroying PartModules on loaded Parts");
 
+
+
             foreach (var pmi in _createdPrefabPartModules)
+            {
+                _log.Debug("Found {0} instances to destroy", GetLoadedInstancesOfPart(pmi.Prefab).Count().ToString());
+
                 foreach (var part in GetLoadedInstancesOfPart(pmi.Prefab))
                 {
                     var pm = part.gameObject.GetComponent(pmi.PmType) as PartModule;
@@ -106,11 +111,14 @@ namespace AssemblyReloader.Loaders.PMLoader
                         continue;
                     }
 
-                    _log.Debug("Creating PartModule config snapshot for {0} on {1}", pmi.Identifier, part.flightID.ToString());
+                    _log.Debug("Creating PartModule config snapshot for {0} on {1}", pmi.Identifier,
+                        part.flightID.ToString());
                     CreateConfigSnapshot(part, pm, pmi);
 
                     UnityEngine.Object.DestroyImmediate(pm);
                 }
+            }
+
             _log.Debug("Finished destroying PartModules on loaded Parts");
         }
 
@@ -210,6 +218,13 @@ namespace AssemblyReloader.Loaders.PMLoader
 
             // locate any loaded vessels that contain a part which matches this prefab
             ILoadedVesselProvider loadedVessels = new LoadedVesselProvider();
+
+            _log.Debug("Found " + loadedVessels.Get().Count() + " loaded vessels");
+
+            _log.Debug("found " + loadedVessels.Get()
+                .SelectMany(v => v.parts)
+                .Where(p => ReferenceEquals(p.partInfo.partPrefab, prefab)).Count() + " matches to " + prefab.name
+                );
 
             return loadedVessels.Get()
                 .SelectMany(v => v.parts)
