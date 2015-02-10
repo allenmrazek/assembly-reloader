@@ -8,7 +8,7 @@ using AssemblyReloader.Queries;
 using NSubstitute;
 using Xunit;
 
-namespace AssemblyReloaderUnitTests.AssemblyTracking
+namespace AssemblyReloaderUnitTests.Controllers
 {
     public class TestReloadableController
     {
@@ -20,9 +20,7 @@ namespace AssemblyReloaderUnitTests.AssemblyTracking
                     new[]
                     {
                         Substitute.For<IReloadablePlugin>(), Substitute.For<IReloadablePlugin>()
-                    },
-                    Substitute.For<IQueryFactory>(),
-                    Substitute.For<ICurrentGameSceneProvider>());
+                    });
             }
         }
 
@@ -34,24 +32,6 @@ namespace AssemblyReloaderUnitTests.AssemblyTracking
             Assert.Throws<ArgumentNullException>(() =>
                 new ReloadableController(
                      
-                    Substitute.For<
-                        IEnumerable<IReloadablePlugin>
-                    >(),
-                    null,
-                    Substitute.For<ICurrentGameSceneProvider>()));
-
-            Assert.Throws<ArgumentNullException>(() =>
-                new ReloadableController(
-                    null,
-                    Substitute.For<IQueryFactory>(),
-                    Substitute.For<ICurrentGameSceneProvider>()));
-
-            Assert.Throws<ArgumentNullException>(() =>
-                new ReloadableController(
-                    Substitute.For<
-                                    IEnumerable<IReloadablePlugin>
-                                >(),
-                    Substitute.For<IQueryFactory>(),
                     null));
         }
 
@@ -73,7 +53,7 @@ namespace AssemblyReloaderUnitTests.AssemblyTracking
                 second
             };
 
-            var sut = new ReloadableController(reloadables, Substitute.For<IQueryFactory>(), Substitute.For<ICurrentGameSceneProvider>());
+            var sut = new ReloadableController(reloadables);
 
             Assert.NotEmpty(sut.Plugins);
             Assert.Contains("First", sut.Plugins.Select(i => i.Name));
@@ -86,10 +66,8 @@ namespace AssemblyReloaderUnitTests.AssemblyTracking
         public void ReloadAll_Calls_Unload_Then_Load()
         {
             var reloadable = Substitute.For<IReloadablePlugin>();
-            var query = Substitute.For<IQueryFactory>();
 
-
-            var sut = new ReloadableController(new[] { reloadable }, query, Substitute.For<ICurrentGameSceneProvider>());
+            var sut = new ReloadableController(new[] { reloadable });
 
             sut.ReloadAll();
 

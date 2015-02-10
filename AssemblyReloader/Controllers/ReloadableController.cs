@@ -10,21 +10,13 @@ namespace AssemblyReloader.Controllers
     public class ReloadableController : IReloadableController
     {
         private readonly IEnumerable<IReloadablePlugin> _reloadables;
-        private readonly IQueryFactory _queryFactory;
-        private readonly ICurrentGameSceneProvider _currentSceneProvider;
 
 
         public ReloadableController(
-            IEnumerable<IReloadablePlugin> reloadables,
-            IQueryFactory queryFactory,
-            ICurrentGameSceneProvider currentSceneProvider)
+            IEnumerable<IReloadablePlugin> reloadables)
         {
-            if (queryFactory == null) throw new ArgumentNullException("queryFactory");
-            if (currentSceneProvider == null) throw new ArgumentNullException("currentSceneProvider");
             if (reloadables == null) throw new ArgumentNullException("reloadables");
 
-            _queryFactory = queryFactory;
-            _currentSceneProvider = currentSceneProvider;
             _reloadables = reloadables;
         }
 

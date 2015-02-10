@@ -38,7 +38,7 @@ namespace AssemblyReloader.Loaders.Addon
             var addon = addonHolder.AddComponent(addonInfo.type) as MonoBehaviour;
             addonInfo.created = true;
 
-            return new AssemblyReloader.Addon.Addon(addon, _mediator);
+            return new Loaders.AddonLoader.Addon(addon, _mediator);
         }
 
 

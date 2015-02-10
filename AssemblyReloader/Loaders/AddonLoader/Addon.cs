@@ -2,7 +2,7 @@
 using AssemblyReloader.Destruction;
 using UnityEngine;
 
-namespace AssemblyReloader.Addon
+namespace AssemblyReloader.Loaders.AddonLoader
 {
     // Represents a potentially live KSPAddon that ART has created
     class Addon : IDisposable

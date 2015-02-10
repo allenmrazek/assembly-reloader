@@ -190,7 +190,7 @@ namespace AssemblyReloader.CompositeRoot
 
             reloadables.ForEach(r => r.Load());
 
-            _controller = new ReloadableController(reloadables, queryProvider, new CurrentGameSceneProvider());
+            _controller = new ReloadableController(reloadables);
 
             var windowFactory = new WindowFactory(resourceLocator, cachedLog);
 
