@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reflection;
 using AssemblyReloader.Addon;
 using AssemblyReloader.ILModifications;
+using AssemblyReloader.ILModifications.Assembly;
 using AssemblyReloader.Loaders;
 using AssemblyReloader.Loaders.Addon;
 using AssemblyReloader.Queries;
@@ -31,6 +32,7 @@ namespace AssemblyReloader.PluginTracking
 
         private readonly IFile _location;
         private readonly ILoaderFactory _loaderFactory;
+        private readonly IModifiedAssemblyFactory _massemblyFactory;
         private readonly IEventSubscriber<GameScenes> _levelLoadedEvent;
         private readonly ILog _log;
         
@@ -40,19 +42,23 @@ namespace AssemblyReloader.PluginTracking
 
         public ReloadablePlugin(
             IFile location,
+
             ILoaderFactory loaderFactory,
+            IModifiedAssemblyFactory massemblyFactory,
             IEventSubscriber<GameScenes> levelLoadedEvent,
             ILog log,
             IQueryFactory queryFactory)
         {
             if (location == null) throw new ArgumentNullException("location");
             if (loaderFactory == null) throw new ArgumentNullException("loaderFactory");
+            if (massemblyFactory == null) throw new ArgumentNullException("massemblyFactory");
             if (levelLoadedEvent == null) throw new ArgumentNullException("levelLoadedEvent");
             if (log == null) throw new ArgumentNullException("log");
             if (queryFactory == null) throw new ArgumentNullException("queryFactory");
 
             _location = location;
             _loaderFactory = loaderFactory;
+            _massemblyFactory = massemblyFactory;
             _levelLoadedEvent = levelLoadedEvent;
             _log = log;
             _queryFactory = queryFactory;
@@ -67,9 +73,12 @@ namespace AssemblyReloader.PluginTracking
 
             var definition = AssemblyDefinition.ReadAssembly(_location.FullPath);
 
-            var modifier = new ModifyPluginIdentity();
+            //var modifier = 
 
-            modifier.Rename(definition, Guid.NewGuid());
+            var modified = _massemblyFactory.Create(definition);
+
+            //modifier.Rename(definition, Guid.NewGuid());
+            modified.Rename(Guid.NewGuid());
 
             //definition.MainModule.GetTypes().ToList().ForEach(td =>
             //{

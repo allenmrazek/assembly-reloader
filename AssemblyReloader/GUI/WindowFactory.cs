@@ -54,11 +54,11 @@ namespace AssemblyReloader.GUI
 
 
             tbButtons.AddButton(new TitleBarButton(style, btnClose.First(), s => { }, "Test"));
-            tbButtons.AddButton(new TitleBarButton(style, btnClose.First(), s => { }, "Test2"));
-            tbButtons.AddButton(new TitleBarButton(style, btnClose.First(), s => { }, "Test3"));
-            tbButtons.AddButton(new TitleBarButton(style, btnClose.First(), s => { }, "Tefsdst2"));
-            tbButtons.AddButton(new TitleBarButton(style, btnClose.First(), s => { }, "Tefsdfdst2"));
-            tbButtons.AddButton(new TitleBarButton(style, btnClose.First(), s => { }, "Tefddsffsdst2"));
+            //tbButtons.AddButton(new TitleBarButton(style, btnClose.First(), s => { }, "Test2"));
+            //tbButtons.AddButton(new TitleBarButton(style, btnClose.First(), s => { }, "Test3"));
+            //tbButtons.AddButton(new TitleBarButton(style, btnClose.First(), s => { }, "Tefsdst2"));
+            //tbButtons.AddButton(new TitleBarButton(style, btnClose.First(), s => { }, "Tefsdfdst2"));
+            //tbButtons.AddButton(new TitleBarButton(style, btnClose.First(), s => { }, "Tefddsffsdst2"));
 
             var hiding = new HideOnF2(tbButtons);
 

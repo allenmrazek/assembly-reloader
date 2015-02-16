@@ -5,7 +5,10 @@ using System.Linq;
 using System.Reflection;
 using AssemblyReloader.Controllers;
 using AssemblyReloader.Destruction;
+using AssemblyReloader.Game;
 using AssemblyReloader.GUI;
+using AssemblyReloader.ILModifications;
+using AssemblyReloader.ILModifications.Assembly;
 using AssemblyReloader.Loaders;
 using AssemblyReloader.Loaders.Addon;
 using AssemblyReloader.Loaders.PMLoader;
@@ -158,6 +161,7 @@ namespace AssemblyReloader.CompositeRoot
 
             var loaderFactory = new LoaderFactory(
                 addonFactory,
+                new PartModuleFactory(),
                 new PartModuleInfoFactory(new PartConfigProvider(), new ModuleConfigsFromPartConfigQuery(), _log.CreateTag("PartModuleInfo")),
 
                 new PartModuleFlightConfigRepository(),
@@ -185,10 +189,11 @@ namespace AssemblyReloader.CompositeRoot
             var reloadables = reloadableAssemblyFileQuery.Get().Select(raFile =>
                 new ReloadablePlugin(
                     raFile,
-                loaderFactory,
-                _eventOnLevelWasLoaded,
-                cachedLog.CreateTag("Reloadable:" + raFile.Name),
-                queryProvider)).Cast<IReloadablePlugin>().ToList();
+                    loaderFactory,
+                    new ModifiedAssemblyFactory(),
+                    _eventOnLevelWasLoaded,
+                    cachedLog.CreateTag("Reloadable:" + raFile.Name),
+                    queryProvider)).Cast<IReloadablePlugin>().ToList();
 
 
             reloadables.ForEach(r => r.Load());

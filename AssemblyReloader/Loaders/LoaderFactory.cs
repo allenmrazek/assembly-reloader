@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
+using AssemblyReloader.Game;
 using AssemblyReloader.Loaders.Addon;
 using AssemblyReloader.Loaders.PMLoader;
 using AssemblyReloader.Providers.SceneProviders;
@@ -13,6 +14,7 @@ namespace AssemblyReloader.Loaders
     public class LoaderFactory : ILoaderFactory
     {
         private readonly IAddonFactory _addonFactory;
+        private readonly IPartModuleFactory _partModuleFactory;
         private readonly IAddonsFromAssemblyQuery _addonsFromAssemblyQuery;
         private readonly IPartModulesFromAssemblyQuery _partModulesFromAssemblyQuery;
         private readonly ICurrentStartupSceneProvider _currentStartupSceneQuery;
@@ -23,6 +25,7 @@ namespace AssemblyReloader.Loaders
 
         public LoaderFactory(
             IAddonFactory addonFactory,
+            IPartModuleFactory partModuleFactory,
             IPartModuleInfoFactory partModuleInfoFactory,
 
             IPartModuleFlightConfigRepository pmConfigRepository,
@@ -35,6 +38,7 @@ namespace AssemblyReloader.Loaders
             )
         {
             if (addonFactory == null) throw new ArgumentNullException("addonFactory");
+            if (partModuleFactory == null) throw new ArgumentNullException("partModuleFactory");
             if (addonsFromAssemblyQuery == null) throw new ArgumentNullException("addonsFromAssemblyQuery");
             if (partModulesFromAssemblyQuery == null) throw new ArgumentNullException("partModulesFromAssemblyQuery");
             if (currentStartupSceneQuery == null) throw new ArgumentNullException("currentStartupSceneQuery");
@@ -44,6 +48,7 @@ namespace AssemblyReloader.Loaders
 
 
             _addonFactory = addonFactory;
+            _partModuleFactory = partModuleFactory;
             _addonsFromAssemblyQuery = addonsFromAssemblyQuery;
             _partModulesFromAssemblyQuery = partModulesFromAssemblyQuery;
             _currentStartupSceneQuery = currentStartupSceneQuery;
@@ -88,6 +93,7 @@ namespace AssemblyReloader.Loaders
             var loader = new PartModuleLoader(
                 _partModulesFromAssemblyQuery.Get(assembly), 
                 _pmConfigRepository,
+                _partModuleFactory,
                 _partModuleInfoFactory,
                 log.CreateTag("PartModuleLoader"));
 

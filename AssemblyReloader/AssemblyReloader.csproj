@@ -54,6 +54,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Game\IPartModuleFactory.cs" />
+    <Compile Include="Game\PartModuleFactory.cs" />
+    <Compile Include="Game\PartModuleProxy.cs" />
+    <Compile Include="ILModifications\Assembly\IModifiedAssembly.cs" />
+    <Compile Include="ILModifications\Assembly\IModifiedAssemblyFactory.cs" />
+    <Compile Include="ILModifications\Assembly\ModifiedAssembly.cs" />
+    <Compile Include="ILModifications\Assembly\ModifiedAssemblyFactory.cs" />
     <Compile Include="Loaders\AddonLoader\AddonLoader.cs" />
     <Compile Include="Loaders\AddonLoader\IAddonLoader.cs" />
     <Compile Include="Controllers\IReloadableController.cs" />
@@ -99,7 +106,6 @@
     <Compile Include="Messages\IMessage.cs" />
     <Compile Include="Loaders\LoaderFactory.cs" />
     <Compile Include="Logging\CachedLog.cs" />
-    <Compile Include="ILModifications\ModifyPluginIdentity.cs" />
     <Compile Include="CompositeRoot\Core.cs" />
     <Compile Include="PluginTracking\ReloadablePlugin.cs" />
     <Compile Include="GUI\MainViewWindowLogic.cs" />
@@ -116,6 +122,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="CompositeRoot\MessageChannel\" />
+    <Folder Include="ILModifications\Operations\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\btnBackground.png" />

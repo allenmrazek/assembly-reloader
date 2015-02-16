@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
+using AssemblyReloader.Game;
 using AssemblyReloader.Providers;
 using AssemblyReloader.Repositories;
 using ReeperCommon.Extensions;
@@ -15,6 +16,7 @@ namespace AssemblyReloader.Loaders.PMLoader
     {
         private readonly IEnumerable<Type> _partModules;
         private readonly IPartModuleFlightConfigRepository _flightConfigs;
+        private readonly IPartModuleFactory _partModuleFactory;
         private readonly IPartModuleInfoFactory _pmiFactory;
         private readonly ILog _log;
 
@@ -22,18 +24,24 @@ namespace AssemblyReloader.Loaders.PMLoader
  
         public PartModuleLoader(
             IEnumerable<Type> partModules, 
+
+            
             IPartModuleFlightConfigRepository flightConfigs,
+
+            IPartModuleFactory partModuleFactory,
             IPartModuleInfoFactory pmiFactory,
 
             ILog log)
         {
             if (partModules == null) throw new ArgumentNullException("partModules");
             if (flightConfigs == null) throw new ArgumentNullException("flightConfigs");
+            if (partModuleFactory == null) throw new ArgumentNullException("partModuleFactory");
             if (pmiFactory == null) throw new ArgumentNullException("pmiFactory");
             if (log == null) throw new ArgumentNullException("log");
 
             _partModules = partModules;
             _flightConfigs = flightConfigs;
+            _partModuleFactory = partModuleFactory;
             _pmiFactory = pmiFactory;
             _log = log;
         }
@@ -150,7 +158,7 @@ namespace AssemblyReloader.Loaders.PMLoader
             {
                 _log.Debug("Adding {0} to {1}", info.PmType.FullName, info.Prefab.name);
 
-                var pm = CreatePartModule(info.Prefab, info.PmType, info.Config, true);
+                var pm = _partModuleFactory.AddPseudoModule(info.PmType, info.Prefab, info.Config, true);
 
                 if (pm.IsNull())
                 {
@@ -174,42 +182,19 @@ namespace AssemblyReloader.Loaders.PMLoader
 
         private void LoadPartModuleIntoFlightParts(PartModuleInfo info, IEnumerable<Part> parts)
         {
-            if (info == null) throw new ArgumentNullException("info");
-            if (parts == null) throw new ArgumentNullException("parts");
+            throw new NotImplementedException();
+            //if (info == null) throw new ArgumentNullException("info");
+            //if (parts == null) throw new ArgumentNullException("parts");
 
-            foreach (var part in parts)
-            {
-                var config = _flightConfigs.Retrieve(part.flightID, info.Identifier).Or(info.Config);
-                CreatePartModule(part, info.PmType, config);
-            }
+            //foreach (var part in parts)
+            //{
+            //    var config = _flightConfigs.Retrieve(part.flightID, info.Identifier).Or(info.Config);
+            //    CreatePartModule(part, info.PmType, config);
+            //}
         }
 
 
-        private PartModule CreatePartModule(Part owner, Type pmType, ConfigNode config, bool forceAwake = false)
-        {
-            if (owner == null) throw new ArgumentNullException("owner");
-            if (pmType == null) throw new ArgumentNullException("pmType");
-            if (config == null) throw new ArgumentNullException("config");
 
-            var pm = owner.gameObject.AddComponent(pmType) as PartModule;
-
-            if (pm.IsNull())
-            {
-                _log.Error("Failed to add {0} to {1}; AddComponent returned null", pmType.FullName,
-                    owner.name);
-                return null;
-            }
-
-            owner.Modules.Add(pm);
-
-            if (forceAwake)
-                typeof(PartModule).GetMethod("Awake", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.FlattenHierarchy)
-                    .Invoke(pm, null);
-
-            pm.Load(config);
-
-            return pm;
-        }
 
 
         private IEnumerable<Part> GetLoadedInstancesOfPart(Part prefab)
