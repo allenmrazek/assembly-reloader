@@ -21,16 +21,6 @@ namespace AssemblyReloader.CompositeRoot.MonoBehaviours
                 return;
             }
 
-            //int partLoaderIdx = ls.loaders.IndexOf(ls.loaders.Find(loader => loader is PartLoader));
-
-            //if (partLoaderIdx < 0)
-            //{
-            //    Abort("AssemblyReloader failed to find PartLoader; aborting");
-            //    return;
-            //}
-
-            //ls.loaders.Insert(partLoaderIdx, this);
-
             ls.loaders.Add(this);
             ls.loaders.ForEach(l => print("Loader: " + l.GetType().FullName));
         }

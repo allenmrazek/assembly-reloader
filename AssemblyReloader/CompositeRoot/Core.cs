@@ -5,7 +5,6 @@ using System.Linq;
 using System.Reflection;
 using AssemblyReloader.Controllers;
 using AssemblyReloader.Destruction;
-using AssemblyReloader.Game;
 using AssemblyReloader.GUI;
 using AssemblyReloader.ILModifications;
 using AssemblyReloader.ILModifications.Assembly;
@@ -143,7 +142,9 @@ namespace AssemblyReloader.CompositeRoot
                 
 
             var queryProvider = new QueryFactory();
-
+            var partModuleFactory = new PartModuleFactory();
+            var partInfoFactory = new PartModuleInfoFactory(new PartConfigProvider(),
+                new ModuleConfigsFromPartConfigQuery(), _log.CreateTag("PartModuleInfo"));
 
 
 
@@ -161,17 +162,14 @@ namespace AssemblyReloader.CompositeRoot
 
             var loaderFactory = new LoaderFactory(
                 addonFactory,
-                new PartModuleFactory(),
-                new PartModuleInfoFactory(new PartConfigProvider(), new ModuleConfigsFromPartConfigQuery(), _log.CreateTag("PartModuleInfo")),
-
-                new PartModuleFlightConfigRepository(),
+                partModuleFactory,
+                partInfoFactory,
 
                 queryProvider.GetAddonsFromAssemblyQuery(),
                 new PartModulesFromAssemblyQuery(),
                 new CurrentStartupSceneProvider(
                     new StartupSceneFromGameSceneQuery(),
-                    new CurrentGameSceneProvider()),
-                new CurrentGameSceneProvider()
+                    new CurrentGameSceneProvider())
                 );
 
 

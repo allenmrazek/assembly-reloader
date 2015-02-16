@@ -23,10 +23,5 @@ namespace AssemblyReloader.ILModifications.Assembly
         {
             throw new NotImplementedException();
         }
-
-        public Maybe<TypeDefinition> GetType(string name)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

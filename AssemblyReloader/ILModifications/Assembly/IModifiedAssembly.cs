@@ -8,7 +8,5 @@ namespace AssemblyReloader.ILModifications.Assembly
     {
         void Rename(Guid guid);
         void Trampoline(MethodDefinition from, MethodDefinition to);
-
-        Maybe<TypeDefinition> GetType(string name);
     }
 }

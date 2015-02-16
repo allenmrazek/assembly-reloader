@@ -54,9 +54,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Game\IPartModuleFactory.cs" />
-    <Compile Include="Game\PartModuleFactory.cs" />
-    <Compile Include="Game\PartModuleProxy.cs" />
+    <Compile Include="ILModifications\Operations\RenameOnSave.cs" />
+    <Compile Include="Loaders\PMLoader\IPartModuleFactory.cs" />
+    <Compile Include="Loaders\PMLoader\PartModuleFactory.cs" />
+    <Compile Include="Loaders\PMLoader\PartModuleProxy.cs" />
     <Compile Include="ILModifications\Assembly\IModifiedAssembly.cs" />
     <Compile Include="ILModifications\Assembly\IModifiedAssemblyFactory.cs" />
     <Compile Include="ILModifications\Assembly\ModifiedAssembly.cs" />
@@ -71,6 +72,7 @@
     <Compile Include="GUI\WindowFactory.cs" />
     <Compile Include="GUI\LogViewLogic.cs" />
     <Compile Include="Loaders\AddonLoader\Addon.cs" />
+    <Compile Include="Loaders\PMLoader\FlightHandler.cs" />
     <Compile Include="Loaders\PMLoader\IPartModuleInfoFactory.cs" />
     <Compile Include="Loaders\PMLoader\PartModuleInfo.cs" />
     <Compile Include="Loaders\PMLoader\PartModuleInfoFactory.cs" />
@@ -82,6 +84,8 @@
     <Compile Include="Providers\LoadedVesselProvider.cs" />
     <Compile Include="Queries\AssemblyQueries\IPartModulesFromAssemblyQuery.cs" />
     <Compile Include="Queries\AssemblyQueries\PartModulesFromAssemblyQuery.cs" />
+    <Compile Include="Queries\CecilQueries\IPartModuleDefinitionsQuery.cs" />
+    <Compile Include="Queries\CecilQueries\PartModuleDefinitionsQuery.cs" />
     <Compile Include="Queries\ConfigNodeQueries\IModuleConfigsFromPartConfigQuery.cs" />
     <Compile Include="Queries\ConfigNodeQueries\ModuleConfigsFromPartConfigQuery.cs" />
     <Compile Include="Queries\ConversionQueries\IAddonAttributeFromTypeQuery.cs" />
@@ -122,7 +126,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="CompositeRoot\MessageChannel\" />
-    <Folder Include="ILModifications\Operations\" />
+    <Folder Include="Game\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\btnBackground.png" />

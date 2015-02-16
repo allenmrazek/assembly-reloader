@@ -64,6 +64,9 @@
   <PropertyGroup>
     <PostBuildEvent>set ksp=D:\For New Computer\Kerbal Space Program\GameData
 
+REM save a copy for unit testing
+copy "$(ProjectDir)bin\$(Configuration)\$(TargetFileName)" "$(SolutionDir)AssemblyReloader\bin\$(Configuration)\$(TargetFileName)" /Y
+
 rename "$(ProjectDir)bin\$(Configuration)\$(TargetFileName)" $(TargetFileName).reloadable
 robocopy "$(ProjectDir)bin\$(Configuration)" "$(ProjectDir)GameData\$(ProjectName)" $(TargetFileName).reloadable
 robocopy "$(ProjectDir)bin\$(Configuration)" "$(ProjectDir)GameData\$(ProjectName)" ReeperCommon.dll

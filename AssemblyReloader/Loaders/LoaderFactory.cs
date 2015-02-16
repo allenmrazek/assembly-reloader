@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
-using AssemblyReloader.Game;
 using AssemblyReloader.Loaders.Addon;
 using AssemblyReloader.Loaders.PMLoader;
 using AssemblyReloader.Providers.SceneProviders;
@@ -18,23 +17,17 @@ namespace AssemblyReloader.Loaders
         private readonly IAddonsFromAssemblyQuery _addonsFromAssemblyQuery;
         private readonly IPartModulesFromAssemblyQuery _partModulesFromAssemblyQuery;
         private readonly ICurrentStartupSceneProvider _currentStartupSceneQuery;
-        private readonly ICurrentGameSceneProvider _currentGameSceneQuery;
         private readonly IPartModuleInfoFactory _partModuleInfoFactory;
-        private readonly IPartModuleFlightConfigRepository _pmConfigRepository;
 
 
         public LoaderFactory(
             IAddonFactory addonFactory,
             IPartModuleFactory partModuleFactory,
             IPartModuleInfoFactory partModuleInfoFactory,
-
-            IPartModuleFlightConfigRepository pmConfigRepository,
-
         
             IAddonsFromAssemblyQuery addonsFromAssemblyQuery,
             IPartModulesFromAssemblyQuery partModulesFromAssemblyQuery,
-            ICurrentStartupSceneProvider currentStartupSceneQuery,
-            ICurrentGameSceneProvider currentGameSceneQuery
+            ICurrentStartupSceneProvider currentStartupSceneQuery
             )
         {
             if (addonFactory == null) throw new ArgumentNullException("addonFactory");
@@ -42,9 +35,7 @@ namespace AssemblyReloader.Loaders
             if (addonsFromAssemblyQuery == null) throw new ArgumentNullException("addonsFromAssemblyQuery");
             if (partModulesFromAssemblyQuery == null) throw new ArgumentNullException("partModulesFromAssemblyQuery");
             if (currentStartupSceneQuery == null) throw new ArgumentNullException("currentStartupSceneQuery");
-            if (currentGameSceneQuery == null) throw new ArgumentNullException("currentGameSceneQuery");
             if (partModuleInfoFactory == null) throw new ArgumentNullException("partModuleInfoFactory");
-            if (pmConfigRepository == null) throw new ArgumentNullException("pmConfigRepository");
 
 
             _addonFactory = addonFactory;
@@ -52,9 +43,7 @@ namespace AssemblyReloader.Loaders
             _addonsFromAssemblyQuery = addonsFromAssemblyQuery;
             _partModulesFromAssemblyQuery = partModulesFromAssemblyQuery;
             _currentStartupSceneQuery = currentStartupSceneQuery;
-            _currentGameSceneQuery = currentGameSceneQuery;
             _partModuleInfoFactory = partModuleInfoFactory;
-            _pmConfigRepository = pmConfigRepository;
         }
 
 
@@ -92,15 +81,14 @@ namespace AssemblyReloader.Loaders
 
             var loader = new PartModuleLoader(
                 _partModulesFromAssemblyQuery.Get(assembly), 
-                _pmConfigRepository,
                 _partModuleFactory,
                 _partModuleInfoFactory,
                 log.CreateTag("PartModuleLoader"));
 
             loader.LoadPartModulesIntoPrefabs();
 
-            if (_currentStartupSceneQuery.Get() == KSPAddon.Startup.Flight)
-                loader.LoadPartModulesIntoFlight();
+            //if (_currentStartupSceneQuery.Get() == KSPAddon.Startup.Flight)
+            //    loader.LoadPartModulesIntoFlight();
 
             return loader;
         }

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AssemblyReloader.Game
+namespace AssemblyReloader.Loaders.PMLoader
 {
     public interface IPartModuleFactory
     {

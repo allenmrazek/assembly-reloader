@@ -2,7 +2,7 @@
 using System.Reflection;
 using ReeperCommon.Extensions;
 
-namespace AssemblyReloader.Game
+namespace AssemblyReloader.Loaders.PMLoader
 {
     class PartModuleFactory : IPartModuleFactory
     {
@@ -12,7 +12,7 @@ namespace AssemblyReloader.Game
             //var wa
 
             // unfinished!
-            throw new NotImplementedException();
+            return pseudoModule;
         }
 
         /// <summary>

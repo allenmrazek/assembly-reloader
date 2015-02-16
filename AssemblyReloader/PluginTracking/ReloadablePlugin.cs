@@ -4,6 +4,7 @@ using System.Reflection;
 using AssemblyReloader.Addon;
 using AssemblyReloader.ILModifications;
 using AssemblyReloader.ILModifications.Assembly;
+using AssemblyReloader.ILModifications.Operations;
 using AssemblyReloader.Loaders;
 using AssemblyReloader.Loaders.Addon;
 using AssemblyReloader.Queries;
@@ -92,6 +93,11 @@ namespace AssemblyReloader.PluginTracking
 
             var attr = definition.CustomAttributes.FirstOrDefault(ca => ca.AttributeType.Name == "GuidAttribute");
             _log.Normal("GuidAttribute: " + attr.ConstructorArguments[0].Value);
+
+            _log.Normal("Listing types");
+            var test = new RenameOnSave(definition, _log.CreateTag("RenameOnSave"));
+            test.RenameOnSaveMethods("CorrectNameOnSave");
+            _log.Normal("End list of types");
 
             //attr.ConstructorArguments[0].Value = Guid.NewGuid();
 
