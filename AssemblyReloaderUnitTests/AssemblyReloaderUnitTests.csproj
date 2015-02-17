@@ -99,14 +99,25 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\TestReloadableController.cs" />
-    <Compile Include="Fixture\Fixture_Addons.cs" />
-    <Compile Include="Fixture\Fixture_PartModules.cs" />
-    <Compile Include="Fixture\Fixture_TestAssembly.cs" />
+    <Compile Include="FixtureCustomizations\AssemblyIsLocalAssemblyCustomization.cs" />
+    <Compile Include="FixtureCustomizations\UnmodifiedTestProjectTypeDefinitionCustomization.cs" />
+    <Compile Include="TestData\Addons\IrrelevantAddonContainerClass.cs" />
+    <Compile Include="TestData\Addons\MonoBehaviour_WithNoAddon.cs" />
+    <Compile Include="TestData\Addons\TestAddon_InvalidResult.cs" />
+    <Compile Include="TestData\Addons\TestAddon_InvalidResultPartModule.cs" />
+    <Compile Include="TestData\Addons\TestAddon_MultipleAttributes.cs" />
+    <Compile Include="TestData\Addons\TestAddon_Private.cs" />
+    <Compile Include="TestData\Addons\TestAddon_Public.cs" />
+    <Compile Include="TestData\PartModules\DerivedPartModule.cs" />
+    <Compile Include="TestData\PartModules\PartModuleContainerClass.cs" />
+    <Compile Include="TestData\PartModules\TestPartModule.cs" />
+    <Compile Include="FixtureCustomizations\UnmodifiedTestProjectAssemblyDefinitionCustomization.cs" />
     <Compile Include="Loaders\Addon\AddonLoader_Test.cs" />
     <Compile Include="Loaders\LoaderFactory_Test.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Queries\AssemblyQueries\AddonsFromAssemblyQuery_Test.cs" />
     <Compile Include="Queries\AssemblyQueries\PartModulesFromAssemblyQuery_Test.cs" />
+    <Compile Include="Queries\CecilQueries\MethodDefinitionQuery_Test.cs" />
     <Compile Include="Queries\CecilQueries\PartModuleDefinitionsQuery_Test.cs" />
     <Compile Include="Queries\ConversionQueries\AddonAttributeFromTypeQuery_Test.cs" />
     <Compile Include="Repositories\PartModuleFlightConfigRepository_Test.cs" />

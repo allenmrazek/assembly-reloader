@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using AssemblyReloader.Queries.ConversionQueries;
+using AssemblyReloaderUnitTests.TestData;
+using AssemblyReloaderUnitTests.TestData.Addons;
 using Xunit;
 
 namespace AssemblyReloaderUnitTests.Queries.ConversionQueries
@@ -14,7 +16,7 @@ namespace AssemblyReloaderUnitTests.Queries.ConversionQueries
         {
             var sut = new AddonAttributeFromTypeQuery();
 
-            Assert.True(sut.Get(typeof (Fixture.TestAddon_Public)).Any());
+            Assert.True(sut.Get(typeof (TestAddon_Public)).Any());
         }
 
 
@@ -23,7 +25,7 @@ namespace AssemblyReloaderUnitTests.Queries.ConversionQueries
         {
             var sut = new AddonAttributeFromTypeQuery();
 
-            Assert.False(sut.Get(typeof (Fixture.MonoBehaviour_WithNoAddon)).Any());
+            Assert.False(sut.Get(typeof (MonoBehaviour_WithNoAddon)).Any());
         }
 
 
@@ -32,7 +34,7 @@ namespace AssemblyReloaderUnitTests.Queries.ConversionQueries
         {
             var sut = new AddonAttributeFromTypeQuery();
 
-            var result = sut.Get(typeof (Fixture.TestAddon_MultipleAttributes));
+            var result = sut.Get(typeof (TestAddon_MultipleAttributes));
 
             Assert.True(result.Any());
             Assert.True(typeof (KSPAddon).BaseType == result.Single().GetType().BaseType);

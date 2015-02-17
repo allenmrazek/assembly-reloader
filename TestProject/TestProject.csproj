@@ -49,8 +49,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="PartModuleTest.cs" />
+    <Compile Include="TestData\DerivativePartModule.cs" />
+    <Compile Include="TestData\InternalPartModule.cs" />
+    <Compile Include="TestData\PartModuleUnitTestVersion.cs" />
+    <Compile Include="TestData\PartModuleTest_SuppressedOnLoad.cs" />
+    <Compile Include="TestData\PartModuleTest_WithVariousOnLoad.cs" />
     <Compile Include="Playground.cs" />
+    <Compile Include="TestPartModule.cs" />
     <Compile Include="TestReloadProject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

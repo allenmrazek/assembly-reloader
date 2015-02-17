@@ -4,7 +4,10 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using AssemblyReloader.Queries.AssemblyQueries;
-using AssemblyReloaderUnitTests.Fixture;
+using AssemblyReloaderUnitTests.FixtureCustomizations;
+using AssemblyReloaderUnitTests.TestData;
+using AssemblyReloaderUnitTests.TestData.PartModules;
+using Ploeh.AutoFixture;
 using Xunit;
 
 namespace AssemblyReloaderUnitTests.Queries.AssemblyQueries
@@ -14,9 +17,12 @@ namespace AssemblyReloaderUnitTests.Queries.AssemblyQueries
         [Fact]
         void Get_Returns_TestPartModuleAndDerived()
         {
+            var fixture = new Fixture();
+            fixture.Customize(new AssemblyIsLocalAssemblyCustomization());
+
             var sut = new PartModulesFromAssemblyQuery();
 
-            var results = sut.Get(Assembly.GetExecutingAssembly());
+            var results = sut.Get(fixture.CreateAnonymous<Assembly>()).ToList();
 
             Assert.NotEmpty(results);
             Assert.Contains(typeof (TestPartModule), results);
@@ -28,9 +34,11 @@ namespace AssemblyReloaderUnitTests.Queries.AssemblyQueries
         [Fact]
         void Get_Returns_PrivateAndInner_PartModules()
         {
+            var fixture = new Fixture();
+            fixture.Customize(new AssemblyIsLocalAssemblyCustomization());
             var sut = new PartModulesFromAssemblyQuery();
 
-            var results = sut.Get(Assembly.GetExecutingAssembly());
+            var results = sut.Get(fixture.CreateAnonymous<Assembly>()).ToList();
 
             Assert.NotEmpty(results);
             Assert.Contains(typeof(PartModuleContainerClass.InnerPartModule), results);

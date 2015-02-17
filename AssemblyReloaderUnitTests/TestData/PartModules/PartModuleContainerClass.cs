@@ -1,20 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace AssemblyReloaderUnitTests.Fixture
+namespace AssemblyReloaderUnitTests.TestData.PartModules
 {
-    class TestPartModule : PartModule
-    {
-
-    }
-
-    class DerivedPartModule : TestPartModule
-    {
-
-    }
-
     public class PartModuleContainerClass
     {
         

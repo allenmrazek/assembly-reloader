@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using AssemblyReloader.Queries.CecilQueries;
 using Mono.Cecil;
 using ReeperCommon.Logging;
 
@@ -22,17 +23,16 @@ namespace AssemblyReloader.ILModifications.Operations
 
         public void RenameOnSaveMethods(string newName)
         {
-            //var results = _assemblyDefinition.MainModule.Types;
-            //var results = _assemblyDefinition.MainModule.Types.SelectMany(GetAllTypes);
-            var results = _assemblyDefinition.MainModule.GetTypes();
-            results.ToList().ForEach(result =>
-            {
-                _log.Normal("Type: " + result.FullName);
-                _log.Normal("  BaseType: " + (result.BaseType != null ? result.BaseType.FullName : "<null>"));
+            var partModuleDefinitionsQuery = new PartModuleDefinitionsQuery();
 
-                if (IsPartModule(result))
-                    _log.Normal("  *** PartModule ***");
-            });
+            var partModuleDefinitions = partModuleDefinitionsQuery.Get(_assemblyDefinition).ToList();
+
+            partModuleDefinitions.ForEach(d => _log.Normal("PartModule: " + d.FullName));
+
+            foreach (var pmDef in partModuleDefinitions)
+            {
+                
+            }
         }
 
 

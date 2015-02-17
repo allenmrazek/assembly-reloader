@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace TestProject
+﻿namespace TestProject
 {
-// ReSharper disable once InconsistentNaming
     public class TestPartModule : PartModule
     {
         ////void Awake()
@@ -28,15 +22,5 @@ namespace TestProject
         {
             print(string.Format("TestPartModule.OnLoad: {0}", node.ToString()));
         }
-    }
-
-
-    public class DerivativePartModule : TestPartModule
-    {
-        
-    }
-
-    internal class InternalPartModule : PartModule
-    {
     }
 }

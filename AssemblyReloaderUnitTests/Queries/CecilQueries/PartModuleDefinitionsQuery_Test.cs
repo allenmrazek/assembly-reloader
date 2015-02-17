@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using AssemblyReloader.Queries.CecilQueries;
-using AssemblyReloaderUnitTests.Fixture;
+using AssemblyReloaderUnitTests.FixtureCustomizations;
+using Mono.Cecil;
+using Ploeh.AutoFixture;
 using Ploeh.AutoFixture.Xunit;
 using Xunit;
 using Xunit.Extensions;
@@ -15,13 +17,17 @@ namespace AssemblyReloaderUnitTests.Queries.CecilQueries
         [Theory, AutoData]
         void Get_Returns_PartModules(PartModuleDefinitionsQuery sut)
         {
-            var assembly = new Fixture_TestAssembly();
-            var result = sut.Get(assembly.Definition).Select(def => def.FullName).ToList();
+            var fixture = new Fixture();
+            fixture.Customize(new UnmodifiedTestProjectAssemblyDefinitionCustomization());
+
+            var result = sut.Get(fixture.CreateAnonymous<AssemblyDefinition>()).Select(def => def.FullName).ToList();
 
             Assert.NotEmpty(result);
-            Assert.True(result.Contains("TestProject.TestPartModule"));
-            Assert.True(result.Contains("TestProject.DerivativePartModule"));
-            Assert.True(result.Contains("TestProject.InternalPartModule"));
+            Assert.True(result.Contains("TestProject.TestData.PartModuleUnitTestVersion"));
+            Assert.True(result.Contains("TestProject.TestData.DerivativePartModule"));
+            Assert.True(result.Contains("TestProject.TestData.InternalPartModule"));
+            Assert.True(result.Contains("TestProject.TestData.PartModuleTest_SuppressedOnLoad"));
+            Assert.True(result.Contains("TestProject.TestData.PartModuleTest_WithVariousOnLoad"));
         }
     }
 }
