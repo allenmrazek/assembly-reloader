@@ -22,5 +22,10 @@
         {
             print(string.Format("TestPartModule.OnLoad: {0}", node.ToString()));
         }
+
+        public override void OnSave(ConfigNode node)
+        {
+            print(string.Format("TestPartModule.OnSave: {0}", node.ToString()));
+        }
     }
 }

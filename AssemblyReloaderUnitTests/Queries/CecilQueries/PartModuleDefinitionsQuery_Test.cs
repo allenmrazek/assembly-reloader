@@ -18,7 +18,7 @@ namespace AssemblyReloaderUnitTests.Queries.CecilQueries
         void Get_Returns_PartModules(PartModuleDefinitionsQuery sut)
         {
             var fixture = new Fixture();
-            fixture.Customize(new UnmodifiedTestProjectAssemblyDefinitionCustomization());
+            fixture.Customize(new TestProjectAssemblyCustomization());
 
             var result = sut.Get(fixture.CreateAnonymous<AssemblyDefinition>()).Select(def => def.FullName).ToList();
 
@@ -27,7 +27,7 @@ namespace AssemblyReloaderUnitTests.Queries.CecilQueries
             Assert.True(result.Contains("TestProject.TestData.DerivativePartModule"));
             Assert.True(result.Contains("TestProject.TestData.InternalPartModule"));
             Assert.True(result.Contains("TestProject.TestData.PartModuleTest_SuppressedOnLoad"));
-            Assert.True(result.Contains("TestProject.TestData.PartModuleTest_WithVariousOnLoad"));
+            Assert.True(result.Contains("TestProject.TestData.PartModuleTest_WithVariousOnLoadOnSave"));
         }
     }
 }

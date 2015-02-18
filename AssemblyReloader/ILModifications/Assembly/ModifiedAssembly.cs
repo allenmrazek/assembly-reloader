@@ -23,5 +23,17 @@ namespace AssemblyReloader.ILModifications.Assembly
         {
             throw new NotImplementedException();
         }
+
+        public MethodDefinition CreateMethod(ModuleDefinition module, TypeDefinition type, string name, MethodAttributes attr)
+        {
+            if (type == null) throw new ArgumentNullException("type");
+
+            var voidReference = module.Import(typeof(void));
+
+            var method = new MethodDefinition(name, MethodAttributes.Private, voidReference);
+            type.Methods.Add(method);
+
+            return method;
+        }
     }
 }

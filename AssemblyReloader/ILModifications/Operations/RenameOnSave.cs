@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using AssemblyReloader.ILModifications.Assembly;
 using AssemblyReloader.Queries.CecilQueries;
 using Mono.Cecil;
 using ReeperCommon.Logging;
@@ -21,6 +22,7 @@ namespace AssemblyReloader.ILModifications.Operations
             _log = log;
         }
 
+
         public void RenameOnSaveMethods(string newName)
         {
             var partModuleDefinitionsQuery = new PartModuleDefinitionsQuery();
@@ -29,24 +31,28 @@ namespace AssemblyReloader.ILModifications.Operations
 
             partModuleDefinitions.ForEach(d => _log.Normal("PartModule: " + d.FullName));
 
+            var modifiedAssembly = new ModifiedAssembly(_assemblyDefinition);
+
             foreach (var pmDef in partModuleDefinitions)
             {
-                
+                var onSaveMethod = new PartModuleMethodDefinitionQuery(pmDef).GetOnSave();
+
+                if (!onSaveMethod.Any())
+                    // we'll have to handle this case at some point; this situation may occur if the author only needs the automatically-persisted KSPFields and has no need for custom method
+                {
+                    _log.Warning("No custom OnSave found in " + pmDef.FullName);
+                    continue;
+                    //throw new NotImplementedException("No custom OnSave found in " + pmDef.FullName);
+                }
+                // create new method
+                var newMethod = modifiedAssembly.CreateMethod(_assemblyDefinition.MainModule, pmDef, "AddedByCecil",
+                    MethodAttributes.Public);
+
+                newMethod.Parameters.Add(new ParameterDefinition("testParam", ParameterAttributes.In, _assemblyDefinition.MainModule.Import(typeof (string))));
+
+                // edit this method now
+
             }
-        }
-
-
-
-        //private IEnumerable<TypeDefinition> GetPartModuleDefinitions(ModuleDefinition @in)
-        //{
-        //    return @in.Types.Where(definition => definition.IsClass)
-        //        .Where(definition => definition.BaseType
-        //}
-
-        private bool IsPartModule(TypeDefinition type)
-        {
-            
-            return type.Name == "PartModule" && type.Namespace == "UnityEngine";
         }
     }
 }

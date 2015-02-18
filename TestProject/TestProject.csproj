@@ -53,7 +53,7 @@
     <Compile Include="TestData\InternalPartModule.cs" />
     <Compile Include="TestData\PartModuleUnitTestVersion.cs" />
     <Compile Include="TestData\PartModuleTest_SuppressedOnLoad.cs" />
-    <Compile Include="TestData\PartModuleTest_WithVariousOnLoad.cs" />
+    <Compile Include="TestData\PartModuleTest_WithVariousOnLoadOnSave.cs" />
     <Compile Include="Playground.cs" />
     <Compile Include="TestPartModule.cs" />
     <Compile Include="TestReloadProject.cs" />

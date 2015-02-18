@@ -84,9 +84,9 @@
     <Compile Include="Providers\LoadedVesselProvider.cs" />
     <Compile Include="Queries\AssemblyQueries\IPartModulesFromAssemblyQuery.cs" />
     <Compile Include="Queries\AssemblyQueries\PartModulesFromAssemblyQuery.cs" />
-    <Compile Include="Queries\CecilQueries\IMethodDefinitionQuery.cs" />
+    <Compile Include="Queries\CecilQueries\IPartModuleMethodDefinitionQuery.cs" />
     <Compile Include="Queries\CecilQueries\IPartModuleDefinitionsQuery.cs" />
-    <Compile Include="Queries\CecilQueries\MethodDefinitionQuery.cs" />
+    <Compile Include="Queries\CecilQueries\PartModuleMethodDefinitionQuery.cs" />
     <Compile Include="Queries\CecilQueries\PartModuleDefinitionsQuery.cs" />
     <Compile Include="Queries\ConfigNodeQueries\IModuleConfigsFromPartConfigQuery.cs" />
     <Compile Include="Queries\ConfigNodeQueries\ModuleConfigsFromPartConfigQuery.cs" />
