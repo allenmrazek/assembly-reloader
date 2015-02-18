@@ -2,6 +2,8 @@
 {
     public class TestPartModule : PartModule
     {
+        private ConfigNode local = new ConfigNode();
+
         ////void Awake()
         ////{
         ////    print("TestPartModule awake");
@@ -26,6 +28,14 @@
         public override void OnSave(ConfigNode node)
         {
             print(string.Format("TestPartModule.OnSave: {0}", node.ToString()));
+
+
+            SomeMethod(local);
+        }
+
+        private void SomeMethod(ConfigNode node)
+        {
+            
         }
     }
 }

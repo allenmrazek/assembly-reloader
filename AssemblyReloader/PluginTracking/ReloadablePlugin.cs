@@ -72,7 +72,16 @@ namespace AssemblyReloader.PluginTracking
         {
             if (stream == null) throw new ArgumentNullException("stream");
 
-            var definition = AssemblyDefinition.ReadAssembly(_location.FullPath);
+            var resolver = new DefaultAssemblyResolver();
+            resolver.AddSearchDirectory("../AssemblyReloader/");
+            resolver.AddSearchDirectory("D:/For New Computer/Kerbal Space Program/GameData/AssemblyReloader/"); // necessary for PartModuleProxy to be found
+
+            var parameters = new ReaderParameters
+            {
+                AssemblyResolver = resolver,
+            };
+
+            var definition = AssemblyDefinition.ReadAssembly(_location.FullPath, parameters);
 
             //var modifier = 
 
