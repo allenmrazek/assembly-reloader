@@ -7,7 +7,6 @@ using AssemblyReloader.Controllers;
 using AssemblyReloader.Destruction;
 using AssemblyReloader.GUI;
 using AssemblyReloader.ILModifications;
-using AssemblyReloader.ILModifications.Assembly;
 using AssemblyReloader.Loaders;
 using AssemblyReloader.Loaders.Addon;
 using AssemblyReloader.Loaders.PMLoader;
@@ -22,6 +21,7 @@ using AssemblyReloader.Queries.ConfigNodeQueries;
 using AssemblyReloader.Queries.ConversionQueries;
 using AssemblyReloader.Queries.FileSystemQueries;
 using AssemblyReloader.Repositories;
+using Mono.Cecil;
 using ReeperCommon.Events.Implementations;
 using ReeperCommon.FileSystem;
 using ReeperCommon.FileSystem.Implementations;
@@ -160,7 +160,7 @@ namespace AssemblyReloader.CompositeRoot
             _eventOnLevelWasLoaded = new EventSubscriber<GameScenes>();
                 GameEvents.onLevelWasLoaded.Add(_eventOnLevelWasLoaded.OnEvent);
 
-            var loaderFactory = new LoaderFactory(
+            var loaderFactory = new AddonLoaderFactory(
                 addonFactory,
                 partModuleFactory,
                 partInfoFactory,
@@ -184,11 +184,15 @@ namespace AssemblyReloader.CompositeRoot
 
             var reloadableAssemblyFileQuery = new ReloadableAssemblyFilesInDirectoryQuery(fsFactory.GetGameDataDirectory());
 
+            var assemblyResolver = new DefaultAssemblyResolver();
+
+            assemblyResolver.AddSearchDirectory(Assembly.GetExecutingAssembly().Location); // we'll be importing some references to types we own so this is a necessary step
+
             var reloadables = reloadableAssemblyFileQuery.Get().Select(raFile =>
                 new ReloadablePlugin(
                     raFile,
                     loaderFactory,
-                    new ModifiedAssemblyFactory(),
+                    new ModifiedAssemblyFactory(assemblyResolver, _log.CreateTag("ModifiedAssembly")),
                     _eventOnLevelWasLoaded,
                     cachedLog.CreateTag("Reloadable:" + raFile.Name),
                     queryProvider)).Cast<IReloadablePlugin>().ToList();

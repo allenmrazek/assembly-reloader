@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AssemblyReloader.Loaders.Addon
+namespace AssemblyReloader.Loaders.AddonLoader
 {
     public interface IAddonLoader : IDisposable
     {

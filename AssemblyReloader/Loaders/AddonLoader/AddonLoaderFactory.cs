@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Reflection;
 using AssemblyReloader.Loaders.Addon;
+using AssemblyReloader.Loaders.AddonLoader;
 using AssemblyReloader.Loaders.PMLoader;
 using AssemblyReloader.Providers.SceneProviders;
 using AssemblyReloader.Queries.AssemblyQueries;
@@ -10,7 +11,7 @@ using ReeperCommon.Logging;
 
 namespace AssemblyReloader.Loaders
 {
-    public class LoaderFactory : ILoaderFactory
+    public class AddonLoaderFactory : IAddonLoaderFactory
     {
         private readonly IAddonFactory _addonFactory;
         private readonly IPartModuleFactory _partModuleFactory;
@@ -20,7 +21,7 @@ namespace AssemblyReloader.Loaders
         private readonly IPartModuleInfoFactory _partModuleInfoFactory;
 
 
-        public LoaderFactory(
+        public AddonLoaderFactory(
             IAddonFactory addonFactory,
             IPartModuleFactory partModuleFactory,
             IPartModuleInfoFactory partModuleInfoFactory,
@@ -50,7 +51,7 @@ namespace AssemblyReloader.Loaders
 
 
 
-        public IAddonLoader CreateAddonLoader(Assembly assembly, ILog log)
+        public IAddonLoader Create(Assembly assembly, ILog log)
         {
             if (assembly == null) throw new ArgumentNullException("assembly");
             if (log == null) throw new ArgumentNullException("log");

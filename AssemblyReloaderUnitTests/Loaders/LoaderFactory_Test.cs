@@ -20,9 +20,9 @@ namespace AssemblyReloaderUnitTests.Loaders
         //    var curScene = Substitute.For<ICurrentStartupSceneProvider>();
         //    var cfgProvider = Substitute.For<IPartConfigProvider>();
 
-        //    var sut = new LoaderFactory(addonFactory, addonQuery, pmQuery, curScene, cfgProvider);
+        //    var sut = new AddonLoaderFactory(addonFactory, addonQuery, pmQuery, curScene, cfgProvider);
 
-        //    Assert.NotNull(sut.CreateAddonLoader(Assembly.GetExecutingAssembly(), Substitute.For<ILog>()));
+        //    Assert.NotNull(sut.Create(Assembly.GetExecutingAssembly(), Substitute.For<ILog>()));
 
         //    addonQuery.Received(1).Get(Arg.Any<Assembly>());
         //    curScene.Received(1).Get();
@@ -42,7 +42,7 @@ namespace AssemblyReloaderUnitTests.Loaders
 
         //    curScene.Get().Returns(KSPAddon.Startup.SpaceCentre);
 
-        //    var sut = new LoaderFactory(addonFactory, addonQuery, pmQuery, curScene, cfgProvider);
+        //    var sut = new AddonLoaderFactory(addonFactory, addonQuery, pmQuery, curScene, cfgProvider);
 
         //    var result = sut.CreatePartModuleLoader(Assembly.GetExecutingAssembly(), Substitute.For<ILog>());
 
