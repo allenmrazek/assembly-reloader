@@ -1,5 +1,4 @@
 ﻿using System.Reflection;
-using AssemblyReloader.Loaders.Addon;
 using ReeperCommon.Logging;
 
 namespace AssemblyReloader.Loaders.AddonLoader

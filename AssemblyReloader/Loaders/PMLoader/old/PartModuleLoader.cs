@@ -1,15 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Reflection;
-using AssemblyReloader.Providers;
-using AssemblyReloader.Repositories;
 using ReeperCommon.Extensions;
 using ReeperCommon.Logging;
-using UnityEngine;
 
-namespace AssemblyReloader.Loaders.PMLoader
+namespace AssemblyReloader.Loaders.PMLoader.old
 {
     public class PartModuleLoader : IDisposable
     {

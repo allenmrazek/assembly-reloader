@@ -1,6 +1,6 @@
 using System;
 
-namespace AssemblyReloader.Addon
+namespace AssemblyReloader.Loaders.AddonLoader
 {
     public class AddonInfo
     {

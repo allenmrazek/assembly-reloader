@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using AssemblyReloader.PluginTracking;
 using ReeperCommon.Extensions;
 using ReeperCommon.Logging;
 
@@ -12,23 +13,26 @@ namespace AssemblyReloader.Loaders.PMLoader
     public class PartModuleProxy : PartModule
     {
         public ILog Log;
-        public PartModule Real;
+        public PartModule TargetInstance;
+        public Type TargetType;
+        public ReloadablePlugin TargetAssembly;
+
         public MethodInfo RealOnSave;
 
         private void Start()
         {
             if (Log.IsNull()) throw new ArgumentException("Log required");
-            if (Real.IsNull()) throw new ArgumentException("Watched instance required");
+            if (TargetInstance.IsNull()) throw new ArgumentException("Target instance required");
         }
 
         private void OnPartPack()
         {
-            Log.Debug("OnPartPack: " + Real.GetType().FullName);
+            Log.Debug("OnPartPack: " + TargetType.FullName);
         }
 
         private void OnPartUnpack()
         {
-            Log.Debug("OnPartUnpack: " + Real.GetType().FullName);
+            Log.Debug("OnPartUnpack: " + TargetType.FullName);
         }
 
 

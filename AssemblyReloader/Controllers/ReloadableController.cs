@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using AssemblyReloader.PluginTracking;
-using AssemblyReloader.Providers.SceneProviders;
-using AssemblyReloader.Queries;
 
 namespace AssemblyReloader.Controllers
 {

@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
-using AssemblyReloader.Loaders.Addon;
-using AssemblyReloader.Loaders.AddonLoader;
 using AssemblyReloader.Loaders.PMLoader;
+using AssemblyReloader.Loaders.PMLoader.old;
 using AssemblyReloader.Providers.SceneProviders;
 using AssemblyReloader.Queries.AssemblyQueries;
-using AssemblyReloader.Repositories;
 using ReeperCommon.Logging;
 
-namespace AssemblyReloader.Loaders
+namespace AssemblyReloader.Loaders.AddonLoader
 {
     public class AddonLoaderFactory : IAddonLoaderFactory
     {
@@ -60,7 +58,7 @@ namespace AssemblyReloader.Loaders
                 _addonsFromAssemblyQuery.Get(assembly)
                     .Select(ty => _addonFactory.CreateInfoForAddonType(ty));
 
-            var loader = new Addon.AddonLoader(
+            var loader = new Loaders.AddonLoader.AddonLoader(
                 _addonFactory,
                 typeInfo,
                 log);
@@ -72,26 +70,26 @@ namespace AssemblyReloader.Loaders
 
 
 
-        public IDisposable CreatePartModuleLoader(Assembly assembly, ILog log)
-        {
-            if (assembly == null) throw new ArgumentNullException("assembly");
-            if (log == null) throw new ArgumentNullException("log");
+        //public IDisposable CreatePartModuleLoader(Assembly assembly, ILog log)
+        //{
+        //    if (assembly == null) throw new ArgumentNullException("assembly");
+        //    if (log == null) throw new ArgumentNullException("log");
 
-            log.Normal("Listing PartModules from " + assembly.FullName);
-            _partModulesFromAssemblyQuery.Get(assembly).ToList().ForEach(t => log.Normal("PartModule: " + t.FullName));
+        //    log.Normal("Listing PartModules from " + assembly.FullName);
+        //    _partModulesFromAssemblyQuery.Get(assembly).ToList().ForEach(t => log.Normal("PartModule: " + t.FullName));
 
-            var loader = new PartModuleLoader(
-                _partModulesFromAssemblyQuery.Get(assembly), 
-                _partModuleFactory,
-                _partModuleInfoFactory,
-                log.CreateTag("PartModuleLoader"));
+        //    var loader = new PartModuleLoader(
+        //        _partModulesFromAssemblyQuery.Get(assembly), 
+        //        _partModuleFactory,
+        //        _partModuleInfoFactory,
+        //        log.CreateTag("PartModuleLoader"));
 
-            loader.LoadPartModulesIntoPrefabs();
+        //    loader.LoadPartModulesIntoPrefabs();
 
-            //if (_currentStartupSceneQuery.Get() == KSPAddon.Startup.Flight)
-            //    loader.LoadPartModulesIntoFlight();
+        //    //if (_currentStartupSceneQuery.Get() == KSPAddon.Startup.Flight)
+        //    //    loader.LoadPartModulesIntoFlight();
 
-            return loader;
-        }
+        //    return loader;
+        //}
     }
 }

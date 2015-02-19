@@ -5,7 +5,7 @@ using System.Text;
 
 namespace AssemblyReloader.Messages
 {
-    public interface IMessage
+    public interface IAssemblyReloaded
     {
     }
 }

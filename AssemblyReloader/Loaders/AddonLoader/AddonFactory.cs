@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Linq;
-using AssemblyReloader.Addon;
 using AssemblyReloader.Destruction;
 using AssemblyReloader.Queries.ConversionQueries;
 using ReeperCommon.Logging;
 using UnityEngine;
 
-namespace AssemblyReloader.Loaders.Addon
+namespace AssemblyReloader.Loaders.AddonLoader
 {
     public class AddonFactory : IAddonFactory
     {

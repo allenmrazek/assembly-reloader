@@ -55,8 +55,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ILModifications\Operations\RenameOnSave.cs" />
+    <Compile Include="Loaders\PMLoader\IPartModuleLoader.cs" />
+    <Compile Include="Loaders\PMLoader\IPartModuleLoaderFactory.cs" />
     <Compile Include="Loaders\PMLoader\old\IPartModuleFactory.cs" />
     <Compile Include="Loaders\PMLoader\old\PartModuleFactory.cs" />
+    <Compile Include="Loaders\PMLoader\PartModuleLoader.cs" />
     <Compile Include="Loaders\PMLoader\PartModuleProxy.cs" />
     <Compile Include="ILModifications\IModifiedAssembly.cs" />
     <Compile Include="ILModifications\IModifiedAssemblyFactory.cs" />
@@ -78,6 +81,7 @@
     <Compile Include="Loaders\PMLoader\old\PartModuleInfoFactory.cs" />
     <Compile Include="Logging\ICachedLog.cs" />
     <Compile Include="Loaders\PMLoader\old\PartModuleLoader.cs" />
+    <Compile Include="Messages\IAssemblyReloaded.cs" />
     <Compile Include="Providers\IPartConfigProvider.cs" />
     <Compile Include="Providers\PartConfigProvider.cs" />
     <Compile Include="Providers\ILoadedVesselProvider.cs" />
@@ -109,7 +113,6 @@
     <Compile Include="Loaders\AddonLoader\AddonInfo.cs" />
     <Compile Include="Messages\IChannel.cs" />
     <Compile Include="Messages\IConsumer.cs" />
-    <Compile Include="Messages\IMessage.cs" />
     <Compile Include="Loaders\AddonLoader\AddonLoaderFactory.cs" />
     <Compile Include="Logging\CachedLog.cs" />
     <Compile Include="CompositeRoot\Core.cs" />

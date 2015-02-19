@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reflection;
 using AssemblyReloader.ILModifications;
 using AssemblyReloader.Loaders.AddonLoader;
+using AssemblyReloader.Loaders.PMLoader;
 using AssemblyReloader.Queries;
 using Mono.Cecil;
 using ReeperCommon.Events;
@@ -41,6 +42,7 @@ namespace AssemblyReloader.PluginTracking
 
             IAddonLoaderFactory addonLoaderFactory,
             IModifiedAssemblyFactory massemblyFactory,
+            
             IEventSubscriber<GameScenes> levelLoadedEvent,
             ILog log,
             IQueryFactory queryFactory)

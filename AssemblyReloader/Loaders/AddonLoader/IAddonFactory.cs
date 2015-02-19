@@ -1,7 +1,6 @@
 ﻿using System;
-using AssemblyReloader.Addon;
 
-namespace AssemblyReloader.Loaders.Addon
+namespace AssemblyReloader.Loaders.AddonLoader
 {
     public interface IAddonFactory
     {

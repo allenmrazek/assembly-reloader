@@ -1,13 +1,4 @@
-﻿using System.Reflection;
-using AssemblyReloader.Loaders;
-using AssemblyReloader.Loaders.Addon;
-using AssemblyReloader.Providers.SceneProviders;
-using AssemblyReloader.Queries.AssemblyQueries;
-using NSubstitute;
-using ReeperCommon.Logging;
-using Xunit;
-
-namespace AssemblyReloaderUnitTests.Loaders
+﻿namespace AssemblyReloaderUnitTests.Loaders
 {
     public class LoaderFactory_Test
     {
