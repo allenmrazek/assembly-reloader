@@ -10,6 +10,7 @@ using AssemblyReloader.Queries.CecilQueries;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
 using Mono.Cecil.Rocks;
+using Mono.CompilerServices.SymbolWriter;
 using ReeperCommon.Logging;
 using FieldAttributes = Mono.Cecil.FieldAttributes;
 using MethodAttributes = Mono.Cecil.MethodAttributes;
@@ -43,7 +44,10 @@ namespace AssemblyReloader.ILModifications.Operations
 
             foreach (var pmDef in partModuleDefinitions)
             {
-                var onSaveMethod = new PartModuleMethodDefinitionQuery(pmDef).GetOnSave();
+                var methodQuery = new PartModuleMethodQuery();
+
+                //var onSaveMethod = new PartModuleMethodQuery(pmDef).GetOnSaveDefinition();
+                var onSaveMethod = methodQuery.GetOnSaveDefinition(pmDef);
 
                 if (!onSaveMethod.Any())
                     // we'll have to handle this case at some point; this situation may occur if the author only needs the automatically-persisted KSPFields and has no need for custom method
@@ -58,7 +62,7 @@ namespace AssemblyReloader.ILModifications.Operations
 
                 // create new method
                 var newMethod = modifiedAssembly.CreateMethod(_assemblyDefinition.MainModule, pmDef, "AddedByCecil",
-                    MethodAttributes.Public | MethodAttributes.FamANDAssem);
+                    MethodAttributes.Public | MethodAttributes.FamANDAssem | MethodAttributes.HideBySig);
 
                 newMethod.Parameters.Add(new ParameterDefinition("testParam", ParameterAttributes.None, _assemblyDefinition.MainModule.Import(typeof (string))));
 
@@ -80,22 +84,22 @@ namespace AssemblyReloader.ILModifications.Operations
                 //processor.Append(methodCall);
 
                 _log.Normal("looking for proxy onsave");
-                var proxyOnSave = new PartModuleMethodDefinitionQuery(_assemblyDefinition.MainModule.Import(typeof(PartModuleProxy)).Resolve()).GetOnSave();
-                _log.Normal("Found proxy? " + (proxyOnSave.Any() ? "yes" : "no"));
+
+                //var proxyOnSave = new PartModuleMethodQuery(_assemblyDefinition.MainModule.Import(typeof(PartModuleProxy)).Resolve()).GetOnSaveDefinition();
+
+                //_log.Normal("Found proxy? " + (proxyOnSave.Any() ? "yes" : "no"));
 
                 //proxy.Resolve().Methods.ToList().ForEach(md => _log.Normal("Method: " + md.FullName));
-                _assemblyDefinition.MainModule.Import(proxyOnSave.Single().Resolve());
+               // _assemblyDefinition.MainModule.Import(proxyOnSave.Single().Resolve());
 
-                processor.Append(processor.Create(OpCodes.Ldarg_0));
-                processor.Append(processor.Create(OpCodes.Ldfld, field.Resolve()));
-                processor.Append(processor.Create(OpCodes.Ldarg_0));
-                //processor.Append(processor.Create(OpCodes.Call, proxyOnSave.Single().Resolve()));
-                processor.Append(processor.Create(OpCodes.Callvirt,
-                    _assemblyDefinition.MainModule.Import(typeof (PartModuleProxy).GetMethod("OnSave", BindingFlags.Instance | BindingFlags.Public))));
 
-                //processor.Append(processor.Create(OpCodes.Call, newMethod));
-                processor.Append(processor.Create(OpCodes.Ret));
-                
+                processor.Emit(OpCodes.Ldarg_0);
+                processor.Emit(OpCodes.Ldfld, field.Resolve());
+                processor.Emit(OpCodes.Ldarg_0);
+                //processor.Emit(OpCodes.Callvirt, _assemblyDefinition.MainModule.Import(typeof(PartModuleProxy).GetMethod("OnSave", BindingFlags.Instance | BindingFlags.Public)));
+                processor.Emit(OpCodes.Callvirt, _assemblyDefinition.MainModule.Import(methodQuery.GetOnSaveMethod(typeof(PartModuleProxy)).Single()));
+                processor.Emit(OpCodes.Ret);
+
             }
         }
     }

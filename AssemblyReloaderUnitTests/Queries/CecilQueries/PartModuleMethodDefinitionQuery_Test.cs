@@ -15,45 +15,43 @@ namespace AssemblyReloaderUnitTests.Queries.CecilQueries
     public class PartModuleMethodDefinitionQuery_Test
     {
         [Fact]
-        void GetOnLoad_Returns_OnLoad_Correctly()
+        void GetOnLoadDefinition_Returns_OnLoad_Correctly()
         {
             var fixture = new Fixture();
             fixture.Customize(new TestProjectAssembly_WithVariousOnLoadOnSavePartModuleCustomization());
 
-            var sut =
-                new PartModuleMethodDefinitionQuery(fixture.CreateAnonymous<TypeDefinition>());
-
-            var results = sut.GetOnLoad().ToList();
+            var sut = new PartModuleMethodQuery();
+            
+            var results = sut.GetOnLoadDefinition((fixture.CreateAnonymous<TypeDefinition>())).ToList();
 
             Assert.True(results.Any());
         }
 
 
         [Fact]
-        void GetOnSave_Returns_OnSave_Correctly()
+        void GetOnSaveDefinition_Returns_OnSave_Correctly()
         {
             var fixture = new Fixture();
             fixture.Customize(new TestProjectAssembly_WithVariousOnLoadOnSavePartModuleCustomization());
 
-            var sut =
-                new PartModuleMethodDefinitionQuery(fixture.CreateAnonymous<TypeDefinition>());
+            var sut = new PartModuleMethodQuery();
 
-            var results = sut.GetOnLoad().ToList();
+            var results = sut.GetOnLoadDefinition(fixture.CreateAnonymous<TypeDefinition>()).ToList();
 
             Assert.True(results.Any());
         }
 
 
         [Fact]
-        void GetOnLoad_Returns_Nothing_OnCorrectlyNamedMethods_But_WrongParametersOrNotVirtual()
+        void GetOnLoadDefinition_Returns_Nothing_OnCorrectlyNamedMethods_But_WrongParametersOrNotVirtual()
         {
             var fixture = new Fixture();
             fixture.Customize(new TestProjectAssembly_WithVariousOnLoadOnSavePartModuleCustomization());
 
-            var sut = new PartModuleMethodDefinitionQuery(fixture.CreateAnonymous<TypeDefinition>());
+            var sut = new PartModuleMethodQuery();
 
 
-            var results = sut.GetOnLoad();
+            var results = sut.GetOnLoadDefinition(fixture.CreateAnonymous<TypeDefinition>());
 
             Assert.True(results.Any());
             Assert.True(results.Single().FullName ==
@@ -61,19 +59,75 @@ namespace AssemblyReloaderUnitTests.Queries.CecilQueries
         }
 
         [Fact]
-        void GetOnSave_Returns_Nothing_OnCorrectlyNamedMethods_But_WrongParametersOrNotVirtual()
+        void GetOnSaveDefinition_Returns_Nothing_OnCorrectlyNamedMethods_But_WrongParametersOrNotVirtual()
         {
             var fixture = new Fixture();
             fixture.Customize(new TestProjectAssembly_WithVariousOnLoadOnSavePartModuleCustomization());
 
-            var sut = new PartModuleMethodDefinitionQuery(fixture.CreateAnonymous<TypeDefinition>());
+            var sut = new PartModuleMethodQuery();
 
 
-            var results = sut.GetOnSave();
+            var results = sut.GetOnSaveDefinition(fixture.CreateAnonymous<TypeDefinition>());
 
             Assert.True(results.Any());
             Assert.True(results.Single().FullName ==
                         "System.Void TestProject.TestData.PartModuleTest_WithVariousOnLoadOnSave::OnSave(ConfigNode)");
+        }
+
+
+        [Fact]
+        void GetOnLoadMethod_Returns_Correct()
+        {
+            var fixture = new Fixture();
+            fixture.Customize(new TestProjectAssembly_WithVariousOnLoadOnSavePartModuleCustomization());
+
+            var sut = new PartModuleMethodQuery();
+
+            var results = sut.GetOnLoadMethod(typeof (TestData.PartModules.TestPartModule));
+
+            Assert.True(results.Any());
+        }
+
+
+        [Fact]
+        void GetOnLoadMethod_Returns_Nothing_WhenPartModuleHasNoDefinedOnLoad()
+        {
+            var fixture = new Fixture();
+            fixture.Customize(new TestProjectAssembly_WithVariousOnLoadOnSavePartModuleCustomization());
+
+            var sut = new PartModuleMethodQuery();
+
+            var results = sut.GetOnLoadMethod(typeof(TestData.PartModules.PartModuleContainerClass.InnerPartModule));
+
+            Assert.False(results.Any());
+        }
+
+
+        [Fact]
+        void GetOnSaveMethod_Returns_Correct()
+        {
+            var fixture = new Fixture();
+            fixture.Customize(new TestProjectAssembly_WithVariousOnLoadOnSavePartModuleCustomization());
+
+            var sut = new PartModuleMethodQuery();
+
+            var results = sut.GetOnSaveMethod(typeof (TestData.PartModules.TestPartModule));
+
+            Assert.True(results.Any());
+        }
+
+
+        [Fact]
+        void GetOnSaveMethod_Returns_Nothing_WhenPartModuleHasNoDefinedOnLoad()
+        {
+            var fixture = new Fixture();
+            fixture.Customize(new TestProjectAssembly_WithVariousOnLoadOnSavePartModuleCustomization());
+
+            var sut = new PartModuleMethodQuery();
+
+            var results = sut.GetOnSaveMethod(typeof(TestData.PartModules.PartModuleContainerClass.InnerPartModule));
+
+            Assert.False(results.Any());
         }
     }
 }
