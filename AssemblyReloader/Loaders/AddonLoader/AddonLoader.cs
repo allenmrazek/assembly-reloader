@@ -34,6 +34,11 @@ namespace AssemblyReloader.Loaders.AddonLoader
         }
 
 
+        public void Consume(KSPAddon.Startup message)
+        {
+            LoadForScene(message);
+        }
+
 
         ~AddonLoader()
         {
@@ -67,11 +72,6 @@ namespace AssemblyReloader.Loaders.AddonLoader
                 .Where(info => !info.RunOnce || (info.RunOnce && !info.created));
         }
 
-
-        public void Load()
-        {
-            // nothing
-        }
 
 
         public void LoadForScene(KSPAddon.Startup scene)

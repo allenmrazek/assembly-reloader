@@ -30,7 +30,6 @@ namespace AssemblyReloader.PluginTracking
         private readonly IFile _location;
         private readonly IAddonLoaderFactory _addonLoaderFactory;
         private readonly IModifiedAssemblyFactory _massemblyFactory;
-        private readonly IEventSubscriber<GameScenes> _levelLoadedEvent;
         private readonly ILog _log;
         
         private IEventSubscription _addonSceneChangeSubscription;
@@ -42,22 +41,19 @@ namespace AssemblyReloader.PluginTracking
 
             IAddonLoaderFactory addonLoaderFactory,
             IModifiedAssemblyFactory massemblyFactory,
-            
-            IEventSubscriber<GameScenes> levelLoadedEvent,
+
             ILog log,
             IQueryFactory queryFactory)
         {
             if (location == null) throw new ArgumentNullException("location");
             if (addonLoaderFactory == null) throw new ArgumentNullException("addonLoaderFactory");
             if (massemblyFactory == null) throw new ArgumentNullException("massemblyFactory");
-            if (levelLoadedEvent == null) throw new ArgumentNullException("levelLoadedEvent");
             if (log == null) throw new ArgumentNullException("log");
             if (queryFactory == null) throw new ArgumentNullException("queryFactory");
 
             _location = location;
             _addonLoaderFactory = addonLoaderFactory;
             _massemblyFactory = massemblyFactory;
-            _levelLoadedEvent = levelLoadedEvent;
             _log = log;
             _queryFactory = queryFactory;
         }
@@ -89,7 +85,6 @@ namespace AssemblyReloader.PluginTracking
                 _loaded = result.Single();
 
                 _addonLoader = _addonLoaderFactory.Create(_loaded, _log);
-                _addonSceneChangeSubscription = _levelLoadedEvent.AddListener(OnGameSceneWasLoaded);
             }
         }
 
@@ -108,12 +103,6 @@ namespace AssemblyReloader.PluginTracking
             _addonLoader = null;
         }
 
-
-
-        private void OnGameSceneWasLoaded(GameScenes scene)
-        {
-            _addonLoader.LoadForScene(_queryFactory.GetStartupSceneFromGameSceneQuery().Get(scene));
-        }
 
 
         public string Name

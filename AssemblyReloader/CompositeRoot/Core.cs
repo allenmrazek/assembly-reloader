@@ -42,8 +42,7 @@ namespace AssemblyReloader.CompositeRoot
 
         private readonly IReloadableController _controller;
         private readonly MessageChannel _messageChannel;
-        private readonly ICurrentGameSceneProvider _currentSceneProvider;
-        private readonly EventSubscriber<GameScenes> _eventOnLevelWasLoaded;
+
 
         private readonly ILog _log;
 
@@ -140,31 +139,21 @@ namespace AssemblyReloader.CompositeRoot
                 
 
             var queryProvider = new QueryFactory();
-            var partModuleFactory = new PartModuleFactory();
-            var partInfoFactory = new PartModuleInfoFactory(new PartConfigProvider(),
-                new ModuleConfigsFromPartConfigQuery(), _log.CreateTag("PartModuleInfo"));
-
-
-
-
             var resourceLocator = ConfigureResourceRepository(ourDirProvider.Get());
-
-
-            
             var destructionMediator = new GameObjectDestroyForReload();
             var addonFactory = new AddonFactory(destructionMediator, cachedLog.CreateTag("AddonFactory"), queryProvider.GetAddonAttributeQuery());
 
-    
-            _eventOnLevelWasLoaded = new EventSubscriber<GameScenes>();
-                GameEvents.onLevelWasLoaded.Add(_eventOnLevelWasLoaded.OnEvent);
+            var eventOnLevelWasLoaded = new EventSubscriber<GameScenes>();
+            GameEvents.onLevelWasLoaded.Add(eventOnLevelWasLoaded.OnEvent);
 
-            var loaderFactory = new AddonLoaderFactory(
+            var eventStartupLevelLoaded = new EventSubscriber<KSPAddon.Startup>();
+            eventOnLevelWasLoaded.AddListener(
+                s => eventStartupLevelLoaded.OnEvent(queryProvider.GetStartupSceneFromGameSceneQuery().Get(s)));
+
+
+            var addonLoaderFactory = new AddonLoaderFactory(
                 addonFactory,
-                partModuleFactory,
-                partInfoFactory,
-
                 queryProvider.GetAddonsFromAssemblyQuery(),
-                new PartModulesFromAssemblyQuery(),
                 new CurrentStartupSceneProvider(
                     new StartupSceneFromGameSceneQuery(),
                     new CurrentGameSceneProvider())
@@ -189,7 +178,7 @@ namespace AssemblyReloader.CompositeRoot
             var reloadables = reloadableAssemblyFileQuery.Get().Select(raFile =>
                 new ReloadablePlugin(
                     raFile,
-                    loaderFactory,
+                    addonLoaderFactory,
                     new ModifiedAssemblyFactory(assemblyResolver, _log.CreateTag("ModifiedAssembly")),
                     _eventOnLevelWasLoaded,
                     cachedLog.CreateTag("Reloadable:" + raFile.Name),
