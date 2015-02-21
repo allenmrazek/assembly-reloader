@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
+using AssemblyReloader.CompositeRoot.Commands;
 using AssemblyReloader.ILModifications;
 using AssemblyReloader.Loaders.AddonLoader;
 using AssemblyReloader.Loaders.PMLoader;
+using AssemblyReloader.Providers.SceneProviders;
 using AssemblyReloader.Queries;
 using Mono.Cecil;
+using ReeperCommon.Containers;
 using ReeperCommon.Events;
 using ReeperCommon.Extensions;
 using ReeperCommon.FileSystem;
@@ -23,45 +26,31 @@ namespace AssemblyReloader.PluginTracking
     public class ReloadablePlugin : IReloadablePlugin
     {
         private Assembly _loaded;
-        private IAddonLoader _addonLoader;
-
-        private readonly IQueryFactory _queryFactory;
 
         private readonly IFile _location;
-        private readonly IAddonLoaderFactory _addonLoaderFactory;
+        private readonly IAddonLoader _addonLoader;
+        private readonly ICurrentStartupSceneProvider _currentSceneProvider;
         private readonly IModifiedAssemblyFactory _massemblyFactory;
-        private readonly ILog _log;
-        
-        private IEventSubscription _addonSceneChangeSubscription;
 
 
 
         public ReloadablePlugin(
             IFile location,
-
-            IAddonLoaderFactory addonLoaderFactory,
-            IModifiedAssemblyFactory massemblyFactory,
-
-            ILog log,
-            IQueryFactory queryFactory)
+            IAddonLoader addonLoader,
+            ICurrentStartupSceneProvider currentSceneProvider,
+            IModifiedAssemblyFactory massemblyFactory)
         {
             if (location == null) throw new ArgumentNullException("location");
-            if (addonLoaderFactory == null) throw new ArgumentNullException("addonLoaderFactory");
+            if (addonLoader == null) throw new ArgumentNullException("addonLoader");
+            if (currentSceneProvider == null) throw new ArgumentNullException("currentSceneProvider");
             if (massemblyFactory == null) throw new ArgumentNullException("massemblyFactory");
-            if (log == null) throw new ArgumentNullException("log");
-            if (queryFactory == null) throw new ArgumentNullException("queryFactory");
 
             _location = location;
-            _addonLoaderFactory = addonLoaderFactory;
+            _addonLoader = addonLoader;
+            _currentSceneProvider = currentSceneProvider;
             _massemblyFactory = massemblyFactory;
-            _log = log;
-            _queryFactory = queryFactory;
         }
 
-
-
-
-        
 
         public void Load()
         {
@@ -69,7 +58,6 @@ namespace AssemblyReloader.PluginTracking
             {
                 var original = _massemblyFactory.Create(_location);
 
-                _log.Debug("Renaming assembly");
                 original.Rename(Guid.NewGuid());
 
                 original.Write(stream);
@@ -77,37 +65,34 @@ namespace AssemblyReloader.PluginTracking
                 var result = original.Load(stream);
 
                 if (!result.Any())
-                {
-                    _log.Error("Failed to read modified assembly definition from memory stream!");
                     return;
-                }
+                
 
                 _loaded = result.Single();
-
-                _addonLoader = _addonLoaderFactory.Create(_loaded, _log);
+                _addonLoader.LoadAddonTypesFrom(_loaded);
+                _addonLoader.CreateForScene(_currentSceneProvider.Get());
             }
         }
-
 
 
         public void Unload()
         {
             if (_loaded.IsNull()) return; // nothing to unload in the first place
 
-            _log.Normal("Unloading " + Name);
-
-            _addonSceneChangeSubscription.Dispose(); 
-            _addonSceneChangeSubscription = null;
-
-            _addonLoader.Dispose();
-            _addonLoader = null;
+            _addonLoader.DestroyLiveAddons();
+            _addonLoader.ClearAddonTypes();
         }
-
 
 
         public string Name
         {
             get { return _location.Name; }
+        }
+
+
+        public Maybe<Assembly> Assembly
+        {
+            get { return _loaded.IsNull() ? Maybe<Assembly>.None : Maybe<Assembly>.With(_loaded); }
         }
     }
 }

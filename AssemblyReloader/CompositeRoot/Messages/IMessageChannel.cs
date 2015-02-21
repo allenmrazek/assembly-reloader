@@ -1,6 +1,6 @@
-﻿namespace AssemblyReloader.Messages
+﻿namespace AssemblyReloader.CompositeRoot.Messages
 {
-    public interface IChannel
+    public interface IMessageChannel
     {
         void Send<T>(T message);
 

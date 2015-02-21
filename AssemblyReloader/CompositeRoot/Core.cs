@@ -3,25 +3,23 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using AssemblyReloader.CompositeRoot.Commands;
+using AssemblyReloader.CompositeRoot.Messages;
 using AssemblyReloader.Controllers;
 using AssemblyReloader.Destruction;
 using AssemblyReloader.GUI;
 using AssemblyReloader.ILModifications;
 using AssemblyReloader.Loaders.AddonLoader;
-using AssemblyReloader.Loaders.PMLoader;
 using AssemblyReloader.Logging;
-using AssemblyReloader.Messages;
 using AssemblyReloader.PluginTracking;
-using AssemblyReloader.Providers;
 using AssemblyReloader.Providers.SceneProviders;
 using AssemblyReloader.Queries;
-using AssemblyReloader.Queries.AssemblyQueries;
-using AssemblyReloader.Queries.ConfigNodeQueries;
 using AssemblyReloader.Queries.ConversionQueries;
 using AssemblyReloader.Queries.FileSystemQueries;
 using Mono.Cecil;
 using ReeperCommon.Events.Implementations;
 using ReeperCommon.FileSystem;
+using ReeperCommon.FileSystem.Factories;
 using ReeperCommon.FileSystem.Implementations;
 using ReeperCommon.FileSystem.Implementations.Providers;
 using ReeperCommon.Gui.Window.View;
@@ -54,7 +52,7 @@ namespace AssemblyReloader.CompositeRoot
         }
 
 
-        private class MessageChannel : IChannel
+        private class MessageChannel : IMessageChannel
         {
             private readonly List<IConsumer> _consumers;
 
@@ -102,7 +100,7 @@ namespace AssemblyReloader.CompositeRoot
             public Consumer(object consumer)
             {
                 if (consumer == null) throw new ArgumentNullException("consumer");
-                if (!(consumer is IConsumer<T>)) throw new InvalidOperationException("consumer is not a " + typeof (T).Name);
+                if (!(consumer is IMessageConsumer<T>)) throw new InvalidOperationException("consumer is not a " + typeof (T).Name);
 
                 _consumer = consumer;
             }
@@ -110,13 +108,62 @@ namespace AssemblyReloader.CompositeRoot
 
             public void Consume(object message)
             {
-                if (message is T && _consumer is IConsumer<T>)
-                    (_consumer as IConsumer<T>).Consume((T)message);
+                if (message is T && _consumer is IMessageConsumer<T>)
+                    (_consumer as IMessageConsumer<T>).Consume((T)message);
             }
         }
 
 
 
+        private class LoadAddonsFromAssemblyCommand : ICommand
+        {
+            private readonly IAddonLoader _addonLoader;
+            private readonly IReloadablePlugin _plugin;
+            private readonly ICurrentStartupSceneProvider _currentSceneProvider;
+
+            public LoadAddonsFromAssemblyCommand(
+                IAddonLoader addonLoader, 
+                IReloadablePlugin plugin,
+                ICurrentStartupSceneProvider currentSceneProvider)
+            {
+                if (addonLoader == null) throw new ArgumentNullException("addonLoader");
+                if (plugin == null) throw new ArgumentNullException("plugin");
+                if (currentSceneProvider == null) throw new ArgumentNullException("currentSceneProvider");
+                _addonLoader = addonLoader;
+                _plugin = plugin;
+                _currentSceneProvider = currentSceneProvider;
+            }
+
+            public void Execute()
+            {
+                if (!_plugin.Assembly.Any())
+                    throw new InvalidOperationException("Plugin must be loaded");
+
+                _addonLoader.LoadAddonTypesFrom(_plugin.Assembly.Single());
+                _addonLoader.CreateForScene(_currentSceneProvider.Get());
+            }
+        }
+
+
+        private class DestroyAddonsAndClearAddonTypesCommand : ICommand
+        {
+            private readonly IAddonLoader _addonLoader;
+
+            public DestroyAddonsAndClearAddonTypesCommand(IAddonLoader addonLoader)
+            {
+                if (addonLoader == null) throw new ArgumentNullException("addonLoader");
+                _addonLoader = addonLoader;
+            }
+
+            public void Execute()
+            {
+                _addonLoader.DestroyLiveAddons();
+                _addonLoader.ClearAddonTypes();
+            }
+        }
+
+
+       
 
         public Core()
         {
@@ -138,52 +185,12 @@ namespace AssemblyReloader.CompositeRoot
             var ourDirProvider = new AssemblyDirectoryQuery(Assembly.GetExecutingAssembly(), fsFactory.GetGameDataDirectory(), _log);
                 
 
-            var queryProvider = new QueryFactory();
+            
             var resourceLocator = ConfigureResourceRepository(ourDirProvider.Get());
-            var destructionMediator = new GameObjectDestroyForReload();
-            var addonFactory = new AddonFactory(destructionMediator, cachedLog.CreateTag("AddonFactory"), queryProvider.GetAddonAttributeQuery());
+            
+            
 
-            var eventOnLevelWasLoaded = new EventSubscriber<GameScenes>();
-            GameEvents.onLevelWasLoaded.Add(eventOnLevelWasLoaded.OnEvent);
-
-            var eventStartupLevelLoaded = new EventSubscriber<KSPAddon.Startup>();
-            eventOnLevelWasLoaded.AddListener(
-                s => eventStartupLevelLoaded.OnEvent(queryProvider.GetStartupSceneFromGameSceneQuery().Get(s)));
-
-
-            var addonLoaderFactory = new AddonLoaderFactory(
-                addonFactory,
-                queryProvider.GetAddonsFromAssemblyQuery(),
-                new CurrentStartupSceneProvider(
-                    new StartupSceneFromGameSceneQuery(),
-                    new CurrentGameSceneProvider())
-                );
-
-
-
-
-
-
-
-
-
-            _log.Normal("Initializing container...");
-
-            var reloadableAssemblyFileQuery = new ReloadableAssemblyFilesInDirectoryQuery(fsFactory.GetGameDataDirectory());
-
-            var assemblyResolver = new DefaultAssemblyResolver();
-
-            assemblyResolver.AddSearchDirectory(Assembly.GetExecutingAssembly().Location); // we'll be importing some references to types we own so this is a necessary step
-
-            var reloadables = reloadableAssemblyFileQuery.Get().Select(raFile =>
-                new ReloadablePlugin(
-                    raFile,
-                    addonLoaderFactory,
-                    new ModifiedAssemblyFactory(assemblyResolver, _log.CreateTag("ModifiedAssembly")),
-                    _eventOnLevelWasLoaded,
-                    cachedLog.CreateTag("Reloadable:" + raFile.Name),
-                    queryProvider)).Cast<IReloadablePlugin>().ToList();
-
+            var reloadables = CreateReloadablePlugins(cachedLog, fsFactory).ToList();
 
             reloadables.ForEach(r => r.Load());
 
@@ -241,6 +248,37 @@ namespace AssemblyReloader.CompositeRoot
                     new ResourceIdentifierAdapter(id => id.Replace('/', '.').Replace('\\', '.'),
                         new ResourceFromEmbeddedResource(Assembly.GetExecutingAssembly()))
                     ));
+        }
+
+
+
+        private IEnumerable<IReloadablePlugin> CreateReloadablePlugins(ILog cachedLog, IFileSystemFactory fsFactory)
+        {
+            var reloadableAssemblyFileQuery = new ReloadableAssemblyFilesInDirectoryQuery(fsFactory.GetGameDataDirectory());
+            var destructionMediator = new GameObjectDestroyForReload();
+            var queryProvider = new QueryFactory();
+
+            var addonFactory = new AddonFactory(destructionMediator, cachedLog.CreateTag("AddonFactory"), queryProvider.GetAddonAttributeQuery());
+
+            var assemblyResolver = new DefaultAssemblyResolver();
+
+            assemblyResolver.AddSearchDirectory(Assembly.GetExecutingAssembly().Location); // we'll be importing some references to types we own so this is a necessary step
+
+
+
+            return reloadableAssemblyFileQuery.Get().Select(raFile =>
+            {
+                var addonLoader = new Loaders.AddonLoader.AddonLoader(addonFactory, cachedLog);
+
+                IReloadablePlugin plugin = new ReloadablePlugin(
+                    raFile,
+                    addonLoader,
+                    new CurrentStartupSceneProvider(queryProvider.GetStartupSceneFromGameSceneQuery(),
+                        new CurrentGameSceneProvider()),
+                    new ModifiedAssemblyFactory(assemblyResolver, cachedLog));
+
+                return plugin;
+            });
         }
     }
 }

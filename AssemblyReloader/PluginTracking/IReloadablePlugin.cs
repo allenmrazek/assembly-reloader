@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using ReeperCommon.Containers;
 
 namespace AssemblyReloader.PluginTracking
 {
@@ -10,5 +11,7 @@ namespace AssemblyReloader.PluginTracking
         void Unload();
 
         string Name { get; }
+
+        Maybe<Assembly> Assembly { get; }
     }
 }

@@ -1,10 +1,13 @@
-﻿using System;
-using AssemblyReloader.Messages;
+﻿using System.Reflection;
 
 namespace AssemblyReloader.Loaders.AddonLoader
 {
-    public interface IAddonLoader : IDisposable, IConsumer<KSPAddon.Startup>
+    public interface IAddonLoader
     {
-        void LoadForScene(KSPAddon.Startup scene);
+        void CreateForScene(KSPAddon.Startup scene);
+        void LoadAddonTypesFrom(Assembly assembly);
+        void ClearAddonTypes(bool destroyLiveAddons = true);
+        void DestroyLiveAddons();
+      
     }
 }

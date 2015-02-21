@@ -70,7 +70,6 @@
     <Compile Include="Controllers\IReloadableController.cs" />
     <Compile Include="CompositeRoot\MonoBehaviours\CoreView.cs" />
     <Compile Include="Loaders\AddonLoader\IAddonFactory.cs" />
-    <Compile Include="Loaders\AddonLoader\IAddonLoaderFactory.cs" />
     <Compile Include="Loaders\AddonLoader\AddonFactory.cs" />
     <Compile Include="GUI\WindowFactory.cs" />
     <Compile Include="GUI\LogViewLogic.cs" />
@@ -81,7 +80,8 @@
     <Compile Include="Loaders\PMLoader\old\PartModuleInfoFactory.cs" />
     <Compile Include="Logging\ICachedLog.cs" />
     <Compile Include="Loaders\PMLoader\old\PartModuleLoader.cs" />
-    <Compile Include="Messages\IAssemblyReloaded.cs" />
+    <Compile Include="CompositeRoot\Commands\ICommand.cs" />
+    <Compile Include="CompositeRoot\Commands\CompositeCommand.cs" />
     <Compile Include="Providers\IPartConfigProvider.cs" />
     <Compile Include="Providers\PartConfigProvider.cs" />
     <Compile Include="Providers\ILoadedVesselProvider.cs" />
@@ -111,9 +111,8 @@
     <Compile Include="Queries\FileSystemQueries\IReloadableAssemblyFileLocationQuery.cs" />
     <Compile Include="Queries\ConversionQueries\IStartupSceneFromGameSceneQuery.cs" />
     <Compile Include="Loaders\AddonLoader\AddonInfo.cs" />
-    <Compile Include="Messages\IChannel.cs" />
-    <Compile Include="Messages\IConsumer.cs" />
-    <Compile Include="Loaders\AddonLoader\AddonLoaderFactory.cs" />
+    <Compile Include="CompositeRoot\Messages\IMessageChannel.cs" />
+    <Compile Include="CompositeRoot\Messages\IMessageConsumer.cs" />
     <Compile Include="Logging\CachedLog.cs" />
     <Compile Include="CompositeRoot\Core.cs" />
     <Compile Include="PluginTracking\ReloadablePlugin.cs" />
@@ -130,7 +129,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="CompositeRoot\MessageChannel\" />
     <Folder Include="Game\" />
   </ItemGroup>
   <ItemGroup>
