@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using AssemblyReloader.PluginTracking;
 using AssemblyReloader.Providers.SceneProviders;
+using AssemblyReloader.Queries.AssemblyQueries;
 using ReeperCommon.Logging;
 
 namespace AssemblyReloader.Loaders.AddonLoader
@@ -12,22 +13,29 @@ namespace AssemblyReloader.Loaders.AddonLoader
     {
         // Mainly required so we can flag addons when they've
         // been created in the case of runOnce = true
-
         private readonly IAddonFactory _addonFactory;
+        private readonly IAddonsFromAssemblyQuery _addonsFromAssemblyQuery;
+        private readonly ICurrentStartupSceneProvider _currentScene;
         private readonly ILog _log;
 
-        private readonly List<AddonInfo> _addons = new List<AddonInfo>();
+        private List<AddonInfo> _addons = new List<AddonInfo>();
         private readonly List<IDisposable> _created = new List<IDisposable>();
 
 
         public AddonLoader(
             IAddonFactory addonFactory,
+            IAddonsFromAssemblyQuery addonsFromAssemblyQuery,
+            ICurrentStartupSceneProvider currentScene,
             ILog log)
         {
             if (addonFactory == null) throw new ArgumentNullException("addonFactory");
+            if (addonsFromAssemblyQuery == null) throw new ArgumentNullException("addonsFromAssemblyQuery");
+            if (currentScene == null) throw new ArgumentNullException("currentScene");
             if (log == null) throw new ArgumentNullException("log");
 
             _addonFactory = addonFactory;
+            _addonsFromAssemblyQuery = addonsFromAssemblyQuery;
+            _currentScene = currentScene;
             _log = log;
         }
 
@@ -57,9 +65,10 @@ namespace AssemblyReloader.Loaders.AddonLoader
         }
 
 
-        public void LoadAddonTypesFrom(Assembly assembly)
+        public void LoadAddonTypes(Assembly assembly)
         {
-            throw new NotImplementedException();
+            _addons = _addonsFromAssemblyQuery.Get(assembly).Select(ty => _addonFactory.CreateInfoForAddonType(ty)).ToList();
+            CreateForScene(_currentScene.Get());
         }
 
 

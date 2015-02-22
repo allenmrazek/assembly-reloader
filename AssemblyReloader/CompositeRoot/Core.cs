@@ -4,13 +4,13 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using AssemblyReloader.CompositeRoot.Commands;
-using AssemblyReloader.CompositeRoot.Messages;
 using AssemblyReloader.Controllers;
 using AssemblyReloader.Destruction;
 using AssemblyReloader.GUI;
 using AssemblyReloader.ILModifications;
 using AssemblyReloader.Loaders.AddonLoader;
 using AssemblyReloader.Logging;
+using AssemblyReloader.Messages;
 using AssemblyReloader.PluginTracking;
 using AssemblyReloader.Providers.SceneProviders;
 using AssemblyReloader.Queries;
@@ -114,51 +114,16 @@ namespace AssemblyReloader.CompositeRoot
         }
 
 
-
-        private class LoadAddonsFromAssemblyCommand : ICommand
+        private class ReloadablePluginEventRegistrator
         {
-            private readonly IAddonLoader _addonLoader;
-            private readonly IReloadablePlugin _plugin;
-            private readonly ICurrentStartupSceneProvider _currentSceneProvider;
-
-            public LoadAddonsFromAssemblyCommand(
-                IAddonLoader addonLoader, 
-                IReloadablePlugin plugin,
-                ICurrentStartupSceneProvider currentSceneProvider)
+            public void RegisterPluginLoad(IReloadablePlugin plugin, IAddonLoader addonLoader)
             {
-                if (addonLoader == null) throw new ArgumentNullException("addonLoader");
-                if (plugin == null) throw new ArgumentNullException("plugin");
-                if (currentSceneProvider == null) throw new ArgumentNullException("currentSceneProvider");
-                _addonLoader = addonLoader;
-                _plugin = plugin;
-                _currentSceneProvider = currentSceneProvider;
+                plugin.OnLoaded += addonLoader.LoadAddonTypes;
             }
 
-            public void Execute()
+            public void RegisterPluginUnload(IReloadablePlugin plugin, IAddonLoader addonLoader)
             {
-                if (!_plugin.Assembly.Any())
-                    throw new InvalidOperationException("Plugin must be loaded");
-
-                _addonLoader.LoadAddonTypesFrom(_plugin.Assembly.Single());
-                _addonLoader.CreateForScene(_currentSceneProvider.Get());
-            }
-        }
-
-
-        private class DestroyAddonsAndClearAddonTypesCommand : ICommand
-        {
-            private readonly IAddonLoader _addonLoader;
-
-            public DestroyAddonsAndClearAddonTypesCommand(IAddonLoader addonLoader)
-            {
-                if (addonLoader == null) throw new ArgumentNullException("addonLoader");
-                _addonLoader = addonLoader;
-            }
-
-            public void Execute()
-            {
-                _addonLoader.DestroyLiveAddons();
-                _addonLoader.ClearAddonTypes();
+                plugin.OnUnloaded += (f => addonLoader.ClearAddonTypes(true));
             }
         }
 
@@ -257,6 +222,7 @@ namespace AssemblyReloader.CompositeRoot
             var reloadableAssemblyFileQuery = new ReloadableAssemblyFilesInDirectoryQuery(fsFactory.GetGameDataDirectory());
             var destructionMediator = new GameObjectDestroyForReload();
             var queryProvider = new QueryFactory();
+            var eventRegistrator = new ReloadablePluginEventRegistrator();
 
             var addonFactory = new AddonFactory(destructionMediator, cachedLog.CreateTag("AddonFactory"), queryProvider.GetAddonAttributeQuery());
 
@@ -268,14 +234,12 @@ namespace AssemblyReloader.CompositeRoot
 
             return reloadableAssemblyFileQuery.Get().Select(raFile =>
             {
-                var addonLoader = new Loaders.AddonLoader.AddonLoader(addonFactory, cachedLog);
+                var addonLoader = new Loaders.AddonLoader.AddonLoader(addonFactory, queryProvider.GetAddonsFromAssemblyQuery(), new CurrentStartupSceneProvider(queryProvider.GetStartupSceneFromGameSceneQuery(), new CurrentGameSceneProvider()), cachedLog);
 
-                IReloadablePlugin plugin = new ReloadablePlugin(
-                    raFile,
-                    addonLoader,
-                    new CurrentStartupSceneProvider(queryProvider.GetStartupSceneFromGameSceneQuery(),
-                        new CurrentGameSceneProvider()),
-                    new ModifiedAssemblyFactory(assemblyResolver, cachedLog));
+                IReloadablePlugin plugin = new ReloadablePlugin(raFile, new ModifiedAssemblyFactory(assemblyResolver, cachedLog));
+
+                eventRegistrator.RegisterPluginLoad(plugin, addonLoader);
+                eventRegistrator.RegisterPluginUnload(plugin, addonLoader);
 
                 return plugin;
             });

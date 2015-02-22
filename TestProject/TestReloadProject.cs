@@ -47,7 +47,7 @@ namespace TestProject
         //    //print(str);
         //}
 
-        private void OnAssemblyReloadRequested()
+        private void OnPluginReloadRequested()
         {
             print("TestReloadProject.OnAssemblyReloadRequested received!");
         }

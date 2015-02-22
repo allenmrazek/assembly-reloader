@@ -1,9 +1,12 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 using ReeperCommon.Containers;
+using ReeperCommon.FileSystem;
 
 namespace AssemblyReloader.PluginTracking
 {
-    internal delegate void AssemblyReloadedDelegate(Assembly assembly);
+    public delegate void PluginLoadedHandler(Assembly assembly);
+    public delegate void PluginUnloadedHandler(IFile location);
 
     public interface IReloadablePlugin
     {
@@ -12,6 +15,7 @@ namespace AssemblyReloader.PluginTracking
 
         string Name { get; }
 
-        Maybe<Assembly> Assembly { get; }
+        event PluginLoadedHandler OnLoaded;
+        event PluginUnloadedHandler OnUnloaded;
     }
 }

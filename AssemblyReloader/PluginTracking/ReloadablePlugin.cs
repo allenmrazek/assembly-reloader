@@ -1,18 +1,10 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
-using AssemblyReloader.CompositeRoot.Commands;
 using AssemblyReloader.ILModifications;
-using AssemblyReloader.Loaders.AddonLoader;
-using AssemblyReloader.Loaders.PMLoader;
-using AssemblyReloader.Providers.SceneProviders;
-using AssemblyReloader.Queries;
-using Mono.Cecil;
 using ReeperCommon.Containers;
-using ReeperCommon.Events;
 using ReeperCommon.Extensions;
 using ReeperCommon.FileSystem;
-using ReeperCommon.Logging;
 
 namespace AssemblyReloader.PluginTracking
 {
@@ -28,26 +20,20 @@ namespace AssemblyReloader.PluginTracking
         private Assembly _loaded;
 
         private readonly IFile _location;
-        private readonly IAddonLoader _addonLoader;
-        private readonly ICurrentStartupSceneProvider _currentSceneProvider;
         private readonly IModifiedAssemblyFactory _massemblyFactory;
 
-
+        public event PluginLoadedHandler OnLoaded = delegate { };
+        public event PluginUnloadedHandler OnUnloaded = delegate { }; 
 
         public ReloadablePlugin(
             IFile location,
-            IAddonLoader addonLoader,
-            ICurrentStartupSceneProvider currentSceneProvider,
             IModifiedAssemblyFactory massemblyFactory)
         {
             if (location == null) throw new ArgumentNullException("location");
-            if (addonLoader == null) throw new ArgumentNullException("addonLoader");
-            if (currentSceneProvider == null) throw new ArgumentNullException("currentSceneProvider");
             if (massemblyFactory == null) throw new ArgumentNullException("massemblyFactory");
 
             _location = location;
-            _addonLoader = addonLoader;
-            _currentSceneProvider = currentSceneProvider;
+
             _massemblyFactory = massemblyFactory;
         }
 
@@ -67,32 +53,22 @@ namespace AssemblyReloader.PluginTracking
                 if (!result.Any())
                     return;
                 
-
                 _loaded = result.Single();
-                _addonLoader.LoadAddonTypesFrom(_loaded);
-                _addonLoader.CreateForScene(_currentSceneProvider.Get());
+                OnLoaded(_loaded);
             }
         }
 
 
         public void Unload()
         {
-            if (_loaded.IsNull()) return; // nothing to unload in the first place
-
-            _addonLoader.DestroyLiveAddons();
-            _addonLoader.ClearAddonTypes();
+            _loaded = null;
+            OnUnloaded(_location);
         }
 
 
         public string Name
         {
             get { return _location.Name; }
-        }
-
-
-        public Maybe<Assembly> Assembly
-        {
-            get { return _loaded.IsNull() ? Maybe<Assembly>.None : Maybe<Assembly>.With(_loaded); }
         }
     }
 }

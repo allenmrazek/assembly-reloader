@@ -82,6 +82,8 @@
     <Compile Include="Loaders\PMLoader\old\PartModuleLoader.cs" />
     <Compile Include="CompositeRoot\Commands\ICommand.cs" />
     <Compile Include="CompositeRoot\Commands\CompositeCommand.cs" />
+    <Compile Include="Messages\IMessageFactory.cs" />
+    <Compile Include="PluginTracking\IReloadablePluginEventRegistrator.cs" />
     <Compile Include="Providers\IPartConfigProvider.cs" />
     <Compile Include="Providers\PartConfigProvider.cs" />
     <Compile Include="Providers\ILoadedVesselProvider.cs" />
@@ -111,8 +113,8 @@
     <Compile Include="Queries\FileSystemQueries\IReloadableAssemblyFileLocationQuery.cs" />
     <Compile Include="Queries\ConversionQueries\IStartupSceneFromGameSceneQuery.cs" />
     <Compile Include="Loaders\AddonLoader\AddonInfo.cs" />
-    <Compile Include="CompositeRoot\Messages\IMessageChannel.cs" />
-    <Compile Include="CompositeRoot\Messages\IMessageConsumer.cs" />
+    <Compile Include="Messages\IMessageChannel.cs" />
+    <Compile Include="Messages\IMessageConsumer.cs" />
     <Compile Include="Logging\CachedLog.cs" />
     <Compile Include="CompositeRoot\Core.cs" />
     <Compile Include="PluginTracking\ReloadablePlugin.cs" />

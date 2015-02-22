@@ -1,4 +1,4 @@
-﻿namespace AssemblyReloader.CompositeRoot.Messages
+﻿namespace AssemblyReloader.Messages
 {
     public interface IMessageConsumer<in T>
     {
