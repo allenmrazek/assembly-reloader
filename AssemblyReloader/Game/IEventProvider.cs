@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace AssemblyReloader.Game
+﻿namespace AssemblyReloader.Game
 {
-    class IEventProvider
+    public interface IEventProvider
     {
+        IGameEventPublisher<GameScenes> OnLevelWasLoaded { get; }
+        IGameEventPublisher<KSPAddon.Startup> OnSceneLoaded { get; }
     }
 }

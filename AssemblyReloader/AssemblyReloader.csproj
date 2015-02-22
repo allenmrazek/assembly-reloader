@@ -54,6 +54,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Game\GameEventPublisher.cs" />
+    <Compile Include="Game\IEventProvider.cs" />
+    <Compile Include="Game\IGameEventPublisher.cs" />
     <Compile Include="ILModifications\Operations\RenameOnSave.cs" />
     <Compile Include="Loaders\PMLoader\IPartModuleLoader.cs" />
     <Compile Include="Loaders\PMLoader\IPartModuleLoaderFactory.cs" />
@@ -130,9 +133,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Game\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <EmbeddedResource Include="Resources\btnBackground.png" />
     <EmbeddedResource Include="Resources\btnClose.png" />

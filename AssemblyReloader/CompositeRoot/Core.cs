@@ -6,6 +6,7 @@ using System.Reflection;
 using AssemblyReloader.CompositeRoot.Commands;
 using AssemblyReloader.Controllers;
 using AssemblyReloader.Destruction;
+using AssemblyReloader.Game;
 using AssemblyReloader.GUI;
 using AssemblyReloader.ILModifications;
 using AssemblyReloader.Loaders.AddonLoader;
@@ -35,6 +36,8 @@ namespace AssemblyReloader.CompositeRoot
     // composite root
     class Core
     {
+        private readonly IEventProvider _eventProvider;
+
         private readonly WindowView _view;
         private readonly WindowView _logView;
 
@@ -114,6 +117,13 @@ namespace AssemblyReloader.CompositeRoot
         }
 
 
+        private class EventProvider : IEventProvider
+        {
+            public IGameEventPublisher<GameScenes> OnLevelWasLoaded { get; set; }
+            public IGameEventPublisher<KSPAddon.Startup> OnSceneLoaded { get; set; }
+        }
+
+
         private class ReloadablePluginEventRegistrator
         {
             public void RegisterPluginLoad(IReloadablePlugin plugin, IAddonLoader addonLoader)
@@ -152,7 +162,7 @@ namespace AssemblyReloader.CompositeRoot
 
             
             var resourceLocator = ConfigureResourceRepository(ourDirProvider.Get());
-            
+            _eventProvider = ConfigureEventProvider(new StartupSceneFromGameSceneQuery());
             
 
             var reloadables = CreateReloadablePlugins(cachedLog, fsFactory).ToList();
@@ -232,9 +242,12 @@ namespace AssemblyReloader.CompositeRoot
 
 
 
+
             return reloadableAssemblyFileQuery.Get().Select(raFile =>
             {
                 var addonLoader = new Loaders.AddonLoader.AddonLoader(addonFactory, queryProvider.GetAddonsFromAssemblyQuery(), new CurrentStartupSceneProvider(queryProvider.GetStartupSceneFromGameSceneQuery(), new CurrentGameSceneProvider()), cachedLog);
+
+                _eventProvider.OnSceneLoaded.OnEvent += addonLoader.CreateForScene;
 
                 IReloadablePlugin plugin = new ReloadablePlugin(raFile, new ModifiedAssemblyFactory(assemblyResolver, cachedLog));
 
@@ -243,6 +256,21 @@ namespace AssemblyReloader.CompositeRoot
 
                 return plugin;
             });
+        }
+
+
+        private IEventProvider ConfigureEventProvider(IStartupSceneFromGameSceneQuery query)
+        {
+            if (query == null) throw new ArgumentNullException("query");
+
+            var onLevelWasLoaded = new GameEventPublisher<GameScenes>();
+            GameEvents.onLevelWasLoaded.Add(onLevelWasLoaded.Raise);
+
+            var onSceneLoaded = new GameEventPublisher<KSPAddon.Startup>();
+            onLevelWasLoaded.OnEvent += gameScene => onSceneLoaded.Raise(query.Get(gameScene));
+
+            return new EventProvider{OnLevelWasLoaded = onLevelWasLoaded,
+                OnSceneLoaded = onSceneLoaded};
         }
     }
 }
