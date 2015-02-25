@@ -1,31 +1,33 @@
 ﻿using System;
+using AssemblyReloader.Game;
 
 namespace AssemblyReloader.Loaders.PMLoader
 {
     /// <summary>
-    /// Each PartModuleInfo wraps relevant data about a particular PartModule instance that
+    /// Each PartModuleDescriptor wraps relevant data about a particular PartModule instance that
     /// should exist on a particular Part prefab
     /// </summary>
-    public class PartModuleInfo
+    public class PartModuleDescriptor
     {
-        public Part Prefab { get; private set; }
+        public IPart Prefab { get; private set; }
         public ConfigNode Config { get; private set; }
-        public Type PmType { get; private set; }
+        public Type Type { get; private set; }
 
-        public PartModuleInfo(Part prefab, ConfigNode config, Type pmType)
+        public PartModuleDescriptor(IPart prefab, ConfigNode config, Type type)
         {
             if (prefab == null) throw new ArgumentNullException("prefab");
             if (config == null) throw new ArgumentNullException("config");
-            if (pmType == null) throw new ArgumentNullException("pmType");
+            if (type == null) throw new ArgumentNullException("type");
 
             Prefab = prefab;
             Config = config;
-            PmType = pmType;
+            Type = type;
         }
+
 
         public string Identifier
         {
-            get { return PmType.Name; }
+            get { return Type.Name; }
         }
     }
 }

@@ -63,7 +63,7 @@ namespace AssemblyReloader.Loaders.PMLoader
 
         //        foreach (var part in GetLoadedInstancesOfPart(pmi.Prefab))
         //        {
-        //            var pm = part.gameObject.GetComponent(pmi.PmType) as PartModule;
+        //            var pm = part.gameObject.GetComponent(pmi.Type) as PartModule;
         //            if (pm.IsNull())
         //            {
         //                _log.Warning("Failed to GetComponent {0} on part {1} (vessel {2})", pmi.Identifier,
@@ -91,14 +91,14 @@ namespace AssemblyReloader.Loaders.PMLoader
         //    _log.Verbose("Finished loading PartModules into flight objects");
         //}
 
-        //private void LoadPartModulesIntoFlight(IEnumerable<PartModuleInfo> infoList)
+        //private void LoadPartModulesIntoFlight(IEnumerable<PartModuleDescriptor> infoList)
         //{
         //    foreach (var info in infoList)
         //        LoadPartModuleIntoFlightParts(info, GetLoadedInstancesOfPart(info.Prefab));
         //}
 
 
-        //private void LoadPartModuleIntoFlightParts(PartModuleInfo info, IEnumerable<Part> parts)
+        //private void LoadPartModuleIntoFlightParts(PartModuleDescriptor info, IEnumerable<Part> parts)
         //{
         //    throw new NotImplementedException();
         //    //if (info == null) throw new ArgumentNullException("info");
@@ -107,7 +107,7 @@ namespace AssemblyReloader.Loaders.PMLoader
         //    //foreach (var part in parts)
         //    //{
         //    //    var config = _flightConfigs.Retrieve(part.flightID, info.Identifier).Or(info.Config);
-        //    //    CreatePartModule(part, info.PmType, config);
+        //    //    CreatePartModule(part, info.Type, config);
         //    //}
         //}
 
@@ -132,7 +132,7 @@ namespace AssemblyReloader.Loaders.PMLoader
         //}
 
 
-        //private void CreateConfigSnapshot(Part part, PartModule pm, PartModuleInfo pmi)
+        //private void CreateConfigSnapshot(Part part, PartModule pm, PartModuleDescriptor pmi)
         //{
         //    if (part == null) throw new ArgumentNullException("part");
         //    if (pm == null) throw new ArgumentNullException("pm");

@@ -9,7 +9,7 @@
         //    var addonQuery = Substitute.For<IAddonsFromAssemblyQuery>();
         //    var pmQuery = Substitute.For<IPartModulesFromAssemblyQuery>();
         //    var curScene = Substitute.For<ICurrentStartupSceneProvider>();
-        //    var cfgProvider = Substitute.For<IPartConfigProvider>();
+        //    var cfgProvider = Substitute.For<IAvailablePartConfigProvider>();
 
         //    var sut = new AddonLoaderFactory(addonFactory, addonQuery, pmQuery, curScene, cfgProvider);
 
@@ -29,7 +29,7 @@
         //    var addonQuery = Substitute.For<IAddonsFromAssemblyQuery>();
         //    var pmQuery = Substitute.For<IPartModulesFromAssemblyQuery>();
         //    var curScene = Substitute.For<ICurrentStartupSceneProvider>();
-        //    var cfgProvider = Substitute.For<IPartConfigProvider>();
+        //    var cfgProvider = Substitute.For<IAvailablePartConfigProvider>();
 
         //    curScene.Get().Returns(KSPAddon.Startup.SpaceCentre);
 

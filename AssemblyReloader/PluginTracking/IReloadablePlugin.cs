@@ -6,7 +6,7 @@ using ReeperCommon.FileSystem;
 namespace AssemblyReloader.PluginTracking
 {
     public delegate void PluginLoadedHandler(Assembly assembly);
-    public delegate void PluginUnloadedHandler(IFile location);
+    public delegate void PluginUnloadedHandler(Assembly location);
 
     public interface IReloadablePlugin
     {

@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Reflection;
 using AssemblyReloader.ILModifications;
+using AssemblyReloader.Providers;
 using ReeperCommon.Containers;
 using ReeperCommon.Extensions;
 using ReeperCommon.FileSystem;
@@ -19,56 +20,41 @@ namespace AssemblyReloader.PluginTracking
     {
         private Assembly _loaded;
 
-        private readonly IFile _location;
-        private readonly IModifiedAssemblyFactory _massemblyFactory;
+        private readonly IReloadableAssemblyProvider _assemblyProvider;
 
         public event PluginLoadedHandler OnLoaded = delegate { };
         public event PluginUnloadedHandler OnUnloaded = delegate { }; 
 
         public ReloadablePlugin(
-            IFile location,
-            IModifiedAssemblyFactory massemblyFactory)
+            IReloadableAssemblyProvider assemblyProvider)
         {
-            if (location == null) throw new ArgumentNullException("location");
-            if (massemblyFactory == null) throw new ArgumentNullException("massemblyFactory");
+            if (assemblyProvider == null) throw new ArgumentNullException("assemblyProvider");
 
-            _location = location;
-
-            _massemblyFactory = massemblyFactory;
+            _assemblyProvider = assemblyProvider;
         }
 
 
         public void Load()
         {
-            using (var stream = new System.IO.MemoryStream())
-            {
-                var original = _massemblyFactory.Create(_location);
+            if (!_loaded.IsNull())
+                Unload();
 
-                original.Rename(Guid.NewGuid());
-
-                original.Write(stream);
-
-                var result = original.Load(stream);
-
-                if (!result.Any())
-                    return;
-                
-                _loaded = result.Single();
-                OnLoaded(_loaded);
-            }
+            _loaded = _assemblyProvider.Get();
         }
 
 
         public void Unload()
         {
+            if (!_loaded.IsNull()) return;
+
+            OnUnloaded(_loaded);
             _loaded = null;
-            OnUnloaded(_location);
         }
 
 
         public string Name
         {
-            get { return _location.Name; }
+            get { return _assemblyProvider.Name; }
         }
     }
 }

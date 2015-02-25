@@ -1,7 +1,10 @@
-﻿namespace AssemblyReloader.Loaders.PMLoader
+﻿using System.Reflection;
+
+namespace AssemblyReloader.Loaders.PMLoader
 {
     public interface IPartModuleLoader
     {
-        void CreateProxyModules();
+        void LoadPartModuleTypes(Assembly assembly);
+        void ClearPartModuleTypes();
     }
 }

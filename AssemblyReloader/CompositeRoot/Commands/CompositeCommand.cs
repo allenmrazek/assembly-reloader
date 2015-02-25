@@ -18,4 +18,20 @@ namespace AssemblyReloader.CompositeRoot.Commands
                 c.Execute();
         }
     }
+
+    public class CompositeCommand<TContext> : ICommand<TContext>
+    {
+        private readonly ICommand<TContext>[] _commands;
+
+        public CompositeCommand(params ICommand<TContext>[] commands)
+        {
+            if (commands == null) throw new ArgumentNullException("commands");
+            _commands = commands;
+        }
+
+        public void Execute(TContext context)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

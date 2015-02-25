@@ -3,8 +3,8 @@ using System.Collections.Generic;
 
 namespace AssemblyReloader.Loaders.PMLoader
 {
-    public interface IPartModuleInfoFactory
+    public interface IDescriptorFactory
     {
-        IEnumerable<PartModuleInfo> Create(Type pmType);
+        IEnumerable<PartModuleDescriptor> Create(Type pmType);
     }
 }

@@ -8,13 +8,16 @@ using AssemblyReloader.Controllers;
 using AssemblyReloader.Destruction;
 using AssemblyReloader.Game;
 using AssemblyReloader.GUI;
-using AssemblyReloader.ILModifications;
 using AssemblyReloader.Loaders.AddonLoader;
+using AssemblyReloader.Loaders.PMLoader;
 using AssemblyReloader.Logging;
 using AssemblyReloader.Messages;
 using AssemblyReloader.PluginTracking;
+using AssemblyReloader.Providers;
 using AssemblyReloader.Providers.SceneProviders;
 using AssemblyReloader.Queries;
+using AssemblyReloader.Queries.AssemblyQueries;
+using AssemblyReloader.Queries.ConfigNodeQueries;
 using AssemblyReloader.Queries.ConversionQueries;
 using AssemblyReloader.Queries.FileSystemQueries;
 using Mono.Cecil;
@@ -124,18 +127,7 @@ namespace AssemblyReloader.CompositeRoot
         }
 
 
-        private class ReloadablePluginEventRegistrator
-        {
-            public void RegisterPluginLoad(IReloadablePlugin plugin, IAddonLoader addonLoader)
-            {
-                plugin.OnLoaded += addonLoader.LoadAddonTypes;
-            }
 
-            public void RegisterPluginUnload(IReloadablePlugin plugin, IAddonLoader addonLoader)
-            {
-                plugin.OnUnloaded += (f => addonLoader.ClearAddonTypes(true));
-            }
-        }
 
 
        
@@ -232,7 +224,6 @@ namespace AssemblyReloader.CompositeRoot
             var reloadableAssemblyFileQuery = new ReloadableAssemblyFilesInDirectoryQuery(fsFactory.GetGameDataDirectory());
             var destructionMediator = new GameObjectDestroyForReload();
             var queryProvider = new QueryFactory();
-            var eventRegistrator = new ReloadablePluginEventRegistrator();
 
             var addonFactory = new AddonFactory(destructionMediator, cachedLog.CreateTag("AddonFactory"), queryProvider.GetAddonAttributeQuery());
 
@@ -246,13 +237,22 @@ namespace AssemblyReloader.CompositeRoot
             return reloadableAssemblyFileQuery.Get().Select(raFile =>
             {
                 var addonLoader = new Loaders.AddonLoader.AddonLoader(addonFactory, queryProvider.GetAddonsFromAssemblyQuery(), new CurrentStartupSceneProvider(queryProvider.GetStartupSceneFromGameSceneQuery(), new CurrentGameSceneProvider()), cachedLog);
+                var partModuleLoader = new PartModuleLoader(
+                    new PartModulesFromAssemblyQuery(),
+                    new CurrentSceneIsFlightQuery(), 
+                    new PartModuleFactory(),
+                    new DescriptorFactory(new AvailablePartConfigProvider(), new ModuleConfigsFromPartConfigQuery(), cachedLog.CreateTag("PartModuleDescriptor")
+                 ), cachedLog.CreateTag("PartModuleLoader"));
 
                 _eventProvider.OnSceneLoaded.OnEvent += addonLoader.CreateForScene;
 
-                IReloadablePlugin plugin = new ReloadablePlugin(raFile, new ModifiedAssemblyFactory(assemblyResolver, cachedLog));
+                IReloadablePlugin plugin = new ReloadablePlugin(new ReloadableAssemblyProvider(raFile, assemblyResolver));
 
-                eventRegistrator.RegisterPluginLoad(plugin, addonLoader);
-                eventRegistrator.RegisterPluginUnload(plugin, addonLoader);
+                plugin.OnLoaded += addonLoader.LoadAddonTypes;
+                plugin.OnLoaded += partModuleLoader.LoadPartModuleTypes;
+
+                plugin.OnUnloaded += (f => addonLoader.ClearAddonTypes(true));
+                plugin.OnUnloaded += (f => partModuleLoader.ClearPartModuleTypes());
 
                 return plugin;
             });
