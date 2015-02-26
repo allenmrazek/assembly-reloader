@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using AssemblyReloader.ILModifications;
@@ -40,6 +41,11 @@ namespace AssemblyReloader.PluginTracking
                 Unload();
 
             _loaded = _assemblyProvider.Get();
+
+            if (_loaded.IsNull())
+                throw new InvalidOperationException("ReloadablePlugin: received NULL Assembly");
+
+            OnLoaded(_loaded);
         }
 
 

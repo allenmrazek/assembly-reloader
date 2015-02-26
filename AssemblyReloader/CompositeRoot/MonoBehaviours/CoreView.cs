@@ -22,7 +22,9 @@ namespace AssemblyReloader.CompositeRoot.MonoBehaviours
             }
 
             ls.loaders.Add(this);
+#if DEBUG
             ls.loaders.ForEach(l => print("Loader: " + l.GetType().FullName));
+#endif
         }
 
 
@@ -49,8 +51,7 @@ namespace AssemblyReloader.CompositeRoot.MonoBehaviours
             }
             catch (Exception e)
             {
-                print("CoreView: Encountered an uncaught exception while creating Core: " + e);
-                Destroy(this);
+                Abort("CoreView: Encountered an uncaught exception while creating Core: " + e);
             }
         }
     }

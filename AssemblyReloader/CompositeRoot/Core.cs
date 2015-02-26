@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using AssemblyReloader.CompositeRoot.Commands;
+using AssemblyReloader.CompositeRoot.Commands.ILModifications;
 using AssemblyReloader.Controllers;
 using AssemblyReloader.Destruction;
 using AssemblyReloader.Game;
@@ -20,6 +21,7 @@ using AssemblyReloader.Queries.AssemblyQueries;
 using AssemblyReloader.Queries.ConfigNodeQueries;
 using AssemblyReloader.Queries.ConversionQueries;
 using AssemblyReloader.Queries.FileSystemQueries;
+using AssemblyReloader.Repositories;
 using Mono.Cecil;
 using ReeperCommon.Events.Implementations;
 using ReeperCommon.FileSystem;
@@ -231,7 +233,8 @@ namespace AssemblyReloader.CompositeRoot
 
             assemblyResolver.AddSearchDirectory(Assembly.GetExecutingAssembly().Location); // we'll be importing some references to types we own so this is a necessary step
 
-
+            var kspFactory = new KspFactory();
+            var ilModifications = ConfigureAssemblyModifications();
 
 
             return reloadableAssemblyFileQuery.Get().Select(raFile =>
@@ -241,12 +244,18 @@ namespace AssemblyReloader.CompositeRoot
                     new PartModulesFromAssemblyQuery(),
                     new CurrentSceneIsFlightQuery(), 
                     new PartModuleFactory(),
-                    new DescriptorFactory(new AvailablePartConfigProvider(), new ModuleConfigsFromPartConfigQuery(), cachedLog.CreateTag("PartModuleDescriptor")
-                 ), cachedLog.CreateTag("PartModuleLoader"));
+                    new DescriptorFactory(
+                        new KspPartLoader(kspFactory), 
+                        new AvailablePartConfigProvider(new KspGameDatabase()), 
+                        new ModuleConfigsFromPartConfigQuery(), 
+                        cachedLog.CreateTag("PartModuleDescriptor")),
+                    destructionMediator,
+                    new PartModuleFlightConfigRepository(),
+                    cachedLog.CreateTag("PartModuleLoader"));
 
                 _eventProvider.OnSceneLoaded.OnEvent += addonLoader.CreateForScene;
 
-                IReloadablePlugin plugin = new ReloadablePlugin(new ReloadableAssemblyProvider(raFile, assemblyResolver));
+                IReloadablePlugin plugin = new ReloadablePlugin(new ReloadableAssemblyProvider(raFile, assemblyResolver, ilModifications));
 
                 plugin.OnLoaded += addonLoader.LoadAddonTypes;
                 plugin.OnLoaded += partModuleLoader.LoadPartModuleTypes;
@@ -271,6 +280,14 @@ namespace AssemblyReloader.CompositeRoot
 
             return new EventProvider{OnLevelWasLoaded = onLevelWasLoaded,
                 OnSceneLoaded = onSceneLoaded};
+        }
+
+
+        private ICommand<AssemblyDefinition> ConfigureAssemblyModifications()
+        {
+            return new CompositeCommand<AssemblyDefinition>(
+                new RenameAssemblyCommand(new UniqueAssemblyNameProvider())
+                );
         }
     }
 }

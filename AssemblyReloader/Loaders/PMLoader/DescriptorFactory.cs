@@ -68,7 +68,7 @@ namespace AssemblyReloader.Loaders.PMLoader
                 var partConfig = _configProvider.Get(ap);
                 if (!partConfig.Any()) return;
 
-                infoList.AddRange(CreatePartModuleInfo(ap.partPrefab, partConfig.Single(), pmType));
+                infoList.AddRange(CreatePartModuleInfo(ap.PartPrefab, partConfig.Single(), pmType));
             });
 
             return infoList;

@@ -31,7 +31,8 @@ namespace AssemblyReloader.CompositeRoot.Commands
 
         public void Execute(TContext context)
         {
-            throw new NotImplementedException();
+            foreach (var c in _commands)
+                c.Execute(context);
         }
     }
 }

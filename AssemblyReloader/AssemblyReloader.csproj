@@ -54,27 +54,30 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CompositeRoot\Commands\ILModifications\RenameAssemblyCommand.cs" />
     <Compile Include="Game\GameEventPublisher.cs" />
     <Compile Include="Game\IAvailablePart.cs" />
     <Compile Include="Game\IEventProvider.cs" />
     <Compile Include="Game\IGameDatabase.cs" />
     <Compile Include="Game\IGameEventPublisher.cs" />
+    <Compile Include="Game\IKspFactory.cs" />
     <Compile Include="Game\IPart.cs" />
     <Compile Include="Game\IPartLoader.cs" />
     <Compile Include="Game\IVessel.cs" />
     <Compile Include="Game\KspAvailablePart.cs" />
+    <Compile Include="Game\KspFactory.cs" />
     <Compile Include="Game\KspGameDatabase.cs" />
     <Compile Include="Game\KspPart.cs" />
     <Compile Include="Game\KspPartLoader.cs" />
     <Compile Include="Game\KspVessel.cs" />
-    <Compile Include="ILModifications\Operations\RenameOnSave.cs" />
+    <Compile Include="ILModifications\old\Operations\RenameOnSave.cs" />
     <Compile Include="Loaders\PMLoader\IPartModuleLoader.cs" />
     <Compile Include="Loaders\PMLoader\IPartModuleFactory.cs" />
     <Compile Include="Loaders\PMLoader\PartModuleFactory.cs" />
-    <Compile Include="ILModifications\IModifiedAssembly.cs" />
-    <Compile Include="ILModifications\IModifiedAssemblyFactory.cs" />
-    <Compile Include="ILModifications\ModifiedAssembly.cs" />
-    <Compile Include="ILModifications\ModifiedAssemblyFactory.cs" />
+    <Compile Include="ILModifications\old\IModifiedAssembly.cs" />
+    <Compile Include="ILModifications\old\IModifiedAssemblyFactory.cs" />
+    <Compile Include="ILModifications\old\ModifiedAssembly.cs" />
+    <Compile Include="ILModifications\old\ModifiedAssemblyFactory.cs" />
     <Compile Include="Loaders\AddonLoader\AddonLoader.cs" />
     <Compile Include="Loaders\AddonLoader\IAddonLoader.cs" />
     <Compile Include="Controllers\IReloadableController.cs" />
@@ -94,6 +97,8 @@
     <Compile Include="CompositeRoot\Commands\CompositeCommand.cs" />
     <Compile Include="Messages\IMessageFactory.cs" />
     <Compile Include="Providers\ILoadedInstancesOfPrefabProvider.cs" />
+    <Compile Include="Providers\IUniqueAssemblyNameProvider.cs" />
+    <Compile Include="Providers\LoadedInstancesOfPrefabProvider.cs" />
     <Compile Include="Providers\SceneProviders\CurrentSceneIsFlightQuery.cs" />
     <Compile Include="Providers\SceneProviders\ICurrentSceneIsFlightQuery.cs" />
     <Compile Include="Providers\ReloadableAssemblyProvider.cs" />
@@ -102,6 +107,7 @@
     <Compile Include="Providers\AvailablePartConfigProvider.cs" />
     <Compile Include="Providers\ILoadedVesselProvider.cs" />
     <Compile Include="Providers\LoadedVesselProvider.cs" />
+    <Compile Include="Providers\UniqueAssemblyNameProvider.cs" />
     <Compile Include="Queries\AssemblyQueries\IPartModulesFromAssemblyQuery.cs" />
     <Compile Include="Queries\AssemblyQueries\PartModulesFromAssemblyQuery.cs" />
     <Compile Include="Queries\CecilQueries\IPartModuleMethodQuery.cs" />

@@ -8,11 +8,23 @@ namespace AssemblyReloader.Game
     public class KspVessel : IVessel
     {
         private readonly Vessel _vessel;
+        private readonly IKspFactory _kspFactory;
 
-        public KspVessel(Vessel vessel)
+
+        public KspVessel(Vessel vessel, IKspFactory kspFactory)
         {
-            _vessel = vessel;
             if (vessel == null) throw new ArgumentNullException("vessel");
+            if (kspFactory == null) throw new ArgumentNullException("kspFactory");
+
+
+            _vessel = vessel;
+            _kspFactory = kspFactory;
+        }
+
+
+        public List<IPart> Parts
+        {
+            get { return _vessel.Parts.Select(p => _kspFactory.Create(p)).ToList(); }
         }
     }
 }

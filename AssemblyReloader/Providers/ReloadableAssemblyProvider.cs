@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using AssemblyReloader.CompositeRoot.Commands;
 using Mono.Cecil;
 using ReeperCommon.Containers;
 using ReeperCommon.FileSystem;
@@ -14,13 +15,19 @@ namespace AssemblyReloader.Providers
     {
         private readonly IFile _location;
         private readonly DefaultAssemblyResolver _resolver;
+        private readonly ICommand<AssemblyDefinition> _assemblyModifications;
 
-        public ReloadableAssemblyProvider(IFile location, DefaultAssemblyResolver resolver)
+        public ReloadableAssemblyProvider(
+            IFile location, 
+            DefaultAssemblyResolver resolver,
+            ICommand<AssemblyDefinition> assemblyModifications)
         {
             if (location == null) throw new ArgumentNullException("location");
             if (resolver == null) throw new ArgumentNullException("resolver");
+            if (assemblyModifications == null) throw new ArgumentNullException("assemblyModifications");
             _location = location;
             _resolver = resolver;
+            _assemblyModifications = assemblyModifications;
         }
 
 
@@ -33,6 +40,10 @@ namespace AssemblyReloader.Providers
                 //original.Rename(Guid.NewGuid());
 
                 //original.Write(stream);
+
+                _assemblyModifications.Execute(assemblyDefinition);
+
+                assemblyDefinition.Write(stream);
 
                 var result = LoadAssemblyFromStream(stream);
 

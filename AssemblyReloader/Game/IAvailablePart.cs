@@ -8,6 +8,6 @@ namespace AssemblyReloader.Game
     public interface IAvailablePart
     {
         string Name { get; }
-        IPart partPrefab { get; }
+        IPart PartPrefab { get; }
     }
 }

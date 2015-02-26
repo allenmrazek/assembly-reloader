@@ -9,11 +9,15 @@ namespace AssemblyReloader.Game
     public class KspPart : IPart
     {
         private readonly Part _target;
+        private readonly IKspFactory _kspFactory;
 
-        public KspPart(Part target)
+        public KspPart(Part target, IKspFactory kspFactory)
         {
-            _target = target;
             if (target == null) throw new ArgumentNullException("target");
+            if (kspFactory == null) throw new ArgumentNullException("kspFactory");
+
+            _target = target;
+            _kspFactory = kspFactory;
         }
 
         public void RemoveModule(PartModule pm)
@@ -34,7 +38,7 @@ namespace AssemblyReloader.Game
 
         public string Name
         {
-            get { return _target.name; }
+            get { return _target.partInfo.name; }
         }
 
         public string PartName
@@ -42,9 +46,8 @@ namespace AssemblyReloader.Game
             get { return _target.partName; }
         }
 
-        public IAvailablePart PartInfo
-        {
-            get { return new KspAvailablePart(_target.partInfo); }
+        public IAvailablePart PartInfo {
+            get { return _kspFactory.Create(_target.partInfo); }
         }
     }
 }

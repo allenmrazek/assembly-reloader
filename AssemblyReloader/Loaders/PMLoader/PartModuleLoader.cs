@@ -56,6 +56,10 @@ namespace AssemblyReloader.Loaders.PMLoader
         }
 
 
+        ~PartModuleLoader()
+        {
+            _log.Warning("PartModuleLoader destructing");
+        }
  
 
 
@@ -138,8 +142,15 @@ namespace AssemblyReloader.Loaders.PMLoader
         public void LoadPartModuleTypes(Assembly assembly)
         {
             if (assembly == null) throw new ArgumentNullException("assembly");
-            _prefabPartModules = _partModuleQuery.Get(assembly).SelectMany(ty => _descriptorFactory.Create(ty)).ToList();
 
+            var partModules = _partModuleQuery.Get(assembly).ToList();
+
+            _log.Debug(string.Format("Found {0} part module types in assembly", partModules.Count));
+
+            _prefabPartModules = partModules.SelectMany(ty => _descriptorFactory.Create(ty)).ToList();
+
+            _log.Debug(string.Format("Found {0} part module descriptors", _prefabPartModules.Count));
+            
             foreach (var info in _prefabPartModules)
                 LoadPartModuleIntoPrefab(info);
         }
@@ -147,6 +158,8 @@ namespace AssemblyReloader.Loaders.PMLoader
 
         public void ClearPartModuleTypes()
         {
+            _log.Debug("Clearing PartModule types");
+
             if (_flightQuery.Get())
                 foreach (var descriptor in _prefabPartModules)
                     UnloadPartModuleFromFlight(descriptor);
