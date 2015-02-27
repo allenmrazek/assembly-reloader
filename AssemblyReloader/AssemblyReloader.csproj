@@ -167,6 +167,7 @@
 
 robocopy "$(ProjectDir)bin\$(Configuration)" "$(ProjectDir)GameData\$(ProjectName)" $(TargetFileName)
 robocopy "$(ProjectDir)bin\$(Configuration)" "$(ProjectDir)GameData\$(ProjectName)" ReeperCommon.dll
+robocopy "$(ProjectDir)bin\$(Configuration)" "$(ProjectDir)GameData\$(ProjectName)" *.proxy
 robocopy "$(ProjectDir)GameData\$(ProjectName)" "%25ksp%25\$(ProjectName)" /E /xo
 
 REM a little hack because robocopy reports code 1 on file copy success
@@ -183,6 +184,10 @@ echo WARNING: Extra files in output dir
 exit 0</PostBuildEvent>
   </PropertyGroup>
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

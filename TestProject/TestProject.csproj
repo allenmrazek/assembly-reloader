@@ -93,9 +93,7 @@ exit 0</PostBuildEvent>
   <PropertyGroup>
     <PreBuildEvent>set ksp=D:\For New Computer\Kerbal Space Program\GameData
 
-del "%25ksp%25\$(ProjectName)\$(TargetFileName).reloadable"
-del "%25ksp%25\$(ProjectName)\$(TargetFileName).reloadable.modified.dll"
-del "%25ksp%25\$(ProjectName)\$(TargetFileName).reloadable.edit"
+del "%25ksp%25\$(ProjectName)\$(TargetFileName)*.reloadable"
 del "$(ProjectDir)bin\$(Configuration)\$(TargetFileName).reloadable"</PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
