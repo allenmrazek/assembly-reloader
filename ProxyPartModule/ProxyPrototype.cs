@@ -7,5 +7,6 @@ namespace ProxyPartModule
 {
     public class ProxyPrototype : PartModule
     {
+        public Type Target;
     }
 }

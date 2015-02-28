@@ -262,7 +262,7 @@ namespace AssemblyReloader.CompositeRoot
                 var partModuleLoader = new PartModuleLoader(
                     new PartModulesFromAssemblyQuery(),
                     new CurrentSceneIsFlightQuery(), 
-                    new PartModuleFactory(partModuleProxyProvider),
+                    new PartModuleFactory(partModuleProxyProvider, new TypeIdentifierQuery(), new PartModulesFromAssemblyQuery()),
                     new DescriptorFactory(
                         new KspPartLoader(kspFactory), 
                         new AvailablePartConfigProvider(new KspGameDatabase()), 
