@@ -16,24 +16,24 @@ namespace AssemblyReloader.Providers
     {
         private readonly IAssemblyDefinitionReader _reader;
         private readonly IAssemblyDefinitionLoader _loader;
-        private readonly IPartModuleDefinitionsQuery _pmQuery;
+        private readonly ITypeDefinitionQuery _targetTypeQuery;
         private readonly ICommand<AssemblyDefinition> _edits;
         private readonly Dictionary<string, Assembly> _cachedAssemblies = new Dictionary<string, Assembly>();
  
         public ProxyAssemblyProvider(
             IAssemblyDefinitionReader reader,
             IAssemblyDefinitionLoader loader,
-            IPartModuleDefinitionsQuery pmQuery,
+            ITypeDefinitionQuery targetTypeQuery,
             ICommand<AssemblyDefinition> edits)
         {
             if (reader == null) throw new ArgumentNullException("reader");
             if (loader == null) throw new ArgumentNullException("loader");
-            if (pmQuery == null) throw new ArgumentNullException("pmQuery");
+            if (targetTypeQuery == null) throw new ArgumentNullException("targetTypeQuery");
             if (edits == null) throw new ArgumentNullException("edits");
 
             _reader = reader;
             _loader = loader;
-            _pmQuery = pmQuery;
+            _targetTypeQuery = targetTypeQuery;
             _edits = edits;
         }
 
@@ -51,18 +51,30 @@ namespace AssemblyReloader.Providers
 
             _edits.Execute(definition.Single());
             
-            var partModules = _pmQuery.Get(definition.Single()).Where(td => td.Name == context.Identifier).ToList();
+            var targets = _targetTypeQuery.Get(definition.Single()).Where(td => td.Name == context.Identifier).ToList();
 
-            if (partModules.Count != 1)
-                throw new Exception("Expected 1 PartModule definition in " + _reader.Name + "; found " +
-                                    partModules.Count);
+            if (targets.Count != 1)
+                throw new Exception("Expected 1 target type definition in " + _reader.Name + "; found " +
+                                    targets.Count);
 
-            partModules.Single().Name = context.Identifier;
+            targets.Single().Name = context.Identifier;
 
-            return _loader.Load(definition.Single());
+            var result =  _loader.Load(definition.Single());
+
+            if (result.Any())
+                _cachedAssemblies.Add(context.Identifier, result.Single());
+
+            return result;
+        }
+
+        public string Name
+        {
+            get { return _reader.Name; }
         }
 
 
+        // note: no sense in making duplicate copies of the same thing, so keep track of those
+        // already created
         private Maybe<Assembly> RetrieveFromCache(ITypeIdentifier context)
         {
             Assembly result;

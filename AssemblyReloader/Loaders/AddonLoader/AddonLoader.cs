@@ -14,7 +14,7 @@ namespace AssemblyReloader.Loaders.AddonLoader
         // Mainly required so we can flag addons when they've
         // been created in the case of runOnce = true
         private readonly IAddonFactory _addonFactory;
-        private readonly IAddonsFromAssemblyQuery _addonsFromAssemblyQuery;
+        private readonly ITypesFromAssemblyQuery _addonsFromAssemblyQuery;
         private readonly ICurrentStartupSceneProvider _currentScene;
         private readonly ILog _log;
 
@@ -24,7 +24,7 @@ namespace AssemblyReloader.Loaders.AddonLoader
 
         public AddonLoader(
             IAddonFactory addonFactory,
-            IAddonsFromAssemblyQuery addonsFromAssemblyQuery,
+            ITypesFromAssemblyQuery addonsFromAssemblyQuery,
             ICurrentStartupSceneProvider currentScene,
             ILog log)
         {

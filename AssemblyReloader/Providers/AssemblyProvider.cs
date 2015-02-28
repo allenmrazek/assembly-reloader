@@ -45,5 +45,9 @@ namespace AssemblyReloader.Providers
             return _loader.Load(def);
         }
 
+        public string Name
+        {
+            get { return _reader.Name; }
+        }
     }
 }

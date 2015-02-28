@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace AssemblyReloader.Queries.AssemblyQueries
 {
-    public class AddonsFromAssemblyQuery : IAddonsFromAssemblyQuery
+    public class AddonsFromAssemblyQuery : ITypesFromAssemblyQuery
     {
         private readonly IAddonAttributeFromTypeQuery _attributeQuery;
 

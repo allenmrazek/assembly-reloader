@@ -18,7 +18,7 @@ namespace AssemblyReloader.Loaders.PMLoader
     /// </summary>
     public class PartModuleLoader : IPartModuleLoader
     {
-        private readonly IPartModulesFromAssemblyQuery _partModuleQuery;
+        private readonly ITypesFromAssemblyQuery _partModuleQuery;
         private readonly ICurrentSceneIsFlightQuery _flightQuery;
         private readonly IPartModuleFactory _partModuleFactory;
         private readonly IDescriptorFactory _descriptorFactory;
@@ -29,7 +29,7 @@ namespace AssemblyReloader.Loaders.PMLoader
         private List<PartModuleDescriptor> _prefabPartModules;
  
         public PartModuleLoader(
-            IPartModulesFromAssemblyQuery partModuleQuery,
+            ITypesFromAssemblyQuery partModuleQuery,
             ICurrentSceneIsFlightQuery flightQuery,
 
             IPartModuleFactory partModuleFactory,

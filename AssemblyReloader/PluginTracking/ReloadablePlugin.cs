@@ -40,7 +40,7 @@ namespace AssemblyReloader.PluginTracking
             if (!_loaded.IsNull())
                 Unload();
 
-            _loaded = _assemblyProvider.Get();
+            _loaded = _assemblyProvider.Get().SingleOrDefault();
 
             if (_loaded.IsNull())
                 throw new InvalidOperationException("ReloadablePlugin: received NULL Assembly");

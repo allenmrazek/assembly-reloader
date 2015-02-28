@@ -3,7 +3,7 @@ using Mono.Cecil;
 
 namespace AssemblyReloader.Queries.CecilQueries
 {
-    public interface IPartModuleDefinitionsQuery
+    public interface ITypeDefinitionQuery
     {
         IEnumerable<TypeDefinition> Get(AssemblyDefinition assembly);
     }

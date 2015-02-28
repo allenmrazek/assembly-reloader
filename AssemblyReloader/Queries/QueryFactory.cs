@@ -21,7 +21,7 @@ namespace AssemblyReloader.Queries
 
 
 
-        public IAddonsFromAssemblyQuery GetAddonsFromAssemblyQuery()
+        public ITypesFromAssemblyQuery GetAddonsFromAssemblyQuery()
         {
             return new AddonsFromAssemblyQuery(_attributeQuery);
         }

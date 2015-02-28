@@ -6,7 +6,7 @@ using System.Text;
 
 namespace AssemblyReloader.Queries.AssemblyQueries
 {
-    public class PartModulesFromAssemblyQuery : IPartModulesFromAssemblyQuery
+    public class PartModulesFromAssemblyQuery : ITypesFromAssemblyQuery
     {
         public IEnumerable<Type> Get(Assembly assembly)
         {

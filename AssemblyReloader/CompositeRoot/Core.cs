@@ -11,6 +11,7 @@ using AssemblyReloader.Destruction;
 using AssemblyReloader.Game;
 using AssemblyReloader.Generators;
 using AssemblyReloader.GUI;
+using AssemblyReloader.Loaders;
 using AssemblyReloader.Loaders.AddonLoader;
 using AssemblyReloader.Loaders.PMLoader;
 using AssemblyReloader.Logging;
@@ -162,14 +163,14 @@ namespace AssemblyReloader.CompositeRoot
 
             assemblyResolver.AddSearchDirectory(Assembly.GetExecutingAssembly().Location); // we'll be importing some references to types we own so this is a necessary step
 
-            var partModuleProxyAssemblyProvider = new ProxyProvider(
-                partModuleProxyAssemblyFile.Single(),
-                assemblyResolver,
+            var partModuleProxyAssemblyProvider = new ProxyAssemblyProvider(
+                new AssemblyDefinitionReader(partModuleProxyAssemblyFile.Single(), assemblyResolver),
+                new AssemblyDefinitionIntoKspLoader(partModuleProxyAssemblyFile.Single(), new KspAssemblyLoader(_log.CreateTag("KspAssemblyLoader"))),
+                new PartModuleDefinitionsQuery(),
+
                 new CompositeCommand<AssemblyDefinition>(
                     new RenameAssemblyCommand(new UniqueAssemblyNameGenerator())
-                    ), 
-                new PartModuleDefinitionsQuery(),
-                new KspAssemblyLoader(_log.CreateTag("AssemblyLoader")));
+                    ));
 
             var resourceLocator = ConfigureResourceRepository(ourDirProvider.Get());
             _eventProvider = ConfigureEventProvider(new StartupSceneFromGameSceneQuery());
@@ -273,7 +274,8 @@ namespace AssemblyReloader.CompositeRoot
 
                 _eventProvider.OnSceneLoaded.OnEvent += addonLoader.CreateForScene;
 
-                IReloadablePlugin plugin = new ReloadablePlugin(new AssemblyProvider(raFile, assemblyResolver, ilModifications));
+                IReloadablePlugin plugin = new ReloadablePlugin(
+                    ConfigureAssemblyProvider(raFile, assemblyResolver, ilModifications));
 
                 plugin.OnLoaded += addonLoader.LoadAddonTypes;
                 plugin.OnLoaded += partModuleLoader.LoadPartModuleTypes;
@@ -300,6 +302,18 @@ namespace AssemblyReloader.CompositeRoot
                 OnSceneLoaded = onSceneLoaded};
         }
 
+
+        private IAssemblyProvider ConfigureAssemblyProvider(IFile location, BaseAssemblyResolver resolver, ICommand<AssemblyDefinition> ilModifications)
+        {
+            if (location == null) throw new ArgumentNullException("location");
+            if (resolver == null) throw new ArgumentNullException("resolver");
+            if (ilModifications == null) throw new ArgumentNullException("ilModifications");
+
+            return new AssemblyProvider(
+                new AssemblyDefinitionReader(location, resolver),
+                new AssemblyDefinitionLoader(),
+                ilModifications);
+        }
 
         private ICommand<AssemblyDefinition> ConfigureAssemblyModifications()
         {

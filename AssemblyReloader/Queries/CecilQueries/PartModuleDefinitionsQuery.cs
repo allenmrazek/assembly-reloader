@@ -6,7 +6,7 @@ using Mono.Cecil;
 
 namespace AssemblyReloader.Queries.CecilQueries
 {
-    public class PartModuleDefinitionsQuery : IPartModuleDefinitionsQuery
+    public class PartModuleDefinitionsQuery : ITypeDefinitionQuery
     {
         public IEnumerable<TypeDefinition> Get(AssemblyDefinition assembly)
         {
