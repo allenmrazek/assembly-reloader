@@ -25,9 +25,9 @@ namespace AssemblyReloader.Loaders.PMLoader
         }
 
 
-        public string Identifier
-        {
-            get { return Type.Name; }
-        }
+        //public string Identifier
+        //{
+        //    get { return Type.Name; }
+        //}
     }
 }

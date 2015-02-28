@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Mono.Cecil;
+using AssemblyReloader.Loaders.PMLoader;
 
 namespace AssemblyReloader.Providers
 {
-    public interface IUniqueAssemblyNameProvider
+    public interface IProxyPartModuleTypeProvider
     {
-        string Get(AssemblyDefinition definition);
+        Type Get(PartModuleDescriptor descriptor);
     }
 }

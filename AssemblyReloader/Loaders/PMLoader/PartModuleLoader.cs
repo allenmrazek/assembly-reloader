@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using AssemblyReloader.Destruction;
+using AssemblyReloader.Providers;
 using AssemblyReloader.Providers.SceneProviders;
 using AssemblyReloader.Queries.AssemblyQueries;
 using AssemblyReloader.Repositories;
@@ -113,13 +114,13 @@ namespace AssemblyReloader.Loaders.PMLoader
 
         private void UnloadPartModuleFromPrefab(PartModuleDescriptor descriptor)
         {
-            _log.Debug("Unloading " + descriptor.Identifier + " from prefab " + descriptor.Prefab.Name);
+            _log.Debug("Unloading " + descriptor.Type.FullName + " from prefab " + descriptor.Prefab.Name);
 
             var pm = descriptor.Prefab.GameObject.GetComponent(descriptor.Type) as PartModule;
 
             if (pm.IsNull())
             {
-                _log.Warning("Failed to find prefab " + descriptor.Identifier + " on prefab " +
+                _log.Warning("Failed to find prefab " + descriptor.Type.FullName + " on prefab " +
                              descriptor.Prefab.PartName);
                 return;
             }
@@ -133,7 +134,7 @@ namespace AssemblyReloader.Loaders.PMLoader
 
         private void UnloadPartModuleFromFlight(PartModuleDescriptor descriptor)
         {
-            _log.Debug("Unloading flight PartModule " + descriptor.Identifier + " from flight instances");
+            _log.Debug("Unloading flight PartModule " + descriptor.Type.FullName + " from flight instances");
 
 
         }

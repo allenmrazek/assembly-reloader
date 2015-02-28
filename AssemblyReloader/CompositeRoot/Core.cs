@@ -6,8 +6,10 @@ using System.Reflection;
 using AssemblyReloader.CompositeRoot.Commands;
 using AssemblyReloader.CompositeRoot.Commands.ILModifications;
 using AssemblyReloader.Controllers;
+using AssemblyReloader.DataObjects;
 using AssemblyReloader.Destruction;
 using AssemblyReloader.Game;
+using AssemblyReloader.Generators;
 using AssemblyReloader.GUI;
 using AssemblyReloader.Loaders.AddonLoader;
 using AssemblyReloader.Loaders.PMLoader;
@@ -18,6 +20,7 @@ using AssemblyReloader.Providers;
 using AssemblyReloader.Providers.SceneProviders;
 using AssemblyReloader.Queries;
 using AssemblyReloader.Queries.AssemblyQueries;
+using AssemblyReloader.Queries.CecilQueries;
 using AssemblyReloader.Queries.ConfigNodeQueries;
 using AssemblyReloader.Queries.ConversionQueries;
 using AssemblyReloader.Queries.FileSystemQueries;
@@ -152,14 +155,27 @@ namespace AssemblyReloader.CompositeRoot
                 new KSPUrlDir(new KSPGameDataUrlDirProvider().Get()));
 
             var ourDirProvider = new AssemblyDirectoryQuery(Assembly.GetExecutingAssembly(), fsFactory.GetGameDataDirectory(), _log);
-                
 
-            
+            var partModuleProxyAssemblyFile = ourDirProvider.Get().File(new KSPUrlIdentifier("PartModule.proxy"));
+
+            var assemblyResolver = new DefaultAssemblyResolver();
+
+            assemblyResolver.AddSearchDirectory(Assembly.GetExecutingAssembly().Location); // we'll be importing some references to types we own so this is a necessary step
+
+            var partModuleProxyAssemblyProvider = new ProxyProvider(
+                partModuleProxyAssemblyFile.Single(),
+                assemblyResolver,
+                new CompositeCommand<AssemblyDefinition>(
+                    new RenameAssemblyCommand(new UniqueAssemblyNameGenerator())
+                    ), 
+                new PartModuleDefinitionsQuery(),
+                new KspAssemblyLoader(_log.CreateTag("AssemblyLoader")));
+
             var resourceLocator = ConfigureResourceRepository(ourDirProvider.Get());
             _eventProvider = ConfigureEventProvider(new StartupSceneFromGameSceneQuery());
-            
 
-            var reloadables = CreateReloadablePlugins(cachedLog, fsFactory).ToList();
+
+            var reloadables = CreateReloadablePlugins(cachedLog, fsFactory, partModuleProxyAssemblyProvider, assemblyResolver).ToList();
 
             reloadables.ForEach(r => r.Load());
 
@@ -221,7 +237,11 @@ namespace AssemblyReloader.CompositeRoot
 
 
 
-        private IEnumerable<IReloadablePlugin> CreateReloadablePlugins(ILog cachedLog, IFileSystemFactory fsFactory)
+        private IEnumerable<IReloadablePlugin> CreateReloadablePlugins(
+            ILog cachedLog, 
+            IFileSystemFactory fsFactory, 
+            IAssemblyProvider<ITypeIdentifier> partModuleProxyProvider,
+            DefaultAssemblyResolver assemblyResolver)
         {
             var reloadableAssemblyFileQuery = new ReloadableAssemblyFilesInDirectoryQuery(fsFactory.GetGameDataDirectory());
             var destructionMediator = new GameObjectDestroyForReload();
@@ -229,9 +249,7 @@ namespace AssemblyReloader.CompositeRoot
 
             var addonFactory = new AddonFactory(destructionMediator, cachedLog.CreateTag("AddonFactory"), queryProvider.GetAddonAttributeQuery());
 
-            var assemblyResolver = new DefaultAssemblyResolver();
-
-            assemblyResolver.AddSearchDirectory(Assembly.GetExecutingAssembly().Location); // we'll be importing some references to types we own so this is a necessary step
+            
 
             var kspFactory = new KspFactory();
             var ilModifications = ConfigureAssemblyModifications();
@@ -243,7 +261,7 @@ namespace AssemblyReloader.CompositeRoot
                 var partModuleLoader = new PartModuleLoader(
                     new PartModulesFromAssemblyQuery(),
                     new CurrentSceneIsFlightQuery(), 
-                    new PartModuleFactory(),
+                    new PartModuleFactory(partModuleProxyProvider),
                     new DescriptorFactory(
                         new KspPartLoader(kspFactory), 
                         new AvailablePartConfigProvider(new KspGameDatabase()), 
@@ -255,7 +273,7 @@ namespace AssemblyReloader.CompositeRoot
 
                 _eventProvider.OnSceneLoaded.OnEvent += addonLoader.CreateForScene;
 
-                IReloadablePlugin plugin = new ReloadablePlugin(new ReloadableAssemblyProvider(raFile, assemblyResolver, ilModifications));
+                IReloadablePlugin plugin = new ReloadablePlugin(new AssemblyProvider(raFile, assemblyResolver, ilModifications));
 
                 plugin.OnLoaded += addonLoader.LoadAddonTypes;
                 plugin.OnLoaded += partModuleLoader.LoadPartModuleTypes;
@@ -286,7 +304,7 @@ namespace AssemblyReloader.CompositeRoot
         private ICommand<AssemblyDefinition> ConfigureAssemblyModifications()
         {
             return new CompositeCommand<AssemblyDefinition>(
-                new RenameAssemblyCommand(new UniqueAssemblyNameProvider())
+                new RenameAssemblyCommand(new UniqueAssemblyNameGenerator())
                 );
         }
     }

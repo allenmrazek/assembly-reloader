@@ -7,6 +7,5 @@ namespace AssemblyReloader.Loaders.PMLoader
     {
         //PartModule AddModule(Type type, Part part, ConfigNode config, bool forceAwake);
         PartModule Create(PartModuleDescriptor descriptor);
-        PartModule Create(IPart part, ConfigNode config, Type pmType);
     }
 }

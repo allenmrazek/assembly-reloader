@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ProxyPartModule
 {
-    public class ProxyPartModule : PartModule
+    public class ProxyPrototype : PartModule
     {
     }
 }

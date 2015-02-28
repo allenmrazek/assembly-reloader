@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using AssemblyReloader.Providers;
 using Mono.Cecil;
 
-namespace AssemblyReloader.Providers
+namespace AssemblyReloader.Generators
 {
-    public class UniqueAssemblyNameProvider : IUniqueAssemblyNameProvider
+    public class UniqueAssemblyNameGenerator : IUniqueAssemblyNameGenerator
     {
         public string Get(AssemblyDefinition definition)
         {

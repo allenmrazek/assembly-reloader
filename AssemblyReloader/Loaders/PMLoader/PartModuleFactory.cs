@@ -1,12 +1,23 @@
 ﻿using System;
 using System.Reflection;
+using AssemblyReloader.DataObjects;
 using AssemblyReloader.Game;
+using AssemblyReloader.Providers;
 using ReeperCommon.Extensions;
 
 namespace AssemblyReloader.Loaders.PMLoader
 {
     public class PartModuleFactory : IPartModuleFactory
     {
+        private readonly IAssemblyProvider<ITypeIdentifier> _proxyProvider;
+
+        public PartModuleFactory(IAssemblyProvider<ITypeIdentifier> proxyProvider)
+        {
+            if (proxyProvider == null) throw new ArgumentNullException("proxyProvider");
+            _proxyProvider = proxyProvider;
+        }
+
+
         private PartModule DoAddModule(Type type, IPart part, ConfigNode config, bool forceAwake = false)
         {
             if (type == null) throw new ArgumentNullException("type");
@@ -38,17 +49,8 @@ namespace AssemblyReloader.Loaders.PMLoader
         {
             if (descriptor == null) throw new ArgumentNullException("descriptor");
 
+           
             return DoAddModule(descriptor.Type, descriptor.Prefab, descriptor.Config, true);
-        }
-
-
-        public PartModule Create(IPart part, ConfigNode config, Type pmType)
-        {
-            if (part == null) throw new ArgumentNullException("part");
-            if (config == null) throw new ArgumentNullException("config");
-            if (pmType == null) throw new ArgumentNullException("pmType");
-
-            return DoAddModule(pmType, part, config, true);
         }
     }
 }

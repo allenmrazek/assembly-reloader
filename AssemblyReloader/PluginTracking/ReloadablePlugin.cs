@@ -21,13 +21,13 @@ namespace AssemblyReloader.PluginTracking
     {
         private Assembly _loaded;
 
-        private readonly IReloadableAssemblyProvider _assemblyProvider;
+        private readonly IAssemblyProvider _assemblyProvider;
 
         public event PluginLoadedHandler OnLoaded = delegate { };
         public event PluginUnloadedHandler OnUnloaded = delegate { }; 
 
         public ReloadablePlugin(
-            IReloadableAssemblyProvider assemblyProvider)
+            IAssemblyProvider assemblyProvider)
         {
             if (assemblyProvider == null) throw new ArgumentNullException("assemblyProvider");
 
