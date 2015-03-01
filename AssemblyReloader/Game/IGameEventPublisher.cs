@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-
-namespace AssemblyReloader.Game
+﻿namespace AssemblyReloader.Game
 {
     public delegate void GameEventHandler<T>(T data);
 

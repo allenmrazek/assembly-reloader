@@ -246,9 +246,8 @@ namespace AssemblyReloader.CompositeRoot
         {
             var reloadableAssemblyFileQuery = new ReloadableAssemblyFilesInDirectoryQuery(fsFactory.GetGameDataDirectory());
             var destructionMediator = new GameObjectDestroyForReload();
-            var queryProvider = new QueryFactory();
 
-            var addonFactory = new AddonFactory(destructionMediator, cachedLog.CreateTag("AddonFactory"), queryProvider.GetAddonAttributeQuery());
+            var addonFactory = new AddonFactory(destructionMediator, cachedLog.CreateTag("AddonFactory"), new AddonAttributeFromTypeQuery());
 
             
 
@@ -258,7 +257,7 @@ namespace AssemblyReloader.CompositeRoot
 
             return reloadableAssemblyFileQuery.Get().Select(raFile =>
             {
-                var addonLoader = new Loaders.AddonLoader.AddonLoader(addonFactory, queryProvider.GetAddonsFromAssemblyQuery(), new CurrentStartupSceneProvider(queryProvider.GetStartupSceneFromGameSceneQuery(), new CurrentGameSceneProvider()), cachedLog);
+                var addonLoader = new Loaders.AddonLoader.AddonLoader(addonFactory, new AddonsFromAssemblyQuery(new AddonAttributeFromTypeQuery()), new CurrentStartupSceneProvider(new StartupSceneFromGameSceneQuery(), new CurrentGameSceneProvider()), cachedLog);
                 var partModuleLoader = new PartModuleLoader(
                     new PartModulesFromAssemblyQuery(),
                     new CurrentSceneIsFlightQuery(), 

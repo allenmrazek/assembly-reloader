@@ -136,12 +136,10 @@
     <Compile Include="Queries\FileSystemQueries\AssemblyDirectoryQuery.cs" />
     <Compile Include="Providers\SceneProviders\CurrentGameSceneProvider.cs" />
     <Compile Include="Queries\ITypeIdentifierQuery.cs" />
-    <Compile Include="Queries\QueryFactory.cs" />
     <Compile Include="Destruction\GameObjectDestroyForReload.cs" />
     <Compile Include="Destruction\IDestructionMediator.cs" />
     <Compile Include="PluginTracking\IReloadablePlugin.cs" />
     <Compile Include="Controllers\ReloadableController.cs" />
-    <Compile Include="Queries\IQueryFactory.cs" />
     <Compile Include="Queries\ConversionQueries\AddonAttributeFromTypeQuery.cs" />
     <Compile Include="Queries\FileSystemQueries\IReloadableAssemblyFileLocationQuery.cs" />
     <Compile Include="Queries\ConversionQueries\IStartupSceneFromGameSceneQuery.cs" />
