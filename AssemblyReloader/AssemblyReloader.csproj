@@ -81,8 +81,11 @@
     <Compile Include="Loaders\AssemblyDefinitionLoaderBase.cs" />
     <Compile Include="Loaders\IAssemblyDefinitionLoader.cs" />
     <Compile Include="Loaders\IAssemblyDefinitionReader.cs" />
-    <Compile Include="Loaders\PMLoader\IPartModuleLoader.cs" />
+    <Compile Include="Loaders\PMLoader\IPartModuleController.cs" />
     <Compile Include="Loaders\PMLoader\IPartModuleFactory.cs" />
+    <Compile Include="Loaders\PMLoader\IPartModuleLoader.cs" />
+    <Compile Include="Loaders\PMLoader\IPartModuleUnloader.cs" />
+    <Compile Include="Loaders\PMLoader\LoadedPartModule.cs" />
     <Compile Include="Loaders\PMLoader\PartModuleFactory.cs" />
     <Compile Include="ILModifications\old\IModifiedAssembly.cs" />
     <Compile Include="ILModifications\old\IModifiedAssemblyFactory.cs" />
@@ -100,9 +103,10 @@
     <Compile Include="Loaders\PMLoader\old\FlightHandler.cs" />
     <Compile Include="Loaders\PMLoader\IDescriptorFactory.cs" />
     <Compile Include="Loaders\PMLoader\PartModuleDescriptor.cs" />
-    <Compile Include="Loaders\PMLoader\DescriptorFactory.cs" />
-    <Compile Include="Logging\ICachedLog.cs" />
+    <Compile Include="Loaders\PMLoader\PartModuleDescriptorFactory.cs" />
     <Compile Include="Loaders\PMLoader\PartModuleLoader.cs" />
+    <Compile Include="Logging\ICachedLog.cs" />
+    <Compile Include="Loaders\PMLoader\PartModuleController.cs" />
     <Compile Include="CompositeRoot\Commands\ICommand.cs" />
     <Compile Include="CompositeRoot\Commands\CompositeCommand.cs" />
     <Compile Include="Messages\IMessageFactory.cs" />
@@ -135,6 +139,7 @@
     <Compile Include="Providers\SceneProviders\ICurrentStartupSceneProvider.cs" />
     <Compile Include="Queries\FileSystemQueries\AssemblyDirectoryQuery.cs" />
     <Compile Include="Providers\SceneProviders\CurrentGameSceneProvider.cs" />
+    <Compile Include="Queries\IPartModulesInPartQuery.cs" />
     <Compile Include="Queries\ITypeIdentifierQuery.cs" />
     <Compile Include="Destruction\GameObjectDestroyForReload.cs" />
     <Compile Include="Destruction\IDestructionMediator.cs" />
@@ -155,6 +160,7 @@
     <Compile Include="Providers\SceneProviders\CurrentStartupSceneProvider.cs" />
     <Compile Include="Queries\ConversionQueries\StartupSceneFromGameSceneQuery.cs" />
     <Compile Include="Queries\FileSystemQueries\ReloadableAssemblyFilesInDirectoryQuery.cs" />
+    <Compile Include="Queries\PartModulesInPartQuery.cs" />
     <Compile Include="Queries\TypeIdentifierQuery.cs" />
     <Compile Include="Repositories\IPartModuleFlightConfigRepository.cs" />
     <Compile Include="Repositories\PartModuleFlightConfigRepository.cs" />

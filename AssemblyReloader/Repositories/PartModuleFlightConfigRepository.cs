@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using AssemblyReloader.DataObjects;
 using ReeperCommon.Containers;
 
 namespace AssemblyReloader.Repositories
@@ -9,20 +10,20 @@ namespace AssemblyReloader.Repositories
     public class PartModuleFlightConfigRepository : IPartModuleFlightConfigRepository
     {
         private readonly Dictionary<uint,
-                            Dictionary<string,
+                            Dictionary<ITypeIdentifier,
                                 Queue<ConfigNode>
                             >
-                         > _entries = new Dictionary<uint, Dictionary<string, Queue<ConfigNode>>>();
-  
-        public void Store(uint flightid, string key, ConfigNode data)
+                         > _entries = new Dictionary<uint, Dictionary<ITypeIdentifier, Queue<ConfigNode>>>();
+
+        public void Store(uint flightid, ITypeIdentifier key, ConfigNode data)
         {
             if (key == null) throw new ArgumentNullException("key");
             if (data == null) throw new ArgumentNullException("data");
 
-            Dictionary<string, Queue<ConfigNode>> configsForKey;
+            Dictionary<ITypeIdentifier, Queue<ConfigNode>> configsForKey;
 
             if (!_entries.TryGetValue(flightid, out configsForKey))
-                configsForKey = _entries[flightid] = new Dictionary<string, Queue<ConfigNode>>();
+                configsForKey = _entries[flightid] = new Dictionary<ITypeIdentifier, Queue<ConfigNode>>();
 
             Queue<ConfigNode> configData;
 
@@ -33,11 +34,22 @@ namespace AssemblyReloader.Repositories
         }
 
 
-        public Maybe<ConfigNode> Retrieve(uint flightid, string key)
+        public Maybe<ConfigNode> Retrieve(uint flightid, ITypeIdentifier key)
         {
             if (key == null) throw new ArgumentNullException("key");
 
-            Dictionary<string, Queue<ConfigNode>> configsForKey;
+            var result = Peek(flightid, key);
+
+            if (result.Any())
+                _entries[flightid][key].Dequeue();
+
+            return result;
+        }
+
+
+        public Maybe<ConfigNode> Peek(uint flightid, ITypeIdentifier key)
+        {
+            Dictionary<ITypeIdentifier, Queue<ConfigNode>> configsForKey;
             Queue<ConfigNode> configData;
 
 
@@ -46,7 +58,7 @@ namespace AssemblyReloader.Repositories
 
 
             return configData.Any()
-                        ? Maybe<ConfigNode>.With(_entries[flightid][key].Dequeue())
+                        ? Maybe<ConfigNode>.With(_entries[flightid][key].Peek())
                         : Maybe<ConfigNode>.None;
         }
 

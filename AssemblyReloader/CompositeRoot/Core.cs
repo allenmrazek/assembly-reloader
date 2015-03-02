@@ -245,31 +245,39 @@ namespace AssemblyReloader.CompositeRoot
             DefaultAssemblyResolver assemblyResolver)
         {
             var reloadableAssemblyFileQuery = new ReloadableAssemblyFilesInDirectoryQuery(fsFactory.GetGameDataDirectory());
+            var partModulesFromAssemblyQuery = new PartModulesFromAssemblyQuery();
+
             var destructionMediator = new GameObjectDestroyForReload();
 
             var addonFactory = new AddonFactory(destructionMediator, cachedLog.CreateTag("AddonFactory"), new AddonAttributeFromTypeQuery());
+            var descriptorFactory = new PartModuleDescriptorFactory(
+                new KspPartLoader(new KspFactory()),
+                new AvailablePartConfigProvider(new KspGameDatabase()),
+                new ModuleConfigsFromPartConfigQuery(),
+                new TypeIdentifierQuery(),
+                _log.CreateTag("DescriptorFactory"));
 
-            
+            var flightConfigRepository = new PartModuleFlightConfigRepository();
+            var loadedPrefabProvider = new LoadedInstancesOfPrefabProvider(new LoadedVesselProvider(new KspFactory()));
 
-            var kspFactory = new KspFactory();
             var ilModifications = ConfigureAssemblyModifications();
 
 
             return reloadableAssemblyFileQuery.Get().Select(raFile =>
             {
                 var addonLoader = new Loaders.AddonLoader.AddonLoader(addonFactory, new AddonsFromAssemblyQuery(new AddonAttributeFromTypeQuery()), new CurrentStartupSceneProvider(new StartupSceneFromGameSceneQuery(), new CurrentGameSceneProvider()), cachedLog);
-                var partModuleLoader = new PartModuleLoader(
-                    new PartModulesFromAssemblyQuery(),
-                    new CurrentSceneIsFlightQuery(), 
-                    new PartModuleFactory(partModuleProxyProvider, new TypeIdentifierQuery(), new PartModulesFromAssemblyQuery()),
-                    new DescriptorFactory(
-                        new KspPartLoader(kspFactory), 
-                        new AvailablePartConfigProvider(new KspGameDatabase()), 
-                        new ModuleConfigsFromPartConfigQuery(), 
-                        cachedLog.CreateTag("PartModuleDescriptor")),
-                    destructionMediator,
-                    new PartModuleFlightConfigRepository(),
-                    cachedLog.CreateTag("PartModuleLoader"));
+                var pmFactory = new PartModuleFactory();
+                var pmLoader = new PartModuleLoader(
+                    pmFactory,
+                    flightConfigRepository,
+                    loadedPrefabProvider);
+
+                var partModuleController = new PartModuleController(
+                    pmLoader,
+                    partModulesFromAssemblyQuery,
+                    descriptorFactory,
+                    new CurrentSceneIsFlightQuery());
+
 
                 _eventProvider.OnSceneLoaded.OnEvent += addonLoader.CreateForScene;
 
@@ -277,10 +285,10 @@ namespace AssemblyReloader.CompositeRoot
                     ConfigureAssemblyProvider(raFile, assemblyResolver, ilModifications));
 
                 plugin.OnLoaded += addonLoader.LoadAddonTypes;
-                plugin.OnLoaded += partModuleLoader.LoadPartModuleTypes;
+                plugin.OnLoaded += partModuleController.LoadPartModules;
 
                 plugin.OnUnloaded += (f => addonLoader.ClearAddonTypes(true));
-                plugin.OnUnloaded += (f => partModuleLoader.ClearPartModuleTypes());
+                plugin.OnUnloaded += partModuleController.UnloadPartModules;
 
                 return plugin;
             });

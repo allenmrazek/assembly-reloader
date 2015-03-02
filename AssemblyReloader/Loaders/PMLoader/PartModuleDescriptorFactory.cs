@@ -1,35 +1,41 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using AssemblyReloader.DataObjects;
 using AssemblyReloader.Game;
 using AssemblyReloader.Providers;
+using AssemblyReloader.Queries;
 using AssemblyReloader.Queries.ConfigNodeQueries;
 using ReeperCommon.Logging;
 
 namespace AssemblyReloader.Loaders.PMLoader
 {
-    public class DescriptorFactory : IDescriptorFactory
+    public class PartModuleDescriptorFactory : IDescriptorFactory
     {
         private readonly IPartLoader _partLoader;
         private readonly IAvailablePartConfigProvider _configProvider;
         private readonly IModuleConfigsFromPartConfigQuery _moduleConfigQuery;
+        private readonly ITypeIdentifierQuery _typeIdentifierQuery;
         private readonly ILog _log;
 
 
-        public DescriptorFactory(
+        public PartModuleDescriptorFactory(
             IPartLoader partLoader,
             IAvailablePartConfigProvider configProvider,
             IModuleConfigsFromPartConfigQuery moduleConfigQuery,
+            ITypeIdentifierQuery typeIdentifierQuery,
             ILog log)
         {
             if (partLoader == null) throw new ArgumentNullException("partLoader");
             if (configProvider == null) throw new ArgumentNullException("configProvider");
             if (moduleConfigQuery == null) throw new ArgumentNullException("moduleConfigQuery");
+            if (typeIdentifierQuery == null) throw new ArgumentNullException("typeIdentifierQuery");
             if (log == null) throw new ArgumentNullException("log");
 
             _partLoader = partLoader;
             _configProvider = configProvider;
             _moduleConfigQuery = moduleConfigQuery;
+            _typeIdentifierQuery = typeIdentifierQuery;
             _log = log;
         }
 
@@ -50,7 +56,7 @@ namespace AssemblyReloader.Loaders.PMLoader
 
             return
                 _moduleConfigQuery.Get(partConfig, pmType.Name)
-                    .Select(config => new PartModuleDescriptor(prefab, config, pmType));
+                    .Select(config => new PartModuleDescriptor(prefab, config, pmType, _typeIdentifierQuery.Get(pmType)));
         }
 
 

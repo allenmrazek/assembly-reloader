@@ -49,5 +49,9 @@ namespace AssemblyReloader.Game
         public IAvailablePart PartInfo {
             get { return _kspFactory.Create(_target.partInfo); }
         }
+
+        public uint FlightID {
+            get { return _target.flightID; }
+        }
     }
 }

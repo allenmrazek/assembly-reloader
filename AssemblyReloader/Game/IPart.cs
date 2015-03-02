@@ -15,5 +15,6 @@ namespace AssemblyReloader.Game
         string Name { get; }
         string PartName { get; }
         IAvailablePart PartInfo { get; }
+        uint FlightID { get; }
     }
 }

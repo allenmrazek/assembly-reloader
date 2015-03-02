@@ -1,4 +1,5 @@
 ﻿using System;
+using AssemblyReloader.DataObjects;
 using AssemblyReloader.Game;
 
 namespace AssemblyReloader.Loaders.PMLoader
@@ -12,8 +13,9 @@ namespace AssemblyReloader.Loaders.PMLoader
         public IPart Prefab { get; private set; }
         public ConfigNode Config { get; private set; }
         public Type Type { get; private set; }
+        public ITypeIdentifier Identifier { get; private set; }
 
-        public PartModuleDescriptor(IPart prefab, ConfigNode config, Type type)
+        public PartModuleDescriptor(IPart prefab, ConfigNode config, Type type, ITypeIdentifier typeIdentifier)
         {
             if (prefab == null) throw new ArgumentNullException("prefab");
             if (config == null) throw new ArgumentNullException("config");
@@ -22,12 +24,7 @@ namespace AssemblyReloader.Loaders.PMLoader
             Prefab = prefab;
             Config = config;
             Type = type;
+            Identifier = typeIdentifier;
         }
-
-
-        //public string Identifier
-        //{
-        //    get { return Type.Name; }
-        //}
     }
 }

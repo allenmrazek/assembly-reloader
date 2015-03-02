@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using AssemblyReloader.DataObjects;
 using AssemblyReloader.Repositories;
 using Ploeh.AutoFixture.AutoNSubstitute;
 using Ploeh.AutoFixture.Xunit;
@@ -13,7 +14,7 @@ namespace AssemblyReloaderUnitTests.Repositories
     public class PartModuleFlightConfigRepository_Test
     {
         [Theory, AutoData]
-        void Store_Then_Retrieve_ReturnsCorrectResult(uint flightid, string key, ConfigNode data, PartModuleFlightConfigRepository sut)
+        void Store_Then_Retrieve_ReturnsCorrectResult(uint flightid, ITypeIdentifier key, ConfigNode data, PartModuleFlightConfigRepository sut)
         {
             sut.Store(flightid, key, data);
 
@@ -26,7 +27,7 @@ namespace AssemblyReloaderUnitTests.Repositories
 
 
         [Theory, AutoData]
-        void Retrieve_NonexistingData_Fails(uint flightid, string key, ConfigNode data,
+        void Retrieve_NonexistingData_Fails(uint flightid, ITypeIdentifier key, ConfigNode data,
             PartModuleFlightConfigRepository sut)
         {
             var result = sut.Retrieve(flightid, key);
@@ -36,7 +37,7 @@ namespace AssemblyReloaderUnitTests.Repositories
 
 
         [Theory, AutoData]
-        void Inserting_Then_Retrieving_Is_FIFO(uint flightid, string key, PartModuleFlightConfigRepository sut)
+        void Inserting_Then_Retrieving_Is_FIFO(uint flightid, ITypeIdentifier key, PartModuleFlightConfigRepository sut)
         {
             var data1 = new ConfigNode();
             var data2 = new ConfigNode();
