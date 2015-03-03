@@ -8,7 +8,7 @@ using ReeperCommon.Containers;
 
 namespace AssemblyReloader.Queries.CecilQueries
 {
-    public interface IPartModuleMethodQuery
+    public interface IPartModuleMethodDefinitionQuery
     {
         Maybe<MethodDefinition> GetOnSaveDefinition(TypeDefinition definition);
         Maybe<MethodInfo> GetOnSaveMethod(Type type);

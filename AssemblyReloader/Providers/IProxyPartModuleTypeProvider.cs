@@ -8,6 +8,6 @@ namespace AssemblyReloader.Providers
 {
     public interface IProxyPartModuleTypeProvider
     {
-        Type Get(PartModuleDescriptor descriptor);
+        Type Get(Type partModuleType);
     }
 }

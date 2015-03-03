@@ -81,11 +81,14 @@
     <Compile Include="Loaders\AssemblyDefinitionLoaderBase.cs" />
     <Compile Include="Loaders\IAssemblyDefinitionLoader.cs" />
     <Compile Include="Loaders\IAssemblyDefinitionReader.cs" />
+    <Compile Include="Loaders\PMLoader\LoadedPartModuleHandleFactory.cs" />
+    <Compile Include="Loaders\PMLoader\ILoadedPartModuleHandle.cs" />
+    <Compile Include="Loaders\PMLoader\ILoadedPartModuleHandleFactory.cs" />
     <Compile Include="Loaders\PMLoader\IPartModuleController.cs" />
     <Compile Include="Loaders\PMLoader\IPartModuleFactory.cs" />
     <Compile Include="Loaders\PMLoader\IPartModuleLoader.cs" />
     <Compile Include="Loaders\PMLoader\IPartModuleUnloader.cs" />
-    <Compile Include="Loaders\PMLoader\LoadedPartModule.cs" />
+    <Compile Include="Loaders\PMLoader\LoadedPartModuleHandle.cs" />
     <Compile Include="Loaders\PMLoader\PartModuleFactory.cs" />
     <Compile Include="ILModifications\old\IModifiedAssembly.cs" />
     <Compile Include="ILModifications\old\IModifiedAssemblyFactory.cs" />
@@ -100,7 +103,6 @@
     <Compile Include="GUI\WindowFactory.cs" />
     <Compile Include="GUI\LogViewLogic.cs" />
     <Compile Include="Loaders\AddonLoader\Addon.cs" />
-    <Compile Include="Loaders\PMLoader\old\FlightHandler.cs" />
     <Compile Include="Loaders\PMLoader\IDescriptorFactory.cs" />
     <Compile Include="Loaders\PMLoader\PartModuleDescriptor.cs" />
     <Compile Include="Loaders\PMLoader\PartModuleDescriptorFactory.cs" />
@@ -127,9 +129,9 @@
     <Compile Include="Generators\UniqueAssemblyNameGenerator.cs" />
     <Compile Include="Queries\AssemblyQueries\ITypesFromAssemblyQuery.cs" />
     <Compile Include="Queries\AssemblyQueries\PartModulesFromAssemblyQuery.cs" />
-    <Compile Include="Queries\CecilQueries\IPartModuleMethodQuery.cs" />
+    <Compile Include="Queries\CecilQueries\IPartModuleMethodDefinitionQuery.cs" />
     <Compile Include="Queries\CecilQueries\ITypeDefinitionQuery.cs" />
-    <Compile Include="Queries\CecilQueries\PartModuleMethodQuery.cs" />
+    <Compile Include="Queries\CecilQueries\PartModuleMethodDefinitionQuery.cs" />
     <Compile Include="Queries\CecilQueries\PartModuleDefinitionsQuery.cs" />
     <Compile Include="Queries\ConfigNodeQueries\IModuleConfigsFromPartConfigQuery.cs" />
     <Compile Include="Queries\ConfigNodeQueries\ModuleConfigsFromPartConfigQuery.cs" />

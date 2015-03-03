@@ -7,6 +7,8 @@ namespace AssemblyReloader.Loaders.PMLoader
 {
     public interface IPartModuleFactory
     {
-        IDisposable Create(Type type, GameObject gameObject, ConfigNode config);
+        // Target PartModule, Proxy PartModule
+        ILoadedPartModuleHandle Create(PartModuleDescriptor descriptor);
+        ILoadedPartModuleHandle Create(PartModuleDescriptor descriptor, ConfigNode withConfig);
     }
 }

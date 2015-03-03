@@ -43,7 +43,7 @@
 
 //            foreach (var pmDef in partModuleDefinitions)
 //            {
-//                var methodQuery = new PartModuleMethodQuery();
+//                var methodQuery = new PartModuleMethodDefinitionQuery();
 //                var onSaveMethod = methodQuery.GetOnSaveDefinition(pmDef);
 
 //                if (!onSaveMethod.Any())

@@ -20,7 +20,7 @@ namespace AssemblyReloaderUnitTests.Queries.CecilQueries
             var fixture = new Fixture();
             fixture.Customize(new TestProjectAssembly_WithVariousOnLoadOnSavePartModuleCustomization());
 
-            var sut = new PartModuleMethodQuery();
+            var sut = new PartModuleMethodDefinitionQuery();
             
             var results = sut.GetOnLoadDefinition((fixture.CreateAnonymous<TypeDefinition>())).ToList();
 
@@ -34,7 +34,7 @@ namespace AssemblyReloaderUnitTests.Queries.CecilQueries
             var fixture = new Fixture();
             fixture.Customize(new TestProjectAssembly_WithVariousOnLoadOnSavePartModuleCustomization());
 
-            var sut = new PartModuleMethodQuery();
+            var sut = new PartModuleMethodDefinitionQuery();
 
             var results = sut.GetOnLoadDefinition(fixture.CreateAnonymous<TypeDefinition>()).ToList();
 
@@ -48,7 +48,7 @@ namespace AssemblyReloaderUnitTests.Queries.CecilQueries
             var fixture = new Fixture();
             fixture.Customize(new TestProjectAssembly_WithVariousOnLoadOnSavePartModuleCustomization());
 
-            var sut = new PartModuleMethodQuery();
+            var sut = new PartModuleMethodDefinitionQuery();
 
 
             var results = sut.GetOnLoadDefinition(fixture.CreateAnonymous<TypeDefinition>());
@@ -64,7 +64,7 @@ namespace AssemblyReloaderUnitTests.Queries.CecilQueries
             var fixture = new Fixture();
             fixture.Customize(new TestProjectAssembly_WithVariousOnLoadOnSavePartModuleCustomization());
 
-            var sut = new PartModuleMethodQuery();
+            var sut = new PartModuleMethodDefinitionQuery();
 
 
             var results = sut.GetOnSaveDefinition(fixture.CreateAnonymous<TypeDefinition>());
@@ -81,7 +81,7 @@ namespace AssemblyReloaderUnitTests.Queries.CecilQueries
             var fixture = new Fixture();
             fixture.Customize(new TestProjectAssembly_WithVariousOnLoadOnSavePartModuleCustomization());
 
-            var sut = new PartModuleMethodQuery();
+            var sut = new PartModuleMethodDefinitionQuery();
 
             var results = sut.GetOnLoadMethod(typeof (TestData.PartModules.TestPartModule));
 
@@ -95,7 +95,7 @@ namespace AssemblyReloaderUnitTests.Queries.CecilQueries
             var fixture = new Fixture();
             fixture.Customize(new TestProjectAssembly_WithVariousOnLoadOnSavePartModuleCustomization());
 
-            var sut = new PartModuleMethodQuery();
+            var sut = new PartModuleMethodDefinitionQuery();
 
             var results = sut.GetOnLoadMethod(typeof(TestData.PartModules.PartModuleContainerClass.InnerPartModule));
 
@@ -109,7 +109,7 @@ namespace AssemblyReloaderUnitTests.Queries.CecilQueries
             var fixture = new Fixture();
             fixture.Customize(new TestProjectAssembly_WithVariousOnLoadOnSavePartModuleCustomization());
 
-            var sut = new PartModuleMethodQuery();
+            var sut = new PartModuleMethodDefinitionQuery();
 
             var results = sut.GetOnSaveMethod(typeof (TestData.PartModules.TestPartModule));
 
@@ -123,7 +123,7 @@ namespace AssemblyReloaderUnitTests.Queries.CecilQueries
             var fixture = new Fixture();
             fixture.Customize(new TestProjectAssembly_WithVariousOnLoadOnSavePartModuleCustomization());
 
-            var sut = new PartModuleMethodQuery();
+            var sut = new PartModuleMethodDefinitionQuery();
 
             var results = sut.GetOnSaveMethod(typeof(TestData.PartModules.PartModuleContainerClass.InnerPartModule));
 

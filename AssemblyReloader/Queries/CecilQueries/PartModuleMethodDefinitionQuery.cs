@@ -9,7 +9,7 @@ using ReeperCommon.Extensions;
 
 namespace AssemblyReloader.Queries.CecilQueries
 {
-    public class PartModuleMethodQuery : IPartModuleMethodQuery
+    public class PartModuleMethodDefinitionQuery : IPartModuleMethodDefinitionQuery
     {
         public Maybe<MethodDefinition> GetOnSaveDefinition(TypeDefinition pmDefinition)
         {

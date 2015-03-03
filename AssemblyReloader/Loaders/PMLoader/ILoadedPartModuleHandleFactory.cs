@@ -5,8 +5,8 @@ using System.Text;
 
 namespace AssemblyReloader.Loaders.PMLoader
 {
-    public interface IPartModuleUnloader
+    public interface ILoadedPartModuleHandleFactory
     {
-        void Destroy(LoadedPartModuleHandle handle);
+        ILoadedPartModuleHandle Create(PartModule target, PartModuleDescriptor descriptor);
     }
 }

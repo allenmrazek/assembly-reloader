@@ -8,21 +8,25 @@ namespace AssemblyReloader.Loaders.PMLoader
 {
     public class PartModuleLoader : IPartModuleLoader
     {
-        private readonly IPartModuleFactory _factory;
+        private readonly IPartModuleFactory _partModuleFactory;
+        private readonly ILoadedPartModuleHandleFactory _handleFactory;
         private readonly IPartModuleFlightConfigRepository _flightConfigs;
         private readonly ILoadedInstancesOfPrefabProvider _loadedPrefabProvider;
 
 
         public PartModuleLoader(
-            IPartModuleFactory factory,
+            IPartModuleFactory partModuleFactory,
+            ILoadedPartModuleHandleFactory handleFactory,
             IPartModuleFlightConfigRepository flightConfigs,
             ILoadedInstancesOfPrefabProvider loadedPrefabProvider)
         {
-            if (factory == null) throw new ArgumentNullException("factory");
+            if (partModuleFactory == null) throw new ArgumentNullException("partModuleFactory");
+            if (handleFactory == null) throw new ArgumentNullException("handleFactory");
             if (flightConfigs == null) throw new ArgumentNullException("flightConfigs");
             if (loadedPrefabProvider == null) throw new ArgumentNullException("loadedPrefabProvider");
 
-            _factory = factory;
+            _partModuleFactory = partModuleFactory;
+            _handleFactory = handleFactory;
             _flightConfigs = flightConfigs;
             _loadedPrefabProvider = loadedPrefabProvider;
         }
@@ -32,23 +36,25 @@ namespace AssemblyReloader.Loaders.PMLoader
         {
             if (descriptor == null) throw new ArgumentNullException("descriptor");
 
-            var handle = _factory.Create(descriptor.Type, descriptor.Prefab.GameObject, descriptor.Config);
+            var handle = _handleFactory.Create(_partModuleFactory.Create(descriptor.Type, descriptor.Prefab, descriptor.Config));
 
             if (!inFlight)
                 return new []{handle};
 
-  
+            // if we're in flight, try to use any previously saved flight config if possible
             var loadedParts = _loadedPrefabProvider.Get(descriptor.Prefab);
 
-            return loadedParts.Select(lp =>
+            var createdItems = loadedParts.Select(lp =>
             {
                 var config = descriptor.Config;
 
                 if (_flightConfigs.Peek(lp.FlightID, descriptor.Identifier).Any())
                     config = _flightConfigs.Retrieve(lp.FlightID, descriptor.Identifier).Single();
 
-                return _factory.Create(descriptor.Type, lp.GameObject, config);
-            }).Concat(new[]{handle});
+                return _partModuleFactory.Create(descriptor.Type, lp, config);
+            });
+            
+            return createdItems.Select(kvp => _handleFactory.Create(kvp)).Concat(new[]{handle});
         }
     }
 }

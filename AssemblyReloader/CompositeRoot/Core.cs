@@ -266,9 +266,10 @@ namespace AssemblyReloader.CompositeRoot
             return reloadableAssemblyFileQuery.Get().Select(raFile =>
             {
                 var addonLoader = new Loaders.AddonLoader.AddonLoader(addonFactory, new AddonsFromAssemblyQuery(new AddonAttributeFromTypeQuery()), new CurrentStartupSceneProvider(new StartupSceneFromGameSceneQuery(), new CurrentGameSceneProvider()), cachedLog);
-                var pmFactory = new PartModuleFactory();
+                var pmFactory = new PartModuleFactory(new ProxyPartModuleTypeProvider(partModuleProxyProvider, partModulesFromAssemblyQuery, new TypeIdentifierQuery()));
                 var pmLoader = new PartModuleLoader(
                     pmFactory,
+                   
                     flightConfigRepository,
                     loadedPrefabProvider);
 
