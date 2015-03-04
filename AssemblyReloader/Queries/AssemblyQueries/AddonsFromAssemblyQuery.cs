@@ -9,13 +9,13 @@ namespace AssemblyReloader.Queries.AssemblyQueries
 {
     public class AddonsFromAssemblyQuery : ITypesFromAssemblyQuery
     {
-        private readonly IAddonAttributeFromTypeQuery _attributeQuery;
+        private readonly IAddonAttributesFromTypeQuery _attributesQuery;
 
-        public AddonsFromAssemblyQuery(IAddonAttributeFromTypeQuery attributeQuery)
+        public AddonsFromAssemblyQuery(IAddonAttributesFromTypeQuery attributesQuery)
         {
-            if (attributeQuery == null) throw new ArgumentNullException("attributeQuery");
+            if (attributesQuery == null) throw new ArgumentNullException("attributesQuery");
 
-            _attributeQuery = attributeQuery;
+            _attributesQuery = attributesQuery;
         }
 
 
@@ -26,7 +26,7 @@ namespace AssemblyReloader.Queries.AssemblyQueries
 
             return assembly
                 .GetTypes()
-                .Where(t => _attributeQuery.Get(t).Any())
+                .Where(t => _attributesQuery.Get(t).Any())
                 .Where(t => typeof(MonoBehaviour).IsAssignableFrom(t) 
                     && !typeof(PartModule).IsAssignableFrom(t) 
                     && !typeof(ScenarioModule).IsAssignableFrom(t)); // don't let KSPAddon-marked PartModules/SModules get selected (they're likely errors anyway)

@@ -13,27 +13,37 @@ namespace AssemblyReloader.Game
 {
     public class KspAssemblyLoader : IAssemblyLoader
     {
-        private readonly ILog _log;
+        private AssemblyLoader.LoadedAssembly _loadedAssembly;
 
-        public KspAssemblyLoader(ILog log)
+        public void Load(Assembly assembly, IFile location)
         {
-            if (log == null) throw new ArgumentNullException("log");
-            _log = log;
-        }
-
-        public Maybe<Assembly> Load(MemoryStream stream, IFile location)
-        {
-            if (stream == null) throw new ArgumentNullException("stream");
+            if (assembly == null) throw new ArgumentNullException("assembly");
             if (location == null) throw new ArgumentNullException("location");
 
-            var assembly = AppDomain.CurrentDomain.Load(stream.GetBuffer());
+            if (AssemblyLoader.loadedAssemblies.GetByAssembly(assembly) != null)
+                throw new InvalidOperationException(assembly.FullName + " has already been loaded by AssemblyLoader!");
 
-            if (assembly.IsNull()) return Maybe<Assembly>.None;
+            _loadedAssembly = new AssemblyLoader.LoadedAssembly(assembly, location.FullPath, location.Url, null);
 
-            AssemblyLoader.loadedAssemblies.Add(new AssemblyLoader.LoadedAssembly(assembly, location.FullPath,
-                location.Url, null));
+            AssemblyLoader.loadedAssemblies.Add(_loadedAssembly);
+        }
 
-            return Maybe<Assembly>.With(assembly);
+
+        public void Unload(Assembly assembly, IFile location)
+        {
+            if (assembly == null) throw new ArgumentNullException("assembly");
+            if (location == null) throw new ArgumentNullException("location");
+            if (_loadedAssembly == null) throw new Exception("AssemblyLoader.LoadedAssembly is null");
+
+            for (int idx = 0; idx < AssemblyLoader.loadedAssemblies.Count; ++idx)
+                if (ReferenceEquals(_loadedAssembly, AssemblyLoader.loadedAssemblies[idx]))
+                {
+                    AssemblyLoader.loadedAssemblies.RemoveAt(idx);
+                    return;
+                }
+
+            throw new Exception("Failed to find assembly " + assembly.FullName + " (location " + location.Url +
+                                ") in loaded assembly list");
         }
     }
 }

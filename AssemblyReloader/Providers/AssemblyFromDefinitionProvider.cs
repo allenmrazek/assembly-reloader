@@ -10,13 +10,13 @@ using ReeperCommon.FileSystem;
 
 namespace AssemblyReloader.Providers
 {
-    public class AssemblyProvider : IAssemblyProvider
+    public class AssemblyFromDefinitionProvider : IAssemblyProvider
     {
         private readonly IAssemblyDefinitionReader _reader;
         private readonly IAssemblyDefinitionLoader _loader;
         private readonly ICommand<AssemblyDefinition> _assemblyModifications;
 
-        public AssemblyProvider(
+        public AssemblyFromDefinitionProvider(
             IAssemblyDefinitionReader reader,
             IAssemblyDefinitionLoader loader,
             ICommand<AssemblyDefinition> assemblyModifications)

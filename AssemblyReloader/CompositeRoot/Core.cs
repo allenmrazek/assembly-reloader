@@ -6,28 +6,17 @@ using System.Reflection;
 using AssemblyReloader.CompositeRoot.Commands;
 using AssemblyReloader.CompositeRoot.Commands.ILModifications;
 using AssemblyReloader.Controllers;
-using AssemblyReloader.DataObjects;
-using AssemblyReloader.Destruction;
 using AssemblyReloader.Game;
 using AssemblyReloader.Generators;
 using AssemblyReloader.GUI;
 using AssemblyReloader.Loaders;
-using AssemblyReloader.Loaders.AddonLoader;
-using AssemblyReloader.Loaders.PMLoader;
 using AssemblyReloader.Logging;
 using AssemblyReloader.Messages;
 using AssemblyReloader.PluginTracking;
 using AssemblyReloader.Providers;
-using AssemblyReloader.Providers.SceneProviders;
-using AssemblyReloader.Queries;
-using AssemblyReloader.Queries.AssemblyQueries;
-using AssemblyReloader.Queries.CecilQueries;
-using AssemblyReloader.Queries.ConfigNodeQueries;
 using AssemblyReloader.Queries.ConversionQueries;
 using AssemblyReloader.Queries.FileSystemQueries;
-using AssemblyReloader.Repositories;
 using Mono.Cecil;
-using ReeperCommon.Events.Implementations;
 using ReeperCommon.FileSystem;
 using ReeperCommon.FileSystem.Factories;
 using ReeperCommon.FileSystem.Implementations;
@@ -163,20 +152,12 @@ namespace AssemblyReloader.CompositeRoot
 
             assemblyResolver.AddSearchDirectory(Assembly.GetExecutingAssembly().Location); // we'll be importing some references to types we own so this is a necessary step
 
-            var partModuleProxyAssemblyProvider = new ProxyAssemblyProvider(
-                new AssemblyDefinitionReader(partModuleProxyAssemblyFile.Single(), assemblyResolver),
-                new AssemblyDefinitionIntoKspLoader(partModuleProxyAssemblyFile.Single(), new KspAssemblyLoader(_log.CreateTag("KspAssemblyLoader"))),
-                new PartModuleDefinitionsQuery(),
-
-                new CompositeCommand<AssemblyDefinition>(
-                    new RenameAssemblyCommand(new UniqueAssemblyNameGenerator())
-                    ));
 
             var resourceLocator = ConfigureResourceRepository(ourDirProvider.Get());
             _eventProvider = ConfigureEventProvider(new StartupSceneFromGameSceneQuery());
 
 
-            var reloadables = CreateReloadablePlugins(cachedLog, fsFactory, partModuleProxyAssemblyProvider, assemblyResolver).ToList();
+            var reloadables = CreateReloadablePlugins(fsFactory, assemblyResolver).ToList();
 
             reloadables.ForEach(r => r.Load());
 
@@ -239,60 +220,13 @@ namespace AssemblyReloader.CompositeRoot
 
 
         private IEnumerable<IReloadablePlugin> CreateReloadablePlugins(
-            ILog cachedLog, 
             IFileSystemFactory fsFactory, 
-            IAssemblyProvider<ITypeIdentifier> partModuleProxyProvider,
             DefaultAssemblyResolver assemblyResolver)
         {
             var reloadableAssemblyFileQuery = new ReloadableAssemblyFilesInDirectoryQuery(fsFactory.GetGameDataDirectory());
-            var partModulesFromAssemblyQuery = new PartModulesFromAssemblyQuery();
-
-            var destructionMediator = new GameObjectDestroyForReload();
-
-            var addonFactory = new AddonFactory(destructionMediator, cachedLog.CreateTag("AddonFactory"), new AddonAttributeFromTypeQuery());
-            var descriptorFactory = new PartModuleDescriptorFactory(
-                new KspPartLoader(new KspFactory()),
-                new AvailablePartConfigProvider(new KspGameDatabase()),
-                new ModuleConfigsFromPartConfigQuery(),
-                new TypeIdentifierQuery(),
-                _log.CreateTag("DescriptorFactory"));
-
-            var flightConfigRepository = new PartModuleFlightConfigRepository();
-            var loadedPrefabProvider = new LoadedInstancesOfPrefabProvider(new LoadedVesselProvider(new KspFactory()));
-
             var ilModifications = ConfigureAssemblyModifications();
 
-
-            return reloadableAssemblyFileQuery.Get().Select(raFile =>
-            {
-                var addonLoader = new Loaders.AddonLoader.AddonLoader(addonFactory, new AddonsFromAssemblyQuery(new AddonAttributeFromTypeQuery()), new CurrentStartupSceneProvider(new StartupSceneFromGameSceneQuery(), new CurrentGameSceneProvider()), cachedLog);
-                var pmFactory = new PartModuleFactory(new ProxyPartModuleTypeProvider(partModuleProxyProvider, partModulesFromAssemblyQuery, new TypeIdentifierQuery()));
-                var pmLoader = new PartModuleLoader(
-                    pmFactory,
-                   
-                    flightConfigRepository,
-                    loadedPrefabProvider);
-
-                var partModuleController = new PartModuleController(
-                    pmLoader,
-                    partModulesFromAssemblyQuery,
-                    descriptorFactory,
-                    new CurrentSceneIsFlightQuery());
-
-
-                _eventProvider.OnSceneLoaded.OnEvent += addonLoader.CreateForScene;
-
-                IReloadablePlugin plugin = new ReloadablePlugin(
-                    ConfigureAssemblyProvider(raFile, assemblyResolver, ilModifications));
-
-                plugin.OnLoaded += addonLoader.LoadAddonTypes;
-                plugin.OnLoaded += partModuleController.LoadPartModules;
-
-                plugin.OnUnloaded += (f => addonLoader.ClearAddonTypes(true));
-                plugin.OnUnloaded += partModuleController.UnloadPartModules;
-
-                return plugin;
-            });
+            return reloadableAssemblyFileQuery.Get().Select(raFile => ConfigureReloadablePlugin(raFile, assemblyResolver, ilModifications));
         }
 
 
@@ -311,23 +245,40 @@ namespace AssemblyReloader.CompositeRoot
         }
 
 
-        private IAssemblyProvider ConfigureAssemblyProvider(IFile location, BaseAssemblyResolver resolver, ICommand<AssemblyDefinition> ilModifications)
+        private IAssemblyProvider ConfigureAssemblyProvider(IFile location, BaseAssemblyResolver resolver,
+            ICommand<AssemblyDefinition> ilModifications)
         {
             if (location == null) throw new ArgumentNullException("location");
             if (resolver == null) throw new ArgumentNullException("resolver");
             if (ilModifications == null) throw new ArgumentNullException("ilModifications");
 
-            return new AssemblyProvider(
+            return new AssemblyFromDefinitionProvider(
                 new AssemblyDefinitionReader(location, resolver),
                 new AssemblyDefinitionLoader(),
                 ilModifications);
+
         }
+
 
         private ICommand<AssemblyDefinition> ConfigureAssemblyModifications()
         {
             return new CompositeCommand<AssemblyDefinition>(
                 new RenameAssemblyCommand(new UniqueAssemblyNameGenerator())
                 );
+        }
+
+
+        private IReloadablePlugin ConfigureReloadablePlugin(IFile location, BaseAssemblyResolver assemblyResolver, ICommand<AssemblyDefinition> ilModifications)
+        {
+            var reloadable = new ReloadablePlugin(
+                    ConfigureAssemblyProvider(location, assemblyResolver, ilModifications), location);
+
+            var kspLoader = new KspAssemblyLoader();
+
+            reloadable.OnLoaded += kspLoader.Load;
+            reloadable.OnUnloaded += kspLoader.Unload;
+
+            return reloadable;
         }
     }
 }

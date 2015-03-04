@@ -5,8 +5,8 @@ using ReeperCommon.FileSystem;
 
 namespace AssemblyReloader.PluginTracking
 {
-    public delegate void PluginLoadedHandler(Assembly assembly);
-    public delegate void PluginUnloadedHandler(Assembly location);
+    public delegate void PluginLoadedHandler(Assembly assembly, IFile location);
+    public delegate void PluginUnloadedHandler(Assembly assembly, IFile location);
 
     public interface IReloadablePlugin
     {
@@ -14,6 +14,7 @@ namespace AssemblyReloader.PluginTracking
         void Unload();
 
         string Name { get; }
+        Maybe<Assembly> Assembly { get; }
 
         event PluginLoadedHandler OnLoaded;
         event PluginUnloadedHandler OnUnloaded;

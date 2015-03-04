@@ -24,7 +24,7 @@ namespace AssemblyReloaderUnitTests.Queries.AssemblyQueries
             var fixture = new Fixture();
             fixture.Customize(new AssemblyIsLocalAssemblyCustomization());
 
-            var sut = new AddonsFromAssemblyQuery(new AddonAttributeFromTypeQuery());
+            var sut = new AddonsFromAssemblyQuery(new AddonAttributesFromTypeQuery());
 
             var results = sut.Get(fixture.CreateAnonymous<Assembly>()).ToList();
 
@@ -41,7 +41,7 @@ namespace AssemblyReloaderUnitTests.Queries.AssemblyQueries
             var fixture = new Fixture();
             fixture.Customize(new AssemblyIsLocalAssemblyCustomization());
 
-            var sut = new AddonsFromAssemblyQuery(new AddonAttributeFromTypeQuery());
+            var sut = new AddonsFromAssemblyQuery(new AddonAttributesFromTypeQuery());
 
             var results = sut.Get(fixture.CreateAnonymous<Assembly>()).ToList();
 

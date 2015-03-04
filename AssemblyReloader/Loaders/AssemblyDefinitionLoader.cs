@@ -1,11 +1,13 @@
-﻿using System.Reflection;
+﻿using System;
+using System.IO;
+using System.Reflection;
 using Mono.Cecil;
 using ReeperCommon.Containers;
 using ReeperCommon.Extensions;
 
 namespace AssemblyReloader.Loaders
 {
-    public class AssemblyDefinitionLoader : AssemblyDefinitionLoaderBase, IAssemblyDefinitionLoader
+    public class AssemblyDefinitionLoader : IAssemblyDefinitionLoader
     {
         public Maybe<Assembly> Load(AssemblyDefinition definition)
         {
@@ -15,6 +17,18 @@ namespace AssemblyReloader.Loaders
 
                 return result.IsNull() ? Maybe<Assembly>.None : Maybe<Assembly>.With(result);
             }
+        }
+
+
+        private MemoryStream WriteDefinitionToStream(AssemblyDefinition definition)
+        {
+            if (definition == null) throw new ArgumentNullException("definition");
+
+            var stream = new MemoryStream();
+
+            definition.Write(stream);
+
+            return stream;
         }
     }
 }

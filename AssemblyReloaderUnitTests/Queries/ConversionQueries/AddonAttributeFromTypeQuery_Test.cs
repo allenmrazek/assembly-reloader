@@ -14,7 +14,7 @@ namespace AssemblyReloaderUnitTests.Queries.ConversionQueries
         [Fact]
         void Get_Returns_KSPAddonAttribute_Correctly()
         {
-            var sut = new AddonAttributeFromTypeQuery();
+            var sut = new AddonAttributesFromTypeQuery();
 
             Assert.True(sut.Get(typeof (TestAddon_Public)).Any());
         }
@@ -23,7 +23,7 @@ namespace AssemblyReloaderUnitTests.Queries.ConversionQueries
         [Fact]
         void Get_Returns_Null_WhenTypeHasNoKSPAddon()
         {
-            var sut = new AddonAttributeFromTypeQuery();
+            var sut = new AddonAttributesFromTypeQuery();
 
             Assert.False(sut.Get(typeof (MonoBehaviour_WithNoAddon)).Any());
         }
@@ -32,7 +32,7 @@ namespace AssemblyReloaderUnitTests.Queries.ConversionQueries
         [Fact]
         void Get_Returns_RightAttribute_WhenTypeHasMultipleDifferent()
         {
-            var sut = new AddonAttributeFromTypeQuery();
+            var sut = new AddonAttributesFromTypeQuery();
 
             var result = sut.Get(typeof (TestAddon_MultipleAttributes));
 
