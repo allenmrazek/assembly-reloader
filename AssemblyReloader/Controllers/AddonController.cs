@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
+using AssemblyReloader.Destruction;
+using AssemblyReloader.Game;
 using AssemblyReloader.Providers.SceneProviders;
 using ReeperCommon.FileSystem;
 
@@ -10,26 +9,39 @@ namespace AssemblyReloader.Controllers
 {
     public class AddonController : IAddonController
     {
+        private readonly IAddonLoader _addonLoader;
+        private readonly IAddonDestroyer _addonDestroyer;
         private readonly ICurrentStartupSceneProvider _currentSceneProvider;
 
         public AddonController(
+            IAddonLoader addonLoader,
+            IAddonDestroyer addonDestroyer,
             ICurrentStartupSceneProvider currentSceneProvider
             )
         {
+            if (addonLoader == null) throw new ArgumentNullException("addonLoader");
+            if (addonDestroyer == null) throw new ArgumentNullException("addonDestroyer");
             if (currentSceneProvider == null) throw new ArgumentNullException("currentSceneProvider");
+
+            _addonLoader = addonLoader;
+            _addonDestroyer = addonDestroyer;
             _currentSceneProvider = currentSceneProvider;
         }
 
 
         public void StartAddonsFrom(Assembly assembly, IFile location)
         {
-            throw new NotImplementedException();
+            if (assembly == null) throw new ArgumentNullException("assembly");
+
+            _addonLoader.StartAddons(assembly, _currentSceneProvider.Get());
         }
 
 
         public void DestroyAddonsFrom(Assembly assembly, IFile location)
         {
-            throw new NotImplementedException();
+            if (assembly == null) throw new ArgumentNullException("assembly");
+
+            _addonDestroyer.DestroyAddonsFrom(assembly); 
         }
     }
 }

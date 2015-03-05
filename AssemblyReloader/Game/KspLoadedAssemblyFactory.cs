@@ -36,16 +36,9 @@ namespace AssemblyReloader.Game
         {
             var la = new AssemblyLoader.LoadedAssembly(assembly, location.FullPath, location.Url, null);
 
-            // setup PartModules
             AddTypes(la, typeof (PartModule), _partModuleQuery.Get(assembly));
-
-            // setup Parts
             AddTypes(la, typeof (Part), _partQuery.Get(assembly));
-            
-            // setup InternalModules
             AddTypes(la, typeof (InternalModule), _internalModuleQuery.Get(assembly));
-
-            // setup ScenarioModules
             AddTypes(la, typeof (ScenarioModule), _scenarioModuleQuery.Get(assembly));
 
             return la;

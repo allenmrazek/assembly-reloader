@@ -65,6 +65,10 @@
     <Compile Include="Controllers\AddonController.cs" />
     <Compile Include="DataObjects\ITypeIdentifier.cs" />
     <Compile Include="DataObjects\TypeIdentifier.cs" />
+    <Compile Include="Destruction\AddonDestroyer.cs" />
+    <Compile Include="Destruction\IAddonDestroyer.cs" />
+    <Compile Include="Destruction\IDestructionController.cs" />
+    <Compile Include="Destruction\DestructionController.cs" />
     <Compile Include="Game\GameEventPublisher.cs" />
     <Compile Include="Game\IAddonLoader.cs" />
     <Compile Include="Game\IAssemblyLoader.cs" />
@@ -74,6 +78,7 @@
     <Compile Include="Game\IGameEventPublisher.cs" />
     <Compile Include="Game\IKspFactory.cs" />
     <Compile Include="Game\ILoadedAssemblyFactory.cs" />
+    <Compile Include="Providers\ILoadedComponentProvider.cs" />
     <Compile Include="Game\IPart.cs" />
     <Compile Include="Game\IPartLoader.cs" />
     <Compile Include="Game\IVessel.cs" />
@@ -125,6 +130,7 @@
     <Compile Include="Providers\ILoadedInstancesOfPrefabProvider.cs" />
     <Compile Include="Providers\IProxyPartModuleTypeProvider.cs" />
     <Compile Include="Generators\IUniqueAssemblyNameGenerator.cs" />
+    <Compile Include="Providers\LoadedComponentProvider.cs" />
     <Compile Include="Providers\LoadedInstancesOfPrefabProvider.cs" />
     <Compile Include="Providers\SceneProviders\CurrentSceneIsFlightQuery.cs" />
     <Compile Include="Providers\SceneProviders\ICurrentSceneIsFlightQuery.cs" />
@@ -153,7 +159,6 @@
     <Compile Include="Queries\IPartModulesInPartQuery.cs" />
     <Compile Include="Queries\ITypeIdentifierQuery.cs" />
     <Compile Include="Destruction\GameObjectDestroyForReload.cs" />
-    <Compile Include="Destruction\IDestructionMediator.cs" />
     <Compile Include="PluginTracking\IReloadablePlugin.cs" />
     <Compile Include="Controllers\ReloadableController.cs" />
     <Compile Include="Queries\ConversionQueries\AddonAttributesFromTypeQuery.cs" />

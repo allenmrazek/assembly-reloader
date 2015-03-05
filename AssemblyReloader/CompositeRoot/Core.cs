@@ -7,6 +7,7 @@ using System.Reflection;
 using AssemblyReloader.CompositeRoot.Commands;
 using AssemblyReloader.CompositeRoot.Commands.ILModifications;
 using AssemblyReloader.Controllers;
+using AssemblyReloader.Destruction;
 using AssemblyReloader.Game;
 using AssemblyReloader.Generators;
 using AssemblyReloader.GUI;
@@ -15,6 +16,7 @@ using AssemblyReloader.Logging;
 using AssemblyReloader.Messages;
 using AssemblyReloader.PluginTracking;
 using AssemblyReloader.Providers;
+using AssemblyReloader.Providers.SceneProviders;
 using AssemblyReloader.Queries.AssemblyQueries;
 using AssemblyReloader.Queries.ConversionQueries;
 using AssemblyReloader.Queries.FileSystemQueries;
@@ -29,6 +31,7 @@ using ReeperCommon.Logging.Implementations;
 using ReeperCommon.Repositories.Resources;
 using ReeperCommon.Repositories.Resources.Implementations;
 using ReeperCommon.Repositories.Resources.Implementations.Decorators;
+using UnityEngine;
 using Object = UnityEngine.Object;
 
 namespace AssemblyReloader.CompositeRoot
@@ -231,7 +234,7 @@ namespace AssemblyReloader.CompositeRoot
 
         private IEnumerable<IReloadablePlugin> CreateReloadablePlugins(
             IFileSystemFactory fsFactory, 
-            DefaultAssemblyResolver assemblyResolver)
+            BaseAssemblyResolver assemblyResolver)
         {
             var laFactory = new KspLoadedAssemblyFactory(
                 new TypesDerivedFromQuery<Part>(),
@@ -239,10 +242,18 @@ namespace AssemblyReloader.CompositeRoot
                 new TypesDerivedFromQuery<InternalModule>(),
                 new TypesDerivedFromQuery<ScenarioModule>());
 
+
             var reloadableAssemblyFileQuery = new ReloadableAssemblyFilesInDirectoryQuery(fsFactory.GetGameDataDirectory());
             var ilModifications = ConfigureAssemblyModifications();
 
-            return reloadableAssemblyFileQuery.Get().Select(raFile => ConfigureReloadablePlugin(raFile, assemblyResolver, laFactory, ilModifications));
+            var destructionController = ConfigureDestructionController();
+
+            var addonDestroyer = new AddonDestroyer(
+                destructionController,
+                new LoadedComponentProvider(),
+                new AddonsFromAssemblyQuery(new AddonAttributesFromTypeQuery()));
+
+            return reloadableAssemblyFileQuery.Get().Select(raFile => ConfigureReloadablePlugin(raFile, assemblyResolver, laFactory, addonDestroyer, ilModifications));
         }
 
 
@@ -288,6 +299,7 @@ namespace AssemblyReloader.CompositeRoot
             IFile location, 
             BaseAssemblyResolver assemblyResolver, 
             ILoadedAssemblyFactory laFactory,
+            IAddonDestroyer addonDestroyer,
             ICommand<AssemblyDefinition> ilModifications)
         {
             var reloadable = new ReloadablePlugin(
@@ -298,7 +310,28 @@ namespace AssemblyReloader.CompositeRoot
             reloadable.OnLoaded += (assembly, location1) => kspLoader.Load(assembly, location1);
             reloadable.OnUnloaded += kspLoader.Unload;
 
+
+            var addonController =
+                new AddonController(
+                    new KspAddonLoader(),
+                    addonDestroyer,
+                    new CurrentStartupSceneProvider(new StartupSceneFromGameSceneQuery(),
+                    new CurrentGameSceneProvider()));
+
+            reloadable.OnLoaded += addonController.StartAddonsFrom;
+            reloadable.OnUnloaded += addonController.DestroyAddonsFrom;
+
             return reloadable;
+        }
+
+
+        private IDestructionController ConfigureDestructionController()
+        {
+            var controller = new DestructionController();
+
+            controller.Register<MonoBehaviour>(mb => _log.Warning("Destruction: MonoBehaviour"));
+
+            return controller;
         }
     }
 }
