@@ -13,7 +13,15 @@ namespace AssemblyReloader.Game
 {
     public class KspAssemblyLoader : IAssemblyLoader
     {
+        private readonly ILoadedAssemblyFactory _laFactory;
         private AssemblyLoader.LoadedAssembly _loadedAssembly;
+
+        public KspAssemblyLoader(ILoadedAssemblyFactory laFactory)
+        {
+            if (laFactory == null) throw new ArgumentNullException("laFactory");
+            _laFactory = laFactory;
+        }
+
 
         public void Load(Assembly assembly, IFile location)
         {
@@ -23,7 +31,7 @@ namespace AssemblyReloader.Game
             if (AssemblyLoader.loadedAssemblies.GetByAssembly(assembly) != null)
                 throw new InvalidOperationException(assembly.FullName + " has already been loaded by AssemblyLoader!");
 
-            _loadedAssembly = new AssemblyLoader.LoadedAssembly(assembly, location.FullPath, location.Url, null);
+            _loadedAssembly = _laFactory.Create(assembly, location);
 
             AssemblyLoader.loadedAssemblies.Add(_loadedAssembly);
         }

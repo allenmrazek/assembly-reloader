@@ -5,44 +5,11 @@ using UnityEngine;
 namespace AssemblyReloader.CompositeRoot.MonoBehaviours
 {
     [KSPAddon(KSPAddon.Startup.Instantly, true)]
-// ReSharper disable once UnusedMember.Global
-    class CoreView : LoadingSystem
+    class CoreView : MonoBehaviour
     {
         private Core _core;
 
-// ReSharper disable once UnusedMember.Local
         private void Start()
-        {
-            var ls = FindObjectOfType<LoadingScreen>();
-
-            if (ls.IsNull())
-            {
-                Abort("AssemblyReloader failed to find LoadingScreen; aborting");
-                return;
-            }
-
-            ls.loaders.Add(this);
-#if DEBUG
-            ls.loaders.ForEach(l => print("Loader: " + l.GetType().FullName));
-#endif
-        }
-
-
-        private void Abort(string message)
-        {
-            Debug.LogError(message);
-            Destroy(this);
-        }
-
-
-        public override bool IsReady()
-        {
-            return true;
-        }
-
-
-        // Our goal here is to load AFTER all part prefabs have been constructed
-        public override void StartLoad()
         {
             try
             {
@@ -51,8 +18,62 @@ namespace AssemblyReloader.CompositeRoot.MonoBehaviours
             }
             catch (Exception e)
             {
-                Abort("CoreView: Encountered an uncaught exception while creating Core: " + e);
+                Debug.LogError("AssemblyReloader: Encountered an uncaught exception while creating Core: " + e);
+                Destroy(this);
             }
         }
     }
+
+
+//    [KSPAddon(KSPAddon.Startup.Instantly, true)]
+//// ReSharper disable once UnusedMember.Global
+//    class CoreView : LoadingSystem
+//    {
+//        private Core _core;
+
+//// ReSharper disable once UnusedMember.Local
+//        private void Start()
+//        {
+//            var ls = FindObjectOfType<LoadingScreen>();
+
+//            if (ls.IsNull())
+//            {
+//                Abort("AssemblyReloader failed to find LoadingScreen; aborting");
+//                return;
+//            }
+
+//            ls.loaders.Add(this);
+//#if DEBUG
+//            ls.loaders.ForEach(l => print("Loader: " + l.GetType().FullName));
+//#endif
+//        }
+
+
+//        private void Abort(string message)
+//        {
+//            Debug.LogError(message);
+//            Destroy(this);
+//        }
+
+
+//        public override bool IsReady()
+//        {
+//            return true;
+//        }
+
+
+//        // Our goal here is to load AFTER all part prefabs have been constructed
+//        public override void StartLoad()
+//        {
+//            try
+//            {
+//                _core = new Core();
+//                DontDestroyOnLoad(this);
+//            }
+//            catch (Exception e)
+//            {
+//                Abort("CoreView: Encountered an uncaught exception while creating Core: " + e);
+//            }
+//        }
+//    }
 }

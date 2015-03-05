@@ -6,7 +6,7 @@ using System.Text;
 
 namespace AssemblyReloader.Queries.AssemblyQueries
 {
-    public class TypesDerivedFromQuery<T> : ITypesDerivedFromQuery<T>
+    public class TypesDerivedFromQuery<T> : ITypesDerivedFromQuery<T>, ITypesFromAssemblyQuery
     {
         public IEnumerable<Type> Get(Assembly assembly)
         {

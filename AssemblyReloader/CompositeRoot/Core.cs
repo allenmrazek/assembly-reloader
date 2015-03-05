@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -14,6 +15,7 @@ using AssemblyReloader.Logging;
 using AssemblyReloader.Messages;
 using AssemblyReloader.PluginTracking;
 using AssemblyReloader.Providers;
+using AssemblyReloader.Queries.AssemblyQueries;
 using AssemblyReloader.Queries.ConversionQueries;
 using AssemblyReloader.Queries.FileSystemQueries;
 using Mono.Cecil;
@@ -146,8 +148,6 @@ namespace AssemblyReloader.CompositeRoot
 
             var ourDirProvider = new AssemblyDirectoryQuery(Assembly.GetExecutingAssembly(), fsFactory.GetGameDataDirectory(), _log);
 
-            var partModuleProxyAssemblyFile = ourDirProvider.Get().File(new KSPUrlIdentifier("PartModule.proxy"));
-
             var assemblyResolver = new DefaultAssemblyResolver();
 
             assemblyResolver.AddSearchDirectory(Assembly.GetExecutingAssembly().Location); // we'll be importing some references to types we own so this is a necessary step
@@ -174,7 +174,17 @@ namespace AssemblyReloader.CompositeRoot
             Object.DontDestroyOnLoad(_view);
             Object.DontDestroyOnLoad(_logView);
 
-    
+            AssemblyLoader.loadedAssemblies.ToList().ForEach(la =>
+            {
+                _log.Normal("LoadedAssembly: " + la.dllName);
+                _log.Normal("  Types:");
+                la.types.ToList().ForEach(ty =>
+                {
+                    _log.Normal("    BaseType: " + ty.Key);
+                    _log.Normal("       Contains: ");
+                    ty.Value.ForEach(v => _log.Normal("        Type: " + v.FullName));
+                });
+            });
         }
 
 
@@ -223,10 +233,16 @@ namespace AssemblyReloader.CompositeRoot
             IFileSystemFactory fsFactory, 
             DefaultAssemblyResolver assemblyResolver)
         {
+            var laFactory = new KspLoadedAssemblyFactory(
+                new TypesDerivedFromQuery<Part>(),
+                new TypesDerivedFromQuery<PartModule>(),
+                new TypesDerivedFromQuery<InternalModule>(),
+                new TypesDerivedFromQuery<ScenarioModule>());
+
             var reloadableAssemblyFileQuery = new ReloadableAssemblyFilesInDirectoryQuery(fsFactory.GetGameDataDirectory());
             var ilModifications = ConfigureAssemblyModifications();
 
-            return reloadableAssemblyFileQuery.Get().Select(raFile => ConfigureReloadablePlugin(raFile, assemblyResolver, ilModifications));
+            return reloadableAssemblyFileQuery.Get().Select(raFile => ConfigureReloadablePlugin(raFile, assemblyResolver, laFactory, ilModifications));
         }
 
 
@@ -268,14 +284,18 @@ namespace AssemblyReloader.CompositeRoot
         }
 
 
-        private IReloadablePlugin ConfigureReloadablePlugin(IFile location, BaseAssemblyResolver assemblyResolver, ICommand<AssemblyDefinition> ilModifications)
+        private IReloadablePlugin ConfigureReloadablePlugin(
+            IFile location, 
+            BaseAssemblyResolver assemblyResolver, 
+            ILoadedAssemblyFactory laFactory,
+            ICommand<AssemblyDefinition> ilModifications)
         {
             var reloadable = new ReloadablePlugin(
                     ConfigureAssemblyProvider(location, assemblyResolver, ilModifications), location);
 
-            var kspLoader = new KspAssemblyLoader();
+            var kspLoader = new KspAssemblyLoader(laFactory);
 
-            reloadable.OnLoaded += kspLoader.Load;
+            reloadable.OnLoaded += (assembly, location1) => kspLoader.Load(assembly, location1);
             reloadable.OnUnloaded += kspLoader.Unload;
 
             return reloadable;
