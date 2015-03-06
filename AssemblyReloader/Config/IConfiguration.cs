@@ -1,4 +1,4 @@
-﻿namespace AssemblyReloader.CompositeRoot.Config
+﻿namespace AssemblyReloader.Config
 {
     public interface IConfiguration
     {
@@ -14,6 +14,13 @@
         /// </summary>
         bool ReloadPartModuleConfigsForPartModulesInFlight { get; }
 
+
+        bool ReplaceInternalModulesInFlight { get; }
+        bool ReloadInternalModuleConfigsInFlight { get; }
+
+
+        bool RestartScenarioModulesForCurrentScene { get; }
+        bool ReloadScenarioModulePersistentConfigs { get; }
 
         /// <summary>
         /// Create MonoBehaviours tagged with the KSPAddon attribute for the current scene

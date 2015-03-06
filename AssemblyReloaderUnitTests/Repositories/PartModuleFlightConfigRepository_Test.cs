@@ -14,7 +14,7 @@ namespace AssemblyReloaderUnitTests.Repositories
     public class PartModuleFlightConfigRepository_Test
     {
         [Theory, AutoData]
-        void Store_Then_Retrieve_ReturnsCorrectResult(uint flightid, ITypeIdentifier key, ConfigNode data, PartModuleFlightConfigRepository sut)
+        void Store_Then_Retrieve_ReturnsCorrectResult(uint flightid, ITypeIdentifier key, ConfigNode data, FlightConfigRepository sut)
         {
             sut.Store(flightid, key, data);
 
@@ -28,7 +28,7 @@ namespace AssemblyReloaderUnitTests.Repositories
 
         [Theory, AutoData]
         void Retrieve_NonexistingData_Fails(uint flightid, ITypeIdentifier key, ConfigNode data,
-            PartModuleFlightConfigRepository sut)
+            FlightConfigRepository sut)
         {
             var result = sut.Retrieve(flightid, key);
 
@@ -37,7 +37,7 @@ namespace AssemblyReloaderUnitTests.Repositories
 
 
         [Theory, AutoData]
-        void Inserting_Then_Retrieving_Is_FIFO(uint flightid, ITypeIdentifier key, PartModuleFlightConfigRepository sut)
+        void Inserting_Then_Retrieving_Is_FIFO(uint flightid, ITypeIdentifier key, FlightConfigRepository sut)
         {
             var data1 = new ConfigNode();
             var data2 = new ConfigNode();

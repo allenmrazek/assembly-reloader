@@ -3,7 +3,7 @@ using ReeperCommon.Containers;
 
 namespace AssemblyReloader.Repositories
 {
-    public interface IPartModuleFlightConfigRepository
+    public interface IFlightConfigRepository
     {
         void Store(uint flightid, ITypeIdentifier key, ConfigNode data);
         Maybe<ConfigNode> Retrieve(uint flightid, ITypeIdentifier key);

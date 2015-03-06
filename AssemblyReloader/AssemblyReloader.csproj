@@ -59,16 +59,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CompositeRoot\Commands\ILModifications\RenameAssemblyCommand.cs" />
-    <Compile Include="CompositeRoot\Commands\StartAddonsForCurrentSceneCommand.cs" />
-    <Compile Include="CompositeRoot\Config\Configuration.cs" />
-    <Compile Include="CompositeRoot\Config\IConfiguration.cs" />
+    <Compile Include="Config\Configuration.cs" />
+    <Compile Include="Config\IConfiguration.cs" />
     <Compile Include="Controllers\AddonController.cs" />
+    <Compile Include="Controllers\IPersistentObjectController.cs" />
+    <Compile Include="Controllers\PartModuleController.cs" />
     <Compile Include="DataObjects\ITypeIdentifier.cs" />
     <Compile Include="DataObjects\TypeIdentifier.cs" />
     <Compile Include="Destruction\AddonDestroyer.cs" />
     <Compile Include="Destruction\IAddonDestroyer.cs" />
     <Compile Include="Destruction\IDestructionController.cs" />
     <Compile Include="Destruction\DestructionController.cs" />
+    <Compile Include="Destruction\IObjectDestroyer.cs" />
+    <Compile Include="Destruction\ObjectDestroyer.cs" />
     <Compile Include="Game\GameEventPublisher.cs" />
     <Compile Include="Game\IAddonLoader.cs" />
     <Compile Include="Game\IAssemblyLoader.cs" />
@@ -78,6 +81,8 @@
     <Compile Include="Game\IGameEventPublisher.cs" />
     <Compile Include="Game\IKspFactory.cs" />
     <Compile Include="Game\ILoadedAssemblyFactory.cs" />
+    <Compile Include="Loaders\IPartModuleUnloader.cs" />
+    <Compile Include="Loaders\PartModuleUnloader.cs" />
     <Compile Include="Providers\ILoadedComponentProvider.cs" />
     <Compile Include="Game\IPart.cs" />
     <Compile Include="Game\IPartLoader.cs" />
@@ -97,15 +102,9 @@
     <Compile Include="Controllers\IAddonController.cs" />
     <Compile Include="Loaders\IAssemblyDefinitionLoader.cs" />
     <Compile Include="Loaders\IAssemblyDefinitionReader.cs" />
-    <Compile Include="Loaders\PMLoader\old\LoadedPartModuleHandleFactory.cs" />
-    <Compile Include="Loaders\PMLoader\old\ILoadedPartModuleHandle.cs" />
-    <Compile Include="Loaders\PMLoader\old\ILoadedPartModuleHandleFactory.cs" />
-    <Compile Include="Loaders\PMLoader\old\IPartModuleController.cs" />
-    <Compile Include="Loaders\PMLoader\old\IPartModuleFactory.cs" />
-    <Compile Include="Loaders\PMLoader\old\IPartModuleLoader.cs" />
-    <Compile Include="Loaders\PMLoader\old\IPartModuleUnloader.cs" />
-    <Compile Include="Loaders\PMLoader\old\LoadedPartModuleHandle.cs" />
-    <Compile Include="Loaders\PMLoader\old\PartModuleFactory.cs" />
+    <Compile Include="Loaders\IPartModuleFactory.cs" />
+    <Compile Include="Loaders\IPersistentObjectLoader.cs" />
+    <Compile Include="Loaders\PartModuleFactory.cs" />
     <Compile Include="ILModifications\old\IModifiedAssembly.cs" />
     <Compile Include="ILModifications\old\IModifiedAssemblyFactory.cs" />
     <Compile Include="ILModifications\old\ModifiedAssembly.cs" />
@@ -118,17 +117,15 @@
     <Compile Include="GUI\WindowFactory.cs" />
     <Compile Include="GUI\LogViewLogic.cs" />
     <Compile Include="Loaders\old\AddonLoader\Addon.cs" />
-    <Compile Include="Loaders\PMLoader\old\IDescriptorFactory.cs" />
-    <Compile Include="Loaders\PMLoader\old\PartModuleDescriptor.cs" />
-    <Compile Include="Loaders\PMLoader\old\PartModuleDescriptorFactory.cs" />
-    <Compile Include="Loaders\PMLoader\old\PartModuleLoader.cs" />
+    <Compile Include="Loaders\IDescriptorFactory.cs" />
+    <Compile Include="Loaders\PartModuleDescriptor.cs" />
+    <Compile Include="Loaders\PartModuleDescriptorFactory.cs" />
+    <Compile Include="Loaders\PartModuleLoader.cs" />
     <Compile Include="Logging\ICachedLog.cs" />
-    <Compile Include="Loaders\PMLoader\old\PartModuleController.cs" />
     <Compile Include="CompositeRoot\Commands\ICommand.cs" />
     <Compile Include="CompositeRoot\Commands\CompositeCommand.cs" />
     <Compile Include="Messages\IMessageFactory.cs" />
     <Compile Include="Providers\ILoadedInstancesOfPrefabProvider.cs" />
-    <Compile Include="Providers\IProxyPartModuleTypeProvider.cs" />
     <Compile Include="Generators\IUniqueAssemblyNameGenerator.cs" />
     <Compile Include="Providers\LoadedComponentProvider.cs" />
     <Compile Include="Providers\LoadedInstancesOfPrefabProvider.cs" />
@@ -178,8 +175,8 @@
     <Compile Include="Queries\FileSystemQueries\ReloadableAssemblyFilesInDirectoryQuery.cs" />
     <Compile Include="Queries\PartModulesInPartQuery.cs" />
     <Compile Include="Queries\TypeIdentifierQuery.cs" />
-    <Compile Include="Repositories\IPartModuleFlightConfigRepository.cs" />
-    <Compile Include="Repositories\PartModuleFlightConfigRepository.cs" />
+    <Compile Include="Repositories\IFlightConfigRepository.cs" />
+    <Compile Include="Repositories\FlightConfigRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

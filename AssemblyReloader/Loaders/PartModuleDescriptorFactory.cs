@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using AssemblyReloader.DataObjects;
 using AssemblyReloader.Game;
+using AssemblyReloader.Loaders.PMLoader;
 using AssemblyReloader.Providers;
 using AssemblyReloader.Queries;
 using AssemblyReloader.Queries.ConfigNodeQueries;
 using ReeperCommon.Logging;
 
-namespace AssemblyReloader.Loaders.PMLoader
+namespace AssemblyReloader.Loaders
 {
     public class PartModuleDescriptorFactory : IDescriptorFactory
     {
@@ -55,7 +55,7 @@ namespace AssemblyReloader.Loaders.PMLoader
             }
 
             return
-                _moduleConfigQuery.Get(partConfig, pmType.Name)
+                _moduleConfigQuery.Get(partConfig, _typeIdentifierQuery.Get(pmType).Identifier)
                     .Select(config => new PartModuleDescriptor(prefab, config, pmType, _typeIdentifierQuery.Get(pmType)));
         }
 

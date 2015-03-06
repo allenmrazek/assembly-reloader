@@ -10,9 +10,11 @@ namespace AssemblyReloader.Providers
     {
         private readonly ILoadedVesselProvider _loadedVesselProvider;
 
-        public LoadedInstancesOfPrefabProvider(ILoadedVesselProvider loadedVesselProvider)
+        public LoadedInstancesOfPrefabProvider(
+            ILoadedVesselProvider loadedVesselProvider)
         {
             if (loadedVesselProvider == null) throw new ArgumentNullException("loadedVesselProvider");
+ 
             _loadedVesselProvider = loadedVesselProvider;
         }
 

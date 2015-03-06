@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -17,9 +16,12 @@ using AssemblyReloader.Messages;
 using AssemblyReloader.PluginTracking;
 using AssemblyReloader.Providers;
 using AssemblyReloader.Providers.SceneProviders;
+using AssemblyReloader.Queries;
 using AssemblyReloader.Queries.AssemblyQueries;
+using AssemblyReloader.Queries.ConfigNodeQueries;
 using AssemblyReloader.Queries.ConversionQueries;
 using AssemblyReloader.Queries.FileSystemQueries;
+using AssemblyReloader.Repositories;
 using Mono.Cecil;
 using ReeperCommon.FileSystem;
 using ReeperCommon.FileSystem.Factories;
@@ -127,6 +129,7 @@ namespace AssemblyReloader.CompositeRoot
         }
 
 
+  
 
 
 
@@ -306,9 +309,38 @@ namespace AssemblyReloader.CompositeRoot
                     ConfigureAssemblyProvider(location, assemblyResolver, ilModifications), location);
 
             var kspLoader = new KspAssemblyLoader(laFactory);
+            var partModuleRepository = new FlightConfigRepository();
 
-            reloadable.OnLoaded += (assembly, location1) => kspLoader.Load(assembly, location1);
+
+            reloadable.OnLoaded += kspLoader.Load;
             reloadable.OnUnloaded += kspLoader.Unload;
+
+
+
+            var partModuleController = new PartModuleController(
+                new PartModuleLoader(
+                    new PartModuleDescriptorFactory(
+                        new KspPartLoader(
+                            new KspFactory()),
+                        new AvailablePartConfigProvider(
+                            new KspGameDatabase()),
+                        new ModuleConfigsFromPartConfigQuery(),
+                        new TypeIdentifierQuery(),
+                        _log.CreateTag("KspPartLoader")),
+                    new PartModuleFactory(),
+                    partModuleRepository,
+                    new LoadedInstancesOfPrefabProvider(
+                        new LoadedVesselProvider(
+                            new KspFactory()))),
+                new PartModuleUnloader(),
+                new TypesDerivedFromQuery<PartModule>(),
+                partModuleRepository,
+                new CurrentSceneIsFlightQuery());
+
+            reloadable.OnLoaded += partModuleController.LoadPersistentObjects;
+            reloadable.OnUnloaded += partModuleController.UnloadPersistentObjects;
+
+
 
 
             var addonController =
@@ -321,6 +353,8 @@ namespace AssemblyReloader.CompositeRoot
             reloadable.OnLoaded += addonController.StartAddonsFrom;
             reloadable.OnUnloaded += addonController.DestroyAddonsFrom;
 
+
+
             return reloadable;
         }
 
@@ -328,8 +362,28 @@ namespace AssemblyReloader.CompositeRoot
         private IDestructionController ConfigureDestructionController()
         {
             var controller = new DestructionController();
+            var destroyer = new ObjectDestroyer(_log.CreateTag("ObjectDestroyer"));
 
-            controller.Register<MonoBehaviour>(mb => _log.Warning("Destruction: MonoBehaviour"));
+
+            controller.Register<MonoBehaviour>(destroyer.Destroy);
+
+            controller.Register<PartModule>(pm =>
+            {
+                destroyer.Destroy(pm);
+                throw new NotImplementedException();
+            });
+
+            controller.Register<InternalModule>(im =>
+            {
+                destroyer.Destroy(im);
+                throw new NotImplementedException();
+            });
+
+            controller.Register<ScenarioModule>(sm =>
+            {
+                destroyer.Destroy(sm);
+                throw new NotImplementedException();
+            });
 
             return controller;
         }

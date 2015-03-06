@@ -7,7 +7,7 @@ using ReeperCommon.Containers;
 
 namespace AssemblyReloader.Repositories
 {
-    public class PartModuleFlightConfigRepository : IPartModuleFlightConfigRepository
+    public class FlightConfigRepository : IFlightConfigRepository
     {
         private readonly Dictionary<uint,
                             Dictionary<ITypeIdentifier,
