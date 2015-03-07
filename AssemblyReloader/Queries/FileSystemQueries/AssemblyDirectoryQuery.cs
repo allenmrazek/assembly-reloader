@@ -12,27 +12,23 @@ namespace AssemblyReloader.Queries.FileSystemQueries
     {
         private readonly Assembly _assembly;
         private readonly IDirectory _gameData;
-        private readonly ILog _log;
 
         private IDirectory _location;
 
-        public AssemblyDirectoryQuery(Assembly assembly, IDirectory gameData, ILog log)
+        public AssemblyDirectoryQuery(Assembly assembly, IDirectory gameData)
         {
             if (assembly == null) throw new ArgumentNullException("assembly");
             if (gameData == null) throw new ArgumentNullException("gameData");
-            if (log == null) throw new ArgumentNullException("log");
             if (string.IsNullOrEmpty(assembly.CodeBase))
                 throw new InvalidOperationException("Assembly must have been loaded from disk");
 
             _assembly = assembly;
             _gameData = gameData;
-            _log = log;
         }
 
 
         public IDirectory Get()
         {
-            _log.Normal("ADP: get");
             LazyInitialize();
 
             return _location;

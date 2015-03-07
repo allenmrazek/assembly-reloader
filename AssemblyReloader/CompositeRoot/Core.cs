@@ -153,7 +153,7 @@ namespace AssemblyReloader.CompositeRoot
             var fsFactory = new KSPFileSystemFactory(
                 new KSPUrlDir(new KSPGameDataUrlDirProvider().Get()));
 
-            var ourDirProvider = new AssemblyDirectoryQuery(Assembly.GetExecutingAssembly(), fsFactory.GetGameDataDirectory(), _log);
+            var ourDirProvider = new AssemblyDirectoryQuery(Assembly.GetExecutingAssembly(), fsFactory.GetGameDataDirectory());
 
             var assemblyResolver = new DefaultAssemblyResolver();
 
@@ -168,7 +168,7 @@ namespace AssemblyReloader.CompositeRoot
 
             reloadables.ForEach(r => r.Load());
 
-            _pluginController = new ReloadablePluginController(reloadables);
+            _pluginController = new ReloadablePluginController(reloadables, _log.CreateTag("PluginController"));
 
             var windowFactory = new WindowFactory(resourceLocator, cachedLog);
 
@@ -313,6 +313,18 @@ namespace AssemblyReloader.CompositeRoot
             var kspLoader = new KspAssemblyLoader(laFactory);
             var partModuleRepository = new FlightConfigRepository();
 
+            var descriptorFactory = new PartModuleDescriptorFactory(
+                                        new KspPartLoader(
+                                            new KspFactory()),
+                                        new AvailablePartConfigProvider(
+                                            new KspGameDatabase()),
+                                        new ModuleConfigsFromPartConfigQuery(),
+                                        new TypeIdentifierQuery(),
+                                        _log.CreateTag("KspPartLoader"));
+
+            var loadedInstancesOfPrefabProvider = new LoadedInstancesOfPrefabProvider(
+                                                    new LoadedVesselProvider(
+                                                        new KspFactory()));
 
             reloadable.OnLoaded += kspLoader.Load;
             reloadable.OnUnloaded += kspLoader.Unload;
@@ -321,23 +333,18 @@ namespace AssemblyReloader.CompositeRoot
 
             var partModuleController = new PartModuleController(
                 new PartModuleLoader(
-                    new PartModuleDescriptorFactory(
-                        new KspPartLoader(
-                            new KspFactory()),
-                        new AvailablePartConfigProvider(
-                            new KspGameDatabase()),
-                        new ModuleConfigsFromPartConfigQuery(),
-                        new TypeIdentifierQuery(),
-                        _log.CreateTag("KspPartLoader")),
+                    descriptorFactory,
                     new PartModuleFactory(),
                     partModuleRepository,
-                    new LoadedInstancesOfPrefabProvider(
-                        new LoadedVesselProvider(
-                            new KspFactory()))),
-                new PartModuleUnloader(),
+                    loadedInstancesOfPrefabProvider),
+                new PartModuleUnloader(
+                    new ObjectDestroyer(_log.CreateTag("ObjectDestroyer")),
+                    descriptorFactory,
+                    loadedInstancesOfPrefabProvider),
                 new TypesDerivedFromQuery<PartModule>(),
                 partModuleRepository,
-                new CurrentSceneIsFlightQuery());
+                new CurrentSceneIsFlightQuery(),
+                _log.CreateTag("PartModuleController"));
 
             reloadable.OnLoaded += partModuleController.Load;
             reloadable.OnUnloaded += partModuleController.Unload;
@@ -366,6 +373,7 @@ namespace AssemblyReloader.CompositeRoot
             var controller = new DestructionController();
             var destroyer = new ObjectDestroyer(_log.CreateTag("ObjectDestroyer"));
 
+            // todo: experience traits?
 
             controller.Register<MonoBehaviour>(destroyer.Destroy);
 

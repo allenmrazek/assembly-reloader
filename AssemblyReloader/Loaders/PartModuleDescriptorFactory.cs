@@ -43,17 +43,6 @@ namespace AssemblyReloader.Loaders
         // Note: returns IEnumerable because there may be multiple duplicate PartModules on one part
         private IEnumerable<PartModuleDescriptor> CreatePartModuleInfo(IPart prefab, ConfigNode partConfig, Type pmType)
         {
-            // make sure there aren't already PartModules on this prefab: that would indicate either a
-            // problem with unloading the previous version or that somehow KSP has found a match and we shouldn't
-            // mess with it
-            if (prefab.GameObject.GetComponents<PartModule>().Any(pm => pm.GetType().Name == pmType.Name))
-            {
-                _log.Warning(
-                    "Found existing PartModule called {0} on prefab {1}; {2} will not be added to this prefab",
-                    pmType.Name, prefab.PartInfo.Name, pmType.FullName);
-                return new PartModuleDescriptor[] {};
-            }
-
             return
                 _moduleConfigQuery.Get(partConfig, _typeIdentifierQuery.Get(pmType).Identifier)
                     .Select(config => new PartModuleDescriptor(prefab, config, pmType, _typeIdentifierQuery.Get(pmType)));

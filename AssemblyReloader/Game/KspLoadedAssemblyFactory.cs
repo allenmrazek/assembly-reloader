@@ -27,6 +27,7 @@ namespace AssemblyReloader.Game
             if (internalModuleQuery == null) throw new ArgumentNullException("internalModuleQuery");
             if (scenarioModuleQuery == null) throw new ArgumentNullException("scenarioModuleQuery");
             if (contractQuery == null) throw new ArgumentNullException("contractQuery");
+
             _partQuery = partQuery;
             _partModuleQuery = partModuleQuery;
             _internalModuleQuery = internalModuleQuery;

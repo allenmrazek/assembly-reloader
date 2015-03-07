@@ -3,6 +3,7 @@ using System.Linq;
 using AssemblyReloader.Game;
 using AssemblyReloader.Loaders.PMLoader;
 using AssemblyReloader.Providers;
+using AssemblyReloader.Providers.SceneProviders;
 using AssemblyReloader.Repositories;
 
 namespace AssemblyReloader.Loaders
@@ -37,7 +38,7 @@ namespace AssemblyReloader.Loaders
         {
             if (!type.IsSubclassOf(typeof (PartModule)))
                 throw new Exception(type.FullName + " is not a subclass of PartModule");
-
+            
             var descriptions = _descriptorFactory.Create(type).ToList();
 
             descriptions.ForEach(description => LoadPartModule(description, inFlight));

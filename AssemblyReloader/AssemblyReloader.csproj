@@ -154,7 +154,6 @@
     <Compile Include="Providers\SceneProviders\CurrentGameSceneProvider.cs" />
     <Compile Include="Queries\IPartModulesInPartQuery.cs" />
     <Compile Include="Queries\ITypeIdentifierQuery.cs" />
-    <Compile Include="Destruction\GameObjectDestroyForReload.cs" />
     <Compile Include="PluginTracking\IReloadablePlugin.cs" />
     <Compile Include="Controllers\ReloadablePluginController.cs" />
     <Compile Include="Queries\ConversionQueries\AddonAttributesFromTypeQuery.cs" />

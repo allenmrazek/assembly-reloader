@@ -33,7 +33,13 @@ namespace AssemblyReloader.Destruction
 
         public void Destroy(PartModule pm)
         {
-            throw new NotImplementedException();
+            if (pm == null) throw new ArgumentNullException("pm");
+
+            _log.Verbose("Destroying PartModule " + pm.moduleName + " (" + pm.GetType().FullName + ")");
+            InformComponentOfDestruction(pm);
+
+            pm.part.Modules.Remove(pm);
+            UnityEngine.Object.Destroy(pm);
         }
 
 

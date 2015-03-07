@@ -10,6 +10,7 @@ using AssemblyReloader.Providers.SceneProviders;
 using AssemblyReloader.Queries.AssemblyQueries;
 using AssemblyReloader.Repositories;
 using ReeperCommon.FileSystem;
+using ReeperCommon.Logging;
 
 namespace AssemblyReloader.Controllers
 {
@@ -20,25 +21,29 @@ namespace AssemblyReloader.Controllers
         private readonly ITypesFromAssemblyQuery _partModuleFromAssemblyQuery;
         private readonly IFlightConfigRepository _partModuleConfigRepository;
         private readonly ICurrentSceneIsFlightQuery _flightQuery;
+        private readonly ILog _log;
 
         public PartModuleController(
             IPersistentObjectLoader pmLoader,
             IPartModuleUnloader pmUnloader,
             ITypesFromAssemblyQuery partModuleFromAssemblyQuery,
             IFlightConfigRepository partModuleConfigRepository,
-            ICurrentSceneIsFlightQuery flightQuery)
+            ICurrentSceneIsFlightQuery flightQuery,
+            ILog log)
         {
             if (pmLoader == null) throw new ArgumentNullException("pmLoader");
             if (pmUnloader == null) throw new ArgumentNullException("pmUnloader");
             if (partModuleFromAssemblyQuery == null) throw new ArgumentNullException("partModuleFromAssemblyQuery");
             if (partModuleConfigRepository == null) throw new ArgumentNullException("partModuleConfigRepository");
             if (flightQuery == null) throw new ArgumentNullException("flightQuery");
+            if (log == null) throw new ArgumentNullException("log");
 
             _pmLoader = pmLoader;
             _pmUnloader = pmUnloader;
             _partModuleFromAssemblyQuery = partModuleFromAssemblyQuery;
             _partModuleConfigRepository = partModuleConfigRepository;
             _flightQuery = flightQuery;
+            _log = log;
         }
 
 
@@ -46,16 +51,34 @@ namespace AssemblyReloader.Controllers
         {
             if (assembly == null) throw new ArgumentNullException("assembly");
 
-            foreach (var t in _partModuleFromAssemblyQuery.Get(assembly))
-                _pmLoader.Load(t, _flightQuery.Get());
+            _log.Verbose("Loading PartModules from " + assembly.FullName);
 
+            foreach (var t in GetPartModules(assembly))
+            {
+                _log.Debug("Loading PartModule " + t.FullName);
+
+                _pmLoader.Load(t, _flightQuery.Get());
+            }
             _partModuleConfigRepository.Clear();
         }
 
 
         public void Unload(Assembly assembly, IFile location)
         {
-            throw new NotImplementedException();
+            if (assembly == null) throw new ArgumentNullException("assembly");
+
+            _log.Verbose("Unloading PartModules from " + assembly.FullName);
+
+            foreach (var t in GetPartModules(assembly))
+            {
+                _log.Debug("Unloading PartModule " + t.FullName);
+                _pmUnloader.Unload(t);
+            }
+        }
+
+        private IEnumerable<Type> GetPartModules(Assembly assembly)
+        {
+            return _partModuleFromAssemblyQuery.Get(assembly);
         }
     }
 }

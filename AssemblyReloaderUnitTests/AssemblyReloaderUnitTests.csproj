@@ -101,6 +101,7 @@
     <Compile Include="Controllers\TestReloadableController.cs" />
     <Compile Include="FixtureCustomizations\AssemblyIsLocalAssemblyCustomization.cs" />
     <Compile Include="FixtureCustomizations\TestProjectAssembly_WithVariousOnLoadOnSavePartModuleCustomization.cs" />
+    <Compile Include="Queries\AssemblyQueries\TypesDerivedFromQueryTests.cs" />
     <Compile Include="TestData\Addons\IrrelevantAddonContainerClass.cs" />
     <Compile Include="TestData\Addons\MonoBehaviour_WithNoAddon.cs" />
     <Compile Include="TestData\Addons\TestAddon_InvalidResult.cs" />

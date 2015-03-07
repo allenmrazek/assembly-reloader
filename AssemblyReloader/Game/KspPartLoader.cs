@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ReeperCommon.Extensions;
 
 namespace AssemblyReloader.Game
 {
@@ -18,7 +19,7 @@ namespace AssemblyReloader.Game
 
         public List<IAvailablePart> LoadedParts
         {
-            get { return PartLoader.LoadedPartsList.Select(ap => _kspFactory.Create(ap)).ToList(); }
+            get { return (!PartLoader.Instance.IsNull() && !PartLoader.LoadedPartsList.IsNull()) ? PartLoader.LoadedPartsList.Select(ap => _kspFactory.Create(ap)).ToList() : new List<IAvailablePart>(); }
         }
     }
 }
