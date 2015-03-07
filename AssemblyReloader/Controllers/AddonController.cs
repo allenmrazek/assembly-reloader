@@ -7,7 +7,7 @@ using ReeperCommon.FileSystem;
 
 namespace AssemblyReloader.Controllers
 {
-    public class AddonController : IAddonController
+    public class AddonController : IReloadableObjectController
     {
         private readonly IAddonLoader _addonLoader;
         private readonly IAddonDestroyer _addonDestroyer;
@@ -29,7 +29,7 @@ namespace AssemblyReloader.Controllers
         }
 
 
-        public void StartAddonsFrom(Assembly assembly, IFile location)
+        public void Load(Assembly assembly, IFile location)
         {
             if (assembly == null) throw new ArgumentNullException("assembly");
 
@@ -37,7 +37,7 @@ namespace AssemblyReloader.Controllers
         }
 
 
-        public void DestroyAddonsFrom(Assembly assembly, IFile location)
+        public void Unload(Assembly assembly, IFile location)
         {
             if (assembly == null) throw new ArgumentNullException("assembly");
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Contracts;
 using UnityEngine;
 
 namespace AssemblyReloader.Destruction
@@ -12,5 +13,6 @@ namespace AssemblyReloader.Destruction
         void Destroy(PartModule pm);
         void Destroy(ScenarioModule sm);
         void Destroy(InternalModule im);
+        void Destroy(Contract contract);
     }
 }

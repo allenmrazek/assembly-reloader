@@ -14,9 +14,9 @@ namespace AssemblyReloaderUnitTests.Controllers
     {
         private class ReloadableControllerFactory
         {
-            public static ReloadableController Create()
+            public static ReloadablePluginController Create()
             {
-                return new ReloadableController(
+                return new ReloadablePluginController(
                     new[]
                     {
                         Substitute.For<IReloadablePlugin>(), Substitute.For<IReloadablePlugin>()
@@ -30,7 +30,7 @@ namespace AssemblyReloaderUnitTests.Controllers
         public void Constructor_NullArg_ThrowsException()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                new ReloadableController(
+                new ReloadablePluginController(
                      
                     null));
         }
@@ -53,7 +53,7 @@ namespace AssemblyReloaderUnitTests.Controllers
                 second
             };
 
-            var sut = new ReloadableController(reloadables);
+            var sut = new ReloadablePluginController(reloadables);
 
             Assert.NotEmpty(sut.Plugins);
             Assert.Contains("First", sut.Plugins.Select(i => i.Name));
@@ -67,7 +67,7 @@ namespace AssemblyReloaderUnitTests.Controllers
         {
             var reloadable = Substitute.For<IReloadablePlugin>();
 
-            var sut = new ReloadableController(new[] { reloadable });
+            var sut = new ReloadablePluginController(new[] { reloadable });
 
             sut.ReloadAll();
 

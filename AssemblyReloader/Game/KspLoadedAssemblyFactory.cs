@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using AssemblyReloader.Queries.AssemblyQueries;
+using Contracts;
 using ReeperCommon.FileSystem;
 
 namespace AssemblyReloader.Game
@@ -12,21 +13,25 @@ namespace AssemblyReloader.Game
         private readonly ITypesFromAssemblyQuery _partModuleQuery;
         private readonly ITypesFromAssemblyQuery _internalModuleQuery;
         private readonly ITypesFromAssemblyQuery _scenarioModuleQuery;
+        private readonly ITypesFromAssemblyQuery _contractQuery;
 
         public KspLoadedAssemblyFactory(
             ITypesFromAssemblyQuery partQuery,
             ITypesFromAssemblyQuery partModuleQuery,
             ITypesFromAssemblyQuery internalModuleQuery,
-            ITypesFromAssemblyQuery scenarioModuleQuery)
+            ITypesFromAssemblyQuery scenarioModuleQuery,
+            ITypesFromAssemblyQuery contractQuery)
         {
             if (partQuery == null) throw new ArgumentNullException("partQuery");
             if (partModuleQuery == null) throw new ArgumentNullException("partModuleQuery");
             if (internalModuleQuery == null) throw new ArgumentNullException("internalModuleQuery");
             if (scenarioModuleQuery == null) throw new ArgumentNullException("scenarioModuleQuery");
+            if (contractQuery == null) throw new ArgumentNullException("contractQuery");
             _partQuery = partQuery;
             _partModuleQuery = partModuleQuery;
             _internalModuleQuery = internalModuleQuery;
             _scenarioModuleQuery = scenarioModuleQuery;
+            _contractQuery = contractQuery;
         }
 
 
@@ -38,6 +43,7 @@ namespace AssemblyReloader.Game
             AddTypes(la, typeof (Part), _partQuery.Get(assembly));
             AddTypes(la, typeof (InternalModule), _internalModuleQuery.Get(assembly));
             AddTypes(la, typeof (ScenarioModule), _scenarioModuleQuery.Get(assembly));
+            AddTypes(la, typeof (Contract), _contractQuery.Get(assembly));
 
             return la;
         }

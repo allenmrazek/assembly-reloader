@@ -62,7 +62,7 @@
     <Compile Include="Config\Configuration.cs" />
     <Compile Include="Config\IConfiguration.cs" />
     <Compile Include="Controllers\AddonController.cs" />
-    <Compile Include="Controllers\IPersistentObjectController.cs" />
+    <Compile Include="Controllers\IReloadableObjectController.cs" />
     <Compile Include="Controllers\PartModuleController.cs" />
     <Compile Include="DataObjects\ITypeIdentifier.cs" />
     <Compile Include="DataObjects\TypeIdentifier.cs" />
@@ -99,7 +99,6 @@
     <Compile Include="ILModifications\old\Operations\RenameOnSave.cs" />
     <Compile Include="Loaders\AssemblyDefinitionLoader.cs" />
     <Compile Include="Loaders\AssemblyDefinitionReader.cs" />
-    <Compile Include="Controllers\IAddonController.cs" />
     <Compile Include="Loaders\IAssemblyDefinitionLoader.cs" />
     <Compile Include="Loaders\IAssemblyDefinitionReader.cs" />
     <Compile Include="Loaders\IPartModuleFactory.cs" />
@@ -110,7 +109,7 @@
     <Compile Include="ILModifications\old\ModifiedAssembly.cs" />
     <Compile Include="ILModifications\old\ModifiedAssemblyFactory.cs" />
     <Compile Include="Loaders\old\AddonLoader\AddonLoader.cs" />
-    <Compile Include="Controllers\IReloadableController.cs" />
+    <Compile Include="Controllers\IReloadablePluginController.cs" />
     <Compile Include="CompositeRoot\MonoBehaviours\CoreView.cs" />
     <Compile Include="Loaders\old\AddonLoader\IAddonFactory.cs" />
     <Compile Include="Loaders\old\AddonLoader\AddonFactory.cs" />
@@ -157,7 +156,7 @@
     <Compile Include="Queries\ITypeIdentifierQuery.cs" />
     <Compile Include="Destruction\GameObjectDestroyForReload.cs" />
     <Compile Include="PluginTracking\IReloadablePlugin.cs" />
-    <Compile Include="Controllers\ReloadableController.cs" />
+    <Compile Include="Controllers\ReloadablePluginController.cs" />
     <Compile Include="Queries\ConversionQueries\AddonAttributesFromTypeQuery.cs" />
     <Compile Include="Queries\FileSystemQueries\IReloadableAssemblyFileLocationQuery.cs" />
     <Compile Include="Queries\ConversionQueries\IStartupSceneFromGameSceneQuery.cs" />

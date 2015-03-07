@@ -3,7 +3,7 @@ using AssemblyReloader.PluginTracking;
 
 namespace AssemblyReloader.Controllers
 {
-    public interface IReloadableController
+    public interface IReloadablePluginController
     {
         void Reload(IReloadablePlugin identity);
         void ReloadAll();

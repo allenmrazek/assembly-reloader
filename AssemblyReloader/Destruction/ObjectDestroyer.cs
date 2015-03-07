@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using Contracts;
 using ReeperCommon.Logging;
 using UnityEngine;
 
@@ -43,6 +44,11 @@ namespace AssemblyReloader.Destruction
 
 
         public void Destroy(InternalModule im)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Destroy(Contract contract)
         {
             throw new NotImplementedException();
         }

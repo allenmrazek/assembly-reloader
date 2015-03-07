@@ -22,6 +22,7 @@ using AssemblyReloader.Queries.ConfigNodeQueries;
 using AssemblyReloader.Queries.ConversionQueries;
 using AssemblyReloader.Queries.FileSystemQueries;
 using AssemblyReloader.Repositories;
+using Contracts;
 using Mono.Cecil;
 using ReeperCommon.FileSystem;
 using ReeperCommon.FileSystem.Factories;
@@ -46,7 +47,7 @@ namespace AssemblyReloader.CompositeRoot
         private readonly WindowView _view;
         private readonly WindowView _logView;
 
-        private readonly IReloadableController _controller;
+        private readonly IReloadablePluginController _pluginController;
         private readonly MessageChannel _messageChannel;
 
 
@@ -167,12 +168,12 @@ namespace AssemblyReloader.CompositeRoot
 
             reloadables.ForEach(r => r.Load());
 
-            _controller = new ReloadableController(reloadables);
+            _pluginController = new ReloadablePluginController(reloadables);
 
             var windowFactory = new WindowFactory(resourceLocator, cachedLog);
 
             var logWindow = windowFactory.CreateLogWindow();
-            var mainWindow = windowFactory.CreateMainWindow(new MainViewWindowLogic(_controller, logWindow));
+            var mainWindow = windowFactory.CreateMainWindow(new MainViewWindowLogic(_pluginController, logWindow));
 
             _view = WindowView.Create(mainWindow);
             _logView = WindowView.Create(logWindow);
@@ -243,7 +244,8 @@ namespace AssemblyReloader.CompositeRoot
                 new TypesDerivedFromQuery<Part>(),
                 new TypesDerivedFromQuery<PartModule>(),
                 new TypesDerivedFromQuery<InternalModule>(),
-                new TypesDerivedFromQuery<ScenarioModule>());
+                new TypesDerivedFromQuery<ScenarioModule>(),
+                new TypesDerivedFromQuery<Contract>());
 
 
             var reloadableAssemblyFileQuery = new ReloadableAssemblyFilesInDirectoryQuery(fsFactory.GetGameDataDirectory());
@@ -337,8 +339,8 @@ namespace AssemblyReloader.CompositeRoot
                 partModuleRepository,
                 new CurrentSceneIsFlightQuery());
 
-            reloadable.OnLoaded += partModuleController.LoadPersistentObjects;
-            reloadable.OnUnloaded += partModuleController.UnloadPersistentObjects;
+            reloadable.OnLoaded += partModuleController.Load;
+            reloadable.OnUnloaded += partModuleController.Unload;
 
 
 
@@ -350,8 +352,8 @@ namespace AssemblyReloader.CompositeRoot
                     new CurrentStartupSceneProvider(new StartupSceneFromGameSceneQuery(),
                     new CurrentGameSceneProvider()));
 
-            reloadable.OnLoaded += addonController.StartAddonsFrom;
-            reloadable.OnUnloaded += addonController.DestroyAddonsFrom;
+            reloadable.OnLoaded += addonController.Load;
+            reloadable.OnUnloaded += addonController.Unload;
 
 
 
@@ -384,6 +386,9 @@ namespace AssemblyReloader.CompositeRoot
                 destroyer.Destroy(sm);
                 throw new NotImplementedException();
             });
+
+            controller.Register<Contract>(contract => { throw new NotImplementedException(); });
+
 
             return controller;
         }

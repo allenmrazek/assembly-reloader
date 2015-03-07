@@ -6,12 +6,12 @@ using AssemblyReloader.PluginTracking;
 namespace AssemblyReloader.Controllers
 {
 
-    public class ReloadableController : IReloadableController
+    public class ReloadablePluginController : IReloadablePluginController
     {
         private readonly IEnumerable<IReloadablePlugin> _reloadables;
 
 
-        public ReloadableController(
+        public ReloadablePluginController(
             IEnumerable<IReloadablePlugin> reloadables)
         {
             if (reloadables == null) throw new ArgumentNullException("reloadables");

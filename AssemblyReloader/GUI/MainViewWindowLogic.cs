@@ -12,7 +12,7 @@ namespace AssemblyReloader.GUI
 {
     class MainViewWindowLogic : IWindowLogic
     {
-        private readonly IReloadableController _controller;
+        private readonly IReloadablePluginController _pluginController;
         private readonly IWindowComponent _logWindow;
 
         // gui
@@ -20,12 +20,12 @@ namespace AssemblyReloader.GUI
 
 
 
-        public MainViewWindowLogic(IReloadableController controller, IWindowComponent logWindow)
+        public MainViewWindowLogic(IReloadablePluginController pluginController, IWindowComponent logWindow)
         {
-            if (controller == null) throw new ArgumentNullException("controller");
+            if (pluginController == null) throw new ArgumentNullException("pluginController");
             if (logWindow == null) throw new ArgumentNullException("logWindow");
 
-            _controller = controller;
+            _pluginController = pluginController;
             _logWindow = logWindow;
         }
 
@@ -40,12 +40,12 @@ namespace AssemblyReloader.GUI
 
                 _scroll = GUILayout.BeginScrollView(_scroll, GUILayout.MinWidth(250f), GUILayout.MinHeight(200f));
                 {
-                    DrawReloadableItems(_controller.Plugins);
+                    DrawReloadableItems(_pluginController.Plugins);
                 }
                 GUILayout.EndScrollView();
 
                 if (GUILayout.Button("Reload all"))
-                    _controller.ReloadAll();
+                    _pluginController.ReloadAll();
 
                 GUILayout.Space(10f);
 
@@ -74,7 +74,7 @@ namespace AssemblyReloader.GUI
                 GUILayout.Label(reloadable.Name);
                 GUILayout.FlexibleSpace();
                 if (GUILayout.Button("Reload", GUILayout.ExpandWidth(false), GUILayout.ExpandHeight(false)))
-                    _controller.Reload(reloadable);
+                    _pluginController.Reload(reloadable);
             }
             GUILayout.EndHorizontal();
         }

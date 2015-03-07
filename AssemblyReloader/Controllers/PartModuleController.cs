@@ -13,7 +13,7 @@ using ReeperCommon.FileSystem;
 
 namespace AssemblyReloader.Controllers
 {
-    public class PartModuleController : IPersistentObjectController<PartModule>
+    public class PartModuleController : IReloadableObjectController
     {
         private readonly IPersistentObjectLoader _pmLoader;
         private readonly IPartModuleUnloader _pmUnloader;
@@ -42,7 +42,7 @@ namespace AssemblyReloader.Controllers
         }
 
 
-        public void LoadPersistentObjects(Assembly assembly, IFile location)
+        public void Load(Assembly assembly, IFile location)
         {
             if (assembly == null) throw new ArgumentNullException("assembly");
 
@@ -53,7 +53,7 @@ namespace AssemblyReloader.Controllers
         }
 
 
-        public void UnloadPersistentObjects(Assembly assembly, IFile location)
+        public void Unload(Assembly assembly, IFile location)
         {
             throw new NotImplementedException();
         }
