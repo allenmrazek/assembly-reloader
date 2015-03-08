@@ -1,11 +1,21 @@
 ﻿using System;
 using System.Reflection;
 using AssemblyReloader.Game;
+using AssemblyReloader.Queries;
 
 namespace AssemblyReloader.Loaders
 {
     public class PartModuleFactory : IPartModuleFactory
     {
+        private readonly IPartIsPrefabQuery _partIsPrefabQuery;
+
+        public PartModuleFactory(IPartIsPrefabQuery partIsPrefabQuery)
+        {
+            if (partIsPrefabQuery == null) throw new ArgumentNullException("partIsPrefabQuery");
+            _partIsPrefabQuery = partIsPrefabQuery;
+        }
+
+
         public void Create(IPart part, Type pmType, ConfigNode config)
         {
             if (part == null) throw new ArgumentNullException("part");
@@ -33,8 +43,8 @@ namespace AssemblyReloader.Loaders
 
 
             // if this is the prefab GameObject, it will never become active again and awake will never
-            // get called
-            if (!part.GameObject.activeInHierarchy && ReferenceEquals(part.PartInfo.PartPrefab, part))
+            // get called so we must do it ourselves
+            if (_partIsPrefabQuery.Get(part))
             {
                 var method = typeof (PartModule).GetMethod("Awake",
                     BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.FlattenHierarchy);

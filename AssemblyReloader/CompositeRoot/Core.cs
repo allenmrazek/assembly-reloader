@@ -341,7 +341,7 @@ namespace AssemblyReloader.CompositeRoot
             var partModuleController = new PartModuleController(
                 new PartModuleLoader(
                     descriptorFactory,
-                    new PartModuleFactory(),
+                    new PartModuleFactory(new PartIsPrefabQuery()),
                     partModuleRepository,
                     prefabCloneProvider),
                 new PartModuleUnloader(
@@ -380,6 +380,8 @@ namespace AssemblyReloader.CompositeRoot
             var destroyer = new ObjectDestroyer(_log.CreateTag("ObjectDestroyer"));
             var idGenerator = new UniqueFlightIdGenerator();
             var identifierQuery = new TypeIdentifierQuery();
+            var isPrefabQuery = new PartIsPrefabQuery();
+            var kspFactory = new KspFactory();
 
             // todo: experience traits?
 
@@ -387,20 +389,32 @@ namespace AssemblyReloader.CompositeRoot
 
             controller.Register<PartModule>(pm =>
             {
+                if (pm == null)
+                    throw new ArgumentNullException("pm");
+
+                if (pm.part == null)
+                    throw new ArgumentException("PartModule " + pm.GetType().FullName + " not associated with a Part");
+
                 _log.Normal("Destroying " + pm.GetType().FullName + " on " + pm.part.flightID);
 
-                if (pm.part.flightID == 0)
-                    pm.part.flightID = idGenerator.Get();
 
-                _log.Normal("FlightID is now " + pm.part.flightID);
 
-                var cfg = new ConfigNode();
+                // we only want to save ConfigNodes for non-prefab parts
+                if (!isPrefabQuery.Get(kspFactory.Create(pm.part)))
+                {
+                    if (pm.part.flightID == 0)
+                        pm.part.flightID = idGenerator.Get();
 
-                pm.Save(cfg);
+                    _log.Normal("FlightID is now " + pm.part.flightID);
 
-                _log.Normal("Saving ConfigNode: {0}", cfg.ToString());
+                    var cfg = new ConfigNode();
 
-                configRepository.Store(pm.part.flightID, identifierQuery.Get(pm.GetType()), cfg);
+                    pm.Save(cfg);
+
+                    _log.Normal("Saving ConfigNode: {0}", cfg.ToString());
+
+                    configRepository.Store(pm.part.flightID, identifierQuery.Get(pm.GetType()), cfg);
+                }
 
                 destroyer.Destroy(pm);
             });
