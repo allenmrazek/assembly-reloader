@@ -81,8 +81,12 @@
     <Compile Include="Game\IGameEventPublisher.cs" />
     <Compile Include="Game\IKspFactory.cs" />
     <Compile Include="Game\ILoadedAssemblyFactory.cs" />
+    <Compile Include="Generators\IUniqueFlightIdGenerator.cs" />
+    <Compile Include="Generators\UniqueFlightIdGenerator.cs" />
     <Compile Include="Loaders\IPartModuleUnloader.cs" />
     <Compile Include="Loaders\PartModuleUnloader.cs" />
+    <Compile Include="Providers\ComponentsInGameObjectHierarchyProvider.cs" />
+    <Compile Include="Providers\IComponentsInGameObjectHierarchyProvider.cs" />
     <Compile Include="Providers\ILoadedComponentProvider.cs" />
     <Compile Include="Game\IPart.cs" />
     <Compile Include="Game\IPartLoader.cs" />

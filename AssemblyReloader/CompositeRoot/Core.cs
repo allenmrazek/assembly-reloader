@@ -251,10 +251,9 @@ namespace AssemblyReloader.CompositeRoot
             var reloadableAssemblyFileQuery = new ReloadableAssemblyFilesInDirectoryQuery(fsFactory.GetGameDataDirectory());
             var ilModifications = ConfigureAssemblyModifications();
 
-            var destructionController = ConfigureDestructionController();
 
             var addonDestroyer = new AddonDestroyer(
-                destructionController,
+                ConfigureDestructionController(new FlightConfigRepository()), // config repo unused
                 new LoadedComponentProvider(),
                 new AddonsFromAssemblyQuery(new AddonAttributesFromTypeQuery()));
 
@@ -311,7 +310,7 @@ namespace AssemblyReloader.CompositeRoot
                     ConfigureAssemblyProvider(location, assemblyResolver, ilModifications), location);
 
             var kspLoader = new KspAssemblyLoader(laFactory);
-            var partModuleRepository = new FlightConfigRepository();
+            
             var kspFactory = new KspFactory();
 
             var descriptorFactory = new PartModuleDescriptorFactory(
@@ -325,8 +324,14 @@ namespace AssemblyReloader.CompositeRoot
 
             var prefabCloneProvider = new PartPrefabCloneProvider(
                 new LoadedComponentProvider<Part>(),
+                new ComponentsInGameObjectHierarchyProvider<Part>(),
                 new PartIsPrefabQuery(),
                 kspFactory);
+
+            var partModuleRepository = new FlightConfigRepository();
+
+
+            var destructionController = ConfigureDestructionController(partModuleRepository);
 
             reloadable.OnLoaded += kspLoader.Load;
             reloadable.OnUnloaded += kspLoader.Unload;
@@ -340,12 +345,11 @@ namespace AssemblyReloader.CompositeRoot
                     partModuleRepository,
                     prefabCloneProvider),
                 new PartModuleUnloader(
-                    new ObjectDestroyer(_log.CreateTag("ObjectDestroyer")),
+                    destructionController,
                     descriptorFactory,
                     prefabCloneProvider),
                 new TypesDerivedFromQuery<PartModule>(),
                 partModuleRepository,
-                new CurrentSceneIsFlightQuery(),
                 _log.CreateTag("PartModuleController"));
 
             reloadable.OnLoaded += partModuleController.Load;
@@ -370,10 +374,12 @@ namespace AssemblyReloader.CompositeRoot
         }
 
 
-        private IDestructionController ConfigureDestructionController()
+        private IDestructionController ConfigureDestructionController(IFlightConfigRepository configRepository)
         {
             var controller = new DestructionController();
             var destroyer = new ObjectDestroyer(_log.CreateTag("ObjectDestroyer"));
+            var idGenerator = new UniqueFlightIdGenerator();
+            var identifierQuery = new TypeIdentifierQuery();
 
             // todo: experience traits?
 
@@ -381,8 +387,22 @@ namespace AssemblyReloader.CompositeRoot
 
             controller.Register<PartModule>(pm =>
             {
+                _log.Normal("Destroying " + pm.GetType().FullName + " on " + pm.part.flightID);
+
+                if (pm.part.flightID == 0)
+                    pm.part.flightID = idGenerator.Get();
+
+                _log.Normal("FlightID is now " + pm.part.flightID);
+
+                var cfg = new ConfigNode();
+
+                pm.Save(cfg);
+
+                _log.Normal("Saving ConfigNode: {0}", cfg.ToString());
+
+                configRepository.Store(pm.part.flightID, identifierQuery.Get(pm.GetType()), cfg);
+
                 destroyer.Destroy(pm);
-                throw new NotImplementedException();
             });
 
             controller.Register<InternalModule>(im =>

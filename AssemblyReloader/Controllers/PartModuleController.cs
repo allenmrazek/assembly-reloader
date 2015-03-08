@@ -20,7 +20,6 @@ namespace AssemblyReloader.Controllers
         private readonly IPartModuleUnloader _pmUnloader;
         private readonly ITypesFromAssemblyQuery _partModuleFromAssemblyQuery;
         private readonly IFlightConfigRepository _partModuleConfigRepository;
-        private readonly ICurrentSceneIsFlightQuery _flightQuery;
         private readonly ILog _log;
 
         public PartModuleController(
@@ -28,21 +27,18 @@ namespace AssemblyReloader.Controllers
             IPartModuleUnloader pmUnloader,
             ITypesFromAssemblyQuery partModuleFromAssemblyQuery,
             IFlightConfigRepository partModuleConfigRepository,
-            ICurrentSceneIsFlightQuery flightQuery,
             ILog log)
         {
             if (pmLoader == null) throw new ArgumentNullException("pmLoader");
             if (pmUnloader == null) throw new ArgumentNullException("pmUnloader");
             if (partModuleFromAssemblyQuery == null) throw new ArgumentNullException("partModuleFromAssemblyQuery");
             if (partModuleConfigRepository == null) throw new ArgumentNullException("partModuleConfigRepository");
-            if (flightQuery == null) throw new ArgumentNullException("flightQuery");
             if (log == null) throw new ArgumentNullException("log");
 
             _pmLoader = pmLoader;
             _pmUnloader = pmUnloader;
             _partModuleFromAssemblyQuery = partModuleFromAssemblyQuery;
             _partModuleConfigRepository = partModuleConfigRepository;
-            _flightQuery = flightQuery;
             _log = log;
         }
 
@@ -57,7 +53,7 @@ namespace AssemblyReloader.Controllers
             {
                 _log.Debug("Loading PartModule " + t.FullName);
 
-                _pmLoader.Load(t, _flightQuery.Get());
+                _pmLoader.Load(t);
             }
             _partModuleConfigRepository.Clear();
         }
