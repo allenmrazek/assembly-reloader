@@ -13,14 +13,14 @@ namespace AssemblyReloader.Loaders
         private readonly IDescriptorFactory _descriptorFactory;
         private readonly IPartModuleFactory _partModuleFactory;
         private readonly IFlightConfigRepository _partModuleConfigRepository;
-        private readonly ILoadedInstancesOfPrefabProvider _loadedPrefabProvider;
+        private readonly IPartPrefabCloneProvider _loadedPrefabProvider;
 
 
         public PartModuleLoader(
             IDescriptorFactory descriptorFactory,
             IPartModuleFactory partModuleFactory,
             IFlightConfigRepository partModuleConfigRepository,
-            ILoadedInstancesOfPrefabProvider loadedPrefabProvider)
+            IPartPrefabCloneProvider loadedPrefabProvider)
         {
             if (descriptorFactory == null) throw new ArgumentNullException("descriptorFactory");
             if (partModuleFactory == null) throw new ArgumentNullException("partModuleFactory");

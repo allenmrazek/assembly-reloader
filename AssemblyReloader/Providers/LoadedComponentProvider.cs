@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using UnityEngine;
 using Object = UnityEngine.Object;
 
 namespace AssemblyReloader.Providers
@@ -13,10 +11,18 @@ namespace AssemblyReloader.Providers
         {
             if (type == null) throw new ArgumentNullException("type");
 
-            if (!type.IsSubclassOf(typeof (UnityEngine.Object)))
+            if (!type.IsSubclassOf(typeof (Object)))
                 throw new ArgumentException(type.FullName + " is not derived from UnityEngine.Object");
 
-            return UnityEngine.Object.FindObjectsOfType(type);
+            return Object.FindObjectsOfType(type);
+        }
+    }
+
+    public class LoadedComponentProvider<T> : ILoadedComponentProvider<T> where T : UnityEngine.Object
+    {
+        public IEnumerable<T> Get()
+        {
+            return Object.FindObjectsOfType(typeof (T)).Cast<T>();
         }
     }
 }

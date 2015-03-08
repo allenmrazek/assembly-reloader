@@ -10,5 +10,14 @@ using UnityEngine;
 
 namespace TestProject
 {
-
+    [KSPAddon(KSPAddon.Startup.EditorAny, false)]
+    public class CheckRootModules : MonoBehaviour
+    {
+        private void Awake()
+        {
+            EditorLogic.RootPart.FindModulesImplementing<PartModule>()
+                .ToList()
+                .ForEach(m => print("Module: " + m.GetType().FullName));
+        }
+    }
 }

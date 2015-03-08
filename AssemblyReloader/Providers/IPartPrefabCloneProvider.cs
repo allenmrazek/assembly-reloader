@@ -6,7 +6,7 @@ using AssemblyReloader.Game;
 
 namespace AssemblyReloader.Providers
 {
-    public interface ILoadedInstancesOfPrefabProvider
+    public interface IPartPrefabCloneProvider
     {
         IEnumerable<IPart> Get(IPart prefab);
     }

@@ -124,10 +124,10 @@
     <Compile Include="CompositeRoot\Commands\ICommand.cs" />
     <Compile Include="CompositeRoot\Commands\CompositeCommand.cs" />
     <Compile Include="Messages\IMessageFactory.cs" />
-    <Compile Include="Providers\ILoadedInstancesOfPrefabProvider.cs" />
     <Compile Include="Generators\IUniqueAssemblyNameGenerator.cs" />
+    <Compile Include="Providers\IPartPrefabCloneProvider.cs" />
     <Compile Include="Providers\LoadedComponentProvider.cs" />
-    <Compile Include="Providers\LoadedInstancesOfPrefabProvider.cs" />
+    <Compile Include="Providers\PartPrefabCloneProvider.cs" />
     <Compile Include="Providers\SceneProviders\CurrentSceneIsFlightQuery.cs" />
     <Compile Include="Providers\SceneProviders\ICurrentSceneIsFlightQuery.cs" />
     <Compile Include="Providers\AssemblyFromDefinitionProvider.cs" />
@@ -152,6 +152,7 @@
     <Compile Include="Providers\SceneProviders\ICurrentStartupSceneProvider.cs" />
     <Compile Include="Queries\FileSystemQueries\AssemblyDirectoryQuery.cs" />
     <Compile Include="Providers\SceneProviders\CurrentGameSceneProvider.cs" />
+    <Compile Include="Queries\IPartIsPrefabQuery.cs" />
     <Compile Include="Queries\IPartModulesInPartQuery.cs" />
     <Compile Include="Queries\ITypeIdentifierQuery.cs" />
     <Compile Include="PluginTracking\IReloadablePlugin.cs" />
@@ -171,6 +172,7 @@
     <Compile Include="Providers\SceneProviders\CurrentStartupSceneProvider.cs" />
     <Compile Include="Queries\ConversionQueries\StartupSceneFromGameSceneQuery.cs" />
     <Compile Include="Queries\FileSystemQueries\ReloadableAssemblyFilesInDirectoryQuery.cs" />
+    <Compile Include="Queries\PartIsPrefabQuery.cs" />
     <Compile Include="Queries\PartModulesInPartQuery.cs" />
     <Compile Include="Queries\TypeIdentifierQuery.cs" />
     <Compile Include="Repositories\IFlightConfigRepository.cs" />

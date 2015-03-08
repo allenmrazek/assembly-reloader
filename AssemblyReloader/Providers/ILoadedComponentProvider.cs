@@ -7,4 +7,9 @@ namespace AssemblyReloader.Providers
     {
         IEnumerable<UnityEngine.Object> GetLoaded(Type type);
     }
+
+    public interface ILoadedComponentProvider<T> where T : UnityEngine.Object
+    {
+        IEnumerable<T> Get();
+    }
 }

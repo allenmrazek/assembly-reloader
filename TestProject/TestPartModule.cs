@@ -37,5 +37,15 @@
         {
             
         }
+
+#if MODIFIED
+        [KSPEvent(guiActive = true, guiName = "Modded TestEvent", guiActiveEditor = true)]
+#else
+        [KSPEvent(guiActive = true, guiName = "TestEvent", guiActiveEditor = true)]
+#endif
+        public void TestMethod()
+        {
+            
+        }
     }
 }

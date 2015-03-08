@@ -312,19 +312,21 @@ namespace AssemblyReloader.CompositeRoot
 
             var kspLoader = new KspAssemblyLoader(laFactory);
             var partModuleRepository = new FlightConfigRepository();
+            var kspFactory = new KspFactory();
 
             var descriptorFactory = new PartModuleDescriptorFactory(
                                         new KspPartLoader(
-                                            new KspFactory()),
+                                            kspFactory),
                                         new AvailablePartConfigProvider(
                                             new KspGameDatabase()),
                                         new ModuleConfigsFromPartConfigQuery(),
                                         new TypeIdentifierQuery(),
                                         _log.CreateTag("KspPartLoader"));
 
-            var loadedInstancesOfPrefabProvider = new LoadedInstancesOfPrefabProvider(
-                                                    new LoadedVesselProvider(
-                                                        new KspFactory()));
+            var prefabCloneProvider = new PartPrefabCloneProvider(
+                new LoadedComponentProvider<Part>(),
+                new PartIsPrefabQuery(),
+                kspFactory);
 
             reloadable.OnLoaded += kspLoader.Load;
             reloadable.OnUnloaded += kspLoader.Unload;
@@ -336,11 +338,11 @@ namespace AssemblyReloader.CompositeRoot
                     descriptorFactory,
                     new PartModuleFactory(),
                     partModuleRepository,
-                    loadedInstancesOfPrefabProvider),
+                    prefabCloneProvider),
                 new PartModuleUnloader(
                     new ObjectDestroyer(_log.CreateTag("ObjectDestroyer")),
                     descriptorFactory,
-                    loadedInstancesOfPrefabProvider),
+                    prefabCloneProvider),
                 new TypesDerivedFromQuery<PartModule>(),
                 partModuleRepository,
                 new CurrentSceneIsFlightQuery(),

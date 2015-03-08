@@ -11,12 +11,12 @@ namespace AssemblyReloader.Loaders
     {
         private readonly IObjectDestroyer _destroyer;
         private readonly IDescriptorFactory _descriptorFactory;
-        private readonly ILoadedInstancesOfPrefabProvider _loadedInstancesOfPrefabProvider;
+        private readonly IPartPrefabCloneProvider _loadedInstancesOfPrefabProvider;
 
         public PartModuleUnloader(
             IObjectDestroyer destroyer,
             IDescriptorFactory descriptorFactory,
-            ILoadedInstancesOfPrefabProvider loadedInstancesOfPrefabProvider
+            IPartPrefabCloneProvider loadedInstancesOfPrefabProvider
             )
         {
             if (destroyer == null) throw new ArgumentNullException("destroyer");
