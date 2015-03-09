@@ -10,12 +10,12 @@ namespace AssemblyReloader.Loaders
     public class PartModuleUnloader : IPartModuleUnloader
     {
         private readonly IDestructionController _destroyer;
-        private readonly IDescriptorFactory _descriptorFactory;
+        private readonly IPartModuleDescriptorFactory _descriptorFactory;
         private readonly IPartPrefabCloneProvider _loadedInstancesOfPrefabProvider;
 
         public PartModuleUnloader(
             IDestructionController destroyer,
-            IDescriptorFactory descriptorFactory,
+            IPartModuleDescriptorFactory descriptorFactory,
             IPartPrefabCloneProvider loadedInstancesOfPrefabProvider
             )
         {

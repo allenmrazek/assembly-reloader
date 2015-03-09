@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using AssemblyReloader.Game;
-using AssemblyReloader.Loaders.PMLoader;
 using AssemblyReloader.Providers;
 using AssemblyReloader.Providers.SceneProviders;
 using AssemblyReloader.Repositories;
@@ -9,16 +8,16 @@ using ReeperCommon.Logging.Implementations;
 
 namespace AssemblyReloader.Loaders
 {
-    public class PartModuleLoader : IPersistentObjectLoader
+    public class PartModuleLoader : IPartModuleLoader
     {
-        private readonly IDescriptorFactory _descriptorFactory;
+        private readonly IPartModuleDescriptorFactory _descriptorFactory;
         private readonly IPartModuleFactory _partModuleFactory;
         private readonly IFlightConfigRepository _partModuleConfigRepository;
         private readonly IPartPrefabCloneProvider _loadedPrefabProvider;
 
 
         public PartModuleLoader(
-            IDescriptorFactory descriptorFactory,
+            IPartModuleDescriptorFactory descriptorFactory,
             IPartModuleFactory partModuleFactory,
             IFlightConfigRepository partModuleConfigRepository,
             IPartPrefabCloneProvider loadedPrefabProvider)
@@ -52,6 +51,11 @@ namespace AssemblyReloader.Loaders
 
             var log = new DebugLog("PartModuleLoader");
 
+            log.Warning("LoadPartModule in PartModuleLoader");
+            var items = _loadedPrefabProvider.Get(description.Prefab).ToList();
+
+            log.Warning("Found " + items.Count + " prefab instances");
+
             foreach (var loadedInstance in _loadedPrefabProvider.Get(description.Prefab).ToList())
             {
                 log.Normal("Loading PartModule on " + loadedInstance.FlightID);
@@ -60,6 +64,7 @@ namespace AssemblyReloader.Loaders
 
                 if (stored.Any())
                     log.Normal("*** found stored ConfigNode for this item ***");
+                else log.Normal("Didn't find ConfigNode for " + loadedInstance.FlightID);
 
                 var config = stored.Any() ? stored.Single() : description.Config;
 

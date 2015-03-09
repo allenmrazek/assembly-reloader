@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using AssemblyReloader.Loaders.PMLoader;
 
 namespace AssemblyReloader.Loaders
 {
-    public interface IDescriptorFactory
+    public interface IPartModuleDescriptorFactory
     {
         IEnumerable<PartModuleDescriptor> Create(Type pmType);
     }

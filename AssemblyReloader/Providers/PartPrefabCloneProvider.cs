@@ -11,11 +11,6 @@ namespace AssemblyReloader.Providers
     // This is kind of an ugly way to go about this but there are cases where it's necessary. Specifically,
     // the editor doesn't seem to keep a list of all the parts it spawns and I couldn't find any way to 
     // locate those parts except for a basic FindObjectsOfType call.
-    //
-    // This is a problem for us; we might end up mixing PartModules from different assemblies when it comes
-    // to orphaned Parts (individual or as a cluster) if we miss some loaded prefabs. This is possible in the
-    // editor at least, where orphaned parts are transparent (think player temporarily detaching stuff from
-    // the ship)
     public class PartPrefabCloneProvider : IPartPrefabCloneProvider
     {
         private readonly ILoadedComponentProvider<Part> _loadedPartProvider;
@@ -55,13 +50,7 @@ namespace AssemblyReloader.Providers
             return loadedParts
                 .SelectMany(p => _partsInGameObject.Get(p.gameObject))
                 .Select(_kspFactory.Create)
-                .Where(p => _confirmPrefabQuery.Get(p));
-
-            //return _loadedPartProvider.Get()
-            //    .Select(p => _kspFactory.Create(p))
-
-            //    .Where(p => !_confirmPrefabQuery.Get(p)); // just to protect against us grabbing the prefabs themselves in case a plugin has made them active for who knows why
-
+                .Where(p => !_confirmPrefabQuery.Get(p));
         }
     }
 }

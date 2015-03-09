@@ -16,10 +16,10 @@ namespace TestProject
     {
         private void Awake()
         {
-            if (EditorLogic.RootPart != null)
-            EditorLogic.RootPart.FindModulesImplementing<PartModule>()
-                .ToList()
-                .ForEach(m => print("Module: " + m.GetType().FullName));
+            //if (EditorLogic.RootPart != null)
+            //EditorLogic.RootPart.FindModulesImplementing<PartModule>()
+            //    .ToList()
+            //    .ForEach(m => print("Module: " + m.GetType().FullName));
         }
 
         private void Update()
@@ -37,7 +37,7 @@ namespace TestProject
                 // the top-level ones! Better look for children too
                 loadedParts
                     .SelectMany(p => p.gameObject.GetComponentsInChildren<Part>(true))
-                    .Where(p => ReferenceEquals(p.gameObject, p.partInfo.partPrefab.gameObject))
+                    .Where(p => !ReferenceEquals(p.gameObject, p.partInfo.partPrefab.gameObject))
                     .ToList()
                     .ForEach(p => print("Loaded part: " + p.name + ", " + p.flightID));
             }

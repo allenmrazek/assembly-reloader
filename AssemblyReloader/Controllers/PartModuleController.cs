@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using AssemblyReloader.CompositeRoot.Commands;
 using AssemblyReloader.Destruction;
 using AssemblyReloader.Loaders;
-using AssemblyReloader.Loaders.PMLoader;
 using AssemblyReloader.Providers.SceneProviders;
 using AssemblyReloader.Queries.AssemblyQueries;
 using AssemblyReloader.Repositories;
@@ -16,29 +16,33 @@ namespace AssemblyReloader.Controllers
 {
     public class PartModuleController : IReloadableObjectController
     {
-        private readonly IPersistentObjectLoader _pmLoader;
+        private readonly IPartModuleLoader _pmLoader;
         private readonly IPartModuleUnloader _pmUnloader;
         private readonly ITypesFromAssemblyQuery _partModuleFromAssemblyQuery;
         private readonly IFlightConfigRepository _partModuleConfigRepository;
+        private readonly ICommand _refreshPartActionWindows;
         private readonly ILog _log;
 
         public PartModuleController(
-            IPersistentObjectLoader pmLoader,
+            IPartModuleLoader pmLoader,
             IPartModuleUnloader pmUnloader,
             ITypesFromAssemblyQuery partModuleFromAssemblyQuery,
             IFlightConfigRepository partModuleConfigRepository,
+            ICommand refreshPartActionWindows,
             ILog log)
         {
             if (pmLoader == null) throw new ArgumentNullException("pmLoader");
             if (pmUnloader == null) throw new ArgumentNullException("pmUnloader");
             if (partModuleFromAssemblyQuery == null) throw new ArgumentNullException("partModuleFromAssemblyQuery");
             if (partModuleConfigRepository == null) throw new ArgumentNullException("partModuleConfigRepository");
+            if (refreshPartActionWindows == null) throw new ArgumentNullException("refreshPartActionWindows");
             if (log == null) throw new ArgumentNullException("log");
 
             _pmLoader = pmLoader;
             _pmUnloader = pmUnloader;
             _partModuleFromAssemblyQuery = partModuleFromAssemblyQuery;
             _partModuleConfigRepository = partModuleConfigRepository;
+            _refreshPartActionWindows = refreshPartActionWindows;
             _log = log;
         }
 
@@ -56,6 +60,7 @@ namespace AssemblyReloader.Controllers
                 _pmLoader.Load(t);
             }
             _partModuleConfigRepository.Clear();
+            _refreshPartActionWindows.Execute();
         }
 
 
@@ -70,6 +75,8 @@ namespace AssemblyReloader.Controllers
                 _log.Debug("Unloading PartModule " + t.FullName);
                 _pmUnloader.Unload(t);
             }
+
+            _refreshPartActionWindows.Execute();
         }
 
         private IEnumerable<Type> GetPartModules(Assembly assembly)

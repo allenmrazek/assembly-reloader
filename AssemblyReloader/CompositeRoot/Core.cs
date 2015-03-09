@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using AssemblyReloader.CompositeRoot.Commands;
 using AssemblyReloader.CompositeRoot.Commands.ILModifications;
+using AssemblyReloader.CompositeRoot.MonoBehaviours;
 using AssemblyReloader.Controllers;
 using AssemblyReloader.Destruction;
 using AssemblyReloader.Game;
@@ -163,6 +164,18 @@ namespace AssemblyReloader.CompositeRoot
             var resourceLocator = ConfigureResourceRepository(ourDirProvider.Get());
             _eventProvider = ConfigureEventProvider(new StartupSceneFromGameSceneQuery());
 
+            KspPartActionWindowListener.WindowController = new KspPartActionWindowController();
+            KspPartActionWindowListener.PartActionWindowQuery =
+                new ComponentsInGameObjectHierarchyProvider<UIPartActionWindow>();
+
+            _eventProvider.OnSceneLoaded.OnEvent += s =>
+            {
+                if (UIPartActionController.Instance != null && UIPartActionController.Instance.windowPrefab != null)
+                    if (UIPartActionController.Instance.windowPrefab.GetComponent<KspPartActionWindowListener>() == null)
+                        UIPartActionController.Instance.windowPrefab.gameObject.AddComponent<KspPartActionWindowListener>();
+            };
+            
+
 
             var reloadables = CreateReloadablePlugins(fsFactory, assemblyResolver).ToList();
 
@@ -252,12 +265,22 @@ namespace AssemblyReloader.CompositeRoot
             var ilModifications = ConfigureAssemblyModifications();
 
 
+
+
+
+
             var addonDestroyer = new AddonDestroyer(
                 ConfigureDestructionController(new FlightConfigRepository()), // config repo unused
                 new LoadedComponentProvider(),
                 new AddonsFromAssemblyQuery(new AddonAttributesFromTypeQuery()));
 
-            return reloadableAssemblyFileQuery.Get().Select(raFile => ConfigureReloadablePlugin(raFile, assemblyResolver, laFactory, addonDestroyer, ilModifications));
+            return reloadableAssemblyFileQuery
+                .Get()
+                .Select(raFile => ConfigureReloadablePlugin(raFile, 
+                    assemblyResolver, 
+                    laFactory, 
+                    addonDestroyer, 
+                    ilModifications));
         }
 
 
@@ -319,8 +342,7 @@ namespace AssemblyReloader.CompositeRoot
                                         new AvailablePartConfigProvider(
                                             new KspGameDatabase()),
                                         new ModuleConfigsFromPartConfigQuery(),
-                                        new TypeIdentifierQuery(),
-                                        _log.CreateTag("KspPartLoader"));
+                                        new TypeIdentifierQuery());
 
             var prefabCloneProvider = new PartPrefabCloneProvider(
                 new LoadedComponentProvider<Part>(),
@@ -350,6 +372,7 @@ namespace AssemblyReloader.CompositeRoot
                     prefabCloneProvider),
                 new TypesDerivedFromQuery<PartModule>(),
                 partModuleRepository,
+                new RefreshPartActionWindows(KspPartActionWindowListener.WindowController),
                 _log.CreateTag("PartModuleController"));
 
             reloadable.OnLoaded += partModuleController.Load;

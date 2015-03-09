@@ -2,7 +2,7 @@
 
 namespace AssemblyReloader.Loaders
 {
-    public interface IPersistentObjectLoader
+    public interface IPartModuleLoader
     {
         void Load(Type type);
     }

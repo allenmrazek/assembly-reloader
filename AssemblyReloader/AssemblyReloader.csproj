@@ -59,6 +59,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CompositeRoot\Commands\ILModifications\RenameAssemblyCommand.cs" />
+    <Compile Include="CompositeRoot\Commands\RefreshPartActionWindows.cs" />
+    <Compile Include="CompositeRoot\MonoBehaviours\KspPartActionWindowListener.cs" />
     <Compile Include="Config\Configuration.cs" />
     <Compile Include="Config\IConfiguration.cs" />
     <Compile Include="Controllers\AddonController.cs" />
@@ -81,6 +83,8 @@
     <Compile Include="Game\IGameEventPublisher.cs" />
     <Compile Include="Game\IKspFactory.cs" />
     <Compile Include="Game\ILoadedAssemblyFactory.cs" />
+    <Compile Include="Game\IPartActionWindowController.cs" />
+    <Compile Include="Game\KspPartActionWindowController.cs" />
     <Compile Include="Generators\IUniqueFlightIdGenerator.cs" />
     <Compile Include="Generators\UniqueFlightIdGenerator.cs" />
     <Compile Include="Loaders\IPartModuleUnloader.cs" />
@@ -106,23 +110,18 @@
     <Compile Include="Loaders\IAssemblyDefinitionLoader.cs" />
     <Compile Include="Loaders\IAssemblyDefinitionReader.cs" />
     <Compile Include="Loaders\IPartModuleFactory.cs" />
-    <Compile Include="Loaders\IPersistentObjectLoader.cs" />
+    <Compile Include="Loaders\IPartModuleLoader.cs" />
     <Compile Include="Loaders\PartModuleFactory.cs" />
     <Compile Include="ILModifications\old\IModifiedAssembly.cs" />
     <Compile Include="ILModifications\old\IModifiedAssemblyFactory.cs" />
     <Compile Include="ILModifications\old\ModifiedAssembly.cs" />
     <Compile Include="ILModifications\old\ModifiedAssemblyFactory.cs" />
-    <Compile Include="Loaders\old\AddonLoader\AddonLoader.cs" />
     <Compile Include="Controllers\IReloadablePluginController.cs" />
     <Compile Include="CompositeRoot\MonoBehaviours\CoreView.cs" />
-    <Compile Include="Loaders\old\AddonLoader\IAddonFactory.cs" />
-    <Compile Include="Loaders\old\AddonLoader\AddonFactory.cs" />
     <Compile Include="GUI\WindowFactory.cs" />
     <Compile Include="GUI\LogViewLogic.cs" />
-    <Compile Include="Loaders\old\AddonLoader\Addon.cs" />
-    <Compile Include="Loaders\IDescriptorFactory.cs" />
+    <Compile Include="Loaders\IPartModuleDescriptorFactory.cs" />
     <Compile Include="Loaders\PartModuleDescriptor.cs" />
-    <Compile Include="Loaders\PartModuleDescriptorFactory.cs" />
     <Compile Include="Loaders\PartModuleLoader.cs" />
     <Compile Include="Logging\ICachedLog.cs" />
     <Compile Include="CompositeRoot\Commands\ICommand.cs" />
@@ -164,7 +163,6 @@
     <Compile Include="Queries\ConversionQueries\AddonAttributesFromTypeQuery.cs" />
     <Compile Include="Queries\FileSystemQueries\IReloadableAssemblyFileLocationQuery.cs" />
     <Compile Include="Queries\ConversionQueries\IStartupSceneFromGameSceneQuery.cs" />
-    <Compile Include="Loaders\old\AddonLoader\AddonInfo.cs" />
     <Compile Include="Messages\IMessageChannel.cs" />
     <Compile Include="Messages\IMessageConsumer.cs" />
     <Compile Include="Logging\CachedLog.cs" />
