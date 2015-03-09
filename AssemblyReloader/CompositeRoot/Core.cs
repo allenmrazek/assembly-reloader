@@ -279,8 +279,7 @@ namespace AssemblyReloader.CompositeRoot
                 .Select(raFile => ConfigureReloadablePlugin(raFile, 
                     assemblyResolver, 
                     laFactory, 
-                    addonDestroyer, 
-                    ilModifications));
+                    addonDestroyer));
         }
 
 
@@ -306,11 +305,16 @@ namespace AssemblyReloader.CompositeRoot
             if (resolver == null) throw new ArgumentNullException("resolver");
             if (ilModifications == null) throw new ArgumentNullException("ilModifications");
 
+#if DEBUG
+            return new AssemblyFromDefinitionProvider(
+                new AssemblyDefinitionReaderWithDebugOutput(
+                    new AssemblyDefinitionReader(location, resolver)),
+                    ilModifications);
+#else
             return new AssemblyFromDefinitionProvider(
                 new AssemblyDefinitionReader(location, resolver),
-                new AssemblyDefinitionLoader(),
                 ilModifications);
-
+#endif
         }
 
 
@@ -326,9 +330,12 @@ namespace AssemblyReloader.CompositeRoot
             IFile location, 
             BaseAssemblyResolver assemblyResolver, 
             ILoadedAssemblyFactory laFactory,
-            IAddonDestroyer addonDestroyer,
-            ICommand<AssemblyDefinition> ilModifications)
+            IAddonDestroyer addonDestroyer)
         {
+            var ilModifications = new CompositeCommand<AssemblyDefinition>(
+                                    new RenameAssemblyCommand(new UniqueAssemblyNameGenerator()),
+                                    new ReplaceExecutingAssemblyCodeBase(location));
+
             var reloadable = new ReloadablePlugin(
                     ConfigureAssemblyProvider(location, assemblyResolver, ilModifications), location);
 

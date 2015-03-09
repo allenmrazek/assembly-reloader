@@ -1,4 +1,6 @@
-﻿namespace TestProject
+﻿using System.Reflection;
+
+namespace TestProject
 {
     public class TestPartModule : PartModule
     {
@@ -18,6 +20,8 @@
 #else
             print("TestPartModule awake (unmodified version)");
 #endif
+
+            print("TestPartModule running from " + Assembly.GetExecutingAssembly().CodeBase);
         }
 
         public override void OnLoad(ConfigNode node)

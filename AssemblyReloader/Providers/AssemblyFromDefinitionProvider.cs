@@ -13,26 +13,23 @@ namespace AssemblyReloader.Providers
     public class AssemblyFromDefinitionProvider : IAssemblyProvider
     {
         private readonly IAssemblyDefinitionReader _reader;
-        private readonly IAssemblyDefinitionLoader _loader;
         private readonly ICommand<AssemblyDefinition> _assemblyModifications;
 
         public AssemblyFromDefinitionProvider(
             IAssemblyDefinitionReader reader,
-            IAssemblyDefinitionLoader loader,
             ICommand<AssemblyDefinition> assemblyModifications)
         {
             if (reader == null) throw new ArgumentNullException("reader");
-            if (loader == null) throw new ArgumentNullException("loader");
             if (assemblyModifications == null) throw new ArgumentNullException("assemblyModifications");
+
             _reader = reader;
-            _loader = loader;
             _assemblyModifications = assemblyModifications;
         }
 
 
         public Maybe<Assembly> Get()
         {
-            var assemblyDefinition = _reader.Get();
+            var assemblyDefinition = _reader.GetDefinition();
 
             if (!assemblyDefinition.Any())
                 throw new Exception("Failed to read " + _reader.Name + " definition");
@@ -41,8 +38,12 @@ namespace AssemblyReloader.Providers
 
             _assemblyModifications.Execute(def);
 
+            using (var stream =new MemoryStream(1024 * 1024))
+            {
+                _reader.WriteToStream(def, stream);
 
-            return _loader.Load(def);
+                return _reader.Load(stream);
+            }
         }
 
         public string Name

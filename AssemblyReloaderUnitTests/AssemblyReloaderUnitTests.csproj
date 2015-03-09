@@ -125,6 +125,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="DebugWeaveResults.bat" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

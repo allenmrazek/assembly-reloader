@@ -59,6 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CompositeRoot\Commands\ILModifications\RenameAssemblyCommand.cs" />
+    <Compile Include="CompositeRoot\Commands\ILModifications\ReplaceExecutingAssemblyCodeBase.cs" />
     <Compile Include="CompositeRoot\Commands\RefreshPartActionWindows.cs" />
     <Compile Include="CompositeRoot\MonoBehaviours\KspPartActionWindowListener.cs" />
     <Compile Include="Config\Configuration.cs" />
@@ -87,6 +88,7 @@
     <Compile Include="Game\KspPartActionWindowController.cs" />
     <Compile Include="Generators\IUniqueFlightIdGenerator.cs" />
     <Compile Include="Generators\UniqueFlightIdGenerator.cs" />
+    <Compile Include="Loaders\AssemblyDefinitionReaderWithDebugOutput.cs" />
     <Compile Include="Loaders\IPartModuleUnloader.cs" />
     <Compile Include="Loaders\PartModuleUnloader.cs" />
     <Compile Include="Providers\ComponentsInGameObjectHierarchyProvider.cs" />
@@ -105,9 +107,7 @@
     <Compile Include="Game\KspPartLoader.cs" />
     <Compile Include="Game\KspVessel.cs" />
     <Compile Include="ILModifications\old\Operations\RenameOnSave.cs" />
-    <Compile Include="Loaders\AssemblyDefinitionLoader.cs" />
     <Compile Include="Loaders\AssemblyDefinitionReader.cs" />
-    <Compile Include="Loaders\IAssemblyDefinitionLoader.cs" />
     <Compile Include="Loaders\IAssemblyDefinitionReader.cs" />
     <Compile Include="Loaders\IPartModuleFactory.cs" />
     <Compile Include="Loaders\IPartModuleLoader.cs" />
