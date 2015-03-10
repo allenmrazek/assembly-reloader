@@ -26,6 +26,7 @@ namespace TestProject
 
         public override void OnLoad(ConfigNode node)
         {
+            print("TestPartModule running from " + Assembly.GetExecutingAssembly().CodeBase);
             print(string.Format("TestPartModule.OnLoad: {0}", node.ToString()));
         }
 

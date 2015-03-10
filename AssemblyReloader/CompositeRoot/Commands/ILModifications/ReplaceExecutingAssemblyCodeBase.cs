@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -54,6 +55,7 @@ namespace AssemblyReloader.CompositeRoot.Commands.ILModifications
             var processor = methodDefinition.Body.GetILProcessor();
 
             var log = new DebugLog(methodDefinition.FullName);
+            Instruction target = null;
 
             foreach (var inst in processor.Body.Instructions)
             {
@@ -65,24 +67,38 @@ namespace AssemblyReloader.CompositeRoot.Commands.ILModifications
                     
                     if ((moduleDefinition.Import(typeof(Assembly).GetMethod("GetExecutingAssembly", BindingFlags.Public | BindingFlags.Static))
                         ).FullName == (inst.Operand as MethodReference).FullName)
-                        log.Warning("   TARGET MATCH!");
+                        if (inst.Next.OpCode == OpCodes.Callvirt)
+                            if (inst.Next.Operand is MethodReference)
+                            {
+                                log.Warning("   TARGET MATCH!" + ((MethodReference) inst.Next.Operand).FullName);
 
-
-                }
-
-                if (inst.OpCode == OpCodes.Callvirt)
-                {
-                    log.Debug("Operand: " + inst.Operand);
-
-                    log.Debug("Operand Type: " + inst.Operand.GetType().FullName);
-
-                    if ((moduleDefinition.Import(typeof(Assembly).GetMethod("GetExecutingAssembly", BindingFlags.Public | BindingFlags.Static))
-                        ).FullName == (inst.Operand as MethodReference).FullName)
-                        log.Warning("   TARGET MATCH! (virtual)");
-
+                                target = inst;
+                                break;
+                            }
 
                 }
-                    //if (inst.Operand 
+
+  
+            }
+
+            if (target != null)
+            {
+                var prev = target.Previous;
+
+                log.Normal("removing previous entries");
+
+                processor.Remove(target.Next); // remove callvirt to get_CodeBase
+                processor.Remove(target);
+
+                log.Normal("creating new entry");
+                var newInstr = processor.Create(OpCodes.Ldstr, _location.FullPath);
+
+                log.Normal("weaving");
+                if (prev != null)
+                    processor.InsertAfter(prev, newInstr);
+                else processor.Append(newInstr);
+
+                log.Normal("done");
             }
         }
     }
