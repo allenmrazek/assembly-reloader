@@ -1,57 +1,82 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
+using AssemblyReloader.Disk;
+using AssemblyReloader.Providers;
+using AssemblyReloader.Weaving;
 using ReeperCommon.Containers;
 using ReeperCommon.Extensions;
-using ReeperCommon.FileSystem;
-using ReeperCommon.Logging;
 
 namespace AssemblyReloader.Game
 {
     public class KspAssemblyLoader : IAssemblyLoader
     {
+        private readonly IAssemblyDefinitionReader _definitionReader;
+        private readonly IAssemblyProvider _assemblyFromDefinitionProvider;
         private readonly ILoadedAssemblyFactory _laFactory;
-        private AssemblyLoader.LoadedAssembly _loadedAssembly;
+        private readonly IAssemblyDefinitionWeaver _weaver;
+        private readonly bool _writeResultToDisk;
+        private IDisposable _loadedAssembly;
 
-        public KspAssemblyLoader(ILoadedAssemblyFactory laFactory)
+        public KspAssemblyLoader(
+            IAssemblyDefinitionReader definitionReader,
+            IAssemblyProvider assemblyFromDefinitionProvider,
+            ILoadedAssemblyFactory laFactory,
+            IAssemblyDefinitionWeaver weaver,
+            bool writeResultToDisk)
         {
+            if (definitionReader == null) throw new ArgumentNullException("definitionReader");
+            if (assemblyFromDefinitionProvider == null) throw new ArgumentNullException("assemblyFromDefinitionProvider");
             if (laFactory == null) throw new ArgumentNullException("laFactory");
+            if (weaver == null) throw new ArgumentNullException("weaver");
+
+            _definitionReader = definitionReader;
+            _assemblyFromDefinitionProvider = assemblyFromDefinitionProvider;
             _laFactory = laFactory;
+            _weaver = weaver;
+            _writeResultToDisk = writeResultToDisk;
         }
 
 
-        public void Load(Assembly assembly, IFile location)
+        public Maybe<Assembly> Load()
         {
-            if (assembly == null) throw new ArgumentNullException("assembly");
-            if (location == null) throw new ArgumentNullException("location");
+            if (!_loadedAssembly.IsNull())
+                throw new InvalidOperationException(_definitionReader.Name + " has not been unloaded");
 
-            if (AssemblyLoader.loadedAssemblies.GetByAssembly(assembly) != null)
-                throw new InvalidOperationException(assembly.FullName + " has already been loaded by AssemblyLoader!");
+            var assemblyDefinition = _definitionReader.Get();
 
-            _loadedAssembly = _laFactory.Create(assembly, location);
+            if (!assemblyDefinition.Any())
+                throw new Exception("Failed to read " + _definitionReader.Name + " definition");
 
-            AssemblyLoader.loadedAssemblies.Add(_loadedAssembly);
+            
+
+            if (!_weaver.Weave(assemblyDefinition.Single()))
+                throw new Exception("Failed to reweave " + _definitionReader.Name + " il");
+
+            // try to write first, in case loading it from memory fails (usually due to an error
+            // in rewritten il code)
+
+            if (_writeResultToDisk)
+                assemblyDefinition.Single().Write(_definitionReader.Location.FullPath + ".debug");
+
+            var result = _assemblyFromDefinitionProvider.Get(assemblyDefinition.Single());
+
+            if (!result.Any()) return Maybe<Assembly>.None;
+
+
+
+            _loadedAssembly = _laFactory.Create(result.Single(), _definitionReader.Location);
+
+            return result;
         }
 
 
-        public void Unload(Assembly assembly, IFile location)
+        public void Unload()
         {
-            if (assembly == null) throw new ArgumentNullException("assembly");
-            if (location == null) throw new ArgumentNullException("location");
-            if (_loadedAssembly == null) throw new Exception("AssemblyLoader.LoadedAssembly is null");
+            if (!_loadedAssembly.IsNull())
+                _loadedAssembly.Dispose();
 
-            for (int idx = 0; idx < AssemblyLoader.loadedAssemblies.Count; ++idx)
-                if (ReferenceEquals(_loadedAssembly, AssemblyLoader.loadedAssemblies[idx]))
-                {
-                    AssemblyLoader.loadedAssemblies.RemoveAt(idx);
-                    return;
-                }
-
-            throw new Exception("Failed to find assembly " + assembly.FullName + " (location " + location.Url +
-                                ") in loaded assembly list");
+            _loadedAssembly = null;
         }
     }
 }

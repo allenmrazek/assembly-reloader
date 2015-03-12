@@ -58,8 +58,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CompositeRoot\Commands\ILModifications\RenameAssemblyCommand.cs" />
-    <Compile Include="CompositeRoot\Commands\ILModifications\ReplaceExecutingAssemblyCodeBase.cs" />
+    <Compile Include="Queries\CecilQueries\AllMethodsFromDefinitionQuery.cs" />
+    <Compile Include="Queries\CecilQueries\AllTypesFromDefinitionQuery.cs" />
+    <Compile Include="Queries\CecilQueries\IMethodDefinitionQuery.cs" />
+    <Compile Include="Queries\CecilQueries\InjectedHelperTypeMethodQuery.cs" />
+    <Compile Include="Queries\CecilQueries\InjectedHelperTypeQuery.cs" />
+    <Compile Include="Queries\CecilQueries\IntermediateLanguage\AssemblyGetExecutingAssemblyQuery.cs" />
+    <Compile Include="Queries\CecilQueries\IntermediateLanguage\IInstructionSetQuery.cs" />
+    <Compile Include="Queries\CecilQueries\IntermediateLanguage\MethodCallInMethodBodyQuery.cs" />
     <Compile Include="CompositeRoot\Commands\RefreshPartActionWindows.cs" />
     <Compile Include="CompositeRoot\MonoBehaviours\KspPartActionWindowListener.cs" />
     <Compile Include="Config\Configuration.cs" />
@@ -75,6 +81,7 @@
     <Compile Include="Destruction\DestructionController.cs" />
     <Compile Include="Destruction\IObjectDestroyer.cs" />
     <Compile Include="Destruction\ObjectDestroyer.cs" />
+    <Compile Include="Game\Commands\DisposeLoadedAssembly.cs" />
     <Compile Include="Game\GameEventPublisher.cs" />
     <Compile Include="Game\IAddonLoader.cs" />
     <Compile Include="Game\IAssemblyLoader.cs" />
@@ -88,7 +95,7 @@
     <Compile Include="Game\KspPartActionWindowController.cs" />
     <Compile Include="Generators\IUniqueFlightIdGenerator.cs" />
     <Compile Include="Generators\UniqueFlightIdGenerator.cs" />
-    <Compile Include="Loaders\AssemblyDefinitionReaderWithDebugOutput.cs" />
+    <Compile Include="Disk\AssemblyDefinitionReaderWithDebugOutput.cs" />
     <Compile Include="Loaders\IPartModuleUnloader.cs" />
     <Compile Include="Loaders\PartModuleUnloader.cs" />
     <Compile Include="Providers\ComponentsInGameObjectHierarchyProvider.cs" />
@@ -106,16 +113,11 @@
     <Compile Include="Game\KspPart.cs" />
     <Compile Include="Game\KspPartLoader.cs" />
     <Compile Include="Game\KspVessel.cs" />
-    <Compile Include="ILModifications\old\Operations\RenameOnSave.cs" />
-    <Compile Include="Loaders\AssemblyDefinitionReader.cs" />
-    <Compile Include="Loaders\IAssemblyDefinitionReader.cs" />
+    <Compile Include="Disk\AssemblyDefinitionReader.cs" />
+    <Compile Include="Disk\IAssemblyDefinitionReader.cs" />
     <Compile Include="Loaders\IPartModuleFactory.cs" />
     <Compile Include="Loaders\IPartModuleLoader.cs" />
     <Compile Include="Loaders\PartModuleFactory.cs" />
-    <Compile Include="ILModifications\old\IModifiedAssembly.cs" />
-    <Compile Include="ILModifications\old\IModifiedAssemblyFactory.cs" />
-    <Compile Include="ILModifications\old\ModifiedAssembly.cs" />
-    <Compile Include="ILModifications\old\ModifiedAssemblyFactory.cs" />
     <Compile Include="Controllers\IReloadablePluginController.cs" />
     <Compile Include="CompositeRoot\MonoBehaviours\CoreView.cs" />
     <Compile Include="GUI\WindowFactory.cs" />
@@ -179,13 +181,19 @@
     <Compile Include="Queries\TypeIdentifierQuery.cs" />
     <Compile Include="Repositories\IFlightConfigRepository.cs" />
     <Compile Include="Repositories\FlightConfigRepository.cs" />
+    <Compile Include="Weaving\AssemblyDefinitionWeaver.cs" />
+    <Compile Include="Weaving\Commands\WriteAssemblyComparisonHelperMethod.cs" />
+    <Compile Include="Weaving\IAssemblyDefinitionWeaver.cs" />
+    <Compile Include="Weaving\IWeaveOperation.cs" />
+    <Compile Include="Weaving\Operations\InterceptExecutingAssemblyLocationQueries.cs" />
+    <Compile Include="Weaving\Operations\RenameAssemblyOperation.cs" />
+    <Compile Include="Weaving\Operations\InjectedHelperTypeDefinitionWriter.cs" />
+    <Compile Include="Weaving\WeaveOperation.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Disk\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <EmbeddedResource Include="Resources\btnBackground.png" />
     <EmbeddedResource Include="Resources\btnClose.png" />

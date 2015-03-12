@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using AssemblyReloader.Game.Commands;
 using AssemblyReloader.Queries.AssemblyQueries;
 using Contracts;
 using ReeperCommon.FileSystem;
@@ -36,7 +37,7 @@ namespace AssemblyReloader.Game
         }
 
 
-        public AssemblyLoader.LoadedAssembly Create(Assembly assembly, IFile location)
+        public IDisposable Create(Assembly assembly, IFile location)
         {
             var la = new AssemblyLoader.LoadedAssembly(assembly, location.FullPath, location.Url, null);
 
@@ -46,7 +47,9 @@ namespace AssemblyReloader.Game
             AddTypes(la, typeof (ScenarioModule), _scenarioModuleQuery.Get(assembly));
             AddTypes(la, typeof (Contract), _contractQuery.Get(assembly));
 
-            return la;
+            AssemblyLoader.loadedAssemblies.Add(la);
+
+            return new DisposeLoadedAssembly(la);
         }
 
 

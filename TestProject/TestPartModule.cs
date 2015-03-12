@@ -34,6 +34,10 @@ namespace TestProject
         {
             print(string.Format("TestPartModule.OnSave: {0}", node.ToString()));
 
+            var current = Assembly.GetExecutingAssembly();
+
+            print("Hello, world!");
+            print("Also, I'm running from " + current.CodeBase);
 
             SomeMethod(local);
         }
@@ -41,6 +45,15 @@ namespace TestProject
         private void SomeMethod(ConfigNode node)
         {
             
+        }
+
+
+        private static string ReturnCodeBaseLocation(Assembly assembly)
+        {
+            if (ReferenceEquals(assembly, Assembly.GetExecutingAssembly()))
+                return "this location";
+
+            return assembly.CodeBase;
         }
 
 #if MODIFIED

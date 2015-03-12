@@ -9,6 +9,6 @@ namespace AssemblyReloader.Game
 {
     public interface ILoadedAssemblyFactory
     {
-        AssemblyLoader.LoadedAssembly Create(Assembly assembly, IFile location);
+        IDisposable Create(Assembly assembly, IFile location);
     }
 }

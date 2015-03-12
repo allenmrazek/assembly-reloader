@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
 using AssemblyReloader.CompositeRoot.Commands;
-using AssemblyReloader.Destruction;
 using AssemblyReloader.Loaders;
-using AssemblyReloader.Providers.SceneProviders;
 using AssemblyReloader.Queries.AssemblyQueries;
 using AssemblyReloader.Repositories;
 using ReeperCommon.FileSystem;

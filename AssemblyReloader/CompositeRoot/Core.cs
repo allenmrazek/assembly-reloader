@@ -4,10 +4,10 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using AssemblyReloader.CompositeRoot.Commands;
-using AssemblyReloader.CompositeRoot.Commands.ILModifications;
 using AssemblyReloader.CompositeRoot.MonoBehaviours;
 using AssemblyReloader.Controllers;
 using AssemblyReloader.Destruction;
+using AssemblyReloader.Disk;
 using AssemblyReloader.Game;
 using AssemblyReloader.Generators;
 using AssemblyReloader.GUI;
@@ -19,12 +19,18 @@ using AssemblyReloader.Providers;
 using AssemblyReloader.Providers.SceneProviders;
 using AssemblyReloader.Queries;
 using AssemblyReloader.Queries.AssemblyQueries;
+using AssemblyReloader.Queries.CecilQueries;
+using AssemblyReloader.Queries.CecilQueries.IntermediateLanguage;
 using AssemblyReloader.Queries.ConfigNodeQueries;
 using AssemblyReloader.Queries.ConversionQueries;
 using AssemblyReloader.Queries.FileSystemQueries;
 using AssemblyReloader.Repositories;
+using AssemblyReloader.Weaving;
+using AssemblyReloader.Weaving.Commands;
+using AssemblyReloader.Weaving.Operations;
 using Contracts;
 using Mono.Cecil;
+using Mono.Cecil.Cil;
 using ReeperCommon.FileSystem;
 using ReeperCommon.FileSystem.Factories;
 using ReeperCommon.FileSystem.Implementations;
@@ -262,12 +268,6 @@ namespace AssemblyReloader.CompositeRoot
 
 
             var reloadableAssemblyFileQuery = new ReloadableAssemblyFilesInDirectoryQuery(fsFactory.GetGameDataDirectory());
-            var ilModifications = ConfigureAssemblyModifications();
-
-
-
-
-
 
             var addonDestroyer = new AddonDestroyer(
                 ConfigureDestructionController(new FlightConfigRepository()), // config repo unused
@@ -298,33 +298,6 @@ namespace AssemblyReloader.CompositeRoot
         }
 
 
-        private IAssemblyProvider ConfigureAssemblyProvider(IFile location, BaseAssemblyResolver resolver,
-            ICommand<AssemblyDefinition> ilModifications)
-        {
-            if (location == null) throw new ArgumentNullException("location");
-            if (resolver == null) throw new ArgumentNullException("resolver");
-            if (ilModifications == null) throw new ArgumentNullException("ilModifications");
-
-#if DEBUG
-            return new AssemblyFromDefinitionProvider(
-                new AssemblyDefinitionReaderWithDebugOutput(
-                    new AssemblyDefinitionReader(location, resolver)),
-                    ilModifications);
-#else
-            return new AssemblyFromDefinitionProvider(
-                new AssemblyDefinitionReader(location, resolver),
-                ilModifications);
-#endif
-        }
-
-
-        private ICommand<AssemblyDefinition> ConfigureAssemblyModifications()
-        {
-            return new CompositeCommand<AssemblyDefinition>(
-                new RenameAssemblyCommand(new UniqueAssemblyNameGenerator())
-                );
-        }
-
 
         private IReloadablePlugin ConfigureReloadablePlugin(
             IFile location, 
@@ -332,14 +305,24 @@ namespace AssemblyReloader.CompositeRoot
             ILoadedAssemblyFactory laFactory,
             IAddonDestroyer addonDestroyer)
         {
-            var ilModifications = new CompositeCommand<AssemblyDefinition>(
-                                    new RenameAssemblyCommand(new UniqueAssemblyNameGenerator()),
-                                    new ReplaceExecutingAssemblyCodeBase(location));
 
-            var reloadable = new ReloadablePlugin(
-                    ConfigureAssemblyProvider(location, assemblyResolver, ilModifications), location);
+            var assemblyProvider = new AssemblyFromDefinitionProvider();
+            var definitionReader = new AssemblyDefinitionReader(location, assemblyResolver);
 
-            var kspLoader = new KspAssemblyLoader(laFactory);
+            var kspLoader = new KspAssemblyLoader(definitionReader,
+                assemblyProvider,
+                laFactory,
+                ConfigureDefinitionWeaver(location),
+#if DEBUG
+                true
+#else
+                false
+#endif
+                );
+
+            var reloadable = new ReloadablePlugin(kspLoader, location);
+
+            
             
             var kspFactory = new KspFactory();
 
@@ -361,9 +344,6 @@ namespace AssemblyReloader.CompositeRoot
 
 
             var destructionController = ConfigureDestructionController(partModuleRepository);
-
-            reloadable.OnLoaded += kspLoader.Load;
-            reloadable.OnUnloaded += kspLoader.Unload;
 
 
 
@@ -465,6 +445,54 @@ namespace AssemblyReloader.CompositeRoot
 
 
             return controller;
+        }
+
+
+        private IAssemblyDefinitionWeaver ConfigureDefinitionWeaver(IFile location)
+        {
+            if (location == null) throw new ArgumentNullException("location");
+
+            //var getExecutingAssemblyMethodInfo = typeof (Assembly).GetMethod("GetExecutingAssembly",
+            //    BindingFlags.Public | BindingFlags.Static);
+
+            
+            var getCodeBaseProperty = typeof (Assembly).GetProperty("CodeBase",
+                BindingFlags.Public | BindingFlags.Instance | BindingFlags.GetProperty);
+
+            //if (getExecutingAssemblyMethodInfo == null)
+            //    throw new MissingMethodException(typeof (Assembly).FullName, "GetExecutingAssembly");
+
+            if (getCodeBaseProperty == null || getCodeBaseProperty.GetGetMethod() == null)
+                throw new MissingMethodException(typeof (Assembly).FullName, "CodeBase");
+
+
+            var renameAssembly = new RenameAssemblyOperation(new UniqueAssemblyNameGenerator());
+
+            var writeInjectedHelper = new InjectedHelperTypeDefinitionWriter(
+                _log.CreateTag("InjectedHelperWriter"),
+                new CompositeCommand<TypeDefinition>(
+                    new WriteAssemblyComparisonHelperMethod("getCodeBase", "CodeBaseRetValueHere"),
+                    new WriteAssemblyComparisonHelperMethod("getLocation", "LocationRetValueHere")));
+
+            var replaceAssemblyLocationCalls = new InterceptExecutingAssemblyLocationQueries(
+                _log.CreateTag("Interception"),
+                location,
+                ////new MethodCallInMethodBodyQuery(
+                ////    getExecutingAssemblyMethodInfo,
+                ////    OpCodes.Call),
+                new MethodCallInMethodBodyQuery(
+                    getCodeBaseProperty.GetGetMethod(),
+                    OpCodes.Callvirt)
+                );
+
+            return new AssemblyDefinitionWeaver(
+                _log.CreateTag("Weaver"), 
+                new AllTypesFromDefinitionQuery(),
+                new AllMethodsFromDefinitionQuery(),
+                renameAssembly,
+                writeInjectedHelper,
+                replaceAssemblyLocationCalls);
+
         }
     }
 }

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ReeperCommon.Logging.Implementations;
+﻿using System.Collections.Generic;
 
 namespace AssemblyReloader.Game
 {
@@ -27,8 +23,6 @@ namespace AssemblyReloader.Game
 
         public void Refresh()
         {
-            new DebugLog("PartActionWindowController").Normal("Refreshing " + _windows.Count + " windows");
-
             _windows.ForEach(w => w.displayDirty = true);
         }
     }
