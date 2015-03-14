@@ -39,8 +39,10 @@ namespace AssemblyReloader.Weaving
         {
             try
             {
+                var types = _allTypeDefinitionsQuery.Get(assemblyDefinition).ToList();
+
                 var allTypeDefinitions = _allTypeDefinitionsQuery.Get(assemblyDefinition).ToList();
-                var allMethodDefinitions = _allMethodDefinitionsQuery.Get(assemblyDefinition).ToList();
+                var allMethodDefinitions = types.SelectMany(td => _allMethodDefinitionsQuery.Get(td)).ToList();
 
                 return _operations.All(op => RunOperation(op, assemblyDefinition, allTypeDefinitions, allMethodDefinitions));
             }

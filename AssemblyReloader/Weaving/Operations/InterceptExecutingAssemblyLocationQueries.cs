@@ -18,24 +18,22 @@ namespace AssemblyReloader.Weaving.Operations
     public class InterceptExecutingAssemblyLocationQueries : WeaveOperation
     {
         private readonly ILog _log;
-        private readonly IFile _location;
         private readonly IInstructionSetQuery _getCodeBaseCallQuery;
-        private readonly ITypeDefinitionQuery _helperTypeQuery;
+        private readonly IMethodDefinitionQuery _replacementCallQuery;
 
         public InterceptExecutingAssemblyLocationQueries(
             ILog log,
-            IFile location,
             IInstructionSetQuery getCodeBaseCallQuery,
-            ITypeDefinitionQuery helperTypeQuery)
+            IMethodDefinitionQuery replacementCallQuery)
         {
             if (log == null) throw new ArgumentNullException("log");
-            if (location == null) throw new ArgumentNullException("location");
             if (getCodeBaseCallQuery == null) throw new ArgumentNullException("getCodeBaseCallQuery");
-            if (helperTypeQuery == null) throw new ArgumentNullException("helperTypeQuery");
+            if (replacementCallQuery == null) throw new ArgumentNullException("replacementCallQuery");
+
             _log = log;
-            _location = location;
             _getCodeBaseCallQuery = getCodeBaseCallQuery;
-            _helperTypeQuery = helperTypeQuery;
+            _replacementCallQuery = replacementCallQuery;
+
         }
 
 
@@ -47,8 +45,25 @@ namespace AssemblyReloader.Weaving.Operations
 
         public override void OnEachMethod(MethodDefinition methodDefinition)
         {
-            if (_helperTypeQuery.Get(methodDefinition.Module.Assembly.MainModule.Architecture
+            var results = _getCodeBaseCallQuery.Get(methodDefinition).ToList();
+            if (results.Count == 0) return;
+
             var processor = methodDefinition.Body.GetILProcessor();
+            var replacement = _replacementCallQuery.Get(methodDefinition.DeclaringType).ToList();
+
+            if (!replacement.Any())
+                throw new Exception("Failed to locate replacement call");
+
+            if (replacement.Count > 1)
+                throw new Exception("Found too many replacement methods");
+
+            results.ForEach(call =>
+            {
+                _log.Normal("Found codeBaseCall in " + methodDefinition.FullName);
+
+                // replace this call to the one provided by replacementCallQuery
+                processor.Replace(call, processor.Create(OpCodes.Call, replacement.Single()));
+            });
         }
 
         //public override void OnEachMethod(MethodDefinition methodDefinition)

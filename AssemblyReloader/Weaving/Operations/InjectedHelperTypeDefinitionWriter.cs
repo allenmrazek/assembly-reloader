@@ -12,7 +12,7 @@ namespace AssemblyReloader.Weaving.Operations
         private readonly ICommand<TypeDefinition> _writeMethods;
 
         public const string Namespace = "ART.Injected";
-        public const string TypeName = "HelperType";
+        public const string TypeName = "AssemblyLocationHelper";
 
         public InjectedHelperTypeDefinitionWriter(
             ILog log, 

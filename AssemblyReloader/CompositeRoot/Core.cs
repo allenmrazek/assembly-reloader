@@ -452,43 +452,40 @@ namespace AssemblyReloader.CompositeRoot
         private IAssemblyDefinitionWeaver ConfigureDefinitionWeaver(IFile location)
         {
             if (location == null) throw new ArgumentNullException("location");
-
-            //var getExecutingAssemblyMethodInfo = typeof (Assembly).GetMethod("GetExecutingAssembly",
-            //    BindingFlags.Public | BindingFlags.Static);
-
             
             var getCodeBaseProperty = typeof (Assembly).GetProperty("CodeBase",
                 BindingFlags.Public | BindingFlags.Instance | BindingFlags.GetProperty);
 
-            //if (getExecutingAssemblyMethodInfo == null)
-            //    throw new MissingMethodException(typeof (Assembly).FullName, "GetExecutingAssembly");
-
+            var getLocationProperty = typeof (Assembly).GetProperty("Location",
+                BindingFlags.Public | BindingFlags.Instance | BindingFlags.GetProperty);
+   
             if (getCodeBaseProperty == null || getCodeBaseProperty.GetGetMethod() == null)
                 throw new MissingMethodException(typeof (Assembly).FullName, "CodeBase");
 
+            if (getLocationProperty == null || getCodeBaseProperty.GetGetMethod() == null)
+                throw new MissingMethodException(typeof (Assembly).FullName, "Location");
 
             var renameAssembly = new RenameAssemblyOperation(new UniqueAssemblyNameGenerator());
 
             var writeInjectedHelper = new InjectedHelperTypeDefinitionWriter(
                 _log.CreateTag("InjectedHelperWriter"),
                 new CompositeCommand<TypeDefinition>(
-                    new WriteAssemblyComparisonHelperMethod("getCodeBase", "CodeBaseRetValueHere", getCodeBaseProperty.GetGetMethod()),
-                    new WriteAssemblyComparisonHelperMethod("getLocation", "LocationRetValueHere", getCodeBaseProperty.GetGetMethod())));
+                    new ProxyAssemblyMethodWriter("CodeBaseRetValueHere", getCodeBaseProperty.GetGetMethod()),
+                    new ProxyAssemblyMethodWriter("LocationRetValueHere", getLocationProperty.GetGetMethod())));
 
             var replaceAssemblyLocationCalls = new InterceptExecutingAssemblyLocationQueries(
                 _log.CreateTag("Interception"),
-                location,
-                ////new MethodCallInMethodBodyQuery(
-                ////    getExecutingAssemblyMethodInfo,
-                ////    OpCodes.Call),
+
                 new MethodCallInMethodBodyQuery(
                     getCodeBaseProperty.GetGetMethod(),
-                    OpCodes.Callvirt)
+                    OpCodes.Callvirt),
+                    new InjectedHelperTypeMethodQuery(new InjectedHelperTypeQuery(), getCodeBaseProperty.GetGetMethod().Name)
                 );
 
             return new AssemblyDefinitionWeaver(
                 _log.CreateTag("Weaver"), 
-                new AllTypesFromDefinitionQuery(),
+                new ExcludingTypeDefinitions(
+                    new AllTypesFromDefinitionQuery(), new InjectedHelperTypeQuery()),
                 new AllMethodsFromDefinitionQuery(),
                 renameAssembly,
                 writeInjectedHelper,

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Mono.Cecil;
+using ReeperCommon.Logging.Implementations;
 
 namespace AssemblyReloader.Queries.CecilQueries
 {
@@ -21,9 +22,9 @@ namespace AssemblyReloader.Queries.CecilQueries
         }
 
 
-        public IEnumerable<MethodDefinition> Get(AssemblyDefinition definition)
+        public IEnumerable<MethodDefinition> Get(TypeDefinition definition)
         {
-            var injectedType = _injectedTypeQuery.Get(definition).ToList();
+            var injectedType = _injectedTypeQuery.Get(definition.Module.Assembly).ToList();
 
             if (!injectedType.Any())
                 throw new Exception("Failed to locate injected helper type in " + definition.FullName);
@@ -31,6 +32,13 @@ namespace AssemblyReloader.Queries.CecilQueries
             if (injectedType.Count > 1)
                 throw new Exception("Too many injected type definitions found (expected 1, found " + injectedType.Count +
                                     ")");
+
+            var log = new DebugLog("InjectedHelperTypeMethodQuery");
+            injectedType.ToDictionary(td => td, td => td.Methods).ToList().ForEach(kvp =>
+            {
+                log.Normal("Type: " + kvp.Key.FullName);
+                foreach (var m in kvp.Value) log.Normal("  Method: " + m.FullName);
+            });
 
             return injectedType.Single().Methods
                 .Where(md => md.Name == _methodName);

@@ -1,32 +1,30 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
 using AssemblyReloader.CompositeRoot.Commands;
-using AssemblyReloader.Queries.CecilQueries;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
 using ReeperCommon.Extensions;
-using ReeperCommon.Logging.Implementations;
 using MethodAttributes = Mono.Cecil.MethodAttributes;
 using ParameterAttributes = Mono.Cecil.ParameterAttributes;
 
 namespace AssemblyReloader.Weaving.Commands
 {
-    public class WriteAssemblyComparisonHelperMethod : ICommand<TypeDefinition>
+    /// <summary>
+    /// Writes a small stub method intended to replace calls to Assembly.SomeMethod on
+    /// the executing reloadable assembly which returns the defined result
+    /// </summary>
+    public class ProxyAssemblyMethodWriter : ICommand<TypeDefinition>
     {
-        private readonly string _name;
         private readonly string _retValue;
         private readonly MethodInfo _realCall;
 
-        public WriteAssemblyComparisonHelperMethod(string name, string retValue, MethodInfo realCall)
+        public ProxyAssemblyMethodWriter(string retValue, MethodInfo realCall)
         {
             if (realCall == null) throw new ArgumentNullException("realCall");
-            if (string.IsNullOrEmpty(name)) throw new ArgumentException("name cannot be null");
             if (string.IsNullOrEmpty(retValue)) throw new ArgumentException("retValue cannot be null");
+            if (realCall.ReturnType != typeof (string))
+                throw new ArgumentException(realCall.Name + " must have string return value");
 
-            _name = name;
             _retValue = retValue;
             _realCall = realCall;
         }
@@ -34,7 +32,7 @@ namespace AssemblyReloader.Weaving.Commands
 
         public void Execute(TypeDefinition context)
         {
-            var methodDefinition = new MethodDefinition(_name,
+            var methodDefinition = new MethodDefinition(_realCall.Name,
                 MethodAttributes.HideBySig | MethodAttributes.Public | MethodAttributes.Static,
                 context.Module.TypeSystem.String);
 

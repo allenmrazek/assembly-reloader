@@ -1,18 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using Mono.Cecil;
 
 namespace AssemblyReloader.Queries.CecilQueries
 {
     public class AllMethodsFromDefinitionQuery : IMethodDefinitionQuery
     {
-        public IEnumerable<MethodDefinition> Get(AssemblyDefinition definition)
+        public IEnumerable<MethodDefinition> Get(TypeDefinition definition)
         {
-            return definition.Modules
-                .SelectMany(module => module.GetTypes()
-                    .SelectMany(td => td.Methods));
+            return definition.Methods;
         }
     }
 }

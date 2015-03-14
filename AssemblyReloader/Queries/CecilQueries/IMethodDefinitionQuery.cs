@@ -8,6 +8,6 @@ namespace AssemblyReloader.Queries.CecilQueries
 {
     public interface IMethodDefinitionQuery
     {
-        IEnumerable<MethodDefinition> Get(AssemblyDefinition definition);
+        IEnumerable<MethodDefinition> Get(TypeDefinition definition);
     }
 }

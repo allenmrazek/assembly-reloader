@@ -60,6 +60,8 @@
   <ItemGroup>
     <Compile Include="Queries\CecilQueries\AllMethodsFromDefinitionQuery.cs" />
     <Compile Include="Queries\CecilQueries\AllTypesFromDefinitionQuery.cs" />
+    <Compile Include="Queries\CecilQueries\ExcludingMethodDefinitions.cs" />
+    <Compile Include="Queries\CecilQueries\ExcludingTypeDefinitions.cs" />
     <Compile Include="Queries\CecilQueries\IMethodDefinitionQuery.cs" />
     <Compile Include="Queries\CecilQueries\InjectedHelperTypeMethodQuery.cs" />
     <Compile Include="Queries\CecilQueries\InjectedHelperTypeQuery.cs" />
@@ -181,7 +183,7 @@
     <Compile Include="Repositories\IFlightConfigRepository.cs" />
     <Compile Include="Repositories\FlightConfigRepository.cs" />
     <Compile Include="Weaving\AssemblyDefinitionWeaver.cs" />
-    <Compile Include="Weaving\Commands\WriteAssemblyComparisonHelperMethod.cs" />
+    <Compile Include="Weaving\Commands\ProxyAssemblyMethodWriter.cs" />
     <Compile Include="Weaving\IAssemblyDefinitionWeaver.cs" />
     <Compile Include="Weaving\IWeaveOperation.cs" />
     <Compile Include="Weaving\Operations\InterceptExecutingAssemblyLocationQueries.cs" />
