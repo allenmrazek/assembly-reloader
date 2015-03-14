@@ -75,6 +75,7 @@ namespace AssemblyReloader.Controllers
             _refreshPartActionWindows.Execute();
         }
 
+
         private IEnumerable<Type> GetPartModules(Assembly assembly)
         {
             return _partModuleFromAssemblyQuery.Get(assembly);

@@ -38,30 +38,5 @@ namespace AssemblyReloader.Weaving.Operations
 
             _writeMethods.Execute(td);
         }
-
-
-        //private void WriteCodeBaseMethod(TypeDefinition typeDefinition)
-        //{
-        //    if (typeDefinition == null) throw new ArgumentNullException("typeDefinition");
-
-        //    var checkMethod = new MethodDefinition(CodeBaseGetter,
-        //            MethodAttributes.Public | MethodAttributes.HideBySig | MethodAttributes.Static,
-        //            typeDefinition.Module.TypeSystem.String);
-
-        //    typeDefinition.Methods.Add(checkMethod);
-
-        //    var processor = checkMethod.Body.GetILProcessor();
-
-        //    checkMethod.Parameters.Add(new ParameterDefinition("assembly", ParameterAttributes.None,
-        //       checkMethod.Module.Import(typeof(Assembly))));
-
-
-        //    var p = checkMethod.Body.GetILProcessor();
-
-        //    if (p == null) _log.Warning("ILProcessor is null");
-        //    p.Append(processor.Create(OpCodes.Ldarg_0));
-        //    p.Append(processor.Create(OpCodes.Ldstr, "Return value"));
-        //    p.Append(processor.Create(OpCodes.Ret));
-        //}
     }
 }

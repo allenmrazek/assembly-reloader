@@ -63,7 +63,6 @@
     <Compile Include="Queries\CecilQueries\IMethodDefinitionQuery.cs" />
     <Compile Include="Queries\CecilQueries\InjectedHelperTypeMethodQuery.cs" />
     <Compile Include="Queries\CecilQueries\InjectedHelperTypeQuery.cs" />
-    <Compile Include="Queries\CecilQueries\IntermediateLanguage\AssemblyGetExecutingAssemblyQuery.cs" />
     <Compile Include="Queries\CecilQueries\IntermediateLanguage\IInstructionSetQuery.cs" />
     <Compile Include="Queries\CecilQueries\IntermediateLanguage\MethodCallInMethodBodyQuery.cs" />
     <Compile Include="CompositeRoot\Commands\RefreshPartActionWindows.cs" />

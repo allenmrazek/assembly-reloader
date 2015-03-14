@@ -37,6 +37,7 @@ using ReeperCommon.FileSystem.Implementations;
 using ReeperCommon.FileSystem.Implementations.Providers;
 using ReeperCommon.Gui.Window.View;
 using ReeperCommon.Logging;
+using ReeperCommon.Logging.Factories;
 using ReeperCommon.Logging.Implementations;
 using ReeperCommon.Repositories.Resources;
 using ReeperCommon.Repositories.Resources.Implementations;
@@ -471,8 +472,8 @@ namespace AssemblyReloader.CompositeRoot
             var writeInjectedHelper = new InjectedHelperTypeDefinitionWriter(
                 _log.CreateTag("InjectedHelperWriter"),
                 new CompositeCommand<TypeDefinition>(
-                    new WriteAssemblyComparisonHelperMethod("getCodeBase", "CodeBaseRetValueHere"),
-                    new WriteAssemblyComparisonHelperMethod("getLocation", "LocationRetValueHere")));
+                    new WriteAssemblyComparisonHelperMethod("getCodeBase", "CodeBaseRetValueHere", getCodeBaseProperty.GetGetMethod()),
+                    new WriteAssemblyComparisonHelperMethod("getLocation", "LocationRetValueHere", getCodeBaseProperty.GetGetMethod())));
 
             var replaceAssemblyLocationCalls = new InterceptExecutingAssemblyLocationQueries(
                 _log.CreateTag("Interception"),

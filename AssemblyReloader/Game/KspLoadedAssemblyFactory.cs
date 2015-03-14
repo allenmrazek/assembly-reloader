@@ -46,6 +46,7 @@ namespace AssemblyReloader.Game
             AddTypes(la, typeof (InternalModule), _internalModuleQuery.Get(assembly));
             AddTypes(la, typeof (ScenarioModule), _scenarioModuleQuery.Get(assembly));
             AddTypes(la, typeof (Contract), _contractQuery.Get(assembly));
+            // todo: kerbal experience traits?
 
             AssemblyLoader.loadedAssemblies.Add(la);
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using AssemblyReloader.Queries.CecilQueries;
 using AssemblyReloader.Queries.CecilQueries.IntermediateLanguage;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
@@ -19,18 +20,22 @@ namespace AssemblyReloader.Weaving.Operations
         private readonly ILog _log;
         private readonly IFile _location;
         private readonly IInstructionSetQuery _getCodeBaseCallQuery;
+        private readonly ITypeDefinitionQuery _helperTypeQuery;
 
         public InterceptExecutingAssemblyLocationQueries(
             ILog log,
             IFile location,
-            IInstructionSetQuery getCodeBaseCallQuery)
+            IInstructionSetQuery getCodeBaseCallQuery,
+            ITypeDefinitionQuery helperTypeQuery)
         {
             if (log == null) throw new ArgumentNullException("log");
             if (location == null) throw new ArgumentNullException("location");
             if (getCodeBaseCallQuery == null) throw new ArgumentNullException("getCodeBaseCallQuery");
+            if (helperTypeQuery == null) throw new ArgumentNullException("helperTypeQuery");
             _log = log;
             _location = location;
             _getCodeBaseCallQuery = getCodeBaseCallQuery;
+            _helperTypeQuery = helperTypeQuery;
         }
 
 
@@ -42,65 +47,71 @@ namespace AssemblyReloader.Weaving.Operations
 
         public override void OnEachMethod(MethodDefinition methodDefinition)
         {
-            _log.Normal("Intercept.OnEachMethod");
-
-            var codeBaseCalls = _getCodeBaseCallQuery.Get(methodDefinition).ToList();
-            var uri = new Uri(_location.FullPath);
-
-            _log.Normal("Found " + codeBaseCalls.Count + " CodeBase calls in " +
-                        methodDefinition.FullName);
-
+            if (_helperTypeQuery.Get(methodDefinition.Module.Assembly.MainModule.Architecture
             var processor = methodDefinition.Body.GetILProcessor();
-
-            foreach (Instruction t in codeBaseCalls)
-            {
-                //var loadNull = processor.Create(OpCodes.Ldnull);
-                //var callTestMethod = processor.Create(OpCodes.Call,
-                //    methodDefinition.Module.Import(this.GetType()
-                //        .GetMethod("TestMethod", BindingFlags.Public | BindingFlags.Static)));
-
-                //var prevInstruction = t.Previous.Previous; // before the call, before pushing value onto stack
-
-                //processor.InsertAfter(prevInstruction, loadNull);
-                //processor.InsertAfter(loadNull, callTestMethod);
-
-                //processor.InsertBefore(t, processor.Create(OpCodes.Pop)); // because this is an instance method
-                //processor.InsertAfter(t, processor.Create(OpCodes.Ldstr, _location.FullPath));
-                //processor.Remove(t);
-            }
-
-            //_log.Normal("Uri.LocalPath: " + uri.LocalPath);
-            //_log.Normal("Uri.AbsolutePath: " + uri.AbsolutePath);
-            //_log.Normal("Uri.AbsoluteUri: " + Uri.UnescapeDataString(uri.AbsoluteUri));
-
-            //if (codeBaseCalls.Count > 0)
-            //{
-            //    _log.Normal("Declaring type: " + methodDefinition.DeclaringType.ToString());
-
-            //    var checkMethod = new MethodDefinition("GetCodeBaseOfAssembly",
-            //        MethodAttributes.Private | MethodAttributes.HideBySig | MethodAttributes.Static,
-            //        methodDefinition.Module.TypeSystem.String);
-
-            //    methodDefinition.DeclaringType.Methods.Add(checkMethod);
-
-            //    _log.Normal("creating parameter");
-
-            //    if (checkMethod.Parameters == null) _log.Normal("no parameters!");
-
-            //    checkMethod.Parameters.Add(new ParameterDefinition("assembly", ParameterAttributes.None,
-            //       checkMethod.Module.Import(typeof(Assembly))));
-
-            //    if (checkMethod.Body == null)
-            //        _log.Error("Method has no body");
-
-            //    var p = checkMethod.Body.GetILProcessor();
-
-            //    if (p == null) _log.Warning("ILProcessor is null");
-            //    p.Append(processor.Create(OpCodes.Ldarg_0));
-            //    p.Append(processor.Create(OpCodes.Ldstr, "Return value"));
-            //    p.Append(processor.Create(OpCodes.Ret));
-            //}
         }
+
+        //public override void OnEachMethod(MethodDefinition methodDefinition)
+        //{
+        //    _log.Normal("Intercept.OnEachMethod");
+
+        //    var codeBaseCalls = _getCodeBaseCallQuery.Get(methodDefinition).ToList();
+        //    var uri = new Uri(_location.FullPath);
+
+        //    _log.Normal("Found " + codeBaseCalls.Count + " CodeBase calls in " +
+        //                methodDefinition.FullName);
+
+        //    var processor = methodDefinition.Body.GetILProcessor();
+
+        //    foreach (Instruction t in codeBaseCalls)
+        //    {
+        //        //var loadNull = processor.Create(OpCodes.Ldnull);
+        //        //var callTestMethod = processor.Create(OpCodes.Call,
+        //        //    methodDefinition.Module.Import(this.GetType()
+        //        //        .GetMethod("TestMethod", BindingFlags.Public | BindingFlags.Static)));
+
+        //        //var prevInstruction = t.Previous.Previous; // before the call, before pushing value onto stack
+
+        //        //processor.InsertAfter(prevInstruction, loadNull);
+        //        //processor.InsertAfter(loadNull, callTestMethod);
+
+        //        //processor.InsertBefore(t, processor.Create(OpCodes.Pop)); // because this is an instance method
+        //        //processor.InsertAfter(t, processor.Create(OpCodes.Ldstr, _location.FullPath));
+        //        //processor.Remove(t);
+        //    }
+
+        //    //_log.Normal("Uri.LocalPath: " + uri.LocalPath);
+        //    //_log.Normal("Uri.AbsolutePath: " + uri.AbsolutePath);
+        //    //_log.Normal("Uri.AbsoluteUri: " + Uri.UnescapeDataString(uri.AbsoluteUri));
+
+        //    //if (codeBaseCalls.Count > 0)
+        //    //{
+        //    //    _log.Normal("Declaring type: " + methodDefinition.DeclaringType.ToString());
+
+        //    //    var checkMethod = new MethodDefinition("GetCodeBaseOfAssembly",
+        //    //        MethodAttributes.Private | MethodAttributes.HideBySig | MethodAttributes.Static,
+        //    //        methodDefinition.Module.TypeSystem.String);
+
+        //    //    methodDefinition.DeclaringType.Methods.Add(checkMethod);
+
+        //    //    _log.Normal("creating parameter");
+
+        //    //    if (checkMethod.Parameters == null) _log.Normal("no parameters!");
+
+        //    //    checkMethod.Parameters.Add(new ParameterDefinition("assembly", ParameterAttributes.None,
+        //    //       checkMethod.Module.Import(typeof(Assembly))));
+
+        //    //    if (checkMethod.Body == null)
+        //    //        _log.Error("Method has no body");
+
+        //    //    var p = checkMethod.Body.GetILProcessor();
+
+        //    //    if (p == null) _log.Warning("ILProcessor is null");
+        //    //    p.Append(processor.Create(OpCodes.Ldarg_0));
+        //    //    p.Append(processor.Create(OpCodes.Ldstr, "Return value"));
+        //    //    p.Append(processor.Create(OpCodes.Ret));
+        //    //}
+        //}
 
         //public static void TestMethod(Assembly arg)
         //{
