@@ -20,6 +20,7 @@ using AssemblyReloader.Providers.SceneProviders;
 using AssemblyReloader.Queries;
 using AssemblyReloader.Queries.AssemblyQueries;
 using AssemblyReloader.Queries.CecilQueries;
+using AssemblyReloader.Queries.CecilQueries.Injected;
 using AssemblyReloader.Queries.CecilQueries.IntermediateLanguage;
 using AssemblyReloader.Queries.ConfigNodeQueries;
 using AssemblyReloader.Queries.ConversionQueries;
@@ -165,7 +166,7 @@ namespace AssemblyReloader.CompositeRoot
 
             var assemblyResolver = new DefaultAssemblyResolver();
 
-            assemblyResolver.AddSearchDirectory(Assembly.GetExecutingAssembly().Location); // we'll be importing some references to types we own so this is a necessary step
+            assemblyResolver.AddSearchDirectory(ourDirProvider.Get().FullPath); // we'll be importing some references to types we own so this is a necessary step
 
 
             var resourceLocator = ConfigureResourceRepository(ourDirProvider.Get());
@@ -465,27 +466,37 @@ namespace AssemblyReloader.CompositeRoot
             if (getLocationProperty == null || getCodeBaseProperty.GetGetMethod() == null)
                 throw new MissingMethodException(typeof (Assembly).FullName, "Location");
 
+
+            var uri = new Uri(location.FullPath);
+            var allTypesFromAssemblyExceptInjected = new ExcludingTypeDefinitions(
+                new AllTypesFromDefinitionQuery(), new InjectedHelperTypeQuery());
+   
             var renameAssembly = new RenameAssemblyOperation(new UniqueAssemblyNameGenerator());
 
             var writeInjectedHelper = new InjectedHelperTypeDefinitionWriter(
                 _log.CreateTag("InjectedHelperWriter"),
                 new CompositeCommand<TypeDefinition>(
-                    new ProxyAssemblyMethodWriter("CodeBaseRetValueHere", getCodeBaseProperty.GetGetMethod()),
-                    new ProxyAssemblyMethodWriter("LocationRetValueHere", getLocationProperty.GetGetMethod())));
+                    new ProxyAssemblyMethodWriter(Uri.UnescapeDataString(uri.AbsoluteUri), getCodeBaseProperty.GetGetMethod()),
+                    new ProxyAssemblyMethodWriter(uri.LocalPath, getLocationProperty.GetGetMethod())));
 
             var replaceAssemblyLocationCalls = new InterceptExecutingAssemblyLocationQueries(
-                _log.CreateTag("Interception"),
-
                 new MethodCallInMethodBodyQuery(
                     getCodeBaseProperty.GetGetMethod(),
                     OpCodes.Callvirt),
                     new InjectedHelperTypeMethodQuery(new InjectedHelperTypeQuery(), getCodeBaseProperty.GetGetMethod().Name)
                 );
 
+            var insertIntermediateLanguageCode = new InsertIntermediateLanguageCommandsIntoMethod(
+                _log.CreateTag("InsertIL"),
+                new CompositeTypeDefinitionQuery(
+                    new TypeDefinitionsDerivedFromBaseTypeQuery<MonoBehaviour>(allTypesFromAssemblyExceptInjected),
+                    new TypeDefinitionsDerivedFromBaseTypeQuery<PartModule>(allTypesFromAssemblyExceptInjected),
+                    new TypeDefinitionsDerivedFromBaseTypeQuery<ScenarioModule>(allTypesFromAssemblyExceptInjected)),
+                new AllMethodsFromDefinitionQuery());
+
             return new AssemblyDefinitionWeaver(
                 _log.CreateTag("Weaver"), 
-                new ExcludingTypeDefinitions(
-                    new AllTypesFromDefinitionQuery(), new InjectedHelperTypeQuery()),
+                allTypesFromAssemblyExceptInjected,
                 new AllMethodsFromDefinitionQuery(),
                 renameAssembly,
                 writeInjectedHelper,

@@ -20,7 +20,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{DA9F79
 		.nuget\packages.config = .nuget\packages.config
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssemblyReloaderUnitTests", "AssemblyReloaderUnitTests\AssemblyReloaderUnitTests.csproj", "{F3968345-6C9C-4503-93DE-B06432DE449E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssemblyReloaderTests", "AssemblyReloaderUnitTests\AssemblyReloaderTests.csproj", "{F3968345-6C9C-4503-93DE-B06432DE449E}"
 	ProjectSection(ProjectDependencies) = postProject
 		{70F9F908-CCC3-41B4-944D-EA3DE3EF55BD} = {70F9F908-CCC3-41B4-944D-EA3DE3EF55BD}
 		{339EB07A-B1AB-4504-AEC5-8D8176784CC3} = {339EB07A-B1AB-4504-AEC5-8D8176784CC3}

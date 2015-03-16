@@ -7,8 +7,8 @@
     <ProjectGuid>{F3968345-6C9C-4503-93DE-B06432DE449E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>AssemblyReloaderUnitTests</RootNamespace>
-    <AssemblyName>AssemblyReloaderUnitTests</AssemblyName>
+    <RootNamespace>AssemblyReloaderTests</RootNamespace>
+    <AssemblyName>AssemblyReloaderTests</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
@@ -98,10 +98,36 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controllers\TestReloadableController.cs" />
+    <Compile Include="Controllers\AddonControllerTests.cs" />
+    <Compile Include="Controllers\PartModuleControllerTests.cs" />
+    <Compile Include="Controllers\ReloadablePluginControllerTests.cs" />
+    <Compile Include="DataObjects\TypeIdentifierTests.cs" />
+    <Compile Include="Destruction\AddonDestroyerTests.cs" />
+    <Compile Include="Destruction\DestructionControllerTests.cs" />
+    <Compile Include="Destruction\ObjectDestroyerTests.cs" />
+    <Compile Include="Disk\AssemblyDefinitionReaderTests.cs" />
+    <Compile Include="FixtureCustomizations\AutoDomainDataAttribute.cs" />
+    <Compile Include="Generators\UniqueAssemblyNameGeneratorTests.cs" />
+    <Compile Include="Loaders\PartModuleDescriptorFactoryTests.cs" />
+    <Compile Include="Loaders\PartModuleFactoryTests.cs" />
+    <Compile Include="Loaders\PartModuleLoaderTests.cs" />
+    <Compile Include="Loaders\PartModuleUnloaderTests.cs" />
+    <Compile Include="old\Controllers\TestReloadableController.cs" />
     <Compile Include="FixtureCustomizations\AssemblyIsLocalAssemblyCustomization.cs" />
-    <Compile Include="FixtureCustomizations\TestProjectAssembly_WithVariousOnLoadOnSavePartModuleCustomization.cs" />
-    <Compile Include="Queries\AssemblyQueries\TypesDerivedFromQueryTests.cs" />
+    <Compile Include="old\Queries\AssemblyQueries\TypesDerivedFromQueryTests.cs" />
+    <Compile Include="Queries\AssemblyQueries\AddonsFromAssemblyQueryTests.cs" />
+    <Compile Include="Queries\CecilQueries\AllMethodsFromDefinitionQueryTests.cs" />
+    <Compile Include="Queries\CecilQueries\AllTypesFromDefinitionQueryTests.cs" />
+    <Compile Include="Queries\CecilQueries\CompositeTypeDefinitionQueryTests.cs" />
+    <Compile Include="Queries\CecilQueries\ExcludingMethodDefinitionsTests.cs" />
+    <Compile Include="Queries\CecilQueries\ExcludingTypeDefinitionsTests.cs" />
+    <Compile Include="Queries\CecilQueries\IntermediateLanguage\MethodCallInMethodBodyQueryTests.cs" />
+    <Compile Include="Queries\CecilQueries\TypeDefinitionsDerivedFromBaseTypeQueryTests.cs" />
+    <Compile Include="Queries\ConversionQueries\AddonAttributesFromTypeQueryTests.cs" />
+    <Compile Include="Queries\ConversionQueries\StartupSceneFromGameSceneQueryTests.cs" />
+    <Compile Include="Queries\FileSystemQueries\ReloadableAssemblyFilesInDirectoryQueryTests.cs" />
+    <Compile Include="Queries\TypeIdentifierQueryTests.cs" />
+    <Compile Include="Repositories\FlightConfigRepositoryTests.cs" />
     <Compile Include="TestData\Addons\IrrelevantAddonContainerClass.cs" />
     <Compile Include="TestData\Addons\MonoBehaviour_WithNoAddon.cs" />
     <Compile Include="TestData\Addons\TestAddon_InvalidResult.cs" />
@@ -112,16 +138,18 @@
     <Compile Include="TestData\PartModules\DerivedPartModule.cs" />
     <Compile Include="TestData\PartModules\PartModuleContainerClass.cs" />
     <Compile Include="TestData\PartModules\TestPartModule.cs" />
-    <Compile Include="FixtureCustomizations\TestProjectAssemblyCustomization.cs" />
-    <Compile Include="Loaders\Addon\AddonLoader_Test.cs" />
-    <Compile Include="Loaders\LoaderFactory_Test.cs" />
+    <Compile Include="FixtureCustomizations\DomainCustomization.cs" />
+    <Compile Include="old\Loaders\Addon\AddonLoader_Test.cs" />
+    <Compile Include="old\Loaders\LoaderFactory_Test.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Queries\AssemblyQueries\AddonsFromAssemblyQuery_Test.cs" />
-    <Compile Include="Queries\AssemblyQueries\PartModulesFromAssemblyQuery_Test.cs" />
-    <Compile Include="Queries\CecilQueries\PartModuleMethodDefinitionQuery_Test.cs" />
-    <Compile Include="Queries\CecilQueries\PartModuleDefinitionsQuery_Test.cs" />
-    <Compile Include="Queries\ConversionQueries\AddonAttributeFromTypeQuery_Test.cs" />
-    <Compile Include="Repositories\PartModuleFlightConfigRepository_Test.cs" />
+    <Compile Include="old\Queries\AssemblyQueries\AddonsFromAssemblyQuery_Test.cs" />
+    <Compile Include="old\Queries\AssemblyQueries\PartModulesFromAssemblyQuery_Test.cs" />
+    <Compile Include="old\Queries\CecilQueries\PartModuleMethodDefinitionQuery_Test.cs" />
+    <Compile Include="old\Queries\CecilQueries\PartModuleDefinitionsQuery_Test.cs" />
+    <Compile Include="old\Queries\ConversionQueries\AddonAttributeFromTypeQuery_Test.cs" />
+    <Compile Include="old\Repositories\PartModuleFlightConfigRepository_Test.cs" />
+    <Compile Include="Weaving\AssemblyDefinitionWeaverTests.cs" />
+    <Compile Include="Weaving\Commands\ProxyAssemblyMethodWriterTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -139,7 +167,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="ILModifications\" />
+    <Folder Include="old\ILModifications\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

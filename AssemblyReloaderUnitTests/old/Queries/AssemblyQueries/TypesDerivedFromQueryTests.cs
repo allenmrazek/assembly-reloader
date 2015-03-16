@@ -13,5 +13,11 @@ namespace AssemblyReloader.Queries.AssemblyQueries.Tests
         {
             throw new NotImplementedException();
         }
+
+        [Fact()]
+        public void GetTest1()
+        {
+            Assert.True(false, "not implemented yet");
+        }
     }
 }

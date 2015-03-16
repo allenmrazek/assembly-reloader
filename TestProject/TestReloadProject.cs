@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using ReeperCommon.Extensions;
+using ReeperCommon.Logging.Implementations;
 using UnityEngine;
 
 namespace TestProject
@@ -30,11 +32,14 @@ namespace TestProject
             GUI.DragWindow();
         }
 
-        //void Start()
-        //{
-        //    //gameObject.GetComponents<Component>().ToList().ForEach(c => print("Have component: " + c.name));
-        //    WriteString("TestReloadProject: " + typeof(TestReloadProject).FullName);
-        //}
+        void Start()
+        {
+            //gameObject.GetComponents<Component>().ToList().ForEach(c => print("Have component: " + c.name));
+            //WriteString("TestReloadProject: " + typeof(TestReloadProject).FullName);
+
+            print("Printing components ...");
+            gameObject.PrintComponents(new DebugLog("TestReloadProject"));
+        }
 
         //void Update()
         //{

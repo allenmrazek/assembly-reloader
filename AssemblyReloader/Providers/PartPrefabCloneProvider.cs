@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using AssemblyReloader.Game;
 using AssemblyReloader.Queries;
-using ReeperCommon.Logging.Implementations;
 
 namespace AssemblyReloader.Providers
 {

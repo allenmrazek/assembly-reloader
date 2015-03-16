@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using AssemblyReloader.Weaving.Operations;
 using Mono.Cecil;
 
-namespace AssemblyReloader.Queries.CecilQueries
+namespace AssemblyReloader.Queries.CecilQueries.Injected
 {
     public class InjectedHelperTypeQuery : ITypeDefinitionQuery
     {

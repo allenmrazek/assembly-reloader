@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Mono.Cecil;
 using ReeperCommon.Logging.Implementations;
 
-namespace AssemblyReloader.Queries.CecilQueries
+namespace AssemblyReloader.Queries.CecilQueries.Injected
 {
     public class InjectedHelperTypeMethodQuery : IMethodDefinitionQuery
     {
