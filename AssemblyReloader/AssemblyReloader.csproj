@@ -58,7 +58,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CompositeRoot\Commands\PluginReloadRequestedMethodCallCommand.cs" />
     <Compile Include="CompositeRoot\MonoBehaviours\InjectedMonoBehaviourTracker.cs" />
+    <Compile Include="Destruction\IPartModuleDestroyer.cs" />
+    <Compile Include="Destruction\IUnityObjectDestroyer.cs" />
+    <Compile Include="Destruction\PartModuleDestroyer.cs" />
+    <Compile Include="Destruction\UnityObjectDestroyer.cs" />
     <Compile Include="Queries\CecilQueries\AllMethodsFromDefinitionQuery.cs" />
     <Compile Include="Queries\CecilQueries\AllTypesFromDefinitionQuery.cs" />
     <Compile Include="Queries\CecilQueries\CompositeTypeDefinitionQuery.cs" />
@@ -80,8 +85,6 @@
     <Compile Include="DataObjects\TypeIdentifier.cs" />
     <Compile Include="Destruction\AddonDestroyer.cs" />
     <Compile Include="Destruction\IAddonDestroyer.cs" />
-    <Compile Include="Destruction\IObjectDestructionController.cs" />
-    <Compile Include="Destruction\ObjectDestructionController.cs" />
     <Compile Include="Game\Commands\DisposeLoadedAssembly.cs" />
     <Compile Include="Game\GameEventPublisher.cs" />
     <Compile Include="Game\IAddonLoader.cs" />

@@ -268,7 +268,7 @@ namespace AssemblyReloader.CompositeRoot
             var reloadableAssemblyFileQuery = new ReloadableAssemblyFilesInDirectoryQuery(fsFactory.GetGameDataDirectory());
 
             var addonDestroyer = new AddonDestroyer(
-                ConfigureDestructionController(new FlightConfigRepository()), // config repo unused
+                new UnityObjectDestroyer(new PluginReloadRequestedMethodCallCommand()),
                 new LoadedComponentProvider(),
                 new AddonsFromAssemblyQuery(new AddonAttributesFromTypeQuery()));
 
@@ -340,11 +340,6 @@ namespace AssemblyReloader.CompositeRoot
 
             var partModuleRepository = new FlightConfigRepository();
 
-
-            var destructionController = ConfigureDestructionController(partModuleRepository);
-
-
-
             var partModuleController = new PartModuleController(
                 new PartModuleLoader(
                     descriptorFactory,
@@ -352,7 +347,7 @@ namespace AssemblyReloader.CompositeRoot
                     partModuleRepository,
                     prefabCloneProvider),
                 new PartModuleUnloader(
-                    destructionController,
+                    ConfigurePartModuleDestroyer(partModuleRepository),
                     descriptorFactory,
                     prefabCloneProvider),
                 new TypesDerivedFromQuery<PartModule>(),
@@ -382,60 +377,22 @@ namespace AssemblyReloader.CompositeRoot
         }
 
 
-        private IObjectDestructionController ConfigureDestructionController(IFlightConfigRepository configRepository)
+        private IPartModuleDestroyer ConfigurePartModuleDestroyer(IFlightConfigRepository configRepository)
         {
-            var destroyer = new ObjectDestructionController();
+            
             var idGenerator = new UniqueFlightIdGenerator();
             var identifierQuery = new TypeIdentifierQuery();
             var isPrefabQuery = new PartIsPrefabQuery();
             var kspFactory = new KspFactory();
 
-            DestructionHandler sendDestructionMessage = (component, owner) =>
-            {
-                var method = component.GetType().GetMethod("OnPluginReloadRequested",
-                    BindingFlags.Instance | BindingFlags.FlattenHierarchy | BindingFlags.Public | BindingFlags.NonPublic,
-                    null, new Type[] { }, null);
-
-                if (method != null) // not having such a method is valid
-                    method.Invoke(component, new object[] { });
-            };
-
-            DestructionHandler destroyComponent =
-                (component, owner) => Object.Destroy(component);
-
-            var informThenDestroy =
-                (DestructionHandler) Delegate.Combine(sendDestructionMessage, destroyComponent);
-
-
-            destroyer.Register<MonoBehaviour>(informThenDestroy);
-
-            destroyer.Register<PartModule>((component, owner) =>
-            {
-                var pm = component as PartModule;
-
-                if (pm == null) throw new Exception("Failed to cast " + component.name + " to PartModule");
-
-                _log.Normal("Destroying " + pm.GetType().FullName + " on " + pm.part.flightID);
-
-                if (!isPrefabQuery.Get(kspFactory.Create(pm.part)))
-                {
-                    if (pm.part.flightID == 0)
-                        pm.part.flightID = idGenerator.Get();
-
-                    _log.Normal("FlightID is now " + pm.part.flightID);
-
-                    var cfg = new ConfigNode();
-
-                    pm.Save(cfg);
-
-                    _log.Normal("Saving ConfigNode: {0}", cfg.ToString());
-
-                    configRepository.Store(pm.part.flightID, identifierQuery.Get(pm.GetType()), cfg);
-                }
-
-                destroyComponent(component, owner);
-            });
-
+            var destroyer = new PartModuleDestroyer(
+                new UnityObjectDestroyer(new PluginReloadRequestedMethodCallCommand()),
+                isPrefabQuery,
+                kspFactory,
+                idGenerator,
+                configRepository,
+                identifierQuery,
+                _log.CreateTag("PartModuleDestroyer"));
 
             return destroyer;
         }

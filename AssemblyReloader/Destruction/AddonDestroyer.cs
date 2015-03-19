@@ -11,20 +11,21 @@ namespace AssemblyReloader.Destruction
 {
     public class AddonDestroyer : IAddonDestroyer
     {
-        private readonly IObjectDestructionController _destructionController;
+        private readonly IUnityObjectDestroyer _objectDestroyer;
         private readonly ILoadedComponentProvider _componentProvider;
         private readonly ITypesFromAssemblyQuery _addonsFromAssemblyQuery;
 
         public AddonDestroyer(
-            IObjectDestructionController destructionController,
+            IUnityObjectDestroyer objectDestroyer,
             ILoadedComponentProvider componentProvider,
             ITypesFromAssemblyQuery addonsFromAssemblyQuery)
         {
-            if (destructionController == null) throw new ArgumentNullException("destructionController");
+            if (objectDestroyer == null) throw new ArgumentNullException("objectDestroyer");
             if (componentProvider == null) throw new ArgumentNullException("componentProvider");
             if (addonsFromAssemblyQuery == null) throw new ArgumentNullException("addonsFromAssemblyQuery");
 
-            _destructionController = destructionController;
+
+            _objectDestroyer = objectDestroyer;
             _componentProvider = componentProvider;
             _addonsFromAssemblyQuery = addonsFromAssemblyQuery;
         }
@@ -45,7 +46,7 @@ namespace AssemblyReloader.Destruction
                                             " is not derived from UnityEngine.MonoBehaviour! Bad KSPAddon attribute?");
 
             foreach (var item in _componentProvider.GetLoaded(type).Cast<MonoBehaviour>())
-                _destructionController.Destroy(item);
+                _objectDestroyer.Destroy(item);
         }
     }
 }

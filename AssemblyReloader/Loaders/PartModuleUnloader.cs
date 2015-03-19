@@ -9,22 +9,22 @@ namespace AssemblyReloader.Loaders
 {
     public class PartModuleUnloader : IPartModuleUnloader
     {
-        private readonly IObjectDestructionController _destructionController;
+        private readonly IPartModuleDestroyer _partModuleDestroyer;
         private readonly IPartModuleDescriptorFactory _descriptorFactory;
         private readonly IPartPrefabCloneProvider _loadedInstancesOfPrefabProvider;
 
         public PartModuleUnloader(
-            IObjectDestructionController destructionController,
+            IPartModuleDestroyer partModuleDestroyer,
             IPartModuleDescriptorFactory descriptorFactory,
             IPartPrefabCloneProvider loadedInstancesOfPrefabProvider
             )
         {
-            if (destructionController == null) throw new ArgumentNullException("destructionController");
+            if (partModuleDestroyer == null) throw new ArgumentNullException("partModuleDestroyer");
             if (descriptorFactory == null) throw new ArgumentNullException("descriptorFactory");
             if (loadedInstancesOfPrefabProvider == null)
                 throw new ArgumentNullException("loadedInstancesOfPrefabProvider");
 
-            _destructionController = destructionController;
+            _partModuleDestroyer = partModuleDestroyer;
             _descriptorFactory = descriptorFactory;
             _loadedInstancesOfPrefabProvider = loadedInstancesOfPrefabProvider;
         }
@@ -49,7 +49,7 @@ namespace AssemblyReloader.Loaders
                 var pm = part.GameObject.GetComponent(type) as PartModule;
 
                 if (!pm.IsNull())
-                    _destructionController.Destroy(pm);
+                    _partModuleDestroyer.Destroy(pm);
             }
         }
     }
