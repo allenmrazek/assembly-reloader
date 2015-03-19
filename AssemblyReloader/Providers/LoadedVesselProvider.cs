@@ -15,6 +15,7 @@ namespace AssemblyReloader.Providers
             _kspFactory = kspFactory;
         }
 
+
         public IEnumerable<IVessel> Get()
         {
             return FlightGlobals.Vessels.Where(v => v.loaded).Select(v => _kspFactory.Create(v));

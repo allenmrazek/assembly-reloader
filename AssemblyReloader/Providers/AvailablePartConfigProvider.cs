@@ -18,8 +18,6 @@ namespace AssemblyReloader.Providers
 
         public Maybe<ConfigNode> Get(IAvailablePart availablePart)
         {
-            //var found = GameDatabase.Instance.GetConfigs("PART")
-            //    .FirstOrDefault(u => u.name.Replace('_', '.') == availablePart.Name);
             var found = _gameDatabase.GetConfigs("PART")
                 .FirstOrDefault(u => u.name.Replace('_', '.') == availablePart.Name);
 

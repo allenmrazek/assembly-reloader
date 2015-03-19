@@ -80,10 +80,8 @@
     <Compile Include="DataObjects\TypeIdentifier.cs" />
     <Compile Include="Destruction\AddonDestroyer.cs" />
     <Compile Include="Destruction\IAddonDestroyer.cs" />
-    <Compile Include="Destruction\IDestructionController.cs" />
-    <Compile Include="Destruction\DestructionController.cs" />
-    <Compile Include="Destruction\IObjectDestroyer.cs" />
-    <Compile Include="Destruction\ObjectDestroyer.cs" />
+    <Compile Include="Destruction\IObjectDestructionController.cs" />
+    <Compile Include="Destruction\ObjectDestructionController.cs" />
     <Compile Include="Game\Commands\DisposeLoadedAssembly.cs" />
     <Compile Include="Game\GameEventPublisher.cs" />
     <Compile Include="Game\IAddonLoader.cs" />

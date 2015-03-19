@@ -11,12 +11,12 @@ namespace AssemblyReloader.Destruction
 {
     public class AddonDestroyer : IAddonDestroyer
     {
-        private readonly IDestructionController _destructionController;
+        private readonly IObjectDestructionController _destructionController;
         private readonly ILoadedComponentProvider _componentProvider;
         private readonly ITypesFromAssemblyQuery _addonsFromAssemblyQuery;
 
         public AddonDestroyer(
-            IDestructionController destructionController,
+            IObjectDestructionController destructionController,
             ILoadedComponentProvider componentProvider,
             ITypesFromAssemblyQuery addonsFromAssemblyQuery)
         {

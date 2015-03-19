@@ -382,32 +382,41 @@ namespace AssemblyReloader.CompositeRoot
         }
 
 
-        private IDestructionController ConfigureDestructionController(IFlightConfigRepository configRepository)
+        private IObjectDestructionController ConfigureDestructionController(IFlightConfigRepository configRepository)
         {
-            var controller = new DestructionController();
-            var destroyer = new ObjectDestroyer(_log.CreateTag("ObjectDestroyer"));
+            var destroyer = new ObjectDestructionController();
             var idGenerator = new UniqueFlightIdGenerator();
             var identifierQuery = new TypeIdentifierQuery();
             var isPrefabQuery = new PartIsPrefabQuery();
             var kspFactory = new KspFactory();
 
-            // todo: experience traits?
-
-            controller.Register<MonoBehaviour>(destroyer.Destroy);
-
-            controller.Register<PartModule>(pm =>
+            DestructionHandler sendDestructionMessage = (component, owner) =>
             {
-                if (pm == null)
-                    throw new ArgumentNullException("pm");
+                var method = component.GetType().GetMethod("OnPluginReloadRequested",
+                    BindingFlags.Instance | BindingFlags.FlattenHierarchy | BindingFlags.Public | BindingFlags.NonPublic,
+                    null, new Type[] { }, null);
 
-                if (pm.part == null)
-                    throw new ArgumentException("PartModule " + pm.GetType().FullName + " not associated with a Part");
+                if (method != null) // not having such a method is valid
+                    method.Invoke(component, new object[] { });
+            };
+
+            DestructionHandler destroyComponent =
+                (component, owner) => Object.Destroy(component);
+
+            var informThenDestroy =
+                (DestructionHandler) Delegate.Combine(sendDestructionMessage, destroyComponent);
+
+
+            destroyer.Register<MonoBehaviour>(informThenDestroy);
+
+            destroyer.Register<PartModule>((component, owner) =>
+            {
+                var pm = component as PartModule;
+
+                if (pm == null) throw new Exception("Failed to cast " + component.name + " to PartModule");
 
                 _log.Normal("Destroying " + pm.GetType().FullName + " on " + pm.part.flightID);
 
-
-
-                // we only want to save ConfigNodes for non-prefab parts
                 if (!isPrefabQuery.Get(kspFactory.Create(pm.part)))
                 {
                     if (pm.part.flightID == 0)
@@ -424,25 +433,11 @@ namespace AssemblyReloader.CompositeRoot
                     configRepository.Store(pm.part.flightID, identifierQuery.Get(pm.GetType()), cfg);
                 }
 
-                destroyer.Destroy(pm);
+                destroyComponent(component, owner);
             });
 
-            controller.Register<InternalModule>(im =>
-            {
-                destroyer.Destroy(im);
-                throw new NotImplementedException();
-            });
 
-            controller.Register<ScenarioModule>(sm =>
-            {
-                destroyer.Destroy(sm);
-                throw new NotImplementedException();
-            });
-
-            controller.Register<Contract>(contract => { throw new NotImplementedException(); });
-
-
-            return controller;
+            return destroyer;
         }
 
 
