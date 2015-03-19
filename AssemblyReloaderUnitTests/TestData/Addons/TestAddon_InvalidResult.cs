@@ -1,4 +1,4 @@
-namespace AssemblyReloaderUnitTests.TestData.Addons
+namespace AssemblyReloaderTests.TestData.Addons
 {
     [KSPAddon(KSPAddon.Startup.Instantly, false)]
     public class TestAddon_InvalidResult

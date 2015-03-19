@@ -11,6 +11,7 @@
     <AssemblyName>TestProject</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -51,6 +52,7 @@
   <ItemGroup>
     <Compile Include="TestData\DerivativePartModule.cs" />
     <Compile Include="TestData\InternalPartModule.cs" />
+    <Compile Include="TestData\KSPAddonData.cs" />
     <Compile Include="TestData\PartModuleUnitTestVersion.cs" />
     <Compile Include="TestData\PartModuleTest_SuppressedOnLoad.cs" />
     <Compile Include="TestData\PartModuleTest_WithVariousOnLoadOnSave.cs" />

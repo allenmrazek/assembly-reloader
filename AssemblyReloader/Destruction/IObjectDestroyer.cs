@@ -14,5 +14,6 @@ namespace AssemblyReloader.Destruction
         void Destroy(ScenarioModule sm);
         void Destroy(InternalModule im);
         void Destroy(Contract contract);
+        // todo: experienceTrait?
     }
 }

@@ -149,7 +149,6 @@
     <Compile Include="Queries\AssemblyQueries\ITypesFromAssemblyQuery.cs" />
     <Compile Include="Queries\AssemblyQueries\TypesDerivedFromQuery.cs" />
     <Compile Include="Queries\CecilQueries\ITypeDefinitionQuery.cs" />
-    <Compile Include="Queries\CecilQueries\TypeDefinitionsDerivedFromBaseTypeQuery.cs" />
     <Compile Include="Queries\ConfigNodeQueries\IModuleConfigsFromPartConfigQuery.cs" />
     <Compile Include="Queries\ConfigNodeQueries\ModuleConfigsFromPartConfigQuery.cs" />
     <Compile Include="Queries\ConversionQueries\IAddonAttributesFromTypeQuery.cs" />

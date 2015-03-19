@@ -139,9 +139,6 @@ namespace AssemblyReloader.CompositeRoot
         }
 
 
-  
-
-
 
        
 
@@ -183,7 +180,6 @@ namespace AssemblyReloader.CompositeRoot
                         UIPartActionController.Instance.windowPrefab.gameObject.AddComponent<KspPartActionWindowListener>();
             };
             
-
 
             var reloadables = CreateReloadablePlugins(fsFactory, assemblyResolver).ToList();
 
@@ -486,13 +482,13 @@ namespace AssemblyReloader.CompositeRoot
                     new InjectedHelperTypeMethodQuery(new InjectedHelperTypeQuery(), getCodeBaseProperty.GetGetMethod().Name)
                 );
 
-            var insertIntermediateLanguageCode = new InsertIntermediateLanguageCommandsIntoMethod(
-                _log.CreateTag("InsertIL"),
-                new CompositeTypeDefinitionQuery(
-                    new TypeDefinitionsDerivedFromBaseTypeQuery<MonoBehaviour>(allTypesFromAssemblyExceptInjected),
-                    new TypeDefinitionsDerivedFromBaseTypeQuery<PartModule>(allTypesFromAssemblyExceptInjected),
-                    new TypeDefinitionsDerivedFromBaseTypeQuery<ScenarioModule>(allTypesFromAssemblyExceptInjected)),
-                new AllMethodsFromDefinitionQuery());
+            //var insertIntermediateLanguageCode = new InsertIntermediateLanguageCommandsIntoMethod(
+            //    _log.CreateTag("InsertIL"),
+            //    new CompositeTypeDefinitionQuery(
+            //        new TypeDefinitionsDerivedFromBaseTypeQuery<MonoBehaviour>(allTypesFromAssemblyExceptInjected),
+            //        new TypeDefinitionsDerivedFromBaseTypeQuery<PartModule>(allTypesFromAssemblyExceptInjected),
+            //        new TypeDefinitionsDerivedFromBaseTypeQuery<ScenarioModule>(allTypesFromAssemblyExceptInjected)),
+            //    new AllMethodsFromDefinitionQuery());
 
             return new AssemblyDefinitionWeaver(
                 _log.CreateTag("Weaver"), 

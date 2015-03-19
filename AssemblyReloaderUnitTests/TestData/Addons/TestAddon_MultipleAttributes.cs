@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace AssemblyReloaderUnitTests.TestData.Addons
+namespace AssemblyReloaderTests.TestData.Addons
 {
     [KSPAddon(KSPAddon.Startup.Instantly, false)]
     [RequireComponent(typeof(AudioSource))]

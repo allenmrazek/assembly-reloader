@@ -1,4 +1,4 @@
-namespace AssemblyReloaderUnitTests.TestData.PartModules
+namespace AssemblyReloaderTests.TestData.PartModules
 {
     public class PartModuleContainerClass
     {

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace AssemblyReloaderUnitTests.TestData.Addons
+namespace AssemblyReloaderTests.TestData.Addons
 {
     [KSPAddon(KSPAddon.Startup.Instantly, false)]
     internal class TestAddon_Private : MonoBehaviour { }

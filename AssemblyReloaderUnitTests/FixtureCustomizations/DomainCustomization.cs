@@ -1,10 +1,7 @@
-using System.ComponentModel;
-using System.Linq;
-using AssemblyReloader.Queries.CecilQueries;
 using Ploeh.AutoFixture;
 using Ploeh.AutoFixture.AutoNSubstitute;
 
-namespace AssemblyReloaderUnitTests.FixtureCustomizations
+namespace AssemblyReloaderTests.FixtureCustomizations
 {
     public class DomainCustomization : CompositeCustomization
     {

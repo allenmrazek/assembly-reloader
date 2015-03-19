@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using AssemblyReloader.Queries.CecilQueries;
-using AssemblyReloaderUnitTests.FixtureCustomizations;
+using AssemblyReloaderTests.FixtureCustomizations;
 using Mono.Cecil;
 using Ploeh.AutoFixture.Xunit;
 using Xunit;

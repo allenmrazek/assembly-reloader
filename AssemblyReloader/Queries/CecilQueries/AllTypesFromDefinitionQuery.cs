@@ -10,7 +10,7 @@ namespace AssemblyReloader.Queries.CecilQueries
     {
         public IEnumerable<TypeDefinition> Get(AssemblyDefinition assembly)
         {
-            return assembly.Modules.SelectMany(md => md.GetTypes());
+            return assembly.Modules.SelectMany(md => md.Types);
         }
     }
 }

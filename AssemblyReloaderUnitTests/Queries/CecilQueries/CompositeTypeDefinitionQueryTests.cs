@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using AssemblyReloader.Queries.CecilQueries;
-using Xunit;
+﻿using Xunit;
+// ReSharper disable once CheckNamespace
 namespace AssemblyReloader.Queries.CecilQueries.Tests
 {
     public class CompositeTypeDefinitionQueryTests
     {
-        [Fact()]
+        [Fact]
         public void GetTest()
         {
             Assert.True(false, "not implemented yet");

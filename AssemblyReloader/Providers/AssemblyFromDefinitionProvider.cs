@@ -1,9 +1,11 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using AssemblyReloader.Disk;
 using Mono.Cecil;
 using ReeperCommon.Containers;
+using ReeperCommon.Logging.Implementations;
 
 namespace AssemblyReloader.Providers
 {
@@ -19,6 +21,13 @@ namespace AssemblyReloader.Providers
 
                 var result = Assembly.Load(stream.GetBuffer());
 
+                if (result != null)
+                {
+                    var log = new DebugLog("AssemblyFromDefinitionProvider");
+
+                    result.GetReferencedAssemblies().ToList().ForEach(an => log.Normal(an.FullName + ", " + an.Version));
+
+                }
                 return result != null ? Maybe<Assembly>.With(result) : Maybe<Assembly>.None;
             }
         }
