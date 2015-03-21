@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
+using AssemblyReloader.Config;
 using AssemblyReloader.Game;
 using AssemblyReloader.Loaders;
 using AssemblyReloader.Providers;
@@ -24,19 +25,22 @@ namespace AssemblyReloader.PluginTracking
         private readonly IAssemblyLoader _assemblyLoader;
         private readonly IFile _location;
 
+
         public event PluginLoadedHandler OnLoaded = delegate { };
         public event PluginUnloadedHandler OnUnloaded = delegate { }; 
 
         public ReloadablePlugin(
             IAssemblyLoader assemblyLoader,
-            IFile location)
+            IFile location,
+            IConfiguration configuration)
         {
             if (assemblyLoader == null) throw new ArgumentNullException("assemblyLoader");
             if (location == null) throw new ArgumentNullException("location");
-
+            if (configuration == null) throw new ArgumentNullException("configuration");
 
             _assemblyLoader = assemblyLoader;
             _location = location;
+            Configuration = configuration;
         }
 
 
@@ -74,5 +78,7 @@ namespace AssemblyReloader.PluginTracking
         {
             get { return _loaded.IsNull() ? Maybe<Assembly>.None : Maybe<Assembly>.With(_loaded); }
         }
+
+        public IConfiguration Configuration { get; private set; }
     }
 }

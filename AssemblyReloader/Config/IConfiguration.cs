@@ -1,4 +1,6 @@
-﻿namespace AssemblyReloader.Config
+﻿using UnityEngine;
+
+namespace AssemblyReloader.Config
 {
     public interface IConfiguration
     {
@@ -33,5 +35,11 @@
         /// Should KSPAddon attributes marked with "instantly" be created regardless of scene?
         /// </summary>
         bool IgnoreCurrentSceneForInstantAddons { get; }
+
+
+
+
+
+        
     }
 }

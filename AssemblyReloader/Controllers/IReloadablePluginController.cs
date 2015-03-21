@@ -5,9 +5,9 @@ namespace AssemblyReloader.Controllers
 {
     public interface IReloadablePluginController
     {
-        void Reload(IReloadablePlugin identity);
-        void ReloadAll();
+        void Reload();
+        void ToggleConfigurationView();
 
-        IEnumerable<IReloadablePlugin> Plugins { get; }
+        IReloadablePlugin Plugin { get; }
     }
 }

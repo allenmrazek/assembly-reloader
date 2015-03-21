@@ -1,10 +1,16 @@
 ﻿using System;
 using System.Linq;
+using AssemblyReloader.Config;
 using AssemblyReloader.Logging;
+using AssemblyReloader.PluginTracking;
+using ReeperCommon.Extensions;
+using ReeperCommon.Gui.Logic;
 using ReeperCommon.Gui.Window;
 using ReeperCommon.Gui.Window.Buttons;
 using ReeperCommon.Gui.Window.Decorators;
 using ReeperCommon.Gui.Window.Providers;
+using ReeperCommon.Gui.Window.View;
+using ReeperCommon.Logging.Implementations;
 using ReeperCommon.Repositories.Resources;
 using UnityEngine;
 
@@ -13,24 +19,34 @@ namespace AssemblyReloader.GUI
     class WindowFactory
     {
         private readonly IResourceRepository _resourceProvider;
-        private readonly ICachedLog _cachedLog;
+        private readonly GUISkin _windowSkin;
 
-        public WindowFactory(IResourceRepository resourceProvider, ICachedLog cachedLog)
+        public WindowFactory(
+            IResourceRepository resourceProvider,
+            
+            GUISkin windowSkin)
         {
             if (resourceProvider == null) throw new ArgumentNullException("resourceProvider");
-            if (cachedLog == null) throw new ArgumentNullException("cachedLog");
+            if (windowSkin == null) throw new ArgumentNullException("windowSkin");
 
             _resourceProvider = resourceProvider;
-            _cachedLog = cachedLog;
+            _windowSkin = windowSkin;
         }
 
 
 
-        public IWindowComponent CreateMainWindow(MainViewWindowLogic logic)
+        public void CreateMainWindow(
+            View logic,
+            Rect initialRect,
+            int winid)
         {
             if (logic == null) throw new ArgumentNullException("logic");
 
-            var idProvider = new UniqueWindowIdProvider();
+            var basicWindow = new BasicWindow(logic, initialRect, winid, _windowSkin) { Title = "ART: Assembly Reloading Tool" };
+
+
+            var tbButtons = new TitleBarButtons(basicWindow, TitleBarButtons.ButtonAlignment.Right, new Vector2(3f, 3f));
+
 
 
             var style = new GUIStyle(HighLogic.Skin.button) { border = new RectOffset(), padding = new RectOffset() };
@@ -38,20 +54,6 @@ namespace AssemblyReloader.GUI
             style.margin = new RectOffset();
 
             var btnClose = _resourceProvider.GetTexture("Resources/btnClose.png");
-
-
-
-            var basicWindow = new BasicWindow(
-                logic,
-                new Rect(400f, 400f, 300f, 300f),
-                idProvider.Get(), HighLogic.Skin /*AssetBase.GetGUISkin("KSP window 6")*/
-
-
-                ) { Title = "ART: Assembly Reloading Tool" };
-
-
-            var tbButtons = new TitleBarButtons(basicWindow, TitleBarButtons.ButtonAlignment.Right, new Vector2(3f, 3f));
-
 
             tbButtons.AddButton(new TitleBarButton(style, btnClose.First(), s => { }, "Test"));
             //tbButtons.AddButton(new TitleBarButton(style, btnClose.First(), s => { }, "Test2"));
@@ -64,21 +66,26 @@ namespace AssemblyReloader.GUI
 
             var clamp = new ClampToScreen(hiding);
 
-            return clamp;
+            UnityEngine.Object.DontDestroyOnLoad(WindowView.Create(clamp, "MainWindow"));
         }
 
 
-
-        public IWindowComponent CreateLogWindow()
+        public IWindowComponent CreatePluginOptionsWindow(IReloadablePlugin plugin)
         {
-            var logWindowLogic = new LogViewLogic(_cachedLog);
-            var idProvider = new UniqueWindowIdProvider();
-
-            var logWindow = new BasicWindow(logWindowLogic, new Rect(400f, 0f, 200f, 128f), idProvider.Get(),
-                HighLogic.Skin, true) { Title = "ART Log", Visible = false };
+            if (plugin == null) throw new ArgumentNullException("plugin");
 
 
-            return logWindow;
+            var basicWindow = new BasicWindow(new ConfigurationViewLogic(plugin.Configuration), new Rect(300f, 300f, 300f, 300f),
+                UnityEngine.Random.Range(10000, 3434343), _windowSkin);
+
+            basicWindow.Title = plugin.Name + " Configuration";
+
+            //var decoratedWindow = new HideOnF2(new ClampToScreen(basicWindow));
+            var decoratedWindow = new ClampToScreen(basicWindow);
+
+            UnityEngine.Object.DontDestroyOnLoad(WindowView.Create(decoratedWindow));
+
+            return decoratedWindow;
         }
     }
 }

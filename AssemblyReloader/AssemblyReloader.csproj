@@ -59,11 +59,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CompositeRoot\Commands\PluginReloadRequestedMethodCallCommand.cs" />
+    <Compile Include="CompositeRoot\Commands\ReloadPluginCommand.cs" />
+    <Compile Include="CompositeRoot\Commands\ToggleWindowVisibilityCommand.cs" />
     <Compile Include="CompositeRoot\MonoBehaviours\InjectedMonoBehaviourTracker.cs" />
+    <Compile Include="Controllers\GuiController.cs" />
+    <Compile Include="Controllers\IGuiController.cs" />
     <Compile Include="Destruction\IPartModuleDestroyer.cs" />
     <Compile Include="Destruction\IUnityObjectDestroyer.cs" />
     <Compile Include="Destruction\PartModuleDestroyer.cs" />
     <Compile Include="Destruction\UnityObjectDestroyer.cs" />
+    <Compile Include="GUI\ConfigurationViewLogic.cs" />
     <Compile Include="Queries\CecilQueries\AllMethodsFromDefinitionQuery.cs" />
     <Compile Include="Queries\CecilQueries\AllTypesFromDefinitionQuery.cs" />
     <Compile Include="Queries\CecilQueries\CompositeTypeDefinitionQuery.cs" />
@@ -125,7 +130,6 @@
     <Compile Include="Controllers\IReloadablePluginController.cs" />
     <Compile Include="CompositeRoot\MonoBehaviours\CoreView.cs" />
     <Compile Include="GUI\WindowFactory.cs" />
-    <Compile Include="GUI\LogViewLogic.cs" />
     <Compile Include="Loaders\IPartModuleDescriptorFactory.cs" />
     <Compile Include="Loaders\PartModuleDescriptor.cs" />
     <Compile Include="Loaders\PartModuleLoader.cs" />
@@ -171,7 +175,7 @@
     <Compile Include="Logging\CachedLog.cs" />
     <Compile Include="CompositeRoot\Core.cs" />
     <Compile Include="PluginTracking\ReloadablePlugin.cs" />
-    <Compile Include="GUI\MainViewWindowLogic.cs" />
+    <Compile Include="GUI\View.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Queries\AssemblyQueries\AddonsFromAssemblyQuery.cs" />
     <Compile Include="Providers\SceneProviders\CurrentStartupSceneProvider.cs" />

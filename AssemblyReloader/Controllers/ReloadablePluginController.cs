@@ -1,54 +1,37 @@
 ﻿using System;
-using System.Collections.Generic;
-using AssemblyReloader.Messages;
+using AssemblyReloader.CompositeRoot.Commands;
 using AssemblyReloader.PluginTracking;
-using ReeperCommon.Logging;
 
 namespace AssemblyReloader.Controllers
 {
 
     public class ReloadablePluginController : IReloadablePluginController
     {
-        private readonly IEnumerable<IReloadablePlugin> _reloadables;
-        private readonly ILog _log;
+        private readonly ICommand _toggleConfigView;
 
-
-        public ReloadablePluginController(
-            IEnumerable<IReloadablePlugin> reloadables,
-            ILog log)
+        public ReloadablePluginController(IReloadablePlugin plugin, ICommand toggleConfigView)
         {
-            if (reloadables == null) throw new ArgumentNullException("reloadables");
-            if (log == null) throw new ArgumentNullException("log");
+            _toggleConfigView = toggleConfigView;
+            if (plugin == null) throw new ArgumentNullException("plugin");
+            if (toggleConfigView == null) throw new ArgumentNullException("toggleConfigView");
 
-            _reloadables = reloadables;
-            _log = log;
+            Plugin = plugin;
         }
 
 
-        public void Reload(IReloadablePlugin toReload)
+        public void Reload()
         {
-            if (toReload == null) throw new ArgumentNullException("toReload");
-
-            _log.Verbose("Reloading " + toReload.Name);
-
-            _log.Verbose("Unloading " + toReload.Name);
-            toReload.Unload();
-
-            _log.Verbose("Loading " + toReload.Name);
-            toReload.Load();
+            Plugin.Unload();
+            Plugin.Load();
         }
 
 
-        public void ReloadAll()
+        public void ToggleConfigurationView()
         {
-            foreach (var r in _reloadables)
-                Reload(r);
+            _toggleConfigView.Execute();
         }
 
 
-        public IEnumerable<IReloadablePlugin> Plugins
-        {
-            get { return _reloadables; }
-        }
+        public IReloadablePlugin Plugin { get; private set; }
     }
 }

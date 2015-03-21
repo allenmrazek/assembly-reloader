@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using AssemblyReloader.CompositeRoot.Commands;
 using AssemblyReloader.CompositeRoot.MonoBehaviours;
+using AssemblyReloader.Config;
 using AssemblyReloader.Controllers;
 using AssemblyReloader.Destruction;
 using AssemblyReloader.Disk;
@@ -36,6 +37,7 @@ using ReeperCommon.FileSystem;
 using ReeperCommon.FileSystem.Factories;
 using ReeperCommon.FileSystem.Implementations;
 using ReeperCommon.FileSystem.Implementations.Providers;
+using ReeperCommon.Gui.Window.Providers;
 using ReeperCommon.Gui.Window.View;
 using ReeperCommon.Logging;
 using ReeperCommon.Logging.Factories;
@@ -51,15 +53,6 @@ namespace AssemblyReloader.CompositeRoot
     // composite root
     class Core
     {
-        private readonly IEventProvider _eventProvider;
-
-        private readonly WindowView _view;
-        private readonly WindowView _logView;
-
-        private readonly IReloadablePluginController _pluginController;
-        private readonly MessageChannel _messageChannel;
-
-
         private readonly ILog _log;
 
 
@@ -167,13 +160,13 @@ namespace AssemblyReloader.CompositeRoot
 
 
             var resourceLocator = ConfigureResourceRepository(ourDirProvider.Get());
-            _eventProvider = ConfigureEventProvider(new StartupSceneFromGameSceneQuery());
+            IEventProvider eventProvider = ConfigureEventProvider(new StartupSceneFromGameSceneQuery());
 
             KspPartActionWindowListener.WindowController = new KspPartActionWindowController();
             KspPartActionWindowListener.PartActionWindowQuery =
                 new ComponentsInGameObjectHierarchyProvider<UIPartActionWindow>();
 
-            _eventProvider.OnSceneLoaded.OnEvent += s =>
+            eventProvider.OnSceneLoaded.OnEvent += s =>
             {
                 if (UIPartActionController.Instance != null && UIPartActionController.Instance.windowPrefab != null)
                     if (UIPartActionController.Instance.windowPrefab.GetComponent<KspPartActionWindowListener>() == null)
@@ -185,18 +178,29 @@ namespace AssemblyReloader.CompositeRoot
 
             reloadables.ForEach(r => r.Load());
 
-            _pluginController = new ReloadablePluginController(reloadables, _log.CreateTag("PluginController"));
 
-            var windowFactory = new WindowFactory(resourceLocator, cachedLog);
+            var windowFactory = new WindowFactory(resourceLocator, ConfigureSkin());
+            var uniqueIdProvider = new UniqueWindowIdProvider();
 
-            var logWindow = windowFactory.CreateLogWindow();
-            var mainWindow = windowFactory.CreateMainWindow(new MainViewWindowLogic(_pluginController, logWindow));
+            var guiController =
+                new GuiController(reloadables.ToDictionary(r => r,
+                    r =>
+                    {
+                        var configWindow = windowFactory.CreatePluginOptionsWindow(r);
 
-            _view = WindowView.Create(mainWindow);
-            _logView = WindowView.Create(logWindow);
+                        configWindow.Visible = false;
 
-            Object.DontDestroyOnLoad(_view);
-            Object.DontDestroyOnLoad(_logView);
+                        return
+                            new ReloadablePluginController(r, new ToggleWindowVisibilityCommand(configWindow)) as IReloadablePluginController;
+                    }));
+
+            windowFactory.CreateMainWindow(
+                new View(guiController),
+                new Rect(400f, 400f, 300f, 300f),
+                uniqueIdProvider.Get());
+
+    
+
 
             AssemblyLoader.loadedAssemblies.ToList().ForEach(la =>
             {
@@ -318,7 +322,7 @@ namespace AssemblyReloader.CompositeRoot
 #endif
                 );
 
-            var reloadable = new ReloadablePlugin(kspLoader, location);
+            var reloadable = new ReloadablePlugin(kspLoader, location, ConfigurePluginConfiguration());
 
             
             
@@ -398,6 +402,34 @@ namespace AssemblyReloader.CompositeRoot
         }
 
 
+        private GUISkin ConfigureSkin()
+        {
+            //Resources.FindObjectsOfTypeAll<GUISkin>().ToList().ForEach(s => new DebugLog().Debug("Skin: " + s.name));
+
+            //UnityEngine.Object.FindObjectOfType<AssetBase>()
+            //    .guiSkins.ToList()
+            //    .ForEach(g => new DebugLog().Debug("AB: Skin: " + g.name));
+
+            //var skin = UnityEngine.Object.Instantiate(HighLogic.Skin) as GUISkin;
+            //var skin = UnityEngine.Object.Instantiate(AssetBase.GetGUISkin("KSP window 5")) as GUISkin;
+            //var skin = UnityEngine.Object.Instantiate(AssetBase.GetGUISkin("KSP window 4")) as GUISkin;
+            //var skin = UnityEngine.Object.Instantiate(AssetBase.GetGUISkin("KSP window 4")) as GUISkin;
+            //var skin = UnityEngine.Object.Instantiate(AssetBase.GetGUISkin("KSP window 3")) as GUISkin;
+            //var skin = UnityEngine.Object.Instantiate(AssetBase.GetGUISkin("KSP window 1")) as GUISkin;
+            var skin = UnityEngine.Object.Instantiate(AssetBase.GetGUISkin("OrbitMapSkin")) as GUISkin;
+
+
+            skin.window.padding.left = skin.window.padding.right = 3;
+
+            return skin;
+        }
+
+
+        private IConfiguration ConfigurePluginConfiguration( /* context -- filename? */)
+        {
+            return new Configuration();
+        }
+
         private IAssemblyDefinitionWeaver ConfigureDefinitionWeaver(IFile location)
         {
             if (location == null) throw new ArgumentNullException("location");
@@ -433,14 +465,6 @@ namespace AssemblyReloader.CompositeRoot
                     OpCodes.Callvirt),
                     new InjectedHelperTypeMethodQuery(new InjectedHelperTypeQuery(), getCodeBaseProperty.GetGetMethod().Name)
                 );
-
-            //var insertIntermediateLanguageCode = new InsertIntermediateLanguageCommandsIntoMethod(
-            //    _log.CreateTag("InsertIL"),
-            //    new CompositeTypeDefinitionQuery(
-            //        new TypeDefinitionsDerivedFromBaseTypeQuery<MonoBehaviour>(allTypesFromAssemblyExceptInjected),
-            //        new TypeDefinitionsDerivedFromBaseTypeQuery<PartModule>(allTypesFromAssemblyExceptInjected),
-            //        new TypeDefinitionsDerivedFromBaseTypeQuery<ScenarioModule>(allTypesFromAssemblyExceptInjected)),
-            //    new AllMethodsFromDefinitionQuery());
 
             return new AssemblyDefinitionWeaver(
                 _log.CreateTag("Weaver"), 

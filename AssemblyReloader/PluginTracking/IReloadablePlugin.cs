@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using AssemblyReloader.Config;
 using ReeperCommon.Containers;
 using ReeperCommon.FileSystem;
 
@@ -15,6 +16,7 @@ namespace AssemblyReloader.PluginTracking
 
         string Name { get; }
         Maybe<Assembly> Assembly { get; }
+        IConfiguration Configuration { get; }
 
         event PluginLoadedHandler OnLoaded;
         event PluginUnloadedHandler OnUnloaded;
