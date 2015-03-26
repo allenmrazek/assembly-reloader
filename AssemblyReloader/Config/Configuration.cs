@@ -1,14 +1,46 @@
-﻿namespace AssemblyReloader.Config
+﻿using System;
+
+namespace AssemblyReloader.Config
 {
     public class Configuration : IConfiguration
     {
-        public bool ReplacePartModulesInFlight { get; private set; }
-        public bool ReloadPartModuleConfigsForPartModulesInFlight { get; private set; }
-        public bool ReplaceInternalModulesInFlight { get; private set; }
-        public bool ReloadInternalModuleConfigsInFlight { get; private set; }
-        public bool RestartScenarioModulesForCurrentScene { get; private set; }
-        public bool ReloadScenarioModulePersistentConfigs { get; private set; }
-        public bool StartAddonsForCurrentScene { get; private set; }
-        public bool IgnoreCurrentSceneForInstantAddons { get; private set; }
+        [Persistent]
+        private bool _startAddonsForCurrentScene = true;
+
+        [Persistent]
+        private bool _reloadPartModulesImmediately = true;
+
+        [Persistent]
+        private bool _ignoreCurrentSceneForInstantAddons = true;
+
+        [Persistent]
+        private bool _rewriteAssemblyLocationCalls = true;
+
+
+        public Configuration(ConfigNode config)
+        {
+            if (config == null) throw new ArgumentNullException("config");
+        }
+
+
+        public bool StartAddonsForCurrentScene
+        {
+            get { return _startAddonsForCurrentScene; }
+        }
+
+        public bool ReloadPartModulesImmediately
+        {
+            get { return _reloadPartModulesImmediately; }
+        }
+
+        public bool IgnoreCurrentSceneForInstantAddons
+        {
+            get { return _ignoreCurrentSceneForInstantAddons; }
+        }
+
+        public bool RewriteAssemblyLocationCalls
+        {
+            get { return _rewriteAssemblyLocationCalls; }
+        }
     }
 }

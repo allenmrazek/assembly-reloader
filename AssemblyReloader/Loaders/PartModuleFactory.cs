@@ -1,18 +1,23 @@
 ﻿using System;
 using System.Reflection;
+using AssemblyReloader.CompositeRoot.Commands;
 using AssemblyReloader.Game;
 using AssemblyReloader.Queries;
+using UnityEngine;
 
 namespace AssemblyReloader.Loaders
 {
     public class PartModuleFactory : IPartModuleFactory
     {
         private readonly IPartIsPrefabQuery _partIsPrefabQuery;
+        private readonly ICommand<PartModule> _awakenPartModule;
 
-        public PartModuleFactory(IPartIsPrefabQuery partIsPrefabQuery)
+        public PartModuleFactory(IPartIsPrefabQuery partIsPrefabQuery, ICommand<PartModule> awakenPartModule)
         {
             if (partIsPrefabQuery == null) throw new ArgumentNullException("partIsPrefabQuery");
+            if (awakenPartModule == null) throw new ArgumentNullException("awakenPartModule");
             _partIsPrefabQuery = partIsPrefabQuery;
+            _awakenPartModule = awakenPartModule;
         }
 
 
@@ -25,15 +30,6 @@ namespace AssemblyReloader.Loaders
             if (!pmType.IsSubclassOf(typeof (PartModule)))
                 throw new ArgumentException("type " + pmType.FullName + " is not a PartModule");
 
-            // note: why not use Part.AddModule here? When the PartLoader is loading parts, those
-            // prefab GameObjects are active so MonoBehaviour.Awake gets called right away BEFORE
-            // OnLoad.
-            //
-            // If we use Part.AddModule after PartLoader has run, the prefab will be
-            // inactive causing Awake NOT to be called and skipping straight to OnLoad. In most cases 
-            // this is probably okay but should a plugin rely on that behaviour
-            // (Awake/OnAwake before OnLoad) for their prefab object, we might break
-            // something. And thusly, we handle this ourselves
             var result = part.GameObject.AddComponent(pmType) as PartModule;
 
             if (result == null)
@@ -45,13 +41,7 @@ namespace AssemblyReloader.Loaders
             // if this is the prefab GameObject, it will never become active again and awake will never
             // get called so we must do it ourselves
             if (_partIsPrefabQuery.Get(part))
-            {
-                var method = typeof (PartModule).GetMethod("Awake",
-                    BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.FlattenHierarchy);
-
-                if (method != null)
-                    method.Invoke(result, null);
-            }
+                _awakenPartModule.Execute(result);
 
             result.OnLoad(config);
         }

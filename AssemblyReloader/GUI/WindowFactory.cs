@@ -70,22 +70,36 @@ namespace AssemblyReloader.GUI
         }
 
 
-        public IWindowComponent CreatePluginOptionsWindow(IReloadablePlugin plugin)
+        public IWindowComponent CreatePluginOptionsWindow(IReloadablePlugin plugin, IExpandablePanelFactory panelFactory)
         {
             if (plugin == null) throw new ArgumentNullException("plugin");
+            if (panelFactory == null) throw new ArgumentNullException("panelFactory");
 
 
-            var basicWindow = new BasicWindow(new ConfigurationViewLogic(plugin.Configuration), new Rect(300f, 300f, 300f, 300f),
+            var basicWindow = new BasicWindow(new ConfigurationViewLogic(plugin.Configuration, panelFactory), new Rect(300f, 300f, 300f, 300f),
                 UnityEngine.Random.Range(10000, 3434343), _windowSkin);
 
             basicWindow.Title = plugin.Name + " Configuration";
 
-            //var decoratedWindow = new HideOnF2(new ClampToScreen(basicWindow));
+            //var decoratedWindow = new HideOnF2(new ClampToScreen(basicWindow)); buggy
             var decoratedWindow = new ClampToScreen(basicWindow);
 
             UnityEngine.Object.DontDestroyOnLoad(WindowView.Create(decoratedWindow));
 
             return decoratedWindow;
+        }
+
+
+        public IExpandablePanelFactory CreateExpandablePanelFactory(GUISkin skin)
+        {
+            if (skin == null) throw new ArgumentNullException("skin");
+
+
+            var style = new GUIStyle(skin.toggle);
+
+
+
+            return new ExpandablePanelFactory(style, 12f, 0f, false);
         }
     }
 }

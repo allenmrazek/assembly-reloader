@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using AssemblyReloader.CompositeRoot.Commands;
 using Object = UnityEngine.Object;
 
@@ -11,7 +8,7 @@ namespace AssemblyReloader.Destruction
     {
         private readonly ICommand<Object> _executeBeforeDestruction;
 
-        public UnityObjectDestroyer(ICommand<UnityEngine.Object> executeBeforeDestruction)
+        public UnityObjectDestroyer(ICommand<Object> executeBeforeDestruction)
         {
             if (executeBeforeDestruction == null) throw new ArgumentNullException("executeBeforeDestruction");
             _executeBeforeDestruction = executeBeforeDestruction;
@@ -24,7 +21,7 @@ namespace AssemblyReloader.Destruction
 
             _executeBeforeDestruction.Execute(target);
 
-            UnityEngine.Object.Destroy(target);
+            Object.Destroy(target);
         }
     }
 }

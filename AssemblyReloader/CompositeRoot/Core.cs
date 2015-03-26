@@ -178,15 +178,17 @@ namespace AssemblyReloader.CompositeRoot
 
             reloadables.ForEach(r => r.Load());
 
+            var skinScheme = ConfigureSkin();
 
-            var windowFactory = new WindowFactory(resourceLocator, ConfigureSkin());
+            var windowFactory = new WindowFactory(resourceLocator, skinScheme);
             var uniqueIdProvider = new UniqueWindowIdProvider();
+            var expandablePanelFactory = windowFactory.CreateExpandablePanelFactory(skinScheme);
 
             var guiController =
                 new GuiController(reloadables.ToDictionary(r => r,
                     r =>
                     {
-                        var configWindow = windowFactory.CreatePluginOptionsWindow(r);
+                        var configWindow = windowFactory.CreatePluginOptionsWindow(r, expandablePanelFactory);
 
                         configWindow.Visible = false;
 
@@ -196,7 +198,7 @@ namespace AssemblyReloader.CompositeRoot
 
             windowFactory.CreateMainWindow(
                 new View(guiController),
-                new Rect(400f, 400f, 300f, 300f),
+                new Rect(400f, 400f, 250f, 128f),
                 uniqueIdProvider.Get());
 
     
@@ -347,13 +349,15 @@ namespace AssemblyReloader.CompositeRoot
             var partModuleController = new PartModuleController(
                 new PartModuleLoader(
                     descriptorFactory,
-                    new PartModuleFactory(new PartIsPrefabQuery()),
+                    new PartModuleFactory(new PartIsPrefabQuery(), new AwakenPartModuleCommand()),
                     partModuleRepository,
                     prefabCloneProvider),
                 new PartModuleUnloader(
-                    ConfigurePartModuleDestroyer(partModuleRepository),
+                    new UnityObjectDestroyer(new PluginReloadRequestedMethodCallCommand()),
                     descriptorFactory,
-                    prefabCloneProvider),
+                    prefabCloneProvider,
+                    ConfigurePartModuleSnapshotGenerator(partModuleRepository)
+                    ),
                 new TypesDerivedFromQuery<PartModule>(),
                 partModuleRepository,
                 new RefreshPartActionWindows(KspPartActionWindowListener.WindowController),
@@ -381,25 +385,7 @@ namespace AssemblyReloader.CompositeRoot
         }
 
 
-        private IPartModuleDestroyer ConfigurePartModuleDestroyer(IFlightConfigRepository configRepository)
-        {
-            
-            var idGenerator = new UniqueFlightIdGenerator();
-            var identifierQuery = new TypeIdentifierQuery();
-            var isPrefabQuery = new PartIsPrefabQuery();
-            var kspFactory = new KspFactory();
-
-            var destroyer = new PartModuleDestroyer(
-                new UnityObjectDestroyer(new PluginReloadRequestedMethodCallCommand()),
-                isPrefabQuery,
-                kspFactory,
-                idGenerator,
-                configRepository,
-                identifierQuery,
-                _log.CreateTag("PartModuleDestroyer"));
-
-            return destroyer;
-        }
+ 
 
 
         private GUISkin ConfigureSkin()
@@ -427,8 +413,9 @@ namespace AssemblyReloader.CompositeRoot
 
         private IConfiguration ConfigurePluginConfiguration( /* context -- filename? */)
         {
-            return new Configuration();
+            return new Configuration(new ConfigNode()); // todo: load actual ConfigNode settings here
         }
+
 
         private IAssemblyDefinitionWeaver ConfigureDefinitionWeaver(IFile location)
         {
@@ -474,6 +461,28 @@ namespace AssemblyReloader.CompositeRoot
                 writeInjectedHelper,
                 replaceAssemblyLocationCalls);
 
+        }
+
+
+        private IPartModuleSnapshotGenerator ConfigurePartModuleSnapshotGenerator(IFlightConfigRepository repository)
+        {
+            if (repository == null) throw new ArgumentNullException("repository");
+
+            return new PartModuleSnapshotGenerator(
+                repository,
+                new PartIsPrefabQuery(),
+                new TypeIdentifierQuery(),
+                _log.CreateTag("PMSnapshotter"));
+        }
+
+
+        private IExpandablePanelFactory ConfigureExpandablePanelFactory(GUISkin skinScheme)
+        {
+            var style = new GUIStyle(skinScheme.toggle);
+
+            // todo: make any adjustments to toggle button here
+
+            return new ExpandablePanelFactory(style, 14f, 0f, false);
         }
     }
 }

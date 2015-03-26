@@ -22,6 +22,9 @@ namespace TestProject
 #endif
 
             print("TestPartModule running from " + Assembly.GetExecutingAssembly().CodeBase);
+            print("TestPartModule is running from " +
+                  (ReferenceEquals(part, part.partInfo.partPrefab) ? "prefab" : "clone"));
+
         }
 
         public override void OnLoad(ConfigNode node)
@@ -63,7 +66,11 @@ namespace TestProject
 #endif
         public void TestMethod()
         {
-            
+#if MODIFIED
+            print("Modified test method executes");
+#else
+            print("Test method executes");
+#endif
         }
     }
 }

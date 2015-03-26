@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Linq;
 using AssemblyReloader.Destruction;
+using AssemblyReloader.Game;
 using AssemblyReloader.Providers;
+using AssemblyReloader.Queries;
+using AssemblyReloader.Repositories;
 using ReeperCommon.Extensions;
 using ReeperCommon.Logging.Implementations;
 
@@ -9,24 +12,28 @@ namespace AssemblyReloader.Loaders
 {
     public class PartModuleUnloader : IPartModuleUnloader
     {
-        private readonly IPartModuleDestroyer _partModuleDestroyer;
+        private readonly IUnityObjectDestroyer _partModuleDestroyer;
         private readonly IPartModuleDescriptorFactory _descriptorFactory;
         private readonly IPartPrefabCloneProvider _loadedInstancesOfPrefabProvider;
+        private readonly IPartModuleSnapshotGenerator _snapshotGenerator;
 
         public PartModuleUnloader(
-            IPartModuleDestroyer partModuleDestroyer,
+            IUnityObjectDestroyer partModuleDestroyer,
             IPartModuleDescriptorFactory descriptorFactory,
-            IPartPrefabCloneProvider loadedInstancesOfPrefabProvider
+            IPartPrefabCloneProvider loadedInstancesOfPrefabProvider,
+            IPartModuleSnapshotGenerator snapshotGenerator
             )
         {
             if (partModuleDestroyer == null) throw new ArgumentNullException("partModuleDestroyer");
             if (descriptorFactory == null) throw new ArgumentNullException("descriptorFactory");
             if (loadedInstancesOfPrefabProvider == null)
                 throw new ArgumentNullException("loadedInstancesOfPrefabProvider");
+            if (snapshotGenerator == null) throw new ArgumentNullException("snapshotGenerator");
 
             _partModuleDestroyer = partModuleDestroyer;
             _descriptorFactory = descriptorFactory;
             _loadedInstancesOfPrefabProvider = loadedInstancesOfPrefabProvider;
+            _snapshotGenerator = snapshotGenerator;
         }
 
 
@@ -48,8 +55,10 @@ namespace AssemblyReloader.Loaders
 
                 var pm = part.GameObject.GetComponent(type) as PartModule;
 
-                if (!pm.IsNull())
-                    _partModuleDestroyer.Destroy(pm);
+                if (pm.IsNull()) continue;
+
+                _snapshotGenerator.Snapshot(part, pm);
+                _partModuleDestroyer.Destroy(pm);
             }
         }
     }

@@ -58,17 +58,21 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CompositeRoot\Commands\AwakenPartModuleCommand.cs" />
+    <Compile Include="CompositeRoot\Commands\NullCommand.cs" />
     <Compile Include="CompositeRoot\Commands\PluginReloadRequestedMethodCallCommand.cs" />
     <Compile Include="CompositeRoot\Commands\ReloadPluginCommand.cs" />
     <Compile Include="CompositeRoot\Commands\ToggleWindowVisibilityCommand.cs" />
     <Compile Include="CompositeRoot\MonoBehaviours\InjectedMonoBehaviourTracker.cs" />
     <Compile Include="Controllers\GuiController.cs" />
     <Compile Include="Controllers\IGuiController.cs" />
-    <Compile Include="Destruction\IPartModuleDestroyer.cs" />
     <Compile Include="Destruction\IUnityObjectDestroyer.cs" />
-    <Compile Include="Destruction\PartModuleDestroyer.cs" />
     <Compile Include="Destruction\UnityObjectDestroyer.cs" />
     <Compile Include="GUI\ConfigurationViewLogic.cs" />
+    <Compile Include="GUI\ExpandablePanelFactory.cs" />
+    <Compile Include="GUI\IExpandablePanelFactory.cs" />
+    <Compile Include="Loaders\IPartModuleSnapshotGenerator.cs" />
+    <Compile Include="Loaders\PartModuleSnapshotGenerator.cs" />
     <Compile Include="Queries\CecilQueries\AllMethodsFromDefinitionQuery.cs" />
     <Compile Include="Queries\CecilQueries\AllTypesFromDefinitionQuery.cs" />
     <Compile Include="Queries\CecilQueries\CompositeTypeDefinitionQuery.cs" />

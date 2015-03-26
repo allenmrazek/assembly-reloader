@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using ReeperCommon.Logging.Implementations;
 using Object = UnityEngine.Object;
 
 namespace AssemblyReloader.CompositeRoot.Commands
@@ -13,6 +14,9 @@ namespace AssemblyReloader.CompositeRoot.Commands
 
         public void Execute(Object context)
         {
+            // todo: remove in release
+            new DebugLog().Debug("Executing plugin request command");
+
             // note: we use reflection rather than SendMessage here because SendMessage will fail
             // if the target component is inactive
             var method = context.GetType().GetMethod(PluginReloadRequestedMethodCallName,

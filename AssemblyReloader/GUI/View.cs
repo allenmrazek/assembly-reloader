@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using AssemblyReloader.CompositeRoot.Commands;
 using AssemblyReloader.Controllers;
 using AssemblyReloader.PluginTracking;
 using ReeperCommon.Gui.Logic;
@@ -46,11 +44,6 @@ namespace AssemblyReloader.GUI
         {
             foreach (var item in items)
                 DrawReloadableItem(item);
-
-#if DEBUG
-            for (int i = 0; i < 20; ++i)
-                DrawReloadableItem(items.First());
-#endif
         }
 
 

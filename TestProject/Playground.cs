@@ -1,10 +1,70 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using ReeperCommon.Extensions;
+using ReeperCommon.Logging.Implementations;
 using UnityEngine;
 
 namespace TestProject
 {
+    [KSPAddon(KSPAddon.Startup.Flight, true)]
+    public class Dumper : MonoBehaviour
+    {
+        IEnumerator Start()
+        {
+            yield return new WaitForSeconds(1.5f);
+
+            var v = FlightGlobals.ActiveVessel;
+            var part = v.FindPartModulesImplementing<TestPartModule>().FirstOrDefault();
+
+            part.gameObject.PrintComponents(new DebugLog("Dumper"));
+
+            DumpList("Part Actions", part.Actions, o => print(((BaseAction) o).guiName));
+            DumpList("Part Events", part.Events, o => print(((BaseEvent) o).guiName));
+            DumpList("Part Fields", part.Fields, o => print(((BaseField) o).guiName));
+
+            foreach (BaseAction a in part.Actions)
+                print("action: " + a.guiName);
+
+
+            foreach (BaseEvent a in part.Events)
+                print("event: " + a.guiName);
+        }
+
+        //private void ActionList(BaseActionList list)
+        //{
+            
+        //}
+
+        //private void DumpFieldList(BaseFieldList list)
+        //{
+            
+        //}
+
+        //private void DumpEventList(BaseEventList list)
+        //{
+            
+        //}
+
+        private void DumpList(string message, IEnumerable list, Action<System.Object> printer)
+        {
+            print(message);
+
+            foreach (var item in list)
+                printer(item);
+        }
+
+        private void OnPluginReloadRequested()
+        {
+            print("Dumper notified of termination");
+        }
+
+        private void OnDestroy()
+        {
+            print("Dumper is being destroyed");
+        }
+    }
 //[KSPAddon(KSPAddon.Startup.EditorAny, true)]
 //public class InitPartActionWindowTracker : MonoBehaviour
 //{
