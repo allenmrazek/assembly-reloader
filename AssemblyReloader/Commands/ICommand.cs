@@ -1,4 +1,4 @@
-﻿namespace AssemblyReloader.CompositeRoot.Commands
+﻿namespace AssemblyReloader.Commands
 {
     public interface ICommand
     {

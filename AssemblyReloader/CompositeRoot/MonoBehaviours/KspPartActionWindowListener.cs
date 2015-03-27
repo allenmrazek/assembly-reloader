@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using AssemblyReloader.CompositeRoot.Commands;
+using AssemblyReloader.Annotations;
 using AssemblyReloader.Game;
 using AssemblyReloader.Providers;
 using ReeperCommon.Extensions;
@@ -12,7 +12,8 @@ namespace AssemblyReloader.CompositeRoot.MonoBehaviours
     {
         public static IPartActionWindowController WindowController;
         public static IComponentsInGameObjectHierarchyProvider<UIPartActionWindow> PartActionWindowQuery;
- 
+
+        [UsedImplicitly]
         private void Start()
         {
             if (WindowController.IsNull())
@@ -23,6 +24,7 @@ namespace AssemblyReloader.CompositeRoot.MonoBehaviours
             WindowController.Add(PartActionWindowQuery.Get(gameObject).SingleOrDefault());
         }
 
+        [UsedImplicitly]
         private void OnDestroy()
         {
             WindowController.Remove(PartActionWindowQuery.Get(gameObject).SingleOrDefault());

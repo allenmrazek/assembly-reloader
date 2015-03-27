@@ -1,4 +1,4 @@
-﻿using System;
+﻿using AssemblyReloader.Annotations;
 using ReeperCommon.Extensions;
 using ReeperCommon.Logging.Implementations;
 using UnityEngine;
@@ -11,6 +11,7 @@ namespace AssemblyReloader.CompositeRoot.MonoBehaviours
     /// </summary>
     public class InjectedMonoBehaviourTracker : MonoBehaviour
     {
+        [UsedImplicitly]
         private void Start()
         {
             print("ART: Injected tracker running");

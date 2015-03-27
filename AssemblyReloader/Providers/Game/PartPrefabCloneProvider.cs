@@ -4,7 +4,7 @@ using System.Linq;
 using AssemblyReloader.Game;
 using AssemblyReloader.Queries;
 
-namespace AssemblyReloader.Providers
+namespace AssemblyReloader.Providers.Game
 {
     // This is kind of an ugly way to go about this but there are cases where it's necessary. Specifically,
     // the editor doesn't seem to keep a list of all the parts it spawns and I couldn't find any way to 

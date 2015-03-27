@@ -1,17 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Text;
 using AssemblyReloader.Queries.CecilQueries;
 using AssemblyReloader.Queries.CecilQueries.IntermediateLanguage;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
-using ReeperCommon.FileSystem;
-using ReeperCommon.Logging;
-using ReeperCommon.Logging.Implementations;
-using MethodAttributes = Mono.Cecil.MethodAttributes;
-using ParameterAttributes = Mono.Cecil.ParameterAttributes;
 
 namespace AssemblyReloader.Weaving.Operations
 {

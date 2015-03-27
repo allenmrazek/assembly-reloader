@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Reflection;
-using AssemblyReloader.CompositeRoot.Commands;
+using AssemblyReloader.Commands;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
 using ReeperCommon.Extensions;

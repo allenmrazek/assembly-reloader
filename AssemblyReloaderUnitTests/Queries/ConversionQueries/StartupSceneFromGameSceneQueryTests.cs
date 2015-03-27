@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using AssemblyReloader.Queries.ConversionQueries;
-using Xunit;
+﻿using Xunit;
 namespace AssemblyReloader.Queries.ConversionQueries.Tests
 {
     public class StartupSceneFromGameSceneQueryTests

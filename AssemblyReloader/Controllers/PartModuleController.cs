@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
-using AssemblyReloader.CompositeRoot.Commands;
-using AssemblyReloader.Loaders;
+using AssemblyReloader.Commands;
+using AssemblyReloader.Loaders.PartModuleLoader;
 using AssemblyReloader.Queries.AssemblyQueries;
 using AssemblyReloader.Repositories;
 using ReeperCommon.FileSystem;

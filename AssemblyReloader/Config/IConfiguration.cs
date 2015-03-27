@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-
-namespace AssemblyReloader.Config
+﻿namespace AssemblyReloader.Config
 {
     public interface IConfiguration
     {

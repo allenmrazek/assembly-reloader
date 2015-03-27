@@ -3,7 +3,7 @@ using System.Linq;
 using AssemblyReloader.Game;
 using ReeperCommon.Containers;
 
-namespace AssemblyReloader.Providers
+namespace AssemblyReloader.Providers.Game
 {
     public class AvailablePartConfigProvider : IAvailablePartConfigProvider
     {

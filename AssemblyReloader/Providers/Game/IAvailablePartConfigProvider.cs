@@ -1,7 +1,7 @@
 ﻿using AssemblyReloader.Game;
 using ReeperCommon.Containers;
 
-namespace AssemblyReloader.Providers
+namespace AssemblyReloader.Providers.Game
 {
     public interface IAvailablePartConfigProvider
     {

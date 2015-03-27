@@ -1,5 +1,5 @@
 ﻿using System;
-using AssemblyReloader.CompositeRoot.Commands;
+using AssemblyReloader.Commands;
 using AssemblyReloader.PluginTracking;
 
 namespace AssemblyReloader.Controllers

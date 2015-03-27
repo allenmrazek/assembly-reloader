@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using AssemblyReloader.Game;
 
-namespace AssemblyReloader.Providers
+namespace AssemblyReloader.Providers.Game
 {
     public interface IPartPrefabCloneProvider
     {

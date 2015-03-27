@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using AssemblyReloader.Queries;
-using Xunit;
+﻿using Xunit;
 namespace AssemblyReloader.Queries.Tests
 {
     public class TypeIdentifierQueryTests

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using AssemblyReloader.Queries.CecilQueries;
-using AssemblyReloaderTests.FixtureCustomizations;
+﻿using AssemblyReloaderTests.FixtureCustomizations;
 using Mono.Cecil;
 using Xunit;
 using Xunit.Extensions;

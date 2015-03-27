@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using UnityEngine;
 
 namespace AssemblyReloader.Game
@@ -52,6 +49,7 @@ namespace AssemblyReloader.Game
 
         public uint FlightID {
             get { return _target.flightID; }
+            set { _target.flightID = value; }
         }
     }
 }

@@ -4,7 +4,6 @@ using System.Reflection;
 using ReeperCommon.Extensions;
 using ReeperCommon.FileSystem;
 using ReeperCommon.FileSystem.Implementations;
-using ReeperCommon.Logging;
 
 namespace AssemblyReloader.Queries.FileSystemQueries
 {

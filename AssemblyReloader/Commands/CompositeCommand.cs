@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AssemblyReloader.CompositeRoot.Commands
+namespace AssemblyReloader.Commands
 {
     public class CompositeCommand : ICommand
     {

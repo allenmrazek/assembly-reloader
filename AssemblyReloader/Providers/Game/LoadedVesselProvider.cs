@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using AssemblyReloader.Game;
 
-namespace AssemblyReloader.Providers
+namespace AssemblyReloader.Providers.Game
 {
     class LoadedVesselProvider : ILoadedVesselProvider
     {

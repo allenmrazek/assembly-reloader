@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Linq;
 using AssemblyReloader.Destruction;
-using AssemblyReloader.Game;
-using AssemblyReloader.Providers;
-using AssemblyReloader.Queries;
-using AssemblyReloader.Repositories;
+using AssemblyReloader.Providers.Game;
 using ReeperCommon.Extensions;
-using ReeperCommon.Logging.Implementations;
 
-namespace AssemblyReloader.Loaders
+namespace AssemblyReloader.Loaders.PartModuleLoader
 {
     public class PartModuleUnloader : IPartModuleUnloader
     {
@@ -44,20 +40,19 @@ namespace AssemblyReloader.Loaders
 
             var descriptions = _descriptorFactory.Create(type).ToList();
 
-            var log = new DebugLog();
-
             foreach (var part in descriptions
                 .Select(d => d.Prefab)
                 .Union(descriptions
                     .SelectMany(d => _loadedInstancesOfPrefabProvider.Get(d.Prefab))))
             {
-                log.Normal("Looking for " + type.FullName + " on " + part.PartName);
-
                 var pm = part.GameObject.GetComponent(type) as PartModule;
 
                 if (pm.IsNull()) continue;
 
                 _snapshotGenerator.Snapshot(part, pm);
+
+                part.RemoveModule(pm);
+
                 _partModuleDestroyer.Destroy(pm);
             }
         }

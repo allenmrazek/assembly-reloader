@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using AssemblyReloader.Weaving;
-using Xunit;
+﻿using Xunit;
 namespace AssemblyReloader.Weaving.Tests
 {
     public class AssemblyDefinitionWeaverTests

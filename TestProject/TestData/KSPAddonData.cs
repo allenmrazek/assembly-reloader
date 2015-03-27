@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Contracts.Agents.Mentalities;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace TestProject.TestData
 {

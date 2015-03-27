@@ -1,7 +1,7 @@
 ﻿using System;
-using AssemblyReloader.Game;
+using AssemblyReloader.Commands;
 
-namespace AssemblyReloader.CompositeRoot.Commands
+namespace AssemblyReloader.Game.Commands
 {
     public class RefreshPartActionWindows : ICommand
     {

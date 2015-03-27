@@ -1,7 +1,7 @@
 ﻿using System;
 using AssemblyReloader.Game;
 
-namespace AssemblyReloader.Loaders
+namespace AssemblyReloader.Loaders.PartModuleLoader
 {
     public interface IPartModuleFactory
     {

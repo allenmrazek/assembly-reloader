@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Reflection;
-using AssemblyReloader.CompositeRoot.Commands;
+using AssemblyReloader.Commands;
 using AssemblyReloader.Game;
 using AssemblyReloader.Queries;
-using UnityEngine;
 
-namespace AssemblyReloader.Loaders
+namespace AssemblyReloader.Loaders.PartModuleLoader
 {
     public class PartModuleFactory : IPartModuleFactory
     {

@@ -1,5 +1,5 @@
 ﻿using System;
-using AssemblyReloader.CompositeRoot.Commands;
+using AssemblyReloader.Commands;
 using Mono.Cecil;
 using ReeperCommon.Logging;
 using TypeAttributes = Mono.Cecil.TypeAttributes;

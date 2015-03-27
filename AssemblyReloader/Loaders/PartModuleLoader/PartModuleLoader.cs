@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Linq;
-using AssemblyReloader.Game;
-using AssemblyReloader.Providers;
-using AssemblyReloader.Providers.SceneProviders;
+using AssemblyReloader.Providers.Game;
 using AssemblyReloader.Repositories;
 using ReeperCommon.Logging.Implementations;
 
-namespace AssemblyReloader.Loaders
+namespace AssemblyReloader.Loaders.PartModuleLoader
 {
     public class PartModuleLoader : IPartModuleLoader
     {

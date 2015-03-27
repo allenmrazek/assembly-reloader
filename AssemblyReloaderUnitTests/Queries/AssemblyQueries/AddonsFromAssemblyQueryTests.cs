@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Reflection;
-using System.Text;
-using AssemblyReloader.Queries.AssemblyQueries;
 using AssemblyReloader.Queries.ConversionQueries;
 using AssemblyReloaderTests.FixtureCustomizations;
 using AssemblyReloaderTests.TestData.Addons;
-using Mono.Cecil;
 using Xunit;
 using Xunit.Extensions;
 

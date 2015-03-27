@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
+﻿using System.Reflection;
+using AssemblyReloader.Commands;
 
-namespace AssemblyReloader.CompositeRoot.Commands
+namespace AssemblyReloader.Game.Commands
 {
     public class AwakenPartModuleCommand : ICommand<PartModule>
     {

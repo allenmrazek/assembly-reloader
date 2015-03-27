@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using AssemblyReloader.Generators;
-using Xunit;
+﻿using Xunit;
 namespace AssemblyReloader.Generators.Tests
 {
     public class UniqueAssemblyNameGeneratorTests

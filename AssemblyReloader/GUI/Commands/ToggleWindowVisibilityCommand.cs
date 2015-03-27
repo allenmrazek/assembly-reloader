@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using AssemblyReloader.Commands;
 using ReeperCommon.Gui.Window;
-using ReeperCommon.Logging.Implementations;
 
-namespace AssemblyReloader.CompositeRoot.Commands
+namespace AssemblyReloader.GUI.Commands
 {
     public class ToggleWindowVisibilityCommand : ICommand
     {
@@ -21,8 +18,6 @@ namespace AssemblyReloader.CompositeRoot.Commands
         public void Execute()
         {
             _window.Visible = !_window.Visible;
-
-            new DebugLog().Normal("ToggleWindowVisibilityCommand.Execute: " + _window.Visible);
         }
     }
 }

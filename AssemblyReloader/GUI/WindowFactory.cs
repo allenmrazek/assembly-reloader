@@ -1,16 +1,10 @@
 ﻿using System;
 using System.Linq;
-using AssemblyReloader.Config;
-using AssemblyReloader.Logging;
 using AssemblyReloader.PluginTracking;
-using ReeperCommon.Extensions;
-using ReeperCommon.Gui.Logic;
 using ReeperCommon.Gui.Window;
 using ReeperCommon.Gui.Window.Buttons;
 using ReeperCommon.Gui.Window.Decorators;
-using ReeperCommon.Gui.Window.Providers;
 using ReeperCommon.Gui.Window.View;
-using ReeperCommon.Logging.Implementations;
 using ReeperCommon.Repositories.Resources;
 using UnityEngine;
 

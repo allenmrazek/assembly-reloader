@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace TestProject.TestData
+﻿namespace TestProject.TestData
 {
     class PartModuleUnitTestVersion : PartModule
     {

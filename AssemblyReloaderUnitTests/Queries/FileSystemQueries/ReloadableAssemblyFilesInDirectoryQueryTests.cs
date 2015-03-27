@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using AssemblyReloader.Queries.FileSystemQueries;
-using Xunit;
+﻿using Xunit;
 namespace AssemblyReloader.Queries.FileSystemQueries.Tests
 {
     public class ReloadableAssemblyFilesInDirectoryQueryTests

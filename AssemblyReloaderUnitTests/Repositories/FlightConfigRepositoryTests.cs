@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using AssemblyReloader.Repositories;
-using Xunit;
+﻿using Xunit;
 namespace AssemblyReloader.Repositories.Tests
 {
     public class FlightConfigRepositoryTests

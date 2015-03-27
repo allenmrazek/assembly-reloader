@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace AssemblyReloader.Game
 {
@@ -15,6 +11,6 @@ namespace AssemblyReloader.Game
         string Name { get; }
         string PartName { get; }
         IAvailablePart PartInfo { get; }
-        uint FlightID { get; }
+        uint FlightID { get; set; }
     }
 }

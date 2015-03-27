@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Object = UnityEngine.Object;
 
-namespace AssemblyReloader.Providers
+namespace AssemblyReloader.Providers.Game
 {
     public class LoadedComponentProvider : ILoadedComponentProvider
     {

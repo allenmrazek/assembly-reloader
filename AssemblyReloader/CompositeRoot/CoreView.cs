@@ -1,14 +1,15 @@
 ﻿using System;
-using ReeperCommon.Extensions;
+using AssemblyReloader.Annotations;
 using UnityEngine;
 
-namespace AssemblyReloader.CompositeRoot.MonoBehaviours
+namespace AssemblyReloader.CompositeRoot
 {
     [KSPAddon(KSPAddon.Startup.Instantly, true)]
     class CoreView : MonoBehaviour
     {
-        private Core _core;
+        [UsedImplicitly] private Core _core;
 
+        [UsedImplicitly]
         private void Start()
         {
             try

@@ -3,20 +3,23 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using AssemblyReloader.CompositeRoot.Commands;
+using AssemblyReloader.Commands;
 using AssemblyReloader.CompositeRoot.MonoBehaviours;
 using AssemblyReloader.Config;
 using AssemblyReloader.Controllers;
 using AssemblyReloader.Destruction;
 using AssemblyReloader.Disk;
 using AssemblyReloader.Game;
+using AssemblyReloader.Game.Commands;
 using AssemblyReloader.Generators;
 using AssemblyReloader.GUI;
-using AssemblyReloader.Loaders;
+using AssemblyReloader.GUI.Commands;
+using AssemblyReloader.Loaders.PartModuleLoader;
 using AssemblyReloader.Logging;
 using AssemblyReloader.Messages;
 using AssemblyReloader.PluginTracking;
 using AssemblyReloader.Providers;
+using AssemblyReloader.Providers.Game;
 using AssemblyReloader.Providers.SceneProviders;
 using AssemblyReloader.Queries;
 using AssemblyReloader.Queries.AssemblyQueries;
@@ -38,15 +41,12 @@ using ReeperCommon.FileSystem.Factories;
 using ReeperCommon.FileSystem.Implementations;
 using ReeperCommon.FileSystem.Implementations.Providers;
 using ReeperCommon.Gui.Window.Providers;
-using ReeperCommon.Gui.Window.View;
 using ReeperCommon.Logging;
-using ReeperCommon.Logging.Factories;
 using ReeperCommon.Logging.Implementations;
 using ReeperCommon.Repositories.Resources;
 using ReeperCommon.Repositories.Resources.Implementations;
 using ReeperCommon.Repositories.Resources.Implementations.Decorators;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 namespace AssemblyReloader.CompositeRoot
 {
@@ -268,7 +268,8 @@ namespace AssemblyReloader.CompositeRoot
                 new TypesDerivedFromQuery<PartModule>(),
                 new TypesDerivedFromQuery<InternalModule>(),
                 new TypesDerivedFromQuery<ScenarioModule>(),
-                new TypesDerivedFromQuery<Contract>());
+                new TypesDerivedFromQuery<Contract>(),
+                new DisposeLoadedAssemblyCommandFactory());
 
 
             var reloadableAssemblyFileQuery = new ReloadableAssemblyFilesInDirectoryQuery(fsFactory.GetGameDataDirectory());
@@ -472,6 +473,7 @@ namespace AssemblyReloader.CompositeRoot
                 repository,
                 new PartIsPrefabQuery(),
                 new TypeIdentifierQuery(),
+                new UniqueFlightIdGenerator(),
                 _log.CreateTag("PMSnapshotter"));
         }
 

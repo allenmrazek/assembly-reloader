@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AssemblyReloader.Loaders
+namespace AssemblyReloader.Loaders.PartModuleLoader
 {
     public interface IPartModuleLoader
     {

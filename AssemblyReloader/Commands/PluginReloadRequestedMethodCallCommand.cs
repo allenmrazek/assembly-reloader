@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
 using ReeperCommon.Logging.Implementations;
 using Object = UnityEngine.Object;
 
-namespace AssemblyReloader.CompositeRoot.Commands
+namespace AssemblyReloader.Commands
 {
-    public class PluginReloadRequestedMethodCallCommand : ICommand<UnityEngine.Object>
+    public class PluginReloadRequestedMethodCallCommand : ICommand<Object>
     {
         private const string PluginReloadRequestedMethodCallName = "OnPluginReloadRequested";
 

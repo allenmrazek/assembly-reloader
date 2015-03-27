@@ -1,6 +1,5 @@
 ﻿using System.Reflection;
 using ReeperCommon.Containers;
-using ReeperCommon.FileSystem;
 
 namespace AssemblyReloader.Game
 {

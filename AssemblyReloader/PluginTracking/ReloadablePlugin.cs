@@ -3,8 +3,6 @@ using System.Linq;
 using System.Reflection;
 using AssemblyReloader.Config;
 using AssemblyReloader.Game;
-using AssemblyReloader.Loaders;
-using AssemblyReloader.Providers;
 using ReeperCommon.Containers;
 using ReeperCommon.Extensions;
 using ReeperCommon.FileSystem;

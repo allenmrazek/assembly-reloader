@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using AssemblyReloader.DataObjects;
 using AssemblyReloader.Game;
-using AssemblyReloader.Providers;
+using AssemblyReloader.Providers.Game;
 using AssemblyReloader.Queries;
 using AssemblyReloader.Queries.ConfigNodeQueries;
 
-namespace AssemblyReloader.Loaders
+namespace AssemblyReloader.Loaders.PartModuleLoader
 {
     /// <summary>
     /// Each PartModuleDescriptor wraps relevant data about a particular PartModule instance that

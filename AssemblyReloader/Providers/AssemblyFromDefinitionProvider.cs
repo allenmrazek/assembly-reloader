@@ -2,7 +2,6 @@
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using AssemblyReloader.Disk;
 using Mono.Cecil;
 using ReeperCommon.Containers;
 using ReeperCommon.Logging.Implementations;
