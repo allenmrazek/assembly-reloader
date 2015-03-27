@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using AssemblyReloader.PluginTracking;
+using AssemblyReloader.Controllers;
 using ReeperCommon.Gui.Window;
 using ReeperCommon.Gui.Window.Buttons;
 using ReeperCommon.Gui.Window.Decorators;

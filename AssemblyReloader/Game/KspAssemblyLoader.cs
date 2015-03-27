@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
-using AssemblyReloader.Disk;
+using AssemblyReloader.Loaders;
 using AssemblyReloader.Providers;
 using AssemblyReloader.Weaving;
 using ReeperCommon.Containers;

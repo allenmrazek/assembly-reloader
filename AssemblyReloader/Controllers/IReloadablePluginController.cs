@@ -1,6 +1,4 @@
-﻿using AssemblyReloader.PluginTracking;
-
-namespace AssemblyReloader.Controllers
+﻿namespace AssemblyReloader.Controllers
 {
     public interface IReloadablePluginController
     {

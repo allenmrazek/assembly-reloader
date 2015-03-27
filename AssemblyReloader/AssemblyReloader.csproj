@@ -58,20 +58,36 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Game\Commands\AwakenPartModuleCommand.cs" />
+    <Compile Include="Commands\AwakenPartModuleCommand.cs" />
+    <Compile Include="Commands\ProxyAssemblyMethodWriter.cs" />
+    <Compile Include="Commands\RefreshPartActionWindows.cs" />
     <Compile Include="Commands\NullCommand.cs" />
     <Compile Include="Commands\PluginReloadRequestedMethodCallCommand.cs" />
-    <Compile Include="Game\Commands\DisposeLoadedAssemblyCommandFactory.cs" />
-    <Compile Include="Game\Commands\IDisposeLoadedAssemblyCommandFactory.cs" />
-    <Compile Include="GUI\Commands\ToggleWindowVisibilityCommand.cs" />
-    <Compile Include="CompositeRoot\MonoBehaviours\InjectedMonoBehaviourTracker.cs" />
+    <Compile Include="Commands\ToggleWindowVisibilityCommand.cs" />
+    <Compile Include="CompositeRoot\CachedLog.cs" />
+    <Compile Include="CompositeRoot\ICachedLog.cs" />
+    <Compile Include="CompositeRoot\IMessageChannel.cs" />
+    <Compile Include="CompositeRoot\IMessageConsumer.cs" />
+    <Compile Include="CompositeRoot\IMessageFactory.cs" />
+    <Compile Include="CompositeRoot\InjectedMonoBehaviourTracker.cs" />
+    <Compile Include="CompositeRoot\KspPartActionWindowListener.cs" />
     <Compile Include="Controllers\GuiController.cs" />
     <Compile Include="Controllers\IGuiController.cs" />
+    <Compile Include="Controllers\IReloadablePlugin.cs" />
+    <Compile Include="Controllers\ReloadablePlugin.cs" />
+    <Compile Include="DataObjects\Configuration.cs" />
+    <Compile Include="DataObjects\IConfiguration.cs" />
     <Compile Include="Destruction\IUnityObjectDestroyer.cs" />
     <Compile Include="Destruction\UnityObjectDestroyer.cs" />
+    <Compile Include="Game\DisposeLoadedAssembly.cs" />
+    <Compile Include="Game\DisposeLoadedAssemblyCommandFactory.cs" />
+    <Compile Include="Game\IDisposeLoadedAssemblyCommandFactory.cs" />
     <Compile Include="GUI\ConfigurationViewLogic.cs" />
     <Compile Include="GUI\ExpandablePanelFactory.cs" />
     <Compile Include="GUI\IExpandablePanelFactory.cs" />
+    <Compile Include="Loaders\AssemblyDefinitionReader.cs" />
+    <Compile Include="Loaders\AssemblyDefinitionReaderWithDebugOutput.cs" />
+    <Compile Include="Loaders\IAssemblyDefinitionReader.cs" />
     <Compile Include="Loaders\PartModuleLoader\IPartModuleDescriptorFactory.cs" />
     <Compile Include="Loaders\PartModuleLoader\IPartModuleFactory.cs" />
     <Compile Include="Loaders\PartModuleLoader\IPartModuleLoader.cs" />
@@ -88,15 +104,8 @@
     <Compile Include="Queries\CecilQueries\CompositeTypeDefinitionQuery.cs" />
     <Compile Include="Queries\CecilQueries\ExcludingMethodDefinitions.cs" />
     <Compile Include="Queries\CecilQueries\ExcludingTypeDefinitions.cs" />
+    <Compile Include="Queries\CecilQueries\IInstructionSetQuery.cs" />
     <Compile Include="Queries\CecilQueries\IMethodDefinitionQuery.cs" />
-    <Compile Include="Queries\CecilQueries\Injected\InjectedHelperTypeMethodQuery.cs" />
-    <Compile Include="Queries\CecilQueries\Injected\InjectedHelperTypeQuery.cs" />
-    <Compile Include="Queries\CecilQueries\IntermediateLanguage\IInstructionSetQuery.cs" />
-    <Compile Include="Queries\CecilQueries\IntermediateLanguage\MethodCallInMethodBodyQuery.cs" />
-    <Compile Include="Game\Commands\RefreshPartActionWindows.cs" />
-    <Compile Include="CompositeRoot\MonoBehaviours\KspPartActionWindowListener.cs" />
-    <Compile Include="Config\Configuration.cs" />
-    <Compile Include="Config\IConfiguration.cs" />
     <Compile Include="Controllers\AddonController.cs" />
     <Compile Include="Controllers\IReloadableObjectController.cs" />
     <Compile Include="Controllers\PartModuleController.cs" />
@@ -104,7 +113,6 @@
     <Compile Include="DataObjects\TypeIdentifier.cs" />
     <Compile Include="Destruction\AddonDestroyer.cs" />
     <Compile Include="Destruction\IAddonDestroyer.cs" />
-    <Compile Include="Game\Commands\DisposeLoadedAssembly.cs" />
     <Compile Include="Game\GameEventPublisher.cs" />
     <Compile Include="Game\IAddonLoader.cs" />
     <Compile Include="Game\IAssemblyLoader.cs" />
@@ -118,7 +126,6 @@
     <Compile Include="Game\KspPartActionWindowController.cs" />
     <Compile Include="Generators\IUniqueFlightIdGenerator.cs" />
     <Compile Include="Generators\UniqueFlightIdGenerator.cs" />
-    <Compile Include="Disk\AssemblyDefinitionReaderWithDebugOutput.cs" />
     <Compile Include="Providers\ComponentsInGameObjectHierarchyProvider.cs" />
     <Compile Include="Providers\IComponentsInGameObjectHierarchyProvider.cs" />
     <Compile Include="Providers\Game\ILoadedComponentProvider.cs" />
@@ -134,15 +141,11 @@
     <Compile Include="Game\KspPart.cs" />
     <Compile Include="Game\KspPartLoader.cs" />
     <Compile Include="Game\KspVessel.cs" />
-    <Compile Include="Disk\AssemblyDefinitionReader.cs" />
-    <Compile Include="Disk\IAssemblyDefinitionReader.cs" />
     <Compile Include="Controllers\IReloadablePluginController.cs" />
     <Compile Include="CompositeRoot\CoreView.cs" />
     <Compile Include="GUI\WindowFactory.cs" />
-    <Compile Include="Logging\ICachedLog.cs" />
     <Compile Include="Commands\ICommand.cs" />
     <Compile Include="Commands\CompositeCommand.cs" />
-    <Compile Include="Messages\IMessageFactory.cs" />
     <Compile Include="Generators\IUniqueAssemblyNameGenerator.cs" />
     <Compile Include="Providers\Game\IPartPrefabCloneProvider.cs" />
     <Compile Include="Providers\Game\LoadedComponentProvider.cs" />
@@ -160,40 +163,37 @@
     <Compile Include="Queries\AssemblyQueries\ITypesFromAssemblyQuery.cs" />
     <Compile Include="Queries\AssemblyQueries\TypesDerivedFromQuery.cs" />
     <Compile Include="Queries\CecilQueries\ITypeDefinitionQuery.cs" />
-    <Compile Include="Queries\ConfigNodeQueries\IModuleConfigsFromPartConfigQuery.cs" />
-    <Compile Include="Queries\ConfigNodeQueries\ModuleConfigsFromPartConfigQuery.cs" />
+    <Compile Include="Queries\CecilQueries\MethodCallInMethodBodyQuery.cs" />
     <Compile Include="Queries\ConversionQueries\IAddonAttributesFromTypeQuery.cs" />
     <Compile Include="Queries\FileSystemQueries\IAssemblyDirectoryQuery.cs" />
     <Compile Include="Providers\SceneProviders\ICurrentGameSceneProvider.cs" />
     <Compile Include="Providers\SceneProviders\ICurrentStartupSceneProvider.cs" />
     <Compile Include="Queries\FileSystemQueries\AssemblyDirectoryQuery.cs" />
     <Compile Include="Providers\SceneProviders\CurrentGameSceneProvider.cs" />
+    <Compile Include="Queries\IModuleConfigsFromPartConfigQuery.cs" />
+    <Compile Include="Queries\InjectedHelperTypeMethodQuery.cs" />
+    <Compile Include="Queries\InjectedHelperTypeQuery.cs" />
     <Compile Include="Queries\IPartIsPrefabQuery.cs" />
     <Compile Include="Queries\IPartModulesInPartQuery.cs" />
     <Compile Include="Queries\ITypeIdentifierQuery.cs" />
-    <Compile Include="PluginTracking\IReloadablePlugin.cs" />
     <Compile Include="Controllers\ReloadablePluginController.cs" />
     <Compile Include="Queries\ConversionQueries\AddonAttributesFromTypeQuery.cs" />
     <Compile Include="Queries\FileSystemQueries\IReloadableAssemblyFileLocationQuery.cs" />
     <Compile Include="Queries\ConversionQueries\IStartupSceneFromGameSceneQuery.cs" />
-    <Compile Include="Messages\IMessageChannel.cs" />
-    <Compile Include="Messages\IMessageConsumer.cs" />
-    <Compile Include="Logging\CachedLog.cs" />
     <Compile Include="CompositeRoot\Core.cs" />
-    <Compile Include="PluginTracking\ReloadablePlugin.cs" />
     <Compile Include="GUI\View.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Queries\AssemblyQueries\AddonsFromAssemblyQuery.cs" />
     <Compile Include="Providers\SceneProviders\CurrentStartupSceneProvider.cs" />
     <Compile Include="Queries\ConversionQueries\StartupSceneFromGameSceneQuery.cs" />
     <Compile Include="Queries\FileSystemQueries\ReloadableAssemblyFilesInDirectoryQuery.cs" />
+    <Compile Include="Queries\ModuleConfigsFromPartConfigQuery.cs" />
     <Compile Include="Queries\PartIsPrefabQuery.cs" />
     <Compile Include="Queries\PartModulesInPartQuery.cs" />
     <Compile Include="Queries\TypeIdentifierQuery.cs" />
     <Compile Include="Repositories\IFlightConfigRepository.cs" />
     <Compile Include="Repositories\FlightConfigRepository.cs" />
     <Compile Include="Weaving\AssemblyDefinitionWeaver.cs" />
-    <Compile Include="Weaving\Commands\ProxyAssemblyMethodWriter.cs" />
     <Compile Include="Weaving\IAssemblyDefinitionWeaver.cs" />
     <Compile Include="Weaving\IWeaveOperation.cs" />
     <Compile Include="Weaving\Operations\InsertIntermediateLanguageCommandsIntoMethod.cs" />
@@ -205,9 +205,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Attributes\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <EmbeddedResource Include="Resources\btnBackground.png" />
     <EmbeddedResource Include="Resources\btnClose.png" />

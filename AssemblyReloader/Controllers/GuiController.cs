@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using AssemblyReloader.PluginTracking;
 
 namespace AssemblyReloader.Controllers
 {

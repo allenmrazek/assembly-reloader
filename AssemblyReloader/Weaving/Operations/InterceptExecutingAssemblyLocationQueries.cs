@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using AssemblyReloader.Queries.CecilQueries;
-using AssemblyReloader.Queries.CecilQueries.IntermediateLanguage;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
 

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Reflection;
 using AssemblyReloader.Annotations;
 using AssemblyReloader.Commands;
-using AssemblyReloader.Game.Commands;
 using AssemblyReloader.Queries.AssemblyQueries;
 using Contracts;
 using ReeperCommon.FileSystem;

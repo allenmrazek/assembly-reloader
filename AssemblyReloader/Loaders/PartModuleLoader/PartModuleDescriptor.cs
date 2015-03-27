@@ -5,7 +5,6 @@ using AssemblyReloader.DataObjects;
 using AssemblyReloader.Game;
 using AssemblyReloader.Providers.Game;
 using AssemblyReloader.Queries;
-using AssemblyReloader.Queries.ConfigNodeQueries;
 
 namespace AssemblyReloader.Loaders.PartModuleLoader
 {
