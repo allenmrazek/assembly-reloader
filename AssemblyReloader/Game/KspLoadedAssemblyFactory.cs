@@ -45,11 +45,11 @@ namespace AssemblyReloader.Game
         {
             var la = new AssemblyLoader.LoadedAssembly(assembly, location.FullPath, location.Url, null);
 
-            AddTypes(la, typeof (PartModule), _partModuleQuery.Get(assembly));
-            AddTypes(la, typeof (Part), _partQuery.Get(assembly));
-            AddTypes(la, typeof (InternalModule), _internalModuleQuery.Get(assembly));
-            AddTypes(la, typeof (ScenarioModule), _scenarioModuleQuery.Get(assembly));
-            AddTypes(la, typeof (Contract), _contractQuery.Get(assembly));
+            InstallTypes(la, typeof (PartModule), _partModuleQuery.Get(assembly));
+            InstallTypes(la, typeof (Part), _partQuery.Get(assembly));
+            InstallTypes(la, typeof (InternalModule), _internalModuleQuery.Get(assembly));
+            InstallTypes(la, typeof (ScenarioModule), _scenarioModuleQuery.Get(assembly));
+            InstallTypes(la, typeof (Contract), _contractQuery.Get(assembly));
             // todo: kerbal experience traits?
 
             AssemblyLoader.loadedAssemblies.Add(la);
@@ -58,7 +58,7 @@ namespace AssemblyReloader.Game
         }
 
 
-        private void AddTypes(AssemblyLoader.LoadedAssembly loaded, Type key, IEnumerable<Type> types)
+        private static void InstallTypes(AssemblyLoader.LoadedAssembly loaded, Type key, IEnumerable<Type> types)
         {
             foreach (var ty in types)
                 loaded.types.Add(key, ty);
