@@ -13,6 +13,13 @@ namespace AssemblyReloader.CompositeRoot
         public static IPartActionWindowController WindowController;
         public static IComponentsInGameObjectHierarchyProvider<UIPartActionWindow> PartActionWindowQuery;
 
+        static KspPartActionWindowListener()
+        {
+            WindowController = null;
+            PartActionWindowQuery = null;
+        }
+
+
         [UsedImplicitly]
         private void Start()
         {
@@ -23,6 +30,7 @@ namespace AssemblyReloader.CompositeRoot
 
             WindowController.Add(PartActionWindowQuery.Get(gameObject).SingleOrDefault());
         }
+
 
         [UsedImplicitly]
         private void OnDestroy()

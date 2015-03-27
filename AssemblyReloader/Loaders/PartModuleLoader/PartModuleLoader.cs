@@ -52,7 +52,7 @@ namespace AssemblyReloader.Loaders.PartModuleLoader
             log.Warning("LoadPartModule in PartModuleLoader");
             var items = _loadedPrefabProvider.Get(description.Prefab).ToList();
 
-            log.Warning("Found " + items.Count + " prefab instances");
+            log.Warning("Found " + items.Count.ToString() + " prefab instances");
 
             foreach (var loadedInstance in _loadedPrefabProvider.Get(description.Prefab).ToList())
             {

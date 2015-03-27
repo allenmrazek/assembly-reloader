@@ -11,9 +11,6 @@ namespace AssemblyReloader.Commands
 
         public void Execute(Object context)
         {
-            // todo: remove in release
-            new DebugLog().Debug("Executing plugin request command");
-
             // note: we use reflection rather than SendMessage here because SendMessage will fail
             // if the target component is inactive
             var method = context.GetType().GetMethod(PluginReloadRequestedMethodCallName,
@@ -21,7 +18,8 @@ namespace AssemblyReloader.Commands
                   null, new Type[] { }, null);
 
             if (method != null) // not having such a method is valid
-                method.Invoke(context, new object[] { });
+// ReSharper disable once CoVariantArrayConversion
+                method.Invoke(context, Type.EmptyTypes);
         }
     }
 }
