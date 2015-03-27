@@ -75,6 +75,7 @@
     <Compile Include="Controllers\IGuiController.cs" />
     <Compile Include="Controllers\IReloadablePlugin.cs" />
     <Compile Include="Controllers\ReloadablePlugin.cs" />
+    <Compile Include="Controllers\ScenarioModuleController.cs" />
     <Compile Include="DataObjects\Configuration.cs" />
     <Compile Include="DataObjects\IConfiguration.cs" />
     <Compile Include="Destruction\IUnityObjectDestroyer.cs" />
@@ -88,6 +89,8 @@
     <Compile Include="Loaders\AssemblyDefinitionReader.cs" />
     <Compile Include="Loaders\AssemblyDefinitionReaderWithDebugOutput.cs" />
     <Compile Include="Loaders\IAssemblyDefinitionReader.cs" />
+    <Compile Include="Loaders\IScenarioModuleLoader.cs" />
+    <Compile Include="Loaders\IScenarioModuleUnloader.cs" />
     <Compile Include="Loaders\PartModuleLoader\IPartModuleDescriptorFactory.cs" />
     <Compile Include="Loaders\PartModuleLoader\IPartModuleFactory.cs" />
     <Compile Include="Loaders\PartModuleLoader\IPartModuleLoader.cs" />
@@ -98,7 +101,11 @@
     <Compile Include="Loaders\PartModuleLoader\PartModuleLoader.cs" />
     <Compile Include="Loaders\PartModuleLoader\PartModuleSnapshotGenerator.cs" />
     <Compile Include="Loaders\PartModuleLoader\PartModuleUnloader.cs" />
+    <Compile Include="Loaders\ScenarioModuleLoader.cs" />
+    <Compile Include="Loaders\ScenarioModuleUnloader.cs" />
     <Compile Include="Properties\Annotations.cs" />
+    <Compile Include="Providers\Game\IProtoScenarioModuleProvider.cs" />
+    <Compile Include="Providers\Game\ProtoScenarioModuleProvider.cs" />
     <Compile Include="Queries\CecilQueries\AllMethodsFromDefinitionQuery.cs" />
     <Compile Include="Queries\CecilQueries\AllTypesFromDefinitionQuery.cs" />
     <Compile Include="Queries\CecilQueries\CompositeTypeDefinitionQuery.cs" />

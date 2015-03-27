@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace TestProject
 {
-    [KSPAddon(KSPAddon.Startup.Flight, true)]
+    //[KSPAddon(KSPAddon.Startup.Flight, true)]
     public class Dumper : MonoBehaviour
     {
         IEnumerator Start()

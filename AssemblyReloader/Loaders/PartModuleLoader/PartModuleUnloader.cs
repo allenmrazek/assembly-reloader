@@ -3,6 +3,7 @@ using System.Linq;
 using AssemblyReloader.Destruction;
 using AssemblyReloader.Providers.Game;
 using ReeperCommon.Extensions;
+using ReeperCommon.Logging.Implementations;
 
 namespace AssemblyReloader.Loaders.PartModuleLoader
 {
@@ -49,9 +50,11 @@ namespace AssemblyReloader.Loaders.PartModuleLoader
 
                 if (pm.IsNull()) continue;
 
+                new DebugLog("PartModuleUnloader").Normal("Unloading " + type.FullName + " from " + part.FlightID);
+
                 _snapshotGenerator.Snapshot(part, pm);
 
-                part.RemoveModule(pm);
+                part.Modules.Remove(pm); // don't use Part.RemoveModule -- that will destroy it 
 
                 _partModuleDestroyer.Destroy(pm);
             }

@@ -317,8 +317,6 @@ namespace AssemblyReloader.CompositeRoot
 
             var reloadable = new ReloadablePlugin(kspLoader, location, ConfigurePluginConfiguration());
 
-            
-            
             var kspFactory = new KspFactory();
 
             var descriptorFactory = new PartModuleDescriptorFactory(
@@ -336,6 +334,25 @@ namespace AssemblyReloader.CompositeRoot
                 kspFactory);
 
             var partModuleRepository = new FlightConfigRepository();
+
+
+            var scenarioModuleController =
+                new ScenarioModuleController(
+                    new ScenarioModuleLoader(
+                        new ProtoScenarioModuleProvider(
+                            new TypeIdentifierQuery())),
+                    new ScenarioModuleUnloader(
+                        new ProtoScenarioModuleProvider(
+                            new TypeIdentifierQuery()),
+                            new UnityObjectDestroyer(new PluginReloadRequestedMethodCallCommand()),
+                            true,
+                            _log.CreateTag("ScenarioModuleUnloader")),
+                    new TypesDerivedFromQuery<ScenarioModule>(),
+                    new CurrentGameSceneProvider());
+
+            reloadable.OnLoaded += scenarioModuleController.Load;
+            reloadable.OnUnloaded += scenarioModuleController.Unload;
+
 
             var partModuleController = new PartModuleController(
                 new PartModuleLoader(
