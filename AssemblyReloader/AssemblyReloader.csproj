@@ -83,6 +83,12 @@
     <Compile Include="Game\DisposeLoadedAssembly.cs" />
     <Compile Include="Game\DisposeLoadedAssemblyCommandFactory.cs" />
     <Compile Include="Game\IDisposeLoadedAssemblyCommandFactory.cs" />
+    <Compile Include="Game\IGame.cs" />
+    <Compile Include="Game\IProtoScenarioModule.cs" />
+    <Compile Include="Game\IScenarioRunnerProvider.cs" />
+    <Compile Include="Game\KspGame.cs" />
+    <Compile Include="Game\KspProtoScenarioModule.cs" />
+    <Compile Include="Game\KspScenarioRunnerProvider.cs" />
     <Compile Include="GUI\ConfigurationViewLogic.cs" />
     <Compile Include="GUI\ExpandablePanelFactory.cs" />
     <Compile Include="GUI\IExpandablePanelFactory.cs" />
@@ -104,7 +110,13 @@
     <Compile Include="Loaders\ScenarioModuleLoader.cs" />
     <Compile Include="Loaders\ScenarioModuleUnloader.cs" />
     <Compile Include="Properties\Annotations.cs" />
+    <Compile Include="Providers\Game\ScenarioRunnerComponentQuery.cs" />
+    <Compile Include="Providers\Game\CurrentGameProvider.cs" />
+    <Compile Include="Providers\Game\IScenarioRunnerComponentQuery.cs" />
+    <Compile Include="Providers\Game\ICurrentGameProvider.cs" />
+    <Compile Include="Providers\Game\IModuleConfigsFromPartConfigProvider.cs" />
     <Compile Include="Providers\Game\IProtoScenarioModuleProvider.cs" />
+    <Compile Include="Providers\Game\ModuleConfigsFromPartConfigProvider.cs" />
     <Compile Include="Providers\Game\ProtoScenarioModuleProvider.cs" />
     <Compile Include="Queries\CecilQueries\AllMethodsFromDefinitionQuery.cs" />
     <Compile Include="Queries\CecilQueries\AllTypesFromDefinitionQuery.cs" />
@@ -177,7 +189,6 @@
     <Compile Include="Providers\SceneProviders\ICurrentStartupSceneProvider.cs" />
     <Compile Include="Queries\FileSystemQueries\AssemblyDirectoryQuery.cs" />
     <Compile Include="Providers\SceneProviders\CurrentGameSceneProvider.cs" />
-    <Compile Include="Queries\IModuleConfigsFromPartConfigQuery.cs" />
     <Compile Include="Queries\InjectedHelperTypeMethodQuery.cs" />
     <Compile Include="Queries\InjectedHelperTypeQuery.cs" />
     <Compile Include="Queries\IPartIsPrefabQuery.cs" />
@@ -194,7 +205,6 @@
     <Compile Include="Providers\SceneProviders\CurrentStartupSceneProvider.cs" />
     <Compile Include="Queries\ConversionQueries\StartupSceneFromGameSceneQuery.cs" />
     <Compile Include="Queries\FileSystemQueries\ReloadableAssemblyFilesInDirectoryQuery.cs" />
-    <Compile Include="Queries\ModuleConfigsFromPartConfigQuery.cs" />
     <Compile Include="Queries\PartIsPrefabQuery.cs" />
     <Compile Include="Queries\PartModulesInPartQuery.cs" />
     <Compile Include="Queries\TypeIdentifierQuery.cs" />

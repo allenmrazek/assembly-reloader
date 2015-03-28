@@ -5,5 +5,6 @@
         IPart Create(Part part);
         IAvailablePart Create(AvailablePart part);
         IVessel Create(Vessel vessel);
+        IProtoScenarioModule Create(ProtoScenarioModule psm);
     }
 }

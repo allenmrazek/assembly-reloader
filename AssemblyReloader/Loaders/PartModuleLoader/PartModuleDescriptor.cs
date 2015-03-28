@@ -37,24 +37,24 @@ namespace AssemblyReloader.Loaders.PartModuleLoader
     {
         private readonly IPartLoader _partLoader;
         private readonly IAvailablePartConfigProvider _configProvider;
-        private readonly IModuleConfigsFromPartConfigQuery _moduleConfigQuery;
+        private readonly IModuleConfigsFromPartConfigProvider _moduleConfigProvider;
         private readonly ITypeIdentifierQuery _typeIdentifierQuery;
 
 
         public PartModuleDescriptorFactory(
             IPartLoader partLoader,
             IAvailablePartConfigProvider configProvider,
-            IModuleConfigsFromPartConfigQuery moduleConfigQuery,
+            IModuleConfigsFromPartConfigProvider moduleConfigProvider,
             ITypeIdentifierQuery typeIdentifierQuery)
         {
             if (partLoader == null) throw new ArgumentNullException("partLoader");
             if (configProvider == null) throw new ArgumentNullException("configProvider");
-            if (moduleConfigQuery == null) throw new ArgumentNullException("moduleConfigQuery");
+            if (moduleConfigProvider == null) throw new ArgumentNullException("moduleConfigProvider");
             if (typeIdentifierQuery == null) throw new ArgumentNullException("typeIdentifierQuery");
 
             _partLoader = partLoader;
             _configProvider = configProvider;
-            _moduleConfigQuery = moduleConfigQuery;
+            _moduleConfigProvider = moduleConfigProvider;
             _typeIdentifierQuery = typeIdentifierQuery;
         }
 
@@ -63,7 +63,7 @@ namespace AssemblyReloader.Loaders.PartModuleLoader
         private IEnumerable<PartModuleDescriptor> CreatePartModuleInfo(IPart prefab, ConfigNode partConfig, Type pmType)
         {
             return
-                _moduleConfigQuery.Get(partConfig, _typeIdentifierQuery.Get(pmType).Identifier)
+                _moduleConfigProvider.Get(partConfig, _typeIdentifierQuery.Get(pmType).Identifier)
                     .Select(config => new PartModuleDescriptor(prefab, config, pmType, _typeIdentifierQuery.Get(pmType)));
         }
 

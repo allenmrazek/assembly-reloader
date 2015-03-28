@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using AssemblyReloader.Annotations;
+using AssemblyReloader.Game;
 using AssemblyReloader.Providers.Game;
 using AssemblyReloader.Providers.SceneProviders;
 using AssemblyReloader.Queries;
@@ -38,18 +39,13 @@ namespace AssemblyReloader.Loaders
         }
 
 
-        private void InstallScenarioModule(Type type, ProtoScenarioModule psm)
+        private void InstallScenarioModule(Type type, IProtoScenarioModule psm)
         {
-            if (psm.moduleRef != null)
+            if (psm.moduleRef.Any())
                 throw new InvalidOperationException("Cannot install " + type.FullName +
                                                     " because the given ProtoScenarioModule already contains a reference to an existing instance");
 
-            var sm = psm.Load(ScenarioRunner.fetch);
-
-            if (sm != null)
-            {
-                new DebugLog().Normal("Successfully instantiated ScenarioModule " + type.FullName);
-            }
+            psm.Load();
         }
     }
 }

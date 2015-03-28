@@ -317,14 +317,14 @@ namespace AssemblyReloader.CompositeRoot
 
             var reloadable = new ReloadablePlugin(kspLoader, location, ConfigurePluginConfiguration());
 
-            var kspFactory = new KspFactory();
+            var kspFactory = new KspFactory(new KspScenarioRunnerProvider());
 
             var descriptorFactory = new PartModuleDescriptorFactory(
                                         new KspPartLoader(
                                             kspFactory),
                                         new AvailablePartConfigProvider(
                                             new KspGameDatabase()),
-                                        new ModuleConfigsFromPartConfigQuery(),
+                                        new ModuleConfigsFromPartConfigProvider(),
                                         new TypeIdentifierQuery());
 
             var prefabCloneProvider = new PartPrefabCloneProvider(
@@ -335,18 +335,22 @@ namespace AssemblyReloader.CompositeRoot
 
             var partModuleRepository = new FlightConfigRepository();
 
+            var protoScenarioModuleProvider = new ProtoScenarioModuleProvider(
+                kspFactory,
+                new TypeIdentifierQuery());
 
+            var gameProvider = new CurrentGameProvider(new TypeIdentifierQuery());
+            
             var scenarioModuleController =
                 new ScenarioModuleController(
-                    new ScenarioModuleLoader(
-                        new ProtoScenarioModuleProvider(
-                            new TypeIdentifierQuery())),
+                    new ScenarioModuleLoader(protoScenarioModuleProvider),
                     new ScenarioModuleUnloader(
-                        new ProtoScenarioModuleProvider(
-                            new TypeIdentifierQuery()),
-                            new UnityObjectDestroyer(new PluginReloadRequestedMethodCallCommand()),
-                            true,
-                            _log.CreateTag("ScenarioModuleUnloader")),
+                        gameProvider,
+                        new ScenarioRunnerComponentQuery(new KspScenarioRunnerProvider()),
+                        protoScenarioModuleProvider,
+                        new UnityObjectDestroyer(new PluginReloadRequestedMethodCallCommand()),
+                        true,
+                        _log.CreateTag("ScenarioModuleUnloader")),
                     new TypesDerivedFromQuery<ScenarioModule>(),
                     new CurrentGameSceneProvider());
 

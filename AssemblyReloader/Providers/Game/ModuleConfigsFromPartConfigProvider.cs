@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace AssemblyReloader.Queries
+namespace AssemblyReloader.Providers.Game
 {
-    public class ModuleConfigsFromPartConfigQuery : IModuleConfigsFromPartConfigQuery
+    public class ModuleConfigsFromPartConfigProvider : IModuleConfigsFromPartConfigProvider
     {
         public IEnumerable<ConfigNode> Get(ConfigNode partConfig, string moduleName)
         {
