@@ -5,7 +5,7 @@
         void Execute();
     }
 
-    public interface ICommand<in TContext>
+    public interface ICommand<TContext>
     {
         void Execute(TContext context);
     }

@@ -47,7 +47,7 @@ namespace AssemblyReloader.Providers.Game
             // the top-level ones! Better look for children too
             return loadedParts
                 .SelectMany(p => _partsInGameObject.Get(p.gameObject))
-                .Select(_kspFactory.Create)
+                .Select(p => _kspFactory.Create(p))
                 .Where(p => !_confirmPrefabQuery.Get(p));
         }
     }

@@ -13,19 +13,27 @@
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
+    <ProductVersion>12.0.0</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <TargetFrameworkProfile>Unity Full v3.5</TargetFrameworkProfile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
+    <DebugSymbols>True</DebugSymbols>
     <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
+    <Optimize>False</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <CustomCommands>
+      <CustomCommands>
+        <Command type="AfterBuild" />
+      </CustomCommands>
+    </CustomCommands>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
+    <Optimize>True</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
@@ -89,9 +97,9 @@
     <Compile Include="Game\KspGame.cs" />
     <Compile Include="Game\KspProtoScenarioModule.cs" />
     <Compile Include="Game\KspScenarioRunnerProvider.cs" />
-    <Compile Include="GUI\ConfigurationViewLogic.cs" />
-    <Compile Include="GUI\ExpandablePanelFactory.cs" />
-    <Compile Include="GUI\IExpandablePanelFactory.cs" />
+    <Compile Include="Gui\ConfigurationViewLogic.cs" />
+    <Compile Include="Gui\ExpandablePanelFactory.cs" />
+    <Compile Include="Gui\IExpandablePanelFactory.cs" />
     <Compile Include="Loaders\AssemblyDefinitionReader.cs" />
     <Compile Include="Loaders\AssemblyDefinitionReaderWithDebugOutput.cs" />
     <Compile Include="Loaders\IAssemblyDefinitionReader.cs" />
@@ -162,7 +170,7 @@
     <Compile Include="Game\KspVessel.cs" />
     <Compile Include="Controllers\IReloadablePluginController.cs" />
     <Compile Include="CompositeRoot\CoreView.cs" />
-    <Compile Include="GUI\WindowFactory.cs" />
+    <Compile Include="Gui\WindowFactory.cs" />
     <Compile Include="Commands\ICommand.cs" />
     <Compile Include="Commands\CompositeCommand.cs" />
     <Compile Include="Generators\IUniqueAssemblyNameGenerator.cs" />
@@ -199,7 +207,7 @@
     <Compile Include="Queries\FileSystemQueries\IReloadableAssemblyFileLocationQuery.cs" />
     <Compile Include="Queries\ConversionQueries\IStartupSceneFromGameSceneQuery.cs" />
     <Compile Include="CompositeRoot\Core.cs" />
-    <Compile Include="GUI\View.cs" />
+    <Compile Include="Gui\View.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Queries\AssemblyQueries\AddonsFromAssemblyQuery.cs" />
     <Compile Include="Providers\SceneProviders\CurrentStartupSceneProvider.cs" />
@@ -229,36 +237,110 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\ReeperCommon\ReeperCommon\ReeperCommon.csproj">
-      <Project>{fecfa8fc-cf80-4685-a2ba-1566e0f3c26e}</Project>
+      <Project>{FECFA8FC-CF80-4685-A2BA-1566E0F3C26E}</Project>
       <Name>ReeperCommon</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>set ksp=D:\For New Computer\Kerbal Space Program\GameData
+    <PostBuildEvent>set ksp=D:\For New Computer\Kerbal Space Program
+set unity=C:\Program Files (x86)\Unity455
 
-robocopy "$(ProjectDir)bin\$(Configuration)" "$(ProjectDir)GameData\$(ProjectName)" $(TargetFileName)
+
+if NOT $(Configuration) == Debug GOTO CopyFiles
+
+call:CheckUnity
+call:CreateMdb "$(ProjectDir)bin\$(Configuration)\$(TargetFileName)"
+
+echo copying mdb into project GameData
+robocopy "$(ProjectDir)bin\$(Configuration)" "$(ProjectDir)GameData\$(ProjectName)" $(TargetFileName).mdb
+call:CheckRoboCopyCode "$(TargetFileName).mdb into project GameData"
+
+
+:CopyFiles
+
+REM ReeperCommon into Project/GameData
+if exist "$(ProjectDir)bin\$(Configuration)\ReeperCommon.dll" (
+echo copying ReeperCommon to project GameData...
 robocopy "$(ProjectDir)bin\$(Configuration)" "$(ProjectDir)GameData\$(ProjectName)" ReeperCommon.dll
-robocopy "$(ProjectDir)bin\$(Configuration)" "$(ProjectDir)GameData\$(ProjectName)" *.proxy
-robocopy "$(ProjectDir)GameData\$(ProjectName)" "%25ksp%25\$(ProjectName)" /E /xo
+call:CheckRoboCopyCode "ReeperCommon.dll to project"
+)
 
-REM a little hack because robocopy reports code 1 on file copy success
-REM build process will interpret non-zero as an error and report failed build
-set rce=%25errorlevel%25
+REM TargetFileName into Project/GameData
+echo copying project binary to project GameData...
+robocopy "$(ProjectDir)bin\$(Configuration)" "$(ProjectDir)GameData\$(ProjectName)" $(TargetFileName)
+call:CheckRoboCopyCode "Project binary to project GameData"
 
-if %25rce%25==1 exit 0
-if %25rce%25==2 GOTO ExtraFiles
-if %25rce%25==3 GOTO ExtraFiles
-if not %25rce%25==1 exit %25rce%25 else exit 0
+REM Project/GameData into KSP/GameData/Project
+echo copying files to KSP GameData...
+robocopy "$(ProjectDir)GameData\$(ProjectName)" "%25ksp%25\GameData\$(ProjectName)" /E /xo
+Call:CheckRoboCopyCode "Solution GameData into KSP GameData"
+exit 0
 
-:ExtraFiles
-echo WARNING: Extra files in output dir
-exit 0</PostBuildEvent>
+
+REM
+REM CreateMdb - Given a fully qualified path to an assembly, generate MDB with same name + appended with .mdb
+REM
+:CreateMdb
+echo CreateMdb: received "%25~1"
+
+if exist %25~1 (
+call "%25unity%25\Editor\Data\MonoBleedingEdge\bin\cli.bat" "%25unity%25\Editor\Data\MonoBleedingEdge\lib\mono\4.0\pdb2mdb.exe" "%25~1"
+
+IF NOT EXIST "%25~1".mdb (
+echo ERROR: failed to generate %25~1.mdb
+exit -4
+)
+goto:eof
+) else (
+echo CreateMdb: Error - %25~1 not found!
+exit -5
+)
+
+
+
+
+:CheckRoboCopyCode
+    if %25ERRORLEVEL%25 EQU 16 echo ***FATAL ERROR*** &amp; exit 16
+    if %25ERRORLEVEL%25 EQU 15 echo OKCOPY + FAIL + MISMATCHES + XTRA &amp; exit 15
+    if %25ERRORLEVEL%25 EQU 14 echo FAIL + MISMATCHES + XTRA &amp; exit 14
+    if %25ERRORLEVEL%25 EQU 13 echo OKCOPY + FAIL + MISMATCHES &amp; exit 13
+    if %25ERRORLEVEL%25 EQU 12 echo FAIL + MISMATCHES&amp; exit 12
+    if %25ERRORLEVEL%25 EQU 11 echo OKCOPY + FAIL + XTRA &amp; exit 11
+    if %25ERRORLEVEL%25 EQU 10 echo FAIL + XTRA &amp; exit 10
+    if %25ERRORLEVEL%25 EQU 9 echo OKCOPY + FAIL &amp; exit 9
+    if %25ERRORLEVEL%25 EQU 8 echo FAIL &amp; exit 8
+    if %25ERRORLEVEL%25 EQU 7 echo OKCOPY + MISMATCHES + XTRA &amp; goto end
+    if %25ERRORLEVEL%25 EQU 6 echo MISMATCHES + XTRA &amp; goto end
+    if %25ERRORLEVEL%25 EQU 5 echo OKCOPY + MISMATCHES &amp; goto end
+    if %25ERRORLEVEL%25 EQU 4 echo MISMATCHES &amp; goto end
+    if %25ERRORLEVEL%25 EQU 3 echo OKCOPY + XTRA &amp; goto end
+    if %25ERRORLEVEL%25 EQU 2 echo XTRA &amp; goto end
+    if %25ERRORLEVEL%25 EQU 1 echo OKCOPY &amp; goto end
+    if %25ERRORLEVEL%25 EQU 0 echo No Change &amp; goto end
+    :end  
+goto:eof
+
+
+:CheckUnity
+IF NOT EXIST "%25unity%25\Editor\Data\MonoBleedingEdge\lib\mono\4.0\pdb2mdb.exe" (
+echo ERROR: Failed to find pdb2mdb.exe; check Unity path
+exit -1
+)
+
+IF NOT EXIST "$(ProjectDir)bin\$(Configuration)\$(TargetName).pdb" (
+echo ERROR: Failed to find $(TargetName).pdb in $(ProjectDir)bin\$(Configuration)
+exit -2
+)
+goto:eof</PostBuildEvent>
   </PropertyGroup>
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <PropertyGroup>
-    <PreBuildEvent>
-    </PreBuildEvent>
+    <PreBuildEvent>if exist "$(TargetFileName).mdb" (
+echo Deleting $(TargetFileName).mdb...
+del "$(TargetFileName).mdb"
+echo Done
+)</PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

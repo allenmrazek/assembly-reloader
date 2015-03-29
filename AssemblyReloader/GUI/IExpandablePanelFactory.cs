@@ -1,7 +1,7 @@
 ﻿using System;
 using ReeperCommon.Gui.Controls;
 
-namespace AssemblyReloader.GUI
+namespace AssemblyReloader.Gui
 {
     public interface IExpandablePanelFactory
     {

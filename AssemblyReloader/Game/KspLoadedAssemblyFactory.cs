@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using AssemblyReloader.Annotations;
 using AssemblyReloader.Commands;
 using AssemblyReloader.Queries.AssemblyQueries;
 using Contracts;
 using ReeperCommon.FileSystem;
+using ReeperCommon.Logging.Implementations;
 
 namespace AssemblyReloader.Game
 {
@@ -51,6 +53,19 @@ namespace AssemblyReloader.Game
             InstallTypes(la, typeof (ScenarioModule), _scenarioModuleQuery.Get(assembly));
             InstallTypes(la, typeof (Contract), _contractQuery.Get(assembly));
             // todo: kerbal experience traits?
+            // todo: kerbal experience effects?
+            // todo: contracts
+            // todo: strategies
+
+            var log = new DebugLog("LoadedAssemblyFactory");
+
+            log.Normal("Types in LoadedAssembly:");
+
+            foreach (var typeName in la.types.Keys.OrderBy(k => k.Name))
+                foreach (var t in la.types[typeName].OrderBy(t => t.Name))
+                    log.Normal(typeName + ": " + t.FullName);
+
+            log.Normal("End loaded type list");
 
             AssemblyLoader.loadedAssemblies.Add(la);
 

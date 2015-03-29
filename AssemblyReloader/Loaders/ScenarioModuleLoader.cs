@@ -7,7 +7,6 @@ using AssemblyReloader.Game;
 using AssemblyReloader.Providers.Game;
 using AssemblyReloader.Providers.SceneProviders;
 using AssemblyReloader.Queries;
-using Microsoft.Contracts;
 using ReeperCommon.Logging.Implementations;
 
 namespace AssemblyReloader.Loaders

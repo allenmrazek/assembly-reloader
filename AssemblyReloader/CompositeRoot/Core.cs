@@ -9,7 +9,7 @@ using AssemblyReloader.DataObjects;
 using AssemblyReloader.Destruction;
 using AssemblyReloader.Game;
 using AssemblyReloader.Generators;
-using AssemblyReloader.GUI;
+using AssemblyReloader.Gui;
 using AssemblyReloader.Loaders;
 using AssemblyReloader.Loaders.PartModuleLoader;
 using AssemblyReloader.Providers;
@@ -232,7 +232,7 @@ namespace AssemblyReloader.CompositeRoot
                 // then look at physical file system. These work on a list of items cached
                 // by GameDatabase rather than working directly with the disk (unless a resource 
                 // is accessed from here, of course)
-                    new ResourceFromDirectory(dllDirectory),
+                    new ResourceFromDirectory(dllDirectory, 1),
 
 
                 // finally search embedded resource

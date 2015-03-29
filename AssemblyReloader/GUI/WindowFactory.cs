@@ -8,7 +8,7 @@ using ReeperCommon.Gui.Window.View;
 using ReeperCommon.Repositories.Resources;
 using UnityEngine;
 
-namespace AssemblyReloader.GUI
+namespace AssemblyReloader.Gui
 {
     class WindowFactory
     {
@@ -36,7 +36,7 @@ namespace AssemblyReloader.GUI
         {
             if (logic == null) throw new ArgumentNullException("logic");
 
-            var basicWindow = new BasicWindow(logic, initialRect, winid, _windowSkin) { Title = "ART: Assembly Reloading Tool" };
+            var basicWindow = new BasicWindow(logic, initialRect, winid, _windowSkin, true) { Title = "ART: Assembly Reloading Tool" };
 
 
             var tbButtons = new TitleBarButtons(basicWindow, TitleBarButtons.ButtonAlignment.Right, new Vector2(3f, 3f));
@@ -71,14 +71,14 @@ namespace AssemblyReloader.GUI
 
 
             var basicWindow = new BasicWindow(new ConfigurationViewLogic(plugin.Configuration, panelFactory), new Rect(300f, 300f, 300f, 300f),
-                UnityEngine.Random.Range(10000, 3434343), _windowSkin);
+                UnityEngine.Random.Range(10000, 3434343), _windowSkin, true);
 
             basicWindow.Title = plugin.Name + " Configuration";
 
             //var decoratedWindow = new HideOnF2(new ClampToScreen(basicWindow)); buggy
             var decoratedWindow = new ClampToScreen(basicWindow);
 
-            UnityEngine.Object.DontDestroyOnLoad(WindowView.Create(decoratedWindow));
+            UnityEngine.Object.DontDestroyOnLoad(WindowView.Create(decoratedWindow, "WindowView"));
 
             return decoratedWindow;
         }

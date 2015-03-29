@@ -14,7 +14,10 @@ namespace AssemblyReloader.Game
                 throw new InvalidOperationException(assembly.FullName + " has not been loaded into KSP AssemblyLoader!");
 
             // this is pretty hacky but the goal here is to sneak addons that should be created
-            // for this scene into AddonLoader's runOnce list
+            // for this scene into AddonLoader's runOnce list without double-creating other addons
+            //
+            // todo: intercept calls to AssemblyLoader.loadedAssemblies and redirect them to a proxy object
+            // which contains all of them in case client plugin is searching through that list
             var cache = AssemblyLoader.loadedAssemblies;
 
             try

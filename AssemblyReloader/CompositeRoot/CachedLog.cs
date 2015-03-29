@@ -17,7 +17,7 @@ namespace AssemblyReloader.CompositeRoot
 
 
 
-        public CachedLog(ILog mainBaseLog, int buffer = 50)
+        public CachedLog(ILog mainBaseLog, int buffer)
         {
             if (mainBaseLog == null) throw new ArgumentNullException("mainBaseLog");
 

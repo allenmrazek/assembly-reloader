@@ -2,7 +2,7 @@
 using ReeperCommon.Gui.Controls;
 using UnityEngine;
 
-namespace AssemblyReloader.GUI
+namespace AssemblyReloader.Gui
 {
     public class ExpandablePanelFactory : IExpandablePanelFactory
     {

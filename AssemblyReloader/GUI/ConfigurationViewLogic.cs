@@ -6,7 +6,7 @@ using ReeperCommon.Gui.Controls;
 using ReeperCommon.Gui.Logic;
 using UnityEngine;
 
-namespace AssemblyReloader.GUI
+namespace AssemblyReloader.Gui
 {
     public class ConfigurationViewLogic : IWindowLogic
     {

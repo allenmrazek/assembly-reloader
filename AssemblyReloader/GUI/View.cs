@@ -4,7 +4,7 @@ using AssemblyReloader.Controllers;
 using ReeperCommon.Gui.Logic;
 using UnityEngine;
 
-namespace AssemblyReloader.GUI
+namespace AssemblyReloader.Gui
 {
     class View : IWindowLogic
     {
