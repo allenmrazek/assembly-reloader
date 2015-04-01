@@ -20,8 +20,15 @@ namespace AssemblyReloader.CompositeRoot
             catch (Exception e)
             {
                 Debug.LogError("AssemblyReloader: Encountered an uncaught exception while creating Core: " + e);
-                Destroy(this);
+                DestroyImmediate(this);
             }
+        }
+
+
+        [UsedImplicitly]
+        private void Update()
+        {
+            _core.Tick();
         }
     }
 }

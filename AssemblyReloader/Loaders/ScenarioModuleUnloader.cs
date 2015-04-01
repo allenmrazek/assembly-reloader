@@ -79,6 +79,10 @@ namespace AssemblyReloader.Loaders
             var snapshot = new ConfigNode("SCENARIO");
             var sm = GetScenarioModuleInstanceFromRunner(type);
 
+            if (!sm.Any())
+                throw new Exception("Did not find ScenarioModule of type " + type.FullName + "(" + psm.moduleName + ") on ScenarioRunner");
+
+
             bool snapshotSuccess = false;
 
             if (_reuseConfigNode)

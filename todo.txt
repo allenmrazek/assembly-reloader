@@ -1,3 +1,7 @@
 - Insert tracking code (especially for ScenarioModules, MonoBehaviours marked with KSPAddon (or KSPAddon-derived), etc) so we can intelligently destroy them on reload
 
 - Insert tracking code for GameEvent registrations so we can remove any that get missed when plugin is unloaded, usually due to forgetfulness or an exception being thrown in destruction code
+
+- Verify that reloadable plugins aren't already loaded by the game (for example: TestProject.dll existing alongside TestProject.dll.reloadable in GameData which will break the whole thing unless TestProject.dll is uninstalled first)
+
+- check for changed reloadable dependencies; reload them also

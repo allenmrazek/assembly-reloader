@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using AssemblyReloader.Annotations;
 using AssemblyReloader.Commands;
 using AssemblyReloader.Controllers;
 using AssemblyReloader.DataObjects;
@@ -21,6 +22,7 @@ using AssemblyReloader.Queries.CecilQueries;
 using AssemblyReloader.Queries.ConversionQueries;
 using AssemblyReloader.Queries.FileSystemQueries;
 using AssemblyReloader.Repositories;
+using AssemblyReloader.TypeInstallers;
 using AssemblyReloader.Weaving;
 using AssemblyReloader.Weaving.Operations;
 using Contracts;
@@ -44,6 +46,7 @@ namespace AssemblyReloader.CompositeRoot
     class Core
     {
         private readonly ILog _log;
+        private readonly IMessageChannel _messageChannel;
 
 
 
@@ -138,6 +141,7 @@ namespace AssemblyReloader.CompositeRoot
 
             _log = cachedLog;
 
+           
 
             var fsFactory = new KSPFileSystemFactory(
                 new KSPUrlDir(new KSPGameDataUrlDirProvider().Get()));
@@ -162,9 +166,10 @@ namespace AssemblyReloader.CompositeRoot
                     if (UIPartActionController.Instance.windowPrefab.GetComponent<KspPartActionWindowListener>() == null)
                         UIPartActionController.Instance.windowPrefab.gameObject.AddComponent<KspPartActionWindowListener>();
             };
-            
 
-            var reloadables = CreateReloadablePlugins(fsFactory, assemblyResolver).ToList();
+            var loadedAssemblyFactory = ConfigureLoadedAssemblyFactory();
+
+            var reloadables = CreateReloadablePlugins(loadedAssemblyFactory, fsFactory, assemblyResolver).ToList();
 
             reloadables.ForEach(r => r.Load());
 
@@ -202,12 +207,17 @@ namespace AssemblyReloader.CompositeRoot
                 {
                     _log.Normal("    BaseType: " + ty.Key);
                     _log.Normal("       Contains: ");
-                    ty.Value.ForEach(v => _log.Normal("        Type: " + v.FullName));
+                    ty.Value.ForEach(v => _log.Normal("        Type: " + v.FullName + "; " + v.AssemblyQualifiedName));
                 });
             });
         }
 
 
+        [UsedImplicitly]
+        public void Tick()
+        {
+            
+        }
 
 
 
@@ -248,20 +258,21 @@ namespace AssemblyReloader.CompositeRoot
         }
 
 
+        private ILoadedAssemblyFactory ConfigureLoadedAssemblyFactory()
+        {
+            return new KspLoadedAssemblyFactory(
+                new DisposeLoadedAssemblyCommandFactory(),
+                new GenericTypeInstaller<Part>(new TypesDerivedFromQuery<Part>()),
+                new GenericTypeInstaller<PartModule>(new TypesDerivedFromQuery<PartModule>()),
+                new GenericTypeInstaller<ScenarioModule>(new TypesDerivedFromQuery<ScenarioModule>()));
+        }
+
 
         private IEnumerable<IReloadablePlugin> CreateReloadablePlugins(
+            ILoadedAssemblyFactory laFactory,
             IFileSystemFactory fsFactory, 
             BaseAssemblyResolver assemblyResolver)
         {
-            var laFactory = new KspLoadedAssemblyFactory(
-                new TypesDerivedFromQuery<Part>(),
-                new TypesDerivedFromQuery<PartModule>(),
-                new TypesDerivedFromQuery<InternalModule>(),
-                new TypesDerivedFromQuery<ScenarioModule>(),
-                new TypesDerivedFromQuery<Contract>(),
-                new DisposeLoadedAssemblyCommandFactory());
-
-
             var reloadableAssemblyFileQuery = new ReloadableAssemblyFilesInDirectoryQuery(fsFactory.GetGameDataDirectory());
 
             var addonDestroyer = new AddonDestroyer(

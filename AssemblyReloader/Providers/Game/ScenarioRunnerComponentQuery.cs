@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using AssemblyReloader.Annotations;
 using AssemblyReloader.Game;
+using ReeperCommon.Logging.Implementations;
 using UnityEngine;
 
 namespace AssemblyReloader.Providers.Game
