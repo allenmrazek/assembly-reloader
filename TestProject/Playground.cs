@@ -1,4 +1,86 @@
-﻿//set ksp=D:\For New Computer\Kerbal Space Program\GameData
+﻿using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
+
+namespace TestProject
+{
+    public class ColorChangingModule : PartModule
+    {
+        [KSPField(guiActiveEditor = true, guiName = "First Color", guiFormat = "F2", isPersistant = true)]
+        [UI_FloatRange(minValue = 0, maxValue = 1, stepIncrement = .05f)]
+        public float FirstColor = 0f;
+
+
+        [KSPField(guiActiveEditor = true, guiName = "Second Color", guiFormat = "F2", isPersistant = true)]
+        [UI_FloatRange(minValue = 0, maxValue = 1, stepIncrement = .05f)]
+        public float SecondColor = 1f;
+
+
+        private Color _current = Color.white;
+        private float _time = 0f;
+        private Renderer[] _renderers;
+
+        private Material _testMaterial = null;
+
+
+        public override void OnStart(StartState state)
+        {
+            //if (state != StartState.Editor || part != EditorLogic.RootPart)
+            //{
+            //    enabled = false;
+            //    return;
+            //}
+
+            //base.OnStart(state);
+            
+            //_renderers = part.FindModelComponents<Renderer>();
+            //if (!_renderers.Any())
+            //    print("ERROR: no renderers found");
+
+            //var tex = new Texture2D(1, 1);
+            //tex.SetPixel(0, 0, Color.red);
+            //tex.Apply();
+
+            //foreach (var r in _renderers)
+            //    r.sharedMaterial.mainTexture = tex;
+
+            //enabled = false;
+            //return;
+            //foreach (var r in _renderers)
+            //    r.material.shader = Shader.Find("Diffuse");
+        }
+
+
+        public override void OnAwake()
+        {
+            if (_testMaterial == null)
+                _testMaterial = new Material(Shader.Find("Diffuse"));
+
+            base.OnAwake();
+            print("ColorChangingModule Awake!");
+
+        }
+
+
+        public void Update()
+        {
+            //_time += Time.deltaTime;
+            //if (_time > 2f)
+            //    _time -= 2f;
+
+            //_current = Color.Lerp(new Color(FirstColor, FirstColor, FirstColor), new Color(SecondColor, SecondColor, SecondColor),
+            //    _time <= 1f ? _time : 2f - _time);
+
+            //foreach (var kvp in _renderers)
+            //    kvp.material.SetColor("_Color", _current);
+        }
+    }
+}
+
+
+
+
+//set ksp=D:\For New Computer\Kerbal Space Program\GameData
 
 //REM save a copy for unit testing
 //copy "$(ProjectDir)bin\$(Configuration)\$(TargetFileName)" "$(SolutionDir)AssemblyReloader\bin\$(Configuration)\$(TargetFileName)" /Y

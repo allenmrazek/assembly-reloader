@@ -188,7 +188,7 @@ namespace AssemblyReloader.CompositeRoot
                         configWindow.Visible = false;
 
                         return
-                            new ReloadablePluginController(r, new ToggleWindowVisibilityCommand(configWindow)) as IReloadablePluginController;
+                            new ReloadablePluginController(r, configWindow) as IReloadablePluginController;
                     }));
 
             windowFactory.CreateMainWindow(
@@ -328,7 +328,7 @@ namespace AssemblyReloader.CompositeRoot
 
             var reloadable = new ReloadablePlugin(kspLoader, location, ConfigurePluginConfiguration());
 
-            var kspFactory = new KspFactory(new KspScenarioRunnerProvider());
+            var kspFactory = new KspFactory(new KspGameObjectProvider());
 
             var descriptorFactory = new PartModuleDescriptorFactory(
                                         new KspPartLoader(
@@ -357,7 +357,7 @@ namespace AssemblyReloader.CompositeRoot
                     new ScenarioModuleLoader(protoScenarioModuleProvider),
                     new ScenarioModuleUnloader(
                         gameProvider,
-                        new ScenarioRunnerComponentQuery(new KspScenarioRunnerProvider()),
+                        new GameObjectComponentQuery(new KspGameObjectProvider()),
                         protoScenarioModuleProvider,
                         new UnityObjectDestroyer(new PluginReloadRequestedMethodCallCommand()),
                         true,

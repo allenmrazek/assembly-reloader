@@ -13,27 +13,27 @@ namespace AssemblyReloader.Loaders
     public class ScenarioModuleUnloader : IScenarioModuleUnloader
     {
         private readonly ICurrentGameProvider _gameProvider;
-        private readonly IScenarioRunnerComponentQuery _scenarioRunnerComponentQuery;
+        private readonly IGameObjectComponentQuery _gameObjectComponentQuery;
         private readonly IProtoScenarioModuleProvider _psmProvider;
         private readonly IUnityObjectDestroyer _objectDestroyer;
         private readonly bool _reuseConfigNode;
         private readonly ILog _log;
 
         public ScenarioModuleUnloader([NotNull] ICurrentGameProvider gameProvider,
-            [NotNull] IScenarioRunnerComponentQuery scenarioRunnerComponentQuery,
+            [NotNull] IGameObjectComponentQuery gameObjectComponentQuery,
             [NotNull] IProtoScenarioModuleProvider psmProvider,
             [NotNull] IUnityObjectDestroyer objectDestroyer,
             bool reuseConfigNode,
             [NotNull] ILog log)
         {
             if (gameProvider == null) throw new ArgumentNullException("gameProvider");
-            if (scenarioRunnerComponentQuery == null) throw new ArgumentNullException("scenarioRunnerComponentQuery");
+            if (gameObjectComponentQuery == null) throw new ArgumentNullException("gameObjectComponentQuery");
             if (psmProvider == null) throw new ArgumentNullException("psmProvider");
             if (objectDestroyer == null) throw new ArgumentNullException("objectDestroyer");
             if (log == null) throw new ArgumentNullException("log");
 
             _gameProvider = gameProvider;
-            _scenarioRunnerComponentQuery = scenarioRunnerComponentQuery;
+            _gameObjectComponentQuery = gameObjectComponentQuery;
             _psmProvider = psmProvider;
             _objectDestroyer = objectDestroyer;
             _reuseConfigNode = reuseConfigNode;
@@ -105,7 +105,7 @@ namespace AssemblyReloader.Loaders
         private Maybe<ScenarioModule> GetScenarioModuleInstanceFromRunner(Type type)
         {
 
-            var smInstancesOfType = _scenarioRunnerComponentQuery.Get(type).Where(c => c is ScenarioModule).ToList();
+            var smInstancesOfType = _gameObjectComponentQuery.Get(type).Where(c => c is ScenarioModule).ToList();
 
             // game enforces one unique instance so somebody has done something naughty and we can't be sure how to proceed
             if (smInstancesOfType.Count > 1)

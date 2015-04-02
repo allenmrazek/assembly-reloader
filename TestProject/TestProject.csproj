@@ -75,6 +75,7 @@
 REM save a copy for unit testing
 copy "$(ProjectDir)bin\$(Configuration)\$(TargetFileName)" "$(SolutionDir)AssemblyReloader\bin\$(Configuration)\$(TargetFileName)" /Y
 
+
 rename "$(ProjectDir)bin\$(Configuration)\$(TargetFileName)" $(TargetFileName).reloadable
 robocopy "$(ProjectDir)bin\$(Configuration)" "$(ProjectDir)GameData\$(ProjectName)" $(TargetFileName).reloadable
 robocopy "$(ProjectDir)bin\$(Configuration)" "$(ProjectDir)GameData\$(ProjectName)" ReeperCommon.dll
@@ -97,7 +98,13 @@ exit 0</PostBuildEvent>
     <PreBuildEvent>set ksp=D:\For New Computer\Kerbal Space Program\GameData
 
 del "%25ksp%25\$(ProjectName)\$(TargetFileName)*.reloadable"
-del "$(ProjectDir)bin\$(Configuration)\$(TargetFileName).reloadable"</PreBuildEvent>
+del "$(ProjectDir)bin\$(Configuration)\$(TargetFileName).reloadable"
+
+if exist "$(TargetFileName).mdb" (
+echo Deleting $(TargetFileName).mdb...
+del "$(TargetFileName).mdb"
+echo Done
+)</PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -5,12 +5,12 @@ namespace AssemblyReloader.Game
 {
     public class KspFactory : IKspFactory
     {
-        private readonly IScenarioRunnerProvider _scenarioRunnerProvider;
+        private readonly IGameObjectProvider _gameObjectProvider;
 
-        public KspFactory([NotNull] IScenarioRunnerProvider scenarioRunnerProvider)
+        public KspFactory([NotNull] IGameObjectProvider gameObjectProvider)
         {
-            if (scenarioRunnerProvider == null) throw new ArgumentNullException("scenarioRunnerProvider");
-            _scenarioRunnerProvider = scenarioRunnerProvider;
+            if (gameObjectProvider == null) throw new ArgumentNullException("gameObjectProvider");
+            _gameObjectProvider = gameObjectProvider;
         }
 
         public IPart Create(Part part)
@@ -30,7 +30,7 @@ namespace AssemblyReloader.Game
 
         public IProtoScenarioModule Create(ProtoScenarioModule psm)
         {
-            return new KspProtoScenarioModule(psm, _scenarioRunnerProvider);
+            return new KspProtoScenarioModule(psm, _gameObjectProvider);
         }
     }
 }

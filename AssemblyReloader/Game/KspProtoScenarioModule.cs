@@ -8,15 +8,15 @@ namespace AssemblyReloader.Game
     public class KspProtoScenarioModule : IProtoScenarioModule
     {
         private readonly ProtoScenarioModule _psm;
-        private readonly IScenarioRunnerProvider _scenarioRunnerProvider;
+        private readonly IGameObjectProvider _gameObjectProvider;
 
         public KspProtoScenarioModule(
             ProtoScenarioModule psm, 
-            [NotNull] IScenarioRunnerProvider scenarioRunnerProvider)
+            [NotNull] IGameObjectProvider gameObjectProvider)
         {
-            if (scenarioRunnerProvider == null) throw new ArgumentNullException("scenarioRunnerProvider");
+            if (gameObjectProvider == null) throw new ArgumentNullException("gameObjectProvider");
             _psm = psm;
-            _scenarioRunnerProvider = scenarioRunnerProvider;
+            _gameObjectProvider = gameObjectProvider;
         }
 
 
@@ -35,7 +35,7 @@ namespace AssemblyReloader.Game
 
         public Maybe<ScenarioModule> Load()
         {
-            var inst = _scenarioRunnerProvider.Get();
+            var inst = _gameObjectProvider.Get();
 
             if (!inst.Any())
                 throw new ArgumentException("Failed to retrieve scenario runner");

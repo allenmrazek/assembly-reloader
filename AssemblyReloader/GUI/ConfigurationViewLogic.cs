@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using AssemblyReloader.CompositeRoot;
 using AssemblyReloader.DataObjects;
 using ReeperCommon.Gui.Controls;
 using ReeperCommon.Gui.Logic;

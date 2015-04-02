@@ -3,16 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using AssemblyReloader.Annotations;
 using AssemblyReloader.Game;
-using ReeperCommon.Logging.Implementations;
 using UnityEngine;
 
 namespace AssemblyReloader.Providers.Game
 {
-    public class ScenarioRunnerComponentQuery : IScenarioRunnerComponentQuery
+    public class GameObjectComponentQuery : IGameObjectComponentQuery
     {
-        private readonly IScenarioRunnerProvider _runnerProvider;
+        private readonly IGameObjectProvider _runnerProvider;
 
-        public ScenarioRunnerComponentQuery([NotNull] IScenarioRunnerProvider runnerProvider)
+        public GameObjectComponentQuery([NotNull] IGameObjectProvider runnerProvider)
         {
             if (runnerProvider == null) throw new ArgumentNullException("runnerProvider");
             _runnerProvider = runnerProvider;

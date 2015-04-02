@@ -2,7 +2,7 @@
 
 namespace AssemblyReloader.Game
 {
-    public class KspScenarioRunnerProvider : IScenarioRunnerProvider
+    public class KspGameObjectProvider : IGameObjectProvider
     {
         public Maybe<ScenarioRunner> Get()
         {

@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace AssemblyReloader.Providers.Game
 {
-    public interface IScenarioRunnerComponentQuery
+    public interface IGameObjectComponentQuery
     {
         IEnumerable<Component> Get(Type componentType);
     }

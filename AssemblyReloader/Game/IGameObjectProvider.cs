@@ -6,7 +6,7 @@ using ReeperCommon.Containers;
 
 namespace AssemblyReloader.Game
 {
-    public interface IScenarioRunnerProvider
+    public interface IGameObjectProvider
     {
         Maybe<ScenarioRunner> Get();
     }
