@@ -4,7 +4,7 @@ using System.Linq;
 using ReeperCommon.Containers;
 using UnityEngine;
 
-namespace AssemblyReloader.Queries.ConversionQueries
+namespace AssemblyReloader.Queries
 {
     public class AddonAttributesFromTypeQuery : IAddonAttributesFromTypeQuery
     {

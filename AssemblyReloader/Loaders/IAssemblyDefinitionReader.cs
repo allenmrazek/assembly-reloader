@@ -7,7 +7,7 @@ namespace AssemblyReloader.Loaders
     public interface IAssemblyDefinitionReader
     {
         Maybe<AssemblyDefinition> Get();
+
         IFile Location { get; }
-        string Name { get; }
     }
 }

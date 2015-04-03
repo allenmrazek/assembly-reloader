@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AssemblyReloader.Queries.ConversionQueries
+namespace AssemblyReloader.Queries
 {
     public class StartupSceneFromGameSceneQuery : IStartupSceneFromGameSceneQuery
     {

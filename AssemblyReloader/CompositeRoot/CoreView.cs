@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using AssemblyReloader.Annotations;
 using UnityEngine;
 
@@ -10,8 +11,10 @@ namespace AssemblyReloader.CompositeRoot
         [UsedImplicitly] private Core _core;
 
         [UsedImplicitly]
-        private void Start()
+        IEnumerator Start()
         {
+            yield return new WaitForSeconds(0f);
+
             try
             {
                 _core = new Core();
@@ -28,7 +31,7 @@ namespace AssemblyReloader.CompositeRoot
         [UsedImplicitly]
         private void Update()
         {
-            _core.Tick();
+            //_core.Tick();
         }
     }
 }

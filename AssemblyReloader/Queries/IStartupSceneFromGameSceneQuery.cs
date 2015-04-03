@@ -1,4 +1,4 @@
-﻿namespace AssemblyReloader.Queries.ConversionQueries
+﻿namespace AssemblyReloader.Queries
 {
     public interface IStartupSceneFromGameSceneQuery
     {

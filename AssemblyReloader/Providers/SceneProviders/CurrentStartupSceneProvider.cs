@@ -1,5 +1,5 @@
 ﻿using System;
-using AssemblyReloader.Queries.ConversionQueries;
+using AssemblyReloader.Queries;
 
 namespace AssemblyReloader.Providers.SceneProviders
 {

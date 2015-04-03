@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
+using AssemblyReloader.Annotations;
 using AssemblyReloader.Loaders;
 using AssemblyReloader.Providers;
 using AssemblyReloader.Weaving;
+using Mono.Cecil;
 using ReeperCommon.Containers;
 using ReeperCommon.Extensions;
 
@@ -11,61 +13,33 @@ namespace AssemblyReloader.Game
 {
     public class KspAssemblyLoader : IAssemblyLoader
     {
-        private readonly IAssemblyDefinitionReader _definitionReader;
-        private readonly IAssemblyProvider _assemblyFromDefinitionProvider;
+        private readonly IAssemblyProvider _assemblyProvider;
         private readonly ILoadedAssemblyFactory _laFactory;
-        private readonly IAssemblyDefinitionWeaver _weaver;
-        private readonly bool _writeResultToDisk;
         private IDisposable _loadedAssembly;
 
         public KspAssemblyLoader(
-            IAssemblyDefinitionReader definitionReader,
-            IAssemblyProvider assemblyFromDefinitionProvider,
-            ILoadedAssemblyFactory laFactory,
-            IAssemblyDefinitionWeaver weaver,
-            bool writeResultToDisk)
+            [NotNull] IAssemblyProvider assemblyProvider, 
+            [NotNull] ILoadedAssemblyFactory laFactory)
         {
-            if (definitionReader == null) throw new ArgumentNullException("definitionReader");
-            if (assemblyFromDefinitionProvider == null) throw new ArgumentNullException("assemblyFromDefinitionProvider");
+            if (assemblyProvider == null) throw new ArgumentNullException("assemblyProvider");
             if (laFactory == null) throw new ArgumentNullException("laFactory");
-            if (weaver == null) throw new ArgumentNullException("weaver");
 
-            _definitionReader = definitionReader;
-            _assemblyFromDefinitionProvider = assemblyFromDefinitionProvider;
+            _assemblyProvider = assemblyProvider;
             _laFactory = laFactory;
-            _weaver = weaver;
-            _writeResultToDisk = writeResultToDisk;
         }
 
 
         public Maybe<Assembly> Load()
         {
             if (!_loadedAssembly.IsNull())
-                throw new InvalidOperationException(_definitionReader.Name + " has not been unloaded");
+                throw new InvalidOperationException(_assemblyProvider.Location.Name + " has not been unloaded");
 
-            var assemblyDefinition = _definitionReader.Get();
+            var result = _assemblyProvider.Get();
 
-            if (!assemblyDefinition.Any())
-                throw new Exception("Failed to read " + _definitionReader.Name + " definition");
+            if (!result.Any())
+                throw new InvalidOperationException("Assembly provider did not provide any assembly");
 
-            
-
-            if (!_weaver.Weave(assemblyDefinition.Single()))
-                throw new Exception("Failed to reweave " + _definitionReader.Name + " il");
-
-            // try to write first, in case loading it from memory fails (usually due to an error
-            // in rewritten il code)
-
-            if (_writeResultToDisk)
-                assemblyDefinition.Single().Write(_definitionReader.Location.FullPath + ".debug");
-
-            var result = _assemblyFromDefinitionProvider.Get(assemblyDefinition.Single());
-
-            if (!result.Any()) return Maybe<Assembly>.None;
-
-
-
-            _loadedAssembly = _laFactory.Create(result.Single(), _definitionReader.Location);
+            _loadedAssembly = _laFactory.Create(result.Single(), _assemblyProvider.Location);
 
             return result;
         }

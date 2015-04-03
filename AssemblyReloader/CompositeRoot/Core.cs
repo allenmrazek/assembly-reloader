@@ -19,7 +19,6 @@ using AssemblyReloader.Providers.SceneProviders;
 using AssemblyReloader.Queries;
 using AssemblyReloader.Queries.AssemblyQueries;
 using AssemblyReloader.Queries.CecilQueries;
-using AssemblyReloader.Queries.ConversionQueries;
 using AssemblyReloader.Queries.FileSystemQueries;
 using AssemblyReloader.Repositories;
 using AssemblyReloader.TypeInstallers;
@@ -312,19 +311,20 @@ namespace AssemblyReloader.CompositeRoot
             IAddonDestroyer addonDestroyer)
         {
 
-            var assemblyProvider = new AssemblyFromDefinitionProvider();
-            var definitionReader = new AssemblyDefinitionReader(location, assemblyResolver);
+            var debugSymbolExistQuery = new DebugSymbolFileExistsQuery(location);
 
-            var kspLoader = new KspAssemblyLoader(definitionReader,
-                assemblyProvider,
-                laFactory,
-                ConfigureDefinitionWeaver(location),
-#if DEBUG
-                true
-#else
-                false
-#endif
-                );
+            var assemblyProvider = new AssemblyProvider(
+                new AssemblyDefinitionReader(
+                    location, 
+                    debugSymbolExistQuery,
+                    assemblyResolver),
+                new AssemblyDefinitionMemoryLoader(_log.CreateTag("AssemblyDefinitionMemoryLoader"), debugSymbolExistQuery),
+                ConfigureDefinitionWeaver(location));
+
+
+            
+
+            var kspLoader = new KspAssemblyLoader(assemblyProvider, laFactory);
 
             var reloadable = new ReloadablePlugin(kspLoader, location, ConfigurePluginConfiguration());
 

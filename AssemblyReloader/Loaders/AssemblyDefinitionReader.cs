@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Linq;
+using AssemblyReloader.Annotations;
+using AssemblyReloader.Queries.FileSystemQueries;
 using Mono.Cecil;
 using ReeperCommon.Containers;
 using ReeperCommon.Extensions;
@@ -8,13 +11,21 @@ namespace AssemblyReloader.Loaders
 {
     public class AssemblyDefinitionReader : IAssemblyDefinitionReader
     {
+        private readonly IDebugSymbolFileExistsQuery _debugSymbolsExistQuery;
         private readonly BaseAssemblyResolver _resolver;
+        private Maybe<AssemblyDefinition> _definition = Maybe<AssemblyDefinition>.None; 
 
-        public AssemblyDefinitionReader(IFile location, BaseAssemblyResolver resolver)
+
+        public AssemblyDefinitionReader(
+            [NotNull] IFile location, 
+            [NotNull] IDebugSymbolFileExistsQuery debugSymbolsExistQuery, 
+            [NotNull] BaseAssemblyResolver resolver)
         {
             if (location == null) throw new ArgumentNullException("location");
+            if (debugSymbolsExistQuery == null) throw new ArgumentNullException("debugSymbolsExistQuery");
             if (resolver == null) throw new ArgumentNullException("resolver");
 
+            _debugSymbolsExistQuery = debugSymbolsExistQuery;
             _resolver = resolver;
             Location = location;
         }
@@ -22,19 +33,33 @@ namespace AssemblyReloader.Loaders
 
         public Maybe<AssemblyDefinition> Get()
         {
-            var definition = AssemblyDefinition.ReadAssembly(Location.FullPath, new ReaderParameters
-            {
-                AssemblyResolver = _resolver,
-            });
+            LazyInitialize();
 
-            return definition.IsNull() ? Maybe<AssemblyDefinition>.None : Maybe<AssemblyDefinition>.With(definition);
+            return _definition;
         }
+
+
+        private void LazyInitialize()
+        {
+            if (_definition.Any()) return;
+
+            var definition = AssemblyDefinition.ReadAssembly(Location.FullPath, ConfigureReaderParameters());
+
+            _definition = definition.IsNull() ? Maybe<AssemblyDefinition>.None : Maybe<AssemblyDefinition>.With(definition);
+        }
+
+
+
+        private ReaderParameters ConfigureReaderParameters()
+        {
+            return new ReaderParameters(ReadingMode.Immediate)
+            {
+                ReadSymbols = _debugSymbolsExistQuery.Get(),
+                AssemblyResolver = _resolver
+            };
+        }
+
 
         public IFile Location { get; private set; }
-
-        public string Name
-        {
-            get { return Location.Name; }
-        }
     }
 }
