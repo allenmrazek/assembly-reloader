@@ -3,6 +3,8 @@ using System.Linq;
 using AssemblyReloader.Annotations;
 using AssemblyReloader.Queries.FileSystemQueries;
 using Mono.Cecil;
+using Mono.Cecil.Mdb;
+using Mono.CompilerServices.SymbolWriter;
 using ReeperCommon.Containers;
 using ReeperCommon.Extensions;
 using ReeperCommon.FileSystem;
@@ -52,6 +54,7 @@ namespace AssemblyReloader.Loaders
 
         private ReaderParameters ConfigureReaderParameters()
         {
+            
             return new ReaderParameters(ReadingMode.Immediate)
             {
                 ReadSymbols = _debugSymbolsExistQuery.Get(),

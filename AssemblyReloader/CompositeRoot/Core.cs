@@ -318,7 +318,11 @@ namespace AssemblyReloader.CompositeRoot
                     location, 
                     debugSymbolExistQuery,
                     assemblyResolver),
-                new AssemblyDefinitionMemoryLoader(_log.CreateTag("AssemblyDefinitionMemoryLoader"), debugSymbolExistQuery),
+                new AssemblyDefinitionMemoryLoader(
+                    new TemporaryFileGenerator(
+                        location.Directory,
+                        new RandomStringGenerator()),
+                    _log.CreateTag("AssemblyDefinitionMemoryLoader")),
                 ConfigureDefinitionWeaver(location));
 
 

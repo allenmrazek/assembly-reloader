@@ -5,8 +5,12 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using AssemblyReloader.Annotations;
+using AssemblyReloader.Generators;
 using AssemblyReloader.Queries.FileSystemQueries;
 using Mono.Cecil;
+using Mono.Cecil.Cil;
+using Mono.Cecil.Mdb;
+using Mono.CompilerServices.SymbolWriter;
 using ReeperCommon.Containers;
 using ReeperCommon.Logging;
 
@@ -14,20 +18,20 @@ namespace AssemblyReloader.Loaders
 {
     public class AssemblyDefinitionMemoryLoader : IAssemblyDefinitionMemoryLoader
     {
+        private readonly ITemporaryFileGenerator _tempFileGenerator;
         private readonly ILog _log;
-        private readonly IDebugSymbolFileExistsQuery _debugSymbolExistsQuery;
         private const int InitialMemoryStreamSize = 1024 * 1024;
 
 
         public AssemblyDefinitionMemoryLoader(
-            [NotNull] ILog log,
-            [NotNull] IDebugSymbolFileExistsQuery debugSymbolExistsQuery)
+            [NotNull] ITemporaryFileGenerator tempFileGenerator,
+            [NotNull] ILog log)
         {
+            if (tempFileGenerator == null) throw new ArgumentNullException("tempFileGenerator");
             if (log == null) throw new ArgumentNullException("log");
-            if (debugSymbolExistsQuery == null) throw new ArgumentNullException("debugSymbolExistsQuery");
 
+            _tempFileGenerator = tempFileGenerator;
             _log = log;
-            _debugSymbolExistsQuery = debugSymbolExistsQuery;
         }
 
 
@@ -36,15 +40,36 @@ namespace AssemblyReloader.Loaders
             if (definition == null) throw new ArgumentNullException("definition");
 
             using (var byteStream = new MemoryStream(InitialMemoryStreamSize))
-            using (var symbolStream = new MemoryStream(InitialMemoryStreamSize))
+            using (var symbolFile = _tempFileGenerator.Get())
             {
-                definition.Write(byteStream, ConfigureWriterParameters(symbolStream));
+                try
+                {
+                    // note: we can't use stream AT ALL; it's completely not implemented. Have to use two temp files
+                    definition.Write(byteStream, ConfigureWriterParameters(definition, symbolFile.Stream));
 
-                if (byteStream.Length == 0) throw new ArgumentException("byteStream does not contain any data");
+                    // tested and works
+                    //definition.Write("D:/TestDefinition.dll",
+                    //    new WriterParameters {WriteSymbols = true, SymbolWriterProvider = new MdbWriterProvider()});
+                }
+                catch (MonoSymbolFileException e)
+                {
+                    _log.Error("Caught MonoSymbolFileException while writing AssemblyDefinition to stream: " + e);
+                    throw;
+                }
+                
+                
 
-                var assembly = symbolStream.Length > 0
+
+                if (byteStream.Length == 0)
+                {
+                    _log.Error("byteStream does not contain any data for " + definition.FullName);
+                    return Maybe<Assembly>.None;
+                }
+
+                // todo: use temp file to load symbols
+                var assembly = /*symbolStream.Length > 0
                     ? LoadAssemblyWithSymbols(byteStream, symbolStream)
-                    : LoadAssemblyWithoutSymbols(byteStream);
+                    :*/ LoadAssemblyWithoutSymbols(byteStream);
 
                 return assembly != null ? Maybe<Assembly>.With(assembly) : Maybe<Assembly>.None;
             }
@@ -76,15 +101,24 @@ namespace AssemblyReloader.Loaders
             var assembly = Assembly.Load(byteStream.GetBuffer());
 
             if (assembly == null)
-                _log.Warning("Failed to load assembly without symbols from byte stream");
-
+                _log.Warning("Failed to load assembly without debug symbols from byte stream");
+            else _log.Normal("Loaded assembly from stream without debug symbols");
+           
             return assembly;
         }
 
 
-        private WriterParameters ConfigureWriterParameters([CanBeNull] MemoryStream symbolStream)
+        private WriterParameters ConfigureWriterParameters(
+            [NotNull] AssemblyDefinition definition,
+            [CanBeNull] Stream symbolStream)
         {
-            return new WriterParameters { WriteSymbols = _debugSymbolExistsQuery.Get(), SymbolStream = symbolStream };
+            if (definition == null) throw new ArgumentNullException("definition");
+
+            return new WriterParameters
+            {
+                WriteSymbols = definition.MainModule.HasSymbols, 
+                SymbolStream = symbolStream
+            };
         }
     }
 }

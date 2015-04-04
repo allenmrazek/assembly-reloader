@@ -22,17 +22,7 @@ namespace AssemblyReloader.Queries.FileSystemQueries
 
         public bool Get()
         {
-            var urlid = new KSPUrlIdentifier(_location.FileName + DebugSymbolExtension);
-
-            var result2 = _location.Directory.FileExists(new KSPUrlIdentifier("TestProject.dll.reloadable.mdb"));
-
-            var files = _location.Directory.Files().ToList();
-
-            var result = _location.Directory.FileExists(new KSPUrlIdentifier(_location.FileName + DebugSymbolExtension));
-
-            new DebugLog().Normal("DebugSymbolFileExists for " + _location.FileName + ": " + result);
-
-            return result;
+            return _location.Directory.FileExists(new KSPUrlIdentifier(_location.FileName + DebugSymbolExtension)); 
         }
     }
 }

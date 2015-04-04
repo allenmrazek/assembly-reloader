@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using AssemblyReloader.Annotations;
 using AssemblyReloader.Loaders;
 using AssemblyReloader.Weaving;
-using FinePrint.Contracts.Parameters;
 using Mono.Cecil;
 using ReeperCommon.Containers;
 using ReeperCommon.FileSystem;
@@ -66,25 +63,3 @@ namespace AssemblyReloader.Providers
         }
     }
 }
-
-
-
-            //var assemblyDefinition = _definitionReader.Get();
-
-            //if (!assemblyDefinition.Any())
-            //    throw new Exception("Failed to read " + _definitionReader.Name + " definition");
-
-            
-
-            //if (!_weaver.Weave(assemblyDefinition.Single()))
-            //    throw new Exception("Failed to reweave " + _definitionReader.Name + " il");
-
-            //// try to write first, in case loading it from memory fails (usually due to an error
-            //// in rewritten il code)
-
-            //if (_writeResultToDisk)
-            //    assemblyDefinition.Single().Write(_definitionReader.Location.FullPath + ".debug", new WriterParameters { WriteSymbols = true});
-
-            //var result = _assemblyFromDefinitionProvider.Get(assemblyDefinition.Single());
-
-            //if (!result.Any()) return Maybe<Assembly>.None;

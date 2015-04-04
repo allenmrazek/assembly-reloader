@@ -23,7 +23,7 @@ namespace TestProject
 
             print("TestPartModule running from " + Assembly.GetExecutingAssembly().CodeBase);
             print("TestPartModule is running from " +
-                  (ReferenceEquals(part, part.partInfo.partPrefab) ? "prefab" : "clone"));
+                  (part == null || ReferenceEquals(part, part.partInfo.partPrefab) ? "prefab" : "clone"));
 
         }
 

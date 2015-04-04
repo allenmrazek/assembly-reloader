@@ -85,6 +85,7 @@
     <Compile Include="Controllers\ScenarioModuleController.cs" />
     <Compile Include="DataObjects\Configuration.cs" />
     <Compile Include="DataObjects\IConfiguration.cs" />
+    <Compile Include="DataObjects\TemporaryFile.cs" />
     <Compile Include="Destruction\IUnityObjectDestroyer.cs" />
     <Compile Include="Destruction\UnityObjectDestroyer.cs" />
     <Compile Include="Game\DisposeLoadedAssembly.cs" />
@@ -96,6 +97,10 @@
     <Compile Include="Game\KspGame.cs" />
     <Compile Include="Game\KspProtoScenarioModule.cs" />
     <Compile Include="Game\KspGameObjectProvider.cs" />
+    <Compile Include="Generators\IRandomStringGenerator.cs" />
+    <Compile Include="Generators\ITemporaryFileGenerator.cs" />
+    <Compile Include="Generators\RandomStringGenerator.cs" />
+    <Compile Include="Generators\TemporaryFileGenerator.cs" />
     <Compile Include="Gui\ConfigurationViewLogic.cs" />
     <Compile Include="Gui\ExpandablePanelFactory.cs" />
     <Compile Include="Gui\IExpandablePanelFactory.cs" />
@@ -186,7 +191,6 @@
     <Compile Include="Providers\Game\PartPrefabCloneProvider.cs" />
     <Compile Include="Providers\SceneProviders\CurrentSceneIsFlightQuery.cs" />
     <Compile Include="Providers\SceneProviders\ICurrentSceneIsFlightQuery.cs" />
-    <Compile Include="Providers\AssemblyFromDefinitionProvider.cs" />
     <Compile Include="Providers\Game\IAvailablePartConfigProvider.cs" />
     <Compile Include="Providers\IAssemblyProvider.cs" />
     <Compile Include="Providers\Game\AvailablePartConfigProvider.cs" />
