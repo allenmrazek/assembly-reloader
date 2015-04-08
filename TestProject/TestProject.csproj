@@ -77,12 +77,12 @@ set unity=C:\Program Files (x86)\Unity455
 
 if NOT $(Configuration) == Debug GOTO CopyFiles
 
-call:CheckUnity
-call:CreateMdb "$(ProjectDir)bin\$(Configuration)\$(TargetFileName)"
+REM call:CheckUnity
+REM call:CreateMdb "$(ProjectDir)bin\$(Configuration)\$(TargetFileName)"
 
-echo copying mdb into project GameData
-robocopy "$(ProjectDir)bin\$(Configuration)" "$(ProjectDir)GameData\$(ProjectName)" $(TargetFileName).mdb
-call:CheckRoboCopyCode "$(TargetFileName).mdb into project GameData"
+REM echo copying mdb into project GameData
+REM robocopy "$(ProjectDir)bin\$(Configuration)" "$(ProjectDir)GameData\$(ProjectName)" $(TargetFileName).mdb
+REM call:CheckRoboCopyCode "$(TargetFileName).mdb into project GameData"
 
 
 

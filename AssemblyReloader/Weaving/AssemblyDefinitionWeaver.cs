@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using AssemblyReloader.Queries.CecilQueries;
 using Mono.Cecil;
 using ReeperCommon.Logging;
@@ -36,14 +37,22 @@ namespace AssemblyReloader.Weaving
 
         public bool Weave(AssemblyDefinition assemblyDefinition)
         {
+            _log.Verbose("Weaving " + assemblyDefinition.FullName);
+
             try
             {
-                var types = _allTypeDefinitionsQuery.Get(assemblyDefinition).ToList();
-
                 var allTypeDefinitions = _allTypeDefinitionsQuery.Get(assemblyDefinition).ToList();
-                var allMethodDefinitions = types.SelectMany(td => _allMethodDefinitionsQuery.Get(td)).ToList();
+                _log.Verbose("Found " + allTypeDefinitions.Count + " type definitions in assembly definition");
 
-                return _operations.All(op => RunOperation(op, assemblyDefinition, allTypeDefinitions, allMethodDefinitions));
+                var allMethodDefinitions = allTypeDefinitions.SelectMany(td => _allMethodDefinitionsQuery.Get(td)).ToList();
+                _log.Verbose("Found " + allMethodDefinitions.Count + " method definitions in assembly definition");
+
+                var result = _operations.All(op => RunOperation(op, assemblyDefinition, allTypeDefinitions, allMethodDefinitions));
+
+                if (!result)
+                    _log.Warning("One or more weave operations failed!");
+
+                return result;
             }
             catch (Exception e)
             {

@@ -6,7 +6,7 @@
         public override void OnAwake()
         {
             base.OnAwake();
-            print("ScenarioModuleTest.OnAwake");
+            print("ScenarioModuleTest.OnAwake modded");
         }
 
         public override void OnLoad(ConfigNode node)

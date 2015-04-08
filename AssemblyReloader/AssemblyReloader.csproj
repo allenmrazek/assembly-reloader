@@ -232,7 +232,6 @@
     <Compile Include="Weaving\AssemblyDefinitionWeaver.cs" />
     <Compile Include="Weaving\IAssemblyDefinitionWeaver.cs" />
     <Compile Include="Weaving\IWeaveOperation.cs" />
-    <Compile Include="Weaving\Operations\InsertIntermediateLanguageCommandsIntoMethod.cs" />
     <Compile Include="Weaving\Operations\InterceptExecutingAssemblyLocationQueries.cs" />
     <Compile Include="Weaving\Operations\RenameAssemblyOperation.cs" />
     <Compile Include="Weaving\Operations\InjectedHelperTypeDefinitionWriter.cs" />

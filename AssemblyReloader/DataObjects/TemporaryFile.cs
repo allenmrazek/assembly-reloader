@@ -2,6 +2,7 @@
 using System.IO;
 using System.Security;
 using KSPAchievements;
+using ReeperCommon.Logging.Implementations;
 
 namespace AssemblyReloader.DataObjects
 {
@@ -37,8 +38,12 @@ namespace AssemblyReloader.DataObjects
             if (_stream != null) _stream.Dispose();
             if (!File.Exists(_fullPath)) return;
 
-            // todo: renable (this used for testing only)
-            //File.Delete(_fullPath);
+            // todo: remove
+            var log = new DebugLog("TemporaryFile");
+
+            log.Normal("Deleting " + FullPath);
+            File.Delete(_fullPath);
+            log.Normal("done");
         }
 
 
@@ -50,6 +55,12 @@ namespace AssemblyReloader.DataObjects
 
                 return _stream;
             }
+        }
+
+
+        public string FullPath
+        {
+            get { return _fullPath; }
         }
     }
 }

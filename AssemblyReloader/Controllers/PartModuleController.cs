@@ -47,14 +47,9 @@ namespace AssemblyReloader.Controllers
         {
             if (assembly == null) throw new ArgumentNullException("assembly");
 
-            _log.Verbose("Loading PartModules from " + assembly.FullName);
-
             foreach (var t in GetPartModules(assembly))
-            {
-                _log.Debug("Loading PartModule " + t.FullName);
-
                 _pmLoader.Load(t);
-            }
+            
             _partModuleConfigRepository.Clear();
             _refreshPartActionWindows.Execute();
         }
@@ -64,13 +59,10 @@ namespace AssemblyReloader.Controllers
         {
             if (assembly == null) throw new ArgumentNullException("assembly");
 
-            _log.Verbose("Unloading PartModules from " + assembly.FullName);
 
             foreach (var t in GetPartModules(assembly))
-            {
-                _log.Debug("Unloading PartModule " + t.FullName);
                 _pmUnloader.Unload(t);
-            }
+            
 
             _refreshPartActionWindows.Execute();
         }

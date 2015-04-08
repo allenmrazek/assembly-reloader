@@ -153,7 +153,7 @@ namespace AssemblyReloader.CompositeRoot
 
 
             var resourceLocator = ConfigureResourceRepository(ourDirProvider.Get());
-            IEventProvider eventProvider = ConfigureEventProvider(new StartupSceneFromGameSceneQuery());
+            var eventProvider = ConfigureEventProvider(new StartupSceneFromGameSceneQuery());
 
             KspPartActionWindowListener.WindowController = new KspPartActionWindowController();
             KspPartActionWindowListener.PartActionWindowQuery =
@@ -198,17 +198,18 @@ namespace AssemblyReloader.CompositeRoot
     
 
 
-            AssemblyLoader.loadedAssemblies.ToList().ForEach(la =>
-            {
-                _log.Normal("LoadedAssembly: " + la.dllName);
-                _log.Normal("  Types:");
-                la.types.ToList().ForEach(ty =>
-                {
-                    _log.Normal("    BaseType: " + ty.Key);
-                    _log.Normal("       Contains: ");
-                    ty.Value.ForEach(v => _log.Normal("        Type: " + v.FullName + "; " + v.AssemblyQualifiedName));
-                });
-            });
+            //AssemblyLoader.loadedAssemblies.ToList().ForEach(la =>
+            //{
+            //    _log.Normal("LoadedAssembly: " + la.dllName);
+            //    _log.Normal("  Types:");
+            //    la.types.ToList().ForEach(ty =>
+            //    {
+            //        _log.Normal("    BaseType: " + ty.Key);
+            //        _log.Normal("       Contains: ");
+            //        ty.Value.ForEach(v => _log.Normal("        Type: " + v.FullName + "; " + v.AssemblyQualifiedName));
+            //    });
+            //});
+
         }
 
 
@@ -352,7 +353,8 @@ namespace AssemblyReloader.CompositeRoot
 
             var protoScenarioModuleProvider = new ProtoScenarioModuleProvider(
                 kspFactory,
-                new TypeIdentifierQuery());
+                new TypeIdentifierQuery(),
+                new CurrentGameProvider(new TypeIdentifierQuery()));
 
             var gameProvider = new CurrentGameProvider(new TypeIdentifierQuery());
             
@@ -465,7 +467,7 @@ namespace AssemblyReloader.CompositeRoot
             var allTypesFromAssemblyExceptInjected = new ExcludingTypeDefinitions(
                 new AllTypesFromDefinitionQuery(), new InjectedHelperTypeQuery());
    
-            var renameAssembly = new RenameAssemblyOperation(new UniqueAssemblyNameGenerator());
+            var renameAssembly = new RenameAssemblyOperation(new UniqueAssemblyNameGenerator(new RandomStringGenerator()));
 
             var writeInjectedHelper = new InjectedHelperTypeDefinitionWriter(
                 _log.CreateTag("InjectedHelperWriter"),

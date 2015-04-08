@@ -1,81 +1,307 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace TestProject
 {
-    public class ColorChangingModule : PartModule
-    {
-        [KSPField(guiActiveEditor = true, guiName = "First Color", guiFormat = "F2", isPersistant = true)]
-        [UI_FloatRange(minValue = 0, maxValue = 1, stepIncrement = .05f)]
-        public float FirstColor = 0f;
+
+//[KSPAddon(KSPAddon.Startup.SpaceCentre, true)]
+//public class WindowCallDemo : MonoBehaviour
+//{
+//    private GUISkin _customSkin;
+//    private Rect _firstWindow = new Rect(0, 200, 200f, 200f);
+//    private Rect _secondWindow = new Rect(300f, 200f, 200f, 200f);
+
+//    private void Start()
+//    {
+//        DontDestroyOnLoad(gameObject);
+//        _customSkin = Instantiate(AssetBase.GetGUISkin("KSP window 1")) as GUISkin;
+
+//        var clearTex = new Texture2D(1, 1);
+//        clearTex.SetPixel(0, 0, Color.clear);
+//        clearTex.Apply();
+
+//        _customSkin.button.normal.background =
+//            _customSkin.button.onNormal.background = clearTex;
+
+//        OnLevelWasLoaded();
+//    }
 
 
-        [KSPField(guiActiveEditor = true, guiName = "Second Color", guiFormat = "F2", isPersistant = true)]
-        [UI_FloatRange(minValue = 0, maxValue = 1, stepIncrement = .05f)]
-        public float SecondColor = 1f;
+//    private void OnLevelWasLoaded()
+//    {
+//        StartCoroutine(AddToQueue());
+//    }
+
+//    IEnumerator AddToQueue()
+//    {
+//        yield return new WaitForSeconds(5f);
+
+//        var callbacks = RenderingManager.fetch.postDrawQueue.ToList();
+//        callbacks.Insert(2, DrawMyCrazyWindows);
+//        RenderingManager.fetch.postDrawQueue = callbacks.ToArray();
+//    }
 
 
-        private Color _current = Color.white;
-        private float _time = 0f;
-        private Renderer[] _renderers;
+//    private void OnDestroy()
+//    {
+//        print("Demo was destroyed!!");
+//    }
 
-        private Material _testMaterial = null;
+//    private void DrawMyCrazyWindows()
+//    {
+//        GUIUtility.RotateAroundPivot(45f, new Vector2(150f, 300f));
 
+//        _firstWindow = GUI.Window(GetInstanceID(), _firstWindow, DrawFirstWindow, "FirstWindow");
+//        _secondWindow = GUI.Window(GetInstanceID() + 1, _secondWindow, DrawSecondWindow, "SecondWindow");
+//    }
 
-        public override void OnStart(StartState state)
-        {
-            //if (state != StartState.Editor || part != EditorLogic.RootPart)
-            //{
-            //    enabled = false;
-            //    return;
-            //}
+//    private void DrawFirstWindow(int winid)
+//    {
+//        GUI.skin = _customSkin;
+//        DrawButton();
+//        GUI.DragWindow();
+//    }
 
-            //base.OnStart(state);
-            
-            //_renderers = part.FindModelComponents<Renderer>();
-            //if (!_renderers.Any())
-            //    print("ERROR: no renderers found");
+//    private void DrawSecondWindow(int winid)
+//    {
+//        DrawButton();
+//        GUI.DragWindow();
+//    }
 
-            //var tex = new Texture2D(1, 1);
-            //tex.SetPixel(0, 0, Color.red);
-            //tex.Apply();
-
-            //foreach (var r in _renderers)
-            //    r.sharedMaterial.mainTexture = tex;
-
-            //enabled = false;
-            //return;
-            //foreach (var r in _renderers)
-            //    r.material.shader = Shader.Find("Diffuse");
-        }
-
-
-        public override void OnAwake()
-        {
-            if (_testMaterial == null)
-                _testMaterial = new Material(Shader.Find("Diffuse"));
-
-            base.OnAwake();
-            print("ColorChangingModule Awake!");
-
-        }
+//    private void DrawButton()
+//    {
+//        if (GUI.Button(new Rect(20f, 20f, 128f, 32f), "Button"))
+//            print("You clicked the button!");
+//    }
+//}
 
 
-        public void Update()
-        {
-            //_time += Time.deltaTime;
-            //if (_time > 2f)
-            //    _time -= 2f;
+    //[KSPAddon(KSPAddon.Startup.SpaceCentre, false)]
+    //public class MyTestAddonA : MonoBehaviour
+    //{
+    //    private void Start()
+    //    {
+    //        //RenderingManager.AddToPostDrawQueue(0, DrawMethod);
+    //        gameObject.AddComponent<MyTestAddonB>();
 
-            //_current = Color.Lerp(new Color(FirstColor, FirstColor, FirstColor), new Color(SecondColor, SecondColor, SecondColor),
-            //    _time <= 1f ? _time : 2f - _time);
+    //        var postCallbacks = RenderingManager.fetch.postDrawQueue.ToList();
+    //        postCallbacks.Insert(0, DrawMethod);
+    //        RenderingManager.fetch.postDrawQueue = postCallbacks.ToArray();
+    //    }
 
-            //foreach (var kvp in _renderers)
-            //    kvp.material.SetColor("_Color", _current);
-        }
-    }
+    //    private void OnDestroy()
+    //    {
+    //        RenderingManager.RemoveFromPostDrawQueue(0, DrawMethod);
+    //    }
+
+    //    public void DrawMethod()
+    //    {
+    //        if (GUI.Button(new Rect(200, 200, 128f, 32f), "Click me!"))
+    //            print("Clicked the button");
+    //    }
+    //}
+
+    //public class MyTestAddonB : MonoBehaviour
+    //{
+    //    private void Start()
+    //    {
+    //        RenderingManager.AddToPostDrawQueue(1, () => GUI.Window(32423, new Rect(300f, 200f, 400f, 400f), DrawMethod, "MyWindow"));
+    //    }
+
+    //    public void DrawMethod(int winid)
+    //    {
+    //        if (GUI.Button(new Rect(20, 20, 128f, 32f), "Click me!"))
+    //            print("Clicked the button");
+    //    }
+    //}
+
+    //[KSPAddon(KSPAddon.Startup.SpaceCentre, false)]
+    //public class NormalWindowOwner : MonoBehaviour
+    //{
+    //    public static Rect ButtonRect = new Rect(100, 100, 96f, 32f);
+
+    //    private void Start()
+    //    {
+    //        gameObject.AddComponent<StylizedWindowOwner>();
+    //    }
+
+    //    private void OnGUI()
+    //    {
+    //        GUI.Button(ButtonRect, "Normal Style");
+    //    }
+    //}
+
+
+    //public class StylizedWindowOwner : MonoBehaviour
+    //{
+    //    private GUISkin customStyle;
+
+    //    private Rect OurRect = new Rect(NormalWindowOwner.ButtonRect.x + NormalWindowOwner.ButtonRect.width + 20f,
+    //        NormalWindowOwner.ButtonRect.y,
+    //        NormalWindowOwner.ButtonRect.width,
+    //        NormalWindowOwner.ButtonRect.height);
+
+    //    private void Start()
+    //    {
+    //        var clearTex = new Texture2D(1, 1);
+    //        clearTex.SetPixel(0, 0, Color.clear);
+    //        clearTex.Apply();
+
+    //        customStyle = Instantiate(HighLogic.Skin) as GUISkin;
+    //        customStyle.button.normal.background = customStyle.button.onNormal.background = clearTex;
+
+    //        var callbacks = RenderingManager.fetch.postDrawQueue.ToList();
+    //        callbacks.Insert(0, DrawWindow);
+    //        RenderingManager.fetch.postDrawQueue = callbacks.ToArray();
+    //    }
+
+    //    private void DrawWindow()
+    //    {
+    //        GUI.skin = customStyle;
+    //        if (GUI.Button(OurRect, "Modified Style"))
+    //        {
+    //            foreach (var style in typeof(GUISkin).GetProperties(BindingFlags.Public | BindingFlags.Instance)
+    //                .Where(f => f.PropertyType.IsSubclassOf(typeof(GUIStyle))))
+    //            {
+    //                var fFontSize = style.PropertyType.GetField("fontSize", BindingFlags.Public | BindingFlags.Instance);
+    //                if (fFontSize == null) continue;
+
+    //                int currentFontSize = (int)fFontSize.GetValue(style);
+    //                print("CurrentFontSize of " + style.Name + "." + fFontSize.Name + " is " + currentFontSize);
+    //                fFontSize.SetValue(style, currentFontSize * 2);
+    //            }
+    //        }
+    //    }
+    //}
 }
+
+//[KSPAddon(KSPAddon.Startup.SpaceCentre, false)]
+    //public class RenderingManagerApproximation : MonoBehaviour
+    //{
+    //    public readonly List<Callback> DrawMethods = new List<Callback>();
+
+    //    private void Start()
+    //    {
+    //        DrawMethods.Add(gameObject.AddComponent<NormalWindowRenderer>().DrawMethod);
+    //        DrawMethods.Add(gameObject.AddComponent<StylizedWindowRenderer>().DrawMethod);
+    //    }
+    //    private void OnGUI()
+    //    {
+    //        foreach (var cb in DrawMethods)
+    //            cb();
+    //    }
+    //}
+
+
+    //public class NormalWindowRenderer : MonoBehaviour
+    //{
+    //    public static Rect ButtonRect = new Rect(100, 100, 96f, 32f);
+
+    //    public void DrawMethod()
+    //    {
+    //        GUI.Button(ButtonRect, "Normal Style");
+    //    }
+    //}
+
+
+    //public class StylizedWindowRenderer : MonoBehaviour
+    //{
+    //    private GUISkin customStyle;
+
+    //    private Rect OurRect = new Rect(NormalWindowRenderer.ButtonRect.x + NormalWindowRenderer.ButtonRect.width + 20f,
+    //        NormalWindowRenderer.ButtonRect.y,
+    //        NormalWindowRenderer.ButtonRect.width,
+    //        NormalWindowRenderer.ButtonRect.height);
+
+    //    private void Start()
+    //    {
+    //        var clearTex = new Texture2D(1, 1);
+    //        clearTex.SetPixel(0, 0, Color.clear);
+    //        clearTex.Apply();
+
+    //        customStyle = Instantiate(HighLogic.Skin) as GUISkin;
+    //        customStyle.button.normal.background = customStyle.button.onNormal.background = clearTex;
+    //    }
+
+    //    public void DrawMethod()
+    //    {
+    //        GUI.skin = customStyle;
+    //        GUI.Button(OurRect, "Modified Style");
+    //    }
+    //}
+
+
+    //public class ColorChangingModule : PartModule
+    //{
+    //    [KSPField(guiActiveEditor = true, guiName = "First Color", guiFormat = "F2", isPersistant = true)]
+    //    [UI_FloatRange(minValue = 0, maxValue = 1, stepIncrement = .05f)]
+    //    public float FirstColor = 0f;
+
+
+    //    [KSPField(guiActiveEditor = true, guiName = "Second Color", guiFormat = "F2", isPersistant = true)]
+    //    [UI_FloatRange(minValue = 0, maxValue = 1, stepIncrement = .05f)]
+    //    public float SecondColor = 1f;
+
+
+    //    private Color _current = Color.white;
+    //    private float _time = 0f;
+    //    private Renderer[] _renderers;
+
+    //    private Material _testMaterial = null;
+
+
+    //    public override void OnStart(StartState state)
+    //    {
+    //        //if (state != StartState.Editor || part != EditorLogic.RootPart)
+    //        //{
+    //        //    enabled = false;
+    //        //    return;
+    //        //}
+
+    //        //base.OnStart(state);
+            
+    //        //_renderers = part.FindModelComponents<Renderer>();
+    //        //if (!_renderers.Any())
+    //        //    print("ERROR: no renderers found");
+
+    //        //var tex = new Texture2D(1, 1);
+    //        //tex.SetPixel(0, 0, Color.red);
+    //        //tex.Apply();
+
+    //        //foreach (var r in _renderers)
+    //        //    r.sharedMaterial.mainTexture = tex;
+
+    //        //enabled = false;
+    //        //return;
+    //        //foreach (var r in _renderers)
+    //        //    r.material.shader = Shader.Find("Diffuse");
+    //    }
+
+
+    //    public override void OnAwake()
+    //    {
+    //        if (_testMaterial == null)
+    //            _testMaterial = new Material(Shader.Find("Diffuse"));
+
+    //        base.OnAwake();
+    //        print("ColorChangingModule Awake!");
+
+    //    }
+
+
+    //    public void Update()
+    //    {
+    //        //_time += Time.deltaTime;
+    //        //if (_time > 2f)
+    //        //    _time -= 2f;
+
+    //        //_current = Color.Lerp(new Color(FirstColor, FirstColor, FirstColor), new Color(SecondColor, SecondColor, SecondColor),
+    //        //    _time <= 1f ? _time : 2f - _time);
+
+    //        //foreach (var kvp in _renderers)
+    //        //    kvp.material.SetColor("_Color", _current);
+    //    }
+    //}
+//}
 
 
 

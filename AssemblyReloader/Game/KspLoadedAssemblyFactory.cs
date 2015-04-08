@@ -49,16 +49,35 @@ namespace AssemblyReloader.Game
 
             var log = new DebugLog("LoadedAssemblyFactory");
 
-            log.Normal("Types in LoadedAssembly:");
+            //log.Normal("Types in LoadedAssembly:");
 
-            foreach (var typeName in la.types.Keys.OrderBy(k => k.Name))
-                foreach (var t in la.types[typeName].OrderBy(t => t.Name))
-                    log.Normal(typeName + ": " + t.FullName + "; " + t.AssemblyQualifiedName);
+            //foreach (var typeName in la.types.Keys.OrderBy(k => k.Name))
+            //    foreach (var t in la.types[typeName].OrderBy(t => t.Name))
+            //        log.Normal(typeName + ": " + t.FullName + "; " + t.AssemblyQualifiedName);
 
-            log.Normal("End loaded type list");
+            //log.Normal("End loaded type list");
 
             AssemblyLoader.loadedAssemblies.Add(la);
 
+            //AssemblyLoader.loadedAssemblies.ToList().ForEach(loadedAssembly =>
+            //{
+            //    log.Normal("LoadedAssembly: " + loadedAssembly.dllName);
+            //    log.Normal("  Types:");
+            //    loadedAssembly.types.ToList().ForEach(ty =>
+            //    {
+            //        log.Normal("    BaseType: " + ty.Key);
+            //        log.Normal("       Contains: ");
+            //        ty.Value.ForEach(v => log.Normal("        Type: " + v.FullName + "; " + v.AssemblyQualifiedName));
+            //    });
+            //});
+
+            log.Normal("Begin AppDomain dump:");
+            AppDomain.CurrentDomain.GetAssemblies().ToList().ForEach(a => log.Normal("AppDomain: " + a.GetName().Name));
+            log.Normal("End AppDomain dump");
+
+            log.Warning("TestPartModule instance: " +
+                        AssemblyLoader.GetClassByName(typeof (PartModule), "TestPartModule").FullName +
+                        AssemblyLoader.GetClassByName(typeof(PartModule), "TestPartModule").Assembly.FullName);
             return _disposeFactory.Create(la);
         }
 

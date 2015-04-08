@@ -47,23 +47,13 @@ namespace AssemblyReloader.Loaders.PartModuleLoader
         {
             _partModuleFactory.Create(description.Prefab, description.Type, description.Config);
 
-            var log = new DebugLog("PartModuleLoader");
-
-            log.Warning("LoadPartModule in PartModuleLoader");
+           
             var items = _loadedPrefabProvider.Get(description.Prefab).ToList();
 
-            log.Warning("Found " + items.Count.ToString() + " prefab instances");
 
             foreach (var loadedInstance in _loadedPrefabProvider.Get(description.Prefab).ToList())
             {
-                log.Normal("Loading PartModule on " + loadedInstance.FlightID);
-
                 var stored = _partModuleConfigRepository.Retrieve(loadedInstance.FlightID, description.Identifier);
-
-                if (stored.Any())
-                    log.Normal("*** found stored ConfigNode for this item ***");
-                else log.Normal("Didn't find ConfigNode for " + loadedInstance.FlightID);
-
                 var config = stored.Any() ? stored.Single() : description.Config;
 
                 _partModuleFactory.Create(loadedInstance, description.Type, config);

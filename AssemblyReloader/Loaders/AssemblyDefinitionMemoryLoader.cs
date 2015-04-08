@@ -1,17 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text;
 using AssemblyReloader.Annotations;
 using AssemblyReloader.Generators;
-using AssemblyReloader.Queries.FileSystemQueries;
 using Mono.Cecil;
-using Mono.Cecil.Cil;
-using Mono.Cecil.Mdb;
 using Mono.CompilerServices.SymbolWriter;
 using ReeperCommon.Containers;
+using ReeperCommon.Extensions;
 using ReeperCommon.Logging;
 
 namespace AssemblyReloader.Loaders
@@ -40,85 +35,117 @@ namespace AssemblyReloader.Loaders
             if (definition == null) throw new ArgumentNullException("definition");
 
             using (var byteStream = new MemoryStream(InitialMemoryStreamSize))
-            using (var symbolFile = _tempFileGenerator.Get())
+            using (var symbolStream = new MemoryStream(InitialMemoryStreamSize))
             {
-                try
-                {
-                    // note: we can't use stream AT ALL; it's completely not implemented. Have to use two temp files
-                    definition.Write(byteStream, ConfigureWriterParameters(definition, symbolFile.Stream));
-
-                    // tested and works
-                    //definition.Write("D:/TestDefinition.dll",
-                    //    new WriterParameters {WriteSymbols = true, SymbolWriterProvider = new MdbWriterProvider()});
-                }
-                catch (MonoSymbolFileException e)
-                {
-                    _log.Error("Caught MonoSymbolFileException while writing AssemblyDefinition to stream: " + e);
-                    throw;
-                }
+                if (definition.MainModule.HasSymbols)
+                    WriteDefinitionAndSymbolsToStream(definition, byteStream, symbolStream);
+                else WriteDefinitionToStream(definition, byteStream);
                 
                 
-
-
                 if (byteStream.Length == 0)
                 {
                     _log.Error("byteStream does not contain any data for " + definition.FullName);
                     return Maybe<Assembly>.None;
                 }
 
-                // todo: use temp file to load symbols
-                var assembly = /*symbolStream.Length > 0
-                    ? LoadAssemblyWithSymbols(byteStream, symbolStream)
-                    :*/ LoadAssemblyWithoutSymbols(byteStream);
-
-                return assembly != null ? Maybe<Assembly>.With(assembly) : Maybe<Assembly>.None;
+                return LoadAssembly(byteStream, symbolStream);
             }
         }
 
 
-        private Assembly LoadAssemblyWithSymbols(
+        /// <summary>
+        /// For who knows why the hell why, Cecil can read mdbs from a stream but not write them (see
+        /// https://github.com/jbevain/cecil/blob/master/symbols/mdb/Mono.Cecil.Mdb/MdbWriter.cs )
+        /// 
+        /// As a workaround, dump the contents to disk and read it back into memory
+        /// </summary>
+        /// <param name="definition"></param>
+        /// <param name="assemblyStream"></param>
+        /// <param name="symbolStream"></param>
+        private void WriteDefinitionAndSymbolsToStream(
+            [NotNull] AssemblyDefinition definition,
+            [NotNull] Stream assemblyStream, 
+            [NotNull] Stream symbolStream)
+        {
+            if (definition == null) throw new ArgumentNullException("definition");
+            if (assemblyStream == null) throw new ArgumentNullException("assemblyStream");
+            if (symbolStream == null) throw new ArgumentNullException("symbolStream");
+
+            if (!definition.MainModule.HasSymbols)
+                throw new ArgumentException("definition does not contain debug symbols");
+
+            using (var tempDll = _tempFileGenerator.Get())
+            {
+                try
+                {
+                    definition.Write(tempDll.FullPath, new WriterParameters {WriteSymbols = true});
+
+                    using (var tempFile = new FileStream(tempDll.FullPath, FileMode.Open))
+                    using (var tempSymbolFile = new FileStream(tempDll.FullPath + ".mdb", FileMode.Open))
+                    {
+                        if (tempFile.Length == 0)
+                            throw new Exception("Failed to write assembly definition to disk at " + tempDll.FullPath);
+
+                        tempFile.CopyTo(assemblyStream);
+
+                        if (tempSymbolFile.Length == 0)
+                        {
+                            _log.Warning("Failed to write " + definition.FullName + " symbols to " + tempDll.FullPath);
+                        }
+                        else tempSymbolFile.CopyTo(symbolStream);
+                    }
+                }
+                catch (MonoSymbolFileException symbolException)
+                {
+                    _log.Warning("Symbol file exception: " + symbolException);
+                    symbolStream.Seek(0, SeekOrigin.Begin);
+                    symbolStream.SetLength(0);
+
+                    if (assemblyStream.Length == 0)
+                        throw;
+                }
+                catch (FileNotFoundException fnf)
+                {
+                    _log.Error("Could not load assembly from temp file (file does not exist): " + tempDll.FullPath);
+                    throw;
+                } 
+            }
+        }
+
+
+        private void WriteDefinitionToStream([NotNull] AssemblyDefinition definition, [NotNull] Stream assemblyStream)
+        {
+            if (definition == null) throw new ArgumentNullException("definition");
+            if (assemblyStream == null) throw new ArgumentNullException("assemblyStream");
+            if (definition.MainModule.HasSymbols)
+                _log.Warning("Ignoring " + definition.FullName + " symbols (is this intended?)");
+
+            definition.Write(assemblyStream);
+
+            if (assemblyStream.Length == 0)
+                throw new Exception("Failed to write " + definition.FullName + " to memory stream");
+        }
+
+
+        private Maybe<Assembly> LoadAssembly(
             [NotNull] MemoryStream byteStream,
             [NotNull] MemoryStream symbolStream)
         {
             if (byteStream == null) throw new ArgumentNullException("byteStream");
             if (symbolStream == null) throw new ArgumentNullException("symbolStream");
+            if (byteStream.Length == 0) throw new InvalidOperationException("byteStream does not contain any data");
 
-            var assembly = Assembly.Load(byteStream.GetBuffer(), symbolStream.GetBuffer());
-
-            if (assembly == null)
-                _log.Warning("Failed to load assembly with symbols from byte stream");
-            else _log.Normal("Loaded assembly from stream with debug symbols");
-
-            return assembly;
-        }
-
-
-        private Assembly LoadAssemblyWithoutSymbols([NotNull] MemoryStream byteStream)
-        {
-            if (byteStream == null) throw new ArgumentNullException("byteStream");
-
-
-            var assembly = Assembly.Load(byteStream.GetBuffer());
+            var assembly = symbolStream.Length > 0 ? 
+                Assembly.Load(byteStream.GetBuffer(), symbolStream.GetBuffer())
+                : Assembly.Load(byteStream.GetBuffer());
 
             if (assembly == null)
-                _log.Warning("Failed to load assembly without debug symbols from byte stream");
-            else _log.Normal("Loaded assembly from stream without debug symbols");
-           
-            return assembly;
-        }
-
-
-        private WriterParameters ConfigureWriterParameters(
-            [NotNull] AssemblyDefinition definition,
-            [CanBeNull] Stream symbolStream)
-        {
-            if (definition == null) throw new ArgumentNullException("definition");
-
-            return new WriterParameters
             {
-                WriteSymbols = definition.MainModule.HasSymbols, 
-                SymbolStream = symbolStream
-            };
+                _log.Warning("Failed to load assembly from byte stream");
+            }
+            else _log.Verbose("Loaded assembly from stream (debug symbols = " + (symbolStream.Length > 0 ? "YES" : "NO") + ")");
+
+            return assembly == null ? Maybe<Assembly>.None : Maybe<Assembly>.With(assembly);
         }
     }
 }

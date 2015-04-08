@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using AssemblyReloader.Annotations;
 using AssemblyReloader.Queries.AssemblyQueries;
 using UnityEngine;

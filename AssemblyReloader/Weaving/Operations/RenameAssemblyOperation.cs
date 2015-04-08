@@ -11,6 +11,7 @@ namespace AssemblyReloader.Weaving.Operations
         public RenameAssemblyOperation(IUniqueAssemblyNameGenerator nameGenerator)
         {
             if (nameGenerator == null) throw new ArgumentNullException("nameGenerator");
+
             _nameGenerator = nameGenerator;
         }
 

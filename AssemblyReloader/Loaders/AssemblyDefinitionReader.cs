@@ -15,7 +15,6 @@ namespace AssemblyReloader.Loaders
     {
         private readonly IDebugSymbolFileExistsQuery _debugSymbolsExistQuery;
         private readonly BaseAssemblyResolver _resolver;
-        private Maybe<AssemblyDefinition> _definition = Maybe<AssemblyDefinition>.None; 
 
 
         public AssemblyDefinitionReader(
@@ -35,21 +34,10 @@ namespace AssemblyReloader.Loaders
 
         public Maybe<AssemblyDefinition> Get()
         {
-            LazyInitialize();
-
-            return _definition;
-        }
-
-
-        private void LazyInitialize()
-        {
-            if (_definition.Any()) return;
-
             var definition = AssemblyDefinition.ReadAssembly(Location.FullPath, ConfigureReaderParameters());
 
-            _definition = definition.IsNull() ? Maybe<AssemblyDefinition>.None : Maybe<AssemblyDefinition>.With(definition);
+            return definition.IsNull() ? Maybe<AssemblyDefinition>.None : Maybe<AssemblyDefinition>.With(definition);
         }
-
 
 
         private ReaderParameters ConfigureReaderParameters()
