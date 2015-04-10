@@ -1,10 +1,9 @@
 ﻿using System;
 using AssemblyReloader.Annotations;
-using AssemblyReloader.Game;
 using AssemblyReloader.Queries;
 using ReeperCommon.Containers;
 
-namespace AssemblyReloader.Providers.Game
+namespace AssemblyReloader.Game.Providers
 {
     public class CurrentGameProvider : ICurrentGameProvider
     {

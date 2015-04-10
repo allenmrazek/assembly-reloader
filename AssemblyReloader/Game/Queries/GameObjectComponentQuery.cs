@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using AssemblyReloader.Annotations;
-using AssemblyReloader.Game;
 using UnityEngine;
 
-namespace AssemblyReloader.Providers.Game
+namespace AssemblyReloader.Game.Queries
 {
     public class GameObjectComponentQuery : IGameObjectComponentQuery
     {

@@ -9,12 +9,13 @@ using AssemblyReloader.Controllers;
 using AssemblyReloader.DataObjects;
 using AssemblyReloader.Destruction;
 using AssemblyReloader.Game;
+using AssemblyReloader.Game.Providers;
+using AssemblyReloader.Game.Queries;
 using AssemblyReloader.Generators;
 using AssemblyReloader.Gui;
 using AssemblyReloader.Loaders;
 using AssemblyReloader.Loaders.PartModuleLoader;
 using AssemblyReloader.Providers;
-using AssemblyReloader.Providers.Game;
 using AssemblyReloader.Providers.SceneProviders;
 using AssemblyReloader.Queries;
 using AssemblyReloader.Queries.AssemblyQueries;
@@ -129,7 +130,7 @@ namespace AssemblyReloader.CompositeRoot
 
         public Core()
         {
-
+            
 #if DEBUG
             var primaryLog = new DebugLog("ART");
 #else
@@ -139,8 +140,6 @@ namespace AssemblyReloader.CompositeRoot
             var cachedLog = new CachedLog(primaryLog, 100);
 
             _log = cachedLog;
-
-           
 
             var fsFactory = new KSPFileSystemFactory(
                 new KSPUrlDir(new KSPGameDataUrlDirProvider().Get()));
@@ -277,7 +276,7 @@ namespace AssemblyReloader.CompositeRoot
 
             var addonDestroyer = new AddonDestroyer(
                 new UnityObjectDestroyer(new PluginReloadRequestedMethodCallCommand()),
-                new LoadedComponentProvider(),
+                new LoadedComponentQuery(),
                 new AddonsFromAssemblyQuery(new AddonAttributesFromTypeQuery()));
 
             return reloadableAssemblyFileQuery
@@ -315,15 +314,15 @@ namespace AssemblyReloader.CompositeRoot
             var debugSymbolExistQuery = new DebugSymbolFileExistsQuery(location);
 
             var assemblyProvider = new AssemblyProvider(
-                new AssemblyDefinitionReader(
+                new AssemblyDefinitionFromDiskReader(
                     location, 
                     debugSymbolExistQuery,
                     assemblyResolver),
-                new AssemblyDefinitionMemoryLoader(
+                new AssemblyDefinitionLoader(
                     new TemporaryFileGenerator(
                         location.Directory,
                         new RandomStringGenerator()),
-                    _log.CreateTag("AssemblyDefinitionMemoryLoader")),
+                    _log.CreateTag("AssemblyDefinitionLoader")),
                 ConfigureDefinitionWeaver(location));
 
 
@@ -338,13 +337,13 @@ namespace AssemblyReloader.CompositeRoot
             var descriptorFactory = new PartModuleDescriptorFactory(
                                         new KspPartLoader(
                                             kspFactory),
-                                        new AvailablePartConfigProvider(
+                                        new AvailablePartConfigQuery(
                                             new KspGameDatabase()),
-                                        new ModuleConfigsFromPartConfigProvider(),
+                                        new ModuleConfigsFromPartConfigQuery(),
                                         new TypeIdentifierQuery());
 
             var prefabCloneProvider = new PartPrefabCloneProvider(
-                new LoadedComponentProvider<Part>(),
+                new LoadedComponentQuery<Part>(),
                 new ComponentsInGameObjectHierarchyProvider<Part>(),
                 new PartIsPrefabQuery(),
                 kspFactory);

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using AssemblyReloader.Providers.Game;
+using AssemblyReloader.Game.Providers;
 using AssemblyReloader.Repositories;
 using ReeperCommon.Logging.Implementations;
 

@@ -4,7 +4,7 @@ using ReeperCommon.Containers;
 
 namespace AssemblyReloader.Loaders
 {
-    public interface IAssemblyDefinitionMemoryLoader
+    public interface IAssemblyDefinitionLoader
     {
         Maybe<Assembly> LoadDefinition(AssemblyDefinition definition);
     }

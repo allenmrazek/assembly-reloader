@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using AssemblyReloader.Annotations;
-using AssemblyReloader.Game;
 using AssemblyReloader.Queries;
 
-namespace AssemblyReloader.Providers.Game
+namespace AssemblyReloader.Game.Providers
 {
     public class ProtoScenarioModuleProvider : IProtoScenarioModuleProvider
     {

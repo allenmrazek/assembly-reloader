@@ -11,14 +11,14 @@ using ReeperCommon.Logging;
 
 namespace AssemblyReloader.Loaders
 {
-    public class AssemblyDefinitionMemoryLoader : IAssemblyDefinitionMemoryLoader
+    public class AssemblyDefinitionLoader : IAssemblyDefinitionLoader
     {
         private readonly ITemporaryFileGenerator _tempFileGenerator;
         private readonly ILog _log;
         private const int InitialMemoryStreamSize = 1024 * 1024;
 
 
-        public AssemblyDefinitionMemoryLoader(
+        public AssemblyDefinitionLoader(
             [NotNull] ITemporaryFileGenerator tempFileGenerator,
             [NotNull] ILog log)
         {
@@ -75,14 +75,16 @@ namespace AssemblyReloader.Loaders
                 throw new ArgumentException("definition does not contain debug symbols");
 
             using (var tempDll = _tempFileGenerator.Get())
+            using (var tempSymbolMdb = _tempFileGenerator.Get(tempDll.FullPath + ".mdb"))
             {
                 try
                 {
                     definition.Write(tempDll.FullPath, new WriterParameters {WriteSymbols = true});
 
                     using (var tempFile = new FileStream(tempDll.FullPath, FileMode.Open))
-                    using (var tempSymbolFile = new FileStream(tempDll.FullPath + ".mdb", FileMode.Open))
                     {
+                        var tempSymbolFile = tempSymbolMdb.Stream;
+
                         if (tempFile.Length == 0)
                             throw new Exception("Failed to write assembly definition to disk at " + tempDll.FullPath);
 

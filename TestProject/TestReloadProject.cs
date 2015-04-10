@@ -33,6 +33,7 @@ namespace TestProject
             //WriteString("TestReloadProject: " + typeof(TestReloadProject).FullName);
 
             print("Printing components ...");
+            print("Also here's another message");
             gameObject.PrintComponents(new DebugLog("TestReloadProject"));
         }
 

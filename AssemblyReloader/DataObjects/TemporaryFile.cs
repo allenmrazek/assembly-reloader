@@ -1,7 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Security;
-using KSPAchievements;
 using ReeperCommon.Logging.Implementations;
 
 namespace AssemblyReloader.DataObjects
@@ -27,7 +25,7 @@ namespace AssemblyReloader.DataObjects
         {
             if (_stream != null) return;
 
-            _stream = new FileStream(_fullPath, FileMode.CreateNew, FileAccess.ReadWrite);
+            _stream = new FileStream(_fullPath, FileMode.OpenOrCreate, FileAccess.ReadWrite);
             if (_stream == null)
                 throw new FileLoadException("Failed to open file stream at " + _fullPath);
         }
@@ -35,15 +33,28 @@ namespace AssemblyReloader.DataObjects
 
         public void Dispose()
         {
-            if (_stream != null) _stream.Dispose();
+            Dispose(true);
+        }
+
+
+        ~TemporaryFile()
+        {
+            Dispose(false);
+        }
+
+
+        private void Dispose(bool managed)
+        {
+            GC.SuppressFinalize(this);
+
+            if (managed)
+            {
+                if (_stream != null) _stream.Dispose();
+            }
+
             if (!File.Exists(_fullPath)) return;
 
-            // todo: remove
-            var log = new DebugLog("TemporaryFile");
-
-            log.Normal("Deleting " + FullPath);
             File.Delete(_fullPath);
-            log.Normal("done");
         }
 
 

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using AssemblyReloader.Annotations;
 using AssemblyReloader.Game;
-using AssemblyReloader.Providers.Game;
+using AssemblyReloader.Game.Providers;
 using AssemblyReloader.Providers.SceneProviders;
 using AssemblyReloader.Queries;
 using ReeperCommon.Logging.Implementations;

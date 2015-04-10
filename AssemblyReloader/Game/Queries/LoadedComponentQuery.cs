@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Object = UnityEngine.Object;
 
-namespace AssemblyReloader.Providers.Game
+namespace AssemblyReloader.Game.Queries
 {
-    public class LoadedComponentProvider : ILoadedComponentProvider
+    public class LoadedComponentQuery : ILoadedComponentQuery
     {
         public IEnumerable<Object> GetLoaded(Type type)
         {
@@ -18,7 +18,7 @@ namespace AssemblyReloader.Providers.Game
         }
     }
 
-    public class LoadedComponentProvider<T> : ILoadedComponentProvider<T> where T : UnityEngine.Object
+    public class LoadedComponentQuery<T> : ILoadedComponentQuery<T> where T : UnityEngine.Object
     {
         public IEnumerable<T> Get()
         {

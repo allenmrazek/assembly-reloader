@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
-using AssemblyReloader.Providers.Game;
+using AssemblyReloader.Game.Providers;
+using AssemblyReloader.Game.Queries;
 using AssemblyReloader.Queries.AssemblyQueries;
 using UnityEngine;
 
@@ -10,21 +11,21 @@ namespace AssemblyReloader.Destruction
     public class AddonDestroyer : IAddonDestroyer
     {
         private readonly IUnityObjectDestroyer _objectDestroyer;
-        private readonly ILoadedComponentProvider _componentProvider;
+        private readonly ILoadedComponentQuery _componentQuery;
         private readonly ITypesFromAssemblyQuery _addonsFromAssemblyQuery;
 
         public AddonDestroyer(
             IUnityObjectDestroyer objectDestroyer,
-            ILoadedComponentProvider componentProvider,
+            ILoadedComponentQuery componentQuery,
             ITypesFromAssemblyQuery addonsFromAssemblyQuery)
         {
             if (objectDestroyer == null) throw new ArgumentNullException("objectDestroyer");
-            if (componentProvider == null) throw new ArgumentNullException("componentProvider");
+            if (componentQuery == null) throw new ArgumentNullException("componentQuery");
             if (addonsFromAssemblyQuery == null) throw new ArgumentNullException("addonsFromAssemblyQuery");
 
 
             _objectDestroyer = objectDestroyer;
-            _componentProvider = componentProvider;
+            _componentQuery = componentQuery;
             _addonsFromAssemblyQuery = addonsFromAssemblyQuery;
         }
 
@@ -43,7 +44,7 @@ namespace AssemblyReloader.Destruction
                 throw new ArgumentException(type.FullName +
                                             " is not derived from UnityEngine.MonoBehaviour! Bad KSPAddon attribute?");
 
-            foreach (var item in _componentProvider.GetLoaded(type).Cast<MonoBehaviour>())
+            foreach (var item in _componentQuery.GetLoaded(type).Cast<MonoBehaviour>())
                 _objectDestroyer.Destroy(item);
         }
     }

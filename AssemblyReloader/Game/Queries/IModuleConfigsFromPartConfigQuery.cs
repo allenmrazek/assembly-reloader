@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 
-namespace AssemblyReloader.Providers.Game
+namespace AssemblyReloader.Game.Queries
 {
-    public interface IModuleConfigsFromPartConfigProvider
+    public interface IModuleConfigsFromPartConfigQuery
     {
         IEnumerable<ConfigNode> Get(ConfigNode partConfig, string moduleName);
     }

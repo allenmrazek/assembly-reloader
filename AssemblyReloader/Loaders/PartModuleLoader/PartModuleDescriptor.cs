@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using AssemblyReloader.DataObjects;
 using AssemblyReloader.Game;
-using AssemblyReloader.Providers.Game;
+using AssemblyReloader.Game.Providers;
+using AssemblyReloader.Game.Queries;
 using AssemblyReloader.Queries;
 
 namespace AssemblyReloader.Loaders.PartModuleLoader
@@ -36,25 +37,25 @@ namespace AssemblyReloader.Loaders.PartModuleLoader
     public class PartModuleDescriptorFactory : IPartModuleDescriptorFactory
     {
         private readonly IPartLoader _partLoader;
-        private readonly IAvailablePartConfigProvider _configProvider;
-        private readonly IModuleConfigsFromPartConfigProvider _moduleConfigProvider;
+        private readonly IAvailablePartConfigQuery _configQuery;
+        private readonly IModuleConfigsFromPartConfigQuery _moduleConfigQuery;
         private readonly ITypeIdentifierQuery _typeIdentifierQuery;
 
 
         public PartModuleDescriptorFactory(
             IPartLoader partLoader,
-            IAvailablePartConfigProvider configProvider,
-            IModuleConfigsFromPartConfigProvider moduleConfigProvider,
+            IAvailablePartConfigQuery configQuery,
+            IModuleConfigsFromPartConfigQuery moduleConfigQuery,
             ITypeIdentifierQuery typeIdentifierQuery)
         {
             if (partLoader == null) throw new ArgumentNullException("partLoader");
-            if (configProvider == null) throw new ArgumentNullException("configProvider");
-            if (moduleConfigProvider == null) throw new ArgumentNullException("moduleConfigProvider");
+            if (configQuery == null) throw new ArgumentNullException("configQuery");
+            if (moduleConfigQuery == null) throw new ArgumentNullException("moduleConfigQuery");
             if (typeIdentifierQuery == null) throw new ArgumentNullException("typeIdentifierQuery");
 
             _partLoader = partLoader;
-            _configProvider = configProvider;
-            _moduleConfigProvider = moduleConfigProvider;
+            _configQuery = configQuery;
+            _moduleConfigQuery = moduleConfigQuery;
             _typeIdentifierQuery = typeIdentifierQuery;
         }
 
@@ -63,7 +64,7 @@ namespace AssemblyReloader.Loaders.PartModuleLoader
         private IEnumerable<PartModuleDescriptor> CreatePartModuleInfo(IPart prefab, ConfigNode partConfig, Type pmType)
         {
             return
-                _moduleConfigProvider.Get(partConfig, _typeIdentifierQuery.Get(pmType).Identifier)
+                _moduleConfigQuery.Get(partConfig, _typeIdentifierQuery.Get(pmType).Identifier)
                     .Select(config => new PartModuleDescriptor(prefab, config, pmType, _typeIdentifierQuery.Get(pmType)));
         }
 
@@ -79,7 +80,7 @@ namespace AssemblyReloader.Loaders.PartModuleLoader
 
             _partLoader.LoadedParts.ForEach(ap =>
             {
-                var partConfig = _configProvider.Get(ap);
+                var partConfig = _configQuery.Get(ap);
                 if (!partConfig.Any()) return;
 
                 infoList.AddRange(CreatePartModuleInfo(ap.PartPrefab, partConfig.Single(), pmType));

@@ -1,32 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using AssemblyReloader.Game;
+using AssemblyReloader.Game.Queries;
+using AssemblyReloader.Providers;
 using AssemblyReloader.Queries;
 
-namespace AssemblyReloader.Providers.Game
+namespace AssemblyReloader.Game.Providers
 {
     // This is kind of an ugly way to go about this but there are cases where it's necessary. Specifically,
     // the editor doesn't seem to keep a list of all the parts it spawns and I couldn't find any way to 
     // locate those parts except for a basic FindObjectsOfType call.
     public class PartPrefabCloneProvider : IPartPrefabCloneProvider
     {
-        private readonly ILoadedComponentProvider<Part> _loadedPartProvider;
+        private readonly ILoadedComponentQuery<Part> _loadedPartQuery;
         private readonly IComponentsInGameObjectHierarchyProvider<Part> _partsInGameObject;
         private readonly IPartIsPrefabQuery _confirmPrefabQuery;
         private readonly IKspFactory _kspFactory;
 
         public PartPrefabCloneProvider(
-            ILoadedComponentProvider<Part> loadedPartProvider,
+            ILoadedComponentQuery<Part> loadedPartQuery,
             IComponentsInGameObjectHierarchyProvider<Part> partsInGameObject,
             IPartIsPrefabQuery confirmPrefabQuery,
             IKspFactory kspFactory)
         {
-            if (loadedPartProvider == null) throw new ArgumentNullException("loadedPartProvider");
+            if (loadedPartQuery == null) throw new ArgumentNullException("loadedPartQuery");
             if (partsInGameObject == null) throw new ArgumentNullException("partsInGameObject");
             if (confirmPrefabQuery == null) throw new ArgumentNullException("confirmPrefabQuery");
             if (kspFactory == null) throw new ArgumentNullException("kspFactory");
-            _loadedPartProvider = loadedPartProvider;
+            _loadedPartQuery = loadedPartQuery;
             _partsInGameObject = partsInGameObject;
             _confirmPrefabQuery = confirmPrefabQuery;
             _kspFactory = kspFactory;
@@ -40,7 +41,7 @@ namespace AssemblyReloader.Providers.Game
                 throw new ArgumentException("argument must be a part prefab");
 
 
-            var loadedParts = _loadedPartProvider.Get();
+            var loadedParts = _loadedPartQuery.Get();
 
             // Bit tricky here: loadedParts is looking for loose parts so if the parts are actually attached to each
             // other via parenting instead of joints (such as when building a ship in the editor), we'll only find

@@ -36,6 +36,24 @@ namespace AssemblyReloader.Generators
         }
 
 
+        public TemporaryFile Get(string fullPath)
+        {
+            if (string.IsNullOrEmpty(fullPath))
+                throw new ArgumentException("argument cannot be null or empty");
+
+            if (File.Exists(fullPath))
+                throw new ArgumentException("A file already exists at " + fullPath);
+
+            if (string.IsNullOrEmpty(Path.GetFileName(fullPath)))
+                throw new ArgumentException("must be a file name, not a directory path");
+
+            if (Directory.Exists(fullPath))
+                throw new ArgumentException("a directory exists at " + fullPath);
+
+            return new TemporaryFile(fullPath);
+        }
+
+
         private string GenerateFilePath()
         {
             return _directory.FullPath +

@@ -1,23 +1,20 @@
 ﻿using System;
-using System.Linq;
 using AssemblyReloader.Annotations;
 using AssemblyReloader.Queries.FileSystemQueries;
 using Mono.Cecil;
-using Mono.Cecil.Mdb;
-using Mono.CompilerServices.SymbolWriter;
 using ReeperCommon.Containers;
 using ReeperCommon.Extensions;
 using ReeperCommon.FileSystem;
 
 namespace AssemblyReloader.Loaders
 {
-    public class AssemblyDefinitionReader : IAssemblyDefinitionReader
+    public class AssemblyDefinitionFromDiskReader : IAssemblyDefinitionReader
     {
         private readonly IDebugSymbolFileExistsQuery _debugSymbolsExistQuery;
         private readonly BaseAssemblyResolver _resolver;
 
 
-        public AssemblyDefinitionReader(
+        public AssemblyDefinitionFromDiskReader(
             [NotNull] IFile location, 
             [NotNull] IDebugSymbolFileExistsQuery debugSymbolsExistQuery, 
             [NotNull] BaseAssemblyResolver resolver)
@@ -42,7 +39,6 @@ namespace AssemblyReloader.Loaders
 
         private ReaderParameters ConfigureReaderParameters()
         {
-            
             return new ReaderParameters(ReadingMode.Immediate)
             {
                 ReadSymbols = _debugSymbolsExistQuery.Get(),

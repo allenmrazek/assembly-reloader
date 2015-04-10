@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace AssemblyReloader.Providers.Game
+namespace AssemblyReloader.Game.Queries
 {
-    public interface ILoadedComponentProvider
+    public interface ILoadedComponentQuery
     {
         IEnumerable<UnityEngine.Object> GetLoaded(Type type);
     }
 
-    public interface ILoadedComponentProvider<T> where T : UnityEngine.Object
+    public interface ILoadedComponentQuery<T> where T : UnityEngine.Object
     {
         IEnumerable<T> Get();
     }

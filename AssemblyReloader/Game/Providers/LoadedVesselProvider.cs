@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using AssemblyReloader.Game;
 
-namespace AssemblyReloader.Providers.Game
+namespace AssemblyReloader.Game.Providers
 {
     class LoadedVesselProvider : ILoadedVesselProvider
     {

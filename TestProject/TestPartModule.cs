@@ -21,6 +21,7 @@ namespace TestProject
 #else
             print("TestPartModule awake (unmodified version)");
 #endif
+            print("hello, testing world!");
 
             print("TestPartModule running from " + Assembly.GetExecutingAssembly().CodeBase);
             print("TestPartModule is running from " +

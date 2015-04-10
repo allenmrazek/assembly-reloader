@@ -14,20 +14,20 @@ namespace AssemblyReloader.Providers
     public class AssemblyProvider : IAssemblyProvider
     {
         private readonly IAssemblyDefinitionReader _reader;
-        private readonly IAssemblyDefinitionMemoryLoader _memoryLoader;
+        private readonly IAssemblyDefinitionLoader _loader;
         private readonly IAssemblyDefinitionWeaver _weaver;
 
         public AssemblyProvider(
             [NotNull] IAssemblyDefinitionReader reader,
-            [NotNull] IAssemblyDefinitionMemoryLoader memoryLoader, 
+            [NotNull] IAssemblyDefinitionLoader loader, 
             [NotNull] IAssemblyDefinitionWeaver weaver)
         {
             if (reader == null) throw new ArgumentNullException("reader");
-            if (memoryLoader == null) throw new ArgumentNullException("memoryLoader");
+            if (loader == null) throw new ArgumentNullException("loader");
             if (weaver == null) throw new ArgumentNullException("weaver");
 
             _reader = reader;
-            _memoryLoader = memoryLoader;
+            _loader = loader;
             _weaver = weaver;
         }
 
@@ -39,7 +39,7 @@ namespace AssemblyReloader.Providers
             if (!_weaver.Weave(definition))
                 throw new Exception("Failed to reweave definition of " + Location.FileName);
 
-            return _memoryLoader.LoadDefinition(definition);
+            return _loader.LoadDefinition(definition);
         }
 
 

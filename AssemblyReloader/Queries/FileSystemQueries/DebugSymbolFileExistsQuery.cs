@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Linq;
 using AssemblyReloader.Annotations;
 using ReeperCommon.FileSystem;
 using ReeperCommon.FileSystem.Implementations;
-using ReeperCommon.Logging.Implementations;
 
 namespace AssemblyReloader.Queries.FileSystemQueries
 {
