@@ -1,7 +1,7 @@
 ﻿using System;
 using AssemblyReloader.Queries;
 
-namespace AssemblyReloader.Providers.SceneProviders
+namespace AssemblyReloader.Game.Providers
 {
     public class CurrentStartupSceneProvider : ICurrentStartupSceneProvider
     {

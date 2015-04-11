@@ -1,6 +1,5 @@
 ﻿using System;
 using AssemblyReloader.Annotations;
-using AssemblyReloader.Gui;
 using ReeperCommon.Gui.Window;
 
 namespace AssemblyReloader.Controllers

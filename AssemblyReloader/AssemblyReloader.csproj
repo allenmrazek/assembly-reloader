@@ -97,6 +97,10 @@
     <Compile Include="Game\KspGame.cs" />
     <Compile Include="Game\KspProtoScenarioModule.cs" />
     <Compile Include="Game\KspGameObjectProvider.cs" />
+    <Compile Include="Game\Providers\CurrentGameSceneProvider.cs" />
+    <Compile Include="Game\Providers\CurrentStartupSceneProvider.cs" />
+    <Compile Include="Game\Providers\ICurrentGameSceneProvider.cs" />
+    <Compile Include="Game\Providers\ICurrentStartupSceneProvider.cs" />
     <Compile Include="Game\Queries\AvailablePartConfigQuery.cs" />
     <Compile Include="Game\Providers\CurrentGameProvider.cs" />
     <Compile Include="Game\Queries\GameObjectComponentQuery.cs" />
@@ -193,8 +197,8 @@
     <Compile Include="Commands\ICommand.cs" />
     <Compile Include="Commands\CompositeCommand.cs" />
     <Compile Include="Generators\IUniqueAssemblyNameGenerator.cs" />
-    <Compile Include="Providers\SceneProviders\CurrentSceneIsFlightQuery.cs" />
-    <Compile Include="Providers\SceneProviders\ICurrentSceneIsFlightQuery.cs" />
+    <Compile Include="Providers\CurrentSceneIsFlightQuery.cs" />
+    <Compile Include="Providers\ICurrentSceneIsFlightQuery.cs" />
     <Compile Include="Providers\IAssemblyProvider.cs" />
     <Compile Include="Generators\UniqueAssemblyNameGenerator.cs" />
     <Compile Include="Queries\AssemblyQueries\ITypesDerivedFromQuery.cs" />
@@ -204,10 +208,7 @@
     <Compile Include="Queries\CecilQueries\MethodCallInMethodBodyQuery.cs" />
     <Compile Include="Queries\IAddonAttributesFromTypeQuery.cs" />
     <Compile Include="Queries\FileSystemQueries\IAssemblyDirectoryQuery.cs" />
-    <Compile Include="Providers\SceneProviders\ICurrentGameSceneProvider.cs" />
-    <Compile Include="Providers\SceneProviders\ICurrentStartupSceneProvider.cs" />
     <Compile Include="Queries\FileSystemQueries\AssemblyDirectoryQuery.cs" />
-    <Compile Include="Providers\SceneProviders\CurrentGameSceneProvider.cs" />
     <Compile Include="Queries\InjectedHelperTypeMethodQuery.cs" />
     <Compile Include="Queries\InjectedHelperTypeQuery.cs" />
     <Compile Include="Queries\IPartIsPrefabQuery.cs" />
@@ -221,7 +222,6 @@
     <Compile Include="Gui\View.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Queries\AssemblyQueries\AddonsFromAssemblyQuery.cs" />
-    <Compile Include="Providers\SceneProviders\CurrentStartupSceneProvider.cs" />
     <Compile Include="Queries\StartupSceneFromGameSceneQuery.cs" />
     <Compile Include="Queries\FileSystemQueries\ReloadableAssemblyFilesInDirectoryQuery.cs" />
     <Compile Include="Queries\PartIsPrefabQuery.cs" />

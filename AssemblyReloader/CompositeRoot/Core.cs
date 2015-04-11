@@ -16,7 +16,6 @@ using AssemblyReloader.Gui;
 using AssemblyReloader.Loaders;
 using AssemblyReloader.Loaders.PartModuleLoader;
 using AssemblyReloader.Providers;
-using AssemblyReloader.Providers.SceneProviders;
 using AssemblyReloader.Queries;
 using AssemblyReloader.Queries.AssemblyQueries;
 using AssemblyReloader.Queries.CecilQueries;

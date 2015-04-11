@@ -2,7 +2,7 @@
 using System.Reflection;
 using AssemblyReloader.Destruction;
 using AssemblyReloader.Game;
-using AssemblyReloader.Providers.SceneProviders;
+using AssemblyReloader.Game.Providers;
 using ReeperCommon.FileSystem;
 
 namespace AssemblyReloader.Controllers

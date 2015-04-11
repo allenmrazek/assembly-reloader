@@ -1,4 +1,4 @@
-﻿namespace AssemblyReloader.Providers.SceneProviders
+﻿namespace AssemblyReloader.Providers
 {
     public class CurrentSceneIsFlightQuery : ICurrentSceneIsFlightQuery
     {

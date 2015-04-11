@@ -2,10 +2,7 @@
 using System.Linq;
 using System.Reflection;
 using AssemblyReloader.Annotations;
-using AssemblyReloader.Loaders;
 using AssemblyReloader.Providers;
-using AssemblyReloader.Weaving;
-using Mono.Cecil;
 using ReeperCommon.Containers;
 using ReeperCommon.Extensions;
 

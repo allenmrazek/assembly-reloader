@@ -1,4 +1,4 @@
-﻿namespace AssemblyReloader.Providers.SceneProviders
+﻿namespace AssemblyReloader.Game.Providers
 {
     public interface ICurrentGameSceneProvider
     {
