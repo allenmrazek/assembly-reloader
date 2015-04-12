@@ -2,7 +2,7 @@
 
 namespace AssemblyReloader.Generators
 {
-    public interface ITemporaryFileGenerator
+    public interface ITemporaryFileFactory
     {
         TemporaryFile Get();
         TemporaryFile Get(string fullPath);

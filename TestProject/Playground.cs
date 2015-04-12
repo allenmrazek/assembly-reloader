@@ -1,10 +1,116 @@
 ﻿using System;
-using System.Collections;
-using System.Linq;
+using System.IO;
 using UnityEngine;
 
 namespace TestProject
 {
+    [KSPAddon(KSPAddon.Startup.SpaceCentre, false)]
+    public class AvoidKeyBindCollisions : MonoBehaviour
+    {
+        private KeyBinding myBinding = new KeyBinding();
+        private string text = "";
+
+        private void OnGUI()
+        {
+            Func<bool> validator = () => true;
+
+            if (GUI.Button(new Rect(200f, 200f, 128f, 32f), "Set key"))
+                PopupDialog.SpawnPopupDialog(new MultiOptionDialog("Press new KeyBinding key", DrawCallback,
+                    "Set Binding",
+                    new DialogOption("Cancel", OnCancel),
+                    new DialogOption("Accept", OnAccept, validator, true)));
+        }
+
+        private void DrawCallback()
+        {
+            
+        }
+
+        private void OnCancel()
+        {
+            
+        }
+
+        private void OnAccept()
+        {
+            
+        }
+
+        private bool ValidateContents()
+        {
+            return true;
+        }
+    }
+
+[KSPAddon(KSPAddon.Startup.SpaceCentre, false)]
+public class AddonKeyBindingPersistence : MonoBehaviour
+{
+    private KeyBinding myBinding = new KeyBinding();
+
+
+    private void Start()
+    {
+        if (File.Exists(GetConfigFilePath()))
+            LoadSettings();
+   
+        print("myBinding is currently " + myBinding);
+    }
+
+    private void OnDestroy()
+    {
+        SaveSettings();
+    }
+
+    private void LoadSettings()
+    {
+        var config = ConfigNode.Load(GetConfigFilePath());
+        myBinding.Load(config.GetNode("MyBinding") ?? DefaultKeyBindingNode()); // KeyBinding will throw an exception on badly formed ConfigNodes
+    }
+
+    private void SaveSettings()
+    {
+        var config = new ConfigNode("MyAddonSettings");
+        myBinding.Save(config.AddNode("MyBinding"));
+    }
+
+
+    private string GetConfigFilePath()
+    {
+        var dllDir = Path.GetDirectoryName(AssemblyLoader.GetPathByType(typeof(AddonKeyBindingPersistence)));
+
+        if (!Directory.Exists(dllDir))
+            Directory.CreateDirectory(dllDir);
+
+        return Path.Combine(dllDir, "settings.cfg");
+    }
+
+    private static ConfigNode DefaultKeyBindingNode()
+    {
+        var node = new ConfigNode();
+        new KeyBinding(KeyCode.None).Save(node);
+        return node;
+    }
+}
+
+//[KSPScenario(ScenarioCreationOptions.AddToAllGames, new []{ GameScenes.SPACECENTER})]
+//public class ScenarioModuleKeyBindingPersistence : ScenarioModule
+//{
+//    [KSPField(isPersistant = true)] // note: must be marked KSPField, persistent
+//    private KeyBinding myBinding = new KeyBinding();
+
+
+//    // note: none of the persistent fields have been set yet
+//    public override void OnAwake()
+//    {
+//        base.OnAwake();
+//    }
+
+//    // persistent fields have been serialized by now
+//    private void Start()
+//    {
+//        print("Start - KeyBindingPersistence - key is set to " + myBinding.primary);
+//    }
+//}
 
 //    public class MyTestclass
 //    {

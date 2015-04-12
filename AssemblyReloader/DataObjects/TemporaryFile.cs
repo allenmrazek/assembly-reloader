@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using ReeperCommon.Logging.Implementations;
 
 namespace AssemblyReloader.DataObjects
 {

@@ -318,7 +318,7 @@ namespace AssemblyReloader.CompositeRoot
                     debugSymbolExistQuery,
                     assemblyResolver),
                 new AssemblyDefinitionLoader(
-                    new TemporaryFileGenerator(
+                    new TemporaryFileFactory(
                         location.Directory,
                         new RandomStringGenerator()),
                     _log.CreateTag("AssemblyDefinitionLoader")),

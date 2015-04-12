@@ -13,19 +13,19 @@ namespace AssemblyReloader.Loaders
 {
     public class AssemblyDefinitionLoader : IAssemblyDefinitionLoader
     {
-        private readonly ITemporaryFileGenerator _tempFileGenerator;
+        private readonly ITemporaryFileFactory _tempFileFactory;
         private readonly ILog _log;
         private const int InitialMemoryStreamSize = 1024 * 1024;
 
 
         public AssemblyDefinitionLoader(
-            [NotNull] ITemporaryFileGenerator tempFileGenerator,
+            [NotNull] ITemporaryFileFactory tempFileFactory,
             [NotNull] ILog log)
         {
-            if (tempFileGenerator == null) throw new ArgumentNullException("tempFileGenerator");
+            if (tempFileFactory == null) throw new ArgumentNullException("tempFileFactory");
             if (log == null) throw new ArgumentNullException("log");
 
-            _tempFileGenerator = tempFileGenerator;
+            _tempFileFactory = tempFileFactory;
             _log = log;
         }
 
@@ -74,8 +74,8 @@ namespace AssemblyReloader.Loaders
             if (!definition.MainModule.HasSymbols)
                 throw new ArgumentException("definition does not contain debug symbols");
 
-            using (var tempDll = _tempFileGenerator.Get())
-            using (var tempSymbolMdb = _tempFileGenerator.Get(tempDll.FullPath + ".mdb"))
+            using (var tempDll = _tempFileFactory.Get())
+            using (var tempSymbolMdb = _tempFileFactory.Get(tempDll.FullPath + ".mdb"))
             {
                 try
                 {

@@ -118,9 +118,9 @@
     <Compile Include="Game\Providers\PartPrefabCloneProvider.cs" />
     <Compile Include="Game\Providers\ProtoScenarioModuleProvider.cs" />
     <Compile Include="Generators\IRandomStringGenerator.cs" />
-    <Compile Include="Generators\ITemporaryFileGenerator.cs" />
+    <Compile Include="Generators\ITemporaryFileFactory.cs" />
     <Compile Include="Generators\RandomStringGenerator.cs" />
-    <Compile Include="Generators\TemporaryFileGenerator.cs" />
+    <Compile Include="Generators\TemporaryFileFactory.cs" />
     <Compile Include="Gui\ConfigurationViewLogic.cs" />
     <Compile Include="Gui\ExpandablePanelFactory.cs" />
     <Compile Include="Gui\IExpandablePanelFactory.cs" />

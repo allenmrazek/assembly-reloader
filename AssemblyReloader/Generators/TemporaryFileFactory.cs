@@ -7,12 +7,12 @@ using ReeperCommon.FileSystem;
 
 namespace AssemblyReloader.Generators
 {
-    public class TemporaryFileGenerator : ITemporaryFileGenerator
+    public class TemporaryFileFactory : ITemporaryFileFactory
     {
         private readonly IDirectory _directory;
         private readonly IRandomStringGenerator _stringGenerator;
 
-        public TemporaryFileGenerator(
+        public TemporaryFileFactory(
             [NotNull] IDirectory directory,
             [NotNull] IRandomStringGenerator stringGenerator)
         {
