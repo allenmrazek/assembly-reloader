@@ -34,9 +34,11 @@ using ReeperCommon.FileSystem.Implementations.Providers;
 using ReeperCommon.Gui.Window.Providers;
 using ReeperCommon.Logging;
 using ReeperCommon.Logging.Implementations;
+using ReeperCommon.Providers;
 using ReeperCommon.Repositories.Resources;
 using ReeperCommon.Repositories.Resources.Implementations;
 using ReeperCommon.Repositories.Resources.Implementations.Decorators;
+using ReeperCommon.Serialization;
 using UnityEngine;
 
 namespace AssemblyReloader.CompositeRoot
@@ -166,7 +168,11 @@ namespace AssemblyReloader.CompositeRoot
 
             var loadedAssemblyFactory = ConfigureLoadedAssemblyFactory();
 
-            var reloadables = CreateReloadablePlugins(loadedAssemblyFactory, fsFactory, assemblyResolver).ToList();
+            var configNodeFormatterProvider =
+                new ConfigNodeFormatterProvider(new DefaultSurrogateSelector(new DefaultSurrogateProvider()),
+                    new SerializableFieldQuery());
+
+            var reloadables = CreateReloadablePlugins(loadedAssemblyFactory, fsFactory, assemblyResolver, new PluginConfigurationProvider(configNodeFormatterProvider)).ToList();
 
             reloadables.ForEach(r => r.Load());
 
@@ -269,7 +275,8 @@ namespace AssemblyReloader.CompositeRoot
         private IEnumerable<IReloadablePlugin> CreateReloadablePlugins(
             ILoadedAssemblyFactory laFactory,
             IFileSystemFactory fsFactory, 
-            BaseAssemblyResolver assemblyResolver)
+            BaseAssemblyResolver assemblyResolver,
+            IPluginConfigurationProvider configurationProvider)
         {
             var reloadableAssemblyFileQuery = new ReloadableAssemblyFilesInDirectoryQuery(fsFactory.GetGameDataDirectory());
 
@@ -283,7 +290,8 @@ namespace AssemblyReloader.CompositeRoot
                 .Select(raFile => ConfigureReloadablePlugin(raFile, 
                     assemblyResolver, 
                     laFactory, 
-                    addonDestroyer));
+                    addonDestroyer,
+                    configurationProvider));
         }
 
 
@@ -307,7 +315,8 @@ namespace AssemblyReloader.CompositeRoot
             IFile location, 
             BaseAssemblyResolver assemblyResolver, 
             ILoadedAssemblyFactory laFactory,
-            IAddonDestroyer addonDestroyer)
+            IAddonDestroyer addonDestroyer,
+            IPluginConfigurationProvider configurationProvider)
         {
 
             var debugSymbolExistQuery = new DebugSymbolFileExistsQuery(location);
@@ -329,7 +338,7 @@ namespace AssemblyReloader.CompositeRoot
 
             var kspLoader = new KspAssemblyLoader(assemblyProvider, laFactory);
 
-            var reloadable = new ReloadablePlugin(kspLoader, location, ConfigurePluginConfiguration());
+            var reloadable = new ReloadablePlugin(kspLoader, location, configurationProvider.Get(location));
 
             var kspFactory = new KspFactory(new KspGameObjectProvider());
 
@@ -437,11 +446,6 @@ namespace AssemblyReloader.CompositeRoot
             return skin;
         }
 
-
-        private IConfiguration ConfigurePluginConfiguration( /* context -- filename? */)
-        {
-            return new Configuration(new ConfigNode()); // todo: load actual ConfigNode settings here
-        }
 
 
         private IAssemblyDefinitionWeaver ConfigureDefinitionWeaver(IFile location)

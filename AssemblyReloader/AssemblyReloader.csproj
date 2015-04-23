@@ -84,7 +84,6 @@
     <Compile Include="Controllers\ReloadablePlugin.cs" />
     <Compile Include="Controllers\ScenarioModuleController.cs" />
     <Compile Include="DataObjects\Configuration.cs" />
-    <Compile Include="DataObjects\IConfiguration.cs" />
     <Compile Include="DataObjects\TemporaryFile.cs" />
     <Compile Include="Destruction\IUnityObjectDestroyer.cs" />
     <Compile Include="Destruction\UnityObjectDestroyer.cs" />
@@ -133,8 +132,12 @@
     <Compile Include="Loaders\IScenarioModuleLoader.cs" />
     <Compile Include="Loaders\IScenarioModuleUnloader.cs" />
     <Compile Include="Providers\AssemblyProvider.cs" />
+    <Compile Include="Providers\ConfigNodeFormatterProvider.cs" />
+    <Compile Include="Providers\IConfigNodeFormatterProvider.cs" />
     <Compile Include="Queries\FileSystemQueries\DebugSymbolFileExistsQuery.cs" />
     <Compile Include="Queries\FileSystemQueries\IDebugSymbolFileExistsQuery.cs" />
+    <Compile Include="Providers\IPluginConfigurationProvider.cs" />
+    <Compile Include="Providers\PluginConfigurationProvider.cs" />
     <Compile Include="TypeInstallers\GenericTypeInstaller.cs" />
     <Compile Include="TypeInstallers\ITypeInstaller.cs" />
     <Compile Include="Loaders\PartModuleLoader\IPartModuleDescriptorFactory.cs" />

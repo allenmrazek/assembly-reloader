@@ -1,5 +1,4 @@
 ﻿using System.Reflection;
-using AssemblyReloader.CompositeRoot;
 using AssemblyReloader.DataObjects;
 using ReeperCommon.Containers;
 using ReeperCommon.FileSystem;
@@ -16,7 +15,7 @@ namespace AssemblyReloader.Controllers
 
         string Name { get; }
         Maybe<Assembly> Assembly { get; }
-        IConfiguration Configuration { get; }
+        Configuration Configuration { get; }
 
         event PluginLoadedHandler OnLoaded;
         event PluginUnloadedHandler OnUnloaded;

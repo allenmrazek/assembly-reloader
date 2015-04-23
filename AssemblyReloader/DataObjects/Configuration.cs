@@ -1,46 +1,20 @@
-﻿using System;
+﻿using ReeperCommon.Serialization;
 
 namespace AssemblyReloader.DataObjects
 {
-    public class Configuration : IConfiguration
+    public class Configuration
     {
-        [Persistent]
-        private bool _startAddonsForCurrentScene = true;
+        [ReeperPersistent]
+        public bool StartAddonsForCurrentScene = true;
 
-        [Persistent]
-        private bool _reloadPartModulesImmediately = true;
-
-        [Persistent]
-        private bool _ignoreCurrentSceneForInstantAddons = true;
-
-        [Persistent]
-        private bool _rewriteAssemblyLocationCalls = true;
+        [ReeperPersistent]
+        public bool ReloadPartModulesImmediately = true;
 
 
-        public Configuration(ConfigNode config)
-        {
-            if (config == null) throw new ArgumentNullException("config");
-        }
+        [ReeperPersistent]
+        public bool IgnoreCurrentSceneForInstantAddons = true;
 
-
-        public bool StartAddonsForCurrentScene
-        {
-            get { return _startAddonsForCurrentScene; }
-        }
-
-        public bool ReloadPartModulesImmediately
-        {
-            get { return _reloadPartModulesImmediately; }
-        }
-
-        public bool IgnoreCurrentSceneForInstantAddons
-        {
-            get { return _ignoreCurrentSceneForInstantAddons; }
-        }
-
-        public bool RewriteAssemblyLocationCalls
-        {
-            get { return _rewriteAssemblyLocationCalls; }
-        }
+        [ReeperPersistent]
+        public bool RewriteAssemblyLocationCalls = true;
     }
 }

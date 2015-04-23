@@ -1,6 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using AssemblyReloader.Annotations;
 using AssemblyReloader.Controllers;
+using AssemblyReloader.DataObjects;
+using ReeperCommon.Gui.Controls;
 using ReeperCommon.Gui.Window;
 using ReeperCommon.Gui.Window.Buttons;
 using ReeperCommon.Gui.Window.Decorators;
@@ -69,16 +73,20 @@ namespace AssemblyReloader.Gui
             if (plugin == null) throw new ArgumentNullException("plugin");
             if (panelFactory == null) throw new ArgumentNullException("panelFactory");
 
+            var configLogic = new ConfigurationViewLogic(plugin.Configuration);
 
-            var basicWindow = new BasicWindow(new ConfigurationViewLogic(plugin.Configuration, panelFactory), new Rect(300f, 300f, 300f, 300f),
+            foreach (var panel in CreateExpandingPanelsForConfiguration(configLogic, panelFactory, plugin.Configuration))
+                configLogic.AddControl(panel);
+
+            var basicWindow = new BasicWindow(configLogic, new Rect(300f, 300f, 300f, 300f),
                 UnityEngine.Random.Range(10000, 3434343), _windowSkin, true);
 
             basicWindow.Title = plugin.Name + " Configuration";
 
-            //var decoratedWindow = new HideOnF2(new ClampToScreen(basicWindow)); buggy
+            //var decoratedWindow = new HideOnF2(new ClampToScreen(basicWindow)); //buggy?
             var decoratedWindow = new ClampToScreen(basicWindow);
 
-            UnityEngine.Object.DontDestroyOnLoad(WindowView.Create(decoratedWindow, "WindowView"));
+            UnityEngine.Object.DontDestroyOnLoad(WindowView.Create(decoratedWindow));
 
             return decoratedWindow;
         }
@@ -94,6 +102,26 @@ namespace AssemblyReloader.Gui
 
 
             return new ExpandablePanelFactory(style, 12f, 0f, false);
+        }
+
+
+        private IEnumerable<ICustomControl> CreateExpandingPanelsForConfiguration(
+            [NotNull] ConfigurationViewLogic view,
+            [NotNull] IExpandablePanelFactory panelFactory,
+            [NotNull] Configuration config)
+        {
+            if (view == null) throw new ArgumentNullException("view");
+            if (panelFactory == null) throw new ArgumentNullException("panelFactory");
+            if (config == null) throw new ArgumentNullException("config");
+
+            return new[]
+            {
+                panelFactory.Create("General", view.DrawGeneralOptionsPanel),
+                panelFactory.Create("Intermediate Language Weaving", view.DrawIntermediateLanguagePanel),
+                panelFactory.Create("KSPAddon Options", view.DrawAddonPanel),
+                panelFactory.Create("PartModule Options", view.DrawPartModulePanel),
+                panelFactory.Create("ScenarioModule Options", view.DrawScenarioModulePanel)
+            };
         }
     }
 }

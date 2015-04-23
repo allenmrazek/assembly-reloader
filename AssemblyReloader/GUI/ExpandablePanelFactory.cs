@@ -27,7 +27,7 @@ namespace AssemblyReloader.Gui
             if (text == null) throw new ArgumentNullException("text");
             if (drawCall == null) throw new ArgumentNullException("drawCall");
 
-            return new HorizontalMarginDecorator(_leftMargin, _rightMargin, new ExpandablePanel(_toggleStyle, text, drawCall, _initialState));
+            return new ExpandablePanel(_toggleStyle, text, drawCall, _leftMargin, _initialState);
         }
     }
 }

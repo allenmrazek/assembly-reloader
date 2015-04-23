@@ -1,98 +1,147 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Reflection;
+using FinePrint.Contracts;
+using KSP.IO;
 using UnityEngine;
 
 namespace TestProject
 {
-    [KSPAddon(KSPAddon.Startup.SpaceCentre, false)]
-    public class AvoidKeyBindCollisions : MonoBehaviour
-    {
-        private KeyBinding myBinding = new KeyBinding();
-        private string text = "";
+  
+    //[KSPAddon(KSPAddon.Startup.SpaceCentre, false)]
+    //public class AvoidKeyBindCollisions : MonoBehaviour
+    //{
+    //    private void Start()
+    //    {
+    //        print("KeyBindCollisions.Start");
 
-        private void OnGUI()
-        {
-            Func<bool> validator = () => true;
+    //        var myBinding = new KeyBinding(KeyCode.G);
 
-            if (GUI.Button(new Rect(200f, 200f, 128f, 32f), "Set key"))
-                PopupDialog.SpawnPopupDialog(new MultiOptionDialog("Press new KeyBinding key", DrawCallback,
-                    "Set Binding",
-                    new DialogOption("Cancel", OnCancel),
-                    new DialogOption("Accept", OnAccept, validator, true)));
-        }
+    //        KeyValuePair<string, KeyBinding> existing;
 
-        private void DrawCallback()
-        {
+    //        if (!IsBindingOpen(myBinding, out existing))
+    //            print("Can't assign binding to " + string.Format("{0}, {1}", myBinding.primary, myBinding.secondary) +
+    //                  "; already assigned to " +
+    //                  string.Format("{0}; {1}, {2}", existing.Key, existing.Value.primary, existing.Value.secondary));
+    //        else print("No collisions");
+    //    }
+
+
+    //    private static bool IsBindingOpen(KeyBinding binding, out KeyValuePair<string, KeyBinding> reserved)
+    //    {
+    //        var gameBindings = typeof (GameSettings).GetFields(BindingFlags.Public | BindingFlags.Static)
+    //            .Where(fi => fi.FieldType == typeof (KeyBinding));
+
+    //        reserved = default(KeyValuePair<string, KeyBinding>);
+
+    //        foreach (var gameBinding in gameBindings.ToDictionary(fi => fi.Name, fi => GetBinding(fi))
+    //            .Where(gameBinding => AreSame(gameBinding.Value, binding)))
+    //        {
+    //            reserved = gameBinding;
+    //            return false;
+    //        }
+    //        return true;
+    //    }
+
+    //    private static KeyBinding GetBinding(FieldInfo fieldInfo)
+    //    {
+    //        return fieldInfo.GetValue(null) as KeyBinding;
+    //    }
+
+    //    private static bool AreSame(KeyBinding first, KeyBinding second)
+    //    {
+    //        return (first.primary == second.primary && first.primary != KeyCode.None) ||
+    //               (first.secondary == second.secondary && first.secondary != KeyCode.None);
+    //    }
+
+    //    //private KeyBinding myBinding = new KeyBinding();
+    //    //private string text = "";
+
+    //    //private void OnGUI()
+    //    //{
+    //    //    Func<bool> validator = () => true;
+
+    //    //    if (GUI.Button(new Rect(200f, 200f, 128f, 32f), "Set key"))
+    //    //        PopupDialog.SpawnPopupDialog(new MultiOptionDialog("Press new KeyBinding key", DrawCallback,
+    //    //            "Set Binding",
+    //    //            new DialogOption("Cancel", OnCancel),
+    //    //            new DialogOption("Accept", OnAccept, validator, true)));
+    //    //}
+
+    //    //private void DrawCallback()
+    //    //{
             
-        }
+    //    //}
 
-        private void OnCancel()
-        {
+    //    //private void OnCancel()
+    //    //{
             
-        }
+    //    //}
 
-        private void OnAccept()
-        {
+    //    //private void OnAccept()
+    //    //{
             
-        }
+    //    //}
 
-        private bool ValidateContents()
-        {
-            return true;
-        }
-    }
+    //    //private bool ValidateContents()
+    //    //{
+    //    //    return true;
+    //    //}
+    //}
 
-[KSPAddon(KSPAddon.Startup.SpaceCentre, false)]
-public class AddonKeyBindingPersistence : MonoBehaviour
-{
-    private KeyBinding myBinding = new KeyBinding();
-
-
-    private void Start()
-    {
-        if (File.Exists(GetConfigFilePath()))
-            LoadSettings();
-   
-        print("myBinding is currently " + myBinding);
-    }
-
-    private void OnDestroy()
-    {
-        SaveSettings();
-    }
-
-    private void LoadSettings()
-    {
-        var config = ConfigNode.Load(GetConfigFilePath());
-        myBinding.Load(config.GetNode("MyBinding") ?? DefaultKeyBindingNode()); // KeyBinding will throw an exception on badly formed ConfigNodes
-    }
-
-    private void SaveSettings()
-    {
-        var config = new ConfigNode("MyAddonSettings");
-        myBinding.Save(config.AddNode("MyBinding"));
-    }
+//[KSPAddon(KSPAddon.Startup.SpaceCentre, false)]
+//public class AddonKeyBindingPersistence : MonoBehaviour
+//{
+//    private KeyBinding myBinding = new KeyBinding();
 
 
-    private string GetConfigFilePath()
-    {
-        var dllDir = Path.GetDirectoryName(AssemblyLoader.GetPathByType(typeof(AddonKeyBindingPersistence)));
+//    private void Start()
+//    {
+//        if (File.Exists(GetConfigFilePath()))
+//            LoadSettings();
 
-        if (!Directory.Exists(dllDir))
-            Directory.CreateDirectory(dllDir);
+//        print("myBinding is currently " + myBinding);
+//    }
 
-        return Path.Combine(dllDir, "settings.cfg");
-    }
+//    private void OnDestroy()
+//    {
+//        SaveSettings();
+//    }
 
-    private static ConfigNode DefaultKeyBindingNode()
-    {
-        var node = new ConfigNode();
-        new KeyBinding(KeyCode.None).Save(node);
-        return node;
-    }
-}
+//    private void LoadSettings()
+//    {
+//        var config = ConfigNode.Load(GetConfigFilePath());
+//        myBinding.Load(config.GetNode("MyBinding") ?? DefaultKeyBindingNode()); // KeyBinding will throw an exception on badly formed ConfigNodes
+//    }
 
-//[KSPScenario(ScenarioCreationOptions.AddToAllGames, new []{ GameScenes.SPACECENTER})]
+//    private void SaveSettings()
+//    {
+//        var config = new ConfigNode("MyAddonSettings");
+//        myBinding.Save(config.AddNode("MyBinding"));
+//    }
+
+
+//    private string GetConfigFilePath()
+//    {
+//        var dllDir = Path.GetDirectoryName(AssemblyLoader.GetPathByType(typeof(AddonKeyBindingPersistence)));
+
+//        if (!Directory.Exists(dllDir))
+//            Directory.CreateDirectory(dllDir);
+
+//        return Path.Combine(dllDir, "settings.cfg");
+//    }
+
+//    private static ConfigNode DefaultKeyBindingNode()
+//    {
+//        var node = new ConfigNode();
+//        new KeyBinding(KeyCode.None).Save(node);
+//        return node;
+//    }
+//}
+
+//[KSPScenario(ScenarioCreationOptions.AddToAllGames, new[] { GameScenes.SPACECENTER })]
 //public class ScenarioModuleKeyBindingPersistence : ScenarioModule
 //{
 //    [KSPField(isPersistant = true)] // note: must be marked KSPField, persistent

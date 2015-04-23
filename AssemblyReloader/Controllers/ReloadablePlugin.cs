@@ -31,7 +31,7 @@ namespace AssemblyReloader.Controllers
         public ReloadablePlugin(
             IAssemblyLoader assemblyLoader,
             IFile location,
-            IConfiguration configuration)
+            Configuration configuration)
         {
             if (assemblyLoader == null) throw new ArgumentNullException("assemblyLoader");
             if (location == null) throw new ArgumentNullException("location");
@@ -78,6 +78,6 @@ namespace AssemblyReloader.Controllers
             get { return _loaded.IsNull() ? Maybe<Assembly>.None : Maybe<Assembly>.With(_loaded); }
         }
 
-        public IConfiguration Configuration { get; private set; }
+        public Configuration Configuration { get; private set; }
     }
 }

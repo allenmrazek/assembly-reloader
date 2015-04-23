@@ -5,3 +5,5 @@
 - Verify that reloadable plugins aren't already loaded by the game (for example: TestProject.dll existing alongside TestProject.dll.reloadable in GameData which will break the whole thing unless TestProject.dll is uninstalled first)
 
 - check for changed reloadable dependencies; reload them also
+
+- update moduleRef and associated configs for unloaded PartModule instances
