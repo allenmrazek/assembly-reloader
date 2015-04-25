@@ -178,15 +178,19 @@ namespace AssemblyReloader.CompositeRoot
 
             var skinScheme = ConfigureSkin();
 
-            var windowFactory = new WindowFactory(resourceLocator, skinScheme);
+            var windowFactory = new WindowFactory(
+                resourceLocator, new ConfigurationPanelFactory(
+                new ExpandablePanelFactory(skinScheme.toggle, GUILayout.ExpandWidth(false), GUILayout.ExpandHeight(false)),
+                new ConfigurationWindowPanelFieldQuery()),
+                skinScheme);
             var uniqueIdProvider = new UniqueWindowIdProvider();
-            var expandablePanelFactory = windowFactory.CreateExpandablePanelFactory(skinScheme);
+
 
             var guiController =
                 new GuiController(reloadables.ToDictionary(r => r,
                     r =>
                     {
-                        var configWindow = windowFactory.CreatePluginOptionsWindow(r, expandablePanelFactory);
+                        var configWindow = windowFactory.CreatePluginOptionsWindow(r);
 
                         configWindow.Visible = false;
 
@@ -505,16 +509,6 @@ namespace AssemblyReloader.CompositeRoot
                 new TypeIdentifierQuery(),
                 new UniqueFlightIdGenerator(),
                 _log.CreateTag("PMSnapshotter"));
-        }
-
-
-        private IExpandablePanelFactory ConfigureExpandablePanelFactory(GUISkin skinScheme)
-        {
-            var style = new GUIStyle(skinScheme.toggle);
-
-            // todo: make any adjustments to toggle button here
-
-            return new ExpandablePanelFactory(style, 14f, 0f, false);
         }
     }
 }

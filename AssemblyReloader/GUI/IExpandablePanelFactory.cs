@@ -1,10 +1,16 @@
 ﻿using System;
-using ReeperCommon.Gui.Controls;
+using System.Collections.Generic;
+using AssemblyReloader.DataObjects;
+using UnityEngine;
 
 namespace AssemblyReloader.Gui
 {
     public interface IExpandablePanelFactory
     {
-        ICustomControl Create(string text, Action drawCall);
+        IExpandablePanel Create(
+            string label,
+            float contentOffset,
+            Action<IEnumerable<GUILayoutOption>> drawAction,
+            bool startExpanded);
     }
 }

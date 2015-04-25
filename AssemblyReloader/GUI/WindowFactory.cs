@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using AssemblyReloader.Annotations;
 using AssemblyReloader.Controllers;
-using AssemblyReloader.DataObjects;
-using ReeperCommon.Gui.Controls;
 using ReeperCommon.Gui.Window;
 using ReeperCommon.Gui.Window.Buttons;
 using ReeperCommon.Gui.Window.Decorators;
@@ -17,24 +14,28 @@ namespace AssemblyReloader.Gui
     class WindowFactory
     {
         private readonly IResourceRepository _resourceProvider;
+        private readonly IConfigurationPanelFactory _configurationPanelFactory;
         private readonly GUISkin _windowSkin;
 
+
         public WindowFactory(
-            IResourceRepository resourceProvider,
-            
-            GUISkin windowSkin)
+            [NotNull] IResourceRepository resourceProvider,
+            [NotNull] IConfigurationPanelFactory configurationPanelFactory,
+            [NotNull] GUISkin windowSkin)
         {
             if (resourceProvider == null) throw new ArgumentNullException("resourceProvider");
+            if (configurationPanelFactory == null) throw new ArgumentNullException("configurationPanelFactory");
             if (windowSkin == null) throw new ArgumentNullException("windowSkin");
 
             _resourceProvider = resourceProvider;
+            _configurationPanelFactory = configurationPanelFactory;
             _windowSkin = windowSkin;
         }
 
 
 
         public void CreateMainWindow(
-            View logic,
+            [NotNull] View logic,
             Rect initialRect,
             int winid)
         {
@@ -68,17 +69,16 @@ namespace AssemblyReloader.Gui
         }
 
 
-        public IWindowComponent CreatePluginOptionsWindow(IReloadablePlugin plugin, IExpandablePanelFactory panelFactory)
+        public IWindowComponent CreatePluginOptionsWindow(IReloadablePlugin plugin)
         {
             if (plugin == null) throw new ArgumentNullException("plugin");
-            if (panelFactory == null) throw new ArgumentNullException("panelFactory");
 
             var configLogic = new ConfigurationViewLogic(plugin.Configuration);
 
-            foreach (var panel in CreateExpandingPanelsForConfiguration(configLogic, panelFactory, plugin.Configuration))
-                configLogic.AddControl(panel);
+            foreach (var panel in _configurationPanelFactory.CreatePanelsFor(plugin.Configuration)) 
+                configLogic.AddPanel(panel);
 
-            var basicWindow = new BasicWindow(configLogic, new Rect(300f, 300f, 300f, 300f),
+            var basicWindow = new BasicWindow(configLogic, new Rect(300f, 300f, 450f, 300f),
                 UnityEngine.Random.Range(10000, 3434343), _windowSkin, true);
 
             basicWindow.Title = plugin.Name + " Configuration";
@@ -89,39 +89,6 @@ namespace AssemblyReloader.Gui
             UnityEngine.Object.DontDestroyOnLoad(WindowView.Create(decoratedWindow));
 
             return decoratedWindow;
-        }
-
-
-        public IExpandablePanelFactory CreateExpandablePanelFactory(GUISkin skin)
-        {
-            if (skin == null) throw new ArgumentNullException("skin");
-
-
-            var style = new GUIStyle(skin.toggle);
-
-
-
-            return new ExpandablePanelFactory(style, 12f, 0f, false);
-        }
-
-
-        private IEnumerable<ICustomControl> CreateExpandingPanelsForConfiguration(
-            [NotNull] ConfigurationViewLogic view,
-            [NotNull] IExpandablePanelFactory panelFactory,
-            [NotNull] Configuration config)
-        {
-            if (view == null) throw new ArgumentNullException("view");
-            if (panelFactory == null) throw new ArgumentNullException("panelFactory");
-            if (config == null) throw new ArgumentNullException("config");
-
-            return new[]
-            {
-                panelFactory.Create("General", view.DrawGeneralOptionsPanel),
-                panelFactory.Create("Intermediate Language Weaving", view.DrawIntermediateLanguagePanel),
-                panelFactory.Create("KSPAddon Options", view.DrawAddonPanel),
-                panelFactory.Create("PartModule Options", view.DrawPartModulePanel),
-                panelFactory.Create("ScenarioModule Options", view.DrawScenarioModulePanel)
-            };
         }
     }
 }

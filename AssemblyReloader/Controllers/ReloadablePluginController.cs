@@ -4,7 +4,6 @@ using ReeperCommon.Gui.Window;
 
 namespace AssemblyReloader.Controllers
 {
-
     public class ReloadablePluginController : IReloadablePluginController
     {
         private readonly IWindowComponent _configWindow;
@@ -45,9 +44,9 @@ namespace AssemblyReloader.Controllers
             {
                 Plugin.Load();
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                throw;
+                throw new Exception("Failed to load plugin " + Plugin.Name + " due to the following exception: " + e);
             }
             
         }

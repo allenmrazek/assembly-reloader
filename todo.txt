@@ -7,3 +7,5 @@
 - check for changed reloadable dependencies; reload them also
 
 - update moduleRef and associated configs for unloaded PartModule instances
+
+- bugfix: reloading database might change GameData dir instance, causing us to point to an old "snapshot" of disk contents

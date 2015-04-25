@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using AssemblyReloader.Annotations;
 using AssemblyReloader.DataObjects;
-using ReeperCommon.Gui.Controls;
 using ReeperCommon.Gui.Logic;
 using UnityEngine;
 
@@ -11,8 +10,8 @@ namespace AssemblyReloader.Gui
     public class ConfigurationViewLogic : IWindowLogic
     {
         private readonly Configuration _configuration;
-        private readonly List<ICustomControl> _controls = new List<ICustomControl>();
- 
+        private readonly List<IExpandablePanel> _panels = new List<IExpandablePanel>();
+        private Vector2 _scrollPos = default(Vector2);
 
         public ConfigurationViewLogic(
             Configuration configuration)
@@ -41,47 +40,59 @@ namespace AssemblyReloader.Gui
             //GUILayout.Toggle(true, "Rewrite calls to GetExecutingAssembly Location & CodeBase");
             //GUILayout.Toggle(true, "Rewrite GameEvent subscriptions using safe removal proxy");
 
-            foreach (var p in _controls) p.Draw(GUILayout.ExpandWidth(true), GUILayout.ExpandHeight(false));
+            _scrollPos = GUILayout.BeginScrollView(_scrollPos, false, true);
+            foreach (var p in _panels) p.Draw(GUILayout.ExpandWidth(false), GUILayout.ExpandHeight(false));
+            GUILayout.EndScrollView();
         }
 
 
 
-        public void DrawAddonPanel()
+        //public void DrawAddonPanel(IEnumerable<GUILayoutOption> options)
+        //{
+        //    _configuration.StartAddonsForCurrentScene = GUILayout.Toggle(_configuration.StartAddonsForCurrentScene, "Reload KSPAddons on the fly");
+        //    _configuration.InstantlyAppliesToEveryScene = GUILayout.Toggle(_configuration.InstantlyAppliesToEveryScene, "KSPAddon.Instant applies to all scenes");
+        //}
+
+
+        //public void DrawPartModulePanel(IEnumerable<GUILayoutOption> options)
+        //{
+        //    _configuration.ReloadPartModulesImmediately = GUILayout.Toggle(_configuration.ReloadPartModulesImmediately, "Swap PartModules on the fly");
+        //    _configuration.ReusePartModuleConfigsFromPrevious = GUILayout.Toggle(_configuration.ReusePartModuleConfigsFromPrevious, "Attempt to reuse PartModule ConfigNodes when swapping");
+        //}
+
+
+        //public void DrawScenarioModulePanel(IEnumerable<GUILayoutOption> options)
+        //{
+        //    _configuration.ReloadScenarioModulesImmediately =
+        //        GUILayout.Toggle(_configuration.ReloadScenarioModulesImmediately, "Reload ScenarioModules on the fly");
+        //    _configuration.ReuseScenarioModuleConfigsFromPrevious = GUILayout.Toggle(false, "Attempt to reuse ScenarioModule ConfigNodes when swapping");
+        //}
+
+
+        //public void DrawIntermediateLanguagePanel(IEnumerable<GUILayoutOption> options)
+        //{
+        //    GUILayout.Toggle(false, "Intercept Assembly.CodeBase calls");
+        //    GUILayout.Toggle(false, "Intercept Assembly.Location calls");
+        //    GUILayout.Toggle(false, "Intercept GameEvent registrations");
+        //}
+
+
+        //public void DrawGeneralOptionsPanel(IEnumerable<GUILayoutOption> options)
+        //{
+        //    GUILayout.Toggle(true, "Reload KSPAddons");
+        //    GUILayout.Toggle(true, "Reload PartModules");
+        //    GUILayout.Toggle(true, "Reload ScenarioModules");
+        //    GUILayout.Toggle(false, "Reload Contracts");
+        //    GUILayout.Toggle(false, "Reload ExperienceTraits");
+        //    GUILayout.Toggle(false, "Reload ExperienceEffects");
+        //}
+
+
+        public void AddPanel([NotNull] IExpandablePanel panel)
         {
-            GUILayout.Toggle(true, "Reload Addons instantly");
-            GUILayout.Toggle(true, "KSPAddon.Instant applies to all scenes");
-        }
+            if (panel == null) throw new ArgumentNullException("panel");
 
-
-        public void DrawPartModulePanel()
-        {
-            GUILayout.Toggle(false, "DrawPartModulePanel option 1");
-        }
-
-
-        public void DrawScenarioModulePanel()
-        {
-            GUILayout.Toggle(false, "DrawScenarioModulePanel option 1");
-        }
-
-
-        public void DrawIntermediateLanguagePanel()
-        {
-            GUILayout.Toggle(false, "DrawIntermediateLanguagePanel option 1");
-        }
-
-
-        public void DrawGeneralOptionsPanel()
-        {
-            GUILayout.Toggle(false, "General option 1");
-        }
-
-
-        public void AddControl([NotNull] ICustomControl control)
-        {
-            if (control == null) throw new ArgumentNullException("control");
-
-            _controls.Add(control);
+            _panels.Add(panel);
         }
 
 

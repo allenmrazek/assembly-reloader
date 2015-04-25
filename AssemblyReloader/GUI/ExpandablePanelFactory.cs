@@ -1,5 +1,6 @@
 ﻿using System;
-using ReeperCommon.Gui.Controls;
+using System.Collections.Generic;
+using AssemblyReloader.Annotations;
 using UnityEngine;
 
 namespace AssemblyReloader.Gui
@@ -7,27 +8,23 @@ namespace AssemblyReloader.Gui
     public class ExpandablePanelFactory : IExpandablePanelFactory
     {
         private readonly GUIStyle _toggleStyle;
-        private readonly float _leftMargin;
-        private readonly float _rightMargin;
-        private readonly bool _initialState;
+        private readonly GUILayoutOption[] _toggleLayoutOptions;
 
-        public ExpandablePanelFactory(GUIStyle toggleStyle, float leftMargin, float rightMargin, bool initialState)
+        public ExpandablePanelFactory(
+            [NotNull] GUIStyle toggleStyle,
+            [NotNull] params GUILayoutOption[] toggleLayoutOptions)
         {
             if (toggleStyle == null) throw new ArgumentNullException("toggleStyle");
+            if (toggleLayoutOptions == null) throw new ArgumentNullException("toggleLayoutOptions");
 
             _toggleStyle = toggleStyle;
-            _leftMargin = leftMargin;
-            _rightMargin = rightMargin;
-            _initialState = initialState;
+            _toggleLayoutOptions = toggleLayoutOptions;
         }
 
 
-        public ICustomControl Create(string text, Action drawCall)
+        public IExpandablePanel Create(string label, float contentOffset, Action<IEnumerable<GUILayoutOption>> drawAction, bool startExpanded = false)
         {
-            if (text == null) throw new ArgumentNullException("text");
-            if (drawCall == null) throw new ArgumentNullException("drawCall");
-
-            return new ExpandablePanel(_toggleStyle, text, drawCall, _leftMargin, _initialState);
+            return new ExpandablePanel(_toggleStyle, label, contentOffset, drawAction, startExpanded, _toggleLayoutOptions);
         }
     }
 }
