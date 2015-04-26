@@ -40,6 +40,10 @@ namespace AssemblyReloader.DataObjects
 
 
         // Intermediate Language
+        [ReeperPersistent, PanelCategory(PanelCategoryAttribute.CategoryType.IntermediateLanguage)] 
+        [ConfigItemDescription("Inject helper type (required for method interception)")] 
+        public bool InjectHelperType = true;
+
         [ReeperPersistent, PanelCategory(PanelCategoryAttribute.CategoryType.IntermediateLanguage)]
         [ConfigItemDescription("Intercept calls to Assembly.CodeBase and Assembly.Location")]
         public bool RewriteAssemblyLocationCalls = true;

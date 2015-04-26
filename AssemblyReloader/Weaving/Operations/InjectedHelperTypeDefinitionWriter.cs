@@ -8,20 +8,16 @@ namespace AssemblyReloader.Weaving.Operations
 {
     public class InjectedHelperTypeDefinitionWriter : WeaveOperation
     {
-        private readonly ILog _log;
         private readonly ICommand<TypeDefinition> _writeMethods;
 
         public const string Namespace = "ART.Injected";
         public const string TypeName = "AssemblyLocationHelper";
 
         public InjectedHelperTypeDefinitionWriter(
-            ILog log, 
             ICommand<TypeDefinition> writeMethods)
         {
-            if (log == null) throw new ArgumentNullException("log");
             if (writeMethods == null) throw new ArgumentNullException("writeMethods");
 
-            _log = log;
             _writeMethods = writeMethods;
         }
 

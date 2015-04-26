@@ -74,8 +74,5 @@ namespace AssemblyReloader.Gui
                         ((PanelCategoryAttribute)
                             fi.GetCustomAttributes(true).First(attr => attr is PanelCategoryAttribute)).Category == cat);
         }
-
-
-        
     }
 }

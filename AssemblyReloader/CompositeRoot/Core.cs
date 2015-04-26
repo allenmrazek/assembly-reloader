@@ -24,7 +24,6 @@ using AssemblyReloader.Repositories;
 using AssemblyReloader.TypeInstallers;
 using AssemblyReloader.Weaving;
 using AssemblyReloader.Weaving.Operations;
-using Contracts;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
 using ReeperCommon.FileSystem;
@@ -34,7 +33,6 @@ using ReeperCommon.FileSystem.Implementations.Providers;
 using ReeperCommon.Gui.Window.Providers;
 using ReeperCommon.Logging;
 using ReeperCommon.Logging.Implementations;
-using ReeperCommon.Providers;
 using ReeperCommon.Repositories.Resources;
 using ReeperCommon.Repositories.Resources.Implementations;
 using ReeperCommon.Repositories.Resources.Implementations.Decorators;
@@ -284,17 +282,12 @@ namespace AssemblyReloader.CompositeRoot
         {
             var reloadableAssemblyFileQuery = new ReloadableAssemblyFilesInDirectoryQuery(fsFactory.GetGameDataDirectory());
 
-            var addonDestroyer = new AddonDestroyer(
-                new UnityObjectDestroyer(new PluginReloadRequestedMethodCallCommand()),
-                new LoadedComponentQuery(),
-                new AddonsFromAssemblyQuery(new AddonAttributesFromTypeQuery()));
 
             return reloadableAssemblyFileQuery
                 .Get()
                 .Select(raFile => ConfigureReloadablePlugin(raFile, 
                     assemblyResolver, 
                     laFactory, 
-                    addonDestroyer,
                     configurationProvider));
         }
 
@@ -316,18 +309,18 @@ namespace AssemblyReloader.CompositeRoot
 
 
         private IReloadablePlugin ConfigureReloadablePlugin(
-            IFile location, 
-            BaseAssemblyResolver assemblyResolver, 
+            IFile location,
+            BaseAssemblyResolver assemblyResolver,
             ILoadedAssemblyFactory laFactory,
-            IAddonDestroyer addonDestroyer,
             IPluginConfigurationProvider configurationProvider)
         {
+            var configuration = configurationProvider.Get(location);
 
             var debugSymbolExistQuery = new DebugSymbolFileExistsQuery(location);
 
             var assemblyProvider = new AssemblyProvider(
                 new AssemblyDefinitionFromDiskReader(
-                    location, 
+                    location,
                     debugSymbolExistQuery,
                     assemblyResolver),
                 new AssemblyDefinitionLoader(
@@ -335,16 +328,50 @@ namespace AssemblyReloader.CompositeRoot
                         location.Directory,
                         new RandomStringGenerator()),
                     _log.CreateTag("AssemblyDefinitionLoader")),
-                ConfigureDefinitionWeaver(location));
+                ConfigureDefinitionWeaver(location, configuration));
+
+
+            var kspFactory = new KspFactory(new KspGameObjectProvider());
+            var reloadable = new ReloadablePlugin(new KspAssemblyLoader(assemblyProvider, laFactory), location, configuration);
+
+            
+
+            SetupAddonController(reloadable, configuration);
+            SetupPartModuleController(reloadable, configuration, kspFactory);
+            SetupScenarioModuleController(reloadable, configuration, kspFactory);
 
 
             
 
-            var kspLoader = new KspAssemblyLoader(assemblyProvider, laFactory);
+            return reloadable;
+        }
 
-            var reloadable = new ReloadablePlugin(kspLoader, location, configurationProvider.Get(location));
 
-            var kspFactory = new KspFactory(new KspGameObjectProvider());
+        private static void SetupAddonController(IReloadablePlugin plugin, Configuration configuration)
+        {
+            var addonDestroyer = new AddonDestroyer(
+                new UnityObjectDestroyer(new PluginReloadRequestedMethodCallCommand()),
+                new LoadedComponentQuery(),
+                new AddonsFromAssemblyQuery(new AddonAttributesFromTypeQuery()));
+
+            var addonController =
+                new AddonController(
+                    new KspAddonLoader(),
+                    addonDestroyer,
+                    new CurrentStartupSceneProvider(new StartupSceneFromGameSceneQuery(),
+                        new CurrentGameSceneProvider()));
+
+            plugin.OnLoaded +=
+                (asm, loc) => { if (configuration.StartAddonsForCurrentScene) addonController.Load(asm, loc); };
+
+            plugin.OnUnloaded += addonController.Unload; 
+        }
+
+
+        private void SetupPartModuleController(IReloadablePlugin plugin, Configuration configuration, IKspFactory kspFactory)
+        {
+            var partModuleRepository = new FlightConfigRepository();
+
 
             var descriptorFactory = new PartModuleDescriptorFactory(
                                         new KspPartLoader(
@@ -355,20 +382,46 @@ namespace AssemblyReloader.CompositeRoot
                                         new TypeIdentifierQuery());
 
             var prefabCloneProvider = new PartPrefabCloneProvider(
-                new LoadedComponentQuery<Part>(),
-                new ComponentsInGameObjectHierarchyProvider<Part>(),
-                new PartIsPrefabQuery(),
-                kspFactory);
+                                        new LoadedComponentQuery<Part>(),
+                                        new ComponentsInGameObjectHierarchyProvider<Part>(),
+                                        new PartIsPrefabQuery(),
+                                        kspFactory);
 
-            var partModuleRepository = new FlightConfigRepository();
+            var partModuleController = new PartModuleController(
+                                         new PartModuleLoader(
+                                             descriptorFactory,
+                                             new PartModuleFactory(new PartIsPrefabQuery(), new AwakenPartModuleCommand()),
+                                             partModuleRepository,
+                                             prefabCloneProvider),
+                                         new PartModuleUnloader(
+                                             new UnityObjectDestroyer(new PluginReloadRequestedMethodCallCommand()),
+                                             descriptorFactory,
+                                             prefabCloneProvider,
+                                             ConfigurePartModuleSnapshotGenerator(partModuleRepository)
+                                             ),
+                                         new TypesDerivedFromQuery<PartModule>(),
+                                         partModuleRepository,
+                                         new RefreshPartActionWindows(KspPartActionWindowListener.WindowController),
+                                         _log.CreateTag("PartModuleController"));
+
+            plugin.OnLoaded += (asm, loc) =>
+            {
+                if (configuration.ReloadPartModulesImmediately) partModuleController.Load(asm, loc);
+            };
+
+            plugin.OnUnloaded += partModuleController.Unload;
+        }
+
+
+        private void SetupScenarioModuleController(IReloadablePlugin plugin, Configuration configuration, IKspFactory kspFactory)
+        {
+            var gameProvider = new CurrentGameProvider(new TypeIdentifierQuery());
 
             var protoScenarioModuleProvider = new ProtoScenarioModuleProvider(
                 kspFactory,
                 new TypeIdentifierQuery(),
                 new CurrentGameProvider(new TypeIdentifierQuery()));
 
-            var gameProvider = new CurrentGameProvider(new TypeIdentifierQuery());
-            
             var scenarioModuleController =
                 new ScenarioModuleController(
                     new ScenarioModuleLoader(protoScenarioModuleProvider),
@@ -382,50 +435,13 @@ namespace AssemblyReloader.CompositeRoot
                     new TypesDerivedFromQuery<ScenarioModule>(),
                     new CurrentGameSceneProvider());
 
-            reloadable.OnLoaded += scenarioModuleController.Load;
-            reloadable.OnUnloaded += scenarioModuleController.Unload;
+            plugin.OnLoaded += (asm, loc) =>
+            {
+                if (configuration.ReloadScenarioModulesImmediately) scenarioModuleController.Load(asm, loc);
+            };
 
-
-            var partModuleController = new PartModuleController(
-                new PartModuleLoader(
-                    descriptorFactory,
-                    new PartModuleFactory(new PartIsPrefabQuery(), new AwakenPartModuleCommand()),
-                    partModuleRepository,
-                    prefabCloneProvider),
-                new PartModuleUnloader(
-                    new UnityObjectDestroyer(new PluginReloadRequestedMethodCallCommand()),
-                    descriptorFactory,
-                    prefabCloneProvider,
-                    ConfigurePartModuleSnapshotGenerator(partModuleRepository)
-                    ),
-                new TypesDerivedFromQuery<PartModule>(),
-                partModuleRepository,
-                new RefreshPartActionWindows(KspPartActionWindowListener.WindowController),
-                _log.CreateTag("PartModuleController"));
-
-            reloadable.OnLoaded += partModuleController.Load;
-            reloadable.OnUnloaded += partModuleController.Unload;
-
-
-
-
-            var addonController =
-                new AddonController(
-                    new KspAddonLoader(),
-                    addonDestroyer,
-                    new CurrentStartupSceneProvider(new StartupSceneFromGameSceneQuery(),
-                    new CurrentGameSceneProvider()));
-
-            reloadable.OnLoaded += addonController.Load;
-            reloadable.OnUnloaded += addonController.Unload;
-
-
-
-            return reloadable;
+            plugin.OnUnloaded += scenarioModuleController.Unload;
         }
-
-
- 
 
 
         private GUISkin ConfigureSkin()
@@ -452,7 +468,7 @@ namespace AssemblyReloader.CompositeRoot
 
 
 
-        private IAssemblyDefinitionWeaver ConfigureDefinitionWeaver(IFile location)
+        private IAssemblyDefinitionWeaver ConfigureDefinitionWeaver(IFile location, Configuration configuration)
         {
             if (location == null) throw new ArgumentNullException("location");
             
@@ -475,11 +491,11 @@ namespace AssemblyReloader.CompositeRoot
    
             var renameAssembly = new RenameAssemblyOperation(new UniqueAssemblyNameGenerator(new RandomStringGenerator()));
 
-            var writeInjectedHelper = new InjectedHelperTypeDefinitionWriter(
-                _log.CreateTag("InjectedHelperWriter"),
-                new CompositeCommand<TypeDefinition>(
-                    new ProxyAssemblyMethodWriter(Uri.UnescapeDataString(uri.AbsoluteUri), getCodeBaseProperty.GetGetMethod()),
-                    new ProxyAssemblyMethodWriter(uri.LocalPath, getLocationProperty.GetGetMethod())));
+            var writeInjectedHelper = 
+                    new InjectedHelperTypeDefinitionWriter(
+                    new CompositeCommand<TypeDefinition>(
+                        new ProxyAssemblyMethodWriter(Uri.UnescapeDataString(uri.AbsoluteUri), getCodeBaseProperty.GetGetMethod()),
+                        new ProxyAssemblyMethodWriter(uri.LocalPath, getLocationProperty.GetGetMethod())));
 
             var replaceAssemblyLocationCalls = new InterceptExecutingAssemblyLocationQueries(
                 new MethodCallInMethodBodyQuery(
@@ -493,8 +509,8 @@ namespace AssemblyReloader.CompositeRoot
                 allTypesFromAssemblyExceptInjected,
                 new AllMethodsFromDefinitionQuery(),
                 renameAssembly,
-                writeInjectedHelper,
-                replaceAssemblyLocationCalls);
+                new ConditionalWeaveOperation(writeInjectedHelper, () => configuration.InjectHelperType),
+                new ConditionalWeaveOperation(replaceAssemblyLocationCalls, () => configuration.RewriteAssemblyLocationCalls));
 
         }
 

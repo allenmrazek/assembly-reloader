@@ -13,7 +13,7 @@ namespace AssemblyReloader.DataObjects
             IntermediateLanguage
         }
 
-        public CategoryType Category = CategoryType.Addon;
+        public readonly CategoryType Category = CategoryType.Addon;
 
         public PanelCategoryAttribute(CategoryType cat)
         {
