@@ -166,7 +166,9 @@ namespace AssemblyReloader.CompositeRoot
                 new DefaultSurrogateSelector(new DefaultSurrogateProvider()),
                     new SerializableFieldQuery());
 
-            var reloadables = CreateReloadablePlugins(loadedAssemblyFactory, fsFactory, assemblyResolver, new PluginConfigurationProvider(configNodeFormatter, new ConfigurationFilePathQuery())).ToList();
+            var configurationPathQuery = new ConfigurationFilePathQuery();
+
+            var reloadables = CreateReloadablePlugins(loadedAssemblyFactory, fsFactory, assemblyResolver, new PluginConfigurationProvider(configNodeFormatter, configurationPathQuery)).ToList();
 
             reloadables.ForEach(r => r.Load());
 
@@ -178,8 +180,7 @@ namespace AssemblyReloader.CompositeRoot
                         GUILayout.ExpandHeight(false)),
                     new ConfigurationWindowPanelFieldQuery()),
                 skinScheme,
-                ConfigureTitleBarButtonStyle(),
-                new SaveConfigurationCommand(configNodeFormatter));
+                ConfigureTitleBarButtonStyle());
 
             var uniqueIdProvider = new UniqueWindowIdProvider();
 
@@ -188,7 +189,7 @@ namespace AssemblyReloader.CompositeRoot
                 new GuiController(reloadables.ToDictionary(r => r,
                     r =>
                     {
-                        var configWindow = windowFactory.CreatePluginOptionsWindow(r);
+                        var configWindow = windowFactory.CreatePluginOptionsWindow(r, new SaveConfigurationCommand(r, configNodeFormatter, configurationPathQuery));
 
                         configWindow.Visible = false;
 

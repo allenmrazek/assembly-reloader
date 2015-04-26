@@ -36,7 +36,7 @@ namespace AssemblyReloader.Providers
 
             var configPath = _configFilePathQuery.Get(pluginLocation);
 
-            if (configPath.Any()) DeserializeConfig(config, configPath.Single());
+            if (File.Exists(configPath)) DeserializeConfig(config, configPath);
 
             return config;
         }
@@ -44,7 +44,7 @@ namespace AssemblyReloader.Providers
 
         private void DeserializeConfig(Configuration config, string configNodeLocation)
         {
-            var node = FindConfigNode(configNodeLocation);
+            var node = LoadConfigNode(configNodeLocation);
             if (!node.Any())
                 throw new FileNotFoundException("Did not find a ConfigNode definition at " + configNodeLocation);
 
@@ -52,7 +52,7 @@ namespace AssemblyReloader.Providers
         }
 
 
-        private Maybe<ConfigNode> FindConfigNode(string location)
+        private Maybe<ConfigNode> LoadConfigNode(string location)
         {
             var config = ConfigNode.Load(location);
 

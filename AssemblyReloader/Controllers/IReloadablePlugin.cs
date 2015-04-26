@@ -16,6 +16,7 @@ namespace AssemblyReloader.Controllers
         string Name { get; }
         Maybe<Assembly> Assembly { get; }
         Configuration Configuration { get; }
+        IFile Location { get; }
 
         event PluginLoadedHandler OnLoaded;
         event PluginUnloadedHandler OnUnloaded;

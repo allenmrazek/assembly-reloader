@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
-using AssemblyReloader.CompositeRoot;
 using AssemblyReloader.DataObjects;
 using AssemblyReloader.Game;
 using ReeperCommon.Containers;
@@ -79,5 +78,10 @@ namespace AssemblyReloader.Controllers
         }
 
         public Configuration Configuration { get; private set; }
+
+        public IFile Location
+        {
+            get { return _location; }
+        }
     }
 }

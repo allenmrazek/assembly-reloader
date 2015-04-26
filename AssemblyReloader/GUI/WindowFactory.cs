@@ -19,27 +19,24 @@ namespace AssemblyReloader.Gui
         private readonly IConfigurationPanelFactory _configurationPanelFactory;
         private readonly GUISkin _windowSkin;
         private readonly GUIStyle _titleBarButtonStyle;
-        private readonly ICommand _saveConfigurationCommand;
+// ReSharper disable once InconsistentNaming
         private readonly Vector2 TitleBarButtonOffset = new Vector2(3f, 3f);
 
         public WindowFactory(
             [NotNull] IResourceRepository resourceProvider,
             [NotNull] IConfigurationPanelFactory configurationPanelFactory,
             [NotNull] GUISkin windowSkin, 
-            [NotNull] GUIStyle titleBarButtonStyle, 
-            [NotNull] ICommand saveConfigurationCommand)
+            [NotNull] GUIStyle titleBarButtonStyle)
         {
             if (resourceProvider == null) throw new ArgumentNullException("resourceProvider");
             if (configurationPanelFactory == null) throw new ArgumentNullException("configurationPanelFactory");
             if (windowSkin == null) throw new ArgumentNullException("windowSkin");
             if (titleBarButtonStyle == null) throw new ArgumentNullException("titleBarButtonStyle");
-            if (saveConfigurationCommand == null) throw new ArgumentNullException("saveConfigurationCommand");
 
             _resourceProvider = resourceProvider;
             _configurationPanelFactory = configurationPanelFactory;
             _windowSkin = windowSkin;
             _titleBarButtonStyle = titleBarButtonStyle;
-            _saveConfigurationCommand = saveConfigurationCommand;
         }
 
 
@@ -79,9 +76,12 @@ namespace AssemblyReloader.Gui
 
 
        
-        public IWindowComponent CreatePluginOptionsWindow(IReloadablePlugin plugin)
+        public IWindowComponent CreatePluginOptionsWindow(
+            [NotNull] IReloadablePlugin plugin,
+            [NotNull] ICommand saveOptionsCommand)
         {
             if (plugin == null) throw new ArgumentNullException("plugin");
+            if (saveOptionsCommand == null) throw new ArgumentNullException("saveOptionsCommand");
 
             var configLogic = new ConfigurationViewLogic(plugin.Configuration);
 
@@ -102,7 +102,7 @@ namespace AssemblyReloader.Gui
                 {
                     new DebugLog().Normal("Button close!");
                     tbButtons.Visible = false;
-                    _saveConfigurationCommand.Execute();
+                    saveOptionsCommand.Execute();
                 }, "Close"));
             
             //var decoratedWindow = new HideOnF2(new ClampToScreen(basicWindow)); //buggy?
