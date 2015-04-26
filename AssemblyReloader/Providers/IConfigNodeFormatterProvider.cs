@@ -1,9 +1,9 @@
-﻿using ReeperCommon.Serialization;
+﻿//using ReeperCommon.Serialization;
 
-namespace AssemblyReloader.Providers
-{
-    public interface IConfigNodeFormatterProvider
-    {
-        IConfigNodeFormatter Get();
-    }
-}
+//namespace AssemblyReloader.Providers
+//{
+//    public interface IConfigNodeFormatterProvider
+//    {
+//        IConfigNodeFormatter Get();
+//    }
+//}

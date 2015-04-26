@@ -2,7 +2,6 @@
 using System.Linq;
 using AssemblyReloader.Game.Providers;
 using AssemblyReloader.Repositories;
-using ReeperCommon.Logging.Implementations;
 
 namespace AssemblyReloader.Loaders.PartModuleLoader
 {

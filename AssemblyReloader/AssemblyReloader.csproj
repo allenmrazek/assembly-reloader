@@ -72,6 +72,7 @@
     <Compile Include="Commands\RefreshPartActionWindows.cs" />
     <Compile Include="Commands\NullCommand.cs" />
     <Compile Include="Commands\PluginReloadRequestedMethodCallCommand.cs" />
+    <Compile Include="Commands\SaveConfigurationCommand.cs" />
     <Compile Include="Commands\ToggleWindowVisibilityCommand.cs" />
     <Compile Include="CompositeRoot\CachedLog.cs" />
     <Compile Include="CompositeRoot\ICachedLog.cs" />
@@ -143,7 +144,9 @@
     <Compile Include="Providers\IConfigNodeFormatterProvider.cs" />
     <Compile Include="Queries\CompositeFieldInfoQuery.cs" />
     <Compile Include="Queries\ConfigurationWindowPanelFieldQuery.cs" />
+    <Compile Include="Queries\FileSystemQueries\ConfigurationFilePathQuery.cs" />
     <Compile Include="Queries\FileSystemQueries\DebugSymbolFileExistsQuery.cs" />
+    <Compile Include="Queries\FileSystemQueries\IConfigurationFilePathQuery.cs" />
     <Compile Include="Queries\FileSystemQueries\IDebugSymbolFileExistsQuery.cs" />
     <Compile Include="Providers\IPluginConfigurationProvider.cs" />
     <Compile Include="Providers\PluginConfigurationProvider.cs" />

@@ -6,7 +6,6 @@ using AssemblyReloader.Annotations;
 using AssemblyReloader.Game;
 using AssemblyReloader.Game.Providers;
 using AssemblyReloader.Queries;
-using ReeperCommon.Logging.Implementations;
 
 namespace AssemblyReloader.Loaders
 {

@@ -3,7 +3,6 @@ using System.Linq;
 using System.Reflection;
 using ReeperCommon.Extensions;
 using ReeperCommon.FileSystem;
-using ReeperCommon.FileSystem.Implementations;
 
 namespace AssemblyReloader.Queries.FileSystemQueries
 {

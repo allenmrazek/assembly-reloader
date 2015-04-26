@@ -1,5 +1,5 @@
 ﻿using ReeperCommon.Extensions;
-using ReeperCommon.Logging.Implementations;
+using ReeperCommon.Logging;
 using UnityEngine;
 
 namespace TestProject

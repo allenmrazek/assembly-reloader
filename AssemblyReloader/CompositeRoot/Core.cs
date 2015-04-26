@@ -28,14 +28,10 @@ using Mono.Cecil;
 using Mono.Cecil.Cil;
 using ReeperCommon.FileSystem;
 using ReeperCommon.FileSystem.Factories;
-using ReeperCommon.FileSystem.Implementations;
-using ReeperCommon.FileSystem.Implementations.Providers;
+using ReeperCommon.FileSystem.Providers;
 using ReeperCommon.Gui.Window.Providers;
 using ReeperCommon.Logging;
-using ReeperCommon.Logging.Implementations;
-using ReeperCommon.Repositories.Resources;
-using ReeperCommon.Repositories.Resources.Implementations;
-using ReeperCommon.Repositories.Resources.Implementations.Decorators;
+using ReeperCommon.Repositories;
 using ReeperCommon.Serialization;
 using UnityEngine;
 
@@ -166,11 +162,11 @@ namespace AssemblyReloader.CompositeRoot
 
             var loadedAssemblyFactory = ConfigureLoadedAssemblyFactory();
 
-            var configNodeFormatterProvider =
-                new ConfigNodeFormatterProvider(new DefaultSurrogateSelector(new DefaultSurrogateProvider()),
+            var configNodeFormatter = new ConfigNodeFormatter(
+                new DefaultSurrogateSelector(new DefaultSurrogateProvider()),
                     new SerializableFieldQuery());
 
-            var reloadables = CreateReloadablePlugins(loadedAssemblyFactory, fsFactory, assemblyResolver, new PluginConfigurationProvider(configNodeFormatterProvider)).ToList();
+            var reloadables = CreateReloadablePlugins(loadedAssemblyFactory, fsFactory, assemblyResolver, new PluginConfigurationProvider(configNodeFormatter, new ConfigurationFilePathQuery())).ToList();
 
             reloadables.ForEach(r => r.Load());
 
@@ -178,9 +174,13 @@ namespace AssemblyReloader.CompositeRoot
 
             var windowFactory = new WindowFactory(
                 resourceLocator, new ConfigurationPanelFactory(
-                new ExpandablePanelFactory(skinScheme.toggle, GUILayout.ExpandWidth(false), GUILayout.ExpandHeight(false)),
-                new ConfigurationWindowPanelFieldQuery()),
-                skinScheme);
+                    new ExpandablePanelFactory(skinScheme.toggle, GUILayout.ExpandWidth(false),
+                        GUILayout.ExpandHeight(false)),
+                    new ConfigurationWindowPanelFieldQuery()),
+                skinScheme,
+                ConfigureTitleBarButtonStyle(),
+                new SaveConfigurationCommand(configNodeFormatter));
+
             var uniqueIdProvider = new UniqueWindowIdProvider();
 
 
@@ -525,6 +525,16 @@ namespace AssemblyReloader.CompositeRoot
                 new TypeIdentifierQuery(),
                 new UniqueFlightIdGenerator(),
                 _log.CreateTag("PMSnapshotter"));
+        }
+
+
+        private GUIStyle ConfigureTitleBarButtonStyle()
+        {
+            var style = new GUIStyle(HighLogic.Skin.button) { border = new RectOffset(), padding = new RectOffset() };
+            style.fixedHeight = style.fixedWidth = 16f;
+            style.margin = new RectOffset();
+
+            return style;
         }
     }
 }

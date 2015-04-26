@@ -3,7 +3,7 @@ using System.Linq;
 using AssemblyReloader.Destruction;
 using AssemblyReloader.Game.Providers;
 using ReeperCommon.Extensions;
-using ReeperCommon.Logging.Implementations;
+using ReeperCommon.Logging;
 
 namespace AssemblyReloader.Loaders.PartModuleLoader
 {

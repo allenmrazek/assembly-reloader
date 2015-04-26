@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Linq;
 using AssemblyReloader.Annotations;
+using AssemblyReloader.Commands;
 using AssemblyReloader.Controllers;
 using ReeperCommon.Gui.Window;
 using ReeperCommon.Gui.Window.Buttons;
 using ReeperCommon.Gui.Window.Decorators;
 using ReeperCommon.Gui.Window.View;
-using ReeperCommon.Repositories.Resources;
+using ReeperCommon.Logging;
+using ReeperCommon.Repositories;
 using UnityEngine;
 
 namespace AssemblyReloader.Gui
@@ -16,20 +18,28 @@ namespace AssemblyReloader.Gui
         private readonly IResourceRepository _resourceProvider;
         private readonly IConfigurationPanelFactory _configurationPanelFactory;
         private readonly GUISkin _windowSkin;
-
+        private readonly GUIStyle _titleBarButtonStyle;
+        private readonly ICommand _saveConfigurationCommand;
+        private readonly Vector2 TitleBarButtonOffset = new Vector2(3f, 3f);
 
         public WindowFactory(
             [NotNull] IResourceRepository resourceProvider,
             [NotNull] IConfigurationPanelFactory configurationPanelFactory,
-            [NotNull] GUISkin windowSkin)
+            [NotNull] GUISkin windowSkin, 
+            [NotNull] GUIStyle titleBarButtonStyle, 
+            [NotNull] ICommand saveConfigurationCommand)
         {
             if (resourceProvider == null) throw new ArgumentNullException("resourceProvider");
             if (configurationPanelFactory == null) throw new ArgumentNullException("configurationPanelFactory");
             if (windowSkin == null) throw new ArgumentNullException("windowSkin");
+            if (titleBarButtonStyle == null) throw new ArgumentNullException("titleBarButtonStyle");
+            if (saveConfigurationCommand == null) throw new ArgumentNullException("saveConfigurationCommand");
 
             _resourceProvider = resourceProvider;
             _configurationPanelFactory = configurationPanelFactory;
             _windowSkin = windowSkin;
+            _titleBarButtonStyle = titleBarButtonStyle;
+            _saveConfigurationCommand = saveConfigurationCommand;
         }
 
 
@@ -44,17 +54,16 @@ namespace AssemblyReloader.Gui
             var basicWindow = new BasicWindow(logic, initialRect, winid, _windowSkin, true) { Title = "ART: Assembly Reloading Tool" };
 
 
-            var tbButtons = new TitleBarButtons(basicWindow, TitleBarButtons.ButtonAlignment.Right, new Vector2(3f, 3f));
+            var tbButtons = new TitleBarButtons(basicWindow, TitleBarButtons.ButtonAlignment.Right, TitleBarButtonOffset);
 
 
 
-            var style = new GUIStyle(HighLogic.Skin.button) { border = new RectOffset(), padding = new RectOffset() };
-            style.fixedHeight = style.fixedWidth = 16f;
-            style.margin = new RectOffset();
+            //var style = new GUIStyle(HighLogic.Skin.button) { border = new RectOffset(), padding = new RectOffset() };
+            //style.fixedHeight = style.fixedWidth = 16f;
+            //style.margin = new RectOffset();
 
-            var btnClose = _resourceProvider.GetTexture("Resources/btnClose.png");
 
-            tbButtons.AddButton(new TitleBarButton(style, btnClose.First(), s => { }, "Test"));
+            tbButtons.AddButton(new TitleBarButton(_titleBarButtonStyle, GetCloseButtonTexture(), s => { }, "Test"));
             //tbButtons.AddButton(new TitleBarButton(style, btnClose.First(), s => { }, "Test2"));
             //tbButtons.AddButton(new TitleBarButton(style, btnClose.First(), s => { }, "Test3"));
             //tbButtons.AddButton(new TitleBarButton(style, btnClose.First(), s => { }, "Tefsdst2"));
@@ -69,6 +78,7 @@ namespace AssemblyReloader.Gui
         }
 
 
+       
         public IWindowComponent CreatePluginOptionsWindow(IReloadablePlugin plugin)
         {
             if (plugin == null) throw new ArgumentNullException("plugin");
@@ -83,12 +93,35 @@ namespace AssemblyReloader.Gui
 
             basicWindow.Title = plugin.Name + " Configuration";
 
+
+            var tbButtons = new TitleBarButtons(basicWindow, TitleBarButtons.ButtonAlignment.Right, TitleBarButtonOffset);
+
+            tbButtons.AddButton(new TitleBarButton(_titleBarButtonStyle,
+                GetCloseButtonTexture(),
+                s =>
+                {
+                    new DebugLog().Normal("Button close!");
+                    tbButtons.Visible = false;
+                    _saveConfigurationCommand.Execute();
+                }, "Close"));
+            
             //var decoratedWindow = new HideOnF2(new ClampToScreen(basicWindow)); //buggy?
-            var decoratedWindow = new ClampToScreen(basicWindow);
+            var decoratedWindow = new ClampToScreen(tbButtons);
 
             UnityEngine.Object.DontDestroyOnLoad(WindowView.Create(decoratedWindow));
 
             return decoratedWindow;
+        }
+
+
+        Texture2D GetCloseButtonTexture()
+        {
+            var tex = _resourceProvider.GetTexture("Resources/btnClose.png");
+
+            if (!tex.Any())
+                throw new Exception("Could not find close button texture");
+
+            return tex.Single();
         }
     }
 }

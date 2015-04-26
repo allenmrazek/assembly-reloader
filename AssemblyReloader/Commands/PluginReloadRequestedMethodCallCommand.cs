@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Reflection;
-using ReeperCommon.Logging.Implementations;
 using Object = UnityEngine.Object;
 
 namespace AssemblyReloader.Commands

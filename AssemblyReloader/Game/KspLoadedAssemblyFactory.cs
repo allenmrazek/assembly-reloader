@@ -8,7 +8,7 @@ using AssemblyReloader.Queries.AssemblyQueries;
 using AssemblyReloader.TypeInstallers;
 using Contracts;
 using ReeperCommon.FileSystem;
-using ReeperCommon.Logging.Implementations;
+using ReeperCommon.Logging;
 
 namespace AssemblyReloader.Game
 {

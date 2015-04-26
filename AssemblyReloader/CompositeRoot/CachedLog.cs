@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using ReeperCommon.Logging;
-using ReeperCommon.Logging.Implementations;
 
 namespace AssemblyReloader.CompositeRoot
 {

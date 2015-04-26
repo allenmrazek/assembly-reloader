@@ -3,23 +3,28 @@ using System.IO;
 using System.Linq;
 using AssemblyReloader.Annotations;
 using AssemblyReloader.DataObjects;
+using AssemblyReloader.Queries.FileSystemQueries;
 using ReeperCommon.Containers;
 using ReeperCommon.FileSystem;
-using ReeperCommon.FileSystem.Implementations;
+using ReeperCommon.Serialization;
 
 namespace AssemblyReloader.Providers
 {
     public class PluginConfigurationProvider : IPluginConfigurationProvider
     {
-        private const string PluginConfigFilename = "ArtPluginConfiguration.cfg";
-        private readonly IConfigNodeFormatterProvider _formatterProvider;
+        private readonly IConfigNodeFormatter _configNodeFormatter;
+        private readonly IConfigurationFilePathQuery _configFilePathQuery;
 
 
-        public PluginConfigurationProvider([NotNull] IConfigNodeFormatterProvider formatterProvider)
+        public PluginConfigurationProvider(
+            [NotNull] IConfigNodeFormatter configNodeFormatter,
+            [NotNull] IConfigurationFilePathQuery configFilePathQuery)
         {
-            if (formatterProvider == null) throw new ArgumentNullException("formatterProvider");
+            if (configNodeFormatter == null) throw new ArgumentNullException("configNodeFormatter");
+            if (configFilePathQuery == null) throw new ArgumentNullException("configFilePathQuery");
 
-            _formatterProvider = formatterProvider;
+            _configNodeFormatter = configNodeFormatter;
+            _configFilePathQuery = configFilePathQuery;
         }
 
 
@@ -29,33 +34,29 @@ namespace AssemblyReloader.Providers
 
             var config = new Configuration();
 
-            var pluginDir = pluginLocation.Directory;
+            var configPath = _configFilePathQuery.Get(pluginLocation);
 
-            var configFile = pluginDir.File(new KSPUrlIdentifier(Path.Combine(pluginLocation.Url, PluginConfigFilename)));
-
-            if (configFile.Any()) DeserializeConfig(config, configFile.FirstOrDefault());
+            if (configPath.Any()) DeserializeConfig(config, configPath.Single());
 
             return config;
         }
 
 
-        private void DeserializeConfig(Configuration config, IFile configNodeLocation)
+        private void DeserializeConfig(Configuration config, string configNodeLocation)
         {
             var node = FindConfigNode(configNodeLocation);
             if (!node.Any())
-                throw new FileNotFoundException("Did not find a ConfigNode definition at " + configNodeLocation.FileName);
+                throw new FileNotFoundException("Did not find a ConfigNode definition at " + configNodeLocation);
 
-            var formatter = _formatterProvider.Get();
-
-            formatter.Deserialize(config, node.Single());
+            _configNodeFormatter.Deserialize(config, node.Single());
         }
 
 
-        private Maybe<ConfigNode> FindConfigNode(IFile location)
+        private Maybe<ConfigNode> FindConfigNode(string location)
         {
-            var node = GameDatabase.Instance.GetConfigNode(location.Url);
+            var config = ConfigNode.Load(location);
 
-            return node == null ? Maybe<ConfigNode>.None : Maybe<ConfigNode>.With(node);
+            return config == null ? Maybe<ConfigNode>.None : Maybe<ConfigNode>.With(config);
         }
     }
 }
