@@ -72,7 +72,7 @@ namespace AssemblyReloader.Gui
 
         public void Update()
         {
-            //_log.Normal("ViewLogic.Update");
+
         }
 
     }

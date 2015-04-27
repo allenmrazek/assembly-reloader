@@ -7,24 +7,23 @@ namespace AssemblyReloader.Gui
 {
     public class ExpandablePanelFactory : IExpandablePanelFactory
     {
-        private readonly GUIStyle _toggleStyle;
+        private readonly GUISkin _panelSkin;
         private readonly GUILayoutOption[] _toggleLayoutOptions;
 
-        public ExpandablePanelFactory(
-            [NotNull] GUIStyle toggleStyle,
+        public ExpandablePanelFactory([NotNull] GUISkin panelSkin,
             [NotNull] params GUILayoutOption[] toggleLayoutOptions)
         {
-            if (toggleStyle == null) throw new ArgumentNullException("toggleStyle");
+            if (panelSkin == null) throw new ArgumentNullException("panelSkin");
             if (toggleLayoutOptions == null) throw new ArgumentNullException("toggleLayoutOptions");
 
-            _toggleStyle = toggleStyle;
+            _panelSkin = panelSkin;
             _toggleLayoutOptions = toggleLayoutOptions;
         }
 
 
         public IExpandablePanel Create(string label, float contentOffset, Action<IEnumerable<GUILayoutOption>> drawAction, bool startExpanded = false)
         {
-            return new ExpandablePanel(_toggleStyle, label, contentOffset, drawAction, startExpanded, _toggleLayoutOptions);
+            return new ExpandablePanel(_panelSkin, label, contentOffset, drawAction, startExpanded, _toggleLayoutOptions);
         }
     }
 }

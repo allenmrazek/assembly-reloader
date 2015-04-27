@@ -48,7 +48,7 @@ namespace AssemblyReloader.Gui
         {
             if (logic == null) throw new ArgumentNullException("logic");
 
-            var basicWindow = new BasicWindow(logic, initialRect, winid, _windowSkin, true) { Title = "ART: Assembly Reloading Tool" };
+            var basicWindow = new BasicWindow(logic, initialRect, winid, _windowSkin) { Title = "ART: Assembly Reloading Tool" };
 
 
             var tbButtons = new TitleBarButtons(basicWindow, TitleBarButtons.ButtonAlignment.Right, TitleBarButtonOffset);
@@ -89,7 +89,7 @@ namespace AssemblyReloader.Gui
                 configLogic.AddPanel(panel);
 
             var basicWindow = new BasicWindow(configLogic, new Rect(300f, 300f, 450f, 300f),
-                UnityEngine.Random.Range(10000, 3434343), _windowSkin, true);
+                UnityEngine.Random.Range(10000, 3434343), _windowSkin);
 
             basicWindow.Title = plugin.Name + " Configuration";
 

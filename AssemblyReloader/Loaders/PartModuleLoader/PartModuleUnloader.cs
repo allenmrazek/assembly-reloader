@@ -50,8 +50,6 @@ namespace AssemblyReloader.Loaders.PartModuleLoader
 
                 if (pm.IsNull()) continue;
 
-                new DebugLog("PartModuleUnloader").Normal("Unloading " + type.FullName + " from " + part.FlightID);
-
                 _snapshotGenerator.Snapshot(part, pm);
 
                 part.Modules.Remove(pm); // don't use Part.RemoveModule -- that will destroy it 

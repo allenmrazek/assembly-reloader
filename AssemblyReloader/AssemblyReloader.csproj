@@ -78,7 +78,6 @@
     <Compile Include="CompositeRoot\ICachedLog.cs" />
     <Compile Include="CompositeRoot\IMessageChannel.cs" />
     <Compile Include="CompositeRoot\IMessageConsumer.cs" />
-    <Compile Include="CompositeRoot\InjectedMonoBehaviourTracker.cs" />
     <Compile Include="CompositeRoot\KspPartActionWindowListener.cs" />
     <Compile Include="Controllers\GuiController.cs" />
     <Compile Include="Controllers\IGuiController.cs" />
@@ -129,10 +128,8 @@
     <Compile Include="Gui\ExpandablePanel.cs" />
     <Compile Include="Gui\ExpandablePanelFactory.cs" />
     <Compile Include="Gui\IConfigurationPanelFactory.cs" />
-    <Compile Include="Gui\IDialogFactory.cs" />
     <Compile Include="Gui\IExpandablePanel.cs" />
     <Compile Include="Gui\IExpandablePanelFactory.cs" />
-    <Compile Include="Gui\KspDialogFactory.cs" />
     <Compile Include="Loaders\AssemblyDefinitionFromDiskReader.cs" />
     <Compile Include="Loaders\AssemblyDefinitionLoader.cs" />
     <Compile Include="Loaders\IAssemblyDefinitionReader.cs" />
@@ -257,7 +254,10 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\toggleChecked.png" />
+    <EmbeddedResource Include="Resources\toggleUnchecked.png" />
+  </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\btnBackground.png" />
     <EmbeddedResource Include="Resources\btnClose.png" />
@@ -267,6 +267,10 @@
       <Project>{FECFA8FC-CF80-4685-A2BA-1566E0F3C26E}</Project>
       <Name>ReeperCommon</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\panelCompact.png" />
+    <EmbeddedResource Include="Resources\panelExpanded.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

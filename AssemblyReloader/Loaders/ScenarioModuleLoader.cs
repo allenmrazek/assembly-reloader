@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using AssemblyReloader.Annotations;
 using AssemblyReloader.Game;
 using AssemblyReloader.Game.Providers;
-using AssemblyReloader.Queries;
 
 namespace AssemblyReloader.Loaders
 {

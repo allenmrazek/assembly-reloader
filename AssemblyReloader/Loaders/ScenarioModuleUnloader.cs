@@ -5,7 +5,6 @@ using AssemblyReloader.Destruction;
 using AssemblyReloader.Game;
 using AssemblyReloader.Game.Providers;
 using AssemblyReloader.Game.Queries;
-using AssemblyReloader.Providers;
 using ReeperCommon.Containers;
 using ReeperCommon.Logging;
 

@@ -26,6 +26,8 @@ using AssemblyReloader.Weaving;
 using AssemblyReloader.Weaving.Operations;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
+using ReeperCommon.DataObjects;
+using ReeperCommon.Extensions;
 using ReeperCommon.FileSystem;
 using ReeperCommon.FileSystem.Factories;
 using ReeperCommon.FileSystem.Providers;
@@ -121,11 +123,30 @@ namespace AssemblyReloader.CompositeRoot
 
 
 
-       
+
+        private static bool ImplementsGenericSerializationSurrogateInterface(Type typeCheck)
+        {
+            return GetSerializationTargetType(typeCheck).Any();
+        }
+
+
+        private static IEnumerable<Type> GetSerializationTargetType(Type typeCheck)
+        {
+            return typeCheck.GetInterfaces()
+                .Where(interfaceType => interfaceType.IsGenericType &&
+                                        typeof(ISerializationSurrogate).IsAssignableFrom(interfaceType))
+                .Select(interfaceType => interfaceType.GetGenericArguments().First());
+        }
 
         public Core()
         {
-            
+
+            var results = new [] {AssemblyLoader.loadedAssemblies.FirstOrDefault(la => la.dllName == "ReeperCommon").assembly}
+    .SelectMany(targetAssembly => targetAssembly.GetTypes())
+    .Where(t => t.IsClass && t.IsVisible && !t.IsAbstract)
+    .Where(t => t.GetConstructor(Type.EmptyTypes) != null && t.GetConstructor(Type.EmptyTypes).IsPublic)
+    .Where(ImplementsGenericSerializationSurrogateInterface).ToList();
+
 #if DEBUG
             var primaryLog = new DebugLog("ART");
 #else
@@ -162,6 +183,7 @@ namespace AssemblyReloader.CompositeRoot
 
             var loadedAssemblyFactory = ConfigureLoadedAssemblyFactory();
 
+
             var configNodeFormatter = new ConfigNodeFormatter(
                 new DefaultSurrogateSelector(new DefaultSurrogateProvider()),
                     new SerializableFieldQuery());
@@ -172,11 +194,11 @@ namespace AssemblyReloader.CompositeRoot
 
             reloadables.ForEach(r => r.Load());
 
-            var skinScheme = ConfigureSkin();
+            var skinScheme = ConfigureSkin(resourceLocator);
 
             var windowFactory = new WindowFactory(
                 resourceLocator, new ConfigurationPanelFactory(
-                    new ExpandablePanelFactory(skinScheme.toggle, GUILayout.ExpandWidth(false),
+                    new ExpandablePanelFactory(ConfigurePanelToggleStyle(resourceLocator, skinScheme), GUILayout.ExpandWidth(false),
                         GUILayout.ExpandHeight(false)),
                     new ConfigurationWindowPanelFieldQuery()),
                 skinScheme,
@@ -445,7 +467,7 @@ namespace AssemblyReloader.CompositeRoot
         }
 
 
-        private GUISkin ConfigureSkin()
+        private GUISkin ConfigureSkin(IResourceRepository resources)
         {
             //Resources.FindObjectsOfTypeAll<GUISkin>().ToList().ForEach(s => new DebugLog().Debug("Skin: " + s.name));
 
@@ -464,9 +486,62 @@ namespace AssemblyReloader.CompositeRoot
 
             skin.window.padding.left = skin.window.padding.right = 3;
 
+
+            var toggleCheckedTexture = resources.GetTexture("Resources/toggleChecked.png");
+            var toggleUncheckedTexture = resources.GetTexture("Resources/toggleUnchecked.png");
+
+            if (!toggleCheckedTexture.Any() || !toggleUncheckedTexture.Any())
+                throw new FileNotFoundException("Missing custom toggle texture");
+
+            var litToggleChecked = toggleCheckedTexture.Single().Clone();
+            var litToggleUnchecked = toggleUncheckedTexture.Single().Clone();
+
+            litToggleChecked.ChangeLightness(1.1f);
+            litToggleUnchecked.ChangeLightness(1.1f);
+
+            skin.toggle.normal.background = skin.toggle.active.background = toggleUncheckedTexture.Single();
+            skin.toggle.onNormal.background = skin.toggle.onActive.background = toggleCheckedTexture.Single();
+
+            skin.toggle.focused.background = skin.toggle.hover.background = litToggleUnchecked;
+            skin.toggle.onFocused.background = skin.toggle.onHover.background = litToggleChecked;
+
             return skin;
         }
 
+
+        private static GUISkin ConfigurePanelToggleStyle(IResourceRepository resources, GUISkin skin)
+        {
+            var customSkin = UnityEngine.Object.Instantiate(skin) as GUISkin;
+            if (customSkin == null) throw new NullReferenceException("Failed to clone skin");
+
+            var style = customSkin.toggle;
+            
+            var panelExpandedTexture = resources.GetTexture("Resources/panelExpanded.png");
+            var panelCompactTexture = resources.GetTexture("Resources/panelCompact.png");
+
+            if (!panelExpandedTexture.Any() || !panelCompactTexture.Any())
+                throw new FileNotFoundException("Missing custom panel toggle texture");
+
+            panelExpandedTexture.Single().wrapMode = 
+                panelCompactTexture.Single().wrapMode = TextureWrapMode.Clamp;
+
+            panelCompactTexture.Single().ChangeLightness(0.6f);
+            panelExpandedTexture.Single().ChangeLightness(0.6f);
+
+            style.normal.background = style.active.background = panelCompactTexture.Single();
+            style.onNormal.background = style.onActive.background = panelExpandedTexture.Single();
+
+            var litExpanded = panelExpandedTexture.Single().Clone();
+            var litCompact = panelCompactTexture.Single().Clone();
+
+            litExpanded.ChangeLightness(1.1f);
+            litCompact.ChangeLightness(1.1f);
+
+            style.focused.background = style.hover.background = litCompact;
+            style.onFocused.background = style.onHover.background = litExpanded;
+
+            return customSkin;
+        }
 
 
         private IAssemblyDefinitionWeaver ConfigureDefinitionWeaver(IFile location, Configuration configuration)

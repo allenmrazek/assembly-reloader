@@ -38,17 +38,13 @@ namespace AssemblyReloader.Loaders.PartModuleLoader
             
             var descriptions = _descriptorFactory.Create(type).ToList();
 
-            descriptions.ForEach(description => LoadPartModule(description));
+            descriptions.ForEach(LoadPartModule);
         }
 
 
         private void LoadPartModule(PartModuleDescriptor description)
         {
             _partModuleFactory.Create(description.Prefab, description.Type, description.Config);
-
-           
-            var items = _loadedPrefabProvider.Get(description.Prefab).ToList();
-
 
             foreach (var loadedInstance in _loadedPrefabProvider.Get(description.Prefab).ToList())
             {

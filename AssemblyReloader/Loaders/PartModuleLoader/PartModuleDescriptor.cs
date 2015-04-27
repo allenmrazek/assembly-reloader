@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using AssemblyReloader.DataObjects;
 using AssemblyReloader.Game;
-using AssemblyReloader.Game.Providers;
 using AssemblyReloader.Game.Queries;
 using AssemblyReloader.Queries;
 

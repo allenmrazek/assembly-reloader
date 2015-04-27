@@ -25,6 +25,10 @@ namespace AssemblyReloader.CompositeRoot
             catch (Exception e)
             {
                 Debug.LogError("AssemblyReloader: Encountered an uncaught exception while creating Core: " + e);
+
+                PopupDialog.SpawnPopupDialog("AssemblyReloader unhandled exception",
+                    "AssemblyReloader encountered an exception with the following message: " + e.Message + "\n\nAssemblyReloader has been disabled.", "Okay",
+                    true, HighLogic.Skin);
                 DestroyImmediate(this);
             }
         }
