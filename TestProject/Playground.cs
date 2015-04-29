@@ -9,7 +9,25 @@ using UnityEngine;
 
 namespace TestProject
 {
-  
+    [KSPAddon(KSPAddon.Startup.MainMenu, false)]
+    public class DumpFonts : MonoBehaviour
+    {
+        private void Start()
+        {
+            Resources.FindObjectsOfTypeAll(typeof (Font))
+                .Cast<Font>()
+                .ToList()
+                .ForEach(f => f.fontNames.ToList().ForEach(n => print("Font name: " + n)));
+
+        }
+
+        private void PrintFont(Font font)
+        {
+
+        }
+    }
+
+
     //[KSPAddon(KSPAddon.Startup.SpaceCentre, false)]
     //public class AvoidKeyBindCollisions : MonoBehaviour
     //{

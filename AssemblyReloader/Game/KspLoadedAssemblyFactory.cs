@@ -29,8 +29,13 @@ namespace AssemblyReloader.Game
         }
 
 
-        public IDisposable Create(Assembly assembly, IFile location)
+        public IDisposable Create([NotNull] Assembly assembly, [NotNull] IFile location)
         {
+            if (assembly == null) throw new ArgumentNullException("assembly");
+            if (location == null) throw new ArgumentNullException("location");
+            if (AssemblyLoader.loadedAssemblies == null)
+                throw new InvalidOperationException("AssemblyLoader.loadedAssemblies is null");
+
             var la = new AssemblyLoader.LoadedAssembly(assembly, location.FullPath, location.Url, null);
 
             //InstallTypes(la, typeof (PartModule), _partModuleQuery.Get(assembly));
@@ -43,49 +48,17 @@ namespace AssemblyReloader.Game
             // todo: contracts
             // todo: strategies
             // todo: ScienceExperiments
+            // todo: parts
+            // todo: VesselModules?
 
             foreach (var installer in _typeInstallers)
                 installer.Install(la);
 
-            var log = new DebugLog("LoadedAssemblyFactory");
-
-            //log.Normal("Types in LoadedAssembly:");
-
-            //foreach (var typeName in la.types.Keys.OrderBy(k => k.Name))
-            //    foreach (var t in la.types[typeName].OrderBy(t => t.Name))
-            //        log.Normal(typeName + ": " + t.FullName + "; " + t.AssemblyQualifiedName);
-
-            //log.Normal("End loaded type list");
 
             AssemblyLoader.loadedAssemblies.Add(la);
 
-            //AssemblyLoader.loadedAssemblies.ToList().ForEach(loadedAssembly =>
-            //{
-            //    log.Normal("LoadedAssembly: " + loadedAssembly.dllName);
-            //    log.Normal("  Types:");
-            //    loadedAssembly.types.ToList().ForEach(ty =>
-            //    {
-            //        log.Normal("    BaseType: " + ty.Key);
-            //        log.Normal("       Contains: ");
-            //        ty.Value.ForEach(v => log.Normal("        Type: " + v.FullName + "; " + v.AssemblyQualifiedName));
-            //    });
-            //});
 
-            log.Normal("Begin AppDomain dump:");
-            AppDomain.CurrentDomain.GetAssemblies().ToList().ForEach(a => log.Normal("AppDomain: " + a.GetName().Name));
-            log.Normal("End AppDomain dump");
-
-            log.Warning("TestPartModule instance: " +
-                        AssemblyLoader.GetClassByName(typeof (PartModule), "TestPartModule").FullName +
-                        AssemblyLoader.GetClassByName(typeof(PartModule), "TestPartModule").Assembly.FullName);
             return _disposeFactory.Create(la);
         }
-
-
-        //private static void InstallTypes(AssemblyLoader.LoadedAssembly loaded, Type key, IEnumerable<Type> types)
-        //{
-        //    foreach (var ty in types)
-        //        loaded.types.Add(key, ty);
-        //}
     }
 }

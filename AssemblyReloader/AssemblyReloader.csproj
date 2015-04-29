@@ -132,6 +132,7 @@
     <Compile Include="Gui\IExpandablePanelFactory.cs" />
     <Compile Include="Loaders\AssemblyDefinitionFromDiskReader.cs" />
     <Compile Include="Loaders\AssemblyDefinitionLoader.cs" />
+    <Compile Include="Loaders\ConditionalWriteLoadedAssemblyToDisk.cs" />
     <Compile Include="Loaders\IAssemblyDefinitionReader.cs" />
     <Compile Include="Loaders\IAssemblyDefinitionLoader.cs" />
     <Compile Include="Loaders\IScenarioModuleLoader.cs" />
@@ -272,10 +273,13 @@
     <EmbeddedResource Include="Resources\panelCompact.png" />
     <EmbeddedResource Include="Resources\panelExpanded.png" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\btnWrench.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>set ksp=D:\For New Computer\Kerbal Space Program
-set unity=C:\Program Files (x86)\Unity455
+set unity=C:\Program Files (x86)\Unity464
 
 
 if NOT $(Configuration) == Debug GOTO CopyFiles

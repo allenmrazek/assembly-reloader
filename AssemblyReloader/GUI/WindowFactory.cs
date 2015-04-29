@@ -48,7 +48,7 @@ namespace AssemblyReloader.Gui
         {
             if (logic == null) throw new ArgumentNullException("logic");
 
-            var basicWindow = new BasicWindow(logic, initialRect, winid, _windowSkin) { Title = "ART: Assembly Reloading Tool" };
+            var basicWindow = new BasicWindow(logic, initialRect, winid, _windowSkin) { Title = "Assembly Reload Tool" };
 
 
             var tbButtons = new TitleBarButtons(basicWindow, TitleBarButtons.ButtonAlignment.Right, TitleBarButtonOffset);
@@ -59,9 +59,9 @@ namespace AssemblyReloader.Gui
             //style.fixedHeight = style.fixedWidth = 16f;
             //style.margin = new RectOffset();
 
-
-            tbButtons.AddButton(new TitleBarButton(_titleBarButtonStyle, GetCloseButtonTexture(), s => { }, "Test"));
-            //tbButtons.AddButton(new TitleBarButton(style, btnClose.First(), s => { }, "Test2"));
+            tbButtons.AddButton(new TitleBarButton(_titleBarButtonStyle, GetTexture("Resources/btnWrench.png"), s => { }, "Test2"));
+            tbButtons.AddButton(new TitleBarButton(_titleBarButtonStyle, GetTexture("Resources/btnClose.png"), s => { }, "Test"));
+            
             //tbButtons.AddButton(new TitleBarButton(style, btnClose.First(), s => { }, "Test3"));
             //tbButtons.AddButton(new TitleBarButton(style, btnClose.First(), s => { }, "Tefsdst2"));
             //tbButtons.AddButton(new TitleBarButton(style, btnClose.First(), s => { }, "Tefsdfdst2"));
@@ -97,7 +97,7 @@ namespace AssemblyReloader.Gui
             var tbButtons = new TitleBarButtons(basicWindow, TitleBarButtons.ButtonAlignment.Right, TitleBarButtonOffset);
 
             tbButtons.AddButton(new TitleBarButton(_titleBarButtonStyle,
-                GetCloseButtonTexture(),
+                GetTexture("Resources/btnClose.png"),
                 s =>
                 {
                     new DebugLog().Normal("Button close!");
@@ -114,12 +114,12 @@ namespace AssemblyReloader.Gui
         }
 
 
-        Texture2D GetCloseButtonTexture()
+        Texture2D GetTexture(string url)
         {
-            var tex = _resourceProvider.GetTexture("Resources/btnClose.png");
+            var tex = _resourceProvider.GetTexture(url);
 
             if (!tex.Any())
-                throw new Exception("Could not find close button texture");
+                throw new Exception("Could not find texture at " + url);
 
             return tex.Single();
         }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using AssemblyReloader.Annotations;
 using AssemblyReloader.Generators;
@@ -40,15 +41,12 @@ namespace AssemblyReloader.Loaders
                 if (definition.MainModule.HasSymbols)
                     WriteDefinitionAndSymbolsToStream(definition, byteStream, symbolStream);
                 else WriteDefinitionToStream(definition, byteStream);
-                
-                
-                if (byteStream.Length == 0)
-                {
-                    _log.Error("byteStream does not contain any data for " + definition.FullName);
-                    return Maybe<Assembly>.None;
-                }
 
-                return LoadAssembly(byteStream, symbolStream);
+
+                if (byteStream.Length != 0) return LoadAssembly(byteStream, symbolStream);
+
+                _log.Error("byteStream does not contain any data for " + definition.FullName);
+                return Maybe<Assembly>.None;
             }
         }
 

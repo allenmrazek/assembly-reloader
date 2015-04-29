@@ -27,6 +27,7 @@ namespace AssemblyReloader.Queries.CecilQueries
         public IEnumerable<Instruction> Get(MethodDefinition methodDefinition)
         {
             if (methodDefinition == null) throw new ArgumentNullException("methodDefinition");
+            if (methodDefinition.Body == null) return new Instruction[] {};
 
             var target = methodDefinition.Module.Import(_methodInfo);
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using AssemblyReloader.Annotations;
 using AssemblyReloader.Destruction;
 using AssemblyReloader.Game.Providers;
 using ReeperCommon.Extensions;
@@ -13,12 +14,14 @@ namespace AssemblyReloader.Loaders.PartModuleLoader
         private readonly IPartModuleDescriptorFactory _descriptorFactory;
         private readonly IPartPrefabCloneProvider _loadedInstancesOfPrefabProvider;
         private readonly IPartModuleSnapshotGenerator _snapshotGenerator;
+        private readonly Func<bool> _createConfigNodeSnapshot;
 
         public PartModuleUnloader(
             IUnityObjectDestroyer partModuleDestroyer,
             IPartModuleDescriptorFactory descriptorFactory,
             IPartPrefabCloneProvider loadedInstancesOfPrefabProvider,
-            IPartModuleSnapshotGenerator snapshotGenerator
+            IPartModuleSnapshotGenerator snapshotGenerator, 
+            [NotNull] Func<bool> createConfigNodeSnapshot
             )
         {
             if (partModuleDestroyer == null) throw new ArgumentNullException("partModuleDestroyer");
@@ -26,11 +29,13 @@ namespace AssemblyReloader.Loaders.PartModuleLoader
             if (loadedInstancesOfPrefabProvider == null)
                 throw new ArgumentNullException("loadedInstancesOfPrefabProvider");
             if (snapshotGenerator == null) throw new ArgumentNullException("snapshotGenerator");
+            if (createConfigNodeSnapshot == null) throw new ArgumentNullException("createConfigNodeSnapshot");
 
             _partModuleDestroyer = partModuleDestroyer;
             _descriptorFactory = descriptorFactory;
             _loadedInstancesOfPrefabProvider = loadedInstancesOfPrefabProvider;
             _snapshotGenerator = snapshotGenerator;
+            _createConfigNodeSnapshot = createConfigNodeSnapshot;
         }
 
 
@@ -50,7 +55,8 @@ namespace AssemblyReloader.Loaders.PartModuleLoader
 
                 if (pm.IsNull()) continue;
 
-                _snapshotGenerator.Snapshot(part, pm);
+                if (_createConfigNodeSnapshot())
+                    _snapshotGenerator.Snapshot(part, pm);
 
                 part.Modules.Remove(pm); // don't use Part.RemoveModule -- that will destroy it 
 

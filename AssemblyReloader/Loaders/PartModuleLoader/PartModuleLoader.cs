@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using AssemblyReloader.Annotations;
 using AssemblyReloader.Game.Providers;
 using AssemblyReloader.Repositories;
 
@@ -11,23 +12,28 @@ namespace AssemblyReloader.Loaders.PartModuleLoader
         private readonly IPartModuleFactory _partModuleFactory;
         private readonly IFlightConfigRepository _partModuleConfigRepository;
         private readonly IPartPrefabCloneProvider _loadedPrefabProvider;
+        private readonly Func<bool> _useConfigNodeSnapshotIfAvailable;
 
 
         public PartModuleLoader(
             IPartModuleDescriptorFactory descriptorFactory,
             IPartModuleFactory partModuleFactory,
             IFlightConfigRepository partModuleConfigRepository,
-            IPartPrefabCloneProvider loadedPrefabProvider)
+            IPartPrefabCloneProvider loadedPrefabProvider, 
+            [NotNull] Func<bool> useConfigNodeSnapshotIfAvailable )
         {
             if (descriptorFactory == null) throw new ArgumentNullException("descriptorFactory");
             if (partModuleFactory == null) throw new ArgumentNullException("partModuleFactory");
             if (partModuleConfigRepository == null) throw new ArgumentNullException("partModuleConfigRepository");
             if (loadedPrefabProvider == null) throw new ArgumentNullException("loadedPrefabProvider");
+            if (useConfigNodeSnapshotIfAvailable == null)
+                throw new ArgumentNullException("useConfigNodeSnapshotIfAvailable");
 
             _descriptorFactory = descriptorFactory;
             _partModuleFactory = partModuleFactory;
             _partModuleConfigRepository = partModuleConfigRepository;
             _loadedPrefabProvider = loadedPrefabProvider;
+            _useConfigNodeSnapshotIfAvailable = useConfigNodeSnapshotIfAvailable;
         }
 
 
@@ -49,7 +55,7 @@ namespace AssemblyReloader.Loaders.PartModuleLoader
             foreach (var loadedInstance in _loadedPrefabProvider.Get(description.Prefab).ToList())
             {
                 var stored = _partModuleConfigRepository.Retrieve(loadedInstance.FlightID, description.Identifier);
-                var config = stored.Any() ? stored.Single() : description.Config;
+                var config = _useConfigNodeSnapshotIfAvailable() && stored.Any() ? stored.Single() : description.Config;
 
                 _partModuleFactory.Create(loadedInstance, description.Type, config);
             }

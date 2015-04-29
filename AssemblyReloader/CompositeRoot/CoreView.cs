@@ -13,7 +13,7 @@ namespace AssemblyReloader.CompositeRoot
         [UsedImplicitly]
         IEnumerator Start()
         {
-            yield return new WaitForSeconds(8f);
+            //yield return new WaitForSeconds(8f);
 
             yield return 0;
 

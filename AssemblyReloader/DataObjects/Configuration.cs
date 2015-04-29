@@ -47,5 +47,10 @@ namespace AssemblyReloader.DataObjects
         [ReeperPersistent, PanelCategory(PanelCategoryAttribute.CategoryType.IntermediateLanguage)]
         [ConfigItemDescription("Intercept calls to Assembly.CodeBase and Assembly.Location")]
         public bool RewriteAssemblyLocationCalls = true;
+
+
+        [ReeperPersistent, PanelCategory(PanelCategoryAttribute.CategoryType.IntermediateLanguage)]
+        [ConfigItemDescription("Write reweaved assembly to disk")]
+        public bool WriteReweavedAssemblyToDisk = true;
     }
 }

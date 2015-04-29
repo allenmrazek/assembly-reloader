@@ -46,6 +46,7 @@ namespace AssemblyReloader.Controllers
             }
             catch (Exception e)
             {
+                // todo: popup message (making failure more apparent instead of just a log entry)
                 throw new Exception("Failed to load plugin " + Plugin.Name + " due to the following exception: " + e);
             }
             
