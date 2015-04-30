@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using AssemblyReloader.Annotations;
+using AssemblyReloader.CompositeRoot;
+using AssemblyReloader.DataObjects;
 using AssemblyReloader.Game.Providers;
-using AssemblyReloader.Repositories;
+using ReeperCommon.Logging;
 
 namespace AssemblyReloader.Loaders.PartModuleLoader
 {
@@ -10,7 +13,7 @@ namespace AssemblyReloader.Loaders.PartModuleLoader
     {
         private readonly IPartModuleDescriptorFactory _descriptorFactory;
         private readonly IPartModuleFactory _partModuleFactory;
-        private readonly IFlightConfigRepository _partModuleConfigRepository;
+        private readonly DictionaryQueue<KeyValuePair<uint, ITypeIdentifier>, ConfigNode> _configNodeQueue;
         private readonly IPartPrefabCloneProvider _loadedPrefabProvider;
         private readonly Func<bool> _useConfigNodeSnapshotIfAvailable;
 
@@ -18,20 +21,20 @@ namespace AssemblyReloader.Loaders.PartModuleLoader
         public PartModuleLoader(
             IPartModuleDescriptorFactory descriptorFactory,
             IPartModuleFactory partModuleFactory,
-            IFlightConfigRepository partModuleConfigRepository,
+            DictionaryQueue<KeyValuePair<uint, ITypeIdentifier>, ConfigNode> configNodeQueue,
             IPartPrefabCloneProvider loadedPrefabProvider, 
             [NotNull] Func<bool> useConfigNodeSnapshotIfAvailable )
         {
             if (descriptorFactory == null) throw new ArgumentNullException("descriptorFactory");
             if (partModuleFactory == null) throw new ArgumentNullException("partModuleFactory");
-            if (partModuleConfigRepository == null) throw new ArgumentNullException("partModuleConfigRepository");
+            if (configNodeQueue == null) throw new ArgumentNullException("configNodeQueue");
             if (loadedPrefabProvider == null) throw new ArgumentNullException("loadedPrefabProvider");
             if (useConfigNodeSnapshotIfAvailable == null)
                 throw new ArgumentNullException("useConfigNodeSnapshotIfAvailable");
 
             _descriptorFactory = descriptorFactory;
             _partModuleFactory = partModuleFactory;
-            _partModuleConfigRepository = partModuleConfigRepository;
+            _configNodeQueue = configNodeQueue;
             _loadedPrefabProvider = loadedPrefabProvider;
             _useConfigNodeSnapshotIfAvailable = useConfigNodeSnapshotIfAvailable;
         }
@@ -54,8 +57,15 @@ namespace AssemblyReloader.Loaders.PartModuleLoader
 
             foreach (var loadedInstance in _loadedPrefabProvider.Get(description.Prefab).ToList())
             {
-                var stored = _partModuleConfigRepository.Retrieve(loadedInstance.FlightID, description.Identifier);
+                var stored = _configNodeQueue.Retrieve(new KeyValuePair<uint, ITypeIdentifier>(loadedInstance.FlightID, description.Identifier));
                 var config = _useConfigNodeSnapshotIfAvailable() && stored.Any() ? stored.Single() : description.Config;
+
+                if (_useConfigNodeSnapshotIfAvailable() && stored.Any())
+                    new DebugLog().Normal("Using snapshot for " + loadedInstance.FlightID);
+                else if (!stored.Any())
+                    new DebugLog().Normal("didn't find a snapshot for " + loadedInstance.FlightID);
+                else if (!_useConfigNodeSnapshotIfAvailable())
+                    new DebugLog().Normal("not using snapshot for " + loadedInstance.FlightID + " because told not to");
 
                 _partModuleFactory.Create(loadedInstance, description.Type, config);
             }

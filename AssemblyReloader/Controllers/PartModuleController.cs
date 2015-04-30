@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using AssemblyReloader.Annotations;
 using AssemblyReloader.Commands;
+using AssemblyReloader.CompositeRoot;
+using AssemblyReloader.DataObjects;
 using AssemblyReloader.Loaders.PartModuleLoader;
 using AssemblyReloader.Queries.AssemblyQueries;
-using AssemblyReloader.Repositories;
 using ReeperCommon.FileSystem;
-using ReeperCommon.Logging;
 
 namespace AssemblyReloader.Controllers
 {
@@ -15,31 +16,27 @@ namespace AssemblyReloader.Controllers
         private readonly IPartModuleLoader _pmLoader;
         private readonly IPartModuleUnloader _pmUnloader;
         private readonly ITypesFromAssemblyQuery _partModuleFromAssemblyQuery;
-        private readonly IFlightConfigRepository _partModuleConfigRepository;
+        private readonly DictionaryQueue<KeyValuePair<uint, ITypeIdentifier>, ConfigNode> _partModuleConfigQueue;
         private readonly ICommand _refreshPartActionWindows;
-        private readonly ILog _log;
 
         public PartModuleController(
             IPartModuleLoader pmLoader,
             IPartModuleUnloader pmUnloader,
             ITypesFromAssemblyQuery partModuleFromAssemblyQuery,
-            IFlightConfigRepository partModuleConfigRepository,
-            ICommand refreshPartActionWindows,
-            ILog log)
+            [NotNull] DictionaryQueue<KeyValuePair<uint, ITypeIdentifier>, ConfigNode> partModuleConfigQueue,
+            ICommand refreshPartActionWindows)
         {
             if (pmLoader == null) throw new ArgumentNullException("pmLoader");
             if (pmUnloader == null) throw new ArgumentNullException("pmUnloader");
             if (partModuleFromAssemblyQuery == null) throw new ArgumentNullException("partModuleFromAssemblyQuery");
-            if (partModuleConfigRepository == null) throw new ArgumentNullException("partModuleConfigRepository");
+            if (partModuleConfigQueue == null) throw new ArgumentNullException("partModuleConfigQueue");
             if (refreshPartActionWindows == null) throw new ArgumentNullException("refreshPartActionWindows");
-            if (log == null) throw new ArgumentNullException("log");
 
             _pmLoader = pmLoader;
             _pmUnloader = pmUnloader;
             _partModuleFromAssemblyQuery = partModuleFromAssemblyQuery;
-            _partModuleConfigRepository = partModuleConfigRepository;
+            _partModuleConfigQueue = partModuleConfigQueue;
             _refreshPartActionWindows = refreshPartActionWindows;
-            _log = log;
         }
 
 
@@ -49,8 +46,8 @@ namespace AssemblyReloader.Controllers
 
             foreach (var t in GetPartModules(assembly))
                 _pmLoader.Load(t);
-            
-            _partModuleConfigRepository.Clear();
+
+            _partModuleConfigQueue.Clear();
             _refreshPartActionWindows.Execute();
         }
 
@@ -63,7 +60,6 @@ namespace AssemblyReloader.Controllers
             foreach (var t in GetPartModules(assembly))
                 _pmUnloader.Unload(t);
             
-
             _refreshPartActionWindows.Execute();
         }
 

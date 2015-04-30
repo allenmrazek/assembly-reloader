@@ -52,5 +52,10 @@ namespace TestProject
         {
             print("TestReloadProject.OnAssemblyReloadRequested received!");
         }
+
+        private void OnDestroy()
+        {
+            print("TestReloadProject.OnDestroy");
+        }
     }
 }

@@ -74,8 +74,7 @@
     <Compile Include="Commands\PluginReloadRequestedMethodCallCommand.cs" />
     <Compile Include="Commands\SaveConfigurationCommand.cs" />
     <Compile Include="Commands\ToggleWindowVisibilityCommand.cs" />
-    <Compile Include="CompositeRoot\CachedLog.cs" />
-    <Compile Include="CompositeRoot\ICachedLog.cs" />
+    <Compile Include="CompositeRoot\FlightConfigNodeKeyValuePairComparer.cs" />
     <Compile Include="CompositeRoot\IMessageChannel.cs" />
     <Compile Include="CompositeRoot\IMessageConsumer.cs" />
     <Compile Include="CompositeRoot\KspPartActionWindowListener.cs" />
@@ -140,7 +139,9 @@
     <Compile Include="Loaders\IAssemblyDefinitionReader.cs" />
     <Compile Include="Loaders\IAssemblyDefinitionLoader.cs" />
     <Compile Include="Loaders\IScenarioModuleLoader.cs" />
+    <Compile Include="Loaders\IScenarioModuleSnapshotGenerator.cs" />
     <Compile Include="Loaders\IScenarioModuleUnloader.cs" />
+    <Compile Include="Loaders\ScenarioModuleSnapshotGenerator.cs" />
     <Compile Include="Providers\AssemblyProvider.cs" />
     <Compile Include="Providers\ConfigNodeFormatterProvider.cs" />
     <Compile Include="Providers\IConfigNodeFormatterProvider.cs" />
@@ -153,6 +154,8 @@
     <Compile Include="Providers\IPluginConfigurationProvider.cs" />
     <Compile Include="Providers\PluginConfigurationProvider.cs" />
     <Compile Include="Queries\FieldsMarkedWithAttributeQuery.cs" />
+    <Compile Include="CompositeRoot\FlightConfigNodeRepository.cs" />
+    <Compile Include="CompositeRoot\DictionaryQueue.cs" />
     <Compile Include="TypeInstallers\GenericTypeInstaller.cs" />
     <Compile Include="TypeInstallers\ITypeInstaller.cs" />
     <Compile Include="Loaders\PartModuleLoader\IPartModuleDescriptorFactory.cs" />
@@ -241,8 +244,7 @@
     <Compile Include="Queries\PartIsPrefabQuery.cs" />
     <Compile Include="Queries\PartModulesInPartQuery.cs" />
     <Compile Include="Queries\TypeIdentifierQuery.cs" />
-    <Compile Include="Repositories\IFlightConfigRepository.cs" />
-    <Compile Include="Repositories\FlightConfigRepository.cs" />
+    <Compile Include="CompositeRoot\IFlightConfigRepository.cs" />
     <Compile Include="Weaving\AssemblyDefinitionWeaver.cs" />
     <Compile Include="Weaving\IAssemblyDefinitionWeaver.cs" />
     <Compile Include="Weaving\IConditionalWeaveOperation.cs" />

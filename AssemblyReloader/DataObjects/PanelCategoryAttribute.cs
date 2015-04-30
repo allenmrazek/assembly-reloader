@@ -3,7 +3,7 @@
 namespace AssemblyReloader.DataObjects
 {
     [AttributeUsage(AttributeTargets.Field, AllowMultiple = false)]
-    public class PanelCategoryAttribute : Attribute
+    public sealed class PanelCategoryAttribute : Attribute
     {
         public enum CategoryType
         {

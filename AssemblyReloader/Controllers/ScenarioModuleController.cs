@@ -8,6 +8,7 @@ using AssemblyReloader.Game.Providers;
 using AssemblyReloader.Loaders;
 using AssemblyReloader.Queries.AssemblyQueries;
 using ReeperCommon.FileSystem;
+using ReeperCommon.Logging;
 
 namespace AssemblyReloader.Controllers
 {
@@ -49,10 +50,6 @@ namespace AssemblyReloader.Controllers
             if (assembly == null) throw new ArgumentNullException("assembly");
             if (location == null) throw new ArgumentNullException("location");
 
-            // if we're not in a scene with ScenarioModules, it stands to reason we have nothing to do here
-            if (!ValidScenarioModuleScenes.Contains(_currentGameSceneProvider.Get()))
-                return;
-
             RunOperationOnScenarioModuleTypes(assembly, _loader.Load);
         }
 
@@ -68,6 +65,10 @@ namespace AssemblyReloader.Controllers
 
         private void RunOperationOnScenarioModuleTypes(Assembly assembly, Action<Type> operation)
         {
+            // if we're not in a scene with ScenarioModules, it stands to reason we have nothing to do here
+            if (!ValidScenarioModuleScenes.Contains(_currentGameSceneProvider.Get()))
+                return;
+
             foreach (var scenarioModuleType in _scenarioModuleQuery.Get(assembly))
                 operation(scenarioModuleType);
         }

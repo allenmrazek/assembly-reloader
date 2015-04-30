@@ -19,7 +19,6 @@ using AssemblyReloader.Queries;
 using AssemblyReloader.Queries.AssemblyQueries;
 using AssemblyReloader.Queries.CecilQueries;
 using AssemblyReloader.Queries.FileSystemQueries;
-using AssemblyReloader.Repositories;
 using AssemblyReloader.TypeInstallers;
 using AssemblyReloader.Weaving;
 using AssemblyReloader.Weaving.Operations;
@@ -146,10 +145,7 @@ namespace AssemblyReloader.CompositeRoot
             var primaryLog = LogFactory.Create(LogLevel.Standard);
 #endif
 
-            var cachedLog = new CachedLog(primaryLog, 100);
-
-            
-            _log = cachedLog;
+            _log = primaryLog;
 
 
             var fsFactory = new KSPFileSystemFactory(
@@ -397,7 +393,8 @@ namespace AssemblyReloader.CompositeRoot
 
         private void SetupPartModuleController(IReloadablePlugin plugin, IKspFactory kspFactory)
         {
-            var partModuleRepository = new FlightConfigRepository();
+            var partModuleConfigQueue = new DictionaryQueue<KeyValuePair<uint, ITypeIdentifier>, ConfigNode>(
+                new FlightConfigNodeKeyValuePairComparer()); 
             
 
             var descriptorFactory = new PartModuleDescriptorFactory(
@@ -420,20 +417,19 @@ namespace AssemblyReloader.CompositeRoot
                                          new PartModuleLoader(
                                              descriptorFactory,
                                              new PartModuleFactory(new PartIsPrefabQuery(), new AwakenPartModuleCommand()),
-                                             partModuleRepository,
+                                             partModuleConfigQueue,
                                              prefabCloneProvider,
                                              reuseConfigNodes),
                                          new PartModuleUnloader(
                                              new UnityObjectDestroyer(new PluginReloadRequestedMethodCallCommand()),
                                              descriptorFactory,
                                              prefabCloneProvider,
-                                             ConfigurePartModuleSnapshotGenerator(partModuleRepository),
+                                             ConfigurePartModuleSnapshotGenerator(partModuleConfigQueue),
                                              reuseConfigNodes
                                              ),
                                          new TypesDerivedFromQuery<PartModule>(),
-                                         partModuleRepository,
-                                         new RefreshPartActionWindows(KspPartActionWindowListener.WindowController),
-                                         _log.CreateTag("PartModuleController"));
+                                         partModuleConfigQueue,
+                                         new RefreshPartActionWindows(KspPartActionWindowListener.WindowController));
 
             plugin.OnLoaded += (asm, loc) =>
             {
@@ -447,24 +443,26 @@ namespace AssemblyReloader.CompositeRoot
         private void SetupScenarioModuleController(IReloadablePlugin plugin, Configuration configuration, IKspFactory kspFactory)
         {
             var gameProvider = new CurrentGameProvider(new TypeIdentifierQuery());
+            var currentGameSceneProvider = new CurrentGameSceneProvider();
 
             var protoScenarioModuleProvider = new ProtoScenarioModuleProvider(
                 kspFactory,
                 new TypeIdentifierQuery(),
-                new CurrentGameProvider(new TypeIdentifierQuery()));
+                new CurrentGameProvider(new TypeIdentifierQuery()),
+                currentGameSceneProvider);
 
             var scenarioModuleController =
                 new ScenarioModuleController(
                     new ScenarioModuleLoader(protoScenarioModuleProvider),
                     new ScenarioModuleUnloader(
-                        gameProvider,
                         new GameObjectComponentQuery(new KspGameObjectProvider()),
                         protoScenarioModuleProvider,
                         new UnityObjectDestroyer(new PluginReloadRequestedMethodCallCommand()),
-                        true,
+                        () => configuration.SaveScenarioModuleConfigBeforeReloading,
+                        new ScenarioModuleSnapshotGenerator(gameProvider, _log.CreateTag("SMSnapshotGen")),
                         _log.CreateTag("ScenarioModuleUnloader")),
                     new TypesDerivedFromQuery<ScenarioModule>(),
-                    new CurrentGameSceneProvider());
+                    currentGameSceneProvider);
 
             plugin.OnLoaded += (asm, loc) =>
             {
@@ -617,12 +615,12 @@ namespace AssemblyReloader.CompositeRoot
         }
 
 
-        private IPartModuleSnapshotGenerator ConfigurePartModuleSnapshotGenerator(IFlightConfigRepository repository)
+        private IPartModuleSnapshotGenerator ConfigurePartModuleSnapshotGenerator(DictionaryQueue<KeyValuePair<uint, ITypeIdentifier>, ConfigNode> configNodeQueue)
         {
-            if (repository == null) throw new ArgumentNullException("repository");
+            if (configNodeQueue == null) throw new ArgumentNullException("configNodeQueue");
 
             return new PartModuleSnapshotGenerator(
-                repository,
+                configNodeQueue,
                 new PartIsPrefabQuery(),
                 new TypeIdentifierQuery(),
                 new UniqueFlightIdGenerator(),

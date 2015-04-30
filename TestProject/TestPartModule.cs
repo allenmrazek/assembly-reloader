@@ -5,7 +5,7 @@ namespace TestProject
 {
     public class TestPartModule : PartModule
     {
-        private ConfigNode local = new ConfigNode();
+        //private ConfigNode local = new ConfigNode();
 
         ////void Awake()
         ////{
@@ -24,8 +24,8 @@ namespace TestProject
             print("hello, testing world!");
 
             print("TestPartModule running from " + Assembly.GetExecutingAssembly().CodeBase);
-            print("TestPartModule is running from " +
-                  (part == null || ReferenceEquals(part, part.partInfo.partPrefab) ? "prefab" : "clone"));
+            //print("TestPartModule is running from " +
+            //      (part == null || ReferenceEquals(part, part.partInfo.partPrefab) ? "prefab" : "clone"));
             print("Done running checks");
 
             //AssemblyLoader.loadedAssemblies.Where(la => la.dllName.StartsWith("TestProject")).ToList().ForEach(asm =>
@@ -39,36 +39,36 @@ namespace TestProject
             //    }
             //});
 
-            if (AssemblyLoader.loadedAssemblies == null)
-            {
-                print("AssemblyLoader.list is null!");
-                return;
-            }
+            //if (AssemblyLoader.loadedAssemblies == null)
+            //{
+            //    print("AssemblyLoader.list is null!");
+            //    return;
+            //}
 
-            if (AssemblyLoader.loadedAssemblies.Any(la => la == null))
-            {
-                print("An item in AssemblyLoader is null!");
-                return;
-            }
+            //if (AssemblyLoader.loadedAssemblies.Any(la => la == null))
+            //{
+            //    print("An item in AssemblyLoader is null!");
+            //    return;
+            //}
 
-            AssemblyLoader.loadedAssemblies.ToList().ForEach(la => print(la.dllName));
+            //AssemblyLoader.loadedAssemblies.ToList().ForEach(la => print(la.dllName));
 
-            if (HighLogic.LoadedSceneIsEditor)
-            AssemblyLoader.loadedAssemblies
-                .Where(la => la.dllName.StartsWith("TestProject"))
-                .Select(la => la.types)
-                .ToList().ForEach(loadedTypes =>
-                {
-                    foreach (var key in loadedTypes.Keys)
-                        foreach (var ty in loadedTypes[key])
-                            print(key.Name + ": " + ty.Name);
-                });
+            //if (HighLogic.LoadedSceneIsEditor)
+            //AssemblyLoader.loadedAssemblies
+            //    .Where(la => la.dllName.StartsWith("TestProject"))
+            //    .Select(la => la.types)
+            //    .ToList().ForEach(loadedTypes =>
+            //    {
+            //        foreach (var key in loadedTypes.Keys)
+            //            foreach (var ty in loadedTypes[key])
+            //                print(key.Name + ": " + ty.Name);
+            //    });
 
         }
 
         public override void OnLoad(ConfigNode node)
         {
-            print("TestPartModule running from " + Assembly.GetExecutingAssembly().CodeBase);
+           // print("TestPartModule running from " + Assembly.GetExecutingAssembly().CodeBase);
             print(string.Format("TestPartModule.OnLoad: {0}", node.ToString()));
         }
 
@@ -81,7 +81,7 @@ namespace TestProject
             print("Hello, world!");
             print("Also, I'm running from " + current.CodeBase);
 
-            SomeMethod(local);
+            //SomeMethod(local);
         }
 
         private void SomeMethod(ConfigNode node)

@@ -1,35 +1,37 @@
 ﻿using System;
+using System.Collections.Generic;
 using AssemblyReloader.Annotations;
+using AssemblyReloader.CompositeRoot;
+using AssemblyReloader.DataObjects;
 using AssemblyReloader.Game;
 using AssemblyReloader.Generators;
 using AssemblyReloader.Queries;
-using AssemblyReloader.Repositories;
 using ReeperCommon.Logging;
 
 namespace AssemblyReloader.Loaders.PartModuleLoader
 {
     public class PartModuleSnapshotGenerator : IPartModuleSnapshotGenerator
     {
-        private readonly IFlightConfigRepository _repository;
+        private readonly DictionaryQueue<KeyValuePair<uint, ITypeIdentifier>, ConfigNode> _configNodeQueue;
         private readonly IPartIsPrefabQuery _partIsPrefabQuery;
         private readonly ITypeIdentifierQuery _typeIdentifierQuery;
         private readonly IUniqueFlightIdGenerator _flightIdGenerator;
         private readonly ILog _log;
 
         public PartModuleSnapshotGenerator(
-            [NotNull] IFlightConfigRepository repository,
+            [NotNull] DictionaryQueue<KeyValuePair<uint, ITypeIdentifier>, ConfigNode> configNodeQueue,
             [NotNull] IPartIsPrefabQuery partIsPrefabQuery,
             [NotNull] ITypeIdentifierQuery typeIdentifierQuery, 
             [NotNull] IUniqueFlightIdGenerator flightIdGenerator,
             [NotNull] ILog log)
         {
-            if (repository == null) throw new ArgumentNullException("repository");
+            if (configNodeQueue == null) throw new ArgumentNullException("configNodeQueue");
             if (partIsPrefabQuery == null) throw new ArgumentNullException("partIsPrefabQuery");
             if (typeIdentifierQuery == null) throw new ArgumentNullException("typeIdentifierQuery");
             if (flightIdGenerator == null) throw new ArgumentNullException("flightIdGenerator");
             if (log == null) throw new ArgumentNullException("log");
 
-            _repository = repository;
+            _configNodeQueue = configNodeQueue;
             _partIsPrefabQuery = partIsPrefabQuery;
             _typeIdentifierQuery = typeIdentifierQuery;
             _flightIdGenerator = flightIdGenerator;
@@ -51,7 +53,11 @@ namespace AssemblyReloader.Loaders.PartModuleLoader
                 if (part.FlightID == 0)
                     part.FlightID = _flightIdGenerator.Get();
 
-                _repository.Store(part.FlightID, _typeIdentifierQuery.Get(instance.GetType()), node);
+                _configNodeQueue.Store(
+                    new KeyValuePair<uint, ITypeIdentifier>(part.FlightID, _typeIdentifierQuery.Get(instance.GetType())),
+                    node);
+
+                _log.Debug("Created ConfigNode snapshot for part " + part.FlightID);
             }
             catch (Exception e)
             {

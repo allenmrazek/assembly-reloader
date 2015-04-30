@@ -9,23 +9,67 @@ using UnityEngine;
 
 namespace TestProject
 {
-    [KSPAddon(KSPAddon.Startup.MainMenu, false)]
-    public class DumpFonts : MonoBehaviour
-    {
-        private void Start()
-        {
-            Resources.FindObjectsOfTypeAll(typeof (Font))
-                .Cast<Font>()
-                .ToList()
-                .ForEach(f => f.fontNames.ToList().ForEach(n => print("Font name: " + n)));
+    //[KSPAddon(KSPAddon.Startup.Flight, false)]
+    //public class CheckEvaExperimentAvailability : MonoBehaviour
+    //{
+    //    private ScienceExperiment experiment;
 
-        }
+    //    private void Start()
+    //    {
+    //        experiment = ResearchAndDevelopment.GetExperiment("evaReport");
+    //        bool evaUnlocked = GameVariables.Instance.UnlockedEVA(
+    //            ScenarioUpgradeableFacilities.GetFacilityLevel(SpaceCenterFacility.AstronautComplex));
 
-        private void PrintFont(Font font)
-        {
+    //        if (experiment == null)
+    //        {
+    //            print("ERROR: didn't find evaReport");
+    //            Destroy(this);
+    //        }
 
-        }
-    }
+    //        if (evaUnlocked)
+    //            print("Yep, you can EVA");
+    //        else print("NO EVAING FOR YOU SIR");
+
+    //        if (HighLogic.CurrentGame.Parameters.Flight.CanEVA)
+    //            print("Game says EVA is currently okay");
+    //        else print("Game says no eva'ing either");
+    //    }
+
+    //    private void Update()
+    //    {
+    //        var situation = ScienceUtil.GetExperimentSituation(FlightGlobals.ActiveVessel);
+
+    //        if (situation == ExperimentSituations.FlyingHigh || situation == ExperimentSituations.FlyingLow)
+    //        {
+    //            //print("Current flying situation: " + situation);
+
+    //            if (!experiment.IsAvailableWhile(situation, FlightGlobals.currentMainBody))
+    //                print("Error: you can't EVA while " + situation + " on " + FlightGlobals.currentMainBody.bodyName);
+    //            //else print("EVA is available.");
+    //        }
+    //        else
+    //        {
+                
+    //        }
+    //    }
+    //}
+    //[KSPAddon(KSPAddon.Startup.MainMenu, false)]
+    //public class DumpFonts : MonoBehaviour
+    //{
+    //    private void Start()
+    //    {
+    //        Resources.FindObjectsOfTypeAll(typeof (Font))
+    //            .Cast<Font>()
+    //            .ToList()
+    //            .ForEach(f => f.fontNames.ToList().ForEach(n => print("Font name: " + n)));
+
+    //    }
+
+    //    private void PrintFont(Font font)
+    //    {
+
+    //    }
+    //}
 
 
     //[KSPAddon(KSPAddon.Startup.SpaceCentre, false)]

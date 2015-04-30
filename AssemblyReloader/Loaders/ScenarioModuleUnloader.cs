@@ -12,31 +12,33 @@ namespace AssemblyReloader.Loaders
 {
     public class ScenarioModuleUnloader : IScenarioModuleUnloader
     {
-        private readonly ICurrentGameProvider _gameProvider;
         private readonly IGameObjectComponentQuery _gameObjectComponentQuery;
         private readonly IProtoScenarioModuleProvider _psmProvider;
         private readonly IUnityObjectDestroyer _objectDestroyer;
-        private readonly bool _reuseConfigNode;
+        private readonly Func<bool> _saveBeforeDestroying;
+        private readonly IScenarioModuleSnapshotGenerator _snapshotGenerator;
         private readonly ILog _log;
 
-        public ScenarioModuleUnloader([NotNull] ICurrentGameProvider gameProvider,
+        public ScenarioModuleUnloader(
             [NotNull] IGameObjectComponentQuery gameObjectComponentQuery,
             [NotNull] IProtoScenarioModuleProvider psmProvider,
-            [NotNull] IUnityObjectDestroyer objectDestroyer,
-            bool reuseConfigNode,
+            [NotNull] IUnityObjectDestroyer objectDestroyer, 
+            [NotNull] Func<bool> saveBeforeDestroying,
+            [NotNull] IScenarioModuleSnapshotGenerator snapshotGenerator,
             [NotNull] ILog log)
         {
-            if (gameProvider == null) throw new ArgumentNullException("gameProvider");
             if (gameObjectComponentQuery == null) throw new ArgumentNullException("gameObjectComponentQuery");
             if (psmProvider == null) throw new ArgumentNullException("psmProvider");
             if (objectDestroyer == null) throw new ArgumentNullException("objectDestroyer");
+            if (saveBeforeDestroying == null) throw new ArgumentNullException("saveBeforeDestroying");
+            if (snapshotGenerator == null) throw new ArgumentNullException("snapshotGenerator");
             if (log == null) throw new ArgumentNullException("log");
 
-            _gameProvider = gameProvider;
             _gameObjectComponentQuery = gameObjectComponentQuery;
             _psmProvider = psmProvider;
             _objectDestroyer = objectDestroyer;
-            _reuseConfigNode = reuseConfigNode;
+            _saveBeforeDestroying = saveBeforeDestroying;
+            _snapshotGenerator = snapshotGenerator;
             _log = log;
         }
 
@@ -68,32 +70,14 @@ namespace AssemblyReloader.Loaders
             }
 
 
-            var game = _gameProvider.Get().FirstOrDefault();
-
-            if (game == null)
-                throw new InvalidOperationException("Current game is null");
-
-
-            // take a snapshot of the current state of the ScenarioModule so we can reuse it to load
-            // the next version
-            var snapshot = new ConfigNode("SCENARIO");
             var sm = GetScenarioModuleInstanceFromRunner(type);
 
             if (!sm.Any())
                 throw new Exception("Did not find ScenarioModule of type " + type.FullName + "(" + psm.moduleName + ") on ScenarioRunner");
 
 
-            bool snapshotSuccess = false;
-
-            if (_reuseConfigNode)
-                snapshotSuccess = TryToSaveScenarioModuleState(sm.First(), snapshot);
-
-            if (!game.RemoveProtoScenarioModule(type))
-                throw new Exception("Failed to remove proto scenario module of " + type.FullName);
-
-            if (_reuseConfigNode && snapshotSuccess)
-                game.AddProtoScenarioModule(snapshot);
-            else game.AddProtoScenarioModule(type, psm.TargetScenes);
+            if (_saveBeforeDestroying())
+                _snapshotGenerator.Snapshot(sm.Single(), psm);
 
             _log.Normal("Destroying ScenarioModule " + type.FullName + " (called " + psm.moduleName + ")");
 
@@ -111,26 +95,7 @@ namespace AssemblyReloader.Loaders
             if (smInstancesOfType.Count > 1)
                 throw new InvalidOperationException("Found multiple ScenarioModules of type " + type.FullName + " on ScenarioRunner");
 
-
             return smInstancesOfType.Any() ? Maybe<ScenarioModule>.With(smInstancesOfType.Single() as ScenarioModule) : Maybe<ScenarioModule>.None;
-        }
-
-
-        private bool TryToSaveScenarioModuleState(ScenarioModule sm, ConfigNode node)
-        {
-            try
-            {
-                sm.Save(node);
-
-                return true;
-            }
-            catch (Exception)
-            {
-                _log.Warning("Failed to save snapshot of " + sm.GetType().FullName +
-                             "; default ConfigNode will be used for next instance");
-
-                return false;
-            }
         }
     }
 }

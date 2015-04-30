@@ -21,7 +21,7 @@ namespace AssemblyReloader.CompositeRoot
 
             _executeBeforeDestruction.Execute(target);
 
-            Object.Destroy(target);
+            Object.DestroyImmediate(target);
         }
     }
 }

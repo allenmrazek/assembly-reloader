@@ -5,6 +5,9 @@ namespace AssemblyReloader.DataObjects
 {
     public class Configuration
     {
+        // ReSharper disable ConvertToConstant.Global
+        // ReSharper disable FieldCanBeMadeReadOnly.Global
+
         // KSPAddon
         [ReeperPersistent, PanelCategory(PanelCategoryAttribute.CategoryType.Addon)]
         [ConfigItemDescription("Start addons for current scene immediately")]
@@ -13,6 +16,7 @@ namespace AssemblyReloader.DataObjects
         [ReeperPersistent, PanelCategory(PanelCategoryAttribute.CategoryType.Addon)]
         [ConfigItemDescription("KSPAddon.Instant applies to all scenes")]
         public bool InstantlyAppliesToEveryScene = true;
+
 
 
 
@@ -34,8 +38,8 @@ namespace AssemblyReloader.DataObjects
         public bool ReloadScenarioModulesImmediately = true;
 
         [ReeperPersistent, PanelCategory(PanelCategoryAttribute.CategoryType.ScenarioModule)]
-        [ConfigItemDescription("New ScenarioModule will use ConfigNode saved by previous ScenarioModule")]
-        public bool ReuseScenarioModuleConfigsFromPrevious = true;
+        [ConfigItemDescription("Save ScenarioModule ConfigNode before reloading")]
+        public bool SaveScenarioModuleConfigBeforeReloading = true;
 
 
 

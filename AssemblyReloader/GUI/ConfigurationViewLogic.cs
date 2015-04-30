@@ -65,7 +65,7 @@ namespace AssemblyReloader.Gui
         //{
         //    _configuration.ReloadScenarioModulesImmediately =
         //        GUILayout.Toggle(_configuration.ReloadScenarioModulesImmediately, "Reload ScenarioModules on the fly");
-        //    _configuration.ReuseScenarioModuleConfigsFromPrevious = GUILayout.Toggle(false, "Attempt to reuse ScenarioModule ConfigNodes when swapping");
+        //    _configuration.SaveScenarioModuleConfigBeforeReloading = GUILayout.Toggle(false, "Attempt to reuse ScenarioModule ConfigNodes when swapping");
         //}
 
 
