@@ -7,7 +7,6 @@ using AssemblyReloader.Annotations;
 using AssemblyReloader.Commands;
 using AssemblyReloader.Controllers;
 using AssemblyReloader.DataObjects;
-using AssemblyReloader.Destruction;
 using AssemblyReloader.Game;
 using AssemblyReloader.Game.Providers;
 using AssemblyReloader.Game.Queries;
@@ -36,6 +35,7 @@ using ReeperCommon.Logging;
 using ReeperCommon.Repositories;
 using ReeperCommon.Serialization;
 using UnityEngine;
+using AddonLoader = AssemblyReloader.Loaders.AddonLoader;
 
 namespace AssemblyReloader.CompositeRoot
 {
@@ -300,18 +300,19 @@ namespace AssemblyReloader.CompositeRoot
             IPluginConfigurationProvider configurationProvider)
         {
             var reloadableAssemblyFileQuery = new ReloadableAssemblyFilesInDirectoryQuery(fsFactory.GetGameDataDirectory());
-
+            var unityObjectDestroyer = new UnityObjectDestroyer(new PluginReloadRequestedMethodCallCommand());
 
             return reloadableAssemblyFileQuery
                 .Get()
                 .Select(raFile => ConfigureReloadablePlugin(raFile, 
                     assemblyResolver, 
                     laFactory, 
-                    configurationProvider));
+                    configurationProvider,
+                    unityObjectDestroyer));
         }
 
 
-        private IEventProvider ConfigureEventProvider(IStartupSceneFromGameSceneQuery query)
+        private static IEventProvider ConfigureEventProvider(IStartupSceneFromGameSceneQuery query)
         {
             if (query == null) throw new ArgumentNullException("query");
 
@@ -331,7 +332,8 @@ namespace AssemblyReloader.CompositeRoot
             IFile location,
             BaseAssemblyResolver assemblyResolver,
             ILoadedAssemblyFactory laFactory,
-            IPluginConfigurationProvider configurationProvider)
+            IPluginConfigurationProvider configurationProvider,
+            IUnityObjectDestroyer objectDestroyer)
         {
             var configuration = configurationProvider.Get(location);
 
@@ -356,32 +358,35 @@ namespace AssemblyReloader.CompositeRoot
             var kspFactory = new KspFactory(new KspGameObjectProvider());
             var reloadable = new ReloadablePlugin(new KspAssemblyLoader(assemblyProvider, laFactory), location, configuration);
 
-            
-
-            SetupAddonController(reloadable);
+            SetupAddonController(reloadable, objectDestroyer);
             SetupPartModuleController(reloadable, kspFactory);
             SetupScenarioModuleController(reloadable, configuration, kspFactory);
-
-
-            
 
             return reloadable;
         }
 
 
-        private static void SetupAddonController(IReloadablePlugin plugin)
-        {
-            var addonDestroyer = new AddonDestroyer(
-                new UnityObjectDestroyer(new PluginReloadRequestedMethodCallCommand()),
-                new LoadedComponentQuery(),
-                new AddonsFromAssemblyQuery(new AddonAttributesFromTypeQuery()));
+        private static void SetupAddonController(
+            [NotNull] IReloadablePlugin plugin, 
+            [NotNull] IUnityObjectDestroyer objectDestroyer)
 
-            var addonController =
-                new AddonController(
-                    new KspAddonLoader(),
-                    addonDestroyer,
-                    new CurrentStartupSceneProvider(new StartupSceneFromGameSceneQuery(),
-                        new CurrentGameSceneProvider()));
+        {
+            if (plugin == null) throw new ArgumentNullException("plugin");
+            if (objectDestroyer == null) throw new ArgumentNullException("objectDestroyer");
+
+            var addonAttributesFromTypeQuery = new AddonAttributesFromTypeQuery();
+            
+   
+            var addonLoader = new Loaders.AddonLoader(
+                new CurrentStartupSceneProvider(new StartupSceneFromGameSceneQuery(), new CurrentGameSceneProvider()),
+                () => plugin.Configuration.InstantlyAppliesToEveryScene);
+
+            var addonUnloader = new Loaders.AddonUnloader(
+                new AddonsFromAssemblyQuery(new AddonAttributesFromTypeQuery()),
+                objectDestroyer,
+                new LoadedComponentQuery());
+
+            var addonController = new AddonController(addonLoader, addonUnloader);
 
             plugin.OnLoaded +=
                 (asm, loc) => { if (plugin.Configuration.StartAddonsForCurrentScene) addonController.Load(asm, loc); };

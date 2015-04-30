@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using AssemblyReloader.Annotations;
-using AssemblyReloader.Destruction;
+using AssemblyReloader.CompositeRoot;
 using AssemblyReloader.Game.Providers;
 using ReeperCommon.Extensions;
 using ReeperCommon.Logging;

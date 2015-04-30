@@ -88,8 +88,8 @@
     <Compile Include="DataObjects\Configuration.cs" />
     <Compile Include="DataObjects\PanelCategoryAttribute.cs" />
     <Compile Include="DataObjects\TemporaryFile.cs" />
-    <Compile Include="Destruction\IUnityObjectDestroyer.cs" />
-    <Compile Include="Destruction\UnityObjectDestroyer.cs" />
+    <Compile Include="CompositeRoot\IUnityObjectDestroyer.cs" />
+    <Compile Include="CompositeRoot\UnityObjectDestroyer.cs" />
     <Compile Include="Game\DisposeLoadedAssembly.cs" />
     <Compile Include="Game\DisposeLoadedAssemblyCommandFactory.cs" />
     <Compile Include="Game\IDisposeLoadedAssemblyCommandFactory.cs" />
@@ -130,9 +130,13 @@
     <Compile Include="Gui\IConfigurationPanelFactory.cs" />
     <Compile Include="Gui\IExpandablePanel.cs" />
     <Compile Include="Gui\IExpandablePanelFactory.cs" />
+    <Compile Include="Loaders\AddonLoader.cs" />
+    <Compile Include="Loaders\AddonUnloader.cs" />
     <Compile Include="Loaders\AssemblyDefinitionFromDiskReader.cs" />
     <Compile Include="Loaders\AssemblyDefinitionLoader.cs" />
     <Compile Include="Loaders\ConditionalWriteLoadedAssemblyToDisk.cs" />
+    <Compile Include="Loaders\IAddonLoader.cs" />
+    <Compile Include="Loaders\IAddonUnloader.cs" />
     <Compile Include="Loaders\IAssemblyDefinitionReader.cs" />
     <Compile Include="Loaders\IAssemblyDefinitionLoader.cs" />
     <Compile Include="Loaders\IScenarioModuleLoader.cs" />
@@ -176,10 +180,7 @@
     <Compile Include="Controllers\PartModuleController.cs" />
     <Compile Include="DataObjects\ITypeIdentifier.cs" />
     <Compile Include="DataObjects\TypeIdentifier.cs" />
-    <Compile Include="Destruction\AddonDestroyer.cs" />
-    <Compile Include="Destruction\IAddonDestroyer.cs" />
     <Compile Include="Game\GameEventPublisher.cs" />
-    <Compile Include="Game\IAddonLoader.cs" />
     <Compile Include="Game\IAssemblyLoader.cs" />
     <Compile Include="Game\IAvailablePart.cs" />
     <Compile Include="Game\IEventProvider.cs" />
@@ -196,7 +197,6 @@
     <Compile Include="Game\IPart.cs" />
     <Compile Include="Game\IPartLoader.cs" />
     <Compile Include="Game\IVessel.cs" />
-    <Compile Include="Game\KspAddonLoader.cs" />
     <Compile Include="Game\KspAssemblyLoader.cs" />
     <Compile Include="Game\KspAvailablePart.cs" />
     <Compile Include="Game\KspFactory.cs" />

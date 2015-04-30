@@ -1,31 +1,27 @@
 ﻿using System;
 using System.Reflection;
-using AssemblyReloader.Destruction;
-using AssemblyReloader.Game;
-using AssemblyReloader.Game.Providers;
+using AssemblyReloader.Annotations;
+using AssemblyReloader.Loaders;
+using AssemblyReloader.Queries.AssemblyQueries;
 using ReeperCommon.FileSystem;
 
 namespace AssemblyReloader.Controllers
 {
     public class AddonController : IReloadableObjectController
     {
-        private readonly IAddonLoader _addonLoader;
-        private readonly IAddonDestroyer _addonDestroyer;
-        private readonly ICurrentStartupSceneProvider _currentSceneProvider;
+        private readonly IAddonLoader _loader;
+        private readonly IAddonUnloader _unloader;
 
         public AddonController(
-            IAddonLoader addonLoader,
-            IAddonDestroyer addonDestroyer,
-            ICurrentStartupSceneProvider currentSceneProvider
+            [NotNull] IAddonLoader loader,
+            [NotNull] IAddonUnloader unloader
             )
         {
-            if (addonLoader == null) throw new ArgumentNullException("addonLoader");
-            if (addonDestroyer == null) throw new ArgumentNullException("addonDestroyer");
-            if (currentSceneProvider == null) throw new ArgumentNullException("currentSceneProvider");
+            if (loader == null) throw new ArgumentNullException("loader");
+            if (unloader == null) throw new ArgumentNullException("unloader");
 
-            _addonLoader = addonLoader;
-            _addonDestroyer = addonDestroyer;
-            _currentSceneProvider = currentSceneProvider;
+            _loader = loader;
+            _unloader = unloader;
         }
 
 
@@ -33,7 +29,7 @@ namespace AssemblyReloader.Controllers
         {
             if (assembly == null) throw new ArgumentNullException("assembly");
 
-            _addonLoader.StartAddons(assembly, _currentSceneProvider.Get());
+            _loader.Load(assembly);
         }
 
 
@@ -41,7 +37,7 @@ namespace AssemblyReloader.Controllers
         {
             if (assembly == null) throw new ArgumentNullException("assembly");
 
-            _addonDestroyer.DestroyAddonsFrom(assembly); 
+            _unloader.Unload(assembly);
         }
     }
 }

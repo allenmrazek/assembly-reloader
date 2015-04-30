@@ -1,4 +1,4 @@
-﻿namespace AssemblyReloader.Destruction
+﻿namespace AssemblyReloader.CompositeRoot
 {
     public interface IUnityObjectDestroyer
     {

@@ -2,7 +2,7 @@
 using AssemblyReloader.Commands;
 using Object = UnityEngine.Object;
 
-namespace AssemblyReloader.Destruction
+namespace AssemblyReloader.CompositeRoot
 {
     public class UnityObjectDestroyer : IUnityObjectDestroyer
     {
