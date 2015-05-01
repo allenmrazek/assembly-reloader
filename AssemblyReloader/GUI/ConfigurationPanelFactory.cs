@@ -17,17 +17,17 @@ namespace AssemblyReloader.Gui
 
         private class ExpandablePanelToggleDrawObject
         {
-            private readonly Configuration _configuration;
+            private readonly PluginConfiguration _pluginConfiguration;
             private readonly Dictionary<FieldInfo, string> _content;
 
             public ExpandablePanelToggleDrawObject(
-                [NotNull] Configuration configuration, 
+                [NotNull] PluginConfiguration pluginConfiguration, 
                 [NotNull] Dictionary<FieldInfo, string> content)
             {
-                if (configuration == null) throw new ArgumentNullException("configuration");
+                if (pluginConfiguration == null) throw new ArgumentNullException("pluginConfiguration");
                 if (content == null) throw new ArgumentNullException("content");
 
-                _configuration = configuration;
+                _pluginConfiguration = pluginConfiguration;
                 _content = content;
             }
 
@@ -36,7 +36,7 @@ namespace AssemblyReloader.Gui
                 var keys = _content.Keys;
 
                 foreach (var key in keys)
-                    key.SetValue(_configuration, GUILayout.Toggle((bool) key.GetValue(_configuration), _content[key]));
+                    key.SetValue(_pluginConfiguration, GUILayout.Toggle((bool) key.GetValue(_pluginConfiguration), _content[key]));
             }
         }
 
@@ -52,16 +52,16 @@ namespace AssemblyReloader.Gui
         }
 
 
-        public IEnumerable<IExpandablePanel> CreatePanelsFor([NotNull] Configuration configuration)
+        public IEnumerable<IExpandablePanel> CreatePanelsFor([NotNull] PluginConfiguration pluginConfiguration)
         {
-            if (configuration == null) throw new ArgumentNullException("configuration");
+            if (pluginConfiguration == null) throw new ArgumentNullException("pluginConfiguration");
 
-            var configurationFields = _configPanelFieldQuery.Get(configuration);
+            var configurationFields = _configPanelFieldQuery.Get(pluginConfiguration);
 
             return (from enumValue in Enum.GetValues(typeof (PanelCategoryAttribute.CategoryType)).Cast<PanelCategoryAttribute.CategoryType>() 
                     let fieldsForThisValue = GetFieldsForPanel(configurationFields, enumValue).ToList() 
                     where fieldsForThisValue.Any() 
-                    let drawObject = new ExpandablePanelToggleDrawObject(configuration, fieldsForThisValue.ToDictionary(fi => fi, fi => ((ConfigItemDescriptionAttribute) fi.GetCustomAttributes(true).First(attr => attr is ConfigItemDescriptionAttribute)).Description)) 
+                    let drawObject = new ExpandablePanelToggleDrawObject(pluginConfiguration, fieldsForThisValue.ToDictionary(fi => fi, fi => ((ConfigItemDescriptionAttribute) fi.GetCustomAttributes(true).First(attr => attr is ConfigItemDescriptionAttribute)).Description)) 
                     select _expandablePanelFactory.Create(enumValue.ToString(), ExpandablePanelContentMarginOffset, drawObject.Draw, false));
         }
 

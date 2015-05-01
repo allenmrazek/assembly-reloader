@@ -5,6 +5,6 @@ namespace AssemblyReloader.Providers
 {
     public interface IPluginConfigurationProvider
     {
-        Configuration Get(IFile pluginLocation);
+        PluginConfiguration Get(IFile pluginLocation);
     }
 }

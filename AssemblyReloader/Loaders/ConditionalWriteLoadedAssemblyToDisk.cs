@@ -6,7 +6,6 @@ using AssemblyReloader.Annotations;
 using Mono.Cecil;
 using ReeperCommon.Containers;
 using ReeperCommon.FileSystem;
-using ReeperCommon.Logging;
 
 namespace AssemblyReloader.Loaders
 {

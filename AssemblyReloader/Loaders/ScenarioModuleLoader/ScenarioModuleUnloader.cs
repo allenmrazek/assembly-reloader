@@ -8,7 +8,7 @@ using AssemblyReloader.Game.Queries;
 using ReeperCommon.Containers;
 using ReeperCommon.Logging;
 
-namespace AssemblyReloader.Loaders
+namespace AssemblyReloader.Loaders.ScenarioModuleLoader
 {
     public class ScenarioModuleUnloader : IScenarioModuleUnloader
     {

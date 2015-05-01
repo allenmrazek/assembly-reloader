@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 using ReeperCommon.Containers;
 
-namespace AssemblyReloader.Game
+namespace AssemblyReloader.Loaders
 {
     public interface IAssemblyLoader
     {

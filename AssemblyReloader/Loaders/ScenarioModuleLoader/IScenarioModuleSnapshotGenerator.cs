@@ -1,6 +1,6 @@
 ﻿using AssemblyReloader.Game;
 
-namespace AssemblyReloader.Loaders
+namespace AssemblyReloader.Loaders.ScenarioModuleLoader
 {
     public interface IScenarioModuleSnapshotGenerator
     {

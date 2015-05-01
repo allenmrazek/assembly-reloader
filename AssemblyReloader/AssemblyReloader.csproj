@@ -72,7 +72,7 @@
     <Compile Include="Commands\RefreshPartActionWindows.cs" />
     <Compile Include="Commands\NullCommand.cs" />
     <Compile Include="Commands\PluginReloadRequestedMethodCallCommand.cs" />
-    <Compile Include="Commands\SaveConfigurationCommand.cs" />
+    <Compile Include="Commands\SavePluginConfigurationCommand.cs" />
     <Compile Include="Commands\ToggleWindowVisibilityCommand.cs" />
     <Compile Include="CompositeRoot\FlightConfigNodeKeyValuePairComparer.cs" />
     <Compile Include="CompositeRoot\IMessageChannel.cs" />
@@ -85,6 +85,7 @@
     <Compile Include="Controllers\ScenarioModuleController.cs" />
     <Compile Include="DataObjects\ConfigItemDescriptionAttribute.cs" />
     <Compile Include="DataObjects\Configuration.cs" />
+    <Compile Include="DataObjects\PluginConfiguration.cs" />
     <Compile Include="DataObjects\PanelCategoryAttribute.cs" />
     <Compile Include="DataObjects\TemporaryFile.cs" />
     <Compile Include="CompositeRoot\IUnityObjectDestroyer.cs" />
@@ -93,8 +94,10 @@
     <Compile Include="Game\DisposeLoadedAssemblyCommandFactory.cs" />
     <Compile Include="Game\IDisposeLoadedAssemblyCommandFactory.cs" />
     <Compile Include="Game\IGame.cs" />
+    <Compile Include="Game\IGameAddonLoader.cs" />
     <Compile Include="Game\IProtoScenarioModule.cs" />
     <Compile Include="Game\IGameObjectProvider.cs" />
+    <Compile Include="Game\KspAddonLoader.cs" />
     <Compile Include="Game\KspGame.cs" />
     <Compile Include="Game\KspProtoScenarioModule.cs" />
     <Compile Include="Game\KspGameObjectProvider.cs" />
@@ -123,32 +126,41 @@
     <Compile Include="Generators\RandomStringGenerator.cs" />
     <Compile Include="Generators\TemporaryFileFactory.cs" />
     <Compile Include="Gui\ConfigurationPanelFactory.cs" />
-    <Compile Include="Gui\ConfigurationViewLogic.cs" />
+    <Compile Include="Gui\PluginConfigurationViewLogic.cs" />
     <Compile Include="Gui\ExpandablePanel.cs" />
     <Compile Include="Gui\ExpandablePanelFactory.cs" />
     <Compile Include="Gui\IConfigurationPanelFactory.cs" />
     <Compile Include="Gui\IExpandablePanel.cs" />
     <Compile Include="Gui\IExpandablePanelFactory.cs" />
+    <Compile Include="Gui\ProgramConfigurationViewLogic.cs" />
     <Compile Include="Loaders\AddonLoader.cs" />
     <Compile Include="Loaders\AddonUnloader.cs" />
     <Compile Include="Loaders\AssemblyDefinitionFromDiskReader.cs" />
     <Compile Include="Loaders\AssemblyDefinitionLoader.cs" />
+    <Compile Include="Loaders\AssemblyLoader.cs" />
     <Compile Include="Loaders\ConditionalWriteLoadedAssemblyToDisk.cs" />
     <Compile Include="Loaders\IAddonLoader.cs" />
     <Compile Include="Loaders\IAddonUnloader.cs" />
     <Compile Include="Loaders\IAssemblyDefinitionReader.cs" />
     <Compile Include="Loaders\IAssemblyDefinitionLoader.cs" />
-    <Compile Include="Loaders\IScenarioModuleLoader.cs" />
-    <Compile Include="Loaders\IScenarioModuleSnapshotGenerator.cs" />
-    <Compile Include="Loaders\IScenarioModuleUnloader.cs" />
-    <Compile Include="Loaders\ScenarioModuleSnapshotGenerator.cs" />
+    <Compile Include="Loaders\IAssemblyLoader.cs" />
+    <Compile Include="Loaders\ScenarioModuleLoader\IScenarioModuleLoader.cs" />
+    <Compile Include="Loaders\ScenarioModuleLoader\IScenarioModuleSnapshotGenerator.cs" />
+    <Compile Include="Loaders\ScenarioModuleLoader\IScenarioModuleUnloader.cs" />
+    <Compile Include="Loaders\ScenarioModuleLoader\ScenarioModuleSnapshotGenerator.cs" />
     <Compile Include="Providers\AssemblyProvider.cs" />
     <Compile Include="Providers\ConfigNodeFormatterProvider.cs" />
+    <Compile Include="Providers\ConfigurationProvider.cs" />
     <Compile Include="Providers\IConfigNodeFormatterProvider.cs" />
+    <Compile Include="Providers\IConfigurationProvider.cs" />
+    <Compile Include="Queries\FileSystemQueries\LoadedAssemblyFileUrlQuery.cs" />
+    <Compile Include="Queries\FileSystemQueries\ILoadedAssemblyFileUrlQuery.cs" />
     <Compile Include="Queries\CompositeFieldInfoQuery.cs" />
     <Compile Include="Queries\ConfigurationWindowPanelFieldQuery.cs" />
+    <Compile Include="Queries\FileSystemQueries\AssemblyFileLocationQuery.cs" />
     <Compile Include="Queries\FileSystemQueries\ConfigurationFilePathQuery.cs" />
     <Compile Include="Queries\FileSystemQueries\DebugSymbolFileExistsQuery.cs" />
+    <Compile Include="Queries\FileSystemQueries\IAssemblyFileLocationQuery.cs" />
     <Compile Include="Queries\FileSystemQueries\IConfigurationFilePathQuery.cs" />
     <Compile Include="Queries\FileSystemQueries\IDebugSymbolFileExistsQuery.cs" />
     <Compile Include="Providers\IPluginConfigurationProvider.cs" />
@@ -168,8 +180,8 @@
     <Compile Include="Loaders\PartModuleLoader\PartModuleLoader.cs" />
     <Compile Include="Loaders\PartModuleLoader\PartModuleSnapshotGenerator.cs" />
     <Compile Include="Loaders\PartModuleLoader\PartModuleUnloader.cs" />
-    <Compile Include="Loaders\ScenarioModuleLoader.cs" />
-    <Compile Include="Loaders\ScenarioModuleUnloader.cs" />
+    <Compile Include="Loaders\ScenarioModuleLoader\ScenarioModuleLoader.cs" />
+    <Compile Include="Loaders\ScenarioModuleLoader\ScenarioModuleUnloader.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Queries\CecilQueries\AllMethodsFromDefinitionQuery.cs" />
     <Compile Include="Queries\CecilQueries\AllTypesFromDefinitionQuery.cs" />
@@ -184,7 +196,7 @@
     <Compile Include="DataObjects\ITypeIdentifier.cs" />
     <Compile Include="DataObjects\TypeIdentifier.cs" />
     <Compile Include="Game\GameEventPublisher.cs" />
-    <Compile Include="Game\IAssemblyLoader.cs" />
+    <Compile Include="Game\IGameAssemblyLoader.cs" />
     <Compile Include="Game\IAvailablePart.cs" />
     <Compile Include="Game\IEventProvider.cs" />
     <Compile Include="Game\IGameDatabase.cs" />
@@ -278,6 +290,7 @@
   <ItemGroup>
     <EmbeddedResource Include="Resources\btnWrench.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>set ksp=D:\For New Computer\Kerbal Space Program

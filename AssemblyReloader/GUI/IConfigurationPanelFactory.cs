@@ -5,6 +5,6 @@ namespace AssemblyReloader.Gui
 {
     public interface IConfigurationPanelFactory
     {
-        IEnumerable<IExpandablePanel> CreatePanelsFor(Configuration configuration);
+        IEnumerable<IExpandablePanel> CreatePanelsFor(PluginConfiguration pluginConfiguration);
     }
 }

@@ -7,18 +7,18 @@ using UnityEngine;
 
 namespace AssemblyReloader.Gui
 {
-    public class ConfigurationViewLogic : IWindowLogic
+    public class PluginConfigurationViewLogic : IWindowLogic
     {
-        private readonly Configuration _configuration;
+        private readonly PluginConfiguration _pluginConfiguration;
         private readonly List<IExpandablePanel> _panels = new List<IExpandablePanel>();
         private Vector2 _scrollPos = default(Vector2);
 
-        public ConfigurationViewLogic(
-            Configuration configuration)
+        public PluginConfigurationViewLogic(
+            PluginConfiguration pluginConfiguration)
         {
-            if (configuration == null) throw new ArgumentNullException("configuration");
+            if (pluginConfiguration == null) throw new ArgumentNullException("pluginConfiguration");
 
-            _configuration = configuration;
+            _pluginConfiguration = pluginConfiguration;
         }
 
 

@@ -4,7 +4,7 @@ using AssemblyReloader.Annotations;
 using AssemblyReloader.Game;
 using AssemblyReloader.Game.Providers;
 
-namespace AssemblyReloader.Loaders
+namespace AssemblyReloader.Loaders.ScenarioModuleLoader
 {
     public class ScenarioModuleLoader : IScenarioModuleLoader
     {

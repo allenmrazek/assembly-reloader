@@ -5,7 +5,7 @@ using AssemblyReloader.Game;
 using AssemblyReloader.Game.Providers;
 using ReeperCommon.Logging;
 
-namespace AssemblyReloader.Loaders
+namespace AssemblyReloader.Loaders.ScenarioModuleLoader
 {
     public class ScenarioModuleSnapshotGenerator : IScenarioModuleSnapshotGenerator
     {

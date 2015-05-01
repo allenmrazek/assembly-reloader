@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
+using AssemblyReloader.Annotations;
 using AssemblyReloader.DataObjects;
 using AssemblyReloader.Game;
+using AssemblyReloader.Loaders;
 using ReeperCommon.Containers;
 using ReeperCommon.Extensions;
 using ReeperCommon.FileSystem;
@@ -18,8 +20,7 @@ namespace AssemblyReloader.Controllers
     /// </summary>
     public class ReloadablePlugin : IReloadablePlugin
     {
-        private Assembly _loaded;
-
+        private Maybe<Assembly> _loaded = Maybe<Assembly>.None;
         private readonly IAssemblyLoader _assemblyLoader;
         private readonly IFile _location;
 
@@ -28,17 +29,17 @@ namespace AssemblyReloader.Controllers
         public event PluginUnloadedHandler OnUnloaded = delegate { }; 
 
         public ReloadablePlugin(
-            IAssemblyLoader assemblyLoader,
+            [NotNull] IAssemblyLoader assemblyLoader,
             IFile location,
-            Configuration configuration)
+            PluginConfiguration pluginConfiguration)
         {
             if (assemblyLoader == null) throw new ArgumentNullException("assemblyLoader");
             if (location == null) throw new ArgumentNullException("location");
-            if (configuration == null) throw new ArgumentNullException("configuration");
+            if (pluginConfiguration == null) throw new ArgumentNullException("pluginConfiguration");
 
             _assemblyLoader = assemblyLoader;
             _location = location;
-            Configuration = configuration;
+            Configuration = pluginConfiguration;
         }
 
 
@@ -47,23 +48,29 @@ namespace AssemblyReloader.Controllers
             if (!_loaded.IsNull())
                 Unload();
 
-            _loaded = _assemblyLoader.Load().SingleOrDefault();
+            _loaded = _assemblyLoader.Load();
 
-            if (_loaded.IsNull())
+            if (!_loaded.Any())
                 throw new InvalidOperationException("ReloadablePlugin: received NULL Assembly");
 
-            OnLoaded(_loaded, _location);
+            OnLoaded(_loaded.Single(), _location);
         }
 
 
         public void Unload()
         {
-            if (_loaded.IsNull()) return;
+            if (!_loaded.Any()) return;
 
             _assemblyLoader.Unload();
 
-            OnUnloaded(_loaded, _location);
-            _loaded = null;
+            try
+            {
+                OnUnloaded(_loaded.Single(), _location);
+            }
+            finally
+            {
+                _loaded = Maybe<Assembly>.None;
+            }
         }
 
 
@@ -74,10 +81,10 @@ namespace AssemblyReloader.Controllers
 
         public Maybe<Assembly> Assembly
         {
-            get { return _loaded.IsNull() ? Maybe<Assembly>.None : Maybe<Assembly>.With(_loaded); }
+            get { return _loaded; }
         }
 
-        public Configuration Configuration { get; private set; }
+        public PluginConfiguration Configuration { get; private set; }
 
         public IFile Location
         {

@@ -28,11 +28,11 @@ namespace AssemblyReloader.Providers
         }
 
 
-        public Configuration Get([NotNull] IFile pluginLocation)
+        public PluginConfiguration Get([NotNull] IFile pluginLocation)
         {
             if (pluginLocation == null) throw new ArgumentNullException("pluginLocation");
 
-            var config = new Configuration();
+            var config = new PluginConfiguration();
 
             var configPath = _configFilePathQuery.Get(pluginLocation);
 
@@ -42,7 +42,7 @@ namespace AssemblyReloader.Providers
         }
 
 
-        private void DeserializeConfig(Configuration config, string configNodeLocation)
+        private void DeserializeConfig(PluginConfiguration config, string configNodeLocation)
         {
             var node = LoadConfigNode(configNodeLocation);
             if (!node.Any())

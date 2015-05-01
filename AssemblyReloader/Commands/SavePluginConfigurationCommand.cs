@@ -1,23 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Text;
 using AssemblyReloader.Annotations;
 using AssemblyReloader.Controllers;
-using AssemblyReloader.DataObjects;
 using AssemblyReloader.Queries.FileSystemQueries;
 using ReeperCommon.Serialization;
 
 namespace AssemblyReloader.Commands
 {
-    public class SaveConfigurationCommand : ICommand
+    public class SavePluginConfigurationCommand : ICommand
     {
         private readonly IReloadablePlugin _plugin;
         private readonly IConfigNodeFormatter _formatter;
         private readonly IConfigurationFilePathQuery _configPathQuery;
 
-        public SaveConfigurationCommand(
+        public SavePluginConfigurationCommand(
             [NotNull] IReloadablePlugin plugin,
             [NotNull] IConfigNodeFormatter formatter, 
             [NotNull] IConfigurationFilePathQuery configPathQuery)
@@ -40,6 +35,8 @@ namespace AssemblyReloader.Commands
             _formatter.Serialize(_plugin.Configuration, config);
 
             config.Save(filePath, string.Format("Configuration settings for " + _plugin.Name));
+
+
         }
     }
 }

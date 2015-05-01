@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using AssemblyReloader.Annotations;
-using AssemblyReloader.Commands;
 using AssemblyReloader.Queries.AssemblyQueries;
+using AssemblyReloader.Queries.FileSystemQueries;
 using AssemblyReloader.TypeInstallers;
-using Contracts;
 using ReeperCommon.FileSystem;
 using ReeperCommon.Logging;
 
@@ -14,16 +11,20 @@ namespace AssemblyReloader.Game
 {
     public class KspLoadedAssemblyFactory : ILoadedAssemblyFactory
     {
+        private readonly ILoadedAssemblyFileUrlQuery _laFileUrlQuery;
         private readonly IDisposeLoadedAssemblyCommandFactory _disposeFactory;
         private readonly ITypeInstaller[] _typeInstallers;
 
         public KspLoadedAssemblyFactory(
+            [NotNull] ILoadedAssemblyFileUrlQuery laFileUrlQuery,
             [NotNull] IDisposeLoadedAssemblyCommandFactory disposeFactory,
             [NotNull] params ITypeInstaller[] typeInstallers)
         {
+            if (laFileUrlQuery == null) throw new ArgumentNullException("laFileUrlQuery");
             if (disposeFactory == null) throw new ArgumentNullException("disposeFactory");
             if (typeInstallers == null) throw new ArgumentNullException("typeInstallers");
 
+            _laFileUrlQuery = laFileUrlQuery;
             _disposeFactory = disposeFactory;
             _typeInstallers = typeInstallers;
         }
@@ -36,7 +37,9 @@ namespace AssemblyReloader.Game
             if (AssemblyLoader.loadedAssemblies == null)
                 throw new InvalidOperationException("AssemblyLoader.loadedAssemblies is null");
 
-            var la = new AssemblyLoader.LoadedAssembly(assembly, location.FullPath, location.Url, null);
+            new DebugLog().Normal("LoadedAssembly URL of " + location.FileName + " is " + _laFileUrlQuery.Get(location));
+
+            var la = new AssemblyLoader.LoadedAssembly(assembly, location.FullPath, _laFileUrlQuery.Get(location), null);
 
             //InstallTypes(la, typeof (PartModule), _partModuleQuery.Get(assembly));
             //InstallTypes(la, typeof (Part), _partQuery.Get(assembly));
