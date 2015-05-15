@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using AssemblyReloader.Annotations;
@@ -6,7 +7,6 @@ using AssemblyReloader.Game;
 using ReeperCommon.Containers;
 using ReeperCommon.FileSystem;
 using ReeperCommon.FileSystem.Factories;
-using ReeperCommon.Logging;
 
 namespace AssemblyReloader.Queries.FileSystemQueries
 {
@@ -39,7 +39,7 @@ namespace AssemblyReloader.Queries.FileSystemQueries
             if (!results.Any()) return Maybe<IFile>.None;
 
             // oddly, the urls in AssemblyLoader don't specify the filename, only the directory
-            var url = results.First().url + "/" + results.First().dllName;
+            var url = results.First().url + Path.DirectorySeparatorChar + results.First().dllName;
  
             return _fsFactory.GetGameDataDirectory().File(new KSPUrlIdentifier(url));
         }

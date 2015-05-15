@@ -146,13 +146,15 @@ namespace AssemblyReloader.CompositeRoot
 
             _log = primaryLog;
 
-
             var fsFactory = new KSPFileSystemFactory(
                 new KSPUrlDir(new KSPGameDataUrlDirProvider().Get()));
 
             var assemblyLoader = new KspAssemblyLoader();
 
-            var ourFileProvider = new AssemblyFileLocationQuery(assemblyLoader, fsFactory);
+            var assemblyFileProvider = new AssemblyFileLocationQuery(assemblyLoader, fsFactory);
+            var mainAssemblyFile = assemblyFileProvider.Get(Assembly.GetExecutingAssembly());
+            if (!mainAssemblyFile.Any()) throw new Exception("Failed to locate executing assembly file");
+
             var ourDirProvider = new AssemblyDirectoryQuery(assemblyLoader, Assembly.GetExecutingAssembly(), fsFactory.GetGameDataDirectory());
 
             var assemblyResolver = new DefaultAssemblyResolver();
@@ -181,7 +183,7 @@ namespace AssemblyReloader.CompositeRoot
                 new DefaultSurrogateSelector(new DefaultSurrogateProvider()),
                     new SerializableFieldQuery());
 
-            var pluginConfigurationPathQuery = new ConfigurationFilePathQuery();
+            var pluginConfigurationPathQuery = new PluginConfigurationFilePathQuery();
 
             var reloadables = CreateReloadablePlugins(loadedAssemblyFactory, fsFactory, assemblyResolver, new PluginConfigurationProvider(configNodeFormatter, pluginConfigurationPathQuery)).ToList();
 
@@ -213,14 +215,23 @@ namespace AssemblyReloader.CompositeRoot
                     }));
 
             var configurationProvider = new ConfigurationProvider(
-                ourFileProvider.Get(Assembly.GetExecutingAssembly()).Single(),
-                new ConfigurationFilePathQuery(),
+                mainAssemblyFile.Single(),
+                new PluginConfigurationFilePathQuery(),
                 configNodeFormatter,
                 _log.CreateTag("ConfigurationProvider"));
 
+            var configuration = configurationProvider.Get();
+
+            var optionsWindow = windowFactory.CreateMainOptionsWindow(
+                new ProgramConfigurationViewLogic(configuration),
+                new Rect(0, 0, 200f, 200f),
+                uniqueIdProvider.Get());
+
             windowFactory.CreateMainWindow(
                 new View(guiController),
-                new ProgramConfigurationViewLogic(configurationProvider.Get()),
+                optionsWindow,
+                new SaveProgramConfigurationCommand(configuration, configNodeFormatter, 
+                    new ProgramConfigurationFilePathQuery(mainAssemblyFile.Single()), _log.CreateTag("Configuration")),
                 new Rect(400f, 400f, 250f, 128f),
                 uniqueIdProvider.Get());
         }
@@ -255,7 +266,7 @@ namespace AssemblyReloader.CompositeRoot
                 // then look at physical file system. These work on a list of items cached
                 // by GameDatabase rather than working directly with the disk (unless a resource 
                 // is accessed from here, of course)
-                    new ResourceFromDirectory(dllDirectory, 1),
+                    new ResourceFromDirectory(dllDirectory),
 
 
                 // finally search embedded resource
@@ -352,7 +363,7 @@ namespace AssemblyReloader.CompositeRoot
 
 
             var kspFactory = new KspFactory(new KspGameObjectProvider());
-            var reloadable = new ReloadablePlugin(new Loaders.AssemblyLoader(assemblyProvider, laFactory), location, configuration);
+            var reloadable = new ReloadablePlugin(new Loaders.AssemblyLoader(assemblyProvider, laFactory, _log.CreateTag("AssemblyLoader")), location, configuration);
 
             SetupAddonController(reloadable, gameAssemblyLoader, gameAddonLoader, objectDestroyer);
             SetupPartModuleController(reloadable, kspFactory);
@@ -374,16 +385,13 @@ namespace AssemblyReloader.CompositeRoot
             if (gameAddonLoader == null) throw new ArgumentNullException("gameAddonLoader");
             if (objectDestroyer == null) throw new ArgumentNullException("objectDestroyer");
 
-            var addonAttributesFromTypeQuery = new AddonAttributesFromTypeQuery();
-            
-   
             var addonLoader = new Loaders.AddonLoader(
                 gameAssemblyLoader,
                 gameAddonLoader,
                 new CurrentStartupSceneProvider(new StartupSceneFromGameSceneQuery(), new CurrentGameSceneProvider()),
                 () => plugin.Configuration.InstantlyAppliesToEveryScene);
 
-            var addonUnloader = new Loaders.AddonUnloader(
+            var addonUnloader = new AddonUnloader(
                 new AddonsFromAssemblyQuery(new AddonAttributesFromTypeQuery()),
                 objectDestroyer,
                 new LoadedComponentQuery());
@@ -501,6 +509,7 @@ namespace AssemblyReloader.CompositeRoot
             //var skin = UnityEngine.Object.Instantiate(AssetBase.GetGUISkin("KSP window 3")) as GUISkin;
             //var skin = UnityEngine.Object.Instantiate(AssetBase.GetGUISkin("KSP window 1")) as GUISkin;
             var skin = UnityEngine.Object.Instantiate(AssetBase.GetGUISkin("OrbitMapSkin")) as GUISkin;
+            if (skin == null) throw new Exception("Failed to clone OrbitMapSkin");
 
             skin.font = Resources.FindObjectsOfTypeAll<Font>().FirstOrDefault(f => f.fontNames.Contains("Calibiri"));
 

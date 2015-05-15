@@ -5,11 +5,11 @@ using ReeperCommon.FileSystem;
 
 namespace AssemblyReloader.Queries.FileSystemQueries
 {
-    public class ConfigurationFilePathQuery : IConfigurationFilePathQuery
+    public class PluginConfigurationFilePathQuery : IPluginConfigurationFilePathQuery
     {
         private readonly string _extension;
 
-        public ConfigurationFilePathQuery([NotNull] string extension = ".config")
+        public PluginConfigurationFilePathQuery([NotNull] string extension = ".config")
         {
             if (extension == null) throw new ArgumentNullException("extension");
             if (string.IsNullOrEmpty(extension))

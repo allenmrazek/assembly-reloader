@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Runtime.InteropServices;
 using AssemblyReloader.Annotations;
 using AssemblyReloader.Commands;
 using AssemblyReloader.Controllers;
@@ -25,6 +26,9 @@ namespace AssemblyReloader.Gui
 // ReSharper disable once InconsistentNaming
         private readonly Vector2 TitleBarButtonOffset = new Vector2(3f, 3f);
 
+        private const string CloseButtonUrl = "Resources/btnClose.png";
+        private const string OptionsButtonUrl = "Resources/btnWrench.png";
+
         public WindowFactory(
             [NotNull] IResourceRepository resourceProvider,
             [NotNull] IConfigurationPanelFactory configurationPanelFactory, 
@@ -45,18 +49,26 @@ namespace AssemblyReloader.Gui
 
 
         public void CreateMainWindow(
-            [NotNull] View logic,
-            IWindowLogic programConfigurationLogic,
+            [NotNull] View logic, 
+            [NotNull] IWindowComponent programConfigurationWindow, 
+            [NotNull] ICommand saveProgramConfiguration,
             Rect initialRect,
             int winid)
         {
             if (logic == null) throw new ArgumentNullException("logic");
+            if (programConfigurationWindow == null) throw new ArgumentNullException("programConfigurationWindow");
+            if (saveProgramConfiguration == null) throw new ArgumentNullException("saveProgramConfiguration");
 
             var basicWindow = new BasicWindow(logic, initialRect, winid, _windowSkin) { Title = "Assembly Reload Tool" };
             var tbButtons = new TitleBarButtons(basicWindow, TitleBarButtons.ButtonAlignment.Right, TitleBarButtonOffset);
 
-            tbButtons.AddButton(new TitleBarButton(_titleBarButtonStyle, GetTexture("Resources/btnWrench.png"), s => { }, "Test2"));
-            tbButtons.AddButton(new TitleBarButton(_titleBarButtonStyle, GetTexture("Resources/btnClose.png"), s => { }, "Test"));
+            tbButtons.AddButton(new TitleBarButton(_titleBarButtonStyle, GetTexture(OptionsButtonUrl), s =>
+            {
+                programConfigurationWindow.Visible = !programConfigurationWindow.Visible;
+                saveProgramConfiguration.Execute();
+            }, "ProgramConfigurationButton"));
+
+            tbButtons.AddButton(new TitleBarButton(_titleBarButtonStyle, GetTexture(CloseButtonUrl), s => { }, "Test"));
             
             var hiding = new HideOnF2(tbButtons);
             var clamp = new ClampToScreen(hiding);
@@ -65,7 +77,25 @@ namespace AssemblyReloader.Gui
         }
 
 
-       
+
+        public IWindowComponent CreateMainOptionsWindow(
+            [NotNull] IWindowLogic programConfigurationLogic,
+            Rect initialRect,
+            int winid)
+        {
+            if (programConfigurationLogic == null) throw new ArgumentNullException("programConfigurationLogic");
+
+            var basicWindow = CreateBasicWindow(programConfigurationLogic, initialRect, winid, "Options");
+
+            var tbButtons = CreateButtonToolbar(basicWindow, TitleBarButtons.ButtonAlignment.Right, TitleBarButtonOffset);
+
+            tbButtons.AddButton(new TitleBarButton(_titleBarButtonStyle, GetTexture(CloseButtonUrl), s => { },
+                "CloseOptionsButton"));
+
+            return tbButtons;
+        }
+
+
         public IWindowComponent CreatePluginOptionsWindow(
             [NotNull] PluginConfigurationViewLogic pluginViewLogic,
             [NotNull] IReloadablePlugin plugin,
@@ -80,11 +110,11 @@ namespace AssemblyReloader.Gui
             foreach (var panel in _configurationPanelFactory.CreatePanelsFor(plugin.Configuration))
                 pluginViewLogic.AddPanel(panel);
 
-            var basicWindow = new BasicWindow(pluginViewLogic, new Rect(300f, 300f, 450f, 300f),
-                winid, _windowSkin) {Title = plugin.Name + " Configuration"};
+            var basicWindow = CreateBasicWindow(pluginViewLogic, new Rect(300f, 300f, 450f, 300f),
+                winid, plugin.Name + " Configuration");
 
 
-            var tbButtons = new TitleBarButtons(basicWindow, TitleBarButtons.ButtonAlignment.Right, TitleBarButtonOffset);
+            var tbButtons = CreateButtonToolbar(basicWindow, TitleBarButtons.ButtonAlignment.Right, TitleBarButtonOffset);
 
             tbButtons.AddButton(new TitleBarButton(_titleBarButtonStyle,
                 GetTexture("Resources/btnClose.png"),
@@ -113,12 +143,10 @@ namespace AssemblyReloader.Gui
             if (saveOptionsCommand == null) throw new ArgumentNullException("saveOptionsCommand");
 
 
-            var basicWindow = new BasicWindow(logic, new Rect(450f, 300f, 300f, 200f), winid, _windowSkin)
-            {
-                Title = "Program Configuration"
-            };
+            var basicWindow = CreateBasicWindow(logic, new Rect(450f, 300f, 300f, 200f), winid,
+                "Program Configuration");
 
-            var tbButtons = new TitleBarButtons(basicWindow, TitleBarButtons.ButtonAlignment.Right, TitleBarButtonOffset);
+            var tbButtons = CreateButtonToolbar(basicWindow, TitleBarButtons.ButtonAlignment.Right, TitleBarButtonOffset);
 
             tbButtons.AddButton(new TitleBarButton(_titleBarButtonStyle, GetTexture("Resources/btnClose.png"),
                 s =>
@@ -143,6 +171,17 @@ namespace AssemblyReloader.Gui
                 throw new Exception("Could not find texture at " + url);
 
             return tex.Single();
+        }
+
+        private IWindowComponent CreateBasicWindow(IWindowLogic logic, Rect rect, int winid, string title)
+        {
+            return new BasicWindow(logic, rect, winid, _windowSkin) { Title = title};
+        }
+
+        private TitleBarButtons CreateButtonToolbar(IWindowComponent window,
+            TitleBarButtons.ButtonAlignment alignment, Vector2 offset)
+        {
+            return new TitleBarButtons(window, alignment, offset);
         }
     }
 }

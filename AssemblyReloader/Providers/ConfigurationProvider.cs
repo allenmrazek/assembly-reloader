@@ -14,13 +14,13 @@ namespace AssemblyReloader.Providers
     public class ConfigurationProvider : IConfigurationProvider
     {
         private readonly IFile _assemblyLocation;
-        private readonly IConfigurationFilePathQuery _configFilePathQuery;
+        private readonly IPluginConfigurationFilePathQuery _configFilePathQuery;
         private readonly IConfigNodeFormatter _formatter;
         private readonly ILog _log;
 
         public ConfigurationProvider(
             [NotNull] IFile assemblyLocation,
-            [NotNull] IConfigurationFilePathQuery configFilePathQuery, 
+            [NotNull] IPluginConfigurationFilePathQuery configFilePathQuery, 
             [NotNull] IConfigNodeFormatter formatter, 
             [NotNull] ILog log)
         {

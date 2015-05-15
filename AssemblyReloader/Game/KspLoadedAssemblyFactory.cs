@@ -53,6 +53,7 @@ namespace AssemblyReloader.Game
             // todo: ScienceExperiments
             // todo: parts
             // todo: VesselModules?
+            // todo: InternalModules?
 
             foreach (var installer in _typeInstallers)
                 installer.Install(la);

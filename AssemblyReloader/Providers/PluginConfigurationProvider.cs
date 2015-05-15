@@ -13,12 +13,12 @@ namespace AssemblyReloader.Providers
     public class PluginConfigurationProvider : IPluginConfigurationProvider
     {
         private readonly IConfigNodeFormatter _configNodeFormatter;
-        private readonly IConfigurationFilePathQuery _configFilePathQuery;
+        private readonly IPluginConfigurationFilePathQuery _configFilePathQuery;
 
 
         public PluginConfigurationProvider(
             [NotNull] IConfigNodeFormatter configNodeFormatter,
-            [NotNull] IConfigurationFilePathQuery configFilePathQuery)
+            [NotNull] IPluginConfigurationFilePathQuery configFilePathQuery)
         {
             if (configNodeFormatter == null) throw new ArgumentNullException("configNodeFormatter");
             if (configFilePathQuery == null) throw new ArgumentNullException("configFilePathQuery");

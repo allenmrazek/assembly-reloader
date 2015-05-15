@@ -6,6 +6,7 @@ using AssemblyReloader.Game;
 using AssemblyReloader.Providers;
 using ReeperCommon.Containers;
 using ReeperCommon.Extensions;
+using ReeperCommon.Logging;
 
 namespace AssemblyReloader.Loaders
 {
@@ -13,17 +14,21 @@ namespace AssemblyReloader.Loaders
     {
         private readonly IAssemblyProvider _assemblyProvider;
         private readonly ILoadedAssemblyFactory _laFactory;
+        private readonly ILog _log;
         private IDisposable _loadedAssembly;
 
         public AssemblyLoader(
             [NotNull] IAssemblyProvider assemblyProvider, 
-            [NotNull] ILoadedAssemblyFactory laFactory)
+            [NotNull] ILoadedAssemblyFactory laFactory,
+            [NotNull] ILog log)
         {
             if (assemblyProvider == null) throw new ArgumentNullException("assemblyProvider");
             if (laFactory == null) throw new ArgumentNullException("laFactory");
+            if (log == null) throw new ArgumentNullException("log");
 
             _assemblyProvider = assemblyProvider;
             _laFactory = laFactory;
+            _log = log;
         }
 
 
@@ -45,10 +50,20 @@ namespace AssemblyReloader.Loaders
 
         public void Unload()
         {
-            if (!_loadedAssembly.IsNull())
-                _loadedAssembly.Dispose();
+            try
+            {
+                if (!_loadedAssembly.IsNull())
+                    _loadedAssembly.Dispose();
+            }
+            catch (Exception e)
+            {
+                _log.Warning("Failed to dispose of loaded assembly due to an uncaught exception: " + e);
+            }
+            finally
+            {
 
-            _loadedAssembly = null;
+                _loadedAssembly = null;
+            }
         }
     }
 }

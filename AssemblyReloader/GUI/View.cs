@@ -9,9 +9,6 @@ namespace AssemblyReloader.Gui
     class View : IWindowLogic
     {
         private readonly IGuiController _controller;
-
-
-        // gui
         private Vector2 _scroll = default(Vector2);
 
 

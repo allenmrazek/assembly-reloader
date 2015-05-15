@@ -6,6 +6,20 @@
 
 - check for changed reloadable dependencies; reload them also
 
+- resolve reloadable dependencies
+
 - update moduleRef and associated configs for unloaded PartModule instances
 
+- clear module snapshots on GameDatabase reload
+
 - bugfix: reloading database might change GameData dir instance, causing us to point to an old "snapshot" of disk contents
+
+
+- todo: ScienceExperiments (?)
+- todo: Contracts
+- todo: strategies
+- todo: kerbal experience traits?
+- todo: kerbal experience effects?
+- todo: parts
+- todo: InternalModules
+- todo: VesselModules (?)

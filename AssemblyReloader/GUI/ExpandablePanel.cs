@@ -31,11 +31,6 @@ namespace AssemblyReloader.Gui
             _drawMethod = drawMethod;
             _toggleOptions = toggleOptions;
             Expanded = initialState;
-
-            //toggleStyle.normal.background.SaveToDisk("toggle_normal_background.png");
-            //toggleStyle.active.background.SaveToDisk("toggle_active_background.png");
-            //toggleStyle.onNormal.background.SaveToDisk("toggle_onnormal_background.png");
-            //toggleStyle.onActive.background.SaveToDisk("toggle_onactive_background.png");
         }
 
 

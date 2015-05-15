@@ -2,7 +2,7 @@
 
 namespace AssemblyReloader.Queries.FileSystemQueries
 {
-    public interface IConfigurationFilePathQuery
+    public interface IPluginConfigurationFilePathQuery
     {
         string Get(IFile pluginLocation);
     }
