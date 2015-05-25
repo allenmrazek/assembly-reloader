@@ -222,16 +222,19 @@ namespace AssemblyReloader.CompositeRoot
 
             var configuration = configurationProvider.Get();
 
-            var optionsWindow = windowFactory.CreateMainOptionsWindow(
+            var saveProgramConfiguration = new SaveProgramConfigurationCommand(configuration, configNodeFormatter,
+                new ProgramConfigurationFilePathQuery(mainAssemblyFile.Single()), _log.CreateTag("Configuration"));
+
+            var optionsWindow = windowFactory.CreateProgramOptionsWindow(
                 new ProgramConfigurationViewLogic(configuration),
-                new Rect(0, 0, 200f, 200f),
+                configuration,
+                saveProgramConfiguration,
                 uniqueIdProvider.Get());
 
             windowFactory.CreateMainWindow(
                 new View(guiController),
                 optionsWindow,
-                new SaveProgramConfigurationCommand(configuration, configNodeFormatter, 
-                    new ProgramConfigurationFilePathQuery(mainAssemblyFile.Single()), _log.CreateTag("Configuration")),
+                saveProgramConfiguration,
                 new Rect(400f, 400f, 250f, 128f),
                 uniqueIdProvider.Get());
         }

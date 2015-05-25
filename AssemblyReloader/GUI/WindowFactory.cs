@@ -73,27 +73,11 @@ namespace AssemblyReloader.Gui
             var hiding = new HideOnF2(tbButtons);
             var clamp = new ClampToScreen(hiding);
 
+            programConfigurationWindow.Visible = false;
+
             UnityEngine.Object.DontDestroyOnLoad(WindowView.Create(clamp, "MainWindow"));
         }
 
-
-
-        public IWindowComponent CreateMainOptionsWindow(
-            [NotNull] IWindowLogic programConfigurationLogic,
-            Rect initialRect,
-            int winid)
-        {
-            if (programConfigurationLogic == null) throw new ArgumentNullException("programConfigurationLogic");
-
-            var basicWindow = CreateBasicWindow(programConfigurationLogic, initialRect, winid, "Options");
-
-            var tbButtons = CreateButtonToolbar(basicWindow, TitleBarButtons.ButtonAlignment.Right, TitleBarButtonOffset);
-
-            tbButtons.AddButton(new TitleBarButton(_titleBarButtonStyle, GetTexture(CloseButtonUrl), s => { },
-                "CloseOptionsButton"));
-
-            return tbButtons;
-        }
 
 
         public IWindowComponent CreatePluginOptionsWindow(
