@@ -102,10 +102,13 @@
     <Compile Include="Game\KspGame.cs" />
     <Compile Include="Game\KspProtoScenarioModule.cs" />
     <Compile Include="Game\KspGameObjectProvider.cs" />
+    <Compile Include="Game\PartPrefabReferenceComparer.cs" />
     <Compile Include="Game\Providers\CurrentGameSceneProvider.cs" />
     <Compile Include="Game\Providers\CurrentStartupSceneProvider.cs" />
     <Compile Include="Game\Providers\ICurrentGameSceneProvider.cs" />
     <Compile Include="Game\Providers\ICurrentStartupSceneProvider.cs" />
+    <Compile Include="Game\Providers\IPartModuleStartStateProvider.cs" />
+    <Compile Include="Game\Providers\PartModuleStartStateProvider.cs" />
     <Compile Include="Game\Queries\AvailablePartConfigQuery.cs" />
     <Compile Include="Game\Providers\CurrentGameProvider.cs" />
     <Compile Include="Game\Queries\GameObjectComponentQuery.cs" />
@@ -145,6 +148,8 @@
     <Compile Include="Loaders\IAssemblyDefinitionReader.cs" />
     <Compile Include="Loaders\IAssemblyDefinitionLoader.cs" />
     <Compile Include="Loaders\IAssemblyLoader.cs" />
+    <Compile Include="Loaders\PartModuleLoader\IPartModuleOnStartRunner.cs" />
+    <Compile Include="Loaders\PartModuleLoader\PartModuleOnStartRunner.cs" />
     <Compile Include="Loaders\ScenarioModuleLoader\IScenarioModuleLoader.cs" />
     <Compile Include="Loaders\ScenarioModuleLoader\IScenarioModuleSnapshotGenerator.cs" />
     <Compile Include="Loaders\ScenarioModuleLoader\IScenarioModuleUnloader.cs" />

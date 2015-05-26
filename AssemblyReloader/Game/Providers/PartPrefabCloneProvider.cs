@@ -49,7 +49,7 @@ namespace AssemblyReloader.Game.Providers
             return loadedParts
                 .SelectMany(p => _partsInGameObject.Get(p.gameObject))
                 .Select(p => _kspFactory.Create(p))
-                .Where(p => !_confirmPrefabQuery.Get(p));
+                .Where(p => !_confirmPrefabQuery.Get(p) && ReferenceEquals(p.PartInfo.PartPrefab.GameObject, prefab.GameObject));
         }
     }
 }

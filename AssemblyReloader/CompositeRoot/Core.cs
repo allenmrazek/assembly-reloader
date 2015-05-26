@@ -436,6 +436,10 @@ namespace AssemblyReloader.CompositeRoot
                                              new PartModuleFactory(new PartIsPrefabQuery(), new AwakenPartModuleCommand()),
                                              partModuleConfigQueue,
                                              prefabCloneProvider,
+                                             new PartModuleOnStartRunner(
+                                                 kspFactory,
+                                                 new PartModuleStartStateProvider(),
+                                                 prefabCloneProvider),
                                              reuseConfigNodes),
                                          new PartModuleUnloader(
                                              new UnityObjectDestroyer(new PluginReloadRequestedMethodCallCommand()),
