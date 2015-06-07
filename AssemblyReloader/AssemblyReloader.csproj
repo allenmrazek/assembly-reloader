@@ -67,7 +67,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands\AwakenPartModuleCommand.cs" />
+    <Compile Include="Commands\ClearDictionaryQueryCommand.cs" />
     <Compile Include="Commands\ConditionalCommand.cs" />
+    <Compile Include="Commands\ExecutePartModuleOnStartsCommand.cs" />
     <Compile Include="Commands\ProxyAssemblyMethodWriter.cs" />
     <Compile Include="Commands\RefreshPartActionWindows.cs" />
     <Compile Include="Commands\NullCommand.cs" />

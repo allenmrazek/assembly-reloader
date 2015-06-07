@@ -61,7 +61,8 @@ namespace AssemblyReloader.Gui
             if (saveProgramConfiguration == null) throw new ArgumentNullException("saveProgramConfiguration");
 
             var basicWindow = new BasicWindow(logic, initialRect, winid, _windowSkin) { Title = "Assembly Reload Tool" };
-            var tbButtons = new TitleBarButtons(basicWindow, TitleBarButtons.ButtonAlignment.Right, TitleBarButtonOffset);
+            var resizable = new Resizable(basicWindow, new Vector2(10f, 10f), new Vector2(150f, 100f), _resizeCursor);
+            var tbButtons = new TitleBarButtons(resizable, TitleBarButtons.ButtonAlignment.Right, TitleBarButtonOffset);
 
             tbButtons.AddButton(new TitleBarButton(_titleBarButtonStyle, _optionsButton, s =>
             {
@@ -75,11 +76,11 @@ namespace AssemblyReloader.Gui
             // end temp
             var hiding = new HideOnF2(tbButtons);
             var clamp = new ClampToScreen(hiding);
-            var resizable = new Resizable(clamp, new Vector2(20f, 20f), new Vector2(150f, 100f), _resizeCursor);
+            
 
             programConfigurationWindow.Visible = false;
 
-            UnityEngine.Object.DontDestroyOnLoad(WindowView.Create(resizable, "MainWindow"));
+            UnityEngine.Object.DontDestroyOnLoad(WindowView.Create(clamp, "MainWindow"));
         }
 
 

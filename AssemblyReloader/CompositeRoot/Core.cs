@@ -441,16 +441,15 @@ namespace AssemblyReloader.CompositeRoot
 
             Func<bool> reuseConfigNodes = () => plugin.Configuration.ReusePartModuleConfigsFromPrevious;
 
+            var onStartRunner = new ExecutePartModuleOnStartsCommand(new PartModuleStartStateProvider(),
+                new PartIsPrefabQuery(), kspFactory, _log.CreateTag(plugin.Name + " OnStart Runner"));
+
             var partModuleController = new PartModuleController(
                                          new PartModuleLoader(
                                              descriptorFactory,
-                                             new PartModuleFactory(new PartIsPrefabQuery(), new AwakenPartModuleCommand()),
+                                             new PartModuleFactory(new PartIsPrefabQuery(), new AwakenPartModuleCommand(), onStartRunner),
                                              partModuleConfigQueue,
                                              prefabCloneProvider,
-                                             new PartModuleOnStartRunner(
-                                                 kspFactory,
-                                                 new PartModuleStartStateProvider(),
-                                                 prefabCloneProvider),
                                              reuseConfigNodes),
                                          new PartModuleUnloader(
                                              new UnityObjectDestroyer(new PluginReloadRequestedMethodCallCommand()),
@@ -460,11 +459,15 @@ namespace AssemblyReloader.CompositeRoot
                                              reuseConfigNodes
                                              ),
                                          new TypesDerivedFromQuery<PartModule>(),
-                                         partModuleConfigQueue,
-                                         new RefreshPartActionWindows(KspPartActionWindowListener.WindowController));
+                                         new CompositeCommand(
+                                            onStartRunner,
+                                            new ClearDictionaryQueryCommand<KeyValuePair<uint, ITypeIdentifier>, ConfigNode>(partModuleConfigQueue), 
+                                            new RefreshPartActionWindows(KspPartActionWindowListener.WindowController)),
+                                            new NullCommand());
 
             plugin.OnLoaded += (asm, loc) =>
             {
+                onStartRunner.Clear();
                 if (plugin.Configuration.ReloadPartModulesImmediately) partModuleController.Load(asm, loc);
             };
 

@@ -16,7 +16,6 @@ namespace AssemblyReloader.Loaders.PartModuleLoader
         private readonly IPartModuleFactory _partModuleFactory;
         private readonly DictionaryQueue<KeyValuePair<uint, ITypeIdentifier>, ConfigNode> _configNodeQueue;
         private readonly IPartPrefabCloneProvider _loadedPrefabProvider;
-        private readonly IPartModuleOnStartRunner _onStartRunner;
         private readonly Func<bool> _useConfigNodeSnapshotIfAvailable;
         private readonly ILog _log = new DebugLog("PartModuleLoader");
 
@@ -24,14 +23,13 @@ namespace AssemblyReloader.Loaders.PartModuleLoader
             IPartModuleDescriptorFactory descriptorFactory,
             IPartModuleFactory partModuleFactory,
             DictionaryQueue<KeyValuePair<uint, ITypeIdentifier>, ConfigNode> configNodeQueue,
-            IPartPrefabCloneProvider loadedPrefabProvider, [NotNull] IPartModuleOnStartRunner onStartRunner,
+            IPartPrefabCloneProvider loadedPrefabProvider,
             [NotNull] Func<bool> useConfigNodeSnapshotIfAvailable )
         {
             if (descriptorFactory == null) throw new ArgumentNullException("descriptorFactory");
             if (partModuleFactory == null) throw new ArgumentNullException("partModuleFactory");
             if (configNodeQueue == null) throw new ArgumentNullException("configNodeQueue");
             if (loadedPrefabProvider == null) throw new ArgumentNullException("loadedPrefabProvider");
-            if (onStartRunner == null) throw new ArgumentNullException("onStartRunner");
             if (useConfigNodeSnapshotIfAvailable == null)
                 throw new ArgumentNullException("useConfigNodeSnapshotIfAvailable");
 
@@ -39,7 +37,6 @@ namespace AssemblyReloader.Loaders.PartModuleLoader
             _partModuleFactory = partModuleFactory;
             _configNodeQueue = configNodeQueue;
             _loadedPrefabProvider = loadedPrefabProvider;
-            _onStartRunner = onStartRunner;
             _useConfigNodeSnapshotIfAvailable = useConfigNodeSnapshotIfAvailable;
         }
 
@@ -55,8 +52,6 @@ namespace AssemblyReloader.Loaders.PartModuleLoader
             var descriptions = _descriptorFactory.Create(type).ToList();
 
             descriptions.ForEach(LoadPartModule);
-
-            _onStartRunner.RunPartModuleOnStarts(descriptions);
         }
 
 
@@ -72,13 +67,6 @@ namespace AssemblyReloader.Loaders.PartModuleLoader
             {
                 var stored = _configNodeQueue.Retrieve(new KeyValuePair<uint, ITypeIdentifier>(loadedInstance.FlightID, description.Identifier));
                 var config = _useConfigNodeSnapshotIfAvailable() && stored.Any() ? stored.Single() : description.Config;
-
-                if (_useConfigNodeSnapshotIfAvailable() && stored.Any())
-                    new DebugLog().Normal("Using snapshot for " + loadedInstance.FlightID);
-                else if (!stored.Any())
-                    new DebugLog().Normal("didn't find a snapshot for " + loadedInstance.FlightID);
-                else if (!_useConfigNodeSnapshotIfAvailable())
-                    new DebugLog().Normal("not using snapshot for " + loadedInstance.FlightID + " because told not to");
 
                 _partModuleFactory.Create(loadedInstance, description.Type, config);
             }

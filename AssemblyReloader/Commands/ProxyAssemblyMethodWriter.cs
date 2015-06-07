@@ -47,7 +47,7 @@ namespace AssemblyReloader.Commands
 
             var getExecutingAssembly = context.Module.Import(typeof (Assembly).GetMethod("GetExecutingAssembly", BindingFlags.Public | BindingFlags.Static));
             var refRequals =
-                context.Module.Import(typeof (System.Object).GetMethod("ReferenceEquals",
+                context.Module.Import(typeof (Object).GetMethod("ReferenceEquals",
                     BindingFlags.Public | BindingFlags.Static));
 
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using AssemblyReloader.Annotations;
 using AssemblyReloader.Commands;
 using AssemblyReloader.Game;
 using AssemblyReloader.Queries;
@@ -9,13 +10,20 @@ namespace AssemblyReloader.Loaders.PartModuleLoader
     {
         private readonly IPartIsPrefabQuery _partIsPrefabQuery;
         private readonly ICommand<PartModule> _awakenPartModule;
+        private readonly IPartModuleOnStartRunner _onStartRunner;
 
-        public PartModuleFactory(IPartIsPrefabQuery partIsPrefabQuery, ICommand<PartModule> awakenPartModule)
+        public PartModuleFactory(
+            [NotNull] IPartIsPrefabQuery partIsPrefabQuery, 
+            [NotNull] ICommand<PartModule> awakenPartModule,
+            [NotNull] IPartModuleOnStartRunner onStartRunner)
         {
             if (partIsPrefabQuery == null) throw new ArgumentNullException("partIsPrefabQuery");
             if (awakenPartModule == null) throw new ArgumentNullException("awakenPartModule");
+            if (onStartRunner == null) throw new ArgumentNullException("onStartRunner");
+
             _partIsPrefabQuery = partIsPrefabQuery;
             _awakenPartModule = awakenPartModule;
+            _onStartRunner = onStartRunner;
         }
 
 
@@ -42,6 +50,7 @@ namespace AssemblyReloader.Loaders.PartModuleLoader
                 _awakenPartModule.Execute(result);
 
             result.OnLoad(config);
+            _onStartRunner.Add(result);
         }
     }
 }

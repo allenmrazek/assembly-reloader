@@ -16,27 +16,27 @@ namespace AssemblyReloader.Controllers
         private readonly IPartModuleLoader _pmLoader;
         private readonly IPartModuleUnloader _pmUnloader;
         private readonly ITypesFromAssemblyQuery _partModuleFromAssemblyQuery;
-        private readonly DictionaryQueue<KeyValuePair<uint, ITypeIdentifier>, ConfigNode> _partModuleConfigQueue;
-        private readonly ICommand _refreshPartActionWindows;
+        private readonly ICommand _onPartModulesLoaded;
+        private readonly ICommand _onPartModulesUnloaded;
 
         public PartModuleController(
-            IPartModuleLoader pmLoader,
-            IPartModuleUnloader pmUnloader,
-            ITypesFromAssemblyQuery partModuleFromAssemblyQuery,
-            [NotNull] DictionaryQueue<KeyValuePair<uint, ITypeIdentifier>, ConfigNode> partModuleConfigQueue,
-            ICommand refreshPartActionWindows)
+            [NotNull] IPartModuleLoader pmLoader,
+            [NotNull] IPartModuleUnloader pmUnloader,
+            [NotNull] ITypesFromAssemblyQuery partModuleFromAssemblyQuery,
+            [NotNull] ICommand onPartModulesLoaded, 
+            [NotNull] ICommand onPartModulesUnloaded)
         {
             if (pmLoader == null) throw new ArgumentNullException("pmLoader");
             if (pmUnloader == null) throw new ArgumentNullException("pmUnloader");
             if (partModuleFromAssemblyQuery == null) throw new ArgumentNullException("partModuleFromAssemblyQuery");
-            if (partModuleConfigQueue == null) throw new ArgumentNullException("partModuleConfigQueue");
-            if (refreshPartActionWindows == null) throw new ArgumentNullException("refreshPartActionWindows");
+            if (onPartModulesLoaded == null) throw new ArgumentNullException("onPartModulesLoaded");
+            if (onPartModulesUnloaded == null) throw new ArgumentNullException("onPartModulesUnloaded");
 
             _pmLoader = pmLoader;
             _pmUnloader = pmUnloader;
             _partModuleFromAssemblyQuery = partModuleFromAssemblyQuery;
-            _partModuleConfigQueue = partModuleConfigQueue;
-            _refreshPartActionWindows = refreshPartActionWindows;
+            _onPartModulesLoaded = onPartModulesLoaded;
+            _onPartModulesUnloaded = onPartModulesUnloaded;
         }
 
 
@@ -47,8 +47,7 @@ namespace AssemblyReloader.Controllers
             foreach (var t in GetPartModules(assembly))
                 _pmLoader.Load(t);
 
-            _partModuleConfigQueue.Clear();
-            _refreshPartActionWindows.Execute();
+            _onPartModulesLoaded.Execute();
         }
 
 
@@ -56,11 +55,10 @@ namespace AssemblyReloader.Controllers
         {
             if (assembly == null) throw new ArgumentNullException("assembly");
 
-
             foreach (var t in GetPartModules(assembly))
                 _pmUnloader.Unload(t);
             
-            _refreshPartActionWindows.Execute();
+            _onPartModulesUnloaded.Execute();
         }
 
 
