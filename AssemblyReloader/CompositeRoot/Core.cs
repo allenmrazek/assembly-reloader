@@ -44,7 +44,6 @@ namespace AssemblyReloader.CompositeRoot
         private readonly IMessageChannel _messageChannel;
 
 
-
         private interface IConsumer
         {
             void Consume(object message);
@@ -191,13 +190,25 @@ namespace AssemblyReloader.CompositeRoot
 
             var skinScheme = ConfigureSkin(resourceLocator);
 
+            var btnCloseTexture = resourceLocator.GetTexture("Resources/btnClose.png");
+            if (!btnCloseTexture.Any()) throw new Exception("Failed to find window close button texture!");
+
+            var btnOptionsTexture = resourceLocator.GetTexture("Resources/btnWrench.png");
+            if (!btnOptionsTexture.Any()) throw new Exception("Failed to find window option button texture!");
+
+            var btnResizeCursorTexture = resourceLocator.GetTexture("Resources/cursor.png");
+            if (!btnResizeCursorTexture.Any()) throw new Exception("Failed to find window resize cursor texture!");
+
             var windowFactory = new WindowFactory(
-                resourceLocator, new ConfigurationPanelFactory(
+                new ConfigurationPanelFactory(
                     new ExpandablePanelFactory(ConfigurePanelToggleStyle(resourceLocator, skinScheme), GUILayout.ExpandWidth(false),
                         GUILayout.ExpandHeight(false)),
                     new ConfigurationWindowPanelFieldQuery()),
                 skinScheme,
-                ConfigureTitleBarButtonStyle());
+                ConfigureTitleBarButtonStyle(),
+                btnCloseTexture.Single(),
+                btnOptionsTexture.Single(),
+                btnResizeCursorTexture.Single());
 
             var uniqueIdProvider = new UniqueWindowIdProvider();
 

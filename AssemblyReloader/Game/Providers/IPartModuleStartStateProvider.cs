@@ -1,7 +1,9 @@
-﻿namespace AssemblyReloader.Game.Providers
+﻿using ReeperCommon.Containers;
+
+namespace AssemblyReloader.Game.Providers
 {
     public interface IPartModuleStartStateProvider
     {
-        PartModule.StartState Get(IVessel vessel);
+        PartModule.StartState Get(Maybe<IVessel> vessel);
     }
 }

@@ -8,19 +8,26 @@ namespace AssemblyReloader.CompositeRoot
     [KSPAddon(KSPAddon.Startup.Instantly, true)]
     class CoreView : MonoBehaviour
     {
+        private static bool _initialized = false;
         [UsedImplicitly] private Core _core;
 
         [UsedImplicitly]
         IEnumerator Start()
         {
-            //yield return new WaitForSeconds(8f);
-
             yield return 0;
+
+            // this is to cover cases where database is reloaded and AssemblyReloader already exists
+            if (_initialized)
+            {
+                Debug.LogWarning("AssemblyReloader already initialized");
+                yield break;
+            }
 
             try
             {
                 _core = new Core();
                 DontDestroyOnLoad(this);
+                _initialized = true;
             }
             catch (Exception e)
             {

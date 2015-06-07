@@ -4,6 +4,7 @@ using System.Linq;
 using AssemblyReloader.Annotations;
 using AssemblyReloader.Game;
 using AssemblyReloader.Game.Providers;
+using ReeperCommon.Containers;
 using ReeperCommon.Logging;
 
 namespace AssemblyReloader.Loaders.PartModuleLoader
@@ -67,7 +68,7 @@ namespace AssemblyReloader.Loaders.PartModuleLoader
                         continue;
                     }
 
-                    var state = _startStateProvider.Get(_kspFactory.Create(pm.vessel));
+                    var state = _startStateProvider.Get(pm.vessel == null ? Maybe<IVessel>.None : Maybe<IVessel>.With(_kspFactory.Create(pm.vessel)));
 
                     try
                     {
