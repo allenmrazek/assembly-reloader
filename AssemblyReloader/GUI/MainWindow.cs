@@ -10,12 +10,14 @@ namespace AssemblyReloader.Gui
 {
     public class MainWindow : BasicWindow
     {
+        private readonly IController _controller;
         private readonly IEnumerable<IPluginInfo> _plugins;
         private readonly IMessageChannel _viewMessageSystem;
         [Persistent] private Vector2 _scroll = default(Vector2);
 
 
         public MainWindow(
+            [NotNull] IController controller,
             [NotNull] IEnumerable<IPluginInfo> plugins,
             [NotNull] IMessageChannel viewMessageSystem,
             Rect rect, 
@@ -23,9 +25,11 @@ namespace AssemblyReloader.Gui
             GUISkin skin, 
             bool draggable = true) : base(rect, winid, skin, draggable)
         {
+            if (controller == null) throw new ArgumentNullException("controller");
             if (plugins == null) throw new ArgumentNullException("plugins");
             if (viewMessageSystem == null) throw new ArgumentNullException("viewMessageSystem");
 
+            _controller = controller;
             _plugins = plugins;
             _viewMessageSystem = viewMessageSystem;
         }
@@ -68,10 +72,8 @@ namespace AssemblyReloader.Gui
                 }
 
                 if (GUILayout.Button("Reload", GUILayout.ExpandWidth(false), GUILayout.ExpandHeight(false)))
-                {
-                    //_guiMediator.Reload(plugin);
-                }
-
+                    _controller.Reload(plugin);
+                
                 GUILayout.Space(3f); // just a bit of space, otherwise the button will overlap right side of scrollable area
             }
             GUILayout.EndHorizontal();
@@ -80,13 +82,13 @@ namespace AssemblyReloader.Gui
 
         public void OnCloseButton()
         {
-            
+            throw new NotImplementedException();
         }
 
 
         public void OnOptionsButton()
         {
-            
+            throw new NotImplementedException(); 
         }
     }
 }

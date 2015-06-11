@@ -56,7 +56,7 @@ namespace AssemblyReloader.Gui
         {
             if (plugins == null) throw new ArgumentNullException("plugins");
 
-            var mainWindow = new MainWindow(plugins, _viewMessageChannel, appearanceInfo.InitialSize, _idProvider.Get(), appearanceInfo.Skin,
+            var mainWindow = new MainWindow(_controller, plugins, _viewMessageChannel, appearanceInfo.InitialSize, _idProvider.Get(), appearanceInfo.Skin,
                 true) { Title = "Assembly Reload Tool" };
 
             var resizable = new Resizable(mainWindow, appearanceInfo.DragHotzoneSize, appearanceInfo.MinDimensions,

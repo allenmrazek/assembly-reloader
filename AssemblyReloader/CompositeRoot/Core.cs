@@ -493,7 +493,8 @@ namespace AssemblyReloader.CompositeRoot
             skin.font = Resources.FindObjectsOfTypeAll<Font>().FirstOrDefault(f => f.fontNames.Contains("Calibiri"));
 
             skin.window.padding.left = skin.window.padding.right = 3;
-
+            skin.scrollView.margin = new RectOffset(0, 0, 0, 0);// = new Vector2(20f, skin.scrollView.contentOffset.y);
+            skin.scrollView.clipping = TextClipping.Clip;
 
             var toggleCheckedTexture = resources.GetTexture("Resources/toggleChecked.png");
             var toggleUncheckedTexture = resources.GetTexture("Resources/toggleUnchecked.png");
@@ -513,6 +514,69 @@ namespace AssemblyReloader.CompositeRoot
             skin.toggle.focused.background = skin.toggle.hover.background = litToggleUnchecked;
             skin.toggle.onFocused.background = skin.toggle.onHover.background = litToggleChecked;
 
+            //skin.horizontalScrollbar = new GUIStyle(skin.verticalScrollbar);
+
+            //Action<GUIStyleState, GUIStyleState, float, string> setState = (state, original, angle, tag) =>
+            //{
+            //    if (original.background.IsNull()) return;
+
+            //    state.background = original.background.CreateReadable().Rotate(angle);
+            //    state.background.As2D().SaveToDisk(tag + ".png");
+            //};
+
+            //skin.horizontalScrollbarLeftButton.normal.background =
+            //    skin.verticalScrollbarUpButton.normal.background.CreateReadable().Rotate(-90f);
+            //skin.horizontalScrollbarRightButton.normal.background =
+            //    skin.verticalScrollbarDownButton.normal.background.CreateReadable().Rotate(90f);
+
+            //setState(skin.horizontalScrollbarLeftButton.normal, skin.verticalScrollbarUpButton.normal, 90f, "leftButtonNormal");
+            //setState(skin.horizontalScrollbar.normal, skin.verticalScrollbar.normal, 90f, "scrollbarNormal");
+            //setState(skin.horizontalScrollbarThumb.normal, skin.verticalScrollbarThumb.normal, 0f, "scrollbarThumb");
+
+            //setState(skin.horizontalScrollbar.onNormal, skin.verticalScrollbar.onNormal, 90f, "scrollbarNormal");
+            //setState(skin.horizontalScrollbarThumb.onNormal, skin.verticalScrollbarThumb.onNormal, 0f, "scrollbarThumb");
+
+
+            //setState(skin.horizontalScrollbarLeftButton.normal, skin.verticalScrollbarUpButton.normal, -90f, "scrollbarLeft");
+
+            //skin.horizontalScrollbar.border = new RectOffset(4, 4, 2, 2);
+            //skin.horizontalScrollbar.clipping = TextClipping.Clip;
+            //skin.horizontalScrollbar.padding = new RectOffset(15, 15, 0, 0);
+            //skin.horizontalScrollbar.margin = new RectOffset(15, 15,0,0);
+            //skin.horizontalScrollbar.border = new RectOffset(15, 0, 0, 0);
+            //skin.horizontalScrollbar.contentOffset = new Vector2(20f, 0f);
+
+            //skin.horizontalScrollbarLeftButton.margin = new RectOffset(10, 10, 10, 10);
+            //skin.horizontalScrollbarLeftButton.padding = new RectOffset(10, 10, 10, 10);
+            //skin.horizontalScrollbarLeftButton.border = new RectOffset(10, 10, 10, 10);
+
+            
+
+
+            //Action<GUIStyleState, string> save = (state, tag) =>
+            //{
+            //    if (state.background.IsNull()) return;
+
+            //    state.background.CreateReadable().SaveToDisk(tag + ".png");
+            //};
+
+            //save(skin.horizontalScrollbar.normal, "normal");
+            //save(skin.horizontalScrollbar.onNormal, "onNormal");
+            //save(skin.horizontalScrollbar.active, "active");
+            //save(skin.horizontalScrollbar.onActive, "onActive");
+            //save(skin.horizontalScrollbar.hover, "hover");
+            //save(skin.horizontalScrollbar.onHover, "onHover");
+            //save(skin.horizontalScrollbar.focused, "focused");
+            //save(skin.horizontalScrollbar.onFocused, "onFocused");
+            //save(skin.horizontalSlider.normal, "sliderNormal");
+
+            //skin.horizontalScrollbar.normal.background.As2D().ChangeLightness(2f);
+            //skin.horizontalSlider.normal.background = skin.horizontalSlider.normal.background.CreateReadable();
+            //skin.horizontalSlider.normal.background.ChangeLightness(0f);
+
+            //skin.verticalScrollbar.normal.background.As2D().CreateReadable().Rotate(45f).SaveToDisk("rotated45.png");
+            //skin.verticalScrollbar.normal.background.As2D().CreateReadable().Rotate(90f).SaveToDisk("rotated90.png");
+            //skin.verticalScrollbar.normal.background.As2D().CreateReadable().Rotate(0f).SaveToDisk("rotated0.png");
             return skin;
         }
 

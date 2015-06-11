@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using AssemblyReloader.Annotations;
 using AssemblyReloader.Game.Providers;
-using AssemblyReloader.Loaders;
 using AssemblyReloader.Loaders.ScenarioModuleLoader;
 using AssemblyReloader.Queries.AssemblyQueries;
 using ReeperCommon.FileSystem;
-using ReeperCommon.Logging;
 
 namespace AssemblyReloader.Controllers
 {
