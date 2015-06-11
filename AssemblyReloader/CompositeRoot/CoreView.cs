@@ -37,7 +37,8 @@ namespace AssemblyReloader.CompositeRoot
                 PopupDialog.SpawnPopupDialog("AssemblyReloader unhandled exception",
                     "AssemblyReloader encountered an exception with the following message: " + e.Message + "\n\nAssemblyReloader has been disabled.", "Okay",
                     true, HighLogic.Skin);
-                DestroyImmediate(this);
+
+                Destroy(this);
             }
         }
 

@@ -17,44 +17,45 @@ namespace AssemblyReloader.Gui
 {
     public class WindowFactory
     {
-        private readonly IMessageChannel _viewMessageChannel;
         private readonly IWindowIdProvider _idProvider;
         private readonly IController _controller;
+        private readonly IMessageChannel _viewMessageChannel;
         private readonly GUIStyle _titleBarButtonStyle;
         private readonly Texture2D _optionsButtonTexture;
         private readonly Texture2D _closeButtonTexture;
         private readonly Vector2 _titleBarButtonOffset = new Vector2(3f, 3f);
 
         public WindowFactory(
-            [NotNull] IMessageChannel viewMessageChannel, 
             [NotNull] IWindowIdProvider idProvider,
             [NotNull] IController controller, 
+            [NotNull] IMessageChannel viewMessageChannel,
             [NotNull] GUIStyle titleBarButtonStyle, 
             [NotNull] Texture2D optionsButtonTexture,
             [NotNull] Texture2D closeButtonTexture)
         {
-            if (viewMessageChannel == null) throw new ArgumentNullException("viewMessageChannel");
             if (idProvider == null) throw new ArgumentNullException("idProvider");
             if (controller == null) throw new ArgumentNullException("controller");
+            if (viewMessageChannel == null) throw new ArgumentNullException("viewMessageChannel");
             if (titleBarButtonStyle == null) throw new ArgumentNullException("titleBarButtonStyle");
             if (optionsButtonTexture == null) throw new ArgumentNullException("optionsButtonTexture");
             if (closeButtonTexture == null) throw new ArgumentNullException("closeButtonTexture");
 
-            _viewMessageChannel = viewMessageChannel;
             _idProvider = idProvider;
             _controller = controller;
+            _viewMessageChannel = viewMessageChannel;
             _titleBarButtonStyle = titleBarButtonStyle;
             _optionsButtonTexture = optionsButtonTexture;
             _closeButtonTexture = closeButtonTexture;
         }
 
 
-        public IWindowComponent CreateMainWindow(
-            [NotNull] IEnumerable<IPluginInfo> plugins, 
-            WindowAppearanceInfo appearanceInfo, 
+        public WindowDescriptor CreateMainWindow(
+            [NotNull] IEnumerable<IPluginInfo> plugins,
+            [NotNull] WindowAppearanceInfo appearanceInfo,
             Maybe<ConfigNode> windowConfig)
         {
             if (plugins == null) throw new ArgumentNullException("plugins");
+            if (appearanceInfo == null) throw new ArgumentNullException("appearanceInfo");
 
             var mainWindow = new MainWindow(_controller, plugins, _viewMessageChannel, appearanceInfo.InitialSize, _idProvider.Get(), appearanceInfo.Skin,
                 true) { Title = "Assembly Reload Tool" };
@@ -65,20 +66,49 @@ namespace AssemblyReloader.Gui
             var clamp = new ClampToScreen(resizable);
             var withButtons = new TitleBarButtons(clamp, TitleBarButtons.ButtonAlignment.Right, _titleBarButtonOffset);
 
-            withButtons.AddButton(new TitleBarButton(_titleBarButtonStyle, _optionsButtonTexture,
-                s => mainWindow.OnOptionsButton(), "Options"));
+            withButtons.AddButton(new BasicTitleBarButton(_titleBarButtonStyle, _optionsButtonTexture,
+                mainWindow.OnOptionsButton));
 
-            withButtons.AddButton(new TitleBarButton(_titleBarButtonStyle, _closeButtonTexture,
-                s => mainWindow.OnCloseButton(), "Close"));
-
-
-
-            UnityEngine.Object.DontDestroyOnLoad(WindowView.Create(withButtons, "MainWindow"));
+            withButtons.AddButton(new BasicTitleBarButton(_titleBarButtonStyle, _closeButtonTexture,
+                mainWindow.OnCloseButton));
 
             if (windowConfig.Any())
                 withButtons.Load(windowConfig.Single());
 
-            return withButtons;
+            var view = WindowView.Create(withButtons, "MainWindow");
+            UnityEngine.Object.DontDestroyOnLoad(view);
+
+            return new WindowDescriptor(mainWindow, view);
+        }
+
+
+        public WindowDescriptor CreateOptionsWindow(
+            [NotNull] WindowAppearanceInfo appearanceInfo,
+            [NotNull] Configuration configuration,
+            Maybe<ConfigNode> windowConfig)
+        {
+            if (appearanceInfo == null) throw new ArgumentNullException("appearanceInfo");
+            if (configuration == null) throw new ArgumentNullException("configuration");
+
+            var optionsWindow = new OptionsWindow(configuration, _controller, appearanceInfo.InitialSize,
+                _idProvider.Get(), appearanceInfo.Skin);
+
+            var clamp = new ClampToScreen(optionsWindow);
+            var withButtons = new TitleBarButtons(clamp, TitleBarButtons.ButtonAlignment.Right, _titleBarButtonOffset);
+
+            withButtons.AddButton(new BasicTitleBarButton(_titleBarButtonStyle, _closeButtonTexture,
+                optionsWindow.OnCloseButton));
+
+            if (windowConfig.Any())
+                withButtons.Load(windowConfig.Single());
+
+            withButtons.Visible = false;
+
+            var view = WindowView.Create(withButtons, "OptionsWindow");
+            UnityEngine.Object.DontDestroyOnLoad(view);
+
+
+            return new WindowDescriptor(optionsWindow, view);
         }
     }
 }

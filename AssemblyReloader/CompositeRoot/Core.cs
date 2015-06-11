@@ -12,6 +12,7 @@ using AssemblyReloader.Game.Providers;
 using AssemblyReloader.Game.Queries;
 using AssemblyReloader.Generators;
 using AssemblyReloader.Gui;
+using AssemblyReloader.Gui.Messages;
 using AssemblyReloader.Loaders;
 using AssemblyReloader.Loaders.PartModuleLoader;
 using AssemblyReloader.Loaders.ScenarioModuleLoader;
@@ -31,11 +32,12 @@ using ReeperCommon.FileSystem;
 using ReeperCommon.FileSystem.Factories;
 using ReeperCommon.FileSystem.Providers;
 using ReeperCommon.Gui;
-using ReeperCommon.Gui.Window;
+using ReeperCommon.Gui.Window.View;
 using ReeperCommon.Logging;
 using ReeperCommon.Repositories;
 using ReeperCommon.Serialization;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace AssemblyReloader.CompositeRoot
 {
@@ -43,8 +45,6 @@ namespace AssemblyReloader.CompositeRoot
     class Core
     {
         private readonly ILog _log;
-        private readonly IMessageChannel _messageChannel;
-        private readonly IWindowComponent _mainWindow;
 
         private interface IConsumer
         {
@@ -186,10 +186,6 @@ namespace AssemblyReloader.CompositeRoot
             var btnResizeCursorTexture = resourceLocator.GetTexture("Resources/cursor.png");
             if (!btnResizeCursorTexture.Any()) throw new Exception("Failed to find window resize cursor texture!");
 
-            var mediator =
-                new Controllers.Controller(reloadables.ToDictionary(r => r as IPluginInfo, r => r as IReloadablePlugin), _log.CreateTag("Controller"));
-
-
             var configurationProvider = new ConfigurationProvider(
                 mainAssemblyFile.Single(),
                 new PluginConfigurationFilePathQuery(),
@@ -197,19 +193,47 @@ namespace AssemblyReloader.CompositeRoot
                 _log.CreateTag("ConfigurationProvider"));
 
             var configuration = configurationProvider.Get();
-           
+
             var saveProgramConfiguration = new SaveProgramConfigurationCommand(configuration, configNodeFormatter,
                 new ProgramConfigurationFilePathQuery(mainAssemblyFile.Single()), _log.CreateTag("Configuration"));
 
+            var mediator =
+                new Controllers.Controller(
+                    reloadables.ToDictionary(r => r as IPluginInfo, r => r as IReloadablePlugin), 
+                    saveProgramConfiguration,
+                    _log.CreateTag("Controller"));
 
-            var windowFactory = new WindowFactory(new MessageChannel(), new UniqueWindowIdProvider(), mediator,
+            var viewMessageChannel = new MessageChannel();
+
+            var windowFactory = new WindowFactory(new UniqueWindowIdProvider(), mediator, viewMessageChannel,
                 ConfigureTitleBarButtonStyle(), btnOptionsTexture.Single(), btnCloseTexture.Single());
 
             var mainAppearance = new WindowAppearanceInfo(skinScheme,
                 new Rect(200f, 200f, 400f, 200f), new Vector2(10f, 10f), new Vector2(150f, 100f),
                 btnResizeCursorTexture.Single());
 
-            _mainWindow = windowFactory.CreateMainWindow(reloadables.Cast<IPluginInfo>(), mainAppearance, Maybe<ConfigNode>.None);
+            var windowDescriptors = new List<WindowDescriptor>();
+
+            try
+            {
+                var mainWindow = windowFactory.CreateMainWindow(reloadables.Cast<IPluginInfo>(), mainAppearance,
+                    Maybe<ConfigNode>.None);
+                windowDescriptors.Add(mainWindow);
+
+                var optionsWindow = windowFactory.CreateOptionsWindow(mainAppearance, configuration, Maybe<ConfigNode>.None);
+                windowDescriptors.Add(optionsWindow);
+
+                viewMessageChannel.AddListener<ShowOptionsWindow>(optionsWindow.Logic);
+            }
+            catch (Exception)
+            {
+                _log.Error("Encountered an exception while creating windows");
+
+                // need to destroy the windows, otherwise they'll stick around on unhandled exceptions
+                windowDescriptors.ForEach(d => Object.Destroy(d.View));
+
+                throw;
+            }
         }
 
 

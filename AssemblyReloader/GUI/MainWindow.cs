@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using AssemblyReloader.Annotations;
 using AssemblyReloader.CompositeRoot;
 using AssemblyReloader.Controllers;
+using AssemblyReloader.Gui.Messages;
 using ReeperCommon.Gui.Window;
 using UnityEngine;
 
@@ -12,14 +13,14 @@ namespace AssemblyReloader.Gui
     {
         private readonly IController _controller;
         private readonly IEnumerable<IPluginInfo> _plugins;
-        private readonly IMessageChannel _viewMessageSystem;
+        private readonly IMessageChannel _viewMessageChannel;
         [Persistent] private Vector2 _scroll = default(Vector2);
 
 
         public MainWindow(
             [NotNull] IController controller,
             [NotNull] IEnumerable<IPluginInfo> plugins,
-            [NotNull] IMessageChannel viewMessageSystem,
+            [NotNull] IMessageChannel viewMessageChannel,
             Rect rect, 
             int winid,
             GUISkin skin, 
@@ -27,11 +28,11 @@ namespace AssemblyReloader.Gui
         {
             if (controller == null) throw new ArgumentNullException("controller");
             if (plugins == null) throw new ArgumentNullException("plugins");
-            if (viewMessageSystem == null) throw new ArgumentNullException("viewMessageSystem");
+            if (viewMessageChannel == null) throw new ArgumentNullException("viewMessageChannel");
 
             _controller = controller;
             _plugins = plugins;
-            _viewMessageSystem = viewMessageSystem;
+            _viewMessageChannel = viewMessageChannel;
         }
 
 
@@ -67,7 +68,7 @@ namespace AssemblyReloader.Gui
 
                 if (GUILayout.Button("Options", GUILayout.ExpandWidth(false), GUILayout.ExpandHeight(false)))
                 {
-                    //_viewChannel.Send(new ToggleOptionsWindow(plugin));
+                    //_viewMessageChannel.Send(new ToggleOptionsWindow(plugin));
                     //_guiMediator.TogglePluginOptionsWindow(plugin);
                 }
 
@@ -82,13 +83,13 @@ namespace AssemblyReloader.Gui
 
         public void OnCloseButton()
         {
-            throw new NotImplementedException();
+            Visible = false;
         }
 
 
         public void OnOptionsButton()
         {
-            throw new NotImplementedException(); 
+            _viewMessageChannel.Send(new ShowOptionsWindow());
         }
     }
 }

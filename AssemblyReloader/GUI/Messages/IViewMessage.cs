@@ -1,6 +1,6 @@
 ﻿using AssemblyReloader.Controllers;
 
-namespace AssemblyReloader.Messages
+namespace AssemblyReloader.Gui.Messages
 {
     public interface IViewMessage
     {
