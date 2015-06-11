@@ -1,6 +1,4 @@
 ﻿using System.Reflection;
-using AssemblyReloader.DataObjects;
-using ReeperCommon.Containers;
 using ReeperCommon.FileSystem;
 
 namespace AssemblyReloader.Controllers
@@ -12,11 +10,6 @@ namespace AssemblyReloader.Controllers
     {
         void Load();
         void Unload();
-
-        string Name { get; }
-        Maybe<Assembly> Assembly { get; }
-        PluginConfiguration Configuration { get; }
-        IFile Location { get; }
 
         event PluginLoadedHandler OnLoaded;
         event PluginUnloadedHandler OnUnloaded;

@@ -8,7 +8,7 @@
 
 - resolve reloadable dependencies
 
-- update moduleRef and associated configs for unloaded PartModule instances
+- update moduleRef and associated configs for unloaded/packed PartModule instances
 
 - clear module snapshots on GameDatabase reload
 

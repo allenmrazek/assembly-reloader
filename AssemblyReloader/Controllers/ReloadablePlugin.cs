@@ -4,6 +4,7 @@ using System.Reflection;
 using AssemblyReloader.Annotations;
 using AssemblyReloader.DataObjects;
 using AssemblyReloader.Game;
+using AssemblyReloader.Gui;
 using AssemblyReloader.Loaders;
 using ReeperCommon.Containers;
 using ReeperCommon.Extensions;
@@ -18,7 +19,7 @@ namespace AssemblyReloader.Controllers
     /// specifically, we may need to modify changes the previous version made such as removing PartModules
     /// from prefabs
     /// </summary>
-    public class ReloadablePlugin : IReloadablePlugin
+    public class ReloadablePlugin : IReloadablePlugin, IPluginInfo
     {
         private Maybe<Assembly> _loaded = Maybe<Assembly>.None;
         private readonly IAssemblyLoader _assemblyLoader;
@@ -30,8 +31,8 @@ namespace AssemblyReloader.Controllers
 
         public ReloadablePlugin(
             [NotNull] IAssemblyLoader assemblyLoader,
-            IFile location,
-            PluginConfiguration pluginConfiguration)
+            [NotNull] IFile location,
+            [NotNull] PluginConfiguration pluginConfiguration)
         {
             if (assemblyLoader == null) throw new ArgumentNullException("assemblyLoader");
             if (location == null) throw new ArgumentNullException("location");

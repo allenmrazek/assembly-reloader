@@ -25,11 +25,13 @@ using AssemblyReloader.Weaving;
 using AssemblyReloader.Weaving.Operations;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
+using ReeperCommon.Containers;
 using ReeperCommon.Extensions;
 using ReeperCommon.FileSystem;
 using ReeperCommon.FileSystem.Factories;
 using ReeperCommon.FileSystem.Providers;
 using ReeperCommon.Gui;
+using ReeperCommon.Gui.Window;
 using ReeperCommon.Logging;
 using ReeperCommon.Repositories;
 using ReeperCommon.Serialization;
@@ -42,7 +44,7 @@ namespace AssemblyReloader.CompositeRoot
     {
         private readonly ILog _log;
         private readonly IMessageChannel _messageChannel;
-
+        private readonly IWindowComponent _mainWindow;
 
         private interface IConsumer
         {
@@ -120,21 +122,6 @@ namespace AssemblyReloader.CompositeRoot
 
 
 
-
-        private static bool ImplementsGenericSerializationSurrogateInterface(Type typeCheck)
-        {
-            return GetSerializationTargetType(typeCheck).Any();
-        }
-
-
-        private static IEnumerable<Type> GetSerializationTargetType(Type typeCheck)
-        {
-            return typeCheck.GetInterfaces()
-                .Where(interfaceType => interfaceType.IsGenericType &&
-                                        typeof(ISerializationSurrogate).IsAssignableFrom(interfaceType))
-                .Select(interfaceType => interfaceType.GetGenericArguments().First());
-        }
-
         public Core()
         {
 #if DEBUG
@@ -199,31 +186,9 @@ namespace AssemblyReloader.CompositeRoot
             var btnResizeCursorTexture = resourceLocator.GetTexture("Resources/cursor.png");
             if (!btnResizeCursorTexture.Any()) throw new Exception("Failed to find window resize cursor texture!");
 
-            var windowFactory = new WindowFactory(
-                new ConfigurationPanelFactory(
-                    new ExpandablePanelFactory(ConfigurePanelToggleStyle(resourceLocator, skinScheme), GUILayout.ExpandWidth(false),
-                        GUILayout.ExpandHeight(false)),
-                    new ConfigurationWindowPanelFieldQuery()),
-                skinScheme,
-                ConfigureTitleBarButtonStyle(),
-                btnCloseTexture.Single(),
-                btnOptionsTexture.Single(),
-                btnResizeCursorTexture.Single());
+            var mediator =
+                new Controllers.Controller(reloadables.ToDictionary(r => r as IPluginInfo, r => r as IReloadablePlugin), _log.CreateTag("Controller"));
 
-            var uniqueIdProvider = new UniqueWindowIdProvider();
-
-
-            var guiController =
-                new GuiController(reloadables.ToDictionary(r => r,
-                    r =>
-                    {
-                        var configWindow = windowFactory.CreatePluginOptionsWindow(new PluginConfigurationViewLogic(r.Configuration), r, new SavePluginConfigurationCommand(r, configNodeFormatter, pluginConfigurationPathQuery), uniqueIdProvider.Get());
-
-                        configWindow.Visible = false;
-
-                        return
-                            new ReloadablePluginController(r, configWindow) as IReloadablePluginController;
-                    }));
 
             var configurationProvider = new ConfigurationProvider(
                 mainAssemblyFile.Single(),
@@ -232,22 +197,19 @@ namespace AssemblyReloader.CompositeRoot
                 _log.CreateTag("ConfigurationProvider"));
 
             var configuration = configurationProvider.Get();
-
+           
             var saveProgramConfiguration = new SaveProgramConfigurationCommand(configuration, configNodeFormatter,
                 new ProgramConfigurationFilePathQuery(mainAssemblyFile.Single()), _log.CreateTag("Configuration"));
 
-            var optionsWindow = windowFactory.CreateProgramOptionsWindow(
-                new ProgramConfigurationViewLogic(configuration),
-                configuration,
-                saveProgramConfiguration,
-                uniqueIdProvider.Get());
 
-            windowFactory.CreateMainWindow(
-                new View(guiController),
-                optionsWindow,
-                saveProgramConfiguration,
-                new Rect(400f, 400f, 250f, 128f),
-                uniqueIdProvider.Get());
+            var windowFactory = new WindowFactory(new MessageChannel(), new UniqueWindowIdProvider(), mediator,
+                ConfigureTitleBarButtonStyle(), btnOptionsTexture.Single(), btnCloseTexture.Single());
+
+            var mainAppearance = new WindowAppearanceInfo(skinScheme,
+                new Rect(200f, 200f, 400f, 200f), new Vector2(10f, 10f), new Vector2(150f, 100f),
+                btnResizeCursorTexture.Single());
+
+            _mainWindow = windowFactory.CreateMainWindow(reloadables.Cast<IPluginInfo>(), mainAppearance, Maybe<ConfigNode>.None);
         }
 
 
@@ -256,9 +218,6 @@ namespace AssemblyReloader.CompositeRoot
         {
             
         }
-
-
-
 
 
         private IResourceRepository ConfigureResourceRepository(IDirectory dllDirectory)
@@ -308,7 +267,7 @@ namespace AssemblyReloader.CompositeRoot
         }
 
 
-        private IEnumerable<IReloadablePlugin> CreateReloadablePlugins(
+        private IEnumerable<ReloadablePlugin> CreateReloadablePlugins(
             ILoadedAssemblyFactory laFactory,
             IFileSystemFactory fsFactory, 
             BaseAssemblyResolver assemblyResolver,
@@ -346,8 +305,7 @@ namespace AssemblyReloader.CompositeRoot
         }
 
 
-
-        private IReloadablePlugin ConfigureReloadablePlugin(
+        private ReloadablePlugin ConfigureReloadablePlugin(
             IFile location,
             IGameAssemblyLoader gameAssemblyLoader,
             IGameAddonLoader gameAddonLoader,
@@ -388,7 +346,7 @@ namespace AssemblyReloader.CompositeRoot
 
 
         private static void SetupAddonController(
-            [NotNull] IReloadablePlugin plugin, 
+            [NotNull] ReloadablePlugin plugin, 
             [NotNull] IGameAssemblyLoader gameAssemblyLoader,
             [NotNull] IGameAddonLoader gameAddonLoader,
             [NotNull] IUnityObjectDestroyer objectDestroyer)
@@ -419,7 +377,7 @@ namespace AssemblyReloader.CompositeRoot
         }
 
 
-        private void SetupPartModuleController(IReloadablePlugin plugin, IKspFactory kspFactory)
+        private void SetupPartModuleController(ReloadablePlugin plugin, IKspFactory kspFactory)
         {
             var partModuleConfigQueue = new DictionaryQueue<KeyValuePair<uint, ITypeIdentifier>, ConfigNode>(
                 new FlightConfigNodeKeyValuePairComparer()); 

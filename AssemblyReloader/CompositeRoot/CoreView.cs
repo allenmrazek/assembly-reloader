@@ -44,7 +44,7 @@ namespace AssemblyReloader.CompositeRoot
         [UsedImplicitly]
         private void Update()
         {
-            //_core.Tick();
+            _core.Tick();
         }
     }
 }

@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using AssemblyReloader.Annotations;
-using AssemblyReloader.Commands;
+using AssemblyReloader.CompositeRoot;
 using AssemblyReloader.Controllers;
 using AssemblyReloader.DataObjects;
-using ReeperCommon.Gui.Logic;
+using ReeperCommon.Containers;
+using ReeperCommon.Gui;
 using ReeperCommon.Gui.Window;
 using ReeperCommon.Gui.Window.Buttons;
 using ReeperCommon.Gui.Window.Decorators;
@@ -12,155 +15,70 @@ using UnityEngine;
 
 namespace AssemblyReloader.Gui
 {
-    class WindowFactory
+    public class WindowFactory
     {
-        private readonly IConfigurationPanelFactory _configurationPanelFactory;
-        private readonly GUISkin _windowSkin;
+        private readonly IMessageChannel _viewMessageChannel;
+        private readonly IWindowIdProvider _idProvider;
+        private readonly IController _controller;
         private readonly GUIStyle _titleBarButtonStyle;
-        private readonly Texture2D _closeButton;
-        private readonly Texture2D _optionsButton;
-        private readonly Texture2D _resizeCursor;
-// ReSharper disable once InconsistentNaming
-        private readonly Vector2 TitleBarButtonOffset = new Vector2(3f, 3f);
-
+        private readonly Texture2D _optionsButtonTexture;
+        private readonly Texture2D _closeButtonTexture;
+        private readonly Vector2 _titleBarButtonOffset = new Vector2(3f, 3f);
 
         public WindowFactory(
-            [NotNull] IConfigurationPanelFactory configurationPanelFactory, 
-            [NotNull] GUISkin windowSkin, 
-            [NotNull] GUIStyle titleBarButtonStyle,
-            [NotNull] Texture2D closeButton, 
-            [NotNull] Texture2D optionsButton, 
-            [NotNull] Texture2D resizeCursor)
+            [NotNull] IMessageChannel viewMessageChannel, 
+            [NotNull] IWindowIdProvider idProvider,
+            [NotNull] IController controller, 
+            [NotNull] GUIStyle titleBarButtonStyle, 
+            [NotNull] Texture2D optionsButtonTexture,
+            [NotNull] Texture2D closeButtonTexture)
         {
-            if (configurationPanelFactory == null) throw new ArgumentNullException("configurationPanelFactory");
-            if (windowSkin == null) throw new ArgumentNullException("windowSkin");
+            if (viewMessageChannel == null) throw new ArgumentNullException("viewMessageChannel");
+            if (idProvider == null) throw new ArgumentNullException("idProvider");
+            if (controller == null) throw new ArgumentNullException("controller");
             if (titleBarButtonStyle == null) throw new ArgumentNullException("titleBarButtonStyle");
-            if (closeButton == null) throw new ArgumentNullException("closeButton");
-            if (optionsButton == null) throw new ArgumentNullException("optionsButton");
-            if (resizeCursor == null) throw new ArgumentNullException("resizeCursor");
+            if (optionsButtonTexture == null) throw new ArgumentNullException("optionsButtonTexture");
+            if (closeButtonTexture == null) throw new ArgumentNullException("closeButtonTexture");
 
-            _configurationPanelFactory = configurationPanelFactory;
-            _windowSkin = windowSkin;
+            _viewMessageChannel = viewMessageChannel;
+            _idProvider = idProvider;
+            _controller = controller;
             _titleBarButtonStyle = titleBarButtonStyle;
-            _closeButton = closeButton;
-            _optionsButton = optionsButton;
-            _resizeCursor = resizeCursor;
+            _optionsButtonTexture = optionsButtonTexture;
+            _closeButtonTexture = closeButtonTexture;
         }
 
 
-
-        public void CreateMainWindow(
-            [NotNull] View logic, 
-            [NotNull] IWindowComponent programConfigurationWindow, 
-            [NotNull] ICommand saveProgramConfiguration,
-            Rect initialRect,
-            int winid)
+        public IWindowComponent CreateMainWindow(
+            [NotNull] IEnumerable<IPluginInfo> plugins, 
+            WindowAppearanceInfo appearanceInfo, 
+            Maybe<ConfigNode> windowConfig)
         {
-            if (logic == null) throw new ArgumentNullException("logic");
-            if (programConfigurationWindow == null) throw new ArgumentNullException("programConfigurationWindow");
-            if (saveProgramConfiguration == null) throw new ArgumentNullException("saveProgramConfiguration");
+            if (plugins == null) throw new ArgumentNullException("plugins");
 
-            var basicWindow = new BasicWindow(logic, initialRect, winid, _windowSkin) { Title = "Assembly Reload Tool" };
-            var resizable = new Resizable(basicWindow, new Vector2(10f, 10f), new Vector2(150f, 100f), _resizeCursor);
-            var tbButtons = new TitleBarButtons(resizable, TitleBarButtons.ButtonAlignment.Right, TitleBarButtonOffset);
+            var mainWindow = new MainWindow(plugins, _viewMessageChannel, appearanceInfo.InitialSize, _idProvider.Get(), appearanceInfo.Skin,
+                true) { Title = "Assembly Reload Tool" };
 
-            tbButtons.AddButton(new TitleBarButton(_titleBarButtonStyle, _optionsButton, s =>
-            {
-                programConfigurationWindow.Visible = !programConfigurationWindow.Visible;
-                saveProgramConfiguration.Execute();
-            }, "ProgramConfigurationButton"));
+            var resizable = new Resizable(mainWindow, appearanceInfo.DragHotzoneSize, appearanceInfo.MinDimensions,
+                appearanceInfo.DragCursorTexture);
 
-            tbButtons.AddButton(new TitleBarButton(_titleBarButtonStyle, _closeButton, s => { }, "Test"));
-            
+            var clamp = new ClampToScreen(resizable);
+            var withButtons = new TitleBarButtons(clamp, TitleBarButtons.ButtonAlignment.Right, _titleBarButtonOffset);
 
-            // end temp
-            var hiding = new HideOnF2(tbButtons);
-            var clamp = new ClampToScreen(hiding);
-            
+            withButtons.AddButton(new TitleBarButton(_titleBarButtonStyle, _optionsButtonTexture,
+                s => mainWindow.OnOptionsButton(), "Options"));
 
-            programConfigurationWindow.Visible = false;
-
-            UnityEngine.Object.DontDestroyOnLoad(WindowView.Create(clamp, "MainWindow"));
-        }
+            withButtons.AddButton(new TitleBarButton(_titleBarButtonStyle, _closeButtonTexture,
+                s => mainWindow.OnCloseButton(), "Close"));
 
 
 
-        public IWindowComponent CreatePluginOptionsWindow(
-            [NotNull] PluginConfigurationViewLogic pluginViewLogic,
-            [NotNull] IReloadablePlugin plugin,
-            [NotNull] ICommand saveOptionsCommand,
-            int winid)
-        {
-            if (pluginViewLogic == null) throw new ArgumentNullException("pluginViewLogic");
-            if (plugin == null) throw new ArgumentNullException("plugin");
-            if (saveOptionsCommand == null) throw new ArgumentNullException("saveOptionsCommand");
+            UnityEngine.Object.DontDestroyOnLoad(WindowView.Create(withButtons, "MainWindow"));
 
+            if (windowConfig.Any())
+                withButtons.Load(windowConfig.Single());
 
-            foreach (var panel in _configurationPanelFactory.CreatePanelsFor(plugin.Configuration))
-                pluginViewLogic.AddPanel(panel);
-
-            var basicWindow = CreateBasicWindow(pluginViewLogic, new Rect(300f, 300f, 450f, 300f),
-                winid, plugin.Name + " Configuration");
-
-
-            var tbButtons = CreateButtonToolbar(basicWindow, TitleBarButtons.ButtonAlignment.Right, TitleBarButtonOffset);
-
-            tbButtons.AddButton(new TitleBarButton(_titleBarButtonStyle,
-                _closeButton,
-                s =>
-                {
-                    tbButtons.Visible = false;
-                    saveOptionsCommand.Execute();
-                }, "Close"));
-            
-            //var decoratedWindow = new HideOnF2(new ClampToScreen(basicWindow)); //buggy?
-            var decoratedWindow = new ClampToScreen(tbButtons);
-
-            UnityEngine.Object.DontDestroyOnLoad(WindowView.Create(decoratedWindow));
-
-            return decoratedWindow;
-        }
-
-
-        public IWindowComponent CreateProgramOptionsWindow([NotNull] ProgramConfigurationViewLogic logic,
-            [NotNull] Configuration programConfiguration, 
-            [NotNull] ICommand saveOptionsCommand,
-            int winid)
-        {
-            if (logic == null) throw new ArgumentNullException("logic");
-            if (programConfiguration == null) throw new ArgumentNullException("programConfiguration");
-            if (saveOptionsCommand == null) throw new ArgumentNullException("saveOptionsCommand");
-
-
-            var basicWindow = CreateBasicWindow(logic, new Rect(450f, 300f, 300f, 200f), winid,
-                "Program Configuration");
-
-            var tbButtons = CreateButtonToolbar(basicWindow, TitleBarButtons.ButtonAlignment.Right, TitleBarButtonOffset);
-
-            tbButtons.AddButton(new TitleBarButton(_titleBarButtonStyle, _closeButton,
-                s =>
-                {
-                    tbButtons.Visible = false;
-                    saveOptionsCommand.Execute();
-                }, "Close"));
-
-            var decorated = new ClampToScreen(tbButtons);
-
-            UnityEngine.Object.DontDestroyOnLoad(WindowView.Create(decorated));
-
-            return decorated;
-        }
-
-
-        private IWindowComponent CreateBasicWindow(IWindowLogic logic, Rect rect, int winid, string title)
-        {
-            return new BasicWindow(logic, rect, winid, _windowSkin) { Title = title};
-        }
-
-        private TitleBarButtons CreateButtonToolbar(IWindowComponent window,
-            TitleBarButtons.ButtonAlignment alignment, Vector2 offset)
-        {
-            return new TitleBarButtons(window, alignment, offset);
+            return withButtons;
         }
     }
 }
