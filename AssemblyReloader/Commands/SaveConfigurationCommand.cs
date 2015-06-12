@@ -7,13 +7,13 @@ using ReeperCommon.Logging;
 
 namespace AssemblyReloader.Commands
 {
-    public class SaveProgramConfigurationCommand : ICommand
+    public class SaveConfigurationCommand : ICommand
     {
         private readonly Configuration _programConfiguration;
         private readonly IProgramConfigurationFilePathQuery _configPathQuery;
         private readonly ILog _log;
 
-        public SaveProgramConfigurationCommand(
+        public SaveConfigurationCommand(
             [NotNull] Configuration programConfiguration,
             [NotNull] IProgramConfigurationFilePathQuery configPathQuery, 
             [NotNull] ILog log)
@@ -27,6 +27,7 @@ namespace AssemblyReloader.Commands
             _log = log;
         }
 
+
         public void Execute()
         {
             var cfg = new ConfigNode("AssemblyReloaderConfiguration");
@@ -37,7 +38,7 @@ namespace AssemblyReloader.Commands
             var configPath = _configPathQuery.Get();
 
             _log.Verbose("Saving program configuration settings to \"" + configPath + "\"");
-            cfg.Save(configPath, "AssemblyReloader program configuration");
+            cfg.Save(configPath, "AssemblyReloader configuration");
             _log.Verbose("Program configuration settings saved.");
         }
     }

@@ -76,7 +76,7 @@
     <Compile Include="Commands\NullCommand.cs" />
     <Compile Include="Commands\PluginReloadRequestedMethodCallCommand.cs" />
     <Compile Include="Commands\SavePluginConfigurationCommand.cs" />
-    <Compile Include="Commands\SaveProgramConfigurationCommand.cs" />
+    <Compile Include="Commands\SaveConfigurationCommand.cs" />
     <Compile Include="Commands\ToggleWindowVisibilityCommand.cs" />
     <Compile Include="CompositeRoot\FlightConfigNodeKeyValuePairComparer.cs" />
     <Compile Include="CompositeRoot\IMessageChannel.cs" />

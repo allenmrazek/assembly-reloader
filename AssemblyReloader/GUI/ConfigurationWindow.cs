@@ -35,6 +35,9 @@ namespace AssemblyReloader.Gui
 
             _configuration.ReloadAllReloadablesUponWindowFocus = GUILayout.Toggle(
                 _configuration.ReloadAllReloadablesUponWindowFocus, "Reload all plugins upon window focus");
+
+            if (GUI.changed)
+                _controller.SaveConfiguration();
         }
 
 

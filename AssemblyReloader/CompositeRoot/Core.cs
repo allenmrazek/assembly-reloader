@@ -32,10 +32,8 @@ using ReeperCommon.FileSystem;
 using ReeperCommon.FileSystem.Factories;
 using ReeperCommon.FileSystem.Providers;
 using ReeperCommon.Gui;
-using ReeperCommon.Gui.Window.View;
 using ReeperCommon.Logging;
 using ReeperCommon.Repositories;
-using ReeperCommon.Serialization;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -45,6 +43,7 @@ namespace AssemblyReloader.CompositeRoot
     class Core
     {
         private readonly ILog _log;
+
 
         private interface IConsumer
         {
@@ -190,7 +189,7 @@ namespace AssemblyReloader.CompositeRoot
 
             var configuration = configurationProvider.Get();
 
-            var saveProgramConfiguration = new SaveProgramConfigurationCommand(configuration,
+            var saveProgramConfiguration = new SaveConfigurationCommand(configuration,
                 new ProgramConfigurationFilePathQuery(mainAssemblyFile.Single()), _log.CreateTag("Configuration"));
 
             var savePluginConfiguration = new SavePluginConfigurationCommand(configFilePathQuery);
@@ -251,6 +250,9 @@ namespace AssemblyReloader.CompositeRoot
         {
             
         }
+
+
+
 
 
         private IResourceRepository ConfigureResourceRepository(IDirectory dllDirectory)
