@@ -164,14 +164,9 @@ namespace AssemblyReloader.CompositeRoot
 
             var loadedAssemblyFactory = ConfigureLoadedAssemblyFactory();
 
-
-            var configNodeFormatter = new ConfigNodeFormatter(
-                new DefaultSurrogateSelector(new DefaultSurrogateProvider()),
-                    new SerializableFieldQuery());
-
             var pluginConfigurationPathQuery = new PluginConfigurationFilePathQuery();
 
-            var reloadables = CreateReloadablePlugins(loadedAssemblyFactory, fsFactory, assemblyResolver, new PluginConfigurationProvider(configNodeFormatter, pluginConfigurationPathQuery)).ToList();
+            var reloadables = CreateReloadablePlugins(loadedAssemblyFactory, fsFactory, assemblyResolver, new PluginConfigurationProvider(pluginConfigurationPathQuery)).ToList();
 
             reloadables.ForEach(r => r.Load());
 
@@ -186,21 +181,25 @@ namespace AssemblyReloader.CompositeRoot
             var btnResizeCursorTexture = resourceLocator.GetTexture("Resources/cursor.png");
             if (!btnResizeCursorTexture.Any()) throw new Exception("Failed to find window resize cursor texture!");
 
+            var configFilePathQuery = new PluginConfigurationFilePathQuery();
+
             var configurationProvider = new ConfigurationProvider(
                 mainAssemblyFile.Single(),
-                new PluginConfigurationFilePathQuery(),
-                configNodeFormatter,
+                configFilePathQuery,
                 _log.CreateTag("ConfigurationProvider"));
 
             var configuration = configurationProvider.Get();
 
-            var saveProgramConfiguration = new SaveProgramConfigurationCommand(configuration, configNodeFormatter,
+            var saveProgramConfiguration = new SaveProgramConfigurationCommand(configuration,
                 new ProgramConfigurationFilePathQuery(mainAssemblyFile.Single()), _log.CreateTag("Configuration"));
+
+            var savePluginConfiguration = new SavePluginConfigurationCommand(configFilePathQuery);
 
             var mediator =
                 new Controllers.Controller(
                     reloadables.ToDictionary(r => r as IPluginInfo, r => r as IReloadablePlugin), 
                     saveProgramConfiguration,
+                    savePluginConfiguration,
                     _log.CreateTag("Controller"));
 
             var viewMessageChannel = new MessageChannel();
@@ -222,8 +221,18 @@ namespace AssemblyReloader.CompositeRoot
 
                 var optionsWindow = windowFactory.CreateOptionsWindow(mainAppearance, configuration, Maybe<ConfigNode>.None);
                 windowDescriptors.Add(optionsWindow);
+                viewMessageChannel.AddListener<ShowConfigurationWindow>(optionsWindow.Logic);
 
-                viewMessageChannel.AddListener<ShowOptionsWindow>(optionsWindow.Logic);
+                reloadables.ForEach(r =>
+                {
+                    var pluginConfigWindow = windowFactory.CreatePluginOptionsWindow(mainAppearance, r as IPluginInfo,
+                        Maybe<ConfigNode>.None);
+                    windowDescriptors.Add(pluginConfigWindow);
+
+                    viewMessageChannel.AddListener<ShowPluginConfigurationWindow>(pluginConfigWindow.Logic);
+                });
+
+                
             }
             catch (Exception)
             {

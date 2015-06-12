@@ -2,7 +2,6 @@
 using System.Reflection;
 using AssemblyReloader.Annotations;
 using AssemblyReloader.Loaders;
-using AssemblyReloader.Queries.AssemblyQueries;
 using ReeperCommon.FileSystem;
 
 namespace AssemblyReloader.Controllers

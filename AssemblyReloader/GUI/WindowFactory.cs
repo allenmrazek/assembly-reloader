@@ -90,8 +90,8 @@ namespace AssemblyReloader.Gui
             if (appearanceInfo == null) throw new ArgumentNullException("appearanceInfo");
             if (configuration == null) throw new ArgumentNullException("configuration");
 
-            var optionsWindow = new OptionsWindow(configuration, _controller, appearanceInfo.InitialSize,
-                _idProvider.Get(), appearanceInfo.Skin);
+            var optionsWindow = new ConfigurationWindow(configuration, _controller, appearanceInfo.InitialSize,
+                _idProvider.Get(), appearanceInfo.Skin) { Title = "Configuration" };
 
             var clamp = new ClampToScreen(optionsWindow);
             var withButtons = new TitleBarButtons(clamp, TitleBarButtons.ButtonAlignment.Right, _titleBarButtonOffset);
@@ -104,11 +104,41 @@ namespace AssemblyReloader.Gui
 
             withButtons.Visible = false;
 
-            var view = WindowView.Create(withButtons, "OptionsWindow");
+            var view = WindowView.Create(withButtons, "ConfigurationWindow");
             UnityEngine.Object.DontDestroyOnLoad(view);
 
 
             return new WindowDescriptor(optionsWindow, view);
+        }
+
+
+        public WindowDescriptor CreatePluginOptionsWindow(
+            [NotNull] WindowAppearanceInfo appearanceInfo,
+            [NotNull] IPluginInfo plugin,
+            Maybe<ConfigNode> windowConfig)
+        {
+            if (appearanceInfo == null) throw new ArgumentNullException("appearanceInfo");
+            if (plugin == null) throw new ArgumentNullException("plugin");
+
+            var pluginWindow = new PluginConfigurationWindow(_controller, plugin, appearanceInfo.InitialSize,
+                _idProvider.Get(), appearanceInfo.Skin) { Title = plugin.Name + " Configuration"};
+
+            var clamp = new ClampToScreen(pluginWindow);
+            var withButtons = new TitleBarButtons(clamp, TitleBarButtons.ButtonAlignment.Right, _titleBarButtonOffset);
+
+            withButtons.AddButton(new BasicTitleBarButton(_titleBarButtonStyle, _closeButtonTexture,
+                pluginWindow.OnCloseButton));
+
+            if (windowConfig.Any())
+                withButtons.Load(windowConfig.Single());
+
+            withButtons.Visible = false;
+
+            var view = WindowView.Create(withButtons, "PluginConfigurationWindow_" + plugin.Name);
+            UnityEngine.Object.DontDestroyOnLoad(view);
+
+
+            return new WindowDescriptor(pluginWindow, view);
         }
     }
 }

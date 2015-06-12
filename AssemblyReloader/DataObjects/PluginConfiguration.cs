@@ -10,12 +10,12 @@ namespace AssemblyReloader.DataObjects
         // KSPAddon
         //[ReeperPersistent, PanelCategory(PanelCategoryAttribute.CategoryType.Addon)]
         //[ConfigItemDescription("Start addons for current scene immediately")]
-        [ReeperPersistent]
+        [ReeperPersistent, Persistent]
         public bool StartAddonsForCurrentScene = true;
 
         //[ReeperPersistent, PanelCategory(PanelCategoryAttribute.CategoryType.Addon)]
         //[ConfigItemDescription("KSPAddon.Instant applies to all scenes")]
-        [ReeperPersistent]
+        [ReeperPersistent, Persistent]
         public bool InstantlyAppliesToEveryScene = true;
 
 
@@ -29,7 +29,7 @@ namespace AssemblyReloader.DataObjects
 
         //[ReeperPersistent, PanelCategory(PanelCategoryAttribute.CategoryType.PartModule)]
         //[ConfigItemDescription("New PartModule will use ConfigNode saved by previous PartModule")]
-        [ReeperPersistent]
+        [ReeperPersistent, Persistent]
         public bool ReusePartModuleConfigsFromPrevious = true;
 
 
@@ -38,12 +38,12 @@ namespace AssemblyReloader.DataObjects
         // ScenarioModule
         //[ReeperPersistent, PanelCategory(PanelCategoryAttribute.CategoryType.ScenarioModule)]
         //[ConfigItemDescription("Swap ScenarioModules immediately")]
-        [ReeperPersistent]
+        [ReeperPersistent, Persistent]
         public bool ReloadScenarioModulesImmediately = true;
 
         //[ReeperPersistent, PanelCategory(PanelCategoryAttribute.CategoryType.ScenarioModule)]
         //[ConfigItemDescription("Save ScenarioModule ConfigNode before reloading")]
-        [ReeperPersistent]
+        [ReeperPersistent, Persistent]
         public bool SaveScenarioModuleConfigBeforeReloading = true;
 
 
@@ -55,13 +55,13 @@ namespace AssemblyReloader.DataObjects
 
         //[ReeperPersistent, PanelCategory(PanelCategoryAttribute.CategoryType.IntermediateLanguage)]
         //[ConfigItemDescription("Intercept calls to Assembly.CodeBase and Assembly.Location")]
-        [ReeperPersistent]
+        [ReeperPersistent, Persistent]
         public bool RewriteAssemblyLocationCalls = true;
 
 
         //[ReeperPersistent, PanelCategory(PanelCategoryAttribute.CategoryType.IntermediateLanguage)]
         //[ConfigItemDescription("Write reweaved assembly to disk")]
-        [ReeperPersistent]
+        [ReeperPersistent, Persistent]
         public bool WriteReweavedAssemblyToDisk = true;
 
 

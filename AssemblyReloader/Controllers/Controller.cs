@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using AssemblyReloader.Annotations;
 using AssemblyReloader.Commands;
 using AssemblyReloader.Gui;
+using ReeperCommon.Containers;
 using ReeperCommon.Logging;
 
 namespace AssemblyReloader.Controllers
@@ -11,18 +13,24 @@ namespace AssemblyReloader.Controllers
     {
         private readonly Dictionary<IPluginInfo, IReloadablePlugin> _plugins;
         private readonly ICommand _saveConfiguration;
+        private readonly ICommand<IPluginInfo> _savePluginConfiguration;
         private readonly ILog _log;
 
 
-        public Controller([NotNull] Dictionary<IPluginInfo, IReloadablePlugin> plugins,
-            [NotNull] ICommand saveConfiguration, [NotNull] ILog log)
+        public Controller(
+            [NotNull] Dictionary<IPluginInfo, IReloadablePlugin> plugins,
+            [NotNull] ICommand saveConfiguration,
+            [NotNull] ICommand<IPluginInfo> savePluginConfiguration,
+            [NotNull] ILog log)
         {
             if (plugins == null) throw new ArgumentNullException("plugins");
             if (saveConfiguration == null) throw new ArgumentNullException("saveConfiguration");
+            if (savePluginConfiguration == null) throw new ArgumentNullException("savePluginConfiguration");
             if (log == null) throw new ArgumentNullException("log");
 
             _plugins = plugins;
             _saveConfiguration = saveConfiguration;
+            _savePluginConfiguration = savePluginConfiguration;
             _log = log;
         }
 
@@ -31,18 +39,23 @@ namespace AssemblyReloader.Controllers
         {
             if (plugin == null) throw new ArgumentNullException("plugin");
 
-            IReloadablePlugin target;
-
-            if (!_plugins.TryGetValue(plugin, out target))
-                throw new KeyNotFoundException("Unable to find " + plugin.Name);
+            var target = GetReloadablePlugin(plugin);
+            if (!target.Any())
+                throw new Exception("Could not find plugin associated with " + plugin.Name);
             
-            Reload(target, plugin);
+            Reload(target.Single(), plugin);
         }
 
 
         public void SaveConfiguration()
         {
             _saveConfiguration.Execute();
+        }
+
+
+        public void SavePluginConfiguration(IPluginInfo plugin)
+        {
+            _savePluginConfiguration.Execute(plugin);
         }
 
 
@@ -73,6 +86,19 @@ namespace AssemblyReloader.Controllers
                 _log.Error("Error while loading plugin " + info.Name + ": " + e);
                 throw;
             }
+        }
+
+
+        private Maybe<IReloadablePlugin> GetReloadablePlugin([NotNull] IPluginInfo info)
+        {
+            if (info == null) throw new ArgumentNullException("info");
+
+            IReloadablePlugin target;
+
+            return _plugins.TryGetValue(info, out target)
+                ? Maybe<IReloadablePlugin>.With(target)
+                : Maybe<IReloadablePlugin>.None;
+
         }
     }
 }

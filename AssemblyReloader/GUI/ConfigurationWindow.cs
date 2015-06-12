@@ -9,12 +9,12 @@ using UnityEngine;
 
 namespace AssemblyReloader.Gui
 {
-    public class OptionsWindow : BasicWindow, IMessageConsumer<ShowOptionsWindow>
+    public class ConfigurationWindow : BasicWindow, IMessageConsumer<ShowConfigurationWindow>
     {
         private readonly Configuration _configuration;
         private readonly IController _controller;
 
-        public OptionsWindow(
+        public ConfigurationWindow(
             [NotNull] Configuration configuration, 
             [NotNull] IController controller,
             Rect rect,
@@ -45,7 +45,7 @@ namespace AssemblyReloader.Gui
         }
 
 
-        public void Consume(ShowOptionsWindow message)
+        public void Consume(ShowConfigurationWindow message)
         {
             Visible = true;
         }

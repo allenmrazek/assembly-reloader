@@ -1,14 +1,13 @@
 ﻿using System;
 using AssemblyReloader.Annotations;
-using AssemblyReloader.Controllers;
 
 namespace AssemblyReloader.Gui.Messages
 {
-    public class TogglePluginOptionsWindow : IViewMessage
+    public class ShowPluginConfigurationWindow
     {
-        public IReloadablePlugin Plugin { get; private set; }
+        public IPluginInfo Plugin { get; private set; }
 
-        public TogglePluginOptionsWindow([NotNull] IReloadablePlugin plugin)
+        public ShowPluginConfigurationWindow([NotNull] IPluginInfo plugin)
         {
             if (plugin == null) throw new ArgumentNullException("plugin");
 

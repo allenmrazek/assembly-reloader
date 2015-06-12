@@ -68,8 +68,8 @@ namespace AssemblyReloader.Gui
 
                 if (GUILayout.Button("Options", GUILayout.ExpandWidth(false), GUILayout.ExpandHeight(false)))
                 {
-                    //_viewMessageChannel.Send(new ToggleOptionsWindow(plugin));
-                    //_guiMediator.TogglePluginOptionsWindow(plugin);
+                    _viewMessageChannel.Send(new ShowPluginConfigurationWindow(plugin));
+                    //_guiMediator.ShowPluginConfigurationWindow(plugin);
                 }
 
                 if (GUILayout.Button("Reload", GUILayout.ExpandWidth(false), GUILayout.ExpandHeight(false)))
@@ -89,7 +89,7 @@ namespace AssemblyReloader.Gui
 
         public void OnOptionsButton()
         {
-            _viewMessageChannel.Send(new ShowOptionsWindow());
+            _viewMessageChannel.Send(new ShowConfigurationWindow());
         }
     }
 }

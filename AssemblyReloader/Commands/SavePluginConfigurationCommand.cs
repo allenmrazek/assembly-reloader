@@ -1,42 +1,31 @@
-﻿//using System;
-//using AssemblyReloader.Annotations;
-//using AssemblyReloader.Controllers;
-//using AssemblyReloader.Queries.FileSystemQueries;
-//using ReeperCommon.Serialization;
+﻿using System;
+using AssemblyReloader.Annotations;
+using AssemblyReloader.Gui;
+using AssemblyReloader.Queries.FileSystemQueries;
 
-//namespace AssemblyReloader.Commands
-//{
-//    public class SavePluginConfigurationCommand : ICommand
-//    {
-//        private readonly IReloadablePlugin _plugin;
-//        private readonly IConfigNodeFormatter _formatter;
-//        private readonly IPluginConfigurationFilePathQuery _configPathQuery;
+namespace AssemblyReloader.Commands
+{
+    public class SavePluginConfigurationCommand : ICommand<IPluginInfo>
+    {
+        private readonly IPluginConfigurationFilePathQuery _configPathQuery;
 
-//        public SavePluginConfigurationCommand(
-//            [NotNull] IReloadablePlugin plugin,
-//            [NotNull] IConfigNodeFormatter formatter, 
-//            [NotNull] IPluginConfigurationFilePathQuery configPathQuery)
-//        {
-//            if (plugin == null) throw new ArgumentNullException("plugin");
-//            if (formatter == null) throw new ArgumentNullException("formatter");
-//            if (configPathQuery == null) throw new ArgumentNullException("configPathQuery");
+        public SavePluginConfigurationCommand(
+            [NotNull] IPluginConfigurationFilePathQuery configPathQuery)
+        {
+            if (configPathQuery == null) throw new ArgumentNullException("configPathQuery");
 
-//            _plugin = plugin;
-//            _formatter = formatter;
-//            _configPathQuery = configPathQuery;
-//        }
+            _configPathQuery = configPathQuery;
+        }
 
 
-//        public void Execute()
-//        {
-//            var config = new ConfigNode();
-//            var filePath = _configPathQuery.Get(_plugin.Location);
+        public void Execute(IPluginInfo context)
+        {
+            var filePath = _configPathQuery.Get(context.Location);
+            var config = ConfigNode.CreateConfigFromObject(context.Configuration);
 
-//            _formatter.Serialize(_plugin.Configuration, config);
+            if (!config.HasData) throw new Exception("ConfigNode created from configuration is empty");
 
-//            config.Save(filePath, string.Format("Configuration settings for " + _plugin.Name));
-
-
-//        }
-//    }
-//}
+            config.Save(filePath);
+        }
+    }
+}

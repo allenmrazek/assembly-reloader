@@ -15,22 +15,18 @@ namespace AssemblyReloader.Providers
     {
         private readonly IFile _assemblyLocation;
         private readonly IPluginConfigurationFilePathQuery _configFilePathQuery;
-        private readonly IConfigNodeFormatter _formatter;
         private readonly ILog _log;
 
         public ConfigurationProvider(
             [NotNull] IFile assemblyLocation,
             [NotNull] IPluginConfigurationFilePathQuery configFilePathQuery, 
-            [NotNull] IConfigNodeFormatter formatter, 
             [NotNull] ILog log)
         {
             if (assemblyLocation == null) throw new ArgumentNullException("assemblyLocation");
             if (configFilePathQuery == null) throw new ArgumentNullException("configFilePathQuery");
-            if (formatter == null) throw new ArgumentNullException("formatter");
             if (log == null) throw new ArgumentNullException("log");
             _assemblyLocation = assemblyLocation;
             _configFilePathQuery = configFilePathQuery;
-            _formatter = formatter;
             _log = log;
         }
 
@@ -51,13 +47,14 @@ namespace AssemblyReloader.Providers
             if (!node.Any())
                 throw new Exception("Couldn't load ConfigNode from " + configPath);
 
-            _formatter.Deserialize(config, node.Single());
+            if (!ConfigNode.LoadObjectFromConfig(config, node.Single()))
+                throw new Exception("Failed to load Configuration from ConfigNode");
 
             return config;
         }
 
 
-        private Maybe<ConfigNode> LoadConfigNode(string location)
+        private static Maybe<ConfigNode> LoadConfigNode(string location)
         {
             var config = ConfigNode.Load(location);
 

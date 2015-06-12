@@ -135,7 +135,7 @@
     <Compile Include="Generators\RandomStringGenerator.cs" />
     <Compile Include="Generators\TemporaryFileFactory.cs" />
     <Compile Include="Gui\IPluginInfo.cs" />
-    <Compile Include="Gui\Messages\ShowOptionsWindow.cs" />
+    <Compile Include="Gui\Messages\ShowConfigurationWindow.cs" />
     <Compile Include="Gui\old\ConfigurationPanelFactory.cs" />
     <Compile Include="Gui\MainWindow.cs" />
     <Compile Include="Gui\old\PluginConfigurationViewLogic.cs" />
@@ -145,7 +145,8 @@
     <Compile Include="Gui\old\IExpandablePanel.cs" />
     <Compile Include="Gui\old\IExpandablePanelFactory.cs" />
     <Compile Include="Gui\old\ProgramConfigurationViewLogic.cs" />
-    <Compile Include="Gui\OptionsWindow.cs" />
+    <Compile Include="Gui\ConfigurationWindow.cs" />
+    <Compile Include="Gui\PluginConfigurationWindow.cs" />
     <Compile Include="Gui\WindowFactory.cs" />
     <Compile Include="Loaders\AddonLoader.cs" />
     <Compile Include="Loaders\AddonUnloader.cs" />
@@ -164,8 +165,7 @@
     <Compile Include="Loaders\ScenarioModuleLoader\IScenarioModuleSnapshotGenerator.cs" />
     <Compile Include="Loaders\ScenarioModuleLoader\IScenarioModuleUnloader.cs" />
     <Compile Include="Loaders\ScenarioModuleLoader\ScenarioModuleSnapshotGenerator.cs" />
-    <Compile Include="Gui\Messages\IViewMessage.cs" />
-    <Compile Include="Gui\Messages\TogglePluginOptionsWindow.cs" />
+    <Compile Include="Gui\Messages\ShowPluginConfigurationWindow.cs" />
     <Compile Include="Providers\AssemblyProvider.cs" />
     <Compile Include="Providers\ConfigNodeFormatterProvider.cs" />
     <Compile Include="Providers\ConfigurationProvider.cs" />

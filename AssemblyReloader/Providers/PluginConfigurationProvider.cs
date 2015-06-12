@@ -6,24 +6,19 @@ using AssemblyReloader.DataObjects;
 using AssemblyReloader.Queries.FileSystemQueries;
 using ReeperCommon.Containers;
 using ReeperCommon.FileSystem;
-using ReeperCommon.Serialization;
 
 namespace AssemblyReloader.Providers
 {
     public class PluginConfigurationProvider : IPluginConfigurationProvider
     {
-        private readonly IConfigNodeFormatter _configNodeFormatter;
         private readonly IPluginConfigurationFilePathQuery _configFilePathQuery;
 
 
         public PluginConfigurationProvider(
-            [NotNull] IConfigNodeFormatter configNodeFormatter,
             [NotNull] IPluginConfigurationFilePathQuery configFilePathQuery)
         {
-            if (configNodeFormatter == null) throw new ArgumentNullException("configNodeFormatter");
             if (configFilePathQuery == null) throw new ArgumentNullException("configFilePathQuery");
 
-            _configNodeFormatter = configNodeFormatter;
             _configFilePathQuery = configFilePathQuery;
         }
 
@@ -48,7 +43,8 @@ namespace AssemblyReloader.Providers
             if (!node.Any())
                 throw new FileNotFoundException("Did not find a ConfigNode definition at " + configNodeLocation);
 
-            _configNodeFormatter.Deserialize(config, node.Single());
+            if (!ConfigNode.LoadObjectFromConfig(config, node.Single()))
+                throw new Exception("Failed to load PluginConfiguration from ConfigNode");
         }
 
 
