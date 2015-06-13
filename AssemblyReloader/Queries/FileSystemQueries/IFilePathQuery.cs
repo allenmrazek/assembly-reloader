@@ -1,6 +1,6 @@
 ﻿namespace AssemblyReloader.Queries.FileSystemQueries
 {
-    public interface IProgramConfigurationFilePathQuery
+    public interface IFilePathQuery
     {
         string Get();
     }

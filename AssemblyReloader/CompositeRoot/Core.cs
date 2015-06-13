@@ -34,6 +34,7 @@ using ReeperCommon.FileSystem.Providers;
 using ReeperCommon.Gui;
 using ReeperCommon.Logging;
 using ReeperCommon.Repositories;
+using ReeperCommon.Serialization;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -134,6 +135,9 @@ namespace AssemblyReloader.CompositeRoot
             var fsFactory = new KSPFileSystemFactory(
                 new KSPUrlDir(new KSPGameDataUrlDirProvider().Get()));
 
+            var configFormatter = new ConfigNodeFormatter(new DefaultSurrogateSelector(new DefaultSurrogateProvider()),
+                new CompositeFieldInfoQuery(new RecursiveSerializableFieldQuery()));
+
             var assemblyLoader = new KspAssemblyLoader();
 
             var assemblyFileProvider = new AssemblyFileLocationQuery(assemblyLoader, fsFactory);
@@ -189,15 +193,18 @@ namespace AssemblyReloader.CompositeRoot
 
             var configuration = configurationProvider.Get();
 
-            var saveProgramConfiguration = new SaveConfigurationCommand(configuration,
-                new ProgramConfigurationFilePathQuery(mainAssemblyFile.Single()), _log.CreateTag("Configuration"));
+            //var saveProgramConfiguration = new SaveConfigurationCommand(configuration,
+            //    new ConfigFilePathQuery(mainAssemblyFile.Single()), _log.CreateTag("Configuration"));
+
+            var saveProgramConfigurationCallbacks = new SaveConfigNodeFromCallbacksCommand("Configuration",
+                new ConfigFilePathQuery(mainAssemblyFile.Single()), "Assembly Reloader Configuration");
 
             var savePluginConfiguration = new SavePluginConfigurationCommand(configFilePathQuery);
 
             var mediator =
                 new Controllers.Controller(
-                    reloadables.ToDictionary(r => r as IPluginInfo, r => r as IReloadablePlugin), 
-                    saveProgramConfiguration,
+                    reloadables.ToDictionary(r => r as IPluginInfo, r => r as IReloadablePlugin),
+                    saveProgramConfigurationCallbacks,
                     savePluginConfiguration,
                     _log.CreateTag("Controller"));
 
@@ -218,9 +225,16 @@ namespace AssemblyReloader.CompositeRoot
                     Maybe<ConfigNode>.None);
                 windowDescriptors.Add(mainWindow);
 
+                saveProgramConfigurationCallbacks.OnExecute += node =>
+                {
+                    _log.Warning("Saving from type " + mainWindow.DecoratedLogic.GetType().FullName);
+                    mainWindow.DecoratedLogic.Save(configFormatter, node.AddNode("MainWindow")); 
+                };
+                saveProgramConfigurationCallbacks.OnExecute += node => ConfigNode.CreateConfigFromObject(configuration, node);
+
                 var optionsWindow = windowFactory.CreateOptionsWindow(mainAppearance, configuration, Maybe<ConfigNode>.None);
                 windowDescriptors.Add(optionsWindow);
-                viewMessageChannel.AddListener<ShowConfigurationWindow>(optionsWindow.Logic);
+                viewMessageChannel.AddListener<ShowConfigurationWindow>(optionsWindow.BaseLogic);
 
                 reloadables.ForEach(r =>
                 {
@@ -228,7 +242,7 @@ namespace AssemblyReloader.CompositeRoot
                         Maybe<ConfigNode>.None);
                     windowDescriptors.Add(pluginConfigWindow);
 
-                    viewMessageChannel.AddListener<ShowPluginConfigurationWindow>(pluginConfigWindow.Logic);
+                    viewMessageChannel.AddListener<ShowPluginConfigurationWindow>(pluginConfigWindow.BaseLogic);
                 });
 
                 

@@ -7,15 +7,18 @@ namespace AssemblyReloader.DataObjects
 {
     public class WindowDescriptor
     {
-        public IWindowComponent Logic { get; private set; }
+        public IWindowComponent BaseLogic { get; private set; }
+        public IWindowComponent DecoratedLogic { get; private set; }
         public WindowView View { get; private set; }
 
-        public WindowDescriptor([NotNull] IWindowComponent logic, [NotNull] WindowView view)
+        public WindowDescriptor([NotNull] IWindowComponent baseLogic, [NotNull] IWindowComponent decoratedLogic, [NotNull] WindowView view)
         {
-            if (logic == null) throw new ArgumentNullException("logic");
+            if (baseLogic == null) throw new ArgumentNullException("baseLogic");
+            if (decoratedLogic == null) throw new ArgumentNullException("decoratedLogic");
             if (view == null) throw new ArgumentNullException("view");
 
-            Logic = logic;
+            BaseLogic = baseLogic;
+            DecoratedLogic = decoratedLogic;
             View = view;
         }
     }

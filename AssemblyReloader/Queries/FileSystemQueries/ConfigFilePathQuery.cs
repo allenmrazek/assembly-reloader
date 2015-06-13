@@ -5,12 +5,12 @@ using ReeperCommon.FileSystem;
 
 namespace AssemblyReloader.Queries.FileSystemQueries
 {
-    public class ProgramConfigurationFilePathQuery : IProgramConfigurationFilePathQuery
+    public class ConfigFilePathQuery : IFilePathQuery
     {
         private readonly IFile _reloaderDll;
         private const string ProgramConfigurationFileExtension = ".config";
 
-        public ProgramConfigurationFilePathQuery([NotNull] IFile reloaderDll)
+        public ConfigFilePathQuery([NotNull] IFile reloaderDll)
         {
             if (reloaderDll == null) throw new ArgumentNullException("reloaderDll");
             _reloaderDll = reloaderDll;

@@ -72,13 +72,13 @@ namespace AssemblyReloader.Gui
             withButtons.AddButton(new BasicTitleBarButton(_titleBarButtonStyle, _closeButtonTexture,
                 mainWindow.OnCloseButton));
 
-            if (windowConfig.Any())
-                withButtons.Load(windowConfig.Single());
+            //if (windowConfig.Any())
+            //    withButtons.Load(windowConfig.Single());
 
             var view = WindowView.Create(withButtons, "MainWindow");
             UnityEngine.Object.DontDestroyOnLoad(view);
 
-            return new WindowDescriptor(mainWindow, view);
+            return new WindowDescriptor(mainWindow, withButtons, view);
         }
 
 
@@ -99,8 +99,8 @@ namespace AssemblyReloader.Gui
             withButtons.AddButton(new BasicTitleBarButton(_titleBarButtonStyle, _closeButtonTexture,
                 optionsWindow.OnCloseButton));
 
-            if (windowConfig.Any())
-                withButtons.Load(windowConfig.Single());
+            //if (windowConfig.Any())
+            //    withButtons.Load(windowConfig.Single());
 
             withButtons.Visible = false;
 
@@ -108,7 +108,7 @@ namespace AssemblyReloader.Gui
             UnityEngine.Object.DontDestroyOnLoad(view);
 
 
-            return new WindowDescriptor(optionsWindow, view);
+            return new WindowDescriptor(optionsWindow, withButtons, view);
         }
 
 
@@ -129,8 +129,8 @@ namespace AssemblyReloader.Gui
             withButtons.AddButton(new BasicTitleBarButton(_titleBarButtonStyle, _closeButtonTexture,
                 pluginWindow.OnCloseButton));
 
-            if (windowConfig.Any())
-                withButtons.Load(windowConfig.Single());
+            //if (windowConfig.Any())
+            //    withButtons.Load(windowConfig.Single());
 
             withButtons.Visible = false;
 
@@ -138,7 +138,7 @@ namespace AssemblyReloader.Gui
             UnityEngine.Object.DontDestroyOnLoad(view);
 
 
-            return new WindowDescriptor(pluginWindow, view);
+            return new WindowDescriptor(pluginWindow, withButtons, view);
         }
     }
 }

@@ -5,6 +5,7 @@ using AssemblyReloader.CompositeRoot;
 using AssemblyReloader.Controllers;
 using AssemblyReloader.Gui.Messages;
 using ReeperCommon.Gui.Window;
+using ReeperCommon.Serialization;
 using UnityEngine;
 
 namespace AssemblyReloader.Gui
@@ -14,7 +15,7 @@ namespace AssemblyReloader.Gui
         private readonly IController _controller;
         private readonly IEnumerable<IPluginInfo> _plugins;
         private readonly IMessageChannel _viewMessageChannel;
-        [Persistent] private Vector2 _scroll = default(Vector2);
+        [ReeperPersistent] private Vector2 _scroll = default(Vector2);
 
 
         public MainWindow(
