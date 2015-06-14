@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using AssemblyReloader.Annotations;
 using AssemblyReloader.CompositeRoot;
 using AssemblyReloader.Controllers;
 using AssemblyReloader.DataObjects;
 using ReeperCommon.Containers;
 using ReeperCommon.Gui;
-using ReeperCommon.Gui.Window;
 using ReeperCommon.Gui.Window.Buttons;
 using ReeperCommon.Gui.Window.Decorators;
 using ReeperCommon.Gui.Window.View;

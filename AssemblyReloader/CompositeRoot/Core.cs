@@ -196,8 +196,10 @@ namespace AssemblyReloader.CompositeRoot
             //var saveProgramConfiguration = new SaveConfigurationCommand(configuration,
             //    new ConfigFilePathQuery(mainAssemblyFile.Single()), _log.CreateTag("Configuration"));
 
+            var mainConfigFilePathQuery = new ConfigFilePathQuery(mainAssemblyFile.Single());
+ 
             var saveProgramConfigurationCallbacks = new SaveConfigNodeFromCallbacksCommand("Configuration",
-                new ConfigFilePathQuery(mainAssemblyFile.Single()), "Assembly Reloader Configuration");
+                mainConfigFilePathQuery, "Assembly Reloader Configuration");
 
             var savePluginConfiguration = new SavePluginConfigurationCommand(configFilePathQuery);
 

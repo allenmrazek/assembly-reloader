@@ -15,6 +15,142 @@ using Object = UnityEngine.Object;
 namespace TestProject
 {
 
+
+
+
+    //public class AddAttachNodePartModule : PartModule
+    //{
+    //    private readonly ILog _log = new DebugLog("AddAttachNodePartModule");
+
+    //    public override void OnAwake()
+    //    {
+    //        _log.Warning("AddAttachNodePartModule awake");
+    //        base.OnAwake();
+
+    //        var model = transform.Find("model");
+
+    //        part.attachNodes.ForEach(an => _log.Normal("AttachNode: " + an.id + ", " + an.attachMethod));
+
+    //        //part.attachNodes.ForEach(an =>
+    //        //{
+    //        //    _log.Normal("id: " + an.id);
+
+    //        //    //if (an.parent == part.transform)
+    //        //    //    _log.Warning("wtf it's on part");
+    //        //    //else if (an.nodeTransform.parent == model)
+    //        //    //    _log.Warning("yep attach nodes are as expected");
+    //        //    //else _log.Error("oh shit I ahve no idea what's going on");
+    //        //});
+
+    //        var location = new GameObject("customAttach");
+    //        location.transform.parent = model;
+    //        location.transform.localPosition = Vector3.up*3f;
+
+    //        //if (part.attachNodes.Any(an => an.id == "top"))
+    //        //    part.attachNodes.Remove(part.attachNodes.First(an => an.id == "top"));
+
+    //        //part.attachRules.allowStack = true;
+    //        //part.attachRules.stack = true;
+
+    //        part.attachNodes.Add(new AttachNode("custom", location.transform, 1, AttachNodeMethod.HINGE_JOINT) { owner = part, orientation = Vector3.up, position = location.transform.position, originalPosition = location.transform.position, originalOrientation = Vector3.up});
+    //        //var cfg = new ConfigNode();
+    //        //cfg.AddValue("transform", "customAttach");
+
+    //        //part.AddAttachNode(cfg);
+
+    //        part.gameObject.PrintComponents(_log);
+    //    }
+
+    //    private void Start()
+    //    {
+    //        var model = transform.Find("model");
+    //        part.attachNodes.ForEach(an =>
+    //        {
+    //            _log.Normal("id: " + an.id);
+    //            _log.Normal("position: " + an.position);
+    //            _log.Normal("original position: " + an.originalPosition);
+
+    //            //if (an.nodeTransform == null) return;
+
+    //            //if (an.nodeTransform.parent == part.transform)
+    //            //    _log.Warning("wtf it's on part");
+    //            //else if (an.nodeTransform.parent == model)
+    //            //    _log.Warning("yep attach nodes are as expected");
+    //            //else _log.Error("oh shit I ahve no idea what's going on");
+    //        });
+    //    }
+
+    //    private void Update()
+    //    {
+    //        if (Input.GetKeyDown(KeyCode.P))
+    //        {
+    //            part.gameObject.PrintComponents(_log);
+    //        }
+    //    }
+    //}
+
+
+    //[KSPAddon(KSPAddon.Startup.EditorAny, false)]
+    //public class IconPrefabInstaller : MonoBehaviour
+    //{
+    //    private class Echoer : MonoBehaviour
+    //    {
+    //        private void Update()
+    //        {
+    //            if (Input.GetKeyDown(KeyCode.O))
+    //                print("Echo!");
+    //        }
+    //    }
+    //    private void Start()
+    //    {
+    //        print("Installing echoer");
+    //        EditorLogic.fetch.attachNodePrefab.AddComponent<Echoer>();
+    //    }
+    //}
+
+    //[KSPAddon(KSPAddon.Startup.SpaceCentre, true)]
+    //public class InstallPartModule : MonoBehaviour
+    //{
+    //    private void Start()
+    //    {
+    //        DontDestroyOnLoad(this);
+
+    //        var ap = PartLoader.getPartInfoByName("mk1pod");
+
+    //        var pm = ap.partPrefab.gameObject.AddComponent<AddAttachNodePartModule>();
+
+    //        //typeof (PartModule).GetMethod("Awake", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(pm, null);
+    //    }
+
+    //    private void OnDestroy()
+    //    {
+    //        // uninstall
+    //        try
+    //        {
+    //            var ap = PartLoader.getPartInfoByName("mk1pod");
+    //            Destroy(ap.partPrefab.gameObject.GetComponent<AddAttachNodePartModule>());
+
+    //            var model = ap.partPrefab.transform.Find("model");
+
+    //            for (int i = 0; i < model.childCount;)
+    //            {
+    //                if (model.GetChild(i).name == "customAttach")
+    //                {
+    //                    model.GetChild(i).parent = null;
+    //                    Destroy(model.GetChild(i));
+    //                }
+    //                else ++i;
+    //            }
+
+    //            ap.partPrefab.attachNodes.Remove(ap.partPrefab.attachNodes.First(an => an.id == "custom"));
+
+    //        }
+    //        catch (Exception e)
+    //        {
+    //            Debug.LogError("Failed to remove PartModule");
+    //        }
+    //    } 
+    //}
 //[KSPScenario(ScenarioCreationOptions.AddToAllGames, new [] { GameScenes.SPACECENTER })]
 //public class FacilityLevelTweaker : ScenarioModule
 //{
