@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.Remoting.Contexts;
 using AssemblyReloader.Annotations;
 
 namespace AssemblyReloader.Commands
@@ -17,6 +18,23 @@ namespace AssemblyReloader.Commands
         public void Execute()
         {
             _action();
+        }
+    }
+
+
+    public class Command<TContext> : ICommand<TContext>
+    {
+        private readonly Action<TContext> _action;
+
+        public Command([NotNull] Action<TContext> action)
+        {
+            if (action == null) throw new ArgumentNullException("action");
+            _action = action;
+        }
+
+        public void Execute(TContext context)
+        {
+            _action(context);
         }
     }
 }

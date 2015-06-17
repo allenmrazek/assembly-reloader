@@ -1,10 +1,10 @@
-﻿namespace AssemblyReloader.DataObjects
+﻿using ReeperCommon.Serialization;
+
+namespace AssemblyReloader.DataObjects
 {
     public class Configuration
     {
         // ReSharper disable UnusedField.Compiler
-        [Persistent] public bool ReloadAllReloadablesUponWindowFocus = false;
-
-
+        [ReeperPersistent] public bool ReloadAllReloadablesUponWindowFocus = false;
     }
 }

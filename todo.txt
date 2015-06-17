@@ -16,6 +16,8 @@
 
 - bugfix: reloading while in editor with parts that have UI elements sometimes causes duplicate PartModules to exist on the ship
 
+- bugfix: module info isn't updated (it's created by PartLoader and then never touched afterwards, might cause NRE if PartModule implements IModuleInfo)
+
 - todo: ScienceExperiments (?)
 - todo: Contracts
 - todo: strategies

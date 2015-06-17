@@ -29,12 +29,12 @@ using Mono.Cecil.Cil;
 using ReeperCommon.Containers;
 using ReeperCommon.Extensions;
 using ReeperCommon.FileSystem;
-using ReeperCommon.FileSystem.Factories;
 using ReeperCommon.FileSystem.Providers;
 using ReeperCommon.Gui;
 using ReeperCommon.Logging;
 using ReeperCommon.Repositories;
 using ReeperCommon.Serialization;
+using TinyIoC;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -124,39 +124,98 @@ namespace AssemblyReloader.CompositeRoot
 
         public Core()
         {
+            var container = TinyIoCContainer.Current;
+
 #if DEBUG
-            var primaryLog = new DebugLog("ART");
+            //var primaryLog = new DebugLog("ART");
+            container.Register<ILog>(new DebugLog("ART"), "MainLog");
 #else
             var primaryLog = LogFactory.Create(LogLevel.Standard);
+            container.Register<ILog>(LogFactory.Create(LogLevel.Standard), "MainLog");
 #endif
 
-            _log = primaryLog;
+            container.Register<ILog>(_log);
 
-            var fsFactory = new KSPFileSystemFactory(
-                new KSPUrlDir(new KSPGameDataUrlDirProvider().Get()));
+            container.AutoRegister(DuplicateImplementationActions.RegisterSingle);
 
-            var configFormatter = new ConfigNodeFormatter(new DefaultSurrogateSelector(new DefaultSurrogateProvider()),
-                new CompositeFieldInfoQuery(new RecursiveSerializableFieldQuery()));
+            container.Register<RandomStringGenerator>().AsSingleton();
+            container.Register<IUrlDirProvider>(new KSPGameDataUrlDirProvider(), "GameData");
 
-            var assemblyLoader = new KspAssemblyLoader();
+            container.Register<IFileSystemFactory>(new KSPFileSystemFactory(
+                new KSPUrlDir(container.Resolve<IUrlDirProvider>("GameData").Get())));
 
-            var assemblyFileProvider = new AssemblyFileLocationQuery(assemblyLoader, fsFactory);
-            var mainAssemblyFile = assemblyFileProvider.Get(Assembly.GetExecutingAssembly());
-            if (!mainAssemblyFile.Any()) throw new Exception("Failed to locate executing assembly file");
+            container.Register<IAssemblyFileLocationQuery>(
+                (cContainer, overloads) => cContainer.Resolve<AssemblyFileLocationQuery>(overloads));
 
-            var ourDirProvider = new AssemblyDirectoryQuery(assemblyLoader, Assembly.GetExecutingAssembly(), fsFactory.GetGameDataDirectory());
+            var mainAssemblyFile = container.Resolve<IAssemblyFileLocationQuery>().Get(Assembly.GetExecutingAssembly());
+                if (!mainAssemblyFile.Any()) throw new Exception("Failed to locate executing assembly file!");
+
+            container.Register<IConfigNodeSerializer>(
+                new ConfigNodeSerializer(new DefaultSurrogateSelector(new DefaultSurrogateProvider()),
+                    new CompositeFieldInfoQuery(new RecursiveSerializableFieldQuery())));
+
+
+            container.Register(container.Resolve<IFileSystemFactory>().GetGameDataDirectory(), "GameData");
+            container.Register<IGameAddonLoader>(new KspAddonLoader());
+            container.Register<IUnityObjectDestroyer>(
+                new UnityObjectDestroyer(new PluginReloadRequestedMethodCallCommand()));
+            container.Register<IAddonAttributesFromTypeQuery>(new AddonAttributesFromTypeQuery());
+
+            var ourDirProvider =
+                container.Resolve<AssemblyDirectoryQuery>(new NamedParameterOverloads
+                {
+                    { "assembly", Assembly.GetExecutingAssembly() },
+                    { "gameData", container.Resolve<IDirectory>("GameData") }
+                });
+
+            container.Register(ourDirProvider.Get(), "Core");
+            container.Register(ConfigureResourceRepository(container.Resolve<IDirectory>("Core")));
+            container.Register(ConfigureEventProvider(container.Resolve<IStartupSceneFromGameSceneQuery>()));
+            container.Register(ConfigureLoadedAssemblyFactory());
+            container.Register(mainAssemblyFile.Single(), "Core");
+            container.Register<IFilePathProvider>(new ConfigFilePathProvider(container.Resolve<IFile>("Core")), "Core");
+            container.Register(container.Resolve<ConfigurationProvider>(new NamedParameterOverloads
+            {
+                { "configurationFileProvider", container.Resolve<IFilePathProvider>("Core") },
+                { "log", container.Resolve<ILog>("MainLog") }
+            }).Get());
 
             var assemblyResolver = new DefaultAssemblyResolver();
+            assemblyResolver.AddSearchDirectory(container.Resolve<IDirectory>("Core").FullPath);
 
-            assemblyResolver.AddSearchDirectory(ourDirProvider.Get().FullPath); // we'll be importing some references to types we own so this is a necessary step
+            container.Register<BaseAssemblyResolver, DefaultAssemblyResolver>(assemblyResolver);
+            container.Register<IPluginConfigurationFilePathQuery>(new PluginConfigurationFilePathQuery());
+            container.Register<IPartLoader, KspPartLoader>().AsSingleton();
+            container.Register<IAvailablePartConfigQuery, AvailablePartConfigQuery>().AsSingleton();
+            container.Register<IModuleConfigsFromPartConfigQuery, ModuleConfigsFromPartConfigQuery>().AsSingleton();
+            container.Register<ITypeIdentifierQuery, TypeIdentifierQuery>().AsSingleton();
+            container.Register<ILoadedComponentQuery<Part>>(new LoadedComponentQuery<Part>());
+            container.Register<IComponentsInGameObjectHierarchyProvider<Part>>(
+                new ComponentsInGameObjectHierarchyProvider<Part>());
+
+            container.Register<IPartPrefabCloneProvider, PartPrefabCloneProvider>(
+                container.Resolve<PartPrefabCloneProvider>());
+
+            container.Register<IPartModuleFactory, PartModuleFactory>(
+                container.Resolve<PartModuleFactory>(new NamedParameterOverloads
+                {
+                    { "awakenPartModule", new AwakenPartModuleCommand() },
+                    { "onStartRunner", container.Resolve<ExecutePartModuleOnStartsCommand>(
+                        new NamedParameterOverloads()
+                        {
+                            { "log", container.Resolve<ILog>("MainLog").CreateTag("PartModuleOnStartRunner") }
+                        }) }
+                }));
 
 
-            var resourceLocator = ConfigureResourceRepository(ourDirProvider.Get());
-            var eventProvider = ConfigureEventProvider(new StartupSceneFromGameSceneQuery());
+            _log = container.Resolve<ILog>("MainLog");
 
             KspPartActionWindowListener.WindowController = new KspPartActionWindowController();
             KspPartActionWindowListener.PartActionWindowQuery =
                 new ComponentsInGameObjectHierarchyProvider<UIPartActionWindow>();
+
+
+            var eventProvider = container.Resolve<IEventProvider>();
 
             eventProvider.OnSceneLoaded.OnEvent += s =>
             {
@@ -165,99 +224,26 @@ namespace AssemblyReloader.CompositeRoot
                         UIPartActionController.Instance.windowPrefab.gameObject.AddComponent<KspPartActionWindowListener>();
             };
 
-            var loadedAssemblyFactory = ConfigureLoadedAssemblyFactory();
 
-            var pluginConfigurationPathQuery = new PluginConfigurationFilePathQuery();
-
-            var reloadables = CreateReloadablePlugins(loadedAssemblyFactory, fsFactory, assemblyResolver, new PluginConfigurationProvider(pluginConfigurationPathQuery)).ToList();
+            var reloadables = CreateReloadablePlugins(container).ToList();
 
             reloadables.ForEach(r => r.Load());
 
-            var skinScheme = ConfigureSkin(resourceLocator);
 
-            var btnCloseTexture = resourceLocator.GetTexture("Resources/btnClose.png");
-            if (!btnCloseTexture.Any()) throw new Exception("Failed to find window close button texture!");
 
-            var btnOptionsTexture = resourceLocator.GetTexture("Resources/btnWrench.png");
-            if (!btnOptionsTexture.Any()) throw new Exception("Failed to find window option button texture!");
 
-            var btnResizeCursorTexture = resourceLocator.GetTexture("Resources/cursor.png");
-            if (!btnResizeCursorTexture.Any()) throw new Exception("Failed to find window resize cursor texture!");
 
-            var configFilePathQuery = new PluginConfigurationFilePathQuery();
 
-            var configurationProvider = new ConfigurationProvider(
-                mainAssemblyFile.Single(),
-                configFilePathQuery,
-                _log.CreateTag("ConfigurationProvider"));
+            //var configurationProvider = new ConfigurationProvider(
+            //    new ConfigFilePathProvider(mainAssemblyFile.Single()),
+            //    serializer,
 
-            var configuration = configurationProvider.Get();
+            //    _log.CreateTag("ConfigurationProvider"));
 
-            //var saveProgramConfiguration = new SaveConfigurationCommand(configuration,
-            //    new ConfigFilePathQuery(mainAssemblyFile.Single()), _log.CreateTag("Configuration"));
+            //var configuration = configurationProvider.Get();
+            //var mainConfigFilePathQuery = new ConfigFilePathProvider(mainAssemblyFile.Single());
 
-            var mainConfigFilePathQuery = new ConfigFilePathQuery(mainAssemblyFile.Single());
- 
-            var saveProgramConfigurationCallbacks = new SaveConfigNodeFromCallbacksCommand("Configuration",
-                mainConfigFilePathQuery, "Assembly Reloader Configuration");
-
-            var savePluginConfiguration = new SavePluginConfigurationCommand(configFilePathQuery);
-
-            var mediator =
-                new Controllers.Controller(
-                    reloadables.ToDictionary(r => r as IPluginInfo, r => r as IReloadablePlugin),
-                    saveProgramConfigurationCallbacks,
-                    savePluginConfiguration,
-                    _log.CreateTag("Controller"));
-
-            var viewMessageChannel = new MessageChannel();
-
-            var windowFactory = new WindowFactory(new UniqueWindowIdProvider(), mediator, viewMessageChannel,
-                ConfigureTitleBarButtonStyle(), btnOptionsTexture.Single(), btnCloseTexture.Single());
-
-            var mainAppearance = new WindowAppearanceInfo(skinScheme,
-                new Rect(200f, 200f, 400f, 200f), new Vector2(10f, 10f), new Vector2(150f, 100f),
-                btnResizeCursorTexture.Single());
-
-            var windowDescriptors = new List<WindowDescriptor>();
-
-            try
-            {
-                var mainWindow = windowFactory.CreateMainWindow(reloadables.Cast<IPluginInfo>(), mainAppearance,
-                    Maybe<ConfigNode>.None);
-                windowDescriptors.Add(mainWindow);
-
-                saveProgramConfigurationCallbacks.OnExecute += node =>
-                {
-                    _log.Warning("Saving from type " + mainWindow.DecoratedLogic.GetType().FullName);
-                    mainWindow.DecoratedLogic.Save(configFormatter, node.AddNode("MainWindow")); 
-                };
-                saveProgramConfigurationCallbacks.OnExecute += node => ConfigNode.CreateConfigFromObject(configuration, node);
-
-                var optionsWindow = windowFactory.CreateOptionsWindow(mainAppearance, configuration, Maybe<ConfigNode>.None);
-                windowDescriptors.Add(optionsWindow);
-                viewMessageChannel.AddListener<ShowConfigurationWindow>(optionsWindow.BaseLogic);
-
-                reloadables.ForEach(r =>
-                {
-                    var pluginConfigWindow = windowFactory.CreatePluginOptionsWindow(mainAppearance, r as IPluginInfo,
-                        Maybe<ConfigNode>.None);
-                    windowDescriptors.Add(pluginConfigWindow);
-
-                    viewMessageChannel.AddListener<ShowPluginConfigurationWindow>(pluginConfigWindow.BaseLogic);
-                });
-
-                
-            }
-            catch (Exception)
-            {
-                _log.Error("Encountered an exception while creating windows");
-
-                // need to destroy the windows, otherwise they'll stick around on unhandled exceptions
-                windowDescriptors.ForEach(d => Object.Destroy(d.View));
-
-                throw;
-            }
+            //CreateWindows(configuration, reloadables, serializer, resourceLocator, mainConfigFilePathQuery);
         }
 
 
@@ -268,6 +254,111 @@ namespace AssemblyReloader.CompositeRoot
         }
 
 
+        //private void CreateWindows(
+        //    [NotNull] Configuration configuration, 
+        //    [NotNull] List<ReloadablePlugin> reloadables, 
+        //    [NotNull] IConfigNodeSerializer serializer, [NotNull] IResourceRepository resourceLocator,
+        //    [NotNull] IFilePathProvider mainConfigPathProvider)
+        //{
+        //    if (configuration == null) throw new ArgumentNullException("configuration");
+        //    if (reloadables == null) throw new ArgumentNullException("reloadables");
+        //    if (serializer == null) throw new ArgumentNullException("serializer");
+        //    if (resourceLocator == null) throw new ArgumentNullException("resourceLocator");
+        //    if (mainConfigPathProvider == null) throw new ArgumentNullException("mainConfigPathProvider");
+
+
+        //    var skinScheme = ConfigureSkin(resourceLocator);
+
+        //    var btnCloseTexture = resourceLocator.GetTexture("Resources/btnClose.png");
+        //    if (!btnCloseTexture.Any()) throw new Exception("Failed to find window close button texture!");
+
+        //    var btnOptionsTexture = resourceLocator.GetTexture("Resources/btnWrench.png");
+        //    if (!btnOptionsTexture.Any()) throw new Exception("Failed to find window option button texture!");
+
+        //    var btnResizeCursorTexture = resourceLocator.GetTexture("Resources/cursor.png");
+        //    if (!btnResizeCursorTexture.Any()) throw new Exception("Failed to find window resize cursor texture!");
+
+        //    var mainConfigNode = new ConfigNode("AssemblyReloaderConfig");
+
+        //    var doConfigurationSerializeCommand = new SerializeObjectCommand(serializer, mainConfigNode);
+
+        //    var serializeConfigurationCommand = new ContextProviderCommand<SerializationContext>(
+        //        () => new SerializationContext(configuration, mainConfigPathProvider), 
+        //        new CompositeCommand<SerializationContext>(new Command<SerializationContext>(c => mainConfigNode.ClearData()),
+        //        doConfigurationSerializeCommand));
+
+        //    //var doPluginConfigurationSerializeCommand = new SerializeObjectCommand(serializer,
+        //    //    "AssemblyReloaderPluginConfiguration");
+
+        //    //var serializePluginConfigurationCommand =
+        //    //    new ContextAdapter<IPluginInfo, SerializationContext>(
+        //    //        pluginInfo =>
+        //    //            new SerializationContext(pluginInfo.Configuration,
+        //    //                new ConfigFilePathProvider(pluginInfo.Location)),
+        //    //        doPluginConfigurationSerializeCommand);
+
+
+        //    var mediator =
+        //        new Controllers.Controller(
+        //            reloadables.ToDictionary(r => r as IPluginInfo, r => r as IReloadablePlugin),
+        //            serializeConfigurationCommand,
+        //            /*serializePluginConfigurationCommand*/ new NullCommand<IPluginInfo>(),
+        //            _log.CreateTag("Controller"));
+
+        //    var viewMessageChannel = new MessageChannel();
+
+        //    var windowFactory = new WindowFactory(new UniqueWindowIdProvider(), mediator, viewMessageChannel,
+        //        ConfigureTitleBarButtonStyle(), btnOptionsTexture.Single(), btnCloseTexture.Single());
+
+        //    var mainAppearance = new WindowAppearanceInfo(skinScheme,
+        //        new Rect(200f, 200f, 400f, 200f), new Vector2(10f, 10f), new Vector2(150f, 100f),
+        //        btnResizeCursorTexture.Single());
+
+        //    var windowDescriptors = new List<WindowDescriptor>();
+
+        //    try
+        //    {
+        //        var mainWindow = windowFactory.CreateMainWindow(reloadables.Cast<IPluginInfo>(), mainAppearance,
+        //            Maybe<ConfigNode>.None);
+        //        windowDescriptors.Add(mainWindow);
+
+        //        doConfigurationSerializeCommand.OnSerialized += node =>
+        //        {
+        //            var windowCfg = new ConfigNode("MainWindow");
+        //            mainWindow.DecoratedLogic.Serialize(serializer, windowCfg);
+        //        };
+
+        //        var optionsWindow = windowFactory.CreateOptionsWindow(mainAppearance, configuration, Maybe<ConfigNode>.None);
+        //        windowDescriptors.Add(optionsWindow);
+        //        viewMessageChannel.AddListener<ShowConfigurationWindow>(optionsWindow.BaseLogic);
+
+        //        reloadables.ForEach(r =>
+        //        {
+        //            var pluginConfigWindow = windowFactory.CreatePluginOptionsWindow(mainAppearance, r,
+        //                Maybe<ConfigNode>.None);
+        //            windowDescriptors.Add(pluginConfigWindow);
+
+        //            //doPluginConfigurationSerializeCommand.OnSerialized += node =>
+        //            //{
+        //            //    var optionsCfg = new ConfigNode("Window");
+        //            //    pluginConfigWindow.DecoratedLogic.Serialize(serializer, optionsCfg);
+        //            //};
+
+        //            viewMessageChannel.AddListener<ShowPluginConfigurationWindow>(pluginConfigWindow.BaseLogic);
+        //        });
+
+
+        //    }
+        //    catch (Exception)
+        //    {
+        //        _log.Error("Encountered an exception while creating windows");
+
+        //        // need to destroy the windows, otherwise they'll stick around on unhandled exceptions
+        //        windowDescriptors.ForEach(d => Object.Destroy(d.View));
+
+        //        throw;
+        //    }
+        //}
 
 
 
@@ -318,26 +409,12 @@ namespace AssemblyReloader.CompositeRoot
         }
 
 
-        private IEnumerable<ReloadablePlugin> CreateReloadablePlugins(
-            ILoadedAssemblyFactory laFactory,
-            IFileSystemFactory fsFactory, 
-            BaseAssemblyResolver assemblyResolver,
-            IPluginConfigurationProvider configurationProvider)
+        private IEnumerable<ReloadablePlugin> CreateReloadablePlugins(TinyIoCContainer container)
         {
-            var reloadableAssemblyFileQuery = new ReloadableAssemblyFilesInDirectoryQuery(fsFactory.GetGameDataDirectory());
-            var unityObjectDestroyer = new UnityObjectDestroyer(new PluginReloadRequestedMethodCallCommand());
-            var gameAssemblyLoader = new KspAssemblyLoader();
-            var gameAddonLoader = new KspAddonLoader();
+            var reloadableAssemblyFilesInDirectoryQuery =
+                container.Resolve<ReloadableAssemblyFilesInDirectoryQuery>(new NamedParameterOverloads { {"topDirectory", container.Resolve<IDirectory>("GameData") } });
 
-            return reloadableAssemblyFileQuery
-                .Get()
-                .Select(raFile => ConfigureReloadablePlugin(raFile,
-                    gameAssemblyLoader,
-                    gameAddonLoader,
-                    assemblyResolver, 
-                    laFactory, 
-                    configurationProvider,
-                    unityObjectDestroyer));
+            return reloadableAssemblyFilesInDirectoryQuery.Get().Select(f => ConfigureReloadablePlugin(container, f));
         }
 
 
@@ -351,21 +428,21 @@ namespace AssemblyReloader.CompositeRoot
             var onSceneLoaded = new GameEventPublisher<KSPAddon.Startup>();
             onLevelWasLoaded.OnEvent += gameScene => onSceneLoaded.Raise(query.Get(gameScene));
 
-            return new EventProvider{OnLevelWasLoaded = onLevelWasLoaded,
-                OnSceneLoaded = onSceneLoaded};
+            return new EventProvider{
+                OnLevelWasLoaded = onLevelWasLoaded,
+                OnSceneLoaded = onSceneLoaded
+            };
         }
 
 
         private ReloadablePlugin ConfigureReloadablePlugin(
-            IFile location,
-            IGameAssemblyLoader gameAssemblyLoader,
-            IGameAddonLoader gameAddonLoader,
-            BaseAssemblyResolver assemblyResolver,
-            ILoadedAssemblyFactory laFactory,
-            IPluginConfigurationProvider configurationProvider,
-            IUnityObjectDestroyer objectDestroyer)
+            [NotNull] TinyIoCContainer container,
+            [NotNull] IFile location)
         {
-            var configuration = configurationProvider.Get(location);
+            if (container == null) throw new ArgumentNullException("container");
+            if (location == null) throw new ArgumentNullException("location");
+
+            var configuration = new PluginConfigurationProvider(container.Resolve<IPluginConfigurationFilePathQuery>()).Get(location);
 
             var debugSymbolExistQuery = new DebugSymbolFileExistsQuery(location);
 
@@ -373,7 +450,7 @@ namespace AssemblyReloader.CompositeRoot
                 new AssemblyDefinitionFromDiskReader(
                     location,
                     debugSymbolExistQuery,
-                    assemblyResolver),
+                    container.Resolve<BaseAssemblyResolver>()),
                 new ConditionalWriteLoadedAssemblyToDisk(
                     new AssemblyDefinitionLoader(
                         new TemporaryFileFactory(
@@ -384,137 +461,266 @@ namespace AssemblyReloader.CompositeRoot
                     location.Directory),
                 ConfigureDefinitionWeaver(location, configuration));
 
+            var loader = new Loaders.AssemblyLoader(assemblyProvider, container.Resolve<ILoadedAssemblyFactory>(),
+                container.Resolve<ILog>("MainLog").CreateTag("AssemblyLoader"));
 
-            var kspFactory = new KspFactory(new KspGameObjectProvider());
-            var reloadable = new ReloadablePlugin(new Loaders.AssemblyLoader(assemblyProvider, laFactory, _log.CreateTag("AssemblyLoader")), location, configuration);
+            var reloadable = new ReloadablePlugin(loader, location, configuration);
 
-            SetupAddonController(reloadable, gameAssemblyLoader, gameAddonLoader, objectDestroyer);
-            SetupPartModuleController(reloadable, kspFactory);
-            SetupScenarioModuleController(reloadable, configuration, kspFactory);
+            SetupAddonController(container, reloadable);
+            SetupPartModuleController(container, reloadable);
+            //SetupScenarioModuleController(container, reloadable);
 
             return reloadable;
         }
 
 
         private static void SetupAddonController(
-            [NotNull] ReloadablePlugin plugin, 
-            [NotNull] IGameAssemblyLoader gameAssemblyLoader,
-            [NotNull] IGameAddonLoader gameAddonLoader,
-            [NotNull] IUnityObjectDestroyer objectDestroyer)
-
+            [NotNull] TinyIoCContainer container,
+            [NotNull] ReloadablePlugin plugin)
         {
+            if (container == null) throw new ArgumentNullException("container");
             if (plugin == null) throw new ArgumentNullException("plugin");
-            if (gameAssemblyLoader == null) throw new ArgumentNullException("gameAssemblyLoader");
-            if (gameAddonLoader == null) throw new ArgumentNullException("gameAddonLoader");
-            if (objectDestroyer == null) throw new ArgumentNullException("objectDestroyer");
 
             var addonLoader = new Loaders.AddonLoader(
-                gameAssemblyLoader,
-                gameAddonLoader,
-                new CurrentStartupSceneProvider(new StartupSceneFromGameSceneQuery(), new CurrentGameSceneProvider()),
+                container.Resolve<IGameAssemblyLoader>(),
+                container.Resolve<IGameAddonLoader>(),
+                container.Resolve<ICurrentStartupSceneProvider>(),
                 () => plugin.Configuration.InstantlyAppliesToEveryScene);
 
-            var addonUnloader = new AddonUnloader(
-                new AddonsFromAssemblyQuery(new AddonAttributesFromTypeQuery()),
-                objectDestroyer,
-                new LoadedComponentQuery());
+            var addonUnloader = container.Resolve<AddonUnloader>(new NamedParameterOverloads
+            {
+                { "addonTypesFromAssemblyQuery", new AddonsFromAssemblyQuery(container.Resolve<IAddonAttributesFromTypeQuery>()) }
+            });
 
             var addonController = new AddonController(addonLoader, addonUnloader);
 
             plugin.OnLoaded +=
                 (asm, loc) => { if (plugin.Configuration.StartAddonsForCurrentScene) addonController.Load(asm, loc); };
 
-            plugin.OnUnloaded += addonController.Unload; 
+            plugin.OnUnloaded += addonController.Unload;
         }
 
+        //private static void SetupAddonController(
+        //    [NotNull] ReloadablePlugin plugin, 
+        //    [NotNull] IGameAssemblyLoader gameAssemblyLoader,
+        //    [NotNull] IGameAddonLoader gameAddonLoader,
+        //    [NotNull] IUnityObjectDestroyer objectDestroyer)
 
-        private void SetupPartModuleController(ReloadablePlugin plugin, IKspFactory kspFactory)
+        //{
+        //    if (plugin == null) throw new ArgumentNullException("plugin");
+        //    if (gameAssemblyLoader == null) throw new ArgumentNullException("gameAssemblyLoader");
+        //    if (gameAddonLoader == null) throw new ArgumentNullException("gameAddonLoader");
+        //    if (objectDestroyer == null) throw new ArgumentNullException("objectDestroyer");
+
+        //    var addonLoader = new Loaders.AddonLoader(
+        //        gameAssemblyLoader,
+        //        gameAddonLoader,
+        //        new CurrentStartupSceneProvider(new StartupSceneFromGameSceneQuery(), new CurrentGameSceneProvider()),
+        //        () => plugin.Configuration.InstantlyAppliesToEveryScene);
+
+        //    var addonUnloader = new AddonUnloader(
+        //        new AddonsFromAssemblyQuery(new AddonAttributesFromTypeQuery()),
+        //        objectDestroyer,
+        //        new LoadedComponentQuery());
+
+        //    var addonController = new AddonController(addonLoader, addonUnloader);
+
+        //    plugin.OnLoaded +=
+        //        (asm, loc) => { if (plugin.Configuration.StartAddonsForCurrentScene) addonController.Load(asm, loc); };
+
+        //    plugin.OnUnloaded += addonController.Unload; 
+        //}
+
+
+        private void SetupPartModuleController(TinyIoCContainer container, ReloadablePlugin plugin)
         {
             var partModuleConfigQueue = new DictionaryQueue<KeyValuePair<uint, ITypeIdentifier>, ConfigNode>(
-                new FlightConfigNodeKeyValuePairComparer()); 
-            
+                new FlightConfigNodeKeyValuePairComparer());
 
-            var descriptorFactory = new PartModuleDescriptorFactory(
-                                        new KspPartLoader(
-                                            kspFactory),
-                                        new AvailablePartConfigQuery(
-                                            new KspGameDatabase()),
-                                        new ModuleConfigsFromPartConfigQuery(),
-                                        new TypeIdentifierQuery());
-
-            var prefabCloneProvider = new PartPrefabCloneProvider(
-                                        new LoadedComponentQuery<Part>(),
-                                        new ComponentsInGameObjectHierarchyProvider<Part>(),
-                                        new PartIsPrefabQuery(),
-                                        kspFactory);
+            //var descriptorFactory = container.Resolve<PartModuleDescriptorFactory>();
+            //var prefabCloneProvider = container.Resolve<PartPrefabCloneProvider>();
 
             Func<bool> reuseConfigNodes = () => plugin.Configuration.ReusePartModuleConfigsFromPrevious;
 
-            var onStartRunner = new ExecutePartModuleOnStartsCommand(new PartModuleStartStateProvider(),
-                new PartIsPrefabQuery(), kspFactory, _log.CreateTag(plugin.Name + " OnStart Runner"));
+            var onStartRunner = container.Resolve<ExecutePartModuleOnStartsCommand>(new NamedParameterOverloads
+            {
+                { "log", container.Resolve<ILog>("MainLog").CreateTag(plugin.Name + " OnStart Runner") }
+            });
 
-            var partModuleController = new PartModuleController(
-                                         new PartModuleLoader(
-                                             descriptorFactory,
-                                             new PartModuleFactory(new PartIsPrefabQuery(), new AwakenPartModuleCommand(), onStartRunner),
-                                             partModuleConfigQueue,
-                                             prefabCloneProvider,
-                                             reuseConfigNodes),
-                                         new PartModuleUnloader(
-                                             new UnityObjectDestroyer(new PluginReloadRequestedMethodCallCommand()),
-                                             descriptorFactory,
-                                             prefabCloneProvider,
-                                             ConfigurePartModuleSnapshotGenerator(partModuleConfigQueue),
-                                             reuseConfigNodes
-                                             ),
-                                         new TypesDerivedFromQuery<PartModule>(),
-                                         new CompositeCommand(
-                                            onStartRunner,
-                                            new ClearDictionaryQueryCommand<KeyValuePair<uint, ITypeIdentifier>, ConfigNode>(partModuleConfigQueue), 
-                                            new RefreshPartActionWindows(KspPartActionWindowListener.WindowController)),
-                                            new NullCommand());
+            //var partModuleFactory = container.Resolve<PartModuleFactory>(new NamedParameterOverloads
+            //{
+            //    { "awakenPartModule", new AwakenPartModuleCommand() },
+            //    { "onStartRunner", onStartRunner }
+            //});
+
+            var partModuleLoader = container.Resolve<PartModuleLoader>(new NamedParameterOverloads()
+            {
+                { "configNodeQueue", partModuleConfigQueue },
+                { "useConfigNodeSnapshotIfAvailable", reuseConfigNodes }
+            });
+
+            var partModuleUnloader = container.Resolve<PartModuleUnloader>(new NamedParameterOverloads
+            {
+                { "snapshotGenerator", ConfigurePartModuleSnapshotGenerator(partModuleConfigQueue) }
+            });
+
+            var partModuleController = container.Resolve<PartModuleController>(new NamedParameterOverloads
+            {
+                { "pmLoader", partModuleLoader },
+                { "pmUnloader", partModuleUnloader },
+                { "partModuleFromAssemblyQuery", new TypesDerivedFromQuery<PartModule>() },
+                { "onPartModulesLoaded", new CompositeCommand(
+                                                onStartRunner,
+                                                new ClearDictionaryQueryCommand<KeyValuePair<uint, ITypeIdentifier>, ConfigNode>(partModuleConfigQueue), 
+                                                new RefreshPartActionWindows(KspPartActionWindowListener.WindowController)) },
+                { "onPartModulesUnloaded", new NullCommand() }
+            });
 
             plugin.OnLoaded += (asm, loc) =>
             {
-                onStartRunner.Clear();
+                onStartRunner.ClearPartModuleTargets();
                 if (plugin.Configuration.ReloadPartModulesImmediately) partModuleController.Load(asm, loc);
             };
 
             plugin.OnUnloaded += partModuleController.Unload;
+
+            //    var descriptorFactory = new PartModuleDescriptorFactory(
+            //                                new KspPartLoader(
+            //                                    kspFactory),
+            //                                new AvailablePartConfigQuery(
+            //                                    new KspGameDatabase()),
+            //                                new ModuleConfigsFromPartConfigQuery(),
+            //                                new TypeIdentifierQuery());
+
+            //    var prefabCloneProvider = new PartPrefabCloneProvider(
+            //                                new LoadedComponentQuery<Part>(),
+            //                                new ComponentsInGameObjectHierarchyProvider<Part>(),
+            //                                new PartIsPrefabQuery(),
+            //                                kspFactory);
+
+            //    Func<bool> reuseConfigNodes = () => plugin.Configuration.ReusePartModuleConfigsFromPrevious;
+
+            //    var onStartRunner = new ExecutePartModuleOnStartsCommand(new PartModuleStartStateProvider(),
+            //        new PartIsPrefabQuery(), kspFactory, _log.CreateTag(plugin.Name + " OnStart Runner"));
+
+            //    var partModuleController = new PartModuleController(
+            //                                 new PartModuleLoader(
+            //                                     descriptorFactory,
+            //                                     new PartModuleFactory(new PartIsPrefabQuery(), new AwakenPartModuleCommand(), onStartRunner),
+            //                                     partModuleConfigQueue,
+            //                                     prefabCloneProvider,
+            //                                     reuseConfigNodes),
+            //                                 new PartModuleUnloader(
+            //                                     new UnityObjectDestroyer(new PluginReloadRequestedMethodCallCommand()),
+            //                                     descriptorFactory,
+            //                                     prefabCloneProvider,
+            //                                     ConfigurePartModuleSnapshotGenerator(partModuleConfigQueue),
+            //                                     reuseConfigNodes
+            //                                     ),
+            //                                 new TypesDerivedFromQuery<PartModule>(),
+            //                                 new CompositeCommand(
+            //                                    onStartRunner,
+            //                                    new ClearDictionaryQueryCommand<KeyValuePair<uint, ITypeIdentifier>, ConfigNode>(partModuleConfigQueue), 
+            //                                    new RefreshPartActionWindows(KspPartActionWindowListener.WindowController)),
+            //                                    new NullCommand());
+
+            //    plugin.OnLoaded += (asm, loc) =>
+            //    {
+            //        onStartRunner.ClearPartModuleTargets();
+            //        if (plugin.Configuration.ReloadPartModulesImmediately) partModuleController.Load(asm, loc);
+            //    };
+
+            //    plugin.OnUnloaded += partModuleController.Unload;
         }
 
 
-        private void SetupScenarioModuleController(IReloadablePlugin plugin, PluginConfiguration pluginConfiguration, IKspFactory kspFactory)
-        {
-            var gameProvider = new CurrentGameProvider(new TypeIdentifierQuery());
-            var currentGameSceneProvider = new CurrentGameSceneProvider();
+        //private void SetupPartModuleController(ReloadablePlugin plugin, IKspFactory kspFactory)
+        //{
+        //    var partModuleConfigQueue = new DictionaryQueue<KeyValuePair<uint, ITypeIdentifier>, ConfigNode>(
+        //        new FlightConfigNodeKeyValuePairComparer()); 
+            
 
-            var protoScenarioModuleProvider = new ProtoScenarioModuleProvider(
-                kspFactory,
-                new TypeIdentifierQuery(),
-                new CurrentGameProvider(new TypeIdentifierQuery()),
-                currentGameSceneProvider);
+        //    var descriptorFactory = new PartModuleDescriptorFactory(
+        //                                new KspPartLoader(
+        //                                    kspFactory),
+        //                                new AvailablePartConfigQuery(
+        //                                    new KspGameDatabase()),
+        //                                new ModuleConfigsFromPartConfigQuery(),
+        //                                new TypeIdentifierQuery());
 
-            var scenarioModuleController =
-                new ScenarioModuleController(
-                    new ScenarioModuleLoader(protoScenarioModuleProvider),
-                    new ScenarioModuleUnloader(
-                        new GameObjectComponentQuery(new KspGameObjectProvider()),
-                        protoScenarioModuleProvider,
-                        new UnityObjectDestroyer(new PluginReloadRequestedMethodCallCommand()),
-                        () => pluginConfiguration.SaveScenarioModuleConfigBeforeReloading,
-                        new ScenarioModuleSnapshotGenerator(gameProvider, _log.CreateTag("SMSnapshotGen")),
-                        _log.CreateTag("ScenarioModuleUnloader")),
-                    new TypesDerivedFromQuery<ScenarioModule>(),
-                    currentGameSceneProvider);
+        //    var prefabCloneProvider = new PartPrefabCloneProvider(
+        //                                new LoadedComponentQuery<Part>(),
+        //                                new ComponentsInGameObjectHierarchyProvider<Part>(),
+        //                                new PartIsPrefabQuery(),
+        //                                kspFactory);
 
-            plugin.OnLoaded += (asm, loc) =>
-            {
-                if (pluginConfiguration.ReloadScenarioModulesImmediately) scenarioModuleController.Load(asm, loc);
-            };
+        //    Func<bool> reuseConfigNodes = () => plugin.Configuration.ReusePartModuleConfigsFromPrevious;
 
-            plugin.OnUnloaded += scenarioModuleController.Unload;
-        }
+        //    var onStartRunner = new ExecutePartModuleOnStartsCommand(new PartModuleStartStateProvider(),
+        //        new PartIsPrefabQuery(), kspFactory, _log.CreateTag(plugin.Name + " OnStart Runner"));
+
+        //    var partModuleController = new PartModuleController(
+        //                                 new PartModuleLoader(
+        //                                     descriptorFactory,
+        //                                     new PartModuleFactory(new PartIsPrefabQuery(), new AwakenPartModuleCommand(), onStartRunner),
+        //                                     partModuleConfigQueue,
+        //                                     prefabCloneProvider,
+        //                                     reuseConfigNodes),
+        //                                 new PartModuleUnloader(
+        //                                     new UnityObjectDestroyer(new PluginReloadRequestedMethodCallCommand()),
+        //                                     descriptorFactory,
+        //                                     prefabCloneProvider,
+        //                                     ConfigurePartModuleSnapshotGenerator(partModuleConfigQueue),
+        //                                     reuseConfigNodes
+        //                                     ),
+        //                                 new TypesDerivedFromQuery<PartModule>(),
+        //                                 new CompositeCommand(
+        //                                    onStartRunner,
+        //                                    new ClearDictionaryQueryCommand<KeyValuePair<uint, ITypeIdentifier>, ConfigNode>(partModuleConfigQueue), 
+        //                                    new RefreshPartActionWindows(KspPartActionWindowListener.WindowController)),
+        //                                    new NullCommand());
+
+        //    plugin.OnLoaded += (asm, loc) =>
+        //    {
+        //        onStartRunner.ClearPartModuleTargets();
+        //        if (plugin.Configuration.ReloadPartModulesImmediately) partModuleController.Load(asm, loc);
+        //    };
+
+        //    plugin.OnUnloaded += partModuleController.Unload;
+        //}
+
+
+        //private void SetupScenarioModuleController(IReloadablePlugin plugin, PluginConfiguration pluginConfiguration, IKspFactory kspFactory)
+        //{
+        //    var gameProvider = new CurrentGameProvider(new TypeIdentifierQuery());
+        //    var currentGameSceneProvider = new CurrentGameSceneProvider();
+
+        //    var protoScenarioModuleProvider = new ProtoScenarioModuleProvider(
+        //        kspFactory,
+        //        new TypeIdentifierQuery(),
+        //        new CurrentGameProvider(new TypeIdentifierQuery()),
+        //        currentGameSceneProvider);
+
+        //    var scenarioModuleController =
+        //        new ScenarioModuleController(
+        //            new ScenarioModuleLoader(protoScenarioModuleProvider),
+        //            new ScenarioModuleUnloader(
+        //                new GameObjectComponentQuery(new KspGameObjectProvider()),
+        //                protoScenarioModuleProvider,
+        //                new UnityObjectDestroyer(new PluginReloadRequestedMethodCallCommand()),
+        //                () => pluginConfiguration.SaveScenarioModuleConfigBeforeReloading,
+        //                new ScenarioModuleSnapshotGenerator(gameProvider, _log.CreateTag("SMSnapshotGen")),
+        //                _log.CreateTag("ScenarioModuleUnloader")),
+        //            new TypesDerivedFromQuery<ScenarioModule>(),
+        //            currentGameSceneProvider);
+
+        //    plugin.OnLoaded += (asm, loc) =>
+        //    {
+        //        if (pluginConfiguration.ReloadScenarioModulesImmediately) scenarioModuleController.Load(asm, loc);
+        //    };
+
+        //    plugin.OnUnloaded += scenarioModuleController.Unload;
+        //}
 
 
         private GUISkin ConfigureSkin(IResourceRepository resources)
@@ -744,6 +950,36 @@ namespace AssemblyReloader.CompositeRoot
             style.margin = new RectOffset();
 
             return style;
+        }
+
+
+        private static Maybe<ConfigNode> GetWindowConfig(Maybe<ConfigNode> reloaderConfig, string nodeKey)
+        {
+            if (!reloaderConfig.Any() || !reloaderConfig.Single().HasNode(nodeKey)) return Maybe<ConfigNode>.None;
+
+            return Maybe<ConfigNode>.With(reloaderConfig.Single().GetNode(nodeKey));
+        }
+
+
+        private ICommand SetupSaveConfigurationCommand(
+            [NotNull] Configuration configuration, 
+            [NotNull] IConfigNodeSerializer serializer,
+            [NotNull] IFilePathProvider configPathProvider)
+        {
+            if (configuration == null) throw new ArgumentNullException("configuration");
+            if (serializer == null) throw new ArgumentNullException("serializer");
+            if (configPathProvider == null) throw new ArgumentNullException("configPathProvider");
+
+            var path = configPathProvider.Get();
+
+            return new Command(() =>
+            {
+                var node = new ConfigNode("AssemblyReloader");
+                serializer.Serialize(configuration, node);
+
+                if (!node.Save(path, "Assembly Reloader Configuration"))
+                    _log.Warning("Failed to save AssemblyReloader configuration to " + path);
+            });
         }
     }
 }

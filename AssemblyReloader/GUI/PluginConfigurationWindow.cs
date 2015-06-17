@@ -49,7 +49,7 @@ namespace AssemblyReloader.Gui
 
             _plugin.Configuration.SaveScenarioModuleConfigBeforeReloading =
                 GUILayout.Toggle(_plugin.Configuration.SaveScenarioModuleConfigBeforeReloading,
-                    "Save ScenarioModules before reloading");
+                    "Serialize ScenarioModules before reloading");
 
             _plugin.Configuration.RewriteAssemblyLocationCalls = GUILayout.Toggle(_plugin.Configuration.RewriteAssemblyLocationCalls,
                 "Intercept Assembly location method calls");

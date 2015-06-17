@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using AssemblyReloader.Annotations;
@@ -46,7 +45,7 @@ namespace AssemblyReloader.Commands
             _log.Verbose(needOnStart.Count + " part modules");
 
             needOnStart.ForEach(RunOnStart);
-            Clear();
+            ClearPartModuleTargets();
         }
 
 
@@ -78,7 +77,7 @@ namespace AssemblyReloader.Commands
             _partModules.Add(target);
         }
 
-        public void Clear()
+        public void ClearPartModuleTargets()
         {
             _partModules.Clear();
         }

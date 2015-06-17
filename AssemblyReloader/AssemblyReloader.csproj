@@ -66,10 +66,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\ContextAdapter.cs" />
+    <Compile Include="Commands\ContextProviderCommand.cs" />
     <Compile Include="Commands\Command.cs" />
     <Compile Include="Commands\AwakenPartModuleCommand.cs" />
     <Compile Include="Commands\ClearDictionaryQueryCommand.cs" />
-    <Compile Include="Commands\ConditionalCommand.cs" />
+    <Compile Include="Commands\DeserializeObjectCommand.cs" />
     <Compile Include="Commands\SaveConfigNodeFromCallbacksCommand.cs" />
     <Compile Include="Commands\ExecutePartModuleOnStartsCommand.cs" />
     <Compile Include="Commands\OrCommand.cs" />
@@ -78,6 +80,7 @@
     <Compile Include="Commands\NullCommand.cs" />
     <Compile Include="Commands\PluginReloadRequestedMethodCallCommand.cs" />
     <Compile Include="Commands\SavePluginConfigurationCommand.cs" />
+    <Compile Include="Commands\SerializeObjectCommand.cs" />
     <Compile Include="CompositeRoot\FlightConfigNodeKeyValuePairComparer.cs" />
     <Compile Include="CompositeRoot\IMessageChannel.cs" />
     <Compile Include="CompositeRoot\IMessageConsumer.cs" />
@@ -92,6 +95,7 @@
     <Compile Include="DataObjects\Configuration.cs" />
     <Compile Include="DataObjects\PluginConfiguration.cs" />
     <Compile Include="DataObjects\PanelCategoryAttribute.cs" />
+    <Compile Include="DataObjects\SerializationContext.cs" />
     <Compile Include="DataObjects\TemporaryFile.cs" />
     <Compile Include="CompositeRoot\IUnityObjectDestroyer.cs" />
     <Compile Include="CompositeRoot\UnityObjectDestroyer.cs" />
@@ -140,7 +144,7 @@
     <Compile Include="Gui\MainWindow.cs" />
     <Compile Include="Gui\ConfigurationWindow.cs" />
     <Compile Include="Gui\PluginConfigurationWindow.cs" />
-    <Compile Include="Gui\WindowFactory.cs" />
+    <Compile Include="CompositeRoot\WindowFactory.cs" />
     <Compile Include="Loaders\AddonLoader.cs" />
     <Compile Include="Loaders\AddonUnloader.cs" />
     <Compile Include="Loaders\AssemblyDefinitionFromDiskReader.cs" />
@@ -161,9 +165,10 @@
     <Compile Include="Gui\Messages\ShowPluginConfigurationWindow.cs" />
     <Compile Include="Providers\AssemblyProvider.cs" />
     <Compile Include="Providers\ConfigurationProvider.cs" />
+    <Compile Include="Providers\FilePathProviderFromContext.cs" />
     <Compile Include="Providers\IConfigNodeFormatterProvider.cs" />
     <Compile Include="Providers\IConfigurationProvider.cs" />
-    <Compile Include="Queries\FileSystemQueries\IFilePathQuery.cs" />
+    <Compile Include="Providers\IFilePathProvider.cs" />
     <Compile Include="Queries\FileSystemQueries\LoadedAssemblyFileUrlQuery.cs" />
     <Compile Include="Queries\FileSystemQueries\ILoadedAssemblyFileUrlQuery.cs" />
     <Compile Include="Queries\CompositeFieldInfoQuery.cs" />
@@ -179,7 +184,9 @@
     <Compile Include="Queries\FieldsMarkedWithAttributeQuery.cs" />
     <Compile Include="CompositeRoot\FlightConfigNodeRepository.cs" />
     <Compile Include="CompositeRoot\DictionaryQueue.cs" />
-    <Compile Include="Queries\FileSystemQueries\ConfigFilePathQuery.cs" />
+    <Compile Include="Queries\FileSystemQueries\ConfigFilePathProvider.cs" />
+    <Compile Include="TinyIoC.cs" />
+    <Compile Include="TinyMessenger.cs" />
     <Compile Include="TypeInstallers\GenericTypeInstaller.cs" />
     <Compile Include="TypeInstallers\ITypeInstaller.cs" />
     <Compile Include="Loaders\PartModuleLoader\IPartModuleDescriptorFactory.cs" />

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using AssemblyReloader.Annotations;
-using AssemblyReloader.CompositeRoot;
 using AssemblyReloader.Controllers;
 using AssemblyReloader.DataObjects;
+using AssemblyReloader.Gui;
 using ReeperCommon.Containers;
 using ReeperCommon.Gui;
 using ReeperCommon.Gui.Window.Buttons;
@@ -11,7 +11,7 @@ using ReeperCommon.Gui.Window.Decorators;
 using ReeperCommon.Gui.Window.View;
 using UnityEngine;
 
-namespace AssemblyReloader.Gui
+namespace AssemblyReloader.CompositeRoot
 {
     public class WindowFactory
     {
@@ -71,7 +71,7 @@ namespace AssemblyReloader.Gui
                 mainWindow.OnCloseButton));
 
             //if (windowConfig.Any())
-            //    withButtons.Load(windowConfig.Single());
+            //    withButtons.Deserialize(windowConfig.Single());
 
             var view = WindowView.Create(withButtons, "MainWindow");
             UnityEngine.Object.DontDestroyOnLoad(view);
@@ -98,7 +98,7 @@ namespace AssemblyReloader.Gui
                 optionsWindow.OnCloseButton));
 
             //if (windowConfig.Any())
-            //    withButtons.Load(windowConfig.Single());
+            //    withButtons.Deserialize(windowConfig.Single());
 
             withButtons.Visible = false;
 
@@ -128,7 +128,7 @@ namespace AssemblyReloader.Gui
                 pluginWindow.OnCloseButton));
 
             //if (windowConfig.Any())
-            //    withButtons.Load(windowConfig.Single());
+            //    withButtons.Deserialize(windowConfig.Single());
 
             withButtons.Visible = false;
 

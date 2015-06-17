@@ -42,7 +42,7 @@ namespace AssemblyReloader.DataObjects
         public bool ReloadScenarioModulesImmediately = true;
 
         //[ReeperPersistent, PanelCategory(PanelCategoryAttribute.CategoryType.ScenarioModule)]
-        //[ConfigItemDescription("Save ScenarioModule ConfigNode before reloading")]
+        //[ConfigItemDescription("Serialize ScenarioModule ConfigNode before reloading")]
         [ReeperPersistent, Persistent]
         public bool SaveScenarioModuleConfigBeforeReloading = true;
 

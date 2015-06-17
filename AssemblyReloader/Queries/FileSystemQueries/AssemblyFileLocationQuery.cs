@@ -6,7 +6,6 @@ using AssemblyReloader.Annotations;
 using AssemblyReloader.Game;
 using ReeperCommon.Containers;
 using ReeperCommon.FileSystem;
-using ReeperCommon.FileSystem.Factories;
 
 namespace AssemblyReloader.Queries.FileSystemQueries
 {

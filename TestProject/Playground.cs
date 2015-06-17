@@ -14,8 +14,157 @@ using Object = UnityEngine.Object;
 
 namespace TestProject
 {
+    //[Serializable]
+    //public class SomeDataIwantTosave : IConfigNode
+    //{
+    //    [KSPField(isPersistant = true), Persistent] private float MyFloat = 123.45f;
+    //    [Persistent] public string PersistentString = "TestString";
+
+    //    public void Load(ConfigNode node)
+    //    {
+            
+    //    }
+
+    //    public void Save(ConfigNode node)
+    //    {
+    //        Debug.LogError("SomeDataIwantToSave.Save");
+    //        node.AddValue("Key", "Value");
+    //    }
+
+    //    public override string ToString()
+    //    {
+    //        return "ToStringSomeData";
+    //    }
+    //}
+
+    //public class TestPersistentModule : PartModule
+    //{
+    //    [KSPField(isPersistant = true), Persistent] public SomeDataIwantTosave MyData = new SomeDataIwantTosave();
+    //    [KSPField(isPersistant = true)] public float NormalSave = 444.44f;
+
+    //    private void Start()
+    //    {
+    //        //var cfg = new ConfigNode();
+    //        //Fields.Save(cfg);
+    //        //print("Cfg: " + cfg.ToString());
+    //        print("Cfg: " + ConfigNode.CreateConfigFromObject(this));
+    //    }
+    //}
+
+    //public class CustomModuleInfo : PartModule, IModuleInfo
+    //{
+    //    public string GetModuleTitle()
+    //    {
+    //        return "My Custom Module";
+    //    }
+
+    //    public Callback<Rect> GetDrawModulePanelCallback()
+    //    {
+    //        return null; // could use this for graphics
+    //    }
+
+    //    public string GetPrimaryField()
+    //    {
+    //        return "Custom Module Info Here\n<b>Secret: Don't tell anyone</b>";
+    //    }
+    //}
+
+//[KSPAddon(KSPAddon.Startup.Flight, false)]
+public class PqsFence : MonoBehaviour
+{
+    private GameObject _postPrefab;
+    private GameObject _fenceSegment;
+
+    private IEnumerator Start()
+    {
+        yield return new WaitForSeconds(1f);
+
+        var cylinder = GameObject.CreatePrimitive(PrimitiveType.Cylinder); // 2 units high, 1 in diameter
+        cylinder.transform.localScale = new Vector3(0.1f, 1f, 0.1f); // make it skinny: 2 units high, 0.1 in diameter
+
+        _postPrefab = new GameObject("FencePost");
+        cylinder.transform.parent = _postPrefab.transform;
+        cylinder.transform.localPosition = new Vector3(0f, 2f * cylinder.transform.localScale.y*0.5f, 0f); // make the bottom of the fence post the point we're manipulating
+        _postPrefab.SetLayerRecursive(15);
+        _postPrefab.SetActive(false);
 
 
+        var rectangleSegment = GameObject.CreatePrimitive(PrimitiveType.Cube); // 1x1x1
+
+        // make it skinny and extend four meters in +x direction
+        rectangleSegment.transform.localScale = new Vector3(4f, 0.1f, 0.1f);
+
+        var segments = new[] {rectangleSegment, (GameObject) Instantiate(rectangleSegment)};
+
+        _fenceSegment = new GameObject("FenceSegment");
+           
+        // the top of the fence post is at y=2, so let's place the segments at y=1.8 and y = 0.8
+        for (int i = 0; i < 2; ++i)
+        {
+            segments[i].transform.parent = _fenceSegment.transform;
+            segments[i].transform.localPosition = new Vector3(0f, 1.8f - i, 0f);
+        }
+
+        _fenceSegment.SetLayerRecursive(15);
+        _fenceSegment.SetActive(false);
+
+
+        var post = CreatePqsObject(_postPrefab, Vector3.up, Color.red); // place a fence post at the north pole
+        CreatePqsObject(_fenceSegment, Vector3.up, Color.blue);
+            
+        for (int i = 0; i < 30; ++i)
+        {
+            // easy way: assuming one of your snap points is the position of an object already created
+            // and positioned:
+            //var radial = (post.transform.localPosition + new Vector3(4f, 0f, 0f)).normalized;
+
+            // slightly less easy: convert radial direction into a world position, then add offset and normalize
+            // to come up with radial vector
+            var radial =
+                ((Vector3d) post.repositionRadial*(post.sphere.radius + post.repositionRadiusOffset) +
+                    new Vector3(4f, 0f, 0f)).normalized;
+
+            post = CreatePqsObject(_postPrefab, radial, Color.black);
+            CreatePqsObject(_fenceSegment, radial, Color.green);
+        }
+    }
+
+
+    private PQSCity CreatePqsObject(GameObject prefab, Vector3 radial, Color color)
+    {
+        var item = (GameObject)Instantiate(prefab);
+        var pqsCity = item.AddComponent<PQSCity>();
+
+            
+        pqsCity.repositionRadial = radial; 
+        pqsCity.repositionToSphereSurface = true;
+        pqsCity.repositionToSphereSurfaceAddHeight = true;
+
+        pqsCity.lod = new[] { new PQSCity.LODRange
+        {
+            renderers = item.GetComponentsInChildren<Renderer>().Select(r => r.gameObject).ToArray(),
+            objects = new []{ item },
+            visibleRange = 25000f
+        }};
+        pqsCity.lod[0].Setup();
+
+        pqsCity.frameDelta = 1; //Unknown
+        pqsCity.reorientToSphere = true; //adjust rotations to match the direction of gravity
+        item.gameObject.transform.parent = FlightGlobals.GetHomeBody().transform;
+        pqsCity.sphere = FlightGlobals.GetHomeBody().pqsController;
+        pqsCity.order = 100;
+        pqsCity.modEnabled = true;
+        pqsCity.OnSetup();
+        pqsCity.Orientate();
+        item.SetActive(true);
+
+        item.GetComponentsInChildren<Renderer>().ToList().ForEach(r => r.material.color = color);
+
+        print("Created new object at " + pqsCity.transform.localPosition);
+
+        return pqsCity;
+    }
+}
 
 
     //public class AddAttachNodePartModule : PartModule
@@ -648,14 +797,14 @@ namespace TestProject
 //        private readonly ILog _log = new DebugLog("ExampleObject");
 
 //        [Persistent, KSPField (isPersistant = true)] public string MyString = "TestValue";
-//        public void Load(ConfigNode node)
+//        public void Deserialize(ConfigNode node)
 //        {
-//            _log.Warning("Load, string is " + MyString);
+//            _log.Warning("Deserialize, string is " + MyString);
 //        }
 
-//        public void Save(ConfigNode node)
+//        public void Serialize(ConfigNode node)
 //        {
-//            _log.Warning("Save");
+//            _log.Warning("Serialize");
 //        }
 
 //        public void PersistenceLoad()

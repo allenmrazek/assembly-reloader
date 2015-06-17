@@ -3,6 +3,6 @@
     public interface IPartModuleOnStartRunner
     {
         void Add(PartModule target);
-        void Clear();
+        void ClearPartModuleTargets();
     }
 }

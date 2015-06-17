@@ -44,6 +44,7 @@ namespace AssemblyReloader.Gui
         public void OnCloseButton()
         {
             Visible = false;
+            
             _controller.SaveConfiguration();
         }
 

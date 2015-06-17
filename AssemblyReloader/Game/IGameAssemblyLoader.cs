@@ -5,7 +5,7 @@ namespace AssemblyReloader.Game
 {
     public interface IGameAssemblyLoader
     {
-        //Maybe<Assembly> Load();
+        //Maybe<Assembly> Deserialize();
         //void Unload();
 
         AssemblyLoader.LoadedAssembyList LoadedAssemblies { get; set; }
