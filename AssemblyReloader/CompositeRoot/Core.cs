@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using AssemblyReloader.Annotations;
 using AssemblyReloader.Commands;
@@ -128,13 +129,14 @@ namespace AssemblyReloader.CompositeRoot
 
 #if DEBUG
             //var primaryLog = new DebugLog("ART");
-            container.Register<ILog>(new DebugLog("ART"), "MainLog");
+            //container.Register<ILog>(new DebugLog("ART"), "MainLog");
 #else
             var primaryLog = LogFactory.Create(LogLevel.Standard);
-            container.Register<ILog>(LogFactory.Create(LogLevel.Standard), "MainLog");
+            //container.Register<ILog>(LogFactory.Create(LogLevel.Standard), "MainLog");
 #endif
 
-            container.Register<ILog>(_log);
+            //container.Register<ILog>(_log);
+            container.Register<ILog>(_log, "MainLog");
 
             container.AutoRegister(DuplicateImplementationActions.RegisterSingle);
 
@@ -206,6 +208,19 @@ namespace AssemblyReloader.CompositeRoot
                             { "log", container.Resolve<ILog>("MainLog").CreateTag("PartModuleOnStartRunner") }
                         }) }
                 }));
+
+            if (!container.CanResolve<ConfigurationProvider>())
+                throw new Exception("Couldn't resolve IConfigurationProvider");
+
+            container.Register<IScenarioModuleLoader, ScenarioModuleLoader>().AsMultiInstance();
+            container.Register<IScenarioModuleUnloader, ScenarioModuleUnloader>().AsMultiInstance();
+            container.Register<IGameObjectProvider, KspGameObjectProvider>().AsSingleton();
+            container.Register<IScenarioModuleSnapshotGenerator, ScenarioModuleSnapshotGenerator>().AsMultiInstance();
+            //container.Register<ConfigurationProvider>((c, p) => c.Resolve<ConfigurationProvider>(new NamedParameterOverloads { { "log", c.Resolve<ILog>("MainLog") } }));
+            //container.Register<IConfigurationProvider>((cContainer, overloads) => cContainer.Resolve<ConfigurationProvider>(new NamedParameterOverloads { { "log", cContainer.Resolve<ILog>("MainLog") }}));
+            ////(cContainer, nOverloads) => cContainer.Resolve<ConfigurationProvider>(new NamedParameterOverloads { { "log", cContainer.Resolve<ILog>("MainLog") }}));
+            ////container.Register<IConfigurationProvider, ConfigurationProvider>().AsMultiInstance();
+
 
 
             _log = container.Resolve<ILog>("MainLog");
@@ -468,7 +483,7 @@ namespace AssemblyReloader.CompositeRoot
 
             SetupAddonController(container, reloadable);
             SetupPartModuleController(container, reloadable);
-            //SetupScenarioModuleController(container, reloadable);
+            SetupScenarioModuleController(container, reloadable);
 
             return reloadable;
         }
@@ -722,6 +737,30 @@ namespace AssemblyReloader.CompositeRoot
         //    plugin.OnUnloaded += scenarioModuleController.Unload;
         //}
 
+
+        private void SetupScenarioModuleController(TinyIoCContainer container, ReloadablePlugin plugin)
+        {
+            var scenarioModuleUnloader = new ScenarioModuleUnloader(
+                container.Resolve<IGameObjectComponentQuery>(),
+                container.Resolve<IProtoScenarioModuleProvider>(),
+                container.Resolve<IUnityObjectDestroyer>(),
+                () => plugin.Configuration.SaveScenarioModuleConfigBeforeReloading,
+                container.Resolve<IScenarioModuleSnapshotGenerator>(),
+                container.Resolve<ILog>("MainLog").CreateTag("ScenarioModuleUnloader"));
+
+            var scenarioModuleController = container.Resolve<ScenarioModuleController>(new NamedParameterOverloads
+            {
+                { "scenarioModuleQuery", container.Resolve<ITypesDerivedFromQuery<ScenarioModule>>() },
+                { "unloader", scenarioModuleUnloader}
+            });
+
+            plugin.OnLoaded += (asm, loc) =>
+            {
+                if (plugin.Configuration.ReloadScenarioModulesImmediately) scenarioModuleController.Load(asm, loc);
+            };
+
+            plugin.OnUnloaded += scenarioModuleController.Unload;
+        }
 
         private GUISkin ConfigureSkin(IResourceRepository resources)
         {

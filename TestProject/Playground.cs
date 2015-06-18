@@ -136,7 +136,7 @@ public class PqsFence : MonoBehaviour
         var pqsCity = item.AddComponent<PQSCity>();
 
             
-        pqsCity.repositionRadial = radial; 
+        pqsCity.repositionRadial = radial;
         pqsCity.repositionToSphereSurface = true;
         pqsCity.repositionToSphereSurfaceAddHeight = true;
 
