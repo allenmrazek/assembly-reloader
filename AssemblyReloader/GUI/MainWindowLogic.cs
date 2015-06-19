@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using ReeperCommon.Gui.Window;
 using ReeperCommon.Logging;
 using UnityEngine;
@@ -12,6 +13,7 @@ namespace AssemblyReloader.Gui
         [Inject]
         public ILog Log { get; set; }
 
+
         public MainWindowLogic(Rect rect, int winid, GUISkin skin, bool draggable = true)
             : base(rect, winid, skin, draggable)
         {
@@ -22,6 +24,7 @@ namespace AssemblyReloader.Gui
         private void TestSituation()
         {
             Log.Normal("MainWindowLogic created");
+            throw new Exception("TestSituation");
         }
 
 

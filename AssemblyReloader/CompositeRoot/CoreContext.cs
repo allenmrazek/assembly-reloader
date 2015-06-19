@@ -90,7 +90,7 @@ namespace AssemblyReloader.CompositeRoot
             //var logic = new MainWindowLogic(new Rect(0, 0, 400, 400), 554, HighLogic.Skin);
             //var view = StrangeWindowView.Create(logic);
             var view = new GameObject("TestView", typeof (StrangeWindowView));
-
+            view.transform.parent = ((GameObject) this.contextView).transform;
             UnityEngine.Object.DontDestroyOnLoad(view);
 
 

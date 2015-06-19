@@ -1,5 +1,4 @@
-﻿using System;
-using ReeperCommon.Extensions;
+﻿using ReeperCommon.Extensions;
 using ReeperCommon.Gui.Window;
 using strange.extensions.mediation.impl;
 using UnityEngine;
@@ -9,10 +8,13 @@ namespace AssemblyReloader.Gui
     public class StrangeWindowView : View
     {
         [Inject]
+// ReSharper disable once MemberCanBePrivate.Global
         public IWindowComponent Logic { get; set; }
 
 
 
+// ReSharper disable once UnusedMember.Local
+// ReSharper disable once InconsistentNaming
         private void OnGUI()
         {
             if (Logic.IsNull() || !Logic.Visible) return;
@@ -34,23 +36,13 @@ namespace AssemblyReloader.Gui
         }
 
 
-        // ReSharper disable once UnusedMember.Global
+
+// ReSharper disable once UnusedMember.Local
         private void Update()
         {
             if (Logic.IsNull()) return;
 
             Logic.Update();
-        }
-
-
-        public static StrangeWindowView Create(IWindowComponent window, string goName = "WindowView")
-        {
-            if (window == null) throw new ArgumentNullException("window");
-
-            var view = new GameObject(goName).AddComponent<StrangeWindowView>();
-            view.Logic = window;
-
-            return view;
         }
     }
 }
