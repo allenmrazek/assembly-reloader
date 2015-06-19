@@ -7,6 +7,5 @@ namespace AssemblyReloader.Gui
     {
         string Name { get; }
         IFile Location { get; }
-        PluginConfiguration Configuration { get; }
     }
 }

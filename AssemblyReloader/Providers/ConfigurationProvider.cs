@@ -17,7 +17,7 @@ namespace AssemblyReloader.Providers
         private readonly ILog _log;
 
         public ConfigurationProvider(
-            [NotNull] IFilePathProvider configurationFileProvider, 
+            [NotNull] IFilePathProvider configurationFileProvider,
             [NotNull] IConfigNodeSerializer configNodeSerializer,
             [NotNull] ILog log)
         {

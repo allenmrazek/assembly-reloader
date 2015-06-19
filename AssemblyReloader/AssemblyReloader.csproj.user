@@ -4,4 +4,7 @@
     <StartAction>Program</StartAction>
     <StartProgram>D:\For New Computer\Kerbal Space Program\KSP.exe</StartProgram>
   </PropertyGroup>
+  <PropertyGroup>
+    <ProjectView>ProjectFiles</ProjectView>
+  </PropertyGroup>
 </Project>

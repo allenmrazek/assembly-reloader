@@ -1,6 +1,5 @@
 ﻿using System;
 using AssemblyReloader.Annotations;
-using AssemblyReloader.Commands;
 
 namespace AssemblyReloader.Game
 {

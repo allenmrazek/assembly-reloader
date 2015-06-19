@@ -1,7 +1,8 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Reflection;
 using AssemblyReloader.Annotations;
-using AssemblyReloader.Queries.AssemblyQueries;
 using AssemblyReloader.Queries.FileSystemQueries;
 using AssemblyReloader.TypeInstallers;
 using ReeperCommon.FileSystem;
@@ -13,12 +14,12 @@ namespace AssemblyReloader.Game
     {
         private readonly ILoadedAssemblyFileUrlQuery _laFileUrlQuery;
         private readonly IDisposeLoadedAssemblyCommandFactory _disposeFactory;
-        private readonly ITypeInstaller[] _typeInstallers;
+        private readonly IEnumerable<ITypeInstaller> _typeInstallers;
 
         public KspLoadedAssemblyFactory(
             [NotNull] ILoadedAssemblyFileUrlQuery laFileUrlQuery,
             [NotNull] IDisposeLoadedAssemblyCommandFactory disposeFactory,
-            [NotNull] params ITypeInstaller[] typeInstallers)
+            [NotNull] IEnumerable<ITypeInstaller> typeInstallers)
         {
             if (laFileUrlQuery == null) throw new ArgumentNullException("laFileUrlQuery");
             if (disposeFactory == null) throw new ArgumentNullException("disposeFactory");
