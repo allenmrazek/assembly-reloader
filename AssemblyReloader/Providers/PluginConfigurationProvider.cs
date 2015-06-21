@@ -9,6 +9,7 @@ using ReeperCommon.FileSystem;
 
 namespace AssemblyReloader.Providers
 {
+// ReSharper disable once ClassNeverInstantiated.Global
     public class PluginConfigurationProvider : IPluginConfigurationProvider
     {
         private readonly IPluginConfigurationFilePathQuery _configFilePathQuery;
@@ -37,7 +38,7 @@ namespace AssemblyReloader.Providers
         }
 
 
-        private void DeserializeConfig(PluginConfiguration config, string configNodeLocation)
+        private static void DeserializeConfig(PluginConfiguration config, string configNodeLocation)
         {
             var node = LoadConfigNode(configNodeLocation);
             if (!node.Any())
@@ -48,7 +49,7 @@ namespace AssemblyReloader.Providers
         }
 
 
-        private Maybe<ConfigNode> LoadConfigNode(string location)
+        private static Maybe<ConfigNode> LoadConfigNode(string location)
         {
             var config = ConfigNode.Load(location);
 

@@ -3,6 +3,7 @@ using ReeperCommon.Extensions;
 
 namespace AssemblyReloader.Game
 {
+    [Implements(typeof(IGameAssemblyLoader))]
     public class KspAssemblyLoader : IGameAssemblyLoader
     {
         public AssemblyLoader.LoadedAssembyList LoadedAssemblies

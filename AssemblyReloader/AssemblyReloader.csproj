@@ -92,340 +92,6 @@
     <Compile Include="DataObjects\IModel.cs" />
     <Compile Include="CompositeRoot\KspPartActionWindowListener.cs" />
     <Compile Include="CompositeRoot\RecursiveSerializableFieldQuery.cs" />
-    <Compile Include="CompositeRoot\strange\extensions\command\api\CommandExceptionType.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\command\api\CommandKeys.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\command\api\ICommand.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\command\api\ICommandBinder.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\command\api\ICommandBinding.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\command\api\IPooledCommandBinder.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\command\impl\Command.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\command\impl\CommandBinder.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\command\impl\CommandBinding.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\command\impl\CommandException.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\command\impl\EventCommand.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\command\impl\EventCommandBinder.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\command\impl\SignalCommandBinder.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\context\api\ContextEvent.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\context\api\ContextExceptionType.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\context\api\ContextKeys.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\context\api\ContextStartupFlags.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\context\api\IContext.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\context\api\IContextView.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\context\api\ICrossContextCapable.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\context\impl\Context.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\context\impl\ContextException.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\context\impl\ContextView.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\context\impl\CrossContext.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\context\impl\CrossContextBridge.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\context\impl\MVCSContext.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\dispatcher\api\DispatcherExceptionType.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\dispatcher\api\IDispatcher.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\dispatcher\api\ITriggerable.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\dispatcher\api\ITriggerProvider.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\dispatcher\eventdispatcher\api\EventCallbackType.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\dispatcher\eventdispatcher\api\EventDispatcherExceptionType.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\dispatcher\eventdispatcher\api\IEvent.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\dispatcher\eventdispatcher\api\IEventBinding.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\dispatcher\eventdispatcher\api\IEventDispatcher.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\dispatcher\eventdispatcher\impl\EventBinding.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\dispatcher\eventdispatcher\impl\EventDispatcher.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\dispatcher\eventdispatcher\impl\EventDispatcherException.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\dispatcher\eventdispatcher\impl\TmEvent.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\dispatcher\impl\DispatcherException.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\implicitBind\api\IImplicitBinder.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\implicitBind\ImplementorAttribute.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\implicitBind\impl\ImplicitBinder.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\injector\api\ICrossContextInjectionBinder.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\injector\api\IInjectionBinder.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\injector\api\IInjectionBinding.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\injector\api\IInjector.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\injector\api\IInjectorFactory.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\injector\api\InjectionBindingScope.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\injector\api\InjectionBindingType.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\injector\api\InjectionExceptionType.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\injector\impl\CrossContextInjectionBinder.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\injector\impl\InjectionBinder.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\injector\impl\InjectionBinding.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\injector\impl\InjectionException.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\injector\impl\Injector.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\injector\impl\InjectorFactory.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\injector\InjectAttribute.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\mediation\api\IMediationBinder.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\mediation\api\IMediationBinding.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\mediation\api\IMediator.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\mediation\api\IView.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\mediation\api\MediationEvent.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\mediation\api\MediationExceptionType.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\mediation\impl\EventMediator.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\mediation\impl\EventView.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\mediation\impl\MediationBinder.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\mediation\impl\MediationBinding.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\mediation\impl\MediationException.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\mediation\impl\Mediator.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\mediation\impl\View.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\pool\api\IPool.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\pool\api\IPoolable.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\pool\api\PoolExceptionType.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\pool\api\PoolInflationType.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\pool\api\PoolOverflowBehavior.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\pool\impl\Pool.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\pool\impl\PoolException.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\reflector\api\IReflectedClass.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\reflector\api\IReflectionBinder.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\reflector\api\ReflectionExceptionType.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\reflector\impl\ReflectedClass.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\reflector\impl\ReflectionBinder.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\reflector\impl\ReflectionException.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\sequencer\api\ISequenceBinding.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\sequencer\api\ISequenceCommand.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\sequencer\api\ISequencer.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\sequencer\api\SequencerExceptionType.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\sequencer\impl\EventSequenceCommand.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\sequencer\impl\EventSequencer.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\sequencer\impl\SequenceBinding.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\sequencer\impl\SequenceCommand.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\sequencer\impl\Sequencer.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\sequencer\impl\SequencerException.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\signal\api\IBaseSignal.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\signal\api\SignalExceptionType.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\signal\impl\BaseSignal.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\signal\impl\Signal.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\extensions\signal\impl\SignalException.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\framework\api\BinderExceptionType.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\framework\api\BindingConst.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\framework\api\BindingConstraintType.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\framework\api\IBinder.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\framework\api\IBinding.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\framework\api\IInstanceProvider.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\framework\api\IManagedList.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\framework\api\ISemiBinding.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\framework\impl\Binder.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\framework\impl\BinderException.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\framework\impl\Binding.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\framework\impl\SemiBinding.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompositeRoot\strange\ReadMe.cs" />
     <Compile Include="Controllers\Controller.cs" />
     <Compile Include="Controllers\IController.cs" />
     <Compile Include="Controllers\IReloadablePlugin.cs" />
@@ -529,7 +195,7 @@
     <Compile Include="Queries\FileSystemQueries\ConfigFilePathProvider.cs" />
     <Compile Include="Signals\PluginLoadedSignal.cs" />
     <Compile Include="Signals\PluginUnloadedSignal.cs" />
-    <Compile Include="TypeInstallers\GenericTypeInstaller.cs" />
+    <Compile Include="TypeInstallers\Impl\GenericTypeInstaller.cs" />
     <Compile Include="TypeInstallers\ITypeInstaller.cs" />
     <Compile Include="Loaders\PartModuleLoader\IPartModuleDescriptorFactory.cs" />
     <Compile Include="Loaders\PartModuleLoader\IPartModuleFactory.cs" />
@@ -623,7 +289,6 @@
     <Compile Include="Weaving\WeaveOperation.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="CompositeRoot\strange\README.md" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -639,6 +304,10 @@
       <Project>{FECFA8FC-CF80-4685-A2BA-1566E0F3C26E}</Project>
       <Name>ReeperCommon</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\StrangeIoC\StrangeIoC\strange.csproj">
+      <Project>{953cd566-42b5-4f0a-856d-63d059e36fc0}</Project>
+      <Name>strange</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\panelCompact.png" />
@@ -651,9 +320,6 @@
     <EmbeddedResource Include="Resources\cursor.png" />
   </ItemGroup>
   <ItemGroup />
-  <ItemGroup>
-    <Content Include="CompositeRoot\strange\extensions\ReadMe.txt" />
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>set ksp=D:\For New Computer\Kerbal Space Program
@@ -677,6 +343,13 @@ if exist "$(ProjectDir)bin\$(Configuration)\ReeperCommon.dll" (
 echo copying ReeperCommon to project GameData...
 robocopy "$(ProjectDir)bin\$(Configuration)" "$(ProjectDir)GameData\$(ProjectName)" ReeperCommon.dll
 call:CheckRoboCopyCode "ReeperCommon.dll to project"
+)
+
+REM StrangeIoC into Project/GameData
+if exist "$(ProjectDir)bin\$(Configuration)\StrangeIoC.dll" (
+echo copying StrangeIoC to project GameData...
+robocopy "$(ProjectDir)bin\$(Configuration)" "$(ProjectDir)GameData\$(ProjectName)" StrangeIoC.dll
+call:CheckRoboCopyCode "StrangeIoC.dll to project"
 )
 
 REM TargetFileName into Project/GameData

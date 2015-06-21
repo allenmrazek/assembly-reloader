@@ -3,7 +3,7 @@ using AssemblyReloader.Annotations;
 using AssemblyReloader.Queries.AssemblyQueries;
 using UnityEngine;
 
-namespace AssemblyReloader.TypeInstallers
+namespace AssemblyReloader.TypeInstallers.Impl
 {
     public class GenericTypeInstaller<T> : ITypeInstaller where T : MonoBehaviour
     {

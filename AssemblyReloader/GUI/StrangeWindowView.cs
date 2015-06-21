@@ -5,10 +5,11 @@ using UnityEngine;
 
 namespace AssemblyReloader.Gui
 {
-    public class StrangeWindowView : View
+    public class StrangeWindowView : EventView
     {
         [Inject]
 // ReSharper disable once MemberCanBePrivate.Global
+// ReSharper disable once UnusedAutoPropertyAccessor.Global
         public IWindowComponent Logic { get; set; }
 
 

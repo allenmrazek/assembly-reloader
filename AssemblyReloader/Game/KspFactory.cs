@@ -3,6 +3,7 @@ using AssemblyReloader.Annotations;
 
 namespace AssemblyReloader.Game
 {
+    [Implements(typeof(IGameObjectProvider))]
     public class KspFactory : IKspFactory
     {
         private readonly IGameObjectProvider _gameObjectProvider;

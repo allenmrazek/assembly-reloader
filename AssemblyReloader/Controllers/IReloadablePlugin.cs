@@ -11,7 +11,7 @@ namespace AssemblyReloader.Controllers
         void Load();
         void Unload();
 
-        event PluginLoadedHandler OnLoaded;
-        event PluginUnloadedHandler OnUnloaded;
+        //event PluginLoadedHandler OnLoaded;
+        //event PluginUnloadedHandler OnUnloaded;
     }
 }

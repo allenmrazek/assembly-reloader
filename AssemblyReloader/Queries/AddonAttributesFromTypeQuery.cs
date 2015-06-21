@@ -6,6 +6,7 @@ using UnityEngine;
 
 namespace AssemblyReloader.Queries
 {
+    [Implements(typeof(IAddonAttributesFromTypeQuery))]
     public class AddonAttributesFromTypeQuery : IAddonAttributesFromTypeQuery
     {
         public IEnumerable<KSPAddon> Get(Type type)

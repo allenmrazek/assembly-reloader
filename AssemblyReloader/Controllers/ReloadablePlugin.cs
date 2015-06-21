@@ -26,8 +26,8 @@ namespace AssemblyReloader.Controllers
         private readonly IFile _location;
 
 
-        public event PluginLoadedHandler OnLoaded = delegate { };
-        public event PluginUnloadedHandler OnUnloaded = delegate { }; 
+        //public event PluginLoadedHandler OnLoaded = delegate { };
+        //public event PluginUnloadedHandler OnUnloaded = delegate { }; 
 
         public ReloadablePlugin(
             [NotNull] IAssemblyLoader assemblyLoader,
@@ -46,32 +46,32 @@ namespace AssemblyReloader.Controllers
 
         public void Load()
         {
-            if (!_loaded.IsNull())
-                Unload();
+            //if (!_loaded.IsNull())
+            //    Unload();
 
-            _loaded = _assemblyLoader.Load();
+            //_loaded = _assemblyLoader.Load();
 
-            if (!_loaded.Any())
-                throw new InvalidOperationException("ReloadablePlugin: received NULL Assembly");
+            //if (!_loaded.Any())
+            //    throw new InvalidOperationException("ReloadablePlugin: received NULL Assembly");
 
-            OnLoaded(_loaded.Single(), _location);
+            //OnLoaded(_loaded.Single(), _location);
         }
 
 
         public void Unload()
         {
-            if (!_loaded.Any()) return;
+            //if (!_loaded.Any()) return;
 
-            _assemblyLoader.Unload();
+            //_assemblyLoader.Unload();
 
-            try
-            {
-                OnUnloaded(_loaded.Single(), _location);
-            }
-            finally
-            {
-                _loaded = Maybe<Assembly>.None;
-            }
+            //try
+            //{
+            //    OnUnloaded(_loaded.Single(), _location);
+            //}
+            //finally
+            //{
+            //    _loaded = Maybe<Assembly>.None;
+            //}
         }
 
 

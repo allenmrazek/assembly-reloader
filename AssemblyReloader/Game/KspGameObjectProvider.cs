@@ -2,6 +2,7 @@
 
 namespace AssemblyReloader.Game
 {
+    [Implements(typeof(IGameObjectProvider))]
     public class KspGameObjectProvider : IGameObjectProvider
     {
         public Maybe<ScenarioRunner> Get()

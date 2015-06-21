@@ -1,18 +1,20 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using AssemblyReloader.Commands;
+using AssemblyReloader.Controllers;
 using AssemblyReloader.DataObjects;
 using AssemblyReloader.Game;
 using AssemblyReloader.Generators;
 using AssemblyReloader.Gui;
+using AssemblyReloader.Providers;
 using AssemblyReloader.Queries;
 using AssemblyReloader.Queries.AssemblyQueries;
 using AssemblyReloader.Queries.FileSystemQueries;
 using AssemblyReloader.TypeInstallers;
+using AssemblyReloader.TypeInstallers.Impl;
 using Mono.Cecil;
 using ReeperCommon.FileSystem;
 using ReeperCommon.FileSystem.Providers;
@@ -75,25 +77,79 @@ namespace AssemblyReloader.CompositeRoot
             injectionBinder.Bind<IResourceRepository>()
                 .ToValue(ConfigureResourceRepository(injectionBinder.GetInstance<IDirectory>(DirectoryTypes.Core)));
 
-            injectionBinder.Bind<IEnumerable<ITypeInstaller>>().ToValue(LocateTypeInstallers());
+            injectionBinder.Bind<IEnumerable<ITypeInstaller>>().ToValue(CreateTypeInstallers());
             injectionBinder.Bind<ILoadedAssemblyFactory>().To<KspLoadedAssemblyFactory>().ToSingleton();
+            
+
+
+
+
+            injectionBinder.Bind<IReloadablePlugin>().To<IPluginInfo>().To<ReloadablePlugin>();
+
+
+            var reloadableFiles =
+                new ReloadableAssemblyFilesInDirectoryQuery(
+                    injectionBinder.GetInstance<IDirectory>(DirectoryTypes.GameData));
+
+
+            var reloadablePlugins = reloadableFiles.Get().Select(file =>
+            {
+                injectionBinder.Bind<IFile>().ToValue(file);
+                injectionBinder.Bind<PluginConfiguration>()
+                    .ToValue(injectionBinder.GetInstance<PluginConfigurationProvider>().Get(file));
+
+                var r = injectionBinder.GetInstance<IReloadablePlugin>();
+
+                r.Load();
+
+                injectionBinder.Unbind<IFile>();
+                injectionBinder.Unbind<PluginConfiguration>();
+
+                return r;
+            });
+
+
+            injectionBinder.Bind<IEnumerable<IPluginInfo>>().ToValue(reloadablePlugins.Cast<IPluginInfo>());
+            injectionBinder.Bind<IEnumerable<IReloadablePlugin>>().ToValue(reloadablePlugins);
+
+
+
+
+
+
+
+
+
+
+
+
 
 
             mediationBinder.Bind<StrangeWindowView>()
                 .To<MainWindowMediator>();
 
+
+
+
+
+
+
+
+            var mainLogic = new MainWindowLogic(new Rect(0, 0, 400, 400), 554, HighLogic.Skin);
             injectionBinder.Bind<IWindowComponent>()
-                .ToValue(new MainWindowLogic(new Rect(0, 0, 400, 400), 554, HighLogic.Skin));
+                .ToValue(mainLogic);
+
+
 
 
             // create main window ...
             //var logic = new MainWindowLogic(new Rect(0, 0, 400, 400), 554, HighLogic.Skin);
             //var view = StrangeWindowView.Create(logic);
             var view = new GameObject("TestView", typeof (StrangeWindowView));
-            view.transform.parent = ((GameObject) this.contextView).transform;
-            UnityEngine.Object.DontDestroyOnLoad(view);
+            view.transform.parent = ((GameObject)contextView).transform;
+            Object.DontDestroyOnLoad(view);
 
-
+            
             //injectionBinder.Bind<IExampleModel>()
             //    .To<ExampleModel>()
             //    .ToSingleton();
@@ -122,19 +178,19 @@ namespace AssemblyReloader.CompositeRoot
             injectionBinder.Bind<ICommandBinder>().To<SignalCommandBinder>().ToSingleton();
         }
 
+         
 
-        //private ILoadedAssemblyFactory ConfigureLoadedAssemblyFactory()
-        //{
-        //    return new KspLoadedAssemblyFactory(
-        //        new LoadedAssemblyFileUrlQuery(),
-        //        new DisposeLoadedAssemblyCommandFactory(),
-        //        // note: no KSPAddon type installer required; game looks through LoadedAssemblies on every scene checking all types
-        //        new GenericTypeInstaller<Part>(new TypesDerivedFromQuery<Part>()),
-        //        new GenericTypeInstaller<PartModule>(new TypesDerivedFromQuery<PartModule>()),
-        //        new GenericTypeInstaller<ScenarioModule>(new TypesDerivedFromQuery<ScenarioModule>()));
-        //}
 
-        private IEnumerable<ITypeInstaller> LocateTypeInstallers()
+        public override void Launch()
+        {
+            base.Launch();
+            //Make sure you've mapped this to a StartCommand!
+            //StartSignal startSignal = (StartSignal)injectionBinder.GetInstance<StartSignal>();
+            //startSignal.Dispatch();
+        }
+
+
+        private IEnumerable<ITypeInstaller> CreateTypeInstallers()
         {
             return new ITypeInstaller[]
             {

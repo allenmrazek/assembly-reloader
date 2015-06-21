@@ -20,14 +20,7 @@ namespace AssemblyReloader.Gui
         }
 
 
-        [PostConstruct]
-        private void TestSituation()
-        {
-            Log.Normal("MainWindowLogic created");
-            throw new Exception("TestSituation");
-        }
-
-
+        [Inject]
         public IEnumerable<IPluginInfo> Plugins
         {
             get { return _plugins; }

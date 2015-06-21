@@ -4,7 +4,7 @@ using strange.extensions.mediation.impl;
 namespace AssemblyReloader.Gui
 {
 // ReSharper disable once ClassNeverInstantiated.Global
-    public class MainWindowMediator : EventMediator
+    public class MainWindowMediator : Mediator
     {
         [Inject]
         public IWindowComponent ViewLogic { get; set; }
