@@ -10,6 +10,7 @@ using ReeperCommon.Logging;
 
 namespace AssemblyReloader.Loaders
 {
+// ReSharper disable once ClassNeverInstantiated.Global
     public class AssemblyLoader : IAssemblyLoader
     {
         private readonly IAssemblyProvider _assemblyProvider;

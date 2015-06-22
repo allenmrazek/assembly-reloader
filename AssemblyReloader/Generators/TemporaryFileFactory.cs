@@ -12,6 +12,7 @@ namespace AssemblyReloader.Generators
         private readonly IDirectory _directory;
         private readonly IRandomStringGenerator _stringGenerator;
 
+
         public TemporaryFileFactory(
             [NotNull] IDirectory directory,
             [NotNull] IRandomStringGenerator stringGenerator)

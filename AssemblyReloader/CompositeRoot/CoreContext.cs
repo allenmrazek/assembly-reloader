@@ -1,21 +1,28 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using AssemblyReloader.Annotations;
 using AssemblyReloader.Commands;
 using AssemblyReloader.Controllers;
 using AssemblyReloader.DataObjects;
 using AssemblyReloader.Game;
 using AssemblyReloader.Generators;
 using AssemblyReloader.Gui;
+using AssemblyReloader.Loaders;
 using AssemblyReloader.Providers;
 using AssemblyReloader.Queries;
 using AssemblyReloader.Queries.AssemblyQueries;
+using AssemblyReloader.Queries.CecilQueries;
 using AssemblyReloader.Queries.FileSystemQueries;
 using AssemblyReloader.TypeInstallers;
 using AssemblyReloader.TypeInstallers.Impl;
+using AssemblyReloader.Weaving;
+using AssemblyReloader.Weaving.Operations;
 using Mono.Cecil;
+using Mono.Cecil.Cil;
 using ReeperCommon.FileSystem;
 using ReeperCommon.FileSystem.Providers;
 using ReeperCommon.Gui.Window;
@@ -26,6 +33,7 @@ using strange.extensions.command.api;
 using strange.extensions.command.impl;
 using strange.extensions.context.impl;
 using UnityEngine;
+using AssemblyLoader = AssemblyReloader.Loaders.AssemblyLoader;
 
 namespace AssemblyReloader.CompositeRoot
 {
@@ -38,9 +46,10 @@ namespace AssemblyReloader.CompositeRoot
         
         protected override void mapBindings()
         {
-            
-            injectionBinder.Bind<ILog>().To(new DebugLog("ART"));
+            var log = new DebugLog("ART");
 
+            injectionBinder.Bind<ILog>().To(log);
+            
 
             injectionBinder.Bind<ITypeIdentifier>().To<TypeIdentifier>().ToSingleton();
             injectionBinder.Bind<IRandomStringGenerator>().To<RandomStringGenerator>().ToSingleton();
@@ -79,10 +88,19 @@ namespace AssemblyReloader.CompositeRoot
 
             injectionBinder.Bind<IEnumerable<ITypeInstaller>>().ToValue(CreateTypeInstallers());
             injectionBinder.Bind<ILoadedAssemblyFactory>().To<KspLoadedAssemblyFactory>().ToSingleton();
-            
-
-
-
+            injectionBinder.Bind<IPluginConfigurationFilePathQuery>()
+                .To(new PluginConfigurationFilePathQuery());
+            injectionBinder.Bind<IPluginConfigurationProvider>().To<PluginConfigurationProvider>().ToSingleton();
+            injectionBinder.Bind<IAssemblyLoader>().To<Loaders.AssemblyLoader>();
+            injectionBinder.Bind<IAssemblyProvider>().To<AssemblyProvider>();
+            injectionBinder.Bind<IAssemblyDefinitionReader>().To<AssemblyDefinitionFromDiskReader>();
+            injectionBinder.Bind<IAssemblyDefinitionLoader>().To<AssemblyDefinitionLoader>().ToSingleton();
+            injectionBinder.Bind<IDebugSymbolFileExistsQuery>().To<DebugSymbolFileExistsQuery>();
+            injectionBinder.Bind<ITemporaryFileFactory>().To<TemporaryFileFactory>();
+            injectionBinder.Bind<ILoadedAssemblyFileUrlQuery>().To<LoadedAssemblyFileUrlQuery>().ToSingleton();
+            injectionBinder.Bind<IDisposeLoadedAssemblyCommandFactory>()
+                .To<DisposeLoadedAssemblyCommandFactory>()
+                .ToSingleton();
 
             injectionBinder.Bind<IReloadablePlugin>().To<IPluginInfo>().To<ReloadablePlugin>();
 
@@ -91,22 +109,34 @@ namespace AssemblyReloader.CompositeRoot
                 new ReloadableAssemblyFilesInDirectoryQuery(
                     injectionBinder.GetInstance<IDirectory>(DirectoryTypes.GameData));
 
+            log.Normal("Reloadable files count: " + reloadableFiles.Get().Count());
 
             var reloadablePlugins = reloadableFiles.Get().Select(file =>
             {
+                log.Normal("Loading " + file.Name);
                 injectionBinder.Bind<IFile>().ToValue(file);
+                injectionBinder.Bind<IDirectory>().ToValue(file.Directory);
                 injectionBinder.Bind<PluginConfiguration>()
-                    .ToValue(injectionBinder.GetInstance<PluginConfigurationProvider>().Get(file));
+                    .ToValue(injectionBinder.GetInstance<IPluginConfigurationProvider>().Get(file));
+                injectionBinder.Bind<IAssemblyDefinitionWeaver>().To(ConfigureDefinitionWeaver(
+                    file, injectionBinder.GetInstance<PluginConfiguration>(), injectionBinder.GetInstance<ILog>().CreateTag("Weaver")));
+                
 
                 var r = injectionBinder.GetInstance<IReloadablePlugin>();
 
+                
+
                 r.Load();
 
+
+                injectionBinder.Unbind<IAssemblyDefinitionWeaver>();
+                injectionBinder.Unbind<IDirectory>();
                 injectionBinder.Unbind<IFile>();
                 injectionBinder.Unbind<PluginConfiguration>();
 
                 return r;
-            });
+            })
+            .ToList();
 
 
             injectionBinder.Bind<IEnumerable<IPluginInfo>>().ToValue(reloadablePlugins.Cast<IPluginInfo>());
@@ -125,8 +155,8 @@ namespace AssemblyReloader.CompositeRoot
 
 
 
-            mediationBinder.Bind<StrangeWindowView>()
-                .To<MainWindowMediator>();
+            //mediationBinder.Bind<StrangeWindowView>()
+            //    .To<MainWindowMediator>();
 
 
 
@@ -135,9 +165,9 @@ namespace AssemblyReloader.CompositeRoot
 
 
 
-            var mainLogic = new MainWindowLogic(new Rect(0, 0, 400, 400), 554, HighLogic.Skin);
-            injectionBinder.Bind<IWindowComponent>()
-                .ToValue(mainLogic);
+            //var mainLogic = new MainWindowLogic(new Rect(0, 0, 400, 400), 554, HighLogic.Skin);
+            //injectionBinder.Bind<IWindowComponent>()
+            //    .ToValue(mainLogic);
 
 
 
@@ -145,9 +175,9 @@ namespace AssemblyReloader.CompositeRoot
             // create main window ...
             //var logic = new MainWindowLogic(new Rect(0, 0, 400, 400), 554, HighLogic.Skin);
             //var view = StrangeWindowView.Create(logic);
-            var view = new GameObject("TestView", typeof (StrangeWindowView));
-            view.transform.parent = ((GameObject)contextView).transform;
-            Object.DontDestroyOnLoad(view);
+            //var view = new GameObject("TestView", typeof (StrangeWindowView));
+            //view.transform.parent = ((GameObject)contextView).transform;
+            //Object.DontDestroyOnLoad(view);
 
             
             //injectionBinder.Bind<IExampleModel>()
@@ -235,6 +265,67 @@ namespace AssemblyReloader.CompositeRoot
                     new ResourceIdentifierAdapter(id => id.Replace('/', '.').Replace('\\', '.'),
                         new ResourceFromEmbeddedResource(Assembly.GetExecutingAssembly()))
                     ));
+        }
+
+
+        private IAssemblyDefinitionWeaver ConfigureDefinitionWeaver([NotNull] IFile location,
+            [NotNull] PluginConfiguration pluginConfiguration,
+            [NotNull] ILog weaverLog)
+        {
+            if (location == null) throw new ArgumentNullException("location");
+            if (pluginConfiguration == null) throw new ArgumentNullException("pluginConfiguration");
+            if (weaverLog == null) throw new ArgumentNullException("weaverLog");
+
+            var getCodeBaseProperty = typeof(Assembly).GetProperty("CodeBase",
+                BindingFlags.Public | BindingFlags.Instance | BindingFlags.GetProperty);
+
+            var getLocationProperty = typeof(Assembly).GetProperty("Location",
+                BindingFlags.Public | BindingFlags.Instance | BindingFlags.GetProperty);
+
+            if (getCodeBaseProperty == null || getCodeBaseProperty.GetGetMethod() == null)
+                throw new MissingMethodException(typeof(Assembly).FullName, "CodeBase");
+
+            if (getLocationProperty == null || getCodeBaseProperty.GetGetMethod() == null)
+                throw new MissingMethodException(typeof(Assembly).FullName, "Location");
+
+
+            var uri = new Uri(location.FullPath);
+            var injectedHelperTypeQuery = new InjectedHelperTypeQuery();
+
+            var allTypesFromAssemblyExceptInjected = new ExcludingTypeDefinitions(
+                new AllTypesFromDefinitionQuery(), new InjectedHelperTypeQuery());
+
+            var renameAssembly = new RenameAssemblyOperation(new UniqueAssemblyNameGenerator(new RandomStringGenerator()));
+
+            var writeInjectedHelper =
+                    new InjectedHelperTypeDefinitionWriter(
+                    new CompositeCommand<TypeDefinition>(
+                        new ProxyAssemblyMethodWriter(Uri.UnescapeDataString(uri.AbsoluteUri), getCodeBaseProperty.GetGetMethod()),
+                        new ProxyAssemblyMethodWriter(uri.LocalPath, getLocationProperty.GetGetMethod())));
+
+            var interceptAssemblyCodeBaseCalls = new InterceptExecutingAssemblyLocationQueries(
+                new MethodCallInMethodBodyQuery(
+                    getCodeBaseProperty.GetGetMethod(),
+                    OpCodes.Callvirt),
+                    new InjectedHelperTypeMethodQuery(injectedHelperTypeQuery, getCodeBaseProperty.GetGetMethod().Name)
+                );
+
+            var interceptAssemblyLocationCalls = new InterceptExecutingAssemblyLocationQueries(
+                new MethodCallInMethodBodyQuery(
+                    getLocationProperty.GetGetMethod(),
+                    OpCodes.Callvirt),
+                new InjectedHelperTypeMethodQuery(injectedHelperTypeQuery, getLocationProperty.GetGetMethod().Name)
+                );
+
+            return new AssemblyDefinitionWeaver(
+                weaverLog,
+                allTypesFromAssemblyExceptInjected,
+                new AllMethodsFromDefinitionQuery(),
+                renameAssembly,
+                new ConditionalWeaveOperation(writeInjectedHelper, () => pluginConfiguration.InjectHelperType),
+                new ConditionalWeaveOperation(interceptAssemblyCodeBaseCalls, () => pluginConfiguration.RewriteAssemblyLocationCalls),
+                new ConditionalWeaveOperation(interceptAssemblyLocationCalls, () => pluginConfiguration.RewriteAssemblyLocationCalls));
+
         }
     }
 }
