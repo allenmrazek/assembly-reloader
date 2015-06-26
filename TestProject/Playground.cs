@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -9,11 +10,91 @@ using ReeperCommon.Containers;
 using ReeperCommon.Extensions;
 using ReeperCommon.Logging;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 using Object = UnityEngine.Object;
 
 
 namespace TestProject
 {
+    //public class ModuleCameraShot : VesselModule
+    //{
+    //    private bool takeHiResShot = false;
+    //    private int resWidth = 128;
+    //    private int resHeight = 128;
+
+
+    //    public static string ScreenShotName(int width, int height)
+    //    {
+    //        return string.Format("{0}/screen_{1}x{2}_{3}.png",
+    //                             Application.dataPath,
+    //                             width, height,
+    //                             System.DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss"));
+    //    }
+
+
+    //    public void TakeHiResShot()
+    //    {
+    //        takeHiResShot = true;
+    //    }
+
+
+    //    //[KSPEvent(active=true,guiActive=true,guiName="Take Shot",name="Take Shot")]
+    //    public void Update()
+    //    {
+    //        takeHiResShot |= Input.GetKeyDown("k");
+    //        if (takeHiResShot)
+    //        {
+    //            float start = Time.realtimeSinceStartup;
+    //            var stopwatch = Stopwatch.StartNew();
+
+    //            var _vessel = GetComponent<Vessel>();
+    //            var _cameraObject = new GameObject("ColourCam");
+    //            _cameraObject.transform.position = _vessel.transform.position;
+    //            _cameraObject.transform.LookAt(_vessel.mainBody.transform.position);
+    //            _cameraObject.transform.Translate(new Vector3(0, 0, -10));
+    //            //Debug.LogError("created camera");
+    //            var _camera = _cameraObject.AddComponent<Camera>();
+    //            RenderTexture rt = new RenderTexture(resWidth, resHeight, 24);
+    //            _camera.targetTexture = rt;
+    //            Texture2D groundShot = new Texture2D(resWidth, resHeight, TextureFormat.RGB24, false);
+    //            _camera.Render();
+    //            //Debug.LogError("rendered something...");
+    //            RenderTexture.active = rt;
+    //            var readPixelsTimer = Stopwatch.StartNew();
+    //            groundShot.ReadPixels(new Rect(0, 0, resWidth, resHeight), 0, 0);
+    //            var readPixelsElapsed = readPixelsTimer.ElapsedMilliseconds;
+    //            _camera.targetTexture = null;
+    //            RenderTexture.active = null; // JC: added to avoid errors
+    //            Destroy(rt);
+    //            Destroy(_cameraObject);
+    //            Color[] texColors = groundShot.GetPixels();
+    //            int total = texColors.Length;
+    //            float r = 0;
+    //            float g = 0;
+    //            float b = 0;
+
+
+    //            for (int i = 0; i < total; i++)
+    //            {
+    //                r += texColors[i].r;
+    //                g += texColors[i].g;
+    //                b += texColors[i].b;
+    //            }
+
+
+    //            Color averageColor = new Color(r / total, g / total, b / total);
+    //            print(averageColor);
+
+
+    //            takeHiResShot = false;
+    //            Debug.LogWarning("Elapsed milliseconds: " + stopwatch.ElapsedMilliseconds);
+    //            Debug.LogWarning("Took " + readPixelsElapsed + " milliseconds to read pixels");
+    //            Debug.LogWarning("Took " + (Time.realtimeSinceStartup - start).ToString("F2") +
+    //                             " seconds to create snapshot");
+    //        }
+    //    }
+    //}
+
     //[Serializable]
     //public class SomeDataIwantTosave : IConfigNode
     //{

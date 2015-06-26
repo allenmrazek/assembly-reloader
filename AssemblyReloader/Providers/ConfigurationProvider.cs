@@ -3,13 +3,13 @@ using System.IO;
 using System.Linq;
 using AssemblyReloader.Annotations;
 using AssemblyReloader.DataObjects;
-using AssemblyReloader.Queries.FileSystemQueries;
 using ReeperCommon.Containers;
 using ReeperCommon.Logging;
 using ReeperCommon.Serialization;
 
 namespace AssemblyReloader.Providers
 {
+// ReSharper disable once UnusedMember.Global
     public class ConfigurationProvider : IConfigurationProvider
     {
         private readonly IFilePathProvider _configurationFileProvider;

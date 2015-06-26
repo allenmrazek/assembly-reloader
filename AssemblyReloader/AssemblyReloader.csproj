@@ -85,6 +85,7 @@
     <Compile Include="CompositeRoot\FlightConfigNodeKeyValuePairComparer.cs" />
     <Compile Include="CompositeRoot\IMessageChannel.cs" />
     <Compile Include="CompositeRoot\IMessageConsumer.cs" />
+    <Compile Include="CompositeRoot\ReloadablePluginFactory.cs" />
     <Compile Include="Gui\StrangeWindowView.cs" />
     <Compile Include="Gui\MainWindowMediator.cs" />
     <Compile Include="DataObjects\AssemblyTypes.cs" />
@@ -174,6 +175,7 @@
     <Compile Include="Providers\AssemblyProvider.cs" />
     <Compile Include="Providers\ConfigurationProvider.cs" />
     <Compile Include="Providers\FilePathProviderFromContext.cs" />
+    <Compile Include="Providers\IAssemblyDefinitionProvider.cs" />
     <Compile Include="Providers\IConfigNodeFormatterProvider.cs" />
     <Compile Include="Providers\IConfigurationProvider.cs" />
     <Compile Include="Providers\IFilePathProvider.cs" />

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -11,12 +10,12 @@ using AssemblyReloader.DataObjects;
 using AssemblyReloader.Game;
 using AssemblyReloader.Generators;
 using AssemblyReloader.Gui;
-using AssemblyReloader.Loaders;
 using AssemblyReloader.Providers;
 using AssemblyReloader.Queries;
 using AssemblyReloader.Queries.AssemblyQueries;
 using AssemblyReloader.Queries.CecilQueries;
 using AssemblyReloader.Queries.FileSystemQueries;
+using AssemblyReloader.Signals;
 using AssemblyReloader.TypeInstallers;
 using AssemblyReloader.TypeInstallers.Impl;
 using AssemblyReloader.Weaving;
@@ -25,7 +24,6 @@ using Mono.Cecil;
 using Mono.Cecil.Cil;
 using ReeperCommon.FileSystem;
 using ReeperCommon.FileSystem.Providers;
-using ReeperCommon.Gui.Window;
 using ReeperCommon.Logging;
 using ReeperCommon.Repositories;
 using ReeperCommon.Serialization;
@@ -33,7 +31,6 @@ using strange.extensions.command.api;
 using strange.extensions.command.impl;
 using strange.extensions.context.impl;
 using UnityEngine;
-using AssemblyLoader = AssemblyReloader.Loaders.AssemblyLoader;
 
 namespace AssemblyReloader.CompositeRoot
 {
@@ -91,10 +88,10 @@ namespace AssemblyReloader.CompositeRoot
             injectionBinder.Bind<IPluginConfigurationFilePathQuery>()
                 .To(new PluginConfigurationFilePathQuery());
             injectionBinder.Bind<IPluginConfigurationProvider>().To<PluginConfigurationProvider>().ToSingleton();
-            injectionBinder.Bind<IAssemblyLoader>().To<Loaders.AssemblyLoader>();
-            injectionBinder.Bind<IAssemblyProvider>().To<AssemblyProvider>();
-            injectionBinder.Bind<IAssemblyDefinitionReader>().To<AssemblyDefinitionFromDiskReader>();
-            injectionBinder.Bind<IAssemblyDefinitionLoader>().To<AssemblyDefinitionLoader>().ToSingleton();
+            //injectionBinder.Bind<IAssemblyLoader>().To<Loaders.AssemblyLoader>();
+            //injectionBinder.Bind<IAssemblyProvider>().To<AssemblyProvider>();
+            //injectionBinder.Bind<IAssemblyDefinitionReader>().To<AssemblyDefinitionFromDiskReader>();
+            //injectionBinder.Bind<IAssemblyDefinitionLoader>().To<AssemblyDefinitionLoader>().ToSingleton();
             injectionBinder.Bind<IDebugSymbolFileExistsQuery>().To<DebugSymbolFileExistsQuery>();
             injectionBinder.Bind<ITemporaryFileFactory>().To<TemporaryFileFactory>();
             injectionBinder.Bind<ILoadedAssemblyFileUrlQuery>().To<LoadedAssemblyFileUrlQuery>().ToSingleton();
@@ -102,8 +99,9 @@ namespace AssemblyReloader.CompositeRoot
                 .To<DisposeLoadedAssemblyCommandFactory>()
                 .ToSingleton();
 
-            injectionBinder.Bind<IReloadablePlugin>().To<IPluginInfo>().To<ReloadablePlugin>();
-
+            //injectionBinder.Bind<IReloadablePlugin>().To<IPluginInfo>().To<ReloadablePlugin>();
+            injectionBinder.Bind<PluginLoadedSignal>().ToSingleton();
+            injectionBinder.Bind<PluginUnloadedSignal>().ToSingleton();
 
             var reloadableFiles =
                 new ReloadableAssemblyFilesInDirectoryQuery(
@@ -111,36 +109,36 @@ namespace AssemblyReloader.CompositeRoot
 
             log.Normal("Reloadable files count: " + reloadableFiles.Get().Count());
 
-            var reloadablePlugins = reloadableFiles.Get().Select(file =>
-            {
-                log.Normal("Loading " + file.Name);
-                injectionBinder.Bind<IFile>().ToValue(file);
-                injectionBinder.Bind<IDirectory>().ToValue(file.Directory);
-                injectionBinder.Bind<PluginConfiguration>()
-                    .ToValue(injectionBinder.GetInstance<IPluginConfigurationProvider>().Get(file));
-                injectionBinder.Bind<IAssemblyDefinitionWeaver>().To(ConfigureDefinitionWeaver(
-                    file, injectionBinder.GetInstance<PluginConfiguration>(), injectionBinder.GetInstance<ILog>().CreateTag("Weaver")));
+            //var reloadablePlugins = reloadableFiles.Get().Select(file =>
+            //{
+            //    log.Normal("Loading " + file.Name);
+            //    injectionBinder.Bind<IFile>().ToValue(file);
+            //    injectionBinder.Bind<IDirectory>().ToValue(file.Directory);
+            //    injectionBinder.Bind<PluginConfiguration>()
+            //        .ToValue(injectionBinder.GetInstance<IPluginConfigurationProvider>().Get(file));
+            //    injectionBinder.Bind<IAssemblyDefinitionWeaver>().To(ConfigureDefinitionWeaver(
+            //        file, injectionBinder.GetInstance<PluginConfiguration>(), injectionBinder.GetInstance<ILog>().CreateTag("Weaver")));
                 
 
-                var r = injectionBinder.GetInstance<IReloadablePlugin>();
+            //    var r = injectionBinder.GetInstance<IReloadablePlugin>();
 
                 
 
-                r.Load();
+            //    r.Load();
 
 
-                injectionBinder.Unbind<IAssemblyDefinitionWeaver>();
-                injectionBinder.Unbind<IDirectory>();
-                injectionBinder.Unbind<IFile>();
-                injectionBinder.Unbind<PluginConfiguration>();
+            //    injectionBinder.Unbind<IAssemblyDefinitionWeaver>();
+            //    injectionBinder.Unbind<IDirectory>();
+            //    injectionBinder.Unbind<IFile>();
+            //    injectionBinder.Unbind<PluginConfiguration>();
 
-                return r;
-            })
-            .ToList();
+            //    return r;
+            //})
+            //.ToList();
 
 
-            injectionBinder.Bind<IEnumerable<IPluginInfo>>().ToValue(reloadablePlugins.Cast<IPluginInfo>());
-            injectionBinder.Bind<IEnumerable<IReloadablePlugin>>().ToValue(reloadablePlugins);
+            //injectionBinder.Bind<IEnumerable<IPluginInfo>>().ToValue(reloadablePlugins.Cast<IPluginInfo>());
+            //injectionBinder.Bind<IEnumerable<IReloadablePlugin>>().ToValue(reloadablePlugins);
 
 
 
