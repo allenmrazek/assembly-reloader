@@ -5,17 +5,15 @@ using System.Linq;
 using System.Reflection;
 using AssemblyReloader.Annotations;
 using AssemblyReloader.Commands;
-using AssemblyReloader.Controllers;
 using AssemblyReloader.DataObjects;
 using AssemblyReloader.Game;
 using AssemblyReloader.Generators;
-using AssemblyReloader.Gui;
+using AssemblyReloader.Names;
 using AssemblyReloader.Providers;
 using AssemblyReloader.Queries;
 using AssemblyReloader.Queries.AssemblyQueries;
 using AssemblyReloader.Queries.CecilQueries;
 using AssemblyReloader.Queries.FileSystemQueries;
-using AssemblyReloader.Signals;
 using AssemblyReloader.TypeInstallers;
 using AssemblyReloader.TypeInstallers.Impl;
 using AssemblyReloader.Weaving;
@@ -58,21 +56,21 @@ namespace AssemblyReloader.CompositeRoot
 
             injectionBinder.Bind<IDirectory>()
                 .ToValue(injectionBinder.GetInstance<IFileSystemFactory>().GetGameDataDirectory())
-                .ToName(DirectoryTypes.GameData);
+                .ToName(DirectoryNames.GameData);
 
             injectionBinder.Bind<IDirectory>()
                 .ToValue(new AssemblyDirectoryQuery(
                     injectionBinder.GetInstance<IGameAssemblyLoader>(),
                     Assembly.GetExecutingAssembly(),
-                    injectionBinder.GetInstance<IDirectory>(DirectoryTypes.GameData)).Get())
-                .ToName(DirectoryTypes.Core);
+                    injectionBinder.GetInstance<IDirectory>(DirectoryNames.GameData)).Get())
+                .ToName(DirectoryNames.Core);
 
             injectionBinder.Bind<IConfigNodeSerializer>().ToValue(
                 new ConfigNodeSerializer(new DefaultSurrogateSelector(new DefaultSurrogateProvider()),
                     new CompositeFieldInfoQuery(new RecursiveSerializableFieldQuery())));
 
             var assemblyResolver = new DefaultAssemblyResolver();
-            assemblyResolver.AddSearchDirectory(injectionBinder.GetInstance<IDirectory>(DirectoryTypes.Core).FullPath);
+            assemblyResolver.AddSearchDirectory(injectionBinder.GetInstance<IDirectory>(DirectoryNames.Core).FullPath);
 
             injectionBinder.Bind<BaseAssemblyResolver>().ToValue(assemblyResolver);
 
@@ -81,10 +79,9 @@ namespace AssemblyReloader.CompositeRoot
 
             injectionBinder.Bind<IAddonAttributesFromTypeQuery>().To<AddonAttributesFromTypeQuery>().ToSingleton();
             injectionBinder.Bind<IResourceRepository>()
-                .ToValue(ConfigureResourceRepository(injectionBinder.GetInstance<IDirectory>(DirectoryTypes.Core)));
+                .ToValue(ConfigureResourceRepository(injectionBinder.GetInstance<IDirectory>(DirectoryNames.Core)));
 
             injectionBinder.Bind<IEnumerable<ITypeInstaller>>().ToValue(CreateTypeInstallers());
-            injectionBinder.Bind<ILoadedAssemblyFactory>().To<KspLoadedAssemblyFactory>().ToSingleton();
             injectionBinder.Bind<IPluginConfigurationFilePathQuery>()
                 .To(new PluginConfigurationFilePathQuery());
             injectionBinder.Bind<IPluginConfigurationProvider>().To<PluginConfigurationProvider>().ToSingleton();
@@ -100,12 +97,12 @@ namespace AssemblyReloader.CompositeRoot
                 .ToSingleton();
 
             //injectionBinder.Bind<IReloadablePlugin>().To<IPluginInfo>().To<ReloadablePlugin>();
-            injectionBinder.Bind<PluginLoadedSignal>().ToSingleton();
-            injectionBinder.Bind<PluginUnloadedSignal>().ToSingleton();
+            //injectionBinder.Bind<PluginLoadedSignal>().ToSingleton();
+            //injectionBinder.Bind<PluginUnloadedSignal>().ToSingleton();
 
             var reloadableFiles =
                 new ReloadableAssemblyFilesInDirectoryQuery(
-                    injectionBinder.GetInstance<IDirectory>(DirectoryTypes.GameData));
+                    injectionBinder.GetInstance<IDirectory>(DirectoryNames.GameData));
 
             log.Normal("Reloadable files count: " + reloadableFiles.Get().Count());
 

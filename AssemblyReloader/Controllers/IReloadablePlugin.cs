@@ -1,15 +1,11 @@
-﻿using System.Reflection;
-using ReeperCommon.FileSystem;
-
-namespace AssemblyReloader.Controllers
+﻿namespace AssemblyReloader.Controllers
 {
-    public delegate void PluginLoadedHandler(Assembly assembly, IFile location);
-    public delegate void PluginUnloadedHandler(Assembly assembly, IFile location);
+    //public delegate void PluginLoadedHandler(Assembly assembly, IFile location);
+    //public delegate void PluginUnloadedHandler(Assembly assembly, IFile location);
 
     public interface IReloadablePlugin
     {
-        void Load();
-        void Unload();
+        bool Reload();
 
         //event PluginLoadedHandler OnLoaded;
         //event PluginUnloadedHandler OnUnloaded;

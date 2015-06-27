@@ -2,16 +2,17 @@
 using System.Collections.Generic;
 using AssemblyReloader.Annotations;
 using AssemblyReloader.Controllers;
+using AssemblyReloader.Gui;
 
 namespace AssemblyReloader.DataObjects
 {
     public class Model : IModel
     {
-        private readonly IEnumerable<IReloadablePlugin> _plugins;
+        private readonly IDictionary<IPluginInfo, IReloadablePlugin> _plugins;
         private readonly Configuration _configuration;
 
 
-        public Model([NotNull] Configuration configuration, [NotNull] IEnumerable<IReloadablePlugin> plugins)
+        public Model([NotNull] Configuration configuration, [NotNull] IDictionary<IPluginInfo, IReloadablePlugin> plugins)
         {
             if (configuration == null) throw new ArgumentNullException("configuration");
             if (plugins == null) throw new ArgumentNullException("plugins");
@@ -21,15 +22,28 @@ namespace AssemblyReloader.DataObjects
         }
 
 
-        public IEnumerable<IReloadablePlugin> Plugins
+        public IEnumerable<IPluginInfo> Plugins
         {
-            get { return _plugins; }
+            get { return _plugins.Keys; }
         }
 
 
         public Configuration Configuration
         {
             get { return _configuration; }
+        }
+
+
+        public bool Reload([NotNull] IPluginInfo which)
+        {
+            if (which == null) throw new ArgumentNullException("which");
+
+            IReloadablePlugin plugin;
+
+            if (!_plugins.TryGetValue(which, out plugin))
+                throw new KeyNotFoundException("No plugin associated with " + which.Name);
+
+            return plugin.Reload();
         }
     }
 }

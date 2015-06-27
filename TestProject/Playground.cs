@@ -16,6 +16,8 @@ using Object = UnityEngine.Object;
 
 namespace TestProject
 {
+
+
     //public class ModuleCameraShot : VesselModule
     //{
     //    private bool takeHiResShot = false;

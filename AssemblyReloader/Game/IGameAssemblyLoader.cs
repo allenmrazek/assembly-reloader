@@ -1,12 +1,12 @@
-﻿using ReeperCommon.Containers;
+﻿using System;
+using System.Reflection;
 using ReeperCommon.FileSystem;
 
 namespace AssemblyReloader.Game
 {
     public interface IGameAssemblyLoader
     {
-        //Maybe<Assembly> Deserialize();
-        //void Unload();
+        IDisposable Load(Assembly assembly, IFile location);
 
         AssemblyLoader.LoadedAssembyList LoadedAssemblies { get; set; }
     }

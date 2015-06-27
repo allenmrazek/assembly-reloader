@@ -1,18 +1,80 @@
-﻿//using System;
-//using System.Linq;
-//using System.Reflection;
-//using AssemblyReloader.Annotations;
-//using AssemblyReloader.DataObjects;
-//using AssemblyReloader.Game;
-//using AssemblyReloader.Gui;
-//using AssemblyReloader.Loaders;
-//using AssemblyReloader.Signals;
-//using ReeperCommon.Containers;
-//using ReeperCommon.Extensions;
-//using ReeperCommon.FileSystem;
+﻿using System;
+using System.Linq;
+using AssemblyReloader.Annotations;
+using AssemblyReloader.Game;
+using AssemblyReloader.Gui;
+using AssemblyReloader.Providers;
+using ReeperCommon.Extensions;
+using ReeperCommon.FileSystem;
 
-//namespace AssemblyReloader.Controllers
-//{
+namespace AssemblyReloader.Controllers
+{
+    public class ReloadablePlugin : IPluginInfo, IReloadablePlugin
+    {
+        private readonly IFile _reloadableFile;
+        private readonly IGameAssemblyLoader _assemblyLoader;
+        private readonly IAssemblyProvider _assemblyProvider;
+
+        private IDisposable _loaded;
+
+        public ReloadablePlugin(
+            [NotNull] IFile reloadableFile, 
+            [NotNull] IGameAssemblyLoader assemblyLoader,
+            [NotNull] IAssemblyProvider assemblyProvider)
+        {
+            if (reloadableFile == null) throw new ArgumentNullException("reloadableFile");
+            if (assemblyLoader == null) throw new ArgumentNullException("assemblyLoader");
+            if (assemblyProvider == null) throw new ArgumentNullException("assemblyProvider");
+
+            _reloadableFile = reloadableFile;
+            _assemblyLoader = assemblyLoader;
+            _assemblyProvider = assemblyProvider;
+        }
+
+
+        public string Name
+        {
+            get { return _reloadableFile.Name; }
+        }
+
+
+        public IFile Location
+        {
+            get { return _reloadableFile; }
+        }
+
+
+        private bool Load()
+        {
+            if (!_loaded.IsNull())
+                throw new InvalidOperationException("Previous instance was not unloaded");
+
+            var assembly = _assemblyProvider.Get(Location);
+            if (!assembly.Any())
+                throw new Exception("Failed to read assembly at " + Location.FullPath);
+
+            _loaded = _assemblyLoader.Load(assembly.Single(), Location);
+
+            return _loaded != null;
+        }
+
+
+        private void Unload()
+        {
+            if (_loaded.IsNull())
+                throw new InvalidOperationException("No assembly loaded");
+        }
+
+
+        public bool Reload()
+        {
+            if (!_loaded.IsNull())
+                Unload();
+
+            return Load();
+        }
+    }
+
 
 //    /// <summary>
 //    /// This object tracks a particular reloadable dll (based on its location). This is necessary
@@ -100,4 +162,4 @@
 //            get { return _location; }
 //        }
 //    }
-//}
+}
