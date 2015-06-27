@@ -2,7 +2,7 @@
 
 namespace AssemblyReloader.Queries.FileSystemQueries
 {
-    public interface ILoadedAssemblyFileUrlQuery
+    public interface IGetLoadedAssemblyFileUrl
     {
         string Get(IFile assemblyLocation);
     }

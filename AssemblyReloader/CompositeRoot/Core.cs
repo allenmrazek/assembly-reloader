@@ -393,12 +393,12 @@
 //        private ILoadedAssemblyFactory ConfigureLoadedAssemblyFactory()
 //        {
 //            return new KspLoadedAssemblyFactory(
-//                new LoadedAssemblyFileUrlQuery(),
-//                new DisposeLoadedAssemblyCommandFactory(),
+//                new GetLoadedAssemblyFileUrl(),
+//                new LoadedAssemblyHandleFactory(),
 //                // note: no KSPAddon type installer required; game looks through LoadedAssemblies on every scene checking all types
-//                new GenericTypeInstaller<Part>(new TypesDerivedFromQuery<Part>()),
-//                new GenericTypeInstaller<PartModule>(new TypesDerivedFromQuery<PartModule>()),
-//                new GenericTypeInstaller<ScenarioModule>(new TypesDerivedFromQuery<ScenarioModule>()));
+//                new GenericLoadedAssemblyTypeInstaller<Part>(new TypesDerivedFromQuery<Part>()),
+//                new GenericLoadedAssemblyTypeInstaller<PartModule>(new TypesDerivedFromQuery<PartModule>()),
+//                new GenericLoadedAssemblyTypeInstaller<ScenarioModule>(new TypesDerivedFromQuery<ScenarioModule>()));
 //        }
 
 
@@ -485,7 +485,7 @@
 //        //        { "addonTypesFromAssemblyQuery", new AddonsFromAssemblyQuery(container.Resolve<IAddonAttributesFromTypeQuery>()) }
 //        //    });
 
-//        //    var addonController = new AddonController(addonLoader, addonUnloader);
+//        //    var addonController = new AddonFacade(addonLoader, addonUnloader);
 
 //        //    plugin.OnLoaded +=
 //        //        (asm, loc) => { if (plugin.Configuration.StartAddonsForCurrentScene) addonController.Load(asm, loc); };
@@ -516,7 +516,7 @@
 //        //        objectDestroyer,
 //        //        new LoadedComponentQuery());
 
-//        //    var addonController = new AddonController(addonLoader, addonUnloader);
+//        //    var addonController = new AddonFacade(addonLoader, addonUnloader);
 
 //        //    plugin.OnLoaded +=
 //        //        (asm, loc) => { if (plugin.Configuration.StartAddonsForCurrentScene) addonController.Load(asm, loc); };
@@ -557,7 +557,7 @@
 //        //        { "snapshotGenerator", ConfigurePartModuleSnapshotGenerator(partModuleConfigQueue) }
 //        //    });
 
-//        //    var partModuleController = container.Resolve<PartModuleController>(new NamedParameterOverloads
+//        //    var partModuleController = container.Resolve<PartModuleFacade>(new NamedParameterOverloads
 //        //    {
 //        //        { "pmLoader", partModuleLoader },
 //        //        { "pmUnloader", partModuleUnloader },
@@ -596,7 +596,7 @@
 //        //    //    var onStartRunner = new ExecutePartModuleOnStartsCommand(new PartModuleStartStateProvider(),
 //        //    //        new PartIsPrefabQuery(), kspFactory, _log.CreateTag(plugin.Name + " OnStart Runner"));
 
-//        //    //    var partModuleController = new PartModuleController(
+//        //    //    var partModuleController = new PartModuleFacade(
 //        //    //                                 new PartModuleLoader(
 //        //    //                                     descriptorFactory,
 //        //    //                                     new PartModuleFactory(new PartIsPrefabQuery(), new AwakenPartModuleCommand(), onStartRunner),
@@ -652,7 +652,7 @@
 //        //    var onStartRunner = new ExecutePartModuleOnStartsCommand(new PartModuleStartStateProvider(),
 //        //        new PartIsPrefabQuery(), kspFactory, _log.CreateTag(plugin.Name + " OnStart Runner"));
 
-//        //    var partModuleController = new PartModuleController(
+//        //    var partModuleController = new PartModuleFacade(
 //        //                                 new PartModuleLoader(
 //        //                                     descriptorFactory,
 //        //                                     new PartModuleFactory(new PartIsPrefabQuery(), new AwakenPartModuleCommand(), onStartRunner),
@@ -695,7 +695,7 @@
 //        //        currentGameSceneProvider);
 
 //        //    var scenarioModuleController =
-//        //        new ScenarioModuleController(
+//        //        new ScenarioModuleFacade(
 //        //            new ScenarioModuleLoader(protoScenarioModuleProvider),
 //        //            new ScenarioModuleUnloader(
 //        //                new GameObjectComponentQuery(new KspGameObjectProvider()),
@@ -726,7 +726,7 @@
 //        //        container.Resolve<IScenarioModuleSnapshotGenerator>(),
 //        //        container.Resolve<ILog>("MainLog").CreateTag("ScenarioModuleUnloader"));
 
-//        //    var scenarioModuleController = container.Resolve<ScenarioModuleController>(new NamedParameterOverloads
+//        //    var scenarioModuleController = container.Resolve<ScenarioModuleFacade>(new NamedParameterOverloads
 //        //    {
 //        //        { "scenarioModuleQuery", container.Resolve<ITypesDerivedFromQuery<ScenarioModule>>() },
 //        //        { "unloader", scenarioModuleUnloader}

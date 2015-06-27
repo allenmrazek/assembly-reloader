@@ -1,4 +1,4 @@
-﻿namespace AssemblyReloader.Controllers
+﻿namespace AssemblyReloader.ReloadablePlugin
 {
     //public delegate void PluginLoadedHandler(Assembly assembly, IFile location);
     //public delegate void PluginUnloadedHandler(Assembly assembly, IFile location);

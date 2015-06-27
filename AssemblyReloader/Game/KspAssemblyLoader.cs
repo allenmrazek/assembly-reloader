@@ -14,35 +14,37 @@ namespace AssemblyReloader.Game
 // ReSharper disable once ClassNeverInstantiated.Global
     public class KspAssemblyLoader : IGameAssemblyLoader
     {
-        private readonly ILoadedAssemblyFileUrlQuery _laFileUrlQuery;
-        private readonly IDisposeLoadedAssemblyCommandFactory _disposeFactory;
-        private readonly IEnumerable<ITypeInstaller> _typeInstallers;
+        private readonly IEnumerable<ILoadedAssemblyTypeInstaller> _typeInstallers;
+        private readonly IGetLoadedAssemblyFileUrl _laFileUrl;
+
 
         public KspAssemblyLoader(
-            [NotNull] ILoadedAssemblyFileUrlQuery laFileUrlQuery,
-            [NotNull] IDisposeLoadedAssemblyCommandFactory disposeFactory,
-            [NotNull] IEnumerable<ITypeInstaller> typeInstallers)
+            [NotNull] IEnumerable<ILoadedAssemblyTypeInstaller> typeInstallers,
+            [NotNull] IGetLoadedAssemblyFileUrl laFileUrl)
         {
-            if (laFileUrlQuery == null) throw new ArgumentNullException("laFileUrlQuery");
-            if (disposeFactory == null) throw new ArgumentNullException("disposeFactory");
             if (typeInstallers == null) throw new ArgumentNullException("typeInstallers");
+            if (laFileUrl == null) throw new ArgumentNullException("laFileUrl");
 
-            _laFileUrlQuery = laFileUrlQuery;
-            _disposeFactory = disposeFactory;
             _typeInstallers = typeInstallers;
+            _laFileUrl = laFileUrl;
         }
 
 
-        public IDisposable Load(Assembly assembly, IFile location)
+        public ILoadedAssemblyHandle Load(Assembly assembly, IFile location)
         {
             if (assembly == null) throw new ArgumentNullException("assembly");
             if (location == null) throw new ArgumentNullException("location");
             if (AssemblyLoader.loadedAssemblies == null)
                 throw new InvalidOperationException("AssemblyLoader.loadedAssemblies is null");
 
-            new DebugLog().Normal("LoadedAssembly URL of " + location.FileName + " is " + _laFileUrlQuery.Get(location));
+            new DebugLog().Normal("LoadedAssembly URL of " + location.FileName + " is " + _laFileUrl.Get(location));
 
-            var la = new AssemblyLoader.LoadedAssembly(assembly, location.FullPath, _laFileUrlQuery.Get(location), null);
+            if (assembly == null) throw new ArgumentNullException("assembly");
+            if (location == null) throw new ArgumentNullException("location");
+
+            var la = new AssemblyLoader.LoadedAssembly(assembly, location.FullPath, _laFileUrl.Get(location), null);
+
+            AssemblyLoader.loadedAssemblies.Add(la);
 
             //InstallTypes(la, typeof (PartModule), _partModuleQuery.Get(assembly));
             //InstallTypes(la, typeof (Part), _partQuery.Get(assembly));
@@ -61,11 +63,7 @@ namespace AssemblyReloader.Game
             foreach (var installer in _typeInstallers)
                 installer.Install(la);
 
-
-            AssemblyLoader.loadedAssemblies.Add(la);
-
-
-            return _disposeFactory.Create(la);
+            return new LoadedAssemblyHandle(la);
         }
 
 

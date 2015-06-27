@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using AssemblyReloader.Annotations;
 using AssemblyReloader.Controllers;
 using AssemblyReloader.Gui;
+using AssemblyReloader.ReloadablePlugin;
 
 namespace AssemblyReloader.DataObjects
 {

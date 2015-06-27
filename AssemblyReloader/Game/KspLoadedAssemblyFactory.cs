@@ -11,14 +11,14 @@
 //{
 //    public class KspLoadedAssemblyFactory : ILoadedAssemblyFactory
 //    {
-//        private readonly ILoadedAssemblyFileUrlQuery _laFileUrlQuery;
-//        private readonly IDisposeLoadedAssemblyCommandFactory _disposeFactory;
-//        private readonly IEnumerable<ITypeInstaller> _typeInstallers;
+//        private readonly IGetLoadedAssemblyFileUrl _laFileUrlQuery;
+//        private readonly ILoadedAssemblyHandleFactory _disposeFactory;
+//        private readonly IEnumerable<ILoadedAssemblyTypeInstaller> _typeInstallers;
 
 //        public KspLoadedAssemblyFactory(
-//            [NotNull] ILoadedAssemblyFileUrlQuery laFileUrlQuery,
-//            [NotNull] IDisposeLoadedAssemblyCommandFactory disposeFactory,
-//            [NotNull] IEnumerable<ITypeInstaller> typeInstallers)
+//            [NotNull] IGetLoadedAssemblyFileUrl laFileUrlQuery,
+//            [NotNull] ILoadedAssemblyHandleFactory disposeFactory,
+//            [NotNull] IEnumerable<ILoadedAssemblyTypeInstaller> typeInstallers)
 //        {
 //            if (laFileUrlQuery == null) throw new ArgumentNullException("laFileUrlQuery");
 //            if (disposeFactory == null) throw new ArgumentNullException("disposeFactory");

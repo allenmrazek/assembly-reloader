@@ -1,9 +1,9 @@
 ﻿using System.Reflection;
 using ReeperCommon.FileSystem;
 
-namespace AssemblyReloader.Controllers
+namespace AssemblyReloader.ReloadablePlugin
 {
-    public interface IReloadableObjectController
+    public interface IReloadableObjectFacade
     {
         void Load(Assembly assembly, IFile location);
         void Unload(Assembly assembly, IFile location);

@@ -1,6 +1,6 @@
 ﻿namespace AssemblyReloader.TypeInstallers
 {
-    public interface ITypeInstaller
+    public interface ILoadedAssemblyTypeInstaller
     {
         void Install(AssemblyLoader.LoadedAssembly assembly);
     }

@@ -2,14 +2,15 @@
 using System.Linq;
 using System.Reflection;
 using AssemblyReloader.Annotations;
+using AssemblyReloader.Controllers;
 using AssemblyReloader.Game.Providers;
 using AssemblyReloader.Loaders.ScenarioModuleLoader;
 using AssemblyReloader.Queries.AssemblyQueries;
 using ReeperCommon.FileSystem;
 
-namespace AssemblyReloader.Controllers
+namespace AssemblyReloader.ReloadablePlugin
 {
-    public class ScenarioModuleController : IReloadableObjectController
+    public class ScenarioModuleFacade : IReloadableObjectFacade
     {
         private readonly IScenarioModuleLoader _loader;
         private readonly IScenarioModuleUnloader _unloader;
@@ -24,7 +25,7 @@ namespace AssemblyReloader.Controllers
             GameScenes.TRACKSTATION
         };
 
-        public ScenarioModuleController(
+        public ScenarioModuleFacade(
             [NotNull] IScenarioModuleLoader loader,
             [NotNull] IScenarioModuleUnloader unloader,
             [NotNull] ITypesFromAssemblyQuery scenarioModuleQuery,

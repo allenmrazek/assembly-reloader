@@ -7,28 +7,33 @@ using AssemblyReloader.Providers;
 using ReeperCommon.Extensions;
 using ReeperCommon.FileSystem;
 
-namespace AssemblyReloader.Controllers
+namespace AssemblyReloader.ReloadablePlugin
 {
     public class ReloadablePlugin : IPluginInfo, IReloadablePlugin
     {
         private readonly IFile _reloadableFile;
         private readonly IGameAssemblyLoader _assemblyLoader;
         private readonly IAssemblyProvider _assemblyProvider;
+        private readonly IReloadableObjectFacade _reloadableObjectFacade;
 
-        private IDisposable _loaded;
+        private ILoadedAssemblyHandle _loaded;
+
 
         public ReloadablePlugin(
             [NotNull] IFile reloadableFile, 
             [NotNull] IGameAssemblyLoader assemblyLoader,
-            [NotNull] IAssemblyProvider assemblyProvider)
+            [NotNull] IAssemblyProvider assemblyProvider, 
+            [NotNull] IReloadableObjectFacade reloadableObjectFacade)
         {
             if (reloadableFile == null) throw new ArgumentNullException("reloadableFile");
             if (assemblyLoader == null) throw new ArgumentNullException("assemblyLoader");
             if (assemblyProvider == null) throw new ArgumentNullException("assemblyProvider");
+            if (reloadableObjectFacade == null) throw new ArgumentNullException("reloadableObjectFacade");
 
             _reloadableFile = reloadableFile;
             _assemblyLoader = assemblyLoader;
             _assemblyProvider = assemblyProvider;
+            _reloadableObjectFacade = reloadableObjectFacade;
         }
 
 
@@ -55,6 +60,9 @@ namespace AssemblyReloader.Controllers
 
             _loaded = _assemblyLoader.Load(assembly.Single(), Location);
 
+            if (_loaded != null)
+                _reloadableObjectFacade.Load(assembly.Single(), Location);
+
             return _loaded != null;
         }
 
@@ -63,6 +71,11 @@ namespace AssemblyReloader.Controllers
         {
             if (_loaded.IsNull())
                 throw new InvalidOperationException("No assembly loaded");
+
+            _reloadableObjectFacade.Unload(_loaded.Assembly, Location);
+
+            _loaded.Dispose();
+            _loaded = null;
         }
 
 

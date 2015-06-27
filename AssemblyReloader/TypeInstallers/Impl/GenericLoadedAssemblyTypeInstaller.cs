@@ -5,11 +5,11 @@ using UnityEngine;
 
 namespace AssemblyReloader.TypeInstallers.Impl
 {
-    public class GenericTypeInstaller<T> : ITypeInstaller where T : MonoBehaviour
+    public class GenericLoadedAssemblyTypeInstaller<T> : ILoadedAssemblyTypeInstaller where T : MonoBehaviour
     {
         private readonly ITypesFromAssemblyQuery _typeQuery;
 
-        public GenericTypeInstaller([NotNull] ITypesFromAssemblyQuery typeQuery)
+        public GenericLoadedAssemblyTypeInstaller([NotNull] ITypesFromAssemblyQuery typeQuery)
         {
             if (typeQuery == null) throw new ArgumentNullException("typeQuery");
             _typeQuery = typeQuery;

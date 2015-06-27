@@ -1,17 +1,18 @@
 ﻿using System;
 using System.Reflection;
 using AssemblyReloader.Annotations;
+using AssemblyReloader.Controllers;
 using AssemblyReloader.Loaders;
 using ReeperCommon.FileSystem;
 
-namespace AssemblyReloader.Controllers
+namespace AssemblyReloader.ReloadablePlugin
 {
-    public class AddonController : IReloadableObjectController
+    public class AddonFacade : IReloadableObjectFacade
     {
         private readonly IAddonLoader _loader;
         private readonly IAddonUnloader _unloader;
 
-        public AddonController(
+        public AddonFacade(
             [NotNull] IAddonLoader loader,
             [NotNull] IAddonUnloader unloader
             )

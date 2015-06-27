@@ -81,7 +81,7 @@ namespace AssemblyReloader.CompositeRoot
             injectionBinder.Bind<IResourceRepository>()
                 .ToValue(ConfigureResourceRepository(injectionBinder.GetInstance<IDirectory>(DirectoryNames.Core)));
 
-            injectionBinder.Bind<IEnumerable<ITypeInstaller>>().ToValue(CreateTypeInstallers());
+            injectionBinder.Bind<IEnumerable<ILoadedAssemblyTypeInstaller>>().ToValue(CreateTypeInstallers());
             injectionBinder.Bind<IPluginConfigurationFilePathQuery>()
                 .To(new PluginConfigurationFilePathQuery());
             injectionBinder.Bind<IPluginConfigurationProvider>().To<PluginConfigurationProvider>().ToSingleton();
@@ -91,10 +91,7 @@ namespace AssemblyReloader.CompositeRoot
             //injectionBinder.Bind<IAssemblyDefinitionLoader>().To<AssemblyDefinitionLoader>().ToSingleton();
             injectionBinder.Bind<IDebugSymbolFileExistsQuery>().To<DebugSymbolFileExistsQuery>();
             injectionBinder.Bind<ITemporaryFileFactory>().To<TemporaryFileFactory>();
-            injectionBinder.Bind<ILoadedAssemblyFileUrlQuery>().To<LoadedAssemblyFileUrlQuery>().ToSingleton();
-            injectionBinder.Bind<IDisposeLoadedAssemblyCommandFactory>()
-                .To<DisposeLoadedAssemblyCommandFactory>()
-                .ToSingleton();
+            injectionBinder.Bind<IGetLoadedAssemblyFileUrl>().To<GetLoadedAssemblyFileUrl>().ToSingleton();
 
             //injectionBinder.Bind<IReloadablePlugin>().To<IPluginInfo>().To<ReloadablePlugin>();
             //injectionBinder.Bind<PluginLoadedSignal>().ToSingleton();
@@ -215,13 +212,13 @@ namespace AssemblyReloader.CompositeRoot
         }
 
 
-        private IEnumerable<ITypeInstaller> CreateTypeInstallers()
+        private IEnumerable<ILoadedAssemblyTypeInstaller> CreateTypeInstallers()
         {
-            return new ITypeInstaller[]
+            return new ILoadedAssemblyTypeInstaller[]
             {
-                new GenericTypeInstaller<Part>(new TypesDerivedFromQuery<Part>()),
-                new GenericTypeInstaller<PartModule>(new TypesDerivedFromQuery<PartModule>()),
-                new GenericTypeInstaller<ScenarioModule>(new TypesDerivedFromQuery<ScenarioModule>())
+                new GenericLoadedAssemblyTypeInstaller<Part>(new TypesDerivedFromQuery<Part>()),
+                new GenericLoadedAssemblyTypeInstaller<PartModule>(new TypesDerivedFromQuery<PartModule>()),
+                new GenericLoadedAssemblyTypeInstaller<ScenarioModule>(new TypesDerivedFromQuery<ScenarioModule>())
             };
         }
 

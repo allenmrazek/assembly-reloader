@@ -3,15 +3,14 @@ using System.Collections.Generic;
 using System.Reflection;
 using AssemblyReloader.Annotations;
 using AssemblyReloader.Commands;
-using AssemblyReloader.CompositeRoot;
-using AssemblyReloader.DataObjects;
+using AssemblyReloader.Controllers;
 using AssemblyReloader.Loaders.PartModuleLoader;
 using AssemblyReloader.Queries.AssemblyQueries;
 using ReeperCommon.FileSystem;
 
-namespace AssemblyReloader.Controllers
+namespace AssemblyReloader.ReloadablePlugin
 {
-    public class PartModuleController : IReloadableObjectController
+    public class PartModuleFacade : IReloadableObjectFacade
     {
         private readonly IPartModuleLoader _pmLoader;
         private readonly IPartModuleUnloader _pmUnloader;
@@ -19,7 +18,7 @@ namespace AssemblyReloader.Controllers
         private readonly ICommand _onPartModulesLoaded;
         private readonly ICommand _onPartModulesUnloaded;
 
-        public PartModuleController(
+        public PartModuleFacade(
             [NotNull] IPartModuleLoader pmLoader,
             [NotNull] IPartModuleUnloader pmUnloader,
             [NotNull] ITypesFromAssemblyQuery partModuleFromAssemblyQuery,

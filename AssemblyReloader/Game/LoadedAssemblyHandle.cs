@@ -1,12 +1,13 @@
 ﻿using System;
+using System.Reflection;
 
 namespace AssemblyReloader.Game
 {
-    public class DisposeLoadedAssembly : IDisposable
+    public class LoadedAssemblyHandle : ILoadedAssemblyHandle
     {
         private readonly AssemblyLoader.LoadedAssembly _loadedAssembly;
 
-        public DisposeLoadedAssembly(AssemblyLoader.LoadedAssembly loadedAssembly)
+        public LoadedAssemblyHandle(AssemblyLoader.LoadedAssembly loadedAssembly)
         {
             if (loadedAssembly == null) throw new ArgumentNullException("loadedAssembly");
 
@@ -14,7 +15,7 @@ namespace AssemblyReloader.Game
         }
 
 
-        ~DisposeLoadedAssembly()
+        ~LoadedAssemblyHandle()
         {
             Dispose(false);
         }
@@ -41,6 +42,12 @@ namespace AssemblyReloader.Game
 
             throw new Exception("Failed to find assembly " + _loadedAssembly.dllName + " (location " + _loadedAssembly.url +
                                 ") in loaded assembly list");
+        }
+
+
+        public Assembly Assembly
+        {
+            get { return _loadedAssembly.assembly; }
         }
     }
 }
