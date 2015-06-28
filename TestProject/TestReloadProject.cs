@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace TestProject
 {
-    //[KSPAddon(KSPAddon.Startup.MainMenu, false)]
+    [KSPAddon(KSPAddon.Startup.MainMenu, false)]
     public class TestReloadProject : MonoBehaviour
     {
         private Rect _windowRect = new Rect(000f, 000f, 200f, 200f);

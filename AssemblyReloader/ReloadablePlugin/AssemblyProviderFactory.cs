@@ -21,12 +21,8 @@ namespace AssemblyReloader.ReloadablePlugin
         private readonly IWeaveOperationFactory _weaveOperationFactory;
         private readonly IGetTypeDefinitions _getTypeDefinitions;
         private readonly IGetMethodDefinitions _getMethodDefinitions;
+        private readonly ILog _log;
         private readonly Func<bool> _debugOutputToDisk;
-
-        [Inject(LogNames.DefinitionWeaver)]
-// ReSharper disable once MemberCanBePrivate.Global
-        public ILog Log { get; set; }
-
 
         public AssemblyProviderFactory(
             [NotNull] BaseAssemblyResolver baseAssemblyResolver,
@@ -34,6 +30,7 @@ namespace AssemblyReloader.ReloadablePlugin
             [NotNull] IWeaveOperationFactory weaveOperationFactory,
             [NotNull] IGetTypeDefinitions getTypeDefinitions,
             [NotNull] IGetMethodDefinitions getMethodDefinitions,
+            [NotNull] ILog log,
             [NotNull] Func<bool> debugOutputToDisk)
         {
             if (baseAssemblyResolver == null) throw new ArgumentNullException("baseAssemblyResolver");
@@ -41,6 +38,7 @@ namespace AssemblyReloader.ReloadablePlugin
             if (weaveOperationFactory == null) throw new ArgumentNullException("weaveOperationFactory");
             if (getTypeDefinitions == null) throw new ArgumentNullException("getTypeDefinitions");
             if (getMethodDefinitions == null) throw new ArgumentNullException("getMethodDefinitions");
+            if (log == null) throw new ArgumentNullException("log");
             if (debugOutputToDisk == null) throw new ArgumentNullException("debugOutputToDisk");
 
             _baseAssemblyResolver = baseAssemblyResolver;
@@ -48,6 +46,7 @@ namespace AssemblyReloader.ReloadablePlugin
             _weaveOperationFactory = weaveOperationFactory;
             _getTypeDefinitions = getTypeDefinitions;
             _getMethodDefinitions = getMethodDefinitions;
+            _log = log;
             _debugOutputToDisk = debugOutputToDisk;
         }
 
@@ -63,11 +62,11 @@ namespace AssemblyReloader.ReloadablePlugin
                         new AssemblyDefinitionFromDiskReader(_getDebugSymbolFileExists, _baseAssemblyResolver),
                         _getTypeDefinitions,
                         _getMethodDefinitions,
-                        Log,
+                        _log,
                         _weaveOperationFactory.Create(pluginConfiguration).ToArray()),
 
                     _debugOutputToDisk),
-                new TemporaryFileFactory(temporaryDirectory, new RandomStringGenerator()), Log);
+                new TemporaryFileFactory(temporaryDirectory, new RandomStringGenerator()), _log);
 
             return provider;
         }

@@ -7,10 +7,10 @@
 //{
 //    public class SavePluginConfigurationCommand : ICommand<IPluginInfo>
 //    {
-//        private readonly IPluginConfigurationFilePathQuery _configPathQuery;
+//        private readonly IGetConfigurationFilePath _configPathQuery;
 
 //        public SavePluginConfigurationCommand(
-//            [NotNull] IPluginConfigurationFilePathQuery configPathQuery)
+//            [NotNull] IGetConfigurationFilePath configPathQuery)
 //        {
 //            if (configPathQuery == null) throw new ArgumentNullException("configPathQuery");
 

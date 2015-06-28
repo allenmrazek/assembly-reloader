@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Reflection;
 using AssemblyReloader.Properties;
-using AssemblyReloader.Queries.FileSystemQueries;
 using AssemblyReloader.StrangeIoC.extensions.implicitBind;
 using AssemblyReloader.TypeInstallers;
 using ReeperCommon.Extensions;
@@ -17,17 +16,21 @@ namespace AssemblyReloader.Game
     {
         private readonly IEnumerable<ILoadedAssemblyTypeInstaller> _typeInstallers;
         private readonly IGetLoadedAssemblyFileUrl _laFileUrl;
+        private readonly ILog _log;
 
 
         public KspAssemblyLoader(
             [NotNull] IEnumerable<ILoadedAssemblyTypeInstaller> typeInstallers,
-            [NotNull] IGetLoadedAssemblyFileUrl laFileUrl)
+            [NotNull] IGetLoadedAssemblyFileUrl laFileUrl,
+            [NotNull] ILog log)
         {
             if (typeInstallers == null) throw new ArgumentNullException("typeInstallers");
             if (laFileUrl == null) throw new ArgumentNullException("laFileUrl");
+            if (log == null) throw new ArgumentNullException("log");
 
             _typeInstallers = typeInstallers;
             _laFileUrl = laFileUrl;
+            _log = log;
         }
 
 

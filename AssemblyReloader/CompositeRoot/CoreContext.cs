@@ -57,9 +57,9 @@ namespace AssemblyReloader.CompositeRoot
             };
             implicitBinder.ScanForAnnotatedClasses(namespaces);
 
-            injectionBinder.Bind<ILog>().To(log);
+            injectionBinder.Bind<ILog>().To(log).ToSingleton();
 
-            injectionBinder.Bind<IPluginConfigurationFilePathQuery>().To(new PluginConfigurationFilePathQuery());
+            injectionBinder.Bind<IGetConfigurationFilePath>().To(new GetConfigurationFilePath());
             injectionBinder.Bind<IFileSystemFactory>()
                 .ToValue(new KSPFileSystemFactory(new KSPUrlDir(new KSPGameDataUrlDirProvider().Get())));
             injectionBinder.Bind<IEnumerable<ILoadedAssemblyTypeInstaller>>().To(CreateTypeInstallers());
@@ -93,12 +93,15 @@ namespace AssemblyReloader.CompositeRoot
             injectionBinder.Bind<IGetAttributesOfType<KSPAddon>>().To<GetAttributesOfType<KSPAddon>>().ToSingleton();
             injectionBinder.Bind<IGetTypesFromAssembly<AddonType>>().To<GetAddonTypesFromAssembly>().ToSingleton();
 
+  
             injectionBinder.Bind<IAssemblyProviderFactory>().To(new AssemblyProviderFactory(
                 injectionBinder.GetInstance<BaseAssemblyResolver>(),
                 injectionBinder.GetInstance<IGetDebugSymbolsExistForDefinition>(),
                 injectionBinder.GetInstance<IWeaveOperationFactory>(),
-                injectionBinder.GetInstance<IGetTypeDefinitions>(),
-                injectionBinder.GetInstance<IGetMethodDefinitions>(),
+                new GetTypeDefinitionsExcluding(new GetAllTypesFromDefinition(),
+                    new GetInjectedHelperTypeFromDefinition()),
+                new GetAllMethodDefinitions(),
+                log.CreateTag("ILWeaver"),
                 () => true)).ToSingleton();
 
             var reloadableFileQuery =
@@ -118,6 +121,9 @@ namespace AssemblyReloader.CompositeRoot
                 log.Normal("Performing initial load of " + file.FileName);
 
                 var r = reloadablePluginFactory.Create(file);
+                if (r.Reload())
+                    log.Normal("Load successful");
+                else log.Error("Load failed");
             }
 
             log.Normal("Finished loading initial reloadable plugins.");

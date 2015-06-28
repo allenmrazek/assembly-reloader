@@ -95,7 +95,7 @@
     <Compile Include="ReloadablePlugin\Definition\Operations\old\InjectedHelperTypeDefinitionWriter.cs" />
     <Compile Include="ReloadablePlugin\Definition\Operations\old\InterceptExecutingAssemblyLocationQueries.cs" />
     <Compile Include="ReloadablePlugin\Definition\Operations\RenameAssemblyOperation.cs" />
-    <Compile Include="ReloadablePlugin\AddonType.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\Addons\AddonType.cs" />
     <Compile Include="ReloadablePlugin\Loaders\Addons\GetAddonTypesFromAssembly.cs" />
     <Compile Include="ReloadablePlugin\GetAttributesOfType.cs" />
     <Compile Include="ReloadablePlugin\IGetAttributesOfType.cs" />
@@ -185,7 +185,6 @@
     <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\IScenarioModuleUnloader.cs" />
     <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\ScenarioModuleSnapshotGenerator.cs" />
     <Compile Include="Gui\Messages\ShowPluginConfigurationWindow.cs" />
-    <Compile Include="Names\LogNames.cs" />
     <Compile Include="FileSystem\AssemblyProvider.cs" />
     <Compile Include="FileSystem\ConfigurationProvider.cs" />
     <Compile Include="Providers\FilePathProviderFromContext.cs" />
@@ -197,10 +196,10 @@
     <Compile Include="Game\IGetLoadedAssemblyFileUrl.cs" />
     <Compile Include="Queries\GetFieldInfoComposite.cs" />
     <Compile Include="Queries\FileSystemQueries\AssemblyFileLocationQuery.cs" />
-    <Compile Include="ReloadablePlugin\PluginConfigurationFilePathQuery.cs" />
+    <Compile Include="ReloadablePlugin\GetConfigurationFilePath.cs" />
     <Compile Include="ReloadablePlugin\Definition\GetDebugSymbolsExistForDefinition.cs" />
     <Compile Include="Queries\FileSystemQueries\IAssemblyFileLocationQuery.cs" />
-    <Compile Include="ReloadablePlugin\IPluginConfigurationFilePathQuery.cs" />
+    <Compile Include="ReloadablePlugin\IGetConfigurationFilePath.cs" />
     <Compile Include="ReloadablePlugin\Definition\IGetDebugSymbolsExistForDefinition.cs" />
     <Compile Include="ReloadablePlugin\IPluginConfigurationProvider.cs" />
     <Compile Include="ReloadablePlugin\PluginConfigurationProvider.cs" />

@@ -2,7 +2,7 @@
 
 namespace AssemblyReloader.ReloadablePlugin
 {
-    public interface IPluginConfigurationFilePathQuery
+    public interface IGetConfigurationFilePath
     {
         string Get(IFile pluginLocation);
     }

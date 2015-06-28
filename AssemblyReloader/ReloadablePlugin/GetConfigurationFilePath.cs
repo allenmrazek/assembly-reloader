@@ -6,13 +6,13 @@ using ReeperCommon.FileSystem;
 
 namespace AssemblyReloader.ReloadablePlugin
 {
-    [Implements(typeof(IPluginConfigurationFilePathQuery))]
+    [Implements(typeof(IGetConfigurationFilePath))]
 // ReSharper disable once UnusedMember.Global
-    public class PluginConfigurationFilePathQuery : IPluginConfigurationFilePathQuery
+    public class GetConfigurationFilePath : IGetConfigurationFilePath
     {
         private readonly string _extension;
 
-        public PluginConfigurationFilePathQuery([NotNull] string extension = ".config")
+        public GetConfigurationFilePath([NotNull] string extension = ".config")
         {
             if (extension == null) throw new ArgumentNullException("extension");
             if (string.IsNullOrEmpty(extension))

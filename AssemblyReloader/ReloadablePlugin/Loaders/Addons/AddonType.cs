@@ -2,7 +2,7 @@
 using System.Linq;
 using UnityEngine;
 
-namespace AssemblyReloader.ReloadablePlugin
+namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
 {
     public class AddonType
     {

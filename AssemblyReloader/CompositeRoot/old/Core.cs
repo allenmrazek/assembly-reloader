@@ -179,7 +179,7 @@
 //            //assemblyResolver.AddSearchDirectory(container.Resolve<IDirectory>("Core").FullPath);
 
 //            //container.Register<BaseAssemblyResolver, DefaultAssemblyResolver>(assemblyResolver);
-//            //container.Register<IPluginConfigurationFilePathQuery>(new PluginConfigurationFilePathQuery());
+//            //container.Register<IGetConfigurationFilePath>(new GetConfigurationFilePath());
 //            //container.Register<IPartLoader, KspPartLoader>().AsSingleton();
 //            //container.Register<IAvailablePartConfigQuery, AvailablePartConfigQuery>().AsSingleton();
 //            //container.Register<IModuleConfigsFromPartConfigQuery, ModuleConfigsFromPartConfigQuery>().AsSingleton();
@@ -435,7 +435,7 @@
 //        //    if (container == null) throw new ArgumentNullException("container");
 //        //    if (location == null) throw new ArgumentNullException("location");
 
-//        //    var configuration = new PluginConfigurationProvider(container.Resolve<IPluginConfigurationFilePathQuery>()).Get(location);
+//        //    var configuration = new PluginConfigurationProvider(container.Resolve<IGetConfigurationFilePath>()).Get(location);
 
 //        //    var debugSymbolExistQuery = new GetDebugSymbolsExistForDefinition(location);
 

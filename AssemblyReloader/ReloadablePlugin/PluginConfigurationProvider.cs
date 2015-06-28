@@ -14,15 +14,15 @@ namespace AssemblyReloader.ReloadablePlugin
 // ReSharper disable once ClassNeverInstantiated.Global
     public class PluginConfigurationProvider : IPluginConfigurationProvider
     {
-        private readonly IPluginConfigurationFilePathQuery _configFilePathQuery;
+        private readonly IGetConfigurationFilePath _configFilePath;
 
 
         public PluginConfigurationProvider(
-            [NotNull] IPluginConfigurationFilePathQuery configFilePathQuery)
+            [NotNull] IGetConfigurationFilePath configFilePath)
         {
-            if (configFilePathQuery == null) throw new ArgumentNullException("configFilePathQuery");
+            if (configFilePath == null) throw new ArgumentNullException("configFilePath");
 
-            _configFilePathQuery = configFilePathQuery;
+            _configFilePath = configFilePath;
         }
 
 
@@ -32,7 +32,7 @@ namespace AssemblyReloader.ReloadablePlugin
 
             var config = new PluginConfiguration();
 
-            var configPath = _configFilePathQuery.Get(pluginLocation);
+            var configPath = _configFilePath.Get(pluginLocation);
 
             if (File.Exists(configPath)) DeserializeConfig(config, configPath);
 

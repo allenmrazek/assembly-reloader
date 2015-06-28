@@ -18,6 +18,7 @@ namespace AssemblyReloader.ReloadablePlugin.Definition
             // note: we use the actual file system instead of checking cached files from GameDatabase
             // because GameDatabase will only contain the state of the file at program load; the debug
             // symbol file might come and go during art's lifetime
+ 
             return File.Exists(location.FileName + DebugSymbolExtension);
         }
     }
