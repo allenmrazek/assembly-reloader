@@ -10,7 +10,7 @@ namespace AssemblyReloader.ReloadablePlugin
     {
         private readonly IEnumerable<IReloadableObjectFacade> _facades;
 
-        public ReloadableObjectFacadeComposite([NotNull] IEnumerable<IReloadableObjectFacade> facades)
+        public ReloadableObjectFacadeComposite([NotNull] params IReloadableObjectFacade[] facades)
         {
             if (facades == null) throw new ArgumentNullException("facades");
             _facades = facades;

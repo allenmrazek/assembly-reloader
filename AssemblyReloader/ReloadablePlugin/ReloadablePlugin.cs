@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using AssemblyReloader.Annotations;
+using AssemblyReloader.FileSystem;
 using AssemblyReloader.Game;
 using AssemblyReloader.Gui;
 using AssemblyReloader.Providers;

@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using AssemblyReloader.Annotations;
-using AssemblyReloader.Controllers;
-using AssemblyReloader.Loaders;
+using AssemblyReloader.ReloadablePlugin.Loaders.Addons;
 using ReeperCommon.FileSystem;
 
 namespace AssemblyReloader.ReloadablePlugin

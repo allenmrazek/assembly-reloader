@@ -7,11 +7,11 @@ using ReeperCommon.FileSystem;
 
 namespace AssemblyReloader.Generators
 {
+// ReSharper disable once ClassNeverInstantiated.Global
     public class TemporaryFileFactory : ITemporaryFileFactory
     {
         private readonly IDirectory _directory;
         private readonly IRandomStringGenerator _stringGenerator;
-
 
         public TemporaryFileFactory(
             [NotNull] IDirectory directory,

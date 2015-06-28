@@ -1,18 +1,18 @@
 ﻿using System;
 using AssemblyReloader.Annotations;
-using AssemblyReloader.Queries.AssemblyQueries;
+using AssemblyReloader.ReloadablePlugin.Loaders;
 using UnityEngine;
 
 namespace AssemblyReloader.TypeInstallers.Impl
 {
     public class GenericLoadedAssemblyTypeInstaller<T> : ILoadedAssemblyTypeInstaller where T : MonoBehaviour
     {
-        private readonly ITypesFromAssemblyQuery _typeQuery;
+        private readonly IGetTypesFromAssembly _getType;
 
-        public GenericLoadedAssemblyTypeInstaller([NotNull] ITypesFromAssemblyQuery typeQuery)
+        public GenericLoadedAssemblyTypeInstaller([NotNull] IGetTypesFromAssembly getType)
         {
-            if (typeQuery == null) throw new ArgumentNullException("typeQuery");
-            _typeQuery = typeQuery;
+            if (getType == null) throw new ArgumentNullException("getType");
+            _getType = getType;
         }
 
 
@@ -22,7 +22,7 @@ namespace AssemblyReloader.TypeInstallers.Impl
             if (assembly.assembly == null) throw new ArgumentException("LoadedAssembly.assembly is null");
 
 
-            foreach (var type in _typeQuery.Get(assembly.assembly))
+            foreach (var type in _getType.Get(assembly.assembly))
                 assembly.types.Add(typeof (T), type);
 
         }

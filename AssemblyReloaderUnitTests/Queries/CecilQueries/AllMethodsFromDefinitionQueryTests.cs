@@ -1,4 +1,5 @@
-﻿using AssemblyReloaderTests.FixtureCustomizations;
+﻿using AssemblyReloader.ReloadablePlugin.Loaders.Definition;
+using AssemblyReloaderTests.FixtureCustomizations;
 using Mono.Cecil;
 using Xunit;
 using Xunit.Extensions;
@@ -11,7 +12,7 @@ namespace AssemblyReloader.Queries.CecilQueries.Tests
         [Theory, AutoDomainData]
         public void GetTest(TypeDefinition typeWithAtLeastOneMethod)
         {
-            var sut = new AllMethodsFromDefinitionQuery();
+            var sut = new GetAllMethodDefinitions();
 
             var results = sut.Get(typeWithAtLeastOneMethod);
 

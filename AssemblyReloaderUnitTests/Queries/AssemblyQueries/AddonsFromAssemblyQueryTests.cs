@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Reflection;
 using AssemblyReloader.Queries.ConversionQueries;
+using AssemblyReloader.ReloadablePlugin.Loaders.Addons;
 using AssemblyReloaderTests.FixtureCustomizations;
 using AssemblyReloaderTests.TestData.Addons;
 using Xunit;
@@ -14,7 +15,7 @@ namespace AssemblyReloader.Queries.AssemblyQueries.Tests
         [Theory, AutoDomainData]
         public void GetTest(Assembly assembly)
         {
-            var sut = new AddonsFromAssemblyQuery(new AddonAttributesFromTypeQuery());
+            var sut = new AddonsFromAssembly(new AddonAttributesFromTypeQuery());
 
             var results = sut.Get(assembly).ToList();
 

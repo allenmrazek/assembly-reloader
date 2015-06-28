@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 using AssemblyReloader.Annotations;
-using AssemblyReloader.Providers;
+using AssemblyReloader.FileSystem;
 using ReeperCommon.FileSystem;
 
 namespace AssemblyReloader.Queries.FileSystemQueries

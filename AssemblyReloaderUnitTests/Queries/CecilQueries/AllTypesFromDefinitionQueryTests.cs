@@ -1,4 +1,5 @@
-﻿using AssemblyReloaderTests.FixtureCustomizations;
+﻿using AssemblyReloader.ReloadablePlugin.Loaders.Definition;
+using AssemblyReloaderTests.FixtureCustomizations;
 using Mono.Cecil;
 using Ploeh.AutoFixture.Xunit;
 using Xunit;
@@ -10,7 +11,7 @@ namespace AssemblyReloader.Queries.CecilQueries.Tests
     public class AllTypesFromDefinitionQueryTests
     {
         [Theory, AutoDomainData]
-        public void GetTest([Frozen] AssemblyDefinition definition, AllTypesFromDefinitionQuery sut)
+        public void GetTest([Frozen] AssemblyDefinition definition, GetAllTypesFromDefinition sut)
         {
             var results = sut.Get(definition);
 

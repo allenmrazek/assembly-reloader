@@ -12,22 +12,22 @@ namespace AssemblyReloader.Game.Providers
     // locate those parts except for a basic FindObjectsOfType call.
     public class PartPrefabCloneProvider : IPartPrefabCloneProvider
     {
-        private readonly ILoadedComponentQuery<Part> _loadedPartQuery;
+        private readonly IGetLoadedUnityComponents<Part> _getLoadedPartQuery;
         private readonly IComponentsInGameObjectHierarchyProvider<Part> _partsInGameObject;
         private readonly IPartIsPrefabQuery _confirmPrefabQuery;
         private readonly IKspFactory _kspFactory;
 
         public PartPrefabCloneProvider(
-            ILoadedComponentQuery<Part> loadedPartQuery,
+            IGetLoadedUnityComponents<Part> getLoadedPartQuery,
             IComponentsInGameObjectHierarchyProvider<Part> partsInGameObject,
             IPartIsPrefabQuery confirmPrefabQuery,
             IKspFactory kspFactory)
         {
-            if (loadedPartQuery == null) throw new ArgumentNullException("loadedPartQuery");
+            if (getLoadedPartQuery == null) throw new ArgumentNullException("getLoadedPartQuery");
             if (partsInGameObject == null) throw new ArgumentNullException("partsInGameObject");
             if (confirmPrefabQuery == null) throw new ArgumentNullException("confirmPrefabQuery");
             if (kspFactory == null) throw new ArgumentNullException("kspFactory");
-            _loadedPartQuery = loadedPartQuery;
+            _getLoadedPartQuery = getLoadedPartQuery;
             _partsInGameObject = partsInGameObject;
             _confirmPrefabQuery = confirmPrefabQuery;
             _kspFactory = kspFactory;
@@ -41,7 +41,7 @@ namespace AssemblyReloader.Game.Providers
                 throw new ArgumentException("argument must be a part prefab");
 
 
-            var loadedParts = _loadedPartQuery.Get();
+            var loadedParts = _getLoadedPartQuery.Get();
 
             // Bit tricky here: loadedParts is looking for loose parts so if the parts are actually attached to each
             // other via parenting instead of joints (such as when building a ship in the editor), we'll only find

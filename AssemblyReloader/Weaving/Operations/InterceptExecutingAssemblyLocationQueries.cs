@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using AssemblyReloader.Queries.CecilQueries;
+using AssemblyReloader.ReloadablePlugin.Loaders.Definition;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
 
@@ -9,17 +10,17 @@ namespace AssemblyReloader.Weaving.Operations
     public class InterceptExecutingAssemblyLocationQueries : WeaveOperation
     {
         private readonly IInstructionSetQuery _getCodeBaseCallQuery;
-        private readonly IMethodDefinitionQuery _replacementCallQuery;
+        private readonly IGetMethodDefinitions _replacementCall;
 
         public InterceptExecutingAssemblyLocationQueries(
             IInstructionSetQuery getCodeBaseCallQuery,
-            IMethodDefinitionQuery replacementCallQuery)
+            IGetMethodDefinitions replacementCall)
         {
             if (getCodeBaseCallQuery == null) throw new ArgumentNullException("getCodeBaseCallQuery");
-            if (replacementCallQuery == null) throw new ArgumentNullException("replacementCallQuery");
+            if (replacementCall == null) throw new ArgumentNullException("replacementCall");
 
             _getCodeBaseCallQuery = getCodeBaseCallQuery;
-            _replacementCallQuery = replacementCallQuery;
+            _replacementCall = replacementCall;
 
         }
 
@@ -36,7 +37,7 @@ namespace AssemblyReloader.Weaving.Operations
             if (results.Count == 0) return;
 
             var processor = methodDefinition.Body.GetILProcessor();
-            var replacement = _replacementCallQuery.Get(methodDefinition.DeclaringType).ToList();
+            var replacement = _replacementCall.Get(methodDefinition.DeclaringType).ToList();
 
             if (!replacement.Any())
                 throw new Exception("Failed to locate replacement call");

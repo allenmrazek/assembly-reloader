@@ -2,6 +2,7 @@
 {
     public enum LogNames
     {
-        Global
+        Global,
+        DefinitionWeaver
     }
 }

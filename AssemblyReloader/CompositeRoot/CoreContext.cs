@@ -6,14 +6,17 @@ using System.Reflection;
 using AssemblyReloader.Annotations;
 using AssemblyReloader.Commands;
 using AssemblyReloader.DataObjects;
+using AssemblyReloader.FileSystem;
 using AssemblyReloader.Game;
 using AssemblyReloader.Generators;
 using AssemblyReloader.Names;
 using AssemblyReloader.Providers;
 using AssemblyReloader.Queries;
-using AssemblyReloader.Queries.AssemblyQueries;
 using AssemblyReloader.Queries.CecilQueries;
 using AssemblyReloader.Queries.FileSystemQueries;
+using AssemblyReloader.ReloadablePlugin;
+using AssemblyReloader.ReloadablePlugin.Loaders;
+using AssemblyReloader.ReloadablePlugin.Loaders.Definition;
 using AssemblyReloader.TypeInstallers;
 using AssemblyReloader.TypeInstallers.Impl;
 using AssemblyReloader.Weaving;
@@ -29,6 +32,7 @@ using strange.extensions.command.api;
 using strange.extensions.command.impl;
 using strange.extensions.context.impl;
 using UnityEngine;
+using AssemblyDefinitionWeaver = AssemblyReloader.Weaving.AssemblyDefinitionWeaver;
 
 namespace AssemblyReloader.CompositeRoot
 {
@@ -52,6 +56,8 @@ namespace AssemblyReloader.CompositeRoot
             injectionBinder.Bind<IKspFactory>().To<KspFactory>().ToSingleton();
             injectionBinder.Bind<IFileSystemFactory>()
                 .ToValue(new KSPFileSystemFactory(new KSPUrlDir(new KSPGameDataUrlDirProvider().Get())));
+            injectionBinder.Bind<IEnumerable<ILoadedAssemblyTypeInstaller>>().To(CreateTypeInstallers());
+            injectionBinder.Bind<IGetLoadedAssemblyFileUrl>().To<GetLoadedAssemblyFileUrl>().ToSingleton();
             injectionBinder.Bind<IGameAssemblyLoader>().To<KspAssemblyLoader>().ToSingleton();
 
             injectionBinder.Bind<IDirectory>()
@@ -81,21 +87,12 @@ namespace AssemblyReloader.CompositeRoot
             injectionBinder.Bind<IResourceRepository>()
                 .ToValue(ConfigureResourceRepository(injectionBinder.GetInstance<IDirectory>(DirectoryNames.Core)));
 
-            injectionBinder.Bind<IEnumerable<ILoadedAssemblyTypeInstaller>>().ToValue(CreateTypeInstallers());
+            //injectionBinder.Bind<IEnumerable<ILoadedAssemblyTypeInstaller>>().ToValue(CreateTypeInstallers());
             injectionBinder.Bind<IPluginConfigurationFilePathQuery>()
                 .To(new PluginConfigurationFilePathQuery());
             injectionBinder.Bind<IPluginConfigurationProvider>().To<PluginConfigurationProvider>().ToSingleton();
-            //injectionBinder.Bind<IAssemblyLoader>().To<Loaders.AssemblyLoader>();
-            //injectionBinder.Bind<IAssemblyProvider>().To<AssemblyProvider>();
-            //injectionBinder.Bind<IAssemblyDefinitionReader>().To<AssemblyDefinitionFromDiskReader>();
-            //injectionBinder.Bind<IAssemblyDefinitionLoader>().To<AssemblyDefinitionLoader>().ToSingleton();
-            injectionBinder.Bind<IDebugSymbolFileExistsQuery>().To<DebugSymbolFileExistsQuery>();
-            injectionBinder.Bind<ITemporaryFileFactory>().To<TemporaryFileFactory>();
-            injectionBinder.Bind<IGetLoadedAssemblyFileUrl>().To<GetLoadedAssemblyFileUrl>().ToSingleton();
-
-            //injectionBinder.Bind<IReloadablePlugin>().To<IPluginInfo>().To<ReloadablePlugin>();
-            //injectionBinder.Bind<PluginLoadedSignal>().ToSingleton();
-            //injectionBinder.Bind<PluginUnloadedSignal>().ToSingleton();
+            injectionBinder.Bind<IAssemblyProvider>().To<AssemblyProvider>().ToSingleton();
+            injectionBinder.Bind<ReloadablePluginFactory>().To<ReloadablePluginFactory>().ToSingleton();
 
             var reloadableFiles =
                 new ReloadableAssemblyFilesInDirectoryQuery(
@@ -103,32 +100,11 @@ namespace AssemblyReloader.CompositeRoot
 
             log.Normal("Reloadable files count: " + reloadableFiles.Get().Count());
 
-            //var reloadablePlugins = reloadableFiles.Get().Select(file =>
-            //{
-            //    log.Normal("Loading " + file.Name);
-            //    injectionBinder.Bind<IFile>().ToValue(file);
-            //    injectionBinder.Bind<IDirectory>().ToValue(file.Directory);
-            //    injectionBinder.Bind<PluginConfiguration>()
-            //        .ToValue(injectionBinder.GetInstance<IPluginConfigurationProvider>().Get(file));
-            //    injectionBinder.Bind<IAssemblyDefinitionWeaver>().To(ConfigureDefinitionWeaver(
-            //        file, injectionBinder.GetInstance<PluginConfiguration>(), injectionBinder.GetInstance<ILog>().CreateTag("Weaver")));
-                
+            var reloadablePluginFactory = injectionBinder.GetInstance<ReloadablePluginFactory>();
 
-            //    var r = injectionBinder.GetInstance<IReloadablePlugin>();
-
-                
-
-            //    r.Load();
+            if (reloadablePluginFactory == null) throw new Exception("failed to create plugin factory");
 
 
-            //    injectionBinder.Unbind<IAssemblyDefinitionWeaver>();
-            //    injectionBinder.Unbind<IDirectory>();
-            //    injectionBinder.Unbind<IFile>();
-            //    injectionBinder.Unbind<PluginConfiguration>();
-
-            //    return r;
-            //})
-            //.ToList();
 
 
             //injectionBinder.Bind<IEnumerable<IPluginInfo>>().ToValue(reloadablePlugins.Cast<IPluginInfo>());
@@ -171,7 +147,7 @@ namespace AssemblyReloader.CompositeRoot
             //view.transform.parent = ((GameObject)contextView).transform;
             //Object.DontDestroyOnLoad(view);
 
-            
+
             //injectionBinder.Bind<IExampleModel>()
             //    .To<ExampleModel>()
             //    .ToSingleton();
@@ -216,9 +192,9 @@ namespace AssemblyReloader.CompositeRoot
         {
             return new ILoadedAssemblyTypeInstaller[]
             {
-                new GenericLoadedAssemblyTypeInstaller<Part>(new TypesDerivedFromQuery<Part>()),
-                new GenericLoadedAssemblyTypeInstaller<PartModule>(new TypesDerivedFromQuery<PartModule>()),
-                new GenericLoadedAssemblyTypeInstaller<ScenarioModule>(new TypesDerivedFromQuery<ScenarioModule>())
+                new GenericLoadedAssemblyTypeInstaller<Part>(new GetTypesDerivedFrom<Part>()),
+                new GenericLoadedAssemblyTypeInstaller<PartModule>(new GetTypesDerivedFrom<PartModule>()),
+                new GenericLoadedAssemblyTypeInstaller<ScenarioModule>(new GetTypesDerivedFrom<ScenarioModule>())
             };
         }
 
@@ -282,10 +258,10 @@ namespace AssemblyReloader.CompositeRoot
 
 
             var uri = new Uri(location.FullPath);
-            var injectedHelperTypeQuery = new InjectedHelperTypeQuery();
+            var injectedHelperTypeQuery = new InjectedHelperGetTypeQuery();
 
-            var allTypesFromAssemblyExceptInjected = new ExcludingTypeDefinitions(
-                new AllTypesFromDefinitionQuery(), new InjectedHelperTypeQuery());
+            var allTypesFromAssemblyExceptInjected = new GetTypeDefinitionsExcluding(
+                new GetAllTypesFromDefinition(), new InjectedHelperGetTypeQuery());
 
             var renameAssembly = new RenameAssemblyOperation(new UniqueAssemblyNameGenerator(new RandomStringGenerator()));
 
@@ -299,20 +275,20 @@ namespace AssemblyReloader.CompositeRoot
                 new MethodCallInMethodBodyQuery(
                     getCodeBaseProperty.GetGetMethod(),
                     OpCodes.Callvirt),
-                    new InjectedHelperTypeMethodQuery(injectedHelperTypeQuery, getCodeBaseProperty.GetGetMethod().Name)
+                    new InjectedHelperTypeGetMethod(injectedHelperTypeQuery, getCodeBaseProperty.GetGetMethod().Name)
                 );
 
             var interceptAssemblyLocationCalls = new InterceptExecutingAssemblyLocationQueries(
                 new MethodCallInMethodBodyQuery(
                     getLocationProperty.GetGetMethod(),
                     OpCodes.Callvirt),
-                new InjectedHelperTypeMethodQuery(injectedHelperTypeQuery, getLocationProperty.GetGetMethod().Name)
+                new InjectedHelperTypeGetMethod(injectedHelperTypeQuery, getLocationProperty.GetGetMethod().Name)
                 );
 
             return new AssemblyDefinitionWeaver(
                 weaverLog,
                 allTypesFromAssemblyExceptInjected,
-                new AllMethodsFromDefinitionQuery(),
+                new GetAllMethodDefinitions(),
                 renameAssembly,
                 new ConditionalWeaveOperation(writeInjectedHelper, () => pluginConfiguration.InjectHelperType),
                 new ConditionalWeaveOperation(interceptAssemblyCodeBaseCalls, () => pluginConfiguration.RewriteAssemblyLocationCalls),

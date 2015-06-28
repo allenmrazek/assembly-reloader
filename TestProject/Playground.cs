@@ -16,7 +16,26 @@ using Object = UnityEngine.Object;
 
 namespace TestProject
 {
+    //[KSPAddon(KSPAddon.Startup.SpaceCentre, false)]
+    //public class CheckConfigNode : MonoBehaviour
+    //{
+    //    private void Awake()
+    //    {
+    //        GameEvents.onGameStateSaved.Add(OnGameSaved);
+    //    }
 
+    //    private void OnDestroy()
+    //    {
+    //        GameEvents.onGameStateSaved.Remove(OnGameSaved);
+    //    }
+
+    //    private void OnGameSaved(Game game)
+    //    {
+    //        print("Current contents of game.config:");
+
+    //        print(game.config.ToString());
+    //    }
+    //}
 
     //public class ModuleCameraShot : VesselModule
     //{

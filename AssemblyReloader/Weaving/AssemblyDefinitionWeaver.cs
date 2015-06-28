@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using AssemblyReloader.Queries.CecilQueries;
+using AssemblyReloader.ReloadablePlugin.Loaders.Definition;
 using Mono.Cecil;
 using ReeperCommon.Logging;
 
@@ -11,26 +12,26 @@ namespace AssemblyReloader.Weaving
     public class AssemblyDefinitionWeaver : IAssemblyDefinitionWeaver
     {
         private readonly ILog _log;
-        private readonly ITypeDefinitionQuery _allTypeDefinitionsQuery;
-        private readonly IMethodDefinitionQuery _allMethodDefinitionsQuery;
+        private readonly IGetTypeDefinitions _allGetTypeDefinitionsQuery;
+        private readonly IGetMethodDefinitions _allGetMethodDefinitionses;
         private readonly IWeaveOperation[] _operations;
 
 
 
         public AssemblyDefinitionWeaver(
             ILog log, 
-            ITypeDefinitionQuery allTypeDefinitionsQuery,
-            IMethodDefinitionQuery allMethodDefinitionsQuery,
+            IGetTypeDefinitions allGetTypeDefinitionsQuery,
+            IGetMethodDefinitions allGetMethodDefinitionses,
             params IWeaveOperation[] operations)
         {
             if (log == null) throw new ArgumentNullException("log");
-            if (allTypeDefinitionsQuery == null) throw new ArgumentNullException("allTypeDefinitionsQuery");
-            if (allMethodDefinitionsQuery == null) throw new ArgumentNullException("allMethodDefinitionsQuery");
+            if (allGetTypeDefinitionsQuery == null) throw new ArgumentNullException("allGetTypeDefinitionsQuery");
+            if (allGetMethodDefinitionses == null) throw new ArgumentNullException("allGetMethodDefinitionses");
             if (operations == null) throw new ArgumentNullException("operations");
 
             _log = log;
-            _allTypeDefinitionsQuery = allTypeDefinitionsQuery;
-            _allMethodDefinitionsQuery = allMethodDefinitionsQuery;
+            _allGetTypeDefinitionsQuery = allGetTypeDefinitionsQuery;
+            _allGetMethodDefinitionses = allGetMethodDefinitionses;
             _operations = operations;
         }
 
@@ -41,10 +42,10 @@ namespace AssemblyReloader.Weaving
 
             try
             {
-                var allTypeDefinitions = _allTypeDefinitionsQuery.Get(assemblyDefinition).ToList();
+                var allTypeDefinitions = _allGetTypeDefinitionsQuery.Get(assemblyDefinition).ToList();
                 _log.Verbose("Found " + allTypeDefinitions.Count + " type definitions in assembly definition");
 
-                var allMethodDefinitions = allTypeDefinitions.SelectMany(td => _allMethodDefinitionsQuery.Get(td)).ToList();
+                var allMethodDefinitions = allTypeDefinitions.SelectMany(td => _allGetMethodDefinitionses.Get(td)).ToList();
                 _log.Verbose("Found " + allMethodDefinitions.Count + " method definitions in assembly definition");
 
                 var result = _operations.All(op => RunOperation(op, assemblyDefinition, allTypeDefinitions, allMethodDefinitions));
