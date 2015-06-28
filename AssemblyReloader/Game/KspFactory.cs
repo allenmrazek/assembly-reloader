@@ -3,7 +3,8 @@ using AssemblyReloader.Properties;
 
 namespace AssemblyReloader.Game
 {
-    [Implements(typeof(IGameObjectProvider))]
+    [Implements(typeof(IKspFactory))]
+// ReSharper disable once ClassNeverInstantiated.Global
     public class KspFactory : IKspFactory
     {
         private readonly IGameObjectProvider _gameObjectProvider;

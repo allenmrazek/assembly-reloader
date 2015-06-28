@@ -10,34 +10,35 @@ using AssemblyReloader.ReloadablePlugin.Loaders.Addons;
 namespace AssemblyReloader.ReloadablePlugin
 {
     [Implements(typeof(IAddonFacadeFactory))]
+// ReSharper disable once UnusedMember.Global
     public class AddonFacadeFactory : IAddonFacadeFactory
     {
         private readonly IGameAssemblyLoader _gameAssemblyLoader;
         private readonly IGameAddonLoader _gameAddonLoader;
         private readonly IGetCurrentStartupScene _getStartupScene;
-        private readonly IGetTypesFromAssembly _getTypesFromAssembly;
+        private readonly IGetTypesFromAssembly<AddonType> _getAddonTypesFromAssembly;
         private readonly IUnityObjectDestroyer _unityDestroyer;
         private readonly IGetLoadedUnityComponents _getLoadedUnityComponents;
 
         public AddonFacadeFactory(
             [NotNull] IGameAssemblyLoader gameAssemblyLoader,
             [NotNull] IGameAddonLoader gameAddonLoader, 
-            [NotNull] IGetCurrentStartupScene getStartupScene, 
-            [NotNull] IGetTypesFromAssembly getTypesFromAssembly,
+            [NotNull] IGetCurrentStartupScene getStartupScene,
+            [NotNull] IGetTypesFromAssembly<AddonType> getAddonTypesFromAssembly,
             [NotNull] IUnityObjectDestroyer unityDestroyer, 
             [NotNull] IGetLoadedUnityComponents getLoadedUnityComponents)
         {
             if (gameAssemblyLoader == null) throw new ArgumentNullException("gameAssemblyLoader");
             if (gameAddonLoader == null) throw new ArgumentNullException("gameAddonLoader");
             if (getStartupScene == null) throw new ArgumentNullException("getStartupScene");
-            if (getTypesFromAssembly == null) throw new ArgumentNullException("getTypesFromAssembly");
+            if (getAddonTypesFromAssembly == null) throw new ArgumentNullException("getAddonTypesFromAssembly");
             if (unityDestroyer == null) throw new ArgumentNullException("unityDestroyer");
             if (getLoadedUnityComponents == null) throw new ArgumentNullException("getLoadedUnityComponents");
 
             _gameAssemblyLoader = gameAssemblyLoader;
             _gameAddonLoader = gameAddonLoader;
             _getStartupScene = getStartupScene;
-            _getTypesFromAssembly = getTypesFromAssembly;
+            _getAddonTypesFromAssembly = getAddonTypesFromAssembly;
             _unityDestroyer = unityDestroyer;
             _getLoadedUnityComponents = getLoadedUnityComponents;
         }
@@ -54,7 +55,7 @@ namespace AssemblyReloader.ReloadablePlugin
 
         private IAddonUnloader CreateUnloader()
         {
-            return new AddonUnloader(_getTypesFromAssembly, _unityDestroyer, _getLoadedUnityComponents);
+            return new AddonUnloader(_getAddonTypesFromAssembly, _unityDestroyer, _getLoadedUnityComponents);
         }
 
 

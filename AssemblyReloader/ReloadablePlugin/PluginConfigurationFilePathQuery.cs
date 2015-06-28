@@ -3,8 +3,10 @@ using System.IO;
 using AssemblyReloader.Properties;
 using ReeperCommon.FileSystem;
 
-namespace AssemblyReloader.Queries.FileSystemQueries
+namespace AssemblyReloader.ReloadablePlugin
 {
+    [Implements(typeof(IPluginConfigurationFilePathQuery))]
+// ReSharper disable once UnusedMember.Global
     public class PluginConfigurationFilePathQuery : IPluginConfigurationFilePathQuery
     {
         private readonly string _extension;

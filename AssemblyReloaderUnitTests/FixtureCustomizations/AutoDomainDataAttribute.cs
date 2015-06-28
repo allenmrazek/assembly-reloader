@@ -35,7 +35,7 @@ namespace AssemblyReloaderTests.FixtureCustomizations
             Fixture.Register(() => Assembly.GetExecutingAssembly());
 
             // IAddonAttributesFromAssembly
-            Fixture.Register(() => new AddonAttributesFromTypeQuery());
+            Fixture.Register(() => new GetAddonAttributesFromType());
 
 
             // MethodDefinition => TestPartModule.OnSave

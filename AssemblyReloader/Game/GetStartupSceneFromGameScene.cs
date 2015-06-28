@@ -1,8 +1,10 @@
 ﻿using System;
 
-namespace AssemblyReloader.Queries
+namespace AssemblyReloader.Game
 {
-    public class StartupSceneFromGameSceneQuery : IStartupSceneFromGameSceneQuery
+    [Implements(typeof(IGetStartupSceneFromGameScene))]
+// ReSharper disable once UnusedMember.Global
+    public class GetStartupSceneFromGameScene : IGetStartupSceneFromGameScene
     {
         public KSPAddon.Startup Get(GameScenes scene)
         {

@@ -1,5 +1,4 @@
 ﻿using System;
-using AssemblyReloader.CompositeRoot;
 using AssemblyReloader.Game;
 using AssemblyReloader.Properties;
 using ReeperCommon.FileSystem;

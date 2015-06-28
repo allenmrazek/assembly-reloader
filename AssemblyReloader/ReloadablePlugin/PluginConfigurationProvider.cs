@@ -9,6 +9,7 @@ using ReeperCommon.FileSystem;
 
 namespace AssemblyReloader.ReloadablePlugin
 {
+    [Implements(typeof(IPluginConfigurationProvider))]
 // ReSharper disable once ClassNeverInstantiated.Global
     public class PluginConfigurationProvider : IPluginConfigurationProvider
     {

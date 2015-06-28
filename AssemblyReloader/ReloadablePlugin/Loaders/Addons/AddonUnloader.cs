@@ -11,20 +11,20 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
 {
     public class AddonUnloader : IAddonUnloader
     {
-        private readonly IGetTypesFromAssembly _addonGetTypesFromAssembly;
+        private readonly IGetTypesFromAssembly<AddonType> _getAddonTypesFromAssembly;
         private readonly IUnityObjectDestroyer _objectDestroyer;
         private readonly IGetLoadedUnityComponents _unityComponents;
 
         public AddonUnloader(
-            [NotNull] IGetTypesFromAssembly addonGetTypesFromAssembly,
+            [NotNull] IGetTypesFromAssembly<AddonType> getAddonTypesFromAssembly,
             [NotNull] IUnityObjectDestroyer objectDestroyer,
             [NotNull] IGetLoadedUnityComponents unityComponents)
         {
-            if (addonGetTypesFromAssembly == null) throw new ArgumentNullException("addonGetTypesFromAssembly");
+            if (getAddonTypesFromAssembly == null) throw new ArgumentNullException("getAddonTypesFromAssembly");
             if (objectDestroyer == null) throw new ArgumentNullException("objectDestroyer");
             if (unityComponents == null) throw new ArgumentNullException("unityComponents");
 
-            _addonGetTypesFromAssembly = addonGetTypesFromAssembly;
+            _getAddonTypesFromAssembly = getAddonTypesFromAssembly;
             _objectDestroyer = objectDestroyer;
             _unityComponents = unityComponents;
         }
@@ -32,8 +32,8 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
 
         public void Unload(Assembly assembly)
         {
-            foreach (var addonType in _addonGetTypesFromAssembly.Get(assembly))
-                DestroyAllInstancesOf(addonType);
+            foreach (var addonType in _getAddonTypesFromAssembly.Get(assembly))
+                DestroyAllInstancesOf(addonType.Type);
         }
 
 

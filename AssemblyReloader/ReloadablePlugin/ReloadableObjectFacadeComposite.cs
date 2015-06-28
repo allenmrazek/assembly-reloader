@@ -6,6 +6,7 @@ using ReeperCommon.FileSystem;
 
 namespace AssemblyReloader.ReloadablePlugin
 {
+// ReSharper disable once UnusedMember.Global
     public class ReloadableObjectFacadeComposite : IReloadableObjectFacade
     {
         private readonly IEnumerable<IReloadableObjectFacade> _facades;

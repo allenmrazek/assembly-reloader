@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Object = UnityEngine.Object;
 
-namespace AssemblyReloader.Game.Queries
+namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
 {
+    [Implements(typeof(IGetLoadedUnityComponents))]
+// ReSharper disable once UnusedMember.Global
     public class GetLoadedUnityComponents : IGetLoadedUnityComponents
     {
         public IEnumerable<Object> GetLoaded(Type type)

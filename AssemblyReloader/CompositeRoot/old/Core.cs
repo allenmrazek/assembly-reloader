@@ -147,14 +147,14 @@
 
 //            //container.Register<IConfigNodeSerializer>(
 //            //    new ConfigNodeSerializer(new DefaultSurrogateSelector(new DefaultSurrogateProvider()),
-//            //        new CompositeFieldInfoQuery(new RecursiveSerializableFieldQuery())));
+//            //        new CompositeGetFieldInfo(new GetSerializableFieldsRecursiveType())));
 
 
 //            //container.Register(container.Resolve<IFileSystemFactory>().GetGameDataDirectory(), "GameData");
 //            //container.Register<IGameAddonLoader>(new KspAddonLoader());
 //            //container.Register<IUnityObjectDestroyer>(
 //            //    new UnityObjectDestroyer(new PluginReloadRequestedMethodCallCommand()));
-//            //container.Register<IAddonAttributesFromTypeQuery>(new AddonAttributesFromTypeQuery());
+//            //container.Register<IGetAddonAttributesFromType>(new GetAddonAttributesFromType());
 
 //            //var ourDirProvider =
 //            //    container.Resolve<AssemblyDirectoryQuery>(new NamedParameterOverloads
@@ -165,7 +165,7 @@
 
 //            //container.Register(ourDirProvider.Get(), "Core");
 //            //container.Register(ConfigureResourceRepository(container.Resolve<IDirectory>("Core")));
-//            //container.Register(ConfigureEventProvider(container.Resolve<IStartupSceneFromGameSceneQuery>()));
+//            //container.Register(ConfigureEventProvider(container.Resolve<IGetStartupSceneFromGameScene>()));
 //            //container.Register(ConfigureLoadedAssemblyFactory());
 //            //container.Register(mainAssemblyFile.Single(), "Core");
 //            //container.Register<IFilePathProvider>(new ConfigFilePathProvider(container.Resolve<IFile>("Core")), "Core");
@@ -411,7 +411,7 @@
 //        //}
 
 
-//        private static IEventProvider ConfigureEventProvider(IStartupSceneFromGameSceneQuery query)
+//        private static IEventProvider ConfigureEventProvider(IGetStartupSceneFromGameScene query)
 //        {
 //            if (query == null) throw new ArgumentNullException("query");
 
@@ -482,7 +482,7 @@
 
 //        //    var addonUnloader = container.Resolve<AddonUnloader>(new NamedParameterOverloads
 //        //    {
-//        //        { "addonGetTypesFromAssembly", new AddonsFromAssembly(container.Resolve<IAddonAttributesFromTypeQuery>()) }
+//        //        { "addonGetTypesFromAssembly", new AddonsFromAssembly(container.Resolve<IGetAddonAttributesFromType>()) }
 //        //    });
 
 //        //    var addonController = new AddonFacade(addonLoader, addonUnloader);
@@ -508,11 +508,11 @@
 //        //    var addonLoader = new Loaders.AddonLoader(
 //        //        gameAssemblyLoader,
 //        //        gameAddonLoader,
-//        //        new GetCurrentStartupScene(new StartupSceneFromGameSceneQuery(), new CurrentGameSceneProvider()),
+//        //        new GetCurrentStartupScene(new GetStartupSceneFromGameScene(), new CurrentGameSceneProvider()),
 //        //        () => plugin.Configuration.InstantlyAppliesToEveryScene);
 
 //        //    var addonUnloader = new AddonUnloader(
-//        //        new AddonsFromAssembly(new AddonAttributesFromTypeQuery()),
+//        //        new AddonsFromAssembly(new GetAddonAttributesFromType()),
 //        //        objectDestroyer,
 //        //        new getLoadedUnityComponents());
 
@@ -908,10 +908,10 @@
 
 
 //            var uri = new Uri(location.FullPath);
-//            var injectedHelperTypeQuery = new InjectedHelperGetTypeQuery();
+//            var injectedHelperTypeQuery = new GetInjectedHelperTypeFromDefinition();
 
 //            var allTypesFromAssemblyExceptInjected = new GetTypeDefinitionsExcluding(
-//                new GetAllTypesFromDefinition(), new InjectedHelperGetTypeQuery());
+//                new GetAllTypesFromDefinition(), new GetInjectedHelperTypeFromDefinition());
    
 //            var renameAssembly = new RenameAssemblyOperation(new UniqueAssemblyNameGenerator(new RandomStringGenerator()));
 

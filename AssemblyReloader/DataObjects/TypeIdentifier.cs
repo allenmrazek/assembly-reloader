@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using strange.extensions.injector.api;
 
 namespace AssemblyReloader.DataObjects
 {

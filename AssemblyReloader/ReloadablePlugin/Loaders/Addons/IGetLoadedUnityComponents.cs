@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace AssemblyReloader.Game.Queries
+namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
 {
     public interface IGetLoadedUnityComponents
     {

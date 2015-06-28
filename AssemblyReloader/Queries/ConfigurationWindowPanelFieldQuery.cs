@@ -8,7 +8,7 @@
 
 //namespace AssemblyReloader.Queries
 //{
-//    public class ConfigurationWindowPanelFieldQuery : IFieldInfoQuery
+//    public class ConfigurationWindowPanelFieldQuery : IGetFieldInfo
 //    {
 //        public IEnumerable<FieldInfo> Get(object target)
 //        {

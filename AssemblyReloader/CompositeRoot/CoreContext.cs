@@ -19,6 +19,7 @@ using AssemblyReloader.ReloadablePlugin.Definition;
 using AssemblyReloader.ReloadablePlugin.Definition.Operations;
 using AssemblyReloader.ReloadablePlugin.Definition.Operations.old;
 using AssemblyReloader.ReloadablePlugin.Loaders;
+using AssemblyReloader.ReloadablePlugin.Loaders.Addons;
 using AssemblyReloader.TypeInstallers;
 using AssemblyReloader.TypeInstallers.Impl;
 using AssemblyReloader.Weaving.old;
@@ -51,23 +52,17 @@ namespace AssemblyReloader.CompositeRoot
             var namespaces = new string[]
             {
                 "AssemblyReloader.Game",
-                "Game",
+                "AssemblyReloader.Generators",
                 "AssemblyReloader.ReloadablePlugin"
             };
             implicitBinder.ScanForAnnotatedClasses(namespaces);
 
             injectionBinder.Bind<ILog>().To(log);
-            
 
-            injectionBinder.Bind<ITypeIdentifier>().To<TypeIdentifier>().ToSingleton();
-            injectionBinder.Bind<IRandomStringGenerator>().To<RandomStringGenerator>().ToSingleton();
-            injectionBinder.Bind<IGameObjectProvider>().To<KspGameObjectProvider>().ToSingleton();
-            injectionBinder.Bind<IKspFactory>().To<KspFactory>().ToSingleton();
+            injectionBinder.Bind<IPluginConfigurationFilePathQuery>().To(new PluginConfigurationFilePathQuery());
             injectionBinder.Bind<IFileSystemFactory>()
                 .ToValue(new KSPFileSystemFactory(new KSPUrlDir(new KSPGameDataUrlDirProvider().Get())));
             injectionBinder.Bind<IEnumerable<ILoadedAssemblyTypeInstaller>>().To(CreateTypeInstallers());
-            injectionBinder.Bind<IGetLoadedAssemblyFileUrl>().To<GetLoadedAssemblyFileUrl>().ToSingleton();
-            injectionBinder.Bind<IGameAssemblyLoader>().To<KspAssemblyLoader>().ToSingleton();
 
             injectionBinder.Bind<IDirectory>()
                 .ToValue(injectionBinder.GetInstance<IFileSystemFactory>().GetGameDataDirectory())
@@ -82,7 +77,7 @@ namespace AssemblyReloader.CompositeRoot
 
             injectionBinder.Bind<IConfigNodeSerializer>().ToValue(
                 new ConfigNodeSerializer(new DefaultSurrogateSelector(new DefaultSurrogateProvider()),
-                    new CompositeFieldInfoQuery(new RecursiveSerializableFieldQuery())));
+                    new CompositeGetFieldInfo(new GetSerializableFieldsRecursiveType())));
 
             var assemblyResolver = new DefaultAssemblyResolver();
             assemblyResolver.AddSearchDirectory(injectionBinder.GetInstance<IDirectory>(DirectoryNames.Core).FullPath);
@@ -92,18 +87,11 @@ namespace AssemblyReloader.CompositeRoot
             injectionBinder.Bind<IUnityObjectDestroyer>()
                 .ToValue(new UnityObjectDestroyer(new PluginReloadRequestedMethodCallCommand()));
 
-            injectionBinder.Bind<IAddonAttributesFromTypeQuery>().To<AddonAttributesFromTypeQuery>().ToSingleton();
             injectionBinder.Bind<IResourceRepository>()
                 .ToValue(ConfigureResourceRepository(injectionBinder.GetInstance<IDirectory>(DirectoryNames.Core)));
 
-            //injectionBinder.Bind<IEnumerable<ILoadedAssemblyTypeInstaller>>().ToValue(CreateTypeInstallers());
-            injectionBinder.Bind<IPluginConfigurationFilePathQuery>()
-                .To(new PluginConfigurationFilePathQuery());
-            injectionBinder.Bind<IPluginConfigurationProvider>().To<PluginConfigurationProvider>().ToSingleton();
-            injectionBinder.Bind<IAssemblyProvider>().To<AssemblyProvider>().ToSingleton();
-            //injectionBinder.Bind<IAddonFacadeFactory>().To<AddonFacadeFactory>().ToSingleton();
-            injectionBinder.Bind<IWeaveOperationFactory>().To<WeaveOperationFactory>().ToSingleton();
-            injectionBinder.Bind<ReloadablePluginFactory>().To<ReloadablePluginFactory>().ToSingleton();
+            injectionBinder.Bind<IGetAttributesOfType<KSPAddon>>().To<GetAttributesOfType<KSPAddon>>().ToSingleton();
+            injectionBinder.Bind<IGetTypesFromAssembly<AddonType>>().To<GetAddonTypesFromAssembly>().ToSingleton();
 
             var reloadableFiles =
                 new ReloadableAssemblyFilesInDirectoryQuery(
@@ -269,10 +257,10 @@ namespace AssemblyReloader.CompositeRoot
 
 
             var uri = new Uri(location.FullPath);
-            var injectedHelperTypeQuery = new InjectedHelperGetTypeQuery();
+            var injectedHelperTypeQuery = new GetInjectedHelperTypeFromDefinition();
 
             var allTypesFromAssemblyExceptInjected = new GetTypeDefinitionsExcluding(
-                new GetAllTypesFromDefinition(), new InjectedHelperGetTypeQuery());
+                new GetAllTypesFromDefinition(), new GetInjectedHelperTypeFromDefinition());
 
             var renameAssembly = new RenameAssemblyOperation(new UniqueAssemblyNameGenerator(new RandomStringGenerator()));
 

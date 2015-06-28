@@ -7,11 +7,11 @@ using ReeperCommon.Serialization;
 
 namespace AssemblyReloader.Queries
 {
-    public class CompositeFieldInfoQuery : IFieldInfoQuery
+    public class CompositeGetFieldInfo : IGetFieldInfo
     {
-        private readonly IFieldInfoQuery[] _queries;
+        private readonly IGetFieldInfo[] _queries;
 
-        public CompositeFieldInfoQuery([NotNull] params IFieldInfoQuery[] queries)
+        public CompositeGetFieldInfo([NotNull] params IGetFieldInfo[] queries)
         {
             if (queries == null) throw new ArgumentNullException("queries");
             _queries = queries;

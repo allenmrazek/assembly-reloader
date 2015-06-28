@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using ReeperCommon.Logging;
 using ReeperCommon.Serialization;
 
 namespace AssemblyReloader.CompositeRoot
 {
-    public class RecursiveSerializableFieldQuery : IFieldInfoQuery
+    public class GetSerializableFieldsRecursiveType : IGetFieldInfo
     {
         public IEnumerable<FieldInfo> Get(object target)
         {

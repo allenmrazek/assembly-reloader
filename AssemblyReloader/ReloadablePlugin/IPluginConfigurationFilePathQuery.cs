@@ -1,6 +1,6 @@
 ﻿using ReeperCommon.FileSystem;
 
-namespace AssemblyReloader.Queries.FileSystemQueries
+namespace AssemblyReloader.ReloadablePlugin
 {
     public interface IPluginConfigurationFilePathQuery
     {

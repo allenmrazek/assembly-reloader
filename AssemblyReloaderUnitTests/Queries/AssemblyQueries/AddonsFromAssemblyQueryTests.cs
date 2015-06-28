@@ -15,7 +15,7 @@ namespace AssemblyReloader.Queries.AssemblyQueries.Tests
         [Theory, AutoDomainData]
         public void GetTest(Assembly assembly)
         {
-            var sut = new AddonsFromAssembly(new AddonAttributesFromTypeQuery());
+            var sut = new AddonsFromAssembly(new GetAddonAttributesFromType());
 
             var results = sut.Get(assembly).ToList();
 
