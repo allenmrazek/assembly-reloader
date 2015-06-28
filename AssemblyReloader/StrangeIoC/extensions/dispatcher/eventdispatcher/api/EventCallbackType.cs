@@ -14,9 +14,7 @@
  *		limitations under the License.
  */
 
-using System;
-
-namespace strange.extensions.dispatcher.eventdispatcher.api
+namespace AssemblyReloader.StrangeIoC.extensions.dispatcher.eventdispatcher.api
 {
 	public enum EventCallbackType
 	{

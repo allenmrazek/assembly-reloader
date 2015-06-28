@@ -2,7 +2,6 @@
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using AssemblyReloader.Generators;
 using AssemblyReloader.Properties;
 using AssemblyReloader.ReloadablePlugin.Definition;
 using Mono.Cecil;

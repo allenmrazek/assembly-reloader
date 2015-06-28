@@ -15,10 +15,7 @@
  */
 
 
-
-using System;
-
-namespace strange.extensions.context.api
+namespace AssemblyReloader.StrangeIoC.extensions.context.api
 {
 	public enum ContextEvent
 	{

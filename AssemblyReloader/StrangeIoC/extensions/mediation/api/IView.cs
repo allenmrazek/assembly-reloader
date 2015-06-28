@@ -23,9 +23,7 @@
  * with bubbling.
  */
 
-using System;
-
-namespace strange.extensions.mediation.api
+namespace AssemblyReloader.StrangeIoC.extensions.mediation.api
 {
 	public interface IView
 	{

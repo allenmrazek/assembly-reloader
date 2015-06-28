@@ -34,9 +34,7 @@
  * @see strange.framework.api.IBinding
  */
 
-using System;
-
-namespace strange.framework.api
+namespace AssemblyReloader.StrangeIoC.framework.api
 {
 	public interface IBinder
 	{

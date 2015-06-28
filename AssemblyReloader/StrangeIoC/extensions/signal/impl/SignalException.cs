@@ -21,9 +21,9 @@
  */
 
 using System;
-using strange.extensions.signal.api;
+using AssemblyReloader.StrangeIoC.extensions.signal.api;
 
-namespace strange.extensions.signal.impl
+namespace AssemblyReloader.StrangeIoC.extensions.signal.impl
 {
 	public class SignalException : Exception
 	{

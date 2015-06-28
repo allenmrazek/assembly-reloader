@@ -21,9 +21,9 @@
  */
 
 using System;
-using strange.extensions.reflector.api;
+using AssemblyReloader.StrangeIoC.extensions.reflector.api;
 
-namespace strange.extensions.reflector.impl
+namespace AssemblyReloader.StrangeIoC.extensions.reflector.impl
 {
 	public class ReflectionException : Exception
 	{

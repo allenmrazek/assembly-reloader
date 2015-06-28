@@ -22,10 +22,9 @@
  * Adds porcelain method to clarify View/Mediator binding.
  */
 
-using System;
-using strange.framework.api;
+using AssemblyReloader.StrangeIoC.framework.api;
 
-namespace strange.extensions.mediation.api
+namespace AssemblyReloader.StrangeIoC.extensions.mediation.api
 {
 	public interface IMediationBinding : IBinding
 	{

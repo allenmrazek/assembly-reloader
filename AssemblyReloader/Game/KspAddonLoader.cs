@@ -1,4 +1,6 @@
-﻿namespace AssemblyReloader.Game
+﻿using AssemblyReloader.StrangeIoC.extensions.implicitBind;
+
+namespace AssemblyReloader.Game
 {
     [Implements(typeof(IGameAddonLoader))]
 // ReSharper disable once UnusedMember.Global

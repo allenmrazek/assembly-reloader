@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using AssemblyReloader.Properties;
+using AssemblyReloader.StrangeIoC.extensions.implicitBind;
 using ReeperCommon.FileSystem;
 
 namespace AssemblyReloader.ReloadablePlugin

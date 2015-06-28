@@ -27,10 +27,10 @@
  * </ul>
  */
 
-using strange.extensions.dispatcher.eventdispatcher.api;
-using strange.extensions.pool.api;
+using AssemblyReloader.StrangeIoC.extensions.dispatcher.eventdispatcher.api;
+using AssemblyReloader.StrangeIoC.extensions.pool.api;
 
-namespace strange.extensions.dispatcher.eventdispatcher.impl
+namespace AssemblyReloader.StrangeIoC.extensions.dispatcher.eventdispatcher.impl
 {
 	public class TmEvent : IEvent, IPoolable
 	{

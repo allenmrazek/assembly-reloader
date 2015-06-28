@@ -25,10 +25,9 @@
  * - a marker for running multiple commands in parallel (default) or sequentially.
  */
 
-using System;
-using strange.framework.api;
+using AssemblyReloader.StrangeIoC.framework.api;
 
-namespace strange.extensions.command.api
+namespace AssemblyReloader.StrangeIoC.extensions.command.api
 {
 	public interface ICommandBinding : IBinding
 	{

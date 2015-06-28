@@ -20,12 +20,9 @@
  *	be recycled, which can be more efficient.
  */
 
-using System;
-using System.Collections.Generic;
-using strange.extensions.pool.impl;
-using strange.extensions.command.impl;
+using AssemblyReloader.StrangeIoC.extensions.pool.impl;
 
-namespace strange.extensions.command.api
+namespace AssemblyReloader.StrangeIoC.extensions.command.api
 {
 	public interface IPooledCommandBinder
 	{

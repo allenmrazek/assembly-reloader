@@ -32,11 +32,10 @@
  * instantiation of a particular class.
  */
 
-using System;
 using System.Collections.Generic;
-using strange.framework.api;
+using AssemblyReloader.StrangeIoC.framework.api;
 
-namespace strange.framework.impl
+namespace AssemblyReloader.StrangeIoC.framework.impl
 {
 	public class Binder : IBinder
 	{

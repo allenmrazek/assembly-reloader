@@ -2,23 +2,22 @@
 using System.Linq;
 using AssemblyReloader.DataObjects;
 using AssemblyReloader.FileSystem;
-using AssemblyReloader.Generators;
 using AssemblyReloader.Names;
 using AssemblyReloader.Properties;
 using AssemblyReloader.ReloadablePlugin.Definition;
 using AssemblyReloader.ReloadablePlugin.Definition.Operations;
+using AssemblyReloader.StrangeIoC.extensions.injector;
 using Mono.Cecil;
+using ReeperCommon.FileSystem;
 using ReeperCommon.Logging;
 
 namespace AssemblyReloader.ReloadablePlugin
 {
-    [Implements(typeof(IAssemblyProviderFactory))]
 // ReSharper disable once UnusedMember.Global
     public class AssemblyProviderFactory : IAssemblyProviderFactory
     {
         private readonly BaseAssemblyResolver _baseAssemblyResolver;
         private readonly IGetDebugSymbolsExistForDefinition _getDebugSymbolFileExists;
-        private readonly ITemporaryFileFactory _temporaryFileFactory;
         private readonly IWeaveOperationFactory _weaveOperationFactory;
         private readonly IGetTypeDefinitions _getTypeDefinitions;
         private readonly IGetMethodDefinitions _getMethodDefinitions;
@@ -32,7 +31,6 @@ namespace AssemblyReloader.ReloadablePlugin
         public AssemblyProviderFactory(
             [NotNull] BaseAssemblyResolver baseAssemblyResolver,
             [NotNull] IGetDebugSymbolsExistForDefinition getDebugSymbolFileExists,
-            [NotNull] ITemporaryFileFactory temporaryFileFactory, 
             [NotNull] IWeaveOperationFactory weaveOperationFactory,
             [NotNull] IGetTypeDefinitions getTypeDefinitions,
             [NotNull] IGetMethodDefinitions getMethodDefinitions,
@@ -40,7 +38,6 @@ namespace AssemblyReloader.ReloadablePlugin
         {
             if (baseAssemblyResolver == null) throw new ArgumentNullException("baseAssemblyResolver");
             if (getDebugSymbolFileExists == null) throw new ArgumentNullException("getDebugSymbolFileExists");
-            if (temporaryFileFactory == null) throw new ArgumentNullException("temporaryFileFactory");
             if (weaveOperationFactory == null) throw new ArgumentNullException("weaveOperationFactory");
             if (getTypeDefinitions == null) throw new ArgumentNullException("getTypeDefinitions");
             if (getMethodDefinitions == null) throw new ArgumentNullException("getMethodDefinitions");
@@ -48,7 +45,6 @@ namespace AssemblyReloader.ReloadablePlugin
 
             _baseAssemblyResolver = baseAssemblyResolver;
             _getDebugSymbolFileExists = getDebugSymbolFileExists;
-            _temporaryFileFactory = temporaryFileFactory;
             _weaveOperationFactory = weaveOperationFactory;
             _getTypeDefinitions = getTypeDefinitions;
             _getMethodDefinitions = getMethodDefinitions;
@@ -56,8 +52,11 @@ namespace AssemblyReloader.ReloadablePlugin
         }
 
 
-        public IAssemblyProvider Create(PluginConfiguration pluginConfiguration)
+        public IAssemblyProvider Create(PluginConfiguration pluginConfiguration, IDirectory temporaryDirectory)
         {
+            if (pluginConfiguration == null) throw new ArgumentNullException("pluginConfiguration");
+            if (temporaryDirectory == null) throw new ArgumentNullException("temporaryDirectory");
+
             var provider = new AssemblyProvider(
                 new ConditionalWriteLoadedAssemblyToDisk(
                     new AssemblyDefinitionWeaver(
@@ -68,7 +67,7 @@ namespace AssemblyReloader.ReloadablePlugin
                         _weaveOperationFactory.Create(pluginConfiguration).ToArray()),
 
                     _debugOutputToDisk),
-                _temporaryFileFactory, Log);
+                new TemporaryFileFactory(temporaryDirectory, new RandomStringGenerator()), Log);
 
             return provider;
         }

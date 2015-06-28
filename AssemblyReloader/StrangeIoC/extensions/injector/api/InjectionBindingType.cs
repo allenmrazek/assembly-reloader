@@ -14,9 +14,7 @@
  *		limitations under the License.
  */
 
-using System;
-
-namespace strange.extensions.injector.api
+namespace AssemblyReloader.StrangeIoC.extensions.injector.api
 {
 	public enum InjectionBindingType
 	{

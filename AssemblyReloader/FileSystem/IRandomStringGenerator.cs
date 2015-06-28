@@ -1,4 +1,4 @@
-﻿namespace AssemblyReloader.Generators
+﻿namespace AssemblyReloader.FileSystem
 {
     public interface IRandomStringGenerator
     {

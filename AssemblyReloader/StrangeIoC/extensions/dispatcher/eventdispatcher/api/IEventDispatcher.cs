@@ -32,10 +32,9 @@
  * @see strange.extensions.dispatcher.eventdispatcher.api.IEvent
  */
 
-using System;
-using strange.extensions.dispatcher.api;
+using AssemblyReloader.StrangeIoC.extensions.dispatcher.api;
 
-namespace strange.extensions.dispatcher.eventdispatcher.api
+namespace AssemblyReloader.StrangeIoC.extensions.dispatcher.eventdispatcher.api
 {
 	public interface IEventDispatcher : IDispatcher
 	{

@@ -1,8 +1,9 @@
 ﻿using System;
+using AssemblyReloader.FileSystem;
 using AssemblyReloader.Properties;
 using Mono.Cecil;
 
-namespace AssemblyReloader.Generators
+namespace AssemblyReloader.ReloadablePlugin.Definition.Operations
 {
     public class UniqueAssemblyNameGenerator : IUniqueAssemblyNameGenerator
     {

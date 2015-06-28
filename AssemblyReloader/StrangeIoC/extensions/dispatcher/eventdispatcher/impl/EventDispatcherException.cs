@@ -21,9 +21,9 @@
  */
 
 using System;
-using strange.extensions.dispatcher.eventdispatcher.api;
+using AssemblyReloader.StrangeIoC.extensions.dispatcher.eventdispatcher.api;
 
-namespace strange.extensions.dispatcher.eventdispatcher.impl
+namespace AssemblyReloader.StrangeIoC.extensions.dispatcher.eventdispatcher.impl
 {
 	public class EventDispatcherException : Exception
 	{

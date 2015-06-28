@@ -156,10 +156,10 @@
     <Compile Include="Game\Queries\ModuleConfigsFromPartConfigQuery.cs" />
     <Compile Include="Game\Providers\PartPrefabCloneProvider.cs" />
     <Compile Include="Game\Providers\ProtoScenarioModuleProvider.cs" />
-    <Compile Include="Generators\IRandomStringGenerator.cs" />
-    <Compile Include="Generators\ITemporaryFileFactory.cs" />
-    <Compile Include="Generators\RandomStringGenerator.cs" />
-    <Compile Include="Generators\TemporaryFileFactory.cs" />
+    <Compile Include="FileSystem\IRandomStringGenerator.cs" />
+    <Compile Include="FileSystem\ITemporaryFileFactory.cs" />
+    <Compile Include="FileSystem\RandomStringGenerator.cs" />
+    <Compile Include="FileSystem\TemporaryFileFactory.cs" />
     <Compile Include="Gui\IMainView.cs" />
     <Compile Include="Gui\IPluginInfo.cs" />
     <Compile Include="Gui\MainWindowLogic.cs" />
@@ -195,8 +195,7 @@
     <Compile Include="FileSystem\IFilePathProvider.cs" />
     <Compile Include="Game\GetLoadedAssemblyFileUrl.cs" />
     <Compile Include="Game\IGetLoadedAssemblyFileUrl.cs" />
-    <Compile Include="Queries\CompositeGetFieldInfo.cs" />
-    <Compile Include="Queries\ConfigurationWindowPanelFieldQuery.cs" />
+    <Compile Include="Queries\GetFieldInfoComposite.cs" />
     <Compile Include="Queries\FileSystemQueries\AssemblyFileLocationQuery.cs" />
     <Compile Include="ReloadablePlugin\PluginConfigurationFilePathQuery.cs" />
     <Compile Include="ReloadablePlugin\Definition\GetDebugSymbolsExistForDefinition.cs" />
@@ -358,8 +357,8 @@
     <Compile Include="Game\IKspFactory.cs" />
     <Compile Include="Game\IPartActionWindowController.cs" />
     <Compile Include="Game\KspPartActionWindowController.cs" />
-    <Compile Include="Generators\IUniqueFlightIdGenerator.cs" />
-    <Compile Include="Generators\UniqueFlightIdGenerator.cs" />
+    <Compile Include="Game\IUniqueFlightIdGenerator.cs" />
+    <Compile Include="Game\UniqueFlightIdGenerator.cs" />
     <Compile Include="Providers\ComponentsInGameObjectHierarchyProvider.cs" />
     <Compile Include="Providers\IComponentsInGameObjectHierarchyProvider.cs" />
     <Compile Include="Game\IPart.cs" />
@@ -376,10 +375,10 @@
     <Compile Include="CompositeRoot\CoreView.cs" />
     <Compile Include="Commands\ICommand.cs" />
     <Compile Include="Commands\CompositeCommand.cs" />
-    <Compile Include="Generators\IUniqueAssemblyNameGenerator.cs" />
+    <Compile Include="ReloadablePlugin\Definition\Operations\IUniqueAssemblyNameGenerator.cs" />
     <Compile Include="Game\ICurrentSceneIsFlightQuery.cs" />
     <Compile Include="FileSystem\IAssemblyProvider.cs" />
-    <Compile Include="Generators\UniqueAssemblyNameGenerator.cs" />
+    <Compile Include="ReloadablePlugin\Definition\Operations\UniqueAssemblyNameGenerator.cs" />
     <Compile Include="ReloadablePlugin\Loaders\IGetTypesDerivedFrom.cs" />
     <Compile Include="ReloadablePlugin\Loaders\IGetTypesFromAssembly.cs" />
     <Compile Include="ReloadablePlugin\Loaders\GetTypesDerivedFrom.cs" />
@@ -393,7 +392,7 @@
     <Compile Include="Queries\IPartIsPrefabQuery.cs" />
     <Compile Include="Queries\IPartModulesInPartQuery.cs" />
     <Compile Include="Queries\ITypeIdentifierQuery.cs" />
-    <Compile Include="Queries\GetAddonAttributesFromType.cs" />
+    <Compile Include="Queries\old\GetAddonAttributesFromType.cs" />
     <Compile Include="Queries\FileSystemQueries\IReloadableAssemblyFileLocationQuery.cs" />
     <Compile Include="Game\IGetStartupSceneFromGameScene.cs" />
     <Compile Include="CompositeRoot\old\Core.cs" />
@@ -439,7 +438,8 @@
     <EmbeddedResource Include="Resources\cursor.png" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Queries\AssemblyQueries\" />
+    <Folder Include="Generators\" />
+    <Folder Include="Queries\old\AssemblyQueries\" />
     <Folder Include="Weaving\old\Operations\" />
   </ItemGroup>
   <ItemGroup>

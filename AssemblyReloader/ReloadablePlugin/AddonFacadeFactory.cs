@@ -6,6 +6,7 @@ using AssemblyReloader.Game.Queries;
 using AssemblyReloader.Properties;
 using AssemblyReloader.ReloadablePlugin.Loaders;
 using AssemblyReloader.ReloadablePlugin.Loaders.Addons;
+using AssemblyReloader.StrangeIoC.extensions.implicitBind;
 
 namespace AssemblyReloader.ReloadablePlugin
 {

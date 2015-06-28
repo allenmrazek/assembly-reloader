@@ -33,13 +33,12 @@
  * has no effect on Commands operating in parallel.
  */
 
-using System;
-using strange.extensions.command.api;
-using strange.extensions.injector.api;
-using strange.framework.api;
-using strange.extensions.pool.api;
+using AssemblyReloader.StrangeIoC.extensions.command.api;
+using AssemblyReloader.StrangeIoC.extensions.injector;
+using AssemblyReloader.StrangeIoC.extensions.injector.api;
+using AssemblyReloader.StrangeIoC.extensions.pool.api;
 
-namespace strange.extensions.command.impl
+namespace AssemblyReloader.StrangeIoC.extensions.command.impl
 {
 	public class Command : ICommand, IPoolable
 	{

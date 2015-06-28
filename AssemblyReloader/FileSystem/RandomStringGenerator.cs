@@ -1,6 +1,7 @@
 ﻿using System;
+using AssemblyReloader.StrangeIoC.extensions.implicitBind;
 
-namespace AssemblyReloader.Generators
+namespace AssemblyReloader.FileSystem
 {
     [Implements(typeof(IRandomStringGenerator))]
     public class RandomStringGenerator : IRandomStringGenerator

@@ -24,11 +24,11 @@
  */
 
 using System;
-using strange.extensions.mediation.api;
-using strange.framework.impl;
-using strange.framework.api;
+using AssemblyReloader.StrangeIoC.extensions.mediation.api;
+using AssemblyReloader.StrangeIoC.framework.api;
+using AssemblyReloader.StrangeIoC.framework.impl;
 
-namespace strange.extensions.mediation.impl
+namespace AssemblyReloader.StrangeIoC.extensions.mediation.impl
 {
 	public class MediationBinding : Binding, IMediationBinding
 	{

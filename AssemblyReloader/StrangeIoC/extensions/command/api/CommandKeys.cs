@@ -14,9 +14,7 @@
  *		limitations under the License.
  */
 
-using System;
-
-namespace strange.extensions.command.api
+namespace AssemblyReloader.StrangeIoC.extensions.command.api
 {
 	public enum CommandKeys
 	{

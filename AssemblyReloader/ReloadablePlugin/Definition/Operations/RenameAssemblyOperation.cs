@@ -1,5 +1,4 @@
 ﻿using System;
-using AssemblyReloader.Generators;
 using Mono.Cecil;
 
 namespace AssemblyReloader.ReloadablePlugin.Definition.Operations

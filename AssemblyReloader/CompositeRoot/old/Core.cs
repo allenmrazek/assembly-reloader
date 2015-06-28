@@ -147,7 +147,7 @@
 
 //            //container.Register<IConfigNodeSerializer>(
 //            //    new ConfigNodeSerializer(new DefaultSurrogateSelector(new DefaultSurrogateProvider()),
-//            //        new CompositeGetFieldInfo(new GetSerializableFieldsRecursiveType())));
+//            //        new GetFieldInfoComposite(new GetSerializableFieldsRecursiveType())));
 
 
 //            //container.Register(container.Resolve<IFileSystemFactory>().GetGameDataDirectory(), "GameData");

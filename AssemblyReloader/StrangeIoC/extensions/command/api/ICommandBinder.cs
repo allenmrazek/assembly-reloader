@@ -51,11 +51,9 @@
  * See Command for details on asynchronous Commands and cancelling sequences.
  */
 
-using System;
-using strange.extensions.injector.api;
-using strange.framework.api;
+using AssemblyReloader.StrangeIoC.framework.api;
 
-namespace strange.extensions.command.api
+namespace AssemblyReloader.StrangeIoC.extensions.command.api
 {
 	public interface ICommandBinder : IBinder
 	{

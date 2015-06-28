@@ -20,11 +20,10 @@
  * @deprecated
  */
 
-using System;
-using strange.extensions.dispatcher.eventdispatcher.api;
-using strange.extensions.sequencer.api;
+using AssemblyReloader.StrangeIoC.extensions.dispatcher.eventdispatcher.api;
+using AssemblyReloader.StrangeIoC.extensions.sequencer.api;
 
-namespace strange.extensions.sequencer.impl
+namespace AssemblyReloader.StrangeIoC.extensions.sequencer.impl
 {
 	public class EventSequencer : Sequencer
 	{

@@ -22,10 +22,7 @@
  * @see strange.extensions.injector.api.IInjectionBinder
  */
 
-using strange.extensions.injector.api;
-using strange.framework.api;
-
-namespace strange.extensions.injector.api
+namespace AssemblyReloader.StrangeIoC.extensions.injector.api
 {
 	public interface ICrossContextInjectionBinder : IInjectionBinder
 	{

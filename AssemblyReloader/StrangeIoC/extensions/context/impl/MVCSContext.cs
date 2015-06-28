@@ -155,24 +155,24 @@
  * 
  */
 
-using strange.extensions.implicitBind.api;
-using strange.extensions.implicitBind.impl;
+using AssemblyReloader.StrangeIoC.extensions.command.api;
+using AssemblyReloader.StrangeIoC.extensions.command.impl;
+using AssemblyReloader.StrangeIoC.extensions.context.api;
+using AssemblyReloader.StrangeIoC.extensions.dispatcher.api;
+using AssemblyReloader.StrangeIoC.extensions.dispatcher.eventdispatcher.api;
+using AssemblyReloader.StrangeIoC.extensions.dispatcher.eventdispatcher.impl;
+using AssemblyReloader.StrangeIoC.extensions.implicitBind.api;
+using AssemblyReloader.StrangeIoC.extensions.implicitBind.impl;
+using AssemblyReloader.StrangeIoC.extensions.injector.api;
+using AssemblyReloader.StrangeIoC.extensions.mediation.api;
+using AssemblyReloader.StrangeIoC.extensions.mediation.impl;
+using AssemblyReloader.StrangeIoC.extensions.sequencer.api;
+using AssemblyReloader.StrangeIoC.extensions.sequencer.impl;
+using AssemblyReloader.StrangeIoC.framework.api;
+using AssemblyReloader.StrangeIoC.framework.impl;
 using UnityEngine;
-using strange.extensions.command.api;
-using strange.extensions.command.impl;
-using strange.extensions.context.api;
-using strange.extensions.dispatcher.api;
-using strange.extensions.dispatcher.eventdispatcher.api;
-using strange.extensions.dispatcher.eventdispatcher.impl;
-using strange.extensions.injector.api;
-using strange.extensions.mediation.api;
-using strange.extensions.mediation.impl;
-using strange.extensions.sequencer.api;
-using strange.extensions.sequencer.impl;
-using strange.framework.api;
-using strange.framework.impl;
 
-namespace strange.extensions.context.impl
+namespace AssemblyReloader.StrangeIoC.extensions.context.impl
 {
 	public class MVCSContext : CrossContext
 	{

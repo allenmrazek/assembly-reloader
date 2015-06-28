@@ -23,12 +23,12 @@
  * critical moments occur in the View lifecycle.
  */
 
+using AssemblyReloader.StrangeIoC.extensions.context.api;
+using AssemblyReloader.StrangeIoC.extensions.context.impl;
+using AssemblyReloader.StrangeIoC.extensions.mediation.api;
 using UnityEngine;
-using strange.extensions.context.api;
-using strange.extensions.context.impl;
-using strange.extensions.mediation.api;
 
-namespace strange.extensions.mediation.impl
+namespace AssemblyReloader.StrangeIoC.extensions.mediation.impl
 {
 	public class View : MonoBehaviour, IView
 	{

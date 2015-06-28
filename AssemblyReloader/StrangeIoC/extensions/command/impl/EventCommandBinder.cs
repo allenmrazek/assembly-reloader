@@ -21,11 +21,11 @@
  */
 
 using System;
-using strange.extensions.command.api;
-using strange.extensions.dispatcher.eventdispatcher.api;
-using strange.extensions.pool.api;
+using AssemblyReloader.StrangeIoC.extensions.command.api;
+using AssemblyReloader.StrangeIoC.extensions.dispatcher.eventdispatcher.api;
+using AssemblyReloader.StrangeIoC.extensions.pool.api;
 
-namespace strange.extensions.command.impl
+namespace AssemblyReloader.StrangeIoC.extensions.command.impl
 {
 	public class EventCommandBinder : CommandBinder
 	{

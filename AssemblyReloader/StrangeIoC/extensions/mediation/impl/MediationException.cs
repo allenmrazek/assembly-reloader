@@ -21,9 +21,9 @@
  */
 
 using System;
-using strange.extensions.mediation.api;
+using AssemblyReloader.StrangeIoC.extensions.mediation.api;
 
-namespace strange.extensions.mediation.impl
+namespace AssemblyReloader.StrangeIoC.extensions.mediation.impl
 {
 	public class MediationException : Exception
 	{

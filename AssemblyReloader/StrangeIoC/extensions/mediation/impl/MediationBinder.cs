@@ -24,14 +24,14 @@
  */
 
 using System;
-using System.Collections;
+using AssemblyReloader.StrangeIoC.extensions.injector;
+using AssemblyReloader.StrangeIoC.extensions.injector.api;
+using AssemblyReloader.StrangeIoC.extensions.mediation.api;
+using AssemblyReloader.StrangeIoC.framework.api;
+using AssemblyReloader.StrangeIoC.framework.impl;
 using UnityEngine;
-using strange.extensions.injector.api;
-using strange.extensions.mediation.api;
-using strange.framework.api;
-using strange.framework.impl;
 
-namespace strange.extensions.mediation.impl
+namespace AssemblyReloader.StrangeIoC.extensions.mediation.impl
 {
 	public class MediationBinder : Binder, IMediationBinder
 	{

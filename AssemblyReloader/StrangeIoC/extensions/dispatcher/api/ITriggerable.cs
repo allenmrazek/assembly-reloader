@@ -27,9 +27,7 @@
  * @see strange.extensions.dispatcher.api.ITriggerProvider
  */
 
-using System;
-
-namespace strange.extensions.dispatcher.api
+namespace AssemblyReloader.StrangeIoC.extensions.dispatcher.api
 {
 	public interface ITriggerable
 	{

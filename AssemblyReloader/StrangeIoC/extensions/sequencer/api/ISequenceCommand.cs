@@ -20,12 +20,11 @@
  * @deprecated
  * 
  * @see strange.extensions.command.api.ICommand
- */ 
+ */
 
-using System;
-using strange.extensions.command.api;
+using AssemblyReloader.StrangeIoC.extensions.command.api;
 
-namespace strange.extensions.sequencer.api
+namespace AssemblyReloader.StrangeIoC.extensions.sequencer.api
 {
 	public interface ISequenceCommand : ICommand
 	{

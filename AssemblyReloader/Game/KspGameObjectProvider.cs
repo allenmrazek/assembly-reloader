@@ -1,4 +1,5 @@
-﻿using ReeperCommon.Containers;
+﻿using AssemblyReloader.StrangeIoC.extensions.implicitBind;
+using ReeperCommon.Containers;
 
 namespace AssemblyReloader.Game
 {

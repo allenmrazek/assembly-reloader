@@ -25,9 +25,7 @@
  * PoolInflationType.
  */
 
-using System;
-
-namespace strange.extensions.pool.api
+namespace AssemblyReloader.StrangeIoC.extensions.pool.api
 {
 	public enum PoolOverflowBehavior
 	{

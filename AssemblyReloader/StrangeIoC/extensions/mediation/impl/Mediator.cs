@@ -22,11 +22,12 @@
  * @see strange.extensions.mediation.api.IMediationBinder
  */
 
-using strange.extensions.context.api;
-using strange.extensions.mediation.api;
+using AssemblyReloader.StrangeIoC.extensions.context.api;
+using AssemblyReloader.StrangeIoC.extensions.injector;
+using AssemblyReloader.StrangeIoC.extensions.mediation.api;
 using UnityEngine;
 
-namespace strange.extensions.mediation.impl
+namespace AssemblyReloader.StrangeIoC.extensions.mediation.impl
 {
 	public class Mediator : MonoBehaviour, IMediator
 	{

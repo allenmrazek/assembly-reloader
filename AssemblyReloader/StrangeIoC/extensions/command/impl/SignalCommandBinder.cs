@@ -56,14 +56,14 @@
 
 using System;
 using System.Collections.Generic;
-using strange.extensions.command.api;
-using strange.extensions.injector.api;
-using strange.framework.api;
-using strange.extensions.injector.impl;
-using strange.extensions.signal.impl;
-using strange.extensions.signal.api;
+using AssemblyReloader.StrangeIoC.extensions.command.api;
+using AssemblyReloader.StrangeIoC.extensions.injector.api;
+using AssemblyReloader.StrangeIoC.extensions.injector.impl;
+using AssemblyReloader.StrangeIoC.extensions.signal.api;
+using AssemblyReloader.StrangeIoC.extensions.signal.impl;
+using AssemblyReloader.StrangeIoC.framework.api;
 
-namespace strange.extensions.command.impl
+namespace AssemblyReloader.StrangeIoC.extensions.command.impl
 {
 	public class SignalCommandBinder : CommandBinder
 	{

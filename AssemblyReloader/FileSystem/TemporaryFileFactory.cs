@@ -5,7 +5,7 @@ using AssemblyReloader.DataObjects;
 using AssemblyReloader.Properties;
 using ReeperCommon.FileSystem;
 
-namespace AssemblyReloader.Generators
+namespace AssemblyReloader.FileSystem
 {
 // ReSharper disable once ClassNeverInstantiated.Global
     public class TemporaryFileFactory : ITemporaryFileFactory

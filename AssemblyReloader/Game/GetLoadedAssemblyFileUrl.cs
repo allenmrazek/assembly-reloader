@@ -1,4 +1,5 @@
-﻿using ReeperCommon.FileSystem;
+﻿using AssemblyReloader.StrangeIoC.extensions.implicitBind;
+using ReeperCommon.FileSystem;
 using ReeperCommon.Logging;
 
 namespace AssemblyReloader.Game

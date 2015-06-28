@@ -1,4 +1,6 @@
-﻿namespace AssemblyReloader.Game.Providers
+﻿using AssemblyReloader.StrangeIoC.extensions.implicitBind;
+
+namespace AssemblyReloader.Game.Providers
 {
     [Implements(typeof(ICurrentGameSceneProvider))]
 // ReSharper disable once UnusedMember.Global

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using AssemblyReloader.Properties;
 using AssemblyReloader.Queries.FileSystemQueries;
+using AssemblyReloader.StrangeIoC.extensions.implicitBind;
 using AssemblyReloader.TypeInstallers;
 using ReeperCommon.Extensions;
 using ReeperCommon.FileSystem;

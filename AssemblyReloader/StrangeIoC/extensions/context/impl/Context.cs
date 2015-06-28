@@ -26,10 +26,10 @@
  * your extension from the ContextView.
  */
 
-using strange.extensions.context.api;
-using strange.framework.impl;
+using AssemblyReloader.StrangeIoC.extensions.context.api;
+using AssemblyReloader.StrangeIoC.framework.impl;
 
-namespace strange.extensions.context.impl
+namespace AssemblyReloader.StrangeIoC.extensions.context.impl
 {
 	public class Context : Binder, IContext
 	{

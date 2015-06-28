@@ -23,9 +23,9 @@
  */
 
 using System;
-using strange.extensions.context.api;
+using AssemblyReloader.StrangeIoC.extensions.context.api;
 
-namespace strange.extensions.context.impl
+namespace AssemblyReloader.StrangeIoC.extensions.context.impl
 {
 	public class ContextException : Exception
 	{

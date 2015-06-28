@@ -33,11 +33,10 @@
 
  */
 
-using System;
+using AssemblyReloader.StrangeIoC.extensions.context.api;
 using UnityEngine;
-using strange.extensions.context.api;
 
-namespace strange.extensions.context.impl
+namespace AssemblyReloader.StrangeIoC.extensions.context.impl
 {
 	public class ContextView : MonoBehaviour, IContextView
 	{

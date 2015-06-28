@@ -1,5 +1,6 @@
-﻿using ReeperCommon.Gui.Window;
-using strange.extensions.mediation.impl;
+﻿using AssemblyReloader.StrangeIoC.extensions.injector;
+using AssemblyReloader.StrangeIoC.extensions.mediation.impl;
+using ReeperCommon.Gui.Window;
 
 namespace AssemblyReloader.Gui
 {

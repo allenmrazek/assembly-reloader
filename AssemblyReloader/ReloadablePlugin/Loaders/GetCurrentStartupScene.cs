@@ -2,6 +2,7 @@
 using AssemblyReloader.Game;
 using AssemblyReloader.Game.Providers;
 using AssemblyReloader.Queries;
+using AssemblyReloader.StrangeIoC.extensions.implicitBind;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders
 {

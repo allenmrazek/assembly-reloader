@@ -21,11 +21,11 @@
  * class for your Mediators to extend if you're using MVCSContext.
  */
 
-using System;
-using strange.extensions.context.api;
-using strange.extensions.dispatcher.eventdispatcher.api;
+using AssemblyReloader.StrangeIoC.extensions.context.api;
+using AssemblyReloader.StrangeIoC.extensions.dispatcher.eventdispatcher.api;
+using AssemblyReloader.StrangeIoC.extensions.injector;
 
-namespace strange.extensions.mediation.impl
+namespace AssemblyReloader.StrangeIoC.extensions.mediation.impl
 {
 	public class EventMediator : Mediator
 	{

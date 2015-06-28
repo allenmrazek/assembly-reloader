@@ -1,6 +1,6 @@
 ﻿using AssemblyReloader.DataObjects;
 
-namespace AssemblyReloader.Generators
+namespace AssemblyReloader.FileSystem
 {
     public interface ITemporaryFileFactory
     {

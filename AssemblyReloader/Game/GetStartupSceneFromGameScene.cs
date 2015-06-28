@@ -1,4 +1,5 @@
 ﻿using System;
+using AssemblyReloader.StrangeIoC.extensions.implicitBind;
 
 namespace AssemblyReloader.Game
 {

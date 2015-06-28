@@ -21,16 +21,12 @@
  */
 
 using System;
-using System.Collections.Generic;
-using strange.extensions.dispatcher.api;
-using strange.extensions.injector.api;
-using strange.extensions.sequencer.api;
-using strange.extensions.command.api;
-using strange.extensions.command.impl;
-using strange.framework.api;
-using strange.framework.impl;
+using AssemblyReloader.StrangeIoC.extensions.command.impl;
+using AssemblyReloader.StrangeIoC.extensions.dispatcher.api;
+using AssemblyReloader.StrangeIoC.extensions.sequencer.api;
+using AssemblyReloader.StrangeIoC.framework.api;
 
-namespace strange.extensions.sequencer.impl
+namespace AssemblyReloader.StrangeIoC.extensions.sequencer.impl
 {
 	public class Sequencer : CommandBinder, ISequencer, ITriggerable
 	{

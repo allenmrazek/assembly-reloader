@@ -39,7 +39,7 @@
 
 using System;
 
-namespace strange.framework.api
+namespace AssemblyReloader.StrangeIoC.framework.api
 {
 	public interface ISemiBinding : IManagedList
 	{

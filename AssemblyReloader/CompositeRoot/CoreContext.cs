@@ -8,7 +8,6 @@ using AssemblyReloader.Commands.old;
 using AssemblyReloader.DataObjects;
 using AssemblyReloader.FileSystem;
 using AssemblyReloader.Game;
-using AssemblyReloader.Generators;
 using AssemblyReloader.Names;
 using AssemblyReloader.Properties;
 using AssemblyReloader.Queries;
@@ -20,6 +19,9 @@ using AssemblyReloader.ReloadablePlugin.Definition.Operations;
 using AssemblyReloader.ReloadablePlugin.Definition.Operations.old;
 using AssemblyReloader.ReloadablePlugin.Loaders;
 using AssemblyReloader.ReloadablePlugin.Loaders.Addons;
+using AssemblyReloader.StrangeIoC.extensions.command.api;
+using AssemblyReloader.StrangeIoC.extensions.command.impl;
+using AssemblyReloader.StrangeIoC.extensions.context.impl;
 using AssemblyReloader.TypeInstallers;
 using AssemblyReloader.TypeInstallers.Impl;
 using AssemblyReloader.Weaving.old;
@@ -30,9 +32,6 @@ using ReeperCommon.FileSystem.Providers;
 using ReeperCommon.Logging;
 using ReeperCommon.Repositories;
 using ReeperCommon.Serialization;
-using strange.extensions.command.api;
-using strange.extensions.command.impl;
-using strange.extensions.context.impl;
 using UnityEngine;
 using AssemblyDefinitionWeaver = AssemblyReloader.Weaving.old.AssemblyDefinitionWeaver;
 
@@ -51,6 +50,7 @@ namespace AssemblyReloader.CompositeRoot
 
             var namespaces = new string[]
             {
+                "AssemblyReloader.FileSystem",
                 "AssemblyReloader.Game",
                 "AssemblyReloader.Generators",
                 "AssemblyReloader.ReloadablePlugin"
@@ -77,7 +77,7 @@ namespace AssemblyReloader.CompositeRoot
 
             injectionBinder.Bind<IConfigNodeSerializer>().ToValue(
                 new ConfigNodeSerializer(new DefaultSurrogateSelector(new DefaultSurrogateProvider()),
-                    new CompositeGetFieldInfo(new GetSerializableFieldsRecursiveType())));
+                    new GetFieldInfoComposite(new GetSerializableFieldsRecursiveType())));
 
             var assemblyResolver = new DefaultAssemblyResolver();
             assemblyResolver.AddSearchDirectory(injectionBinder.GetInstance<IDirectory>(DirectoryNames.Core).FullPath);
@@ -93,11 +93,19 @@ namespace AssemblyReloader.CompositeRoot
             injectionBinder.Bind<IGetAttributesOfType<KSPAddon>>().To<GetAttributesOfType<KSPAddon>>().ToSingleton();
             injectionBinder.Bind<IGetTypesFromAssembly<AddonType>>().To<GetAddonTypesFromAssembly>().ToSingleton();
 
-            var reloadableFiles =
+            injectionBinder.Bind<IAssemblyProviderFactory>().To(new AssemblyProviderFactory(
+                injectionBinder.GetInstance<BaseAssemblyResolver>(),
+                injectionBinder.GetInstance<IGetDebugSymbolsExistForDefinition>(),
+                injectionBinder.GetInstance<IWeaveOperationFactory>(),
+                injectionBinder.GetInstance<IGetTypeDefinitions>(),
+                injectionBinder.GetInstance<IGetMethodDefinitions>(),
+                () => true)).ToSingleton();
+
+            var reloadableFileQuery =
                 new ReloadableAssemblyFilesInDirectoryQuery(
                     injectionBinder.GetInstance<IDirectory>(DirectoryNames.GameData));
 
-            log.Normal("Reloadable files count: " + reloadableFiles.Get().Count());
+            log.Normal("Reloadable files count: " + reloadableFileQuery.Get().Count());
 
             var reloadablePluginFactory = injectionBinder.GetInstance<ReloadablePluginFactory>();
 
@@ -105,6 +113,14 @@ namespace AssemblyReloader.CompositeRoot
 
 
 
+            foreach (var file in reloadableFileQuery.Get())
+            {
+                log.Normal("Performing initial load of " + file.FileName);
+
+                var r = reloadablePluginFactory.Create(file);
+            }
+
+            log.Normal("Finished loading initial reloadable plugins.");
 
             //injectionBinder.Bind<IEnumerable<IPluginInfo>>().ToValue(reloadablePlugins.Cast<IPluginInfo>());
             //injectionBinder.Bind<IEnumerable<IReloadablePlugin>>().ToValue(reloadablePlugins);

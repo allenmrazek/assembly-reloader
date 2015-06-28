@@ -26,10 +26,10 @@
  * @see strange.extensions.injector.api.IInjectionBinding
  */
 
-using strange.extensions.dispatcher.api;
-using strange.extensions.injector.api;
+using AssemblyReloader.StrangeIoC.extensions.dispatcher.api;
+using AssemblyReloader.StrangeIoC.extensions.injector.api;
 
-namespace strange.extensions.context.api
+namespace AssemblyReloader.StrangeIoC.extensions.context.api
 {
 	public interface ICrossContextCapable
 	{

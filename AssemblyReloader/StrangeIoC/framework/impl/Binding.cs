@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright 2013 ThirdMotion, Inc.
  *
  *	Licensed under the Apache License, Version 2.0 (the "License");
@@ -37,10 +37,10 @@
  * @see strange.framework.impl.Binder;
  */
 
-using strange.framework.api;
 using System;
+using AssemblyReloader.StrangeIoC.framework.api;
 
-namespace strange.framework.impl
+namespace AssemblyReloader.StrangeIoC.framework.impl
 {
 	public class Binding : IBinding
 	{

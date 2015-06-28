@@ -22,9 +22,7 @@
  * @see strange.extensions.injector.api.IInjector
  */
 
-using System;
-
-namespace strange.extensions.injector.api
+namespace AssemblyReloader.StrangeIoC.extensions.injector.api
 {
 	public interface IInjectorFactory
 	{

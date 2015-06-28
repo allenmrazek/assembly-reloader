@@ -14,9 +14,7 @@
  *		limitations under the License.
  */
 
-using strange.extensions.mediation.api;
-
-namespace strange.extensions.implicitBind.api
+namespace AssemblyReloader.StrangeIoC.extensions.implicitBind.api
 {
 	public interface IImplicitBinder
 	{

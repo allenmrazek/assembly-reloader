@@ -21,9 +21,9 @@
  */
 
 using System;
-using strange.extensions.injector.api;
+using AssemblyReloader.StrangeIoC.extensions.injector.api;
 
-namespace strange.extensions.injector.impl
+namespace AssemblyReloader.StrangeIoC.extensions.injector.impl
 {
 	public class InjectorFactory : IInjectorFactory
 	{

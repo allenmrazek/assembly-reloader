@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections;
-using strange.extensions.context.impl;
+using AssemblyReloader.StrangeIoC.extensions.context.impl;
 using UnityEngine;
 
 namespace AssemblyReloader.CompositeRoot

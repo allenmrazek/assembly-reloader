@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using AssemblyReloader.StrangeIoC.extensions.implicitBind;
 using Object = UnityEngine.Object;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons

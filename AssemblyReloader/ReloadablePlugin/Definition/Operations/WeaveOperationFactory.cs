@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using AssemblyReloader.DataObjects;
-using AssemblyReloader.Generators;
 using AssemblyReloader.Properties;
+using AssemblyReloader.StrangeIoC.extensions.implicitBind;
 
 namespace AssemblyReloader.ReloadablePlugin.Definition.Operations
 {

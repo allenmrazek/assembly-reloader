@@ -23,9 +23,9 @@
  */
 
 using System;
-using strange.framework.api;
+using AssemblyReloader.StrangeIoC.framework.api;
 
-namespace strange.framework.impl
+namespace AssemblyReloader.StrangeIoC.framework.impl
 {
 	public class SemiBinding : ISemiBinding
 	{

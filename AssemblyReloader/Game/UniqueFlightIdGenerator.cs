@@ -1,4 +1,4 @@
-﻿namespace AssemblyReloader.Generators
+﻿namespace AssemblyReloader.Game
 {
     public class UniqueFlightIdGenerator : IUniqueFlightIdGenerator
     {

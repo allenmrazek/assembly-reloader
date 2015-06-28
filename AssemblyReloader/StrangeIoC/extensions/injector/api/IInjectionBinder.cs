@@ -59,9 +59,9 @@
 
 using System;
 using System.Collections.Generic;
-using strange.framework.api;
+using AssemblyReloader.StrangeIoC.framework.api;
 
-namespace strange.extensions.injector.api
+namespace AssemblyReloader.StrangeIoC.extensions.injector.api
 {
 	public interface IInjectionBinder : IInstanceProvider
 	{

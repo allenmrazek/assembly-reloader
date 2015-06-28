@@ -17,7 +17,7 @@
 /**
  * @class strange.extensions.signal.api.SignalExceptionType
  */
-namespace strange.extensions.signal.api
+namespace AssemblyReloader.StrangeIoC.extensions.signal.api
 {
 	public enum SignalExceptionType
 	{

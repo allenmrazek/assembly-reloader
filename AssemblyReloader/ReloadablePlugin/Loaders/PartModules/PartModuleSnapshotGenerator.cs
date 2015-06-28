@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using AssemblyReloader.CompositeRoot;
 using AssemblyReloader.DataObjects;
 using AssemblyReloader.Game;
-using AssemblyReloader.Generators;
 using AssemblyReloader.Properties;
 using AssemblyReloader.Queries;
 using ReeperCommon.Logging;

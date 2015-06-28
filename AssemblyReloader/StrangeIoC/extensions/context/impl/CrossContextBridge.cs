@@ -38,15 +38,15 @@
  * relay that Event to other Contexts.
  */
 
-using System;
-using strange.extensions.dispatcher.api;
-using strange.extensions.dispatcher.eventdispatcher.api;
-using strange.extensions.context.api;
-using strange.framework.api;
-using strange.framework.impl;
 using System.Collections.Generic;
+using AssemblyReloader.StrangeIoC.extensions.context.api;
+using AssemblyReloader.StrangeIoC.extensions.dispatcher.api;
+using AssemblyReloader.StrangeIoC.extensions.dispatcher.eventdispatcher.api;
+using AssemblyReloader.StrangeIoC.extensions.injector;
+using AssemblyReloader.StrangeIoC.framework.api;
+using AssemblyReloader.StrangeIoC.framework.impl;
 
-namespace strange.extensions.context.impl
+namespace AssemblyReloader.StrangeIoC.extensions.context.impl
 {
 	public class CrossContextBridge : Binder, ITriggerable
 	{

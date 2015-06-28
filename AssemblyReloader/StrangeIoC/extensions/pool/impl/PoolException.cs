@@ -16,9 +16,9 @@
 
 
 using System;
-using strange.extensions.pool.api;
+using AssemblyReloader.StrangeIoC.extensions.pool.api;
 
-namespace strange.extensions.pool.impl
+namespace AssemblyReloader.StrangeIoC.extensions.pool.impl
 {
 	public class PoolException : Exception
 	{
