@@ -2,16 +2,13 @@
 using System.Linq;
 using AssemblyReloader.DataObjects;
 using AssemblyReloader.FileSystem;
-using AssemblyReloader.Names;
 using AssemblyReloader.Properties;
-using AssemblyReloader.ReloadablePlugin.Definition;
 using AssemblyReloader.ReloadablePlugin.Definition.Operations;
-using AssemblyReloader.StrangeIoC.extensions.injector;
 using Mono.Cecil;
 using ReeperCommon.FileSystem;
 using ReeperCommon.Logging;
 
-namespace AssemblyReloader.ReloadablePlugin
+namespace AssemblyReloader.ReloadablePlugin.Definition
 {
 // ReSharper disable once UnusedMember.Global
     public class AssemblyProviderFactory : IAssemblyProviderFactory
@@ -59,7 +56,7 @@ namespace AssemblyReloader.ReloadablePlugin
             var provider = new AssemblyProvider(
                 new ConditionalWriteLoadedAssemblyToDisk(
                     new AssemblyDefinitionWeaver(
-                        new AssemblyDefinitionFromDiskReader(_getDebugSymbolFileExists, _baseAssemblyResolver),
+                        new AssemblyDefinitionFromDiskReader(_getDebugSymbolFileExists, _baseAssemblyResolver, _log),
                         _getTypeDefinitions,
                         _getMethodDefinitions,
                         _log,

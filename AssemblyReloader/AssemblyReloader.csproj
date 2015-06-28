@@ -15,7 +15,8 @@
     <RestorePackages>true</RestorePackages>
     <ProductVersion>12.0.0</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <TargetFrameworkProfile>Unity Full v3.5</TargetFrameworkProfile>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>True</DebugSymbols>
@@ -43,17 +44,21 @@
     <Reference Include="Assembly-CSharp">
       <HintPath>..\..\..\Kerbal Space Program\KSP_Data\Managed\Assembly-CSharp.dll</HintPath>
     </Reference>
-    <Reference Include="Mono.Cecil">
-      <HintPath>..\packages\Mono.Cecil.0.9.5.4\lib\net35\Mono.Cecil.dll</HintPath>
+    <Reference Include="Mono.Cecil, Version=0.9.4.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
+      <HintPath>..\packages\Mono.Cecil.0.9.5.0\lib\net35\Mono.Cecil.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Mono.Cecil.Mdb">
-      <HintPath>..\packages\Mono.Cecil.0.9.5.4\lib\net35\Mono.Cecil.Mdb.dll</HintPath>
+    <Reference Include="Mono.Cecil.Mdb, Version=0.9.4.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
+      <HintPath>..\packages\Mono.Cecil.0.9.5.0\lib\net35\Mono.Cecil.Mdb.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Mono.Cecil.Pdb">
-      <HintPath>..\packages\Mono.Cecil.0.9.5.4\lib\net35\Mono.Cecil.Pdb.dll</HintPath>
+    <Reference Include="Mono.Cecil.Pdb, Version=0.9.4.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
+      <HintPath>..\packages\Mono.Cecil.0.9.5.0\lib\net35\Mono.Cecil.Pdb.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Mono.Cecil.Rocks">
-      <HintPath>..\packages\Mono.Cecil.0.9.5.4\lib\net35\Mono.Cecil.Rocks.dll</HintPath>
+    <Reference Include="Mono.Cecil.Rocks, Version=0.9.4.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
+      <HintPath>..\packages\Mono.Cecil.0.9.5.0\lib\net35\Mono.Cecil.Rocks.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -81,16 +86,16 @@
     <Compile Include="Commands\PluginReloadRequestedMethodCallCommand.cs" />
     <Compile Include="Commands\old\SavePluginConfigurationCommand.cs" />
     <Compile Include="Commands\old\SerializeObjectCommand.cs" />
-    <Compile Include="ReloadablePlugin\AddonFacadeFactory.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\Addons\AddonFacadeFactory.cs" />
     <Compile Include="CompositeRoot\CoreContext.cs" />
     <Compile Include="CompositeRoot\FlightConfigNodeKeyValuePairComparer.cs" />
-    <Compile Include="ReloadablePlugin\IAddonFacadeFactory.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\Addons\IAddonFacadeFactory.cs" />
     <Compile Include="CompositeRoot\IMessageChannel.cs" />
     <Compile Include="CompositeRoot\IMessageConsumer.cs" />
-    <Compile Include="ReloadablePlugin\AssemblyProviderFactory.cs" />
+    <Compile Include="ReloadablePlugin\Definition\AssemblyProviderFactory.cs" />
     <Compile Include="ReloadablePlugin\Definition\Operations\IWeaveOperationFactory.cs" />
     <Compile Include="ReloadablePlugin\Definition\Operations\WeaveOperationFactory.cs" />
-    <Compile Include="ReloadablePlugin\IAssemblyProviderFactory.cs" />
+    <Compile Include="ReloadablePlugin\Definition\IAssemblyProviderFactory.cs" />
     <Compile Include="ReloadablePlugin\Definition\AssemblyDefinitionWeaver.cs" />
     <Compile Include="ReloadablePlugin\Definition\Operations\old\InjectedHelperTypeDefinitionWriter.cs" />
     <Compile Include="ReloadablePlugin\Definition\Operations\old\InterceptExecutingAssemblyLocationQueries.cs" />
@@ -185,7 +190,7 @@
     <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\IScenarioModuleUnloader.cs" />
     <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\ScenarioModuleSnapshotGenerator.cs" />
     <Compile Include="Gui\Messages\ShowPluginConfigurationWindow.cs" />
-    <Compile Include="FileSystem\AssemblyProvider.cs" />
+    <Compile Include="ReloadablePlugin\Definition\AssemblyProvider.cs" />
     <Compile Include="FileSystem\ConfigurationProvider.cs" />
     <Compile Include="Providers\FilePathProviderFromContext.cs" />
     <Compile Include="ReloadablePlugin\Definition\IAssemblyDefinitionProvider.cs" />
@@ -342,7 +347,7 @@
     <Compile Include="ReloadablePlugin\Definition\GetTypeDefinitionsExcluding.cs" />
     <Compile Include="Queries\CecilQueries\IInstructionSetQuery.cs" />
     <Compile Include="ReloadablePlugin\Definition\IGetMethodDefinitions.cs" />
-    <Compile Include="ReloadablePlugin\AddonFacade.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\Addons\AddonFacade.cs" />
     <Compile Include="ReloadablePlugin\IReloadableObjectFacade.cs" />
     <Compile Include="ReloadablePlugin\PartModuleFacade.cs" />
     <Compile Include="DataObjects\ITypeIdentifier.cs" />
@@ -376,7 +381,7 @@
     <Compile Include="Commands\CompositeCommand.cs" />
     <Compile Include="ReloadablePlugin\Definition\Operations\IUniqueAssemblyNameGenerator.cs" />
     <Compile Include="Game\ICurrentSceneIsFlightQuery.cs" />
-    <Compile Include="FileSystem\IAssemblyProvider.cs" />
+    <Compile Include="ReloadablePlugin\Definition\IAssemblyProvider.cs" />
     <Compile Include="ReloadablePlugin\Definition\Operations\UniqueAssemblyNameGenerator.cs" />
     <Compile Include="ReloadablePlugin\Loaders\IGetTypesDerivedFrom.cs" />
     <Compile Include="ReloadablePlugin\Loaders\IGetTypesFromAssembly.cs" />
@@ -410,9 +415,6 @@
     <Compile Include="ReloadablePlugin\Definition\WeaveOperation.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Resources\toggleChecked.png" />
     <EmbeddedResource Include="Resources\toggleUnchecked.png" />
   </ItemGroup>
@@ -443,6 +445,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="StrangeIoC\extensions\ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

@@ -5,6 +5,7 @@ using AssemblyReloader.Game;
 using AssemblyReloader.Gui;
 using AssemblyReloader.Properties;
 using AssemblyReloader.Providers;
+using AssemblyReloader.ReloadablePlugin.Definition;
 using ReeperCommon.Extensions;
 using ReeperCommon.FileSystem;
 

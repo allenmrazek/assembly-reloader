@@ -1,6 +1,8 @@
 ﻿using System;
 using AssemblyReloader.Game;
 using AssemblyReloader.Properties;
+using AssemblyReloader.ReloadablePlugin.Definition;
+using AssemblyReloader.ReloadablePlugin.Loaders.Addons;
 using AssemblyReloader.StrangeIoC.extensions.implicitBind;
 using ReeperCommon.FileSystem;
 

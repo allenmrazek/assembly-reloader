@@ -1,6 +1,6 @@
 ﻿using AssemblyReloader.DataObjects;
 
-namespace AssemblyReloader.ReloadablePlugin
+namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
 {
     public interface IAddonFacadeFactory
     {

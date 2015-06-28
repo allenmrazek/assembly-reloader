@@ -2,16 +2,18 @@
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using AssemblyReloader.FileSystem;
 using AssemblyReloader.Properties;
-using AssemblyReloader.ReloadablePlugin.Definition;
 using Mono.Cecil;
+using Mono.Cecil.Cil;
+using Mono.Cecil.Mdb;
 using Mono.CompilerServices.SymbolWriter;
 using ReeperCommon.Containers;
 using ReeperCommon.Extensions;
 using ReeperCommon.FileSystem;
 using ReeperCommon.Logging;
 
-namespace AssemblyReloader.FileSystem
+namespace AssemblyReloader.ReloadablePlugin.Definition
 {
 // ReSharper disable once ClassNeverInstantiated.Global
     public class AssemblyProvider : IAssemblyProvider
@@ -94,7 +96,14 @@ namespace AssemblyReloader.FileSystem
             {
                 try
                 {
-                    definition.Write(tempDll.FullPath, new WriterParameters {WriteSymbols = true});
+                    _log.Debug("Writing temp dll to " + tempDll.FullPath);
+                    _log.Debug("Writing any symbols to " + tempSymbolMdb.FullPath);
+
+
+                    definition.Write(tempDll.FullPath, new WriterParameters
+                    {
+                        WriteSymbols = true,
+                    });
 
                     using (var tempFile = new FileStream(tempDll.FullPath, FileMode.Open))
                     {
@@ -103,13 +112,18 @@ namespace AssemblyReloader.FileSystem
                         if (tempFile.Length == 0)
                             throw new Exception("Failed to write assembly definition to disk at " + tempDll.FullPath);
 
+                        _log.Debug("Copying temp dll into byte stream");
                         tempFile.CopyTo(assemblyStream);
 
                         if (tempSymbolFile.Length == 0)
                         {
                             _log.Warning("Failed to write " + definition.FullName + " symbols to " + tempDll.FullPath);
                         }
-                        else tempSymbolFile.CopyTo(symbolStream);
+                        else
+                        {
+                            _log.Debug("Copying symbols into byte stream");
+                            tempSymbolFile.CopyTo(symbolStream);
+                        }
                     }
                 }
                 catch (MonoSymbolFileException symbolException)

@@ -2,13 +2,10 @@
 using AssemblyReloader.CompositeRoot;
 using AssemblyReloader.DataObjects;
 using AssemblyReloader.Game;
-using AssemblyReloader.Game.Queries;
 using AssemblyReloader.Properties;
-using AssemblyReloader.ReloadablePlugin.Loaders;
-using AssemblyReloader.ReloadablePlugin.Loaders.Addons;
 using AssemblyReloader.StrangeIoC.extensions.implicitBind;
 
-namespace AssemblyReloader.ReloadablePlugin
+namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
 {
     [Implements(typeof(IAddonFacadeFactory))]
 // ReSharper disable once UnusedMember.Global

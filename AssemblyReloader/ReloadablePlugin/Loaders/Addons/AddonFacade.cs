@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Reflection;
 using AssemblyReloader.Properties;
-using AssemblyReloader.ReloadablePlugin.Loaders.Addons;
 using ReeperCommon.FileSystem;
 
-namespace AssemblyReloader.ReloadablePlugin
+namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
 {
     public class AddonFacade : IReloadableObjectFacade
     {

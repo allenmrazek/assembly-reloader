@@ -24,7 +24,7 @@ namespace AssemblyReloader.ReloadablePlugin.Definition.Operations
         {
             return new IWeaveOperation[]
             {
-                new RenameAssemblyOperation(_uniqueAssemblyNameGenerator)
+                //new RenameAssemblyOperation(_uniqueAssemblyNameGenerator)
             };
         }
     }

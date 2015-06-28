@@ -3,6 +3,7 @@ using System.IO;
 using AssemblyReloader.Properties;
 using AssemblyReloader.StrangeIoC.extensions.implicitBind;
 using ReeperCommon.FileSystem;
+using ReeperCommon.Logging;
 
 namespace AssemblyReloader.ReloadablePlugin.Definition
 {
@@ -18,8 +19,10 @@ namespace AssemblyReloader.ReloadablePlugin.Definition
             // note: we use the actual file system instead of checking cached files from GameDatabase
             // because GameDatabase will only contain the state of the file at program load; the debug
             // symbol file might come and go during art's lifetime
- 
-            return File.Exists(location.FileName + DebugSymbolExtension);
+            new DebugLog("DebugSymbols").Normal("Looking for debug symbols at " + location.FileName +
+                                                DebugSymbolExtension);
+
+            return File.Exists(location.FullPath + DebugSymbolExtension);
         }
     }
 }
