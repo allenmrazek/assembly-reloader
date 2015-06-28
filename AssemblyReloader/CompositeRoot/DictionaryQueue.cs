@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using AssemblyReloader.Annotations;
+using AssemblyReloader.Properties;
 using ReeperCommon.Containers;
 
 namespace AssemblyReloader.CompositeRoot

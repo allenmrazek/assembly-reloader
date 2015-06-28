@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Runtime.Remoting.Contexts;
-using AssemblyReloader.Annotations;
+using AssemblyReloader.Properties;
 
 namespace AssemblyReloader.Commands
 {

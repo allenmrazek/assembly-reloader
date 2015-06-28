@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
-using AssemblyReloader.Annotations;
+using AssemblyReloader.Properties;
 using AssemblyReloader.Queries.FileSystemQueries;
 using AssemblyReloader.TypeInstallers;
 using ReeperCommon.Extensions;

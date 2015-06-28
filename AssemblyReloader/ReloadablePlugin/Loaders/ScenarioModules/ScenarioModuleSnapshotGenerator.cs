@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Linq;
-using AssemblyReloader.Annotations;
 using AssemblyReloader.Game;
 using AssemblyReloader.Game.Providers;
+using AssemblyReloader.Properties;
 using ReeperCommon.Logging;
 
-namespace AssemblyReloader.Loaders.ScenarioModuleLoader
+namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
 {
     public class ScenarioModuleSnapshotGenerator : IScenarioModuleSnapshotGenerator
     {

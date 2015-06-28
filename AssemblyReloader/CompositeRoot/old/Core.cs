@@ -437,7 +437,7 @@
 
 //        //    var configuration = new PluginConfigurationProvider(container.Resolve<IPluginConfigurationFilePathQuery>()).Get(location);
 
-//        //    var debugSymbolExistQuery = new DebugSymbolFileExistsQuery(location);
+//        //    var debugSymbolExistQuery = new GetDebugSymbolsExistForDefinition(location);
 
 //        //    var assemblyProvider = new AssemblyProvider(
 //        //        new AssemblyDefinitionFromDiskReader(

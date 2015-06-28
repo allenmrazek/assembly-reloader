@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Globalization;
 using System.IO;
-using AssemblyReloader.Annotations;
 using AssemblyReloader.DataObjects;
+using AssemblyReloader.Properties;
 using ReeperCommon.FileSystem;
 
 namespace AssemblyReloader.Generators

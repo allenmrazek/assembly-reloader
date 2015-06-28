@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using AssemblyReloader.Annotations;
+using AssemblyReloader.Properties;
 using ReeperCommon.Gui.Window;
 using ReeperCommon.Logging;
 using UnityEngine;

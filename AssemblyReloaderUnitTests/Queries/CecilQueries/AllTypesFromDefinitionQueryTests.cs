@@ -1,4 +1,4 @@
-﻿using AssemblyReloader.ReloadablePlugin.Loaders.Definition;
+﻿using AssemblyReloader.ReloadablePlugin.Definition;
 using AssemblyReloaderTests.FixtureCustomizations;
 using Mono.Cecil;
 using Ploeh.AutoFixture.Xunit;

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Linq;
-using AssemblyReloader.Annotations;
 using AssemblyReloader.FileSystem;
 using AssemblyReloader.Game;
 using AssemblyReloader.Gui;
+using AssemblyReloader.Properties;
 using AssemblyReloader.Providers;
 using ReeperCommon.Extensions;
 using ReeperCommon.FileSystem;

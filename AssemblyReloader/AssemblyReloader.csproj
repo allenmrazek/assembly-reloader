@@ -72,22 +72,29 @@
     <Compile Include="Commands\AwakenPartModuleCommand.cs" />
     <Compile Include="Commands\ClearDictionaryQueryCommand.cs" />
     <Compile Include="Commands\DeserializeObjectCommand.cs" />
-    <Compile Include="Commands\SaveConfigNodeFromCallbacksCommand.cs" />
+    <Compile Include="Commands\old\SaveConfigNodeFromCallbacksCommand.cs" />
     <Compile Include="Commands\ExecutePartModuleOnStartsCommand.cs" />
     <Compile Include="Commands\OrCommand.cs" />
-    <Compile Include="Commands\ProxyAssemblyMethodWriter.cs" />
+    <Compile Include="Commands\old\ProxyAssemblyMethodWriter.cs" />
     <Compile Include="Commands\RefreshPartActionWindows.cs" />
     <Compile Include="Commands\NullCommand.cs" />
     <Compile Include="Commands\PluginReloadRequestedMethodCallCommand.cs" />
-    <Compile Include="Commands\SavePluginConfigurationCommand.cs" />
-    <Compile Include="Commands\SerializeObjectCommand.cs" />
+    <Compile Include="Commands\old\SavePluginConfigurationCommand.cs" />
+    <Compile Include="Commands\old\SerializeObjectCommand.cs" />
     <Compile Include="ReloadablePlugin\AddonFacadeFactory.cs" />
     <Compile Include="CompositeRoot\CoreContext.cs" />
     <Compile Include="CompositeRoot\FlightConfigNodeKeyValuePairComparer.cs" />
-    <Compile Include="CompositeRoot\IAddonFacadeFactory.cs" />
+    <Compile Include="ReloadablePlugin\IAddonFacadeFactory.cs" />
     <Compile Include="CompositeRoot\IMessageChannel.cs" />
     <Compile Include="CompositeRoot\IMessageConsumer.cs" />
-    <Compile Include="ReloadablePlugin\Loaders\Definition\AssemblyDefinitionWeaver.cs" />
+    <Compile Include="ReloadablePlugin\AssemblyProviderFactory.cs" />
+    <Compile Include="ReloadablePlugin\Definition\Operations\IWeaveOperationFactory.cs" />
+    <Compile Include="ReloadablePlugin\Definition\Operations\WeaveOperationFactory.cs" />
+    <Compile Include="ReloadablePlugin\IAssemblyProviderFactory.cs" />
+    <Compile Include="ReloadablePlugin\Definition\AssemblyDefinitionWeaver.cs" />
+    <Compile Include="ReloadablePlugin\Definition\Operations\old\InjectedHelperTypeDefinitionWriter.cs" />
+    <Compile Include="ReloadablePlugin\Definition\Operations\old\InterceptExecutingAssemblyLocationQueries.cs" />
+    <Compile Include="ReloadablePlugin\Definition\Operations\RenameAssemblyOperation.cs" />
     <Compile Include="ReloadablePlugin\ReloadablePluginFactory.cs" />
     <Compile Include="Game\ILoadedAssemblyHandle.cs" />
     <Compile Include="Gui\StrangeWindowView.cs" />
@@ -157,10 +164,10 @@
     <Compile Include="CompositeRoot\WindowFactory.cs" />
     <Compile Include="ReloadablePlugin\Loaders\Addons\AddonLoader.cs" />
     <Compile Include="ReloadablePlugin\Loaders\Addons\AddonUnloader.cs" />
-    <Compile Include="ReloadablePlugin\Loaders\Definition\AssemblyDefinitionFromDiskReader.cs" />
+    <Compile Include="ReloadablePlugin\Definition\AssemblyDefinitionFromDiskReader.cs" />
     <Compile Include="ReloadablePlugin\Loaders\old\AssemblyDefinitionLoader.cs" />
     <Compile Include="ReloadablePlugin\Loaders\old\AssemblyLoader.cs" />
-    <Compile Include="ReloadablePlugin\Loaders\Definition\ConditionalWriteLoadedAssemblyToDisk.cs" />
+    <Compile Include="ReloadablePlugin\Definition\ConditionalWriteLoadedAssemblyToDisk.cs" />
     <Compile Include="ReloadablePlugin\Loaders\Addons\IAddonLoader.cs" />
     <Compile Include="ReloadablePlugin\Loaders\Addons\IAddonUnloader.cs" />
     <Compile Include="ReloadablePlugin\Loaders\old\IAssemblyDefinitionReader.cs" />
@@ -177,7 +184,7 @@
     <Compile Include="FileSystem\AssemblyProvider.cs" />
     <Compile Include="FileSystem\ConfigurationProvider.cs" />
     <Compile Include="Providers\FilePathProviderFromContext.cs" />
-    <Compile Include="ReloadablePlugin\Loaders\Definition\IAssemblyDefinitionProvider.cs" />
+    <Compile Include="ReloadablePlugin\Definition\IAssemblyDefinitionProvider.cs" />
     <Compile Include="Providers\IConfigNodeFormatterProvider.cs" />
     <Compile Include="Providers\IConfigurationProvider.cs" />
     <Compile Include="FileSystem\IFilePathProvider.cs" />
@@ -187,10 +194,10 @@
     <Compile Include="Queries\ConfigurationWindowPanelFieldQuery.cs" />
     <Compile Include="Queries\FileSystemQueries\AssemblyFileLocationQuery.cs" />
     <Compile Include="Queries\FileSystemQueries\PluginConfigurationFilePathQuery.cs" />
-    <Compile Include="Queries\FileSystemQueries\DebugSymbolFileExistsQuery.cs" />
+    <Compile Include="ReloadablePlugin\Definition\GetDebugSymbolsExistForDefinition.cs" />
     <Compile Include="Queries\FileSystemQueries\IAssemblyFileLocationQuery.cs" />
     <Compile Include="Queries\FileSystemQueries\IPluginConfigurationFilePathQuery.cs" />
-    <Compile Include="Queries\FileSystemQueries\IDebugSymbolFileExistsQuery.cs" />
+    <Compile Include="ReloadablePlugin\Definition\IGetDebugSymbolsExistForDefinition.cs" />
     <Compile Include="ReloadablePlugin\IPluginConfigurationProvider.cs" />
     <Compile Include="ReloadablePlugin\PluginConfigurationProvider.cs" />
     <Compile Include="Queries\FieldsMarkedWithAttributeQuery.cs" />
@@ -199,6 +206,117 @@
     <Compile Include="Queries\FileSystemQueries\ConfigFilePathProvider.cs" />
     <Compile Include="Signals\PluginLoadedSignal.cs" />
     <Compile Include="Signals\PluginUnloadedSignal.cs" />
+    <Compile Include="StrangeIoC\extensions\command\api\CommandExceptionType.cs" />
+    <Compile Include="StrangeIoC\extensions\command\api\CommandKeys.cs" />
+    <Compile Include="StrangeIoC\extensions\command\api\ICommand.cs" />
+    <Compile Include="StrangeIoC\extensions\command\api\ICommandBinder.cs" />
+    <Compile Include="StrangeIoC\extensions\command\api\ICommandBinding.cs" />
+    <Compile Include="StrangeIoC\extensions\command\api\IPooledCommandBinder.cs" />
+    <Compile Include="StrangeIoC\extensions\command\impl\Command.cs" />
+    <Compile Include="StrangeIoC\extensions\command\impl\CommandBinder.cs" />
+    <Compile Include="StrangeIoC\extensions\command\impl\CommandBinding.cs" />
+    <Compile Include="StrangeIoC\extensions\command\impl\CommandException.cs" />
+    <Compile Include="StrangeIoC\extensions\command\impl\EventCommand.cs" />
+    <Compile Include="StrangeIoC\extensions\command\impl\EventCommandBinder.cs" />
+    <Compile Include="StrangeIoC\extensions\command\impl\SignalCommandBinder.cs" />
+    <Compile Include="StrangeIoC\extensions\context\api\ContextEvent.cs" />
+    <Compile Include="StrangeIoC\extensions\context\api\ContextExceptionType.cs" />
+    <Compile Include="StrangeIoC\extensions\context\api\ContextKeys.cs" />
+    <Compile Include="StrangeIoC\extensions\context\api\ContextStartupFlags.cs" />
+    <Compile Include="StrangeIoC\extensions\context\api\IContext.cs" />
+    <Compile Include="StrangeIoC\extensions\context\api\IContextView.cs" />
+    <Compile Include="StrangeIoC\extensions\context\api\ICrossContextCapable.cs" />
+    <Compile Include="StrangeIoC\extensions\context\impl\Context.cs" />
+    <Compile Include="StrangeIoC\extensions\context\impl\ContextException.cs" />
+    <Compile Include="StrangeIoC\extensions\context\impl\ContextView.cs" />
+    <Compile Include="StrangeIoC\extensions\context\impl\CrossContext.cs" />
+    <Compile Include="StrangeIoC\extensions\context\impl\CrossContextBridge.cs" />
+    <Compile Include="StrangeIoC\extensions\context\impl\MVCSContext.cs" />
+    <Compile Include="StrangeIoC\extensions\dispatcher\api\DispatcherExceptionType.cs" />
+    <Compile Include="StrangeIoC\extensions\dispatcher\api\IDispatcher.cs" />
+    <Compile Include="StrangeIoC\extensions\dispatcher\api\ITriggerable.cs" />
+    <Compile Include="StrangeIoC\extensions\dispatcher\api\ITriggerProvider.cs" />
+    <Compile Include="StrangeIoC\extensions\dispatcher\eventdispatcher\api\EventCallbackType.cs" />
+    <Compile Include="StrangeIoC\extensions\dispatcher\eventdispatcher\api\EventDispatcherExceptionType.cs" />
+    <Compile Include="StrangeIoC\extensions\dispatcher\eventdispatcher\api\IEvent.cs" />
+    <Compile Include="StrangeIoC\extensions\dispatcher\eventdispatcher\api\IEventBinding.cs" />
+    <Compile Include="StrangeIoC\extensions\dispatcher\eventdispatcher\api\IEventDispatcher.cs" />
+    <Compile Include="StrangeIoC\extensions\dispatcher\eventdispatcher\impl\EventBinding.cs" />
+    <Compile Include="StrangeIoC\extensions\dispatcher\eventdispatcher\impl\EventDispatcher.cs" />
+    <Compile Include="StrangeIoC\extensions\dispatcher\eventdispatcher\impl\EventDispatcherException.cs" />
+    <Compile Include="StrangeIoC\extensions\dispatcher\eventdispatcher\impl\TmEvent.cs" />
+    <Compile Include="StrangeIoC\extensions\dispatcher\impl\DispatcherException.cs" />
+    <Compile Include="StrangeIoC\extensions\implicitBind\api\IImplicitBinder.cs" />
+    <Compile Include="StrangeIoC\extensions\implicitBind\ImplementorAttribute.cs" />
+    <Compile Include="StrangeIoC\extensions\implicitBind\impl\ImplicitBinder.cs" />
+    <Compile Include="StrangeIoC\extensions\injector\api\ICrossContextInjectionBinder.cs" />
+    <Compile Include="StrangeIoC\extensions\injector\api\IInjectionBinder.cs" />
+    <Compile Include="StrangeIoC\extensions\injector\api\IInjectionBinding.cs" />
+    <Compile Include="StrangeIoC\extensions\injector\api\IInjector.cs" />
+    <Compile Include="StrangeIoC\extensions\injector\api\IInjectorFactory.cs" />
+    <Compile Include="StrangeIoC\extensions\injector\api\InjectionBindingScope.cs" />
+    <Compile Include="StrangeIoC\extensions\injector\api\InjectionBindingType.cs" />
+    <Compile Include="StrangeIoC\extensions\injector\api\InjectionExceptionType.cs" />
+    <Compile Include="StrangeIoC\extensions\injector\impl\CrossContextInjectionBinder.cs" />
+    <Compile Include="StrangeIoC\extensions\injector\impl\InjectionBinder.cs" />
+    <Compile Include="StrangeIoC\extensions\injector\impl\InjectionBinding.cs" />
+    <Compile Include="StrangeIoC\extensions\injector\impl\InjectionException.cs" />
+    <Compile Include="StrangeIoC\extensions\injector\impl\Injector.cs" />
+    <Compile Include="StrangeIoC\extensions\injector\impl\InjectorFactory.cs" />
+    <Compile Include="StrangeIoC\extensions\injector\InjectAttribute.cs" />
+    <Compile Include="StrangeIoC\extensions\mediation\api\IMediationBinder.cs" />
+    <Compile Include="StrangeIoC\extensions\mediation\api\IMediationBinding.cs" />
+    <Compile Include="StrangeIoC\extensions\mediation\api\IMediator.cs" />
+    <Compile Include="StrangeIoC\extensions\mediation\api\IView.cs" />
+    <Compile Include="StrangeIoC\extensions\mediation\api\MediationEvent.cs" />
+    <Compile Include="StrangeIoC\extensions\mediation\api\MediationExceptionType.cs" />
+    <Compile Include="StrangeIoC\extensions\mediation\impl\EventMediator.cs" />
+    <Compile Include="StrangeIoC\extensions\mediation\impl\EventView.cs" />
+    <Compile Include="StrangeIoC\extensions\mediation\impl\MediationBinder.cs" />
+    <Compile Include="StrangeIoC\extensions\mediation\impl\MediationBinding.cs" />
+    <Compile Include="StrangeIoC\extensions\mediation\impl\MediationException.cs" />
+    <Compile Include="StrangeIoC\extensions\mediation\impl\Mediator.cs" />
+    <Compile Include="StrangeIoC\extensions\mediation\impl\View.cs" />
+    <Compile Include="StrangeIoC\extensions\pool\api\IPool.cs" />
+    <Compile Include="StrangeIoC\extensions\pool\api\IPoolable.cs" />
+    <Compile Include="StrangeIoC\extensions\pool\api\PoolExceptionType.cs" />
+    <Compile Include="StrangeIoC\extensions\pool\api\PoolInflationType.cs" />
+    <Compile Include="StrangeIoC\extensions\pool\api\PoolOverflowBehavior.cs" />
+    <Compile Include="StrangeIoC\extensions\pool\impl\Pool.cs" />
+    <Compile Include="StrangeIoC\extensions\pool\impl\PoolException.cs" />
+    <Compile Include="StrangeIoC\extensions\reflector\api\IReflectedClass.cs" />
+    <Compile Include="StrangeIoC\extensions\reflector\api\IReflectionBinder.cs" />
+    <Compile Include="StrangeIoC\extensions\reflector\api\ReflectionExceptionType.cs" />
+    <Compile Include="StrangeIoC\extensions\reflector\impl\ReflectedClass.cs" />
+    <Compile Include="StrangeIoC\extensions\reflector\impl\ReflectionBinder.cs" />
+    <Compile Include="StrangeIoC\extensions\reflector\impl\ReflectionException.cs" />
+    <Compile Include="StrangeIoC\extensions\sequencer\api\ISequenceBinding.cs" />
+    <Compile Include="StrangeIoC\extensions\sequencer\api\ISequenceCommand.cs" />
+    <Compile Include="StrangeIoC\extensions\sequencer\api\ISequencer.cs" />
+    <Compile Include="StrangeIoC\extensions\sequencer\api\SequencerExceptionType.cs" />
+    <Compile Include="StrangeIoC\extensions\sequencer\impl\EventSequenceCommand.cs" />
+    <Compile Include="StrangeIoC\extensions\sequencer\impl\EventSequencer.cs" />
+    <Compile Include="StrangeIoC\extensions\sequencer\impl\SequenceBinding.cs" />
+    <Compile Include="StrangeIoC\extensions\sequencer\impl\SequenceCommand.cs" />
+    <Compile Include="StrangeIoC\extensions\sequencer\impl\Sequencer.cs" />
+    <Compile Include="StrangeIoC\extensions\sequencer\impl\SequencerException.cs" />
+    <Compile Include="StrangeIoC\extensions\signal\api\IBaseSignal.cs" />
+    <Compile Include="StrangeIoC\extensions\signal\api\SignalExceptionType.cs" />
+    <Compile Include="StrangeIoC\extensions\signal\impl\BaseSignal.cs" />
+    <Compile Include="StrangeIoC\extensions\signal\impl\Signal.cs" />
+    <Compile Include="StrangeIoC\extensions\signal\impl\SignalException.cs" />
+    <Compile Include="StrangeIoC\framework\api\BinderExceptionType.cs" />
+    <Compile Include="StrangeIoC\framework\api\BindingConst.cs" />
+    <Compile Include="StrangeIoC\framework\api\BindingConstraintType.cs" />
+    <Compile Include="StrangeIoC\framework\api\IBinder.cs" />
+    <Compile Include="StrangeIoC\framework\api\IBinding.cs" />
+    <Compile Include="StrangeIoC\framework\api\IInstanceProvider.cs" />
+    <Compile Include="StrangeIoC\framework\api\IManagedList.cs" />
+    <Compile Include="StrangeIoC\framework\api\ISemiBinding.cs" />
+    <Compile Include="StrangeIoC\framework\impl\Binder.cs" />
+    <Compile Include="StrangeIoC\framework\impl\BinderException.cs" />
+    <Compile Include="StrangeIoC\framework\impl\Binding.cs" />
+    <Compile Include="StrangeIoC\framework\impl\SemiBinding.cs" />
     <Compile Include="TypeInstallers\Impl\GenericLoadedAssemblyTypeInstaller.cs" />
     <Compile Include="TypeInstallers\ILoadedAssemblyTypeInstaller.cs" />
     <Compile Include="ReloadablePlugin\Loaders\PartModules\IPartModuleDescriptorFactory.cs" />
@@ -214,13 +332,13 @@
     <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\ScenarioModuleLoader.cs" />
     <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\ScenarioModuleUnloader.cs" />
     <Compile Include="Properties\Annotations.cs" />
-    <Compile Include="ReloadablePlugin\Loaders\Definition\GetAllMethodDefinitions.cs" />
-    <Compile Include="ReloadablePlugin\Loaders\Definition\GetAllTypesFromDefinition.cs" />
-    <Compile Include="ReloadablePlugin\Loaders\Definition\GetTypeDefinitionsComposite.cs" />
-    <Compile Include="ReloadablePlugin\Loaders\Definition\GetMethodDefinitionsExcluding.cs" />
-    <Compile Include="ReloadablePlugin\Loaders\Definition\GetTypeDefinitionsExcluding.cs" />
+    <Compile Include="ReloadablePlugin\Definition\GetAllMethodDefinitions.cs" />
+    <Compile Include="ReloadablePlugin\Definition\GetAllTypesFromDefinition.cs" />
+    <Compile Include="ReloadablePlugin\Definition\GetTypeDefinitionsComposite.cs" />
+    <Compile Include="ReloadablePlugin\Definition\GetMethodDefinitionsExcluding.cs" />
+    <Compile Include="ReloadablePlugin\Definition\GetTypeDefinitionsExcluding.cs" />
     <Compile Include="Queries\CecilQueries\IInstructionSetQuery.cs" />
-    <Compile Include="ReloadablePlugin\Loaders\Definition\IGetMethodDefinitions.cs" />
+    <Compile Include="ReloadablePlugin\Definition\IGetMethodDefinitions.cs" />
     <Compile Include="ReloadablePlugin\AddonFacade.cs" />
     <Compile Include="ReloadablePlugin\IReloadableObjectFacade.cs" />
     <Compile Include="ReloadablePlugin\PartModuleFacade.cs" />
@@ -260,7 +378,7 @@
     <Compile Include="ReloadablePlugin\Loaders\IGetTypesDerivedFrom.cs" />
     <Compile Include="ReloadablePlugin\Loaders\IGetTypesFromAssembly.cs" />
     <Compile Include="ReloadablePlugin\Loaders\GetTypesDerivedFrom.cs" />
-    <Compile Include="ReloadablePlugin\Loaders\Definition\IGetTypeDefinitions.cs" />
+    <Compile Include="ReloadablePlugin\Definition\IGetTypeDefinitions.cs" />
     <Compile Include="Queries\CecilQueries\MethodCallInMethodBodyQuery.cs" />
     <Compile Include="Queries\IAddonAttributesFromTypeQuery.cs" />
     <Compile Include="Queries\FileSystemQueries\IAssemblyDirectoryQuery.cs" />
@@ -282,14 +400,11 @@
     <Compile Include="Queries\PartModulesInPartQuery.cs" />
     <Compile Include="Queries\TypeIdentifierQuery.cs" />
     <Compile Include="CompositeRoot\IFlightConfigRepository.cs" />
-    <Compile Include="Weaving\AssemblyDefinitionWeaver.cs" />
-    <Compile Include="Weaving\IAssemblyDefinitionWeaver.cs" />
-    <Compile Include="Weaving\IConditionalWeaveOperation.cs" />
-    <Compile Include="Weaving\IWeaveOperation.cs" />
-    <Compile Include="Weaving\Operations\InterceptExecutingAssemblyLocationQueries.cs" />
-    <Compile Include="Weaving\Operations\RenameAssemblyOperation.cs" />
-    <Compile Include="Weaving\Operations\InjectedHelperTypeDefinitionWriter.cs" />
-    <Compile Include="Weaving\WeaveOperation.cs" />
+    <Compile Include="Weaving\old\AssemblyDefinitionWeaver.cs" />
+    <Compile Include="Weaving\old\IAssemblyDefinitionWeaver.cs" />
+    <Compile Include="ReloadablePlugin\Definition\Operations\ConditionalWeaveOperation.cs" />
+    <Compile Include="ReloadablePlugin\Definition\IWeaveOperation.cs" />
+    <Compile Include="ReloadablePlugin\Definition\WeaveOperation.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -307,10 +422,6 @@
       <Project>{FECFA8FC-CF80-4685-A2BA-1566E0F3C26E}</Project>
       <Name>ReeperCommon</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\StrangeIoC\StrangeIoC\strange.csproj">
-      <Project>{953cd566-42b5-4f0a-856d-63d059e36fc0}</Project>
-      <Name>strange</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\panelCompact.png" />
@@ -324,6 +435,10 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Queries\AssemblyQueries\" />
+    <Folder Include="Weaving\old\Operations\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="StrangeIoC\extensions\ReadMe.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

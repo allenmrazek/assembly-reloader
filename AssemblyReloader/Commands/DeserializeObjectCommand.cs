@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
-using AssemblyReloader.Annotations;
 using AssemblyReloader.DataObjects;
+using AssemblyReloader.Properties;
 using ReeperCommon.Logging;
 using ReeperCommon.Serialization;
 using File = System.IO.File;

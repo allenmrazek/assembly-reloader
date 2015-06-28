@@ -1,6 +1,6 @@
 ﻿using System;
-using AssemblyReloader.Annotations;
 using AssemblyReloader.FileSystem;
+using AssemblyReloader.Properties;
 using AssemblyReloader.Providers;
 
 namespace AssemblyReloader.DataObjects

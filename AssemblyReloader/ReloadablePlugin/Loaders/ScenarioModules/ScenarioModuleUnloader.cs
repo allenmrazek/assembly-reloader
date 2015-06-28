@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Linq;
-using AssemblyReloader.Annotations;
 using AssemblyReloader.CompositeRoot;
 using AssemblyReloader.Game;
 using AssemblyReloader.Game.Providers;
 using AssemblyReloader.Game.Queries;
+using AssemblyReloader.Properties;
 using ReeperCommon.Containers;
 using ReeperCommon.Logging;
 
-namespace AssemblyReloader.Loaders.ScenarioModuleLoader
+namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
 {
     public class ScenarioModuleUnloader : IScenarioModuleUnloader
     {

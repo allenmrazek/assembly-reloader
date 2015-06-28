@@ -6,7 +6,7 @@ using AssemblyReloader.Game;
 using AssemblyReloader.Game.Queries;
 using AssemblyReloader.Queries;
 
-namespace AssemblyReloader.Loaders.PartModuleLoader
+namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
 {
     /// <summary>
     /// Each PartModuleDescriptor wraps relevant data about a particular PartModule instance that

@@ -1,5 +1,5 @@
 ﻿using System;
-using AssemblyReloader.Annotations;
+using AssemblyReloader.Properties;
 using UnityEngine;
 
 namespace AssemblyReloader.DataObjects

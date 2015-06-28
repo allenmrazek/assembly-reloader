@@ -1,6 +1,6 @@
 ﻿using System;
-using AssemblyReloader.Annotations;
 using AssemblyReloader.FileSystem;
+using AssemblyReloader.Properties;
 
 namespace AssemblyReloader.Providers
 {

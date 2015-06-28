@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Linq;
-using AssemblyReloader.Annotations;
 using AssemblyReloader.Game;
 using AssemblyReloader.Game.Providers;
+using AssemblyReloader.Properties;
 
-namespace AssemblyReloader.Loaders.ScenarioModuleLoader
+namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
 {
     public class ScenarioModuleLoader : IScenarioModuleLoader
     {

@@ -1,14 +1,15 @@
 ﻿using System;
-using AssemblyReloader.Annotations;
 using AssemblyReloader.CompositeRoot;
 using AssemblyReloader.DataObjects;
 using AssemblyReloader.Game;
 using AssemblyReloader.Game.Queries;
+using AssemblyReloader.Properties;
 using AssemblyReloader.ReloadablePlugin.Loaders;
 using AssemblyReloader.ReloadablePlugin.Loaders.Addons;
 
 namespace AssemblyReloader.ReloadablePlugin
 {
+    [Implements(typeof(IAddonFacadeFactory))]
     public class AddonFacadeFactory : IAddonFacadeFactory
     {
         private readonly IGameAssemblyLoader _gameAssemblyLoader;
@@ -46,7 +47,7 @@ namespace AssemblyReloader.ReloadablePlugin
         {
             if (pluginConfiguration == null) throw new ArgumentNullException("pluginConfiguration");
 
-            return new AssemblyReloader.ReloadablePlugin.Loaders.Addons.AddonLoader(_gameAssemblyLoader, _gameAddonLoader, _getStartupScene,
+            return new Loaders.Addons.AddonLoader(_gameAssemblyLoader, _gameAddonLoader, _getStartupScene,
                 () => pluginConfiguration.InstantlyAppliesToEveryScene);
         }
 

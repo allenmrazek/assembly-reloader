@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using AssemblyReloader.Annotations;
+using AssemblyReloader.Properties;
 using AssemblyReloader.Queries;
 using ReeperCommon.Extensions;
 

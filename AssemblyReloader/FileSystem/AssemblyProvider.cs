@@ -2,10 +2,9 @@
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using AssemblyReloader.Annotations;
 using AssemblyReloader.Generators;
-using AssemblyReloader.Providers;
-using AssemblyReloader.ReloadablePlugin.Loaders.Definition;
+using AssemblyReloader.Properties;
+using AssemblyReloader.ReloadablePlugin.Definition;
 using Mono.Cecil;
 using Mono.CompilerServices.SymbolWriter;
 using ReeperCommon.Containers;

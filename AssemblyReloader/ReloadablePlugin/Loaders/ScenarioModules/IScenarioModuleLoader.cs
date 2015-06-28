@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AssemblyReloader.Loaders.ScenarioModuleLoader
+namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
 {
     public interface IScenarioModuleLoader
     {

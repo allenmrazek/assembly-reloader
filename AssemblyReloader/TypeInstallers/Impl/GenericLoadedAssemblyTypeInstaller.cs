@@ -1,5 +1,5 @@
 ﻿using System;
-using AssemblyReloader.Annotations;
+using AssemblyReloader.Properties;
 using AssemblyReloader.ReloadablePlugin.Loaders;
 using UnityEngine;
 

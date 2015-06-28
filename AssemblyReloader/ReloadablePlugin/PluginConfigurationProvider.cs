@@ -1,8 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using AssemblyReloader.Annotations;
 using AssemblyReloader.DataObjects;
+using AssemblyReloader.Properties;
 using AssemblyReloader.Queries.FileSystemQueries;
 using ReeperCommon.Containers;
 using ReeperCommon.FileSystem;

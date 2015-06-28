@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using AssemblyReloader.Annotations;
+using AssemblyReloader.Properties;
 using ReeperCommon.Serialization;
 
 namespace AssemblyReloader.Queries

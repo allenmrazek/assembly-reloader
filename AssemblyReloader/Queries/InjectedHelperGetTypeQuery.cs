@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using AssemblyReloader.Queries.CecilQueries;
-using AssemblyReloader.ReloadablePlugin.Loaders.Definition;
-using AssemblyReloader.Weaving.Operations;
+using AssemblyReloader.ReloadablePlugin.Definition;
+using AssemblyReloader.ReloadablePlugin.Definition.Operations;
+using AssemblyReloader.ReloadablePlugin.Definition.Operations.old;
 using Mono.Cecil;
 
 namespace AssemblyReloader.Queries

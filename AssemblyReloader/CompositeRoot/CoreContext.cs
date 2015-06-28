@@ -3,24 +3,25 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using AssemblyReloader.Annotations;
 using AssemblyReloader.Commands;
+using AssemblyReloader.Commands.old;
 using AssemblyReloader.DataObjects;
 using AssemblyReloader.FileSystem;
 using AssemblyReloader.Game;
 using AssemblyReloader.Generators;
 using AssemblyReloader.Names;
-using AssemblyReloader.Providers;
+using AssemblyReloader.Properties;
 using AssemblyReloader.Queries;
 using AssemblyReloader.Queries.CecilQueries;
 using AssemblyReloader.Queries.FileSystemQueries;
 using AssemblyReloader.ReloadablePlugin;
+using AssemblyReloader.ReloadablePlugin.Definition;
+using AssemblyReloader.ReloadablePlugin.Definition.Operations;
+using AssemblyReloader.ReloadablePlugin.Definition.Operations.old;
 using AssemblyReloader.ReloadablePlugin.Loaders;
-using AssemblyReloader.ReloadablePlugin.Loaders.Definition;
 using AssemblyReloader.TypeInstallers;
 using AssemblyReloader.TypeInstallers.Impl;
-using AssemblyReloader.Weaving;
-using AssemblyReloader.Weaving.Operations;
+using AssemblyReloader.Weaving.old;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
 using ReeperCommon.FileSystem;
@@ -32,7 +33,7 @@ using strange.extensions.command.api;
 using strange.extensions.command.impl;
 using strange.extensions.context.impl;
 using UnityEngine;
-using AssemblyDefinitionWeaver = AssemblyReloader.Weaving.AssemblyDefinitionWeaver;
+using AssemblyDefinitionWeaver = AssemblyReloader.Weaving.old.AssemblyDefinitionWeaver;
 
 namespace AssemblyReloader.CompositeRoot
 {
@@ -46,6 +47,14 @@ namespace AssemblyReloader.CompositeRoot
         protected override void mapBindings()
         {
             var log = new DebugLog("ART");
+
+            var namespaces = new string[]
+            {
+                "AssemblyReloader.Game",
+                "Game",
+                "AssemblyReloader.ReloadablePlugin"
+            };
+            implicitBinder.ScanForAnnotatedClasses(namespaces);
 
             injectionBinder.Bind<ILog>().To(log);
             
@@ -92,6 +101,8 @@ namespace AssemblyReloader.CompositeRoot
                 .To(new PluginConfigurationFilePathQuery());
             injectionBinder.Bind<IPluginConfigurationProvider>().To<PluginConfigurationProvider>().ToSingleton();
             injectionBinder.Bind<IAssemblyProvider>().To<AssemblyProvider>().ToSingleton();
+            //injectionBinder.Bind<IAddonFacadeFactory>().To<AddonFacadeFactory>().ToSingleton();
+            injectionBinder.Bind<IWeaveOperationFactory>().To<WeaveOperationFactory>().ToSingleton();
             injectionBinder.Bind<ReloadablePluginFactory>().To<ReloadablePluginFactory>().ToSingleton();
 
             var reloadableFiles =

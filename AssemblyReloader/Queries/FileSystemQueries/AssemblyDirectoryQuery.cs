@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
-using AssemblyReloader.Annotations;
 using AssemblyReloader.Game;
+using AssemblyReloader.Properties;
 using ReeperCommon.Extensions;
 using ReeperCommon.FileSystem;
 

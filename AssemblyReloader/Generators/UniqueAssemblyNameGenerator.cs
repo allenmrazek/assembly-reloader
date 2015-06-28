@@ -1,5 +1,5 @@
 ﻿using System;
-using AssemblyReloader.Annotations;
+using AssemblyReloader.Properties;
 using Mono.Cecil;
 
 namespace AssemblyReloader.Generators

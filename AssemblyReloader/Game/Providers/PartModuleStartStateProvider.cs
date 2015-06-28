@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using AssemblyReloader.Annotations;
 using ReeperCommon.Containers;
 
 namespace AssemblyReloader.Game.Providers

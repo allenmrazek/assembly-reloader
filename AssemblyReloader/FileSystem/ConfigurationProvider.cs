@@ -1,8 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using AssemblyReloader.Annotations;
 using AssemblyReloader.DataObjects;
+using AssemblyReloader.Properties;
 using AssemblyReloader.Providers;
 using ReeperCommon.Containers;
 using ReeperCommon.Logging;
@@ -25,6 +25,7 @@ namespace AssemblyReloader.FileSystem
             if (configurationFileProvider == null) throw new ArgumentNullException("configurationFileProvider");
             if (configNodeSerializer == null) throw new ArgumentNullException("configNodeSerializer");
             if (log == null) throw new ArgumentNullException("log");
+
             _configurationFileProvider = configurationFileProvider;
             _configNodeSerializer = configNodeSerializer;
             _log = log;

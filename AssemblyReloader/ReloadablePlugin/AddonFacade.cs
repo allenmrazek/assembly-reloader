@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Reflection;
-using AssemblyReloader.Annotations;
+using AssemblyReloader.Properties;
 using AssemblyReloader.ReloadablePlugin.Loaders.Addons;
 using ReeperCommon.FileSystem;
 

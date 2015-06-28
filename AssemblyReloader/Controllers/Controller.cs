@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using AssemblyReloader.Annotations;
 using AssemblyReloader.Commands;
 using AssemblyReloader.DataObjects;
 using AssemblyReloader.Gui;
+using AssemblyReloader.Properties;
 using ReeperCommon.Logging;
 
 namespace AssemblyReloader.Controllers

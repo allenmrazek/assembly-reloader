@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
-using AssemblyReloader.Annotations;
 using AssemblyReloader.Game;
+using AssemblyReloader.Properties;
 using AssemblyReloader.Providers;
 using ReeperCommon.Extensions;
 using UnityEngine;

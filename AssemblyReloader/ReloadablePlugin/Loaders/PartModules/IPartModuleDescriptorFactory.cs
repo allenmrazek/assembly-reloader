@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace AssemblyReloader.Loaders.PartModuleLoader
+namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
 {
     public interface IPartModuleDescriptorFactory
     {

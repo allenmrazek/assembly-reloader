@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using AssemblyReloader.Annotations;
 using AssemblyReloader.Game;
 using AssemblyReloader.Game.Providers;
-using AssemblyReloader.Loaders.PartModuleLoader;
+using AssemblyReloader.Properties;
 using AssemblyReloader.Queries;
+using AssemblyReloader.ReloadablePlugin.Loaders.PartModules;
 using ReeperCommon.Containers;
 using ReeperCommon.Logging;
 

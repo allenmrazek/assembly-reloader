@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
-using AssemblyReloader.Annotations;
 using AssemblyReloader.Game;
+using AssemblyReloader.Properties;
 using ReeperCommon.Extensions;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons

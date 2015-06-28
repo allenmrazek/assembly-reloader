@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using AssemblyReloader.Annotations;
 using AssemblyReloader.CompositeRoot;
 using AssemblyReloader.Game.Queries;
+using AssemblyReloader.Properties;
 using UnityEngine;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
