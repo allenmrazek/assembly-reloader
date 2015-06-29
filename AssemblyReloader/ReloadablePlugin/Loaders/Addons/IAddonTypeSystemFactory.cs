@@ -2,7 +2,7 @@
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
 {
-    public interface IAddonFacadeFactory
+    public interface IAddonTypeSystemFactory
     {
         IReloadableTypeSystem Create(PluginConfiguration pluginConfiguration);
     }

@@ -8,51 +8,33 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
     {
         private readonly IAddonLoader _loader;
         private readonly IAddonUnloader _unloader;
-        private readonly IGetTypesFromAssembly<AddonType> _addonTypesFromAssembly;
 
 
         public AddonTypeSystem(
             [NotNull] IAddonLoader loader,
-            [NotNull] IAddonUnloader unloader,
-            [NotNull] IGetTypesFromAssembly<AddonType> addonTypesFromAssembly
-            )
+            [NotNull] IAddonUnloader unloader)
         {
             if (loader == null) throw new ArgumentNullException("loader");
             if (unloader == null) throw new ArgumentNullException("unloader");
-            if (addonTypesFromAssembly == null) throw new ArgumentNullException("addonTypesFromAssembly");
 
             _loader = loader;
             _unloader = unloader;
-            _addonTypesFromAssembly = addonTypesFromAssembly;
         }
 
 
-        //public void CreateReloadableTypesFrom(Assembly assembly, IFile location)
-        //{
-        //    if (assembly == null) throw new ArgumentNullException("assembly");
-
-        //    _loader.Load(assembly);
-        //}
-
-
-        //public void DestroyReloadableTypesFrom(Assembly assembly, IFile location)
-        //{
-        //    if (assembly == null) throw new ArgumentNullException("assembly");
-
-        //    _unloader.Unload(assembly);
-        //}
-        public void CreateReloadableTypesFrom(ILoadedAssemblyHandle assembly)
+        public void CreateReloadableTypesFrom(ILoadedAssemblyHandle loadedAssembly)
         {
-            if (assembly == null) throw new ArgumentNullException("assembly");
+            if (loadedAssembly == null) throw new ArgumentNullException("loadedAssembly");
 
-            throw new NotImplementedException();
+            _loader.CreateAddons(loadedAssembly);
         }
 
-        public void DestroyReloadableTypesFrom(ILoadedAssemblyHandle assembly)
-        {
-            if (assembly == null) throw new ArgumentNullException("assembly");
 
-            throw new NotImplementedException();
+        public void DestroyReloadableTypesFrom(ILoadedAssemblyHandle loadedAssembly)
+        {
+            if (loadedAssembly == null) throw new ArgumentNullException("loadedAssembly");
+
+            _unloader.DestroyAddons(loadedAssembly);
         }
     }
 }

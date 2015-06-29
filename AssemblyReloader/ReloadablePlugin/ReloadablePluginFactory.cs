@@ -14,23 +14,23 @@ namespace AssemblyReloader.ReloadablePlugin
         private readonly IAssemblyProviderFactory _assemblyProviderFactory;
         private readonly IPluginConfigurationProvider _configProvider;
         private readonly IGameAssemblyLoader _gameAssemblyLoader;
-        private readonly IAddonFacadeFactory _addonFacadeFactory;
+        private readonly IAddonTypeSystemFactory _addonTypeSystemFactory;
 
         public ReloadablePluginFactory(
             [NotNull] IAssemblyProviderFactory assemblyProviderFactory,
             [NotNull] IPluginConfigurationProvider configProvider,
             [NotNull] IGameAssemblyLoader gameAssemblyLoader, 
-            [NotNull] IAddonFacadeFactory addonFacadeFactory )
+            [NotNull] IAddonTypeSystemFactory addonTypeSystemFactory )
         {
             if (assemblyProviderFactory == null) throw new ArgumentNullException("assemblyProviderFactory");
             if (configProvider == null) throw new ArgumentNullException("configProvider");
             if (gameAssemblyLoader == null) throw new ArgumentNullException("gameAssemblyLoader");
-            if (addonFacadeFactory == null) throw new ArgumentNullException("addonFacadeFactory");
+            if (addonTypeSystemFactory == null) throw new ArgumentNullException("addonTypeSystemFactory");
 
             _assemblyProviderFactory = assemblyProviderFactory;
             _configProvider = configProvider;
             _gameAssemblyLoader = gameAssemblyLoader;
-            _addonFacadeFactory = addonFacadeFactory;
+            _addonTypeSystemFactory = addonTypeSystemFactory;
         }
 
 
@@ -42,7 +42,7 @@ namespace AssemblyReloader.ReloadablePlugin
 
             return new ReloadablePlugin(location, _gameAssemblyLoader,
                 _assemblyProviderFactory.Create(pluginConfiguration, location.Directory),
-                _addonFacadeFactory.Create(pluginConfiguration));
+                _addonTypeSystemFactory.Create(pluginConfiguration));
         }
     }
 }

@@ -52,7 +52,7 @@ namespace AssemblyReloader.ReloadablePlugin
 
         private bool Load()
         {
-            if (!_loaded.Any())
+            if (_loaded.Any())
                 throw new InvalidOperationException("Previous instance was not unloaded");
 
             var assembly = _assemblyProvider.Get(Location);
@@ -82,7 +82,7 @@ namespace AssemblyReloader.ReloadablePlugin
 
         public bool Reload()
         {
-            if (!_loaded.IsNull())
+            if (_loaded.Any())
                 Unload();
 
             return Load();

@@ -7,9 +7,9 @@ using AssemblyReloader.StrangeIoC.extensions.implicitBind;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
 {
-    [Implements(typeof(IAddonFacadeFactory))]
+    [Implements(typeof(IAddonTypeSystemFactory))]
 // ReSharper disable once UnusedMember.Global
-    public class AddonTypeSystemFactory : IAddonFacadeFactory
+    public class AddonTypeSystemFactory : IAddonTypeSystemFactory
     {
         private readonly IGameAssemblyLoader _gameAssemblyLoader;
         private readonly IGameAddonLoader _gameAddonLoader;
@@ -46,7 +46,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
         {
             if (pluginConfiguration == null) throw new ArgumentNullException("pluginConfiguration");
 
-            return new Loaders.Addons.AddonLoader(_gameAssemblyLoader, _gameAddonLoader, _getStartupScene,
+            return new AddonLoader(_gameAssemblyLoader, _gameAddonLoader, _getStartupScene,
                 () => pluginConfiguration.InstantlyAppliesToEveryScene);
         }
 
@@ -61,7 +61,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
         {
             if (pluginConfiguration == null) throw new ArgumentNullException("pluginConfiguration");
 
-            return new AddonTypeSystem(CreateLoader(pluginConfiguration), CreateUnloader(), _getAddonTypesFromAssembly);
+            return new AddonTypeSystem(CreateLoader(pluginConfiguration), CreateUnloader());
         }
     }
 }

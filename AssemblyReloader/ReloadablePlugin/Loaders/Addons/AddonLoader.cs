@@ -31,7 +31,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
         }
 
 
-        public void Load([NotNull] ILoadedAssemblyHandle assemblyHandle)
+        public void CreateAddons([NotNull] ILoadedAssemblyHandle assemblyHandle)
         {
             if (assemblyHandle == null) throw new ArgumentNullException("assemblyHandle");
 

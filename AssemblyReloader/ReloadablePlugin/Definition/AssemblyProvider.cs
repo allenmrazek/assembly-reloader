@@ -102,8 +102,10 @@ namespace AssemblyReloader.ReloadablePlugin.Definition
 
                     definition.Write(tempDll.FullPath, new WriterParameters
                     {
-                        WriteSymbols = true,
+                        WriteSymbols = false,
                     });
+
+                    _log.Warning("Symbol loading has been intentionally disabled (has a bug I need to find)");
 
                     using (var tempFile = new FileStream(tempDll.FullPath, FileMode.Open))
                     {

@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using AssemblyReloader.CompositeRoot;
-using AssemblyReloader.Game.Queries;
+using AssemblyReloader.Game;
 using AssemblyReloader.Properties;
 using UnityEngine;
 
@@ -30,9 +29,11 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
         }
 
 
-        public void Unload(Assembly assembly)
+        public void DestroyAddons(ILoadedAssemblyHandle assemblyHandle)
         {
-            foreach (var addonType in _getAddonTypesFromAssembly.Get(assembly))
+            if (assemblyHandle == null) throw new ArgumentNullException("assemblyHandle");
+
+            foreach (var addonType in _getAddonTypesFromAssembly.Get(assemblyHandle.LoadedAssembly.assembly))
                 DestroyAllInstancesOf(addonType.Type);
         }
 

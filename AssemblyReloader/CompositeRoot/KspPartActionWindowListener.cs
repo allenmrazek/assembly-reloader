@@ -10,7 +10,9 @@ namespace AssemblyReloader.CompositeRoot
 {
     public class KspPartActionWindowListener : MonoBehaviour
     {
+// ReSharper disable once FieldCanBeMadeReadOnly.Global
         public static IPartActionWindowController WindowController;
+// ReSharper disable once FieldCanBeMadeReadOnly.Global
         public static IGetComponentsInGameObjectHierarchy<UIPartActionWindow> PartActionWindowQuery;
 
         static KspPartActionWindowListener()

@@ -89,7 +89,7 @@
     <Compile Include="ReloadablePlugin\Loaders\Addons\AddonTypeSystemFactory.cs" />
     <Compile Include="CompositeRoot\CoreContext.cs" />
     <Compile Include="CompositeRoot\FlightConfigNodeKeyValuePairComparer.cs" />
-    <Compile Include="ReloadablePlugin\Loaders\Addons\IAddonFacadeFactory.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\Addons\IAddonTypeSystemFactory.cs" />
     <Compile Include="CompositeRoot\IMessageChannel.cs" />
     <Compile Include="CompositeRoot\IMessageConsumer.cs" />
     <Compile Include="ReloadablePlugin\Definition\AssemblyProviderFactory.cs" />
