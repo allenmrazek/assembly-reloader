@@ -11,20 +11,20 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders
     public class GetCurrentStartupScene : IGetCurrentStartupScene
     {
         private readonly IGetStartupSceneFromGameScene _query;
-        private readonly ICurrentGameSceneProvider _currentGameScene;
+        private readonly IGetCurrentGameScene _getCurrentGameScene;
 
-        public GetCurrentStartupScene(IGetStartupSceneFromGameScene query, ICurrentGameSceneProvider currentGameScene)
+        public GetCurrentStartupScene(IGetStartupSceneFromGameScene query, IGetCurrentGameScene getCurrentGameScene)
         {
             if (query == null) throw new ArgumentNullException("query");
-            if (currentGameScene == null) throw new ArgumentNullException("currentGameScene");
+            if (getCurrentGameScene == null) throw new ArgumentNullException("getCurrentGameScene");
             _query = query;
-            _currentGameScene = currentGameScene;
+            _getCurrentGameScene = getCurrentGameScene;
         }
 
 
         public KSPAddon.Startup Get()
         {
-            return _query.Get(_currentGameScene.Get());
+            return _query.Get(_getCurrentGameScene.Get());
         }
     }
 }

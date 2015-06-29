@@ -31,16 +31,16 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
         }
 
 
-        public void Load([NotNull] Assembly assembly)
+        public void Load([NotNull] ILoadedAssemblyHandle assemblyHandle)
         {
-            if (assembly == null) throw new ArgumentNullException("assembly");
+            if (assemblyHandle == null) throw new ArgumentNullException("assemblyHandle");
 
             var currentScene = _getCurrentStartupScene.Get();
 
-            LoadAddonsForScene(assembly, currentScene);
+            LoadAddonsForScene(assemblyHandle.LoadedAssembly.assembly, currentScene);
 
             if (currentScene != KSPAddon.Startup.Instantly && _alwaysLoadInstantAddons())
-                LoadAddonsForScene(assembly, KSPAddon.Startup.Instantly);
+                LoadAddonsForScene(assemblyHandle.LoadedAssembly.assembly, KSPAddon.Startup.Instantly);
         }
 
 
@@ -63,7 +63,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
             try
             {
                 //AssemblyLoader.loadedAssemblies = new AssemblyLoader.LoadedAssembyList { loadedAssembly };
-                _gameAssemblyLoader.LoadedAssemblies = new global::AssemblyLoader.LoadedAssembyList {loadedAssembly};
+                _gameAssemblyLoader.LoadedAssemblies = new AssemblyLoader.LoadedAssembyList {loadedAssembly};
 
                 //global::AddonLoader.Instance.StartAddons(scene);
                 _gameAddonLoader.StartAddons(scene);

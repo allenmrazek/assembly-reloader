@@ -1,9 +1,9 @@
-﻿using System.Reflection;
+﻿using AssemblyReloader.Game;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
 {
     public interface IAddonLoader
     {
-        void Load(Assembly assembly);
+        void Load(ILoadedAssemblyHandle loadedAssembly);
     }
 }

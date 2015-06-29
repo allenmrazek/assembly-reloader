@@ -11,14 +11,14 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
     {
         private readonly IUnityObjectDestroyer _partModuleDestroyer;
         private readonly IPartModuleDescriptorFactory _descriptorFactory;
-        private readonly IPartPrefabCloneProvider _loadedInstancesOfPrefabProvider;
+        private readonly IGetPartPrefabClones _loadedInstancesOfPrefabProvider;
         private readonly IPartModuleSnapshotGenerator _snapshotGenerator;
         private readonly Func<bool> _createConfigNodeSnapshot;
 
         public PartModuleUnloader(
             IUnityObjectDestroyer partModuleDestroyer,
             IPartModuleDescriptorFactory descriptorFactory,
-            IPartPrefabCloneProvider loadedInstancesOfPrefabProvider,
+            IGetPartPrefabClones loadedInstancesOfPrefabProvider,
             IPartModuleSnapshotGenerator snapshotGenerator, 
             [NotNull] Func<bool> createConfigNodeSnapshot
             )

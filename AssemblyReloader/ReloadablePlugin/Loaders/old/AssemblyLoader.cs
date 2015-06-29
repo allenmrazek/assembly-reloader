@@ -38,7 +38,7 @@
 //        }
 
 
-//        public Maybe<Assembly> Load()
+//        public Maybe<Assembly> AddToLoadedAssemblies()
 //        {
 //            if (!_loadedAssembly.IsNull())
 //                throw new InvalidOperationException(_targetFile.Url + " has not been unloaded");
@@ -54,7 +54,7 @@
 //        }
 
 
-//        public void Unload()
+//        public void DestroyReloadableTypesFrom()
 //        {
 //            try
 //            {

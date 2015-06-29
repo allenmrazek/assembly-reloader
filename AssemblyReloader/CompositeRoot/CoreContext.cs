@@ -22,8 +22,6 @@ using AssemblyReloader.ReloadablePlugin.Loaders.Addons;
 using AssemblyReloader.StrangeIoC.extensions.command.api;
 using AssemblyReloader.StrangeIoC.extensions.command.impl;
 using AssemblyReloader.StrangeIoC.extensions.context.impl;
-using AssemblyReloader.TypeInstallers;
-using AssemblyReloader.TypeInstallers.Impl;
 using AssemblyReloader.Weaving.old;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
@@ -62,7 +60,7 @@ namespace AssemblyReloader.CompositeRoot
             injectionBinder.Bind<IGetConfigurationFilePath>().To(new GetConfigurationFilePath());
             injectionBinder.Bind<IFileSystemFactory>()
                 .ToValue(new KSPFileSystemFactory(new KSPUrlDir(new KSPGameDataUrlDirProvider().Get())));
-            injectionBinder.Bind<IEnumerable<ILoadedAssemblyTypeInstaller>>().To(CreateTypeInstallers());
+            //injectionBinder.Bind<IEnumerable<ILoadedAssemblyTypeInstaller>>().To(CreateTypeInstallers());
 
             injectionBinder.Bind<IDirectory>()
                 .ToValue(injectionBinder.GetInstance<IFileSystemFactory>().GetGameDataDirectory())
@@ -209,15 +207,15 @@ namespace AssemblyReloader.CompositeRoot
         }
 
 
-        private IEnumerable<ILoadedAssemblyTypeInstaller> CreateTypeInstallers()
-        {
-            return new ILoadedAssemblyTypeInstaller[]
-            {
-                new GenericLoadedAssemblyTypeInstaller<Part>(new GetTypesDerivedFrom<Part>()),
-                new GenericLoadedAssemblyTypeInstaller<PartModule>(new GetTypesDerivedFrom<PartModule>()),
-                new GenericLoadedAssemblyTypeInstaller<ScenarioModule>(new GetTypesDerivedFrom<ScenarioModule>())
-            };
-        }
+        //private IEnumerable<ILoadedAssemblyTypeInstaller> CreateTypeInstallers()
+        //{
+        //    return new ILoadedAssemblyTypeInstaller[]
+        //    {
+        //        new GenericLoadedAssemblyTypeInstaller<Part>(new GetTypesDerivedFrom<Part>()),
+        //        new GenericLoadedAssemblyTypeInstaller<PartModule>(new GetTypesDerivedFrom<PartModule>()),
+        //        new GenericLoadedAssemblyTypeInstaller<ScenarioModule>(new GetTypesDerivedFrom<ScenarioModule>())
+        //    };
+        //}
 
 
 
@@ -296,14 +294,14 @@ namespace AssemblyReloader.CompositeRoot
                 new MethodCallInMethodBodyQuery(
                     getCodeBaseProperty.GetGetMethod(),
                     OpCodes.Callvirt),
-                    new InjectedHelperTypeGetMethod(injectedHelperTypeQuery, getCodeBaseProperty.GetGetMethod().Name)
+                    new GetInjectedHelperTypeMethod(injectedHelperTypeQuery, getCodeBaseProperty.GetGetMethod().Name)
                 );
 
             var interceptAssemblyLocationCalls = new InterceptExecutingAssemblyLocationQueries(
                 new MethodCallInMethodBodyQuery(
                     getLocationProperty.GetGetMethod(),
                     OpCodes.Callvirt),
-                new InjectedHelperTypeGetMethod(injectedHelperTypeQuery, getLocationProperty.GetGetMethod().Name)
+                new GetInjectedHelperTypeMethod(injectedHelperTypeQuery, getLocationProperty.GetGetMethod().Name)
                 );
 
             return new AssemblyDefinitionWeaver(

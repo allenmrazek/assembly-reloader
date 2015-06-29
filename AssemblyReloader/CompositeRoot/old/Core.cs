@@ -183,13 +183,13 @@
 //            //container.Register<IPartLoader, KspPartLoader>().AsSingleton();
 //            //container.Register<IAvailablePartConfigQuery, AvailablePartConfigQuery>().AsSingleton();
 //            //container.Register<IModuleConfigsFromPartConfigQuery, ModuleConfigsFromPartConfigQuery>().AsSingleton();
-//            //container.Register<ITypeIdentifierQuery, TypeIdentifierQuery>().AsSingleton();
+//            //container.Register<IGetTypeIdentifier, getTypeIdentifier>().AsSingleton();
 //            //container.Register<IGetLoadedUnityComponents<Part>>(new getLoadedUnityComponents<Part>());
-//            //container.Register<IComponentsInGameObjectHierarchyProvider<Part>>(
-//            //    new ComponentsInGameObjectHierarchyProvider<Part>());
+//            //container.Register<IGetComponentsInGameObjectHierarchy<Part>>(
+//            //    new GetComponentsInGameObjectHierarchy<Part>());
 
-//            //container.Register<IPartPrefabCloneProvider, PartPrefabCloneProvider>(
-//            //    container.Resolve<PartPrefabCloneProvider>());
+//            //container.Register<IGetPartPrefabClones, GetPartPrefabClones>(
+//            //    container.Resolve<GetPartPrefabClones>());
 
 //            //container.Register<IPartModuleFactory, PartModuleFactory>(
 //            //    container.Resolve<PartModuleFactory>(new NamedParameterOverloads
@@ -220,7 +220,7 @@
 
 //            //KspPartActionWindowListener.WindowController = new KspPartActionWindowController();
 //            //KspPartActionWindowListener.PartActionWindowQuery =
-//            //    new ComponentsInGameObjectHierarchyProvider<UIPartActionWindow>();
+//            //    new GetComponentsInGameObjectHierarchy<UIPartActionWindow>();
 
 
 //            //var eventProvider = container.Resolve<IEventProvider>();
@@ -235,7 +235,7 @@
 
 //            //var reloadables = CreateReloadablePlugins(container).ToList();
 
-//            //reloadables.ForEach(r => r.Load());
+//            //reloadables.ForEach(r => r.AddToLoadedAssemblies());
 
 //        }
 
@@ -485,12 +485,12 @@
 //        //        { "addonGetTypesFromAssembly", new AddonsFromAssembly(container.Resolve<IGetAddonAttributesFromType>()) }
 //        //    });
 
-//        //    var addonController = new AddonFacade(addonLoader, addonUnloader);
+//        //    var addonController = new AddonTypeSystem(addonLoader, addonUnloader);
 
 //        //    plugin.OnLoaded +=
-//        //        (asm, loc) => { if (plugin.Configuration.StartAddonsForCurrentScene) addonController.Load(asm, loc); };
+//        //        (asm, loc) => { if (plugin.Configuration.StartAddonsForCurrentScene) addonController.AddToLoadedAssemblies(asm, loc); };
 
-//        //    plugin.OnUnloaded += addonController.Unload;
+//        //    plugin.OnUnloaded += addonController.DestroyReloadableTypesFrom;
 //        //}
 
 //        //private static void SetupAddonController(
@@ -508,7 +508,7 @@
 //        //    var addonLoader = new Loaders.AddonLoader(
 //        //        gameAssemblyLoader,
 //        //        gameAddonLoader,
-//        //        new GetCurrentStartupScene(new GetStartupSceneFromGameScene(), new CurrentGameSceneProvider()),
+//        //        new GetCurrentStartupScene(new GetStartupSceneFromGameScene(), new GetCurrentGameScene()),
 //        //        () => plugin.Configuration.InstantlyAppliesToEveryScene);
 
 //        //    var addonUnloader = new AddonUnloader(
@@ -516,12 +516,12 @@
 //        //        objectDestroyer,
 //        //        new getLoadedUnityComponents());
 
-//        //    var addonController = new AddonFacade(addonLoader, addonUnloader);
+//        //    var addonController = new AddonTypeSystem(addonLoader, addonUnloader);
 
 //        //    plugin.OnLoaded +=
-//        //        (asm, loc) => { if (plugin.Configuration.StartAddonsForCurrentScene) addonController.Load(asm, loc); };
+//        //        (asm, loc) => { if (plugin.Configuration.StartAddonsForCurrentScene) addonController.AddToLoadedAssemblies(asm, loc); };
 
-//        //    plugin.OnUnloaded += addonController.Unload; 
+//        //    plugin.OnUnloaded += addonController.DestroyReloadableTypesFrom; 
 //        //}
 
 
@@ -531,7 +531,7 @@
 //        //        new FlightConfigNodeKeyValuePairComparer());
 
 //        //    //var descriptorFactory = container.Resolve<PartModuleDescriptorFactory>();
-//        //    //var prefabCloneProvider = container.Resolve<PartPrefabCloneProvider>();
+//        //    //var prefabCloneProvider = container.Resolve<GetPartPrefabClones>();
 
 //        //    Func<bool> reuseConfigNodes = () => plugin.Configuration.ReusePartModuleConfigsFromPrevious;
 
@@ -572,10 +572,10 @@
 //        //    plugin.OnLoaded += (asm, loc) =>
 //        //    {
 //        //        onStartRunner.ClearPartModuleTargets();
-//        //        if (plugin.Configuration.ReloadPartModulesImmediately) partModuleController.Load(asm, loc);
+//        //        if (plugin.Configuration.ReloadPartModulesImmediately) partModuleController.AddToLoadedAssemblies(asm, loc);
 //        //    };
 
-//        //    plugin.OnUnloaded += partModuleController.Unload;
+//        //    plugin.OnUnloaded += partModuleController.DestroyReloadableTypesFrom;
 
 //        //    //    var descriptorFactory = new PartModuleDescriptorFactory(
 //        //    //                                new KspPartLoader(
@@ -583,23 +583,23 @@
 //        //    //                                new AvailablePartConfigQuery(
 //        //    //                                    new KspGameDatabase()),
 //        //    //                                new ModuleConfigsFromPartConfigQuery(),
-//        //    //                                new TypeIdentifierQuery());
+//        //    //                                new getTypeIdentifier());
 
-//        //    //    var prefabCloneProvider = new PartPrefabCloneProvider(
+//        //    //    var prefabCloneProvider = new GetPartPrefabClones(
 //        //    //                                new getLoadedUnityComponents<Part>(),
-//        //    //                                new ComponentsInGameObjectHierarchyProvider<Part>(),
-//        //    //                                new PartIsPrefabQuery(),
+//        //    //                                new GetComponentsInGameObjectHierarchy<Part>(),
+//        //    //                                new getIsPartPrefab(),
 //        //    //                                kspFactory);
 
 //        //    //    Func<bool> reuseConfigNodes = () => plugin.Configuration.ReusePartModuleConfigsFromPrevious;
 
-//        //    //    var onStartRunner = new ExecutePartModuleOnStartsCommand(new PartModuleStartStateProvider(),
-//        //    //        new PartIsPrefabQuery(), kspFactory, _log.CreateTag(plugin.Name + " OnStart Runner"));
+//        //    //    var onStartRunner = new ExecutePartModuleOnStartsCommand(new GetPartModuleStartState(),
+//        //    //        new getIsPartPrefab(), kspFactory, _log.CreateTag(plugin.Name + " OnStart Runner"));
 
 //        //    //    var partModuleController = new PartModuleFacade(
 //        //    //                                 new PartModuleLoader(
 //        //    //                                     descriptorFactory,
-//        //    //                                     new PartModuleFactory(new PartIsPrefabQuery(), new AwakenPartModuleCommand(), onStartRunner),
+//        //    //                                     new PartModuleFactory(new getIsPartPrefab(), new AwakenPartModuleCommand(), onStartRunner),
 //        //    //                                     partModuleConfigQueue,
 //        //    //                                     prefabCloneProvider,
 //        //    //                                     reuseConfigNodes),
@@ -620,10 +620,10 @@
 //        //    //    plugin.OnLoaded += (asm, loc) =>
 //        //    //    {
 //        //    //        onStartRunner.ClearPartModuleTargets();
-//        //    //        if (plugin.Configuration.ReloadPartModulesImmediately) partModuleController.Load(asm, loc);
+//        //    //        if (plugin.Configuration.ReloadPartModulesImmediately) partModuleController.AddToLoadedAssemblies(asm, loc);
 //        //    //    };
 
-//        //    //    plugin.OnUnloaded += partModuleController.Unload;
+//        //    //    plugin.OnUnloaded += partModuleController.DestroyReloadableTypesFrom;
 //        //}
 
 
@@ -639,23 +639,23 @@
 //        //                                new AvailablePartConfigQuery(
 //        //                                    new KspGameDatabase()),
 //        //                                new ModuleConfigsFromPartConfigQuery(),
-//        //                                new TypeIdentifierQuery());
+//        //                                new getTypeIdentifier());
 
-//        //    var prefabCloneProvider = new PartPrefabCloneProvider(
+//        //    var prefabCloneProvider = new GetPartPrefabClones(
 //        //                                new getLoadedUnityComponents<Part>(),
-//        //                                new ComponentsInGameObjectHierarchyProvider<Part>(),
-//        //                                new PartIsPrefabQuery(),
+//        //                                new GetComponentsInGameObjectHierarchy<Part>(),
+//        //                                new getIsPartPrefab(),
 //        //                                kspFactory);
 
 //        //    Func<bool> reuseConfigNodes = () => plugin.Configuration.ReusePartModuleConfigsFromPrevious;
 
-//        //    var onStartRunner = new ExecutePartModuleOnStartsCommand(new PartModuleStartStateProvider(),
-//        //        new PartIsPrefabQuery(), kspFactory, _log.CreateTag(plugin.Name + " OnStart Runner"));
+//        //    var onStartRunner = new ExecutePartModuleOnStartsCommand(new GetPartModuleStartState(),
+//        //        new getIsPartPrefab(), kspFactory, _log.CreateTag(plugin.Name + " OnStart Runner"));
 
 //        //    var partModuleController = new PartModuleFacade(
 //        //                                 new PartModuleLoader(
 //        //                                     descriptorFactory,
-//        //                                     new PartModuleFactory(new PartIsPrefabQuery(), new AwakenPartModuleCommand(), onStartRunner),
+//        //                                     new PartModuleFactory(new getIsPartPrefab(), new AwakenPartModuleCommand(), onStartRunner),
 //        //                                     partModuleConfigQueue,
 //        //                                     prefabCloneProvider,
 //        //                                     reuseConfigNodes),
@@ -676,23 +676,23 @@
 //        //    plugin.OnLoaded += (asm, loc) =>
 //        //    {
 //        //        onStartRunner.ClearPartModuleTargets();
-//        //        if (plugin.Configuration.ReloadPartModulesImmediately) partModuleController.Load(asm, loc);
+//        //        if (plugin.Configuration.ReloadPartModulesImmediately) partModuleController.AddToLoadedAssemblies(asm, loc);
 //        //    };
 
-//        //    plugin.OnUnloaded += partModuleController.Unload;
+//        //    plugin.OnUnloaded += partModuleController.DestroyReloadableTypesFrom;
 //        //}
 
 
 //        //private void SetupScenarioModuleController(IReloadablePlugin plugin, PluginConfiguration pluginConfiguration, IKspFactory kspFactory)
 //        //{
-//        //    var gameProvider = new CurrentGameProvider(new TypeIdentifierQuery());
-//        //    var currentGameSceneProvider = new CurrentGameSceneProvider();
+//        //    var game = new GetCurrentGame(new getTypeIdentifier());
+//        //    var GetCurrentGameScene = new GetCurrentGameScene();
 
-//        //    var protoScenarioModuleProvider = new ProtoScenarioModuleProvider(
+//        //    var protoScenarioModuleProvider = new GetProtoScenarioModules(
 //        //        kspFactory,
-//        //        new TypeIdentifierQuery(),
-//        //        new CurrentGameProvider(new TypeIdentifierQuery()),
-//        //        currentGameSceneProvider);
+//        //        new getTypeIdentifier(),
+//        //        new GetCurrentGame(new getTypeIdentifier()),
+//        //        GetCurrentGameScene);
 
 //        //    var scenarioModuleController =
 //        //        new ScenarioModuleFacade(
@@ -702,17 +702,17 @@
 //        //                protoScenarioModuleProvider,
 //        //                new UnityObjectDestroyer(new PluginReloadRequestedMethodCallCommand()),
 //        //                () => pluginConfiguration.SaveScenarioModuleConfigBeforeReloading,
-//        //                new ScenarioModuleSnapshotGenerator(gameProvider, _log.CreateTag("SMSnapshotGen")),
+//        //                new ScenarioModuleSnapshotGenerator(game, _log.CreateTag("SMSnapshotGen")),
 //        //                _log.CreateTag("ScenarioModuleUnloader")),
 //        //            new GetTypesDerivedFrom<ScenarioModule>(),
-//        //            currentGameSceneProvider);
+//        //            GetCurrentGameScene);
 
 //        //    plugin.OnLoaded += (asm, loc) =>
 //        //    {
-//        //        if (pluginConfiguration.ReloadScenarioModulesImmediately) scenarioModuleController.Load(asm, loc);
+//        //        if (pluginConfiguration.ReloadScenarioModulesImmediately) scenarioModuleController.AddToLoadedAssemblies(asm, loc);
 //        //    };
 
-//        //    plugin.OnUnloaded += scenarioModuleController.Unload;
+//        //    plugin.OnUnloaded += scenarioModuleController.DestroyReloadableTypesFrom;
 //        //}
 
 
@@ -720,7 +720,7 @@
 //        //{
 //        //    var scenarioModuleUnloader = new ScenarioModuleUnloader(
 //        //        container.Resolve<IGameObjectComponentQuery>(),
-//        //        container.Resolve<IProtoScenarioModuleProvider>(),
+//        //        container.Resolve<IGetProtoScenarioModules>(),
 //        //        container.Resolve<IUnityObjectDestroyer>(),
 //        //        () => plugin.Configuration.SaveScenarioModuleConfigBeforeReloading,
 //        //        container.Resolve<IScenarioModuleSnapshotGenerator>(),
@@ -734,10 +734,10 @@
 
 //        //    plugin.OnLoaded += (asm, loc) =>
 //        //    {
-//        //        if (plugin.Configuration.ReloadScenarioModulesImmediately) scenarioModuleController.Load(asm, loc);
+//        //        if (plugin.Configuration.ReloadScenarioModulesImmediately) scenarioModuleController.AddToLoadedAssemblies(asm, loc);
 //        //    };
 
-//        //    plugin.OnUnloaded += scenarioModuleController.Unload;
+//        //    plugin.OnUnloaded += scenarioModuleController.DestroyReloadableTypesFrom;
 //        //}
 
 //        private GUISkin ConfigureSkin(IResourceRepository resources)
@@ -925,14 +925,14 @@
 //                new MethodCallInMethodBodyQuery(
 //                    getCodeBaseProperty.GetGetMethod(),
 //                    OpCodes.Callvirt),
-//                    new InjectedHelperTypeGetMethod(injectedHelperTypeQuery, getCodeBaseProperty.GetGetMethod().Name)
+//                    new GetInjectedHelperTypeMethod(injectedHelperTypeQuery, getCodeBaseProperty.GetGetMethod().Name)
 //                );
 
 //            var interceptAssemblyLocationCalls = new InterceptExecutingAssemblyLocationQueries(
 //                new MethodCallInMethodBodyQuery(
 //                    getLocationProperty.GetGetMethod(),
 //                    OpCodes.Callvirt),
-//                new InjectedHelperTypeGetMethod(injectedHelperTypeQuery, getLocationProperty.GetGetMethod().Name)
+//                new GetInjectedHelperTypeMethod(injectedHelperTypeQuery, getLocationProperty.GetGetMethod().Name)
 //                );
 
 //            return new AssemblyDefinitionWeaver(
@@ -953,8 +953,8 @@
 
 //            return new PartModuleSnapshotGenerator(
 //                configNodeQueue,
-//                new PartIsPrefabQuery(),
-//                new TypeIdentifierQuery(),
+//                new getIsPartPrefab(),
+//                new getTypeIdentifier(),
 //                new UniqueFlightIdGenerator(),
 //                _log.CreateTag("PMSnapshotter"));
 //        }

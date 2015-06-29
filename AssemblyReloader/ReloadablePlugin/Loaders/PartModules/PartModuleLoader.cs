@@ -14,7 +14,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
         private readonly IPartModuleDescriptorFactory _descriptorFactory;
         private readonly IPartModuleFactory _partModuleFactory;
         private readonly DictionaryQueue<KeyValuePair<uint, ITypeIdentifier>, ConfigNode> _configNodeQueue;
-        private readonly IPartPrefabCloneProvider _loadedPrefabProvider;
+        private readonly IGetPartPrefabClones _loadedPrefabProvider;
         private readonly Func<bool> _useConfigNodeSnapshotIfAvailable;
         private readonly ILog _log = new DebugLog("PartModuleLoader");
 
@@ -22,7 +22,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
             IPartModuleDescriptorFactory descriptorFactory,
             IPartModuleFactory partModuleFactory,
             DictionaryQueue<KeyValuePair<uint, ITypeIdentifier>, ConfigNode> configNodeQueue,
-            IPartPrefabCloneProvider loadedPrefabProvider,
+            IGetPartPrefabClones loadedPrefabProvider,
             [NotNull] Func<bool> useConfigNodeSnapshotIfAvailable )
         {
             if (descriptorFactory == null) throw new ArgumentNullException("descriptorFactory");

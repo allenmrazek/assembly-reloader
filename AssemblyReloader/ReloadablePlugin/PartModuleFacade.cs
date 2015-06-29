@@ -10,7 +10,7 @@
 
 //namespace AssemblyReloader.ReloadablePlugin
 //{
-//    public class PartModuleFacade : IReloadableObjectFacade
+//    public class PartModuleFacade : IReloadableTypeSystem
 //    {
 //        private readonly IPartModuleLoader _pmLoader;
 //        private readonly IPartModuleUnloader _pmUnloader;
@@ -39,23 +39,23 @@
 //        }
 
 
-//        public void Load(Assembly assembly, IFile location)
+//        public void AddToLoadedAssemblies(Assembly assembly, IFile location)
 //        {
 //            if (assembly == null) throw new ArgumentNullException("assembly");
 
 //            foreach (var t in GetPartModules(assembly))
-//                _pmLoader.Load(t);
+//                _pmLoader.AddToLoadedAssemblies(t);
 
 //            _onPartModulesLoaded.Execute();
 //        }
 
 
-//        public void Unload(Assembly assembly, IFile location)
+//        public void DestroyReloadableTypesFrom(Assembly assembly, IFile location)
 //        {
 //            if (assembly == null) throw new ArgumentNullException("assembly");
 
 //            foreach (var t in GetPartModules(assembly))
-//                _pmUnloader.Unload(t);
+//                _pmUnloader.DestroyReloadableTypesFrom(t);
             
 //            _onPartModulesUnloaded.Execute();
 //        }

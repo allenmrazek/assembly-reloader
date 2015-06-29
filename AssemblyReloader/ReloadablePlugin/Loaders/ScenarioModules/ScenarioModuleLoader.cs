@@ -8,11 +8,11 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
 {
     public class ScenarioModuleLoader : IScenarioModuleLoader
     {
-        private readonly IProtoScenarioModuleProvider _psmProvider;
+        private readonly IGetProtoScenarioModules _psmProvider;
 
 
         public ScenarioModuleLoader(
-            [NotNull] IProtoScenarioModuleProvider psmProvider)
+            [NotNull] IGetProtoScenarioModules psmProvider)
         {
             if (psmProvider == null) throw new ArgumentNullException("psmProvider");
 

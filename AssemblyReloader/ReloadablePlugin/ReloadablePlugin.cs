@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Linq;
-using AssemblyReloader.FileSystem;
 using AssemblyReloader.Game;
 using AssemblyReloader.Gui;
 using AssemblyReloader.Properties;
-using AssemblyReloader.Providers;
 using AssemblyReloader.ReloadablePlugin.Definition;
+using ReeperCommon.Containers;
 using ReeperCommon.Extensions;
 using ReeperCommon.FileSystem;
 
@@ -16,26 +15,26 @@ namespace AssemblyReloader.ReloadablePlugin
         private readonly IFile _reloadableFile;
         private readonly IGameAssemblyLoader _assemblyLoader;
         private readonly IAssemblyProvider _assemblyProvider;
-        private readonly IReloadableObjectFacade _reloadableObjectFacade;
+        private readonly IReloadableTypeSystem _reloadableTypeSystem;
 
-        private ILoadedAssemblyHandle _loaded;
+        private Maybe<ILoadedAssemblyHandle> _loaded;
 
 
         public ReloadablePlugin(
-            [NotNull] IFile reloadableFile, 
+            [NotNull] IFile reloadableFile,
             [NotNull] IGameAssemblyLoader assemblyLoader,
-            [NotNull] IAssemblyProvider assemblyProvider, 
-            [NotNull] IReloadableObjectFacade reloadableObjectFacade)
+            [NotNull] IAssemblyProvider assemblyProvider,
+            [NotNull] IReloadableTypeSystem reloadableTypeSystem)
         {
             if (reloadableFile == null) throw new ArgumentNullException("reloadableFile");
             if (assemblyLoader == null) throw new ArgumentNullException("assemblyLoader");
             if (assemblyProvider == null) throw new ArgumentNullException("assemblyProvider");
-            if (reloadableObjectFacade == null) throw new ArgumentNullException("reloadableObjectFacade");
+            if (reloadableTypeSystem == null) throw new ArgumentNullException("reloadableTypeSystem");
 
             _reloadableFile = reloadableFile;
             _assemblyLoader = assemblyLoader;
             _assemblyProvider = assemblyProvider;
-            _reloadableObjectFacade = reloadableObjectFacade;
+            _reloadableTypeSystem = reloadableTypeSystem;
         }
 
 
@@ -53,31 +52,31 @@ namespace AssemblyReloader.ReloadablePlugin
 
         private bool Load()
         {
-            if (!_loaded.IsNull())
+            if (!_loaded.Any())
                 throw new InvalidOperationException("Previous instance was not unloaded");
 
             var assembly = _assemblyProvider.Get(Location);
             if (!assembly.Any())
                 throw new Exception("Failed to read assembly at " + Location.FullPath);
 
-            _loaded = _assemblyLoader.Load(assembly.Single(), Location);
+            _loaded = _assemblyLoader.AddToLoadedAssemblies(assembly.Single(), Location);
 
-            if (_loaded != null)
-                _reloadableObjectFacade.Load(assembly.Single(), Location);
+            if (_loaded.Any())
+                _reloadableTypeSystem.CreateReloadableTypesFrom(_loaded.Single());
 
-            return _loaded != null;
+            return _loaded.Any();
         }
 
 
         private void Unload()
         {
-            if (_loaded.IsNull())
+            if (!_loaded.Any())
                 throw new InvalidOperationException("No assembly loaded");
 
-            _reloadableObjectFacade.Unload(_loaded.Assembly, Location);
+            _reloadableTypeSystem.DestroyReloadableTypesFrom(_loaded.Single());
 
-            _loaded.Dispose();
-            _loaded = null;
+            _assemblyLoader.RemoveFromLoadedAssemblies(_loaded.Single());
+            _loaded = Maybe<ILoadedAssemblyHandle>.None;
         }
 
 
@@ -89,92 +88,4 @@ namespace AssemblyReloader.ReloadablePlugin
             return Load();
         }
     }
-
-
-//    /// <summary>
-//    /// This object tracks a particular reloadable dll (based on its location). This is necessary
-//    /// because the state of a previous version of the assembly may affect how we load the next one;
-//    /// specifically, we may need to modify changes the previous version made such as removing PartModules
-//    /// from prefabs
-//    /// </summary>
-//    public class ReloadablePlugin : IReloadablePlugin, IPluginInfo
-//    {
-//        private Maybe<Assembly> _loaded = Maybe<Assembly>.None;
-//        private readonly IAssemblyLoader _assemblyLoader;
-//        private readonly IFile _location;
-
-
-//        //public event PluginLoadedHandler OnLoaded = delegate { };
-//        //public event PluginUnloadedHandler OnUnloaded = delegate { }; 
-
-//        [Inject] public PluginLoadedSignal Loaded { get; set; }
-
-//        [Inject] public PluginUnloadedSignal Unloaded { get; set; }
-
-
-//        public ReloadablePlugin(
-//            [NotNull] IAssemblyLoader assemblyLoader,
-//            [NotNull] IFile location,
-//            [NotNull] PluginConfiguration pluginConfiguration)
-//        {
-//            if (assemblyLoader == null) throw new ArgumentNullException("assemblyLoader");
-//            if (location == null) throw new ArgumentNullException("location");
-//            if (pluginConfiguration == null) throw new ArgumentNullException("pluginConfiguration");
-
-//            _assemblyLoader = assemblyLoader;
-//            _location = location;
-//            Configuration = pluginConfiguration;
-//        }
-
-
-//        public void Load()
-//        {
-//            if (!_loaded.IsNull())
-//                Unload();
-
-//            _loaded = _assemblyLoader.Load();
-
-//            if (!_loaded.Any())
-//                throw new InvalidOperationException("ReloadablePlugin: received NULL Assembly");
-
-//            Loaded.Dispatch(this);
-//            //OnLoaded(_loaded.Single(), _location);
-//        }
-
-
-//        public void Unload()
-//        {
-//            if (!_loaded.Any()) return;
-
-//            _assemblyLoader.Unload();
-
-//            try
-//            {
-//                //OnUnloaded(_loaded.Single(), _location);
-//                Unloaded.Dispatch(this);
-//            }
-//            finally
-//            {
-//                _loaded = Maybe<Assembly>.None;
-//            }
-//        }
-
-
-//        public string Name
-//        {
-//            get { return _location.Name; }
-//        }
-
-//        public Maybe<Assembly> Assembly
-//        {
-//            get { return _loaded; }
-//        }
-
-//        public PluginConfiguration Configuration { get; private set; }
-
-//        public IFile Location
-//        {
-//            get { return _location; }
-//        }
-//    }
 }

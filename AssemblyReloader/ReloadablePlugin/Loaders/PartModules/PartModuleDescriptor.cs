@@ -38,24 +38,24 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
         private readonly IPartLoader _partLoader;
         private readonly IAvailablePartConfigQuery _configQuery;
         private readonly IModuleConfigsFromPartConfigQuery _moduleConfigQuery;
-        private readonly ITypeIdentifierQuery _typeIdentifierQuery;
+        private readonly IGetTypeIdentifier _getTypeIdentifier;
 
 
         public PartModuleDescriptorFactory(
             IPartLoader partLoader,
             IAvailablePartConfigQuery configQuery,
             IModuleConfigsFromPartConfigQuery moduleConfigQuery,
-            ITypeIdentifierQuery typeIdentifierQuery)
+            IGetTypeIdentifier getTypeIdentifier)
         {
             if (partLoader == null) throw new ArgumentNullException("partLoader");
             if (configQuery == null) throw new ArgumentNullException("configQuery");
             if (moduleConfigQuery == null) throw new ArgumentNullException("moduleConfigQuery");
-            if (typeIdentifierQuery == null) throw new ArgumentNullException("typeIdentifierQuery");
+            if (getTypeIdentifier == null) throw new ArgumentNullException("getTypeIdentifier");
 
             _partLoader = partLoader;
             _configQuery = configQuery;
             _moduleConfigQuery = moduleConfigQuery;
-            _typeIdentifierQuery = typeIdentifierQuery;
+            _getTypeIdentifier = getTypeIdentifier;
         }
 
 
@@ -63,8 +63,8 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
         private IEnumerable<PartModuleDescriptor> CreatePartModuleInfo(IPart prefab, ConfigNode partConfig, Type pmType)
         {
             return
-                _moduleConfigQuery.Get(partConfig, _typeIdentifierQuery.Get(pmType).Identifier)
-                    .Select(config => new PartModuleDescriptor(prefab, config, pmType, _typeIdentifierQuery.Get(pmType)));
+                _moduleConfigQuery.Get(partConfig, _getTypeIdentifier.Get(pmType).Identifier)
+                    .Select(config => new PartModuleDescriptor(prefab, config, pmType, _getTypeIdentifier.Get(pmType)));
         }
 
 

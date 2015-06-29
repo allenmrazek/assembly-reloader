@@ -136,8 +136,8 @@
 //            if (byteStream.Length == 0) throw new InvalidOperationException("byteStream does not contain any data");
 
 //            var assembly = symbolStream.Length > 0 ? 
-//                Assembly.Load(byteStream.GetBuffer(), symbolStream.GetBuffer())
-//                : Assembly.Load(byteStream.GetBuffer());
+//                Assembly.AddToLoadedAssemblies(byteStream.GetBuffer(), symbolStream.GetBuffer())
+//                : Assembly.AddToLoadedAssemblies(byteStream.GetBuffer());
 
 //            if (assembly == null)
 //            {

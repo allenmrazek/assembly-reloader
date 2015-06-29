@@ -12,14 +12,14 @@
 //    public class PartModuleOnStartRunner : IPartModuleOnStartRunner
 //    {
 //        private readonly IKspFactory _kspFactory;
-//        private readonly IPartModuleStartStateProvider _startStateProvider;
-//        private readonly IPartPrefabCloneProvider _prefabInstanceProvider;
+//        private readonly IGetPartModuleStartState _startStateProvider;
+//        private readonly IGetPartPrefabClones _prefabInstanceProvider;
 //        private readonly ILog _log = new DebugLog("PartModuleOnStartRunner");
 
 //        public PartModuleOnStartRunner(
 //            [NotNull] IKspFactory kspFactory, 
-//            [NotNull] IPartModuleStartStateProvider startStateProvider,
-//            [NotNull] IPartPrefabCloneProvider prefabInstanceProvider)
+//            [NotNull] IGetPartModuleStartState startStateProvider,
+//            [NotNull] IGetPartPrefabClones prefabInstanceProvider)
 //        {
 //            if (kspFactory == null) throw new ArgumentNullException("kspFactory");
 //            if (startStateProvider == null) throw new ArgumentNullException("startStateProvider");

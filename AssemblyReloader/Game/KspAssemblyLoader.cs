@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using AssemblyReloader.Properties;
 using AssemblyReloader.StrangeIoC.extensions.implicitBind;
-using AssemblyReloader.TypeInstallers;
+using ReeperCommon.Containers;
 using ReeperCommon.Extensions;
 using ReeperCommon.FileSystem;
 using ReeperCommon.Logging;
@@ -14,27 +14,19 @@ namespace AssemblyReloader.Game
 // ReSharper disable once ClassNeverInstantiated.Global
     public class KspAssemblyLoader : IGameAssemblyLoader
     {
-        private readonly IEnumerable<ILoadedAssemblyTypeInstaller> _typeInstallers;
         private readonly IGetLoadedAssemblyFileUrl _laFileUrl;
-        private readonly ILog _log;
 
 
         public KspAssemblyLoader(
-            [NotNull] IEnumerable<ILoadedAssemblyTypeInstaller> typeInstallers,
-            [NotNull] IGetLoadedAssemblyFileUrl laFileUrl,
-            [NotNull] ILog log)
+            [NotNull] IGetLoadedAssemblyFileUrl laFileUrl)
         {
-            if (typeInstallers == null) throw new ArgumentNullException("typeInstallers");
             if (laFileUrl == null) throw new ArgumentNullException("laFileUrl");
-            if (log == null) throw new ArgumentNullException("log");
 
-            _typeInstallers = typeInstallers;
             _laFileUrl = laFileUrl;
-            _log = log;
         }
 
 
-        public ILoadedAssemblyHandle Load(Assembly assembly, IFile location)
+        public Maybe<ILoadedAssemblyHandle> AddToLoadedAssemblies(Assembly assembly, IFile location)
         {
             if (assembly == null) throw new ArgumentNullException("assembly");
             if (location == null) throw new ArgumentNullException("location");
@@ -43,12 +35,14 @@ namespace AssemblyReloader.Game
 
             new DebugLog().Normal("LoadedAssembly URL of " + location.FileName + " is " + _laFileUrl.Get(location));
 
-            if (assembly == null) throw new ArgumentNullException("assembly");
-            if (location == null) throw new ArgumentNullException("location");
+            var url = _laFileUrl.Get(location);
 
-            var la = new AssemblyLoader.LoadedAssembly(assembly, location.FullPath, _laFileUrl.Get(location), null);
+            if (AssemblyLoader.loadedAssemblies.Any(la => la.url == url && la.dllName == location.Name))
+                throw new Exception("An assembly with this URL and name is already loaded by KSP. Duplicate entries?");
 
-            AssemblyLoader.loadedAssemblies.Add(la);
+            var loadedAssembly = new AssemblyLoader.LoadedAssembly(assembly, location.FullPath, _laFileUrl.Get(location), null);
+
+            AssemblyLoader.loadedAssemblies.Add(loadedAssembly);
 
             //InstallTypes(la, typeof (PartModule), _partModuleQuery.Get(assembly));
             //InstallTypes(la, typeof (Part), _partQuery.Get(assembly));
@@ -64,10 +58,24 @@ namespace AssemblyReloader.Game
             // todo: VesselModules?
             // todo: InternalModules?
 
-            foreach (var installer in _typeInstallers)
-                installer.Install(la);
+            //foreach (var installer in _typeInstallers)
+            //    installer.Install(la);
 
-            return new LoadedAssemblyHandle(la);
+            return Maybe<ILoadedAssemblyHandle>.With(new LoadedAssemblyHandle(loadedAssembly));
+        }
+
+        public void RemoveFromLoadedAssemblies(ILoadedAssemblyHandle handle)
+        {
+            if (handle == null) throw new ArgumentNullException("handle");
+
+            for (var idx = 0; idx < AssemblyLoader.loadedAssemblies.Count; ++idx)
+                if (ReferenceEquals(handle.LoadedAssembly, AssemblyLoader.loadedAssemblies[idx]))
+                {
+                    AssemblyLoader.loadedAssemblies.RemoveAt(idx);
+                    return;
+                }
+
+            throw new Exception("handle was not found in AssemblyLoader.loadedAssemblies");
         }
 
 

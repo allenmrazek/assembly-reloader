@@ -8,20 +8,20 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
 {
     public class PartModuleFactory : IPartModuleFactory
     {
-        private readonly IPartIsPrefabQuery _partIsPrefabQuery;
+        private readonly IGetIsPartPrefab _getIsPartPrefab;
         private readonly ICommand<PartModule> _awakenPartModule;
         private readonly IPartModuleOnStartRunner _onStartRunner;
 
         public PartModuleFactory(
-            [NotNull] IPartIsPrefabQuery partIsPrefabQuery, 
+            [NotNull] IGetIsPartPrefab getIsPartPrefab, 
             [NotNull] ICommand<PartModule> awakenPartModule,
             [NotNull] IPartModuleOnStartRunner onStartRunner)
         {
-            if (partIsPrefabQuery == null) throw new ArgumentNullException("partIsPrefabQuery");
+            if (getIsPartPrefab == null) throw new ArgumentNullException("getIsPartPrefab");
             if (awakenPartModule == null) throw new ArgumentNullException("awakenPartModule");
             if (onStartRunner == null) throw new ArgumentNullException("onStartRunner");
 
-            _partIsPrefabQuery = partIsPrefabQuery;
+            _getIsPartPrefab = getIsPartPrefab;
             _awakenPartModule = awakenPartModule;
             _onStartRunner = onStartRunner;
         }
@@ -46,7 +46,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
 
             // if this is the prefab GameObject, it will never become active again and awake will never
             // get called so we must do it ourselves
-            if (_partIsPrefabQuery.Get(part))
+            if (_getIsPartPrefab.Get(part))
                 _awakenPartModule.Execute(result);
 
             result.OnLoad(config);

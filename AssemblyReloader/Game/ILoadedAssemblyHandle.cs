@@ -1,10 +1,7 @@
-﻿using System;
-using System.Reflection;
-
-namespace AssemblyReloader.Game
+﻿namespace AssemblyReloader.Game
 {
-    public interface ILoadedAssemblyHandle : IDisposable
+    public interface ILoadedAssemblyHandle
     {
-        Assembly Assembly { get; }
+        AssemblyLoader.LoadedAssembly LoadedAssembly { get; }
     }
 }

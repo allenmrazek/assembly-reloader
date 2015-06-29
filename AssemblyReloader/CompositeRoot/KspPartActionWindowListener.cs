@@ -11,7 +11,7 @@ namespace AssemblyReloader.CompositeRoot
     public class KspPartActionWindowListener : MonoBehaviour
     {
         public static IPartActionWindowController WindowController;
-        public static IComponentsInGameObjectHierarchyProvider<UIPartActionWindow> PartActionWindowQuery;
+        public static IGetComponentsInGameObjectHierarchy<UIPartActionWindow> PartActionWindowQuery;
 
         static KspPartActionWindowListener()
         {

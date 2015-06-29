@@ -13,41 +13,11 @@ namespace AssemblyReloader.Game
 
             _loadedAssembly = loadedAssembly;
         }
-
-
-        ~LoadedAssemblyHandle()
-        {
-            Dispose(false);
-        }
-
         
-        public void Dispose()
+
+        public AssemblyLoader.LoadedAssembly LoadedAssembly
         {
-            Dispose(true);
-        }
-
-
-        private void Dispose(bool managed)
-        {
-            GC.SuppressFinalize(this);
-
-            if (!managed) return;
-
-            for (int idx = 0; idx < AssemblyLoader.loadedAssemblies.Count; ++idx)
-                if (ReferenceEquals(_loadedAssembly, AssemblyLoader.loadedAssemblies[idx]))
-                {
-                    AssemblyLoader.loadedAssemblies.RemoveAt(idx);
-                    return;
-                }
-
-            throw new Exception("Failed to find assembly " + _loadedAssembly.dllName + " (location " + _loadedAssembly.url +
-                                ") in loaded assembly list");
-        }
-
-
-        public Assembly Assembly
-        {
-            get { return _loadedAssembly.assembly; }
+            get { return _loadedAssembly; }
         }
     }
 }

@@ -1,8 +1,6 @@
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using AssemblyReloader.Queries;
-using AssemblyReloader.Queries.ConversionQueries;
 using Mono.Cecil;
 using Ploeh.AutoFixture;
 using Ploeh.AutoFixture.Xunit;

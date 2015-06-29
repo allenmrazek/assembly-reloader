@@ -13,24 +13,24 @@ namespace AssemblyReloader.Commands
 {
     public class ExecutePartModuleOnStartsCommand : ICommand, IPartModuleOnStartRunner
     {
-        private readonly IPartModuleStartStateProvider _startStateProvider;
-        private readonly IPartIsPrefabQuery _partIsPrefabQuery;
+        private readonly IGetPartModuleStartState _startState;
+        private readonly IGetIsPartPrefab _getIsPartPrefab;
         private readonly IKspFactory _kspFactory;
         private readonly ILog _log;
         private readonly List<PartModule> _partModules = new List<PartModule>();
  
         public ExecutePartModuleOnStartsCommand(
-            [NotNull] IPartModuleStartStateProvider startStateProvider,
-            [NotNull] IPartIsPrefabQuery partIsPrefabQuery,
+            [NotNull] IGetPartModuleStartState startState,
+            [NotNull] IGetIsPartPrefab getIsPartPrefab,
             [NotNull] IKspFactory kspFactory,
             [NotNull] ILog log)
         {
-            if (startStateProvider == null) throw new ArgumentNullException("startStateProvider");
-            if (partIsPrefabQuery == null) throw new ArgumentNullException("partIsPrefabQuery");
+            if (startState == null) throw new ArgumentNullException("startState");
+            if (getIsPartPrefab == null) throw new ArgumentNullException("getIsPartPrefab");
             if (kspFactory == null) throw new ArgumentNullException("kspFactory");
             if (log == null) throw new ArgumentNullException("log");
-            _startStateProvider = startStateProvider;
-            _partIsPrefabQuery = partIsPrefabQuery;
+            _startState = startState;
+            _getIsPartPrefab = getIsPartPrefab;
             _kspFactory = kspFactory;
             _log = log;
         }
@@ -39,7 +39,7 @@ namespace AssemblyReloader.Commands
         public void Execute()
         {
             var needOnStart = _partModules
-                .Where(pm => !_partIsPrefabQuery.Get(_kspFactory.Create(pm.part))) // don't run OnStart for any PartModules on part prefabs
+                .Where(pm => !_getIsPartPrefab.Get(_kspFactory.Create(pm.part))) // don't run OnStart for any PartModules on part prefabs
                 .ToList();
 
             _log.Verbose(needOnStart.Count + " part modules");
@@ -53,7 +53,7 @@ namespace AssemblyReloader.Commands
         {
             if (pm == null) throw new ArgumentNullException("pm");
 
-            var startingState = _startStateProvider.Get(pm.vessel != null ? Maybe<IVessel>.With(_kspFactory.Create(pm.vessel)) : Maybe<IVessel>.None);
+            var startingState = _startState.Get(pm.vessel != null ? Maybe<IVessel>.With(_kspFactory.Create(pm.vessel)) : Maybe<IVessel>.None);
 
             try
             {

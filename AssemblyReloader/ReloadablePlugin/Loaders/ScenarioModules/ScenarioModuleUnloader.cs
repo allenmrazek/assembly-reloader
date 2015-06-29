@@ -13,7 +13,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
     public class ScenarioModuleUnloader : IScenarioModuleUnloader
     {
         private readonly IGameObjectComponentQuery _gameObjectComponentQuery;
-        private readonly IProtoScenarioModuleProvider _psmProvider;
+        private readonly IGetProtoScenarioModules _psmProvider;
         private readonly IUnityObjectDestroyer _objectDestroyer;
         private readonly Func<bool> _saveBeforeDestroying;
         private readonly IScenarioModuleSnapshotGenerator _snapshotGenerator;
@@ -21,7 +21,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
 
         public ScenarioModuleUnloader(
             [NotNull] IGameObjectComponentQuery gameObjectComponentQuery,
-            [NotNull] IProtoScenarioModuleProvider psmProvider,
+            [NotNull] IGetProtoScenarioModules psmProvider,
             [NotNull] IUnityObjectDestroyer objectDestroyer, 
             [NotNull] Func<bool> saveBeforeDestroying,
             [NotNull] IScenarioModuleSnapshotGenerator snapshotGenerator,

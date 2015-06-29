@@ -59,7 +59,7 @@ namespace AssemblyReloader.Controllers
 
         //    try
         //    {
-        //        plugin.Unload();
+        //        plugin.DestroyReloadableTypesFrom();
         //    }
         //    catch (Exception e)
         //    {
@@ -71,7 +71,7 @@ namespace AssemblyReloader.Controllers
 
         //    try
         //    {
-        //        plugin.Load();
+        //        plugin.AddToLoadedAssemblies();
         //    }
         //    catch (Exception e)
         //    {

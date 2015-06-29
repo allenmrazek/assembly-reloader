@@ -9,18 +9,18 @@ namespace AssemblyReloader.Game
     public class KspGame : IGame
     {
         private readonly global::Game _game;
-        private readonly ITypeIdentifierQuery _typeIdentifierQuery;
+        private readonly IGetTypeIdentifier _getTypeIdentifier;
 
 
         public KspGame(
             [NotNull] global::Game game, 
-            [NotNull] ITypeIdentifierQuery typeIdentifierQuery)
+            [NotNull] IGetTypeIdentifier getTypeIdentifier)
         {
             if (game == null) throw new ArgumentNullException("game");
-            if (typeIdentifierQuery == null) throw new ArgumentNullException("typeIdentifierQuery");
+            if (getTypeIdentifier == null) throw new ArgumentNullException("getTypeIdentifier");
 
             _game = game;
-            _typeIdentifierQuery = typeIdentifierQuery;
+            _getTypeIdentifier = getTypeIdentifier;
         }
 
 
@@ -42,7 +42,7 @@ namespace AssemblyReloader.Game
 
         public void AddProtoScenarioModule(Type scnType, params GameScenes[] targetScenes)
         {
-            CheckForDuplicateProtoScenarioModule(_typeIdentifierQuery.Get(scnType).Identifier);
+            CheckForDuplicateProtoScenarioModule(_getTypeIdentifier.Get(scnType).Identifier);
 
             _game.AddProtoScenarioModule(scnType, targetScenes);
             ScenarioRunner.SetProtoModules(_game.scenarios);

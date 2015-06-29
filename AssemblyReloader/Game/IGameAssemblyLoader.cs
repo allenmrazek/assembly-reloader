@@ -1,11 +1,13 @@
 ﻿using System.Reflection;
+using ReeperCommon.Containers;
 using ReeperCommon.FileSystem;
 
 namespace AssemblyReloader.Game
 {
     public interface IGameAssemblyLoader
     {
-        ILoadedAssemblyHandle Load(Assembly assembly, IFile location);
+        Maybe<ILoadedAssemblyHandle> AddToLoadedAssemblies(Assembly assembly, IFile location);
+        void RemoveFromLoadedAssemblies(ILoadedAssemblyHandle handle);
 
         AssemblyLoader.LoadedAssembyList LoadedAssemblies { get; set; }
     }

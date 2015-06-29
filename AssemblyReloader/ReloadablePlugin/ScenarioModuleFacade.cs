@@ -10,12 +10,12 @@
 
 //namespace AssemblyReloader.ReloadablePlugin
 //{
-//    public class ScenarioModuleFacade : IReloadableObjectFacade
+//    public class ScenarioModuleFacade : IReloadableTypeSystem
 //    {
 //        private readonly IScenarioModuleLoader _loader;
 //        private readonly IScenarioModuleUnloader _unloader;
 //        private readonly IGetTypesFromAssembly _scenarioModuleQuery;
-//        private readonly ICurrentGameSceneProvider _currentGameSceneProvider;
+//        private readonly IGetCurrentGameScene _getCurrentGameScene;
 
 //        private static readonly GameScenes[] ValidScenarioModuleScenes =
 //        {
@@ -29,42 +29,42 @@
 //            [NotNull] IScenarioModuleLoader loader,
 //            [NotNull] IScenarioModuleUnloader unloader,
 //            [NotNull] IGetTypesFromAssembly scenarioModuleQuery,
-//            [NotNull] ICurrentGameSceneProvider currentGameSceneProvider)
+//            [NotNull] IGetCurrentGameScene GetCurrentGameScene)
 //        {
 //            if (loader == null) throw new ArgumentNullException("loader");
 //            if (unloader == null) throw new ArgumentNullException("unloader");
 //            if (scenarioModuleQuery == null) throw new ArgumentNullException("scenarioModuleQuery");
-//            if (currentGameSceneProvider == null) throw new ArgumentNullException("currentGameSceneProvider");
+//            if (GetCurrentGameScene == null) throw new ArgumentNullException("GetCurrentGameScene");
 
 //            _loader = loader;
 //            _unloader = unloader;
 //            _scenarioModuleQuery = scenarioModuleQuery;
-//            _currentGameSceneProvider = currentGameSceneProvider;
+//            _getCurrentGameScene = GetCurrentGameScene;
 //        }
 
 
-//        public void Load([NotNull] Assembly assembly, [NotNull] IFile location)
+//        public void AddToLoadedAssemblies([NotNull] Assembly assembly, [NotNull] IFile location)
 //        {
 //            if (assembly == null) throw new ArgumentNullException("assembly");
 //            if (location == null) throw new ArgumentNullException("location");
 
-//            RunOperationOnScenarioModuleTypes(assembly, _loader.Load);
+//            RunOperationOnScenarioModuleTypes(assembly, _loader.AddToLoadedAssemblies);
 //        }
 
 
-//        public void Unload([NotNull] Assembly assembly, [NotNull] IFile location)
+//        public void DestroyReloadableTypesFrom([NotNull] Assembly assembly, [NotNull] IFile location)
 //        {
 //            if (assembly == null) throw new ArgumentNullException("assembly");
 //            if (location == null) throw new ArgumentNullException("location");
 
-//            RunOperationOnScenarioModuleTypes(assembly, _unloader.Unload);
+//            RunOperationOnScenarioModuleTypes(assembly, _unloader.DestroyReloadableTypesFrom);
 //        }
 
 
 //        private void RunOperationOnScenarioModuleTypes(Assembly assembly, Action<Type> operation)
 //        {
 //            // if we're not in a scene with ScenarioModules, it stands to reason we have nothing to do here
-//            if (!ValidScenarioModuleScenes.Contains(_currentGameSceneProvider.Get()))
+//            if (!ValidScenarioModuleScenes.Contains(_getCurrentGameScene.Get()))
 //                return;
 
 //            foreach (var scenarioModuleType in _scenarioModuleQuery.Get(assembly))

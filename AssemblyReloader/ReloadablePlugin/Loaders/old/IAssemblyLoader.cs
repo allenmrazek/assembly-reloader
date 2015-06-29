@@ -5,7 +5,7 @@
 //{
 //    public interface IAssemblyLoader
 //    {
-//        Maybe<Assembly> Load();
-//        void Unload();
+//        Maybe<Assembly> AddToLoadedAssemblies();
+//        void DestroyReloadableTypesFrom();
 //    }
 //}

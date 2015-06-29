@@ -9,16 +9,16 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
 {
     public class ScenarioModuleSnapshotGenerator : IScenarioModuleSnapshotGenerator
     {
-        private readonly ICurrentGameProvider _gameProvider;
+        private readonly IGetCurrentGame _game;
         private readonly ILog _log;
 
-        public ScenarioModuleSnapshotGenerator([NotNull] ICurrentGameProvider gameProvider,
+        public ScenarioModuleSnapshotGenerator([NotNull] IGetCurrentGame game,
             [NotNull] ILog log)
         {
-            if (gameProvider == null) throw new ArgumentNullException("gameProvider");
+            if (game == null) throw new ArgumentNullException("game");
             if (log == null) throw new ArgumentNullException("log");
 
-            _gameProvider = gameProvider;
+            _game = game;
             _log = log;
         }
 
@@ -30,13 +30,13 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
         {
             if (instance == null) throw new ArgumentNullException("instance");
             if (psm == null) throw new ArgumentNullException("psm");
-            if (!_gameProvider.Get().Any()) throw new InvalidOperationException("Game is not in a valid state");
+            if (!_game.Get().Any()) throw new InvalidOperationException("Game is not in a valid state");
 
             // take a snapshot of the current state of the ScenarioModule so we can reuse it to load
             // the next version
             var snapshot = new ConfigNode("SCENARIO");
             bool snapshotSuccess = TryToSaveScenarioModuleState(instance, snapshot);
-            var game = _gameProvider.Get().Single();
+            var game = _game.Get().Single();
 
             if (!game.RemoveProtoScenarioModule(instance.GetType()))
                 throw new Exception("Failed to remove proto scenario module of " + instance.GetType().FullName);
