@@ -86,6 +86,10 @@
     <Compile Include="Commands\PluginReloadRequestedMethodCallCommand.cs" />
     <Compile Include="Commands\old\SavePluginConfigurationCommand.cs" />
     <Compile Include="Commands\old\SerializeObjectCommand.cs" />
+    <Compile Include="Gui\IMainViewMediator.cs" />
+    <Compile Include="Names\Styles.cs" />
+    <Compile Include="Names\TextureNames.cs" />
+    <Compile Include="Names\ViewNames.cs" />
     <Compile Include="ReloadablePlugin\Loaders\Addons\AddonTypeSystemFactory.cs" />
     <Compile Include="CompositeRoot\CoreContext.cs" />
     <Compile Include="CompositeRoot\FlightConfigNodeKeyValuePairComparer.cs" />
@@ -107,7 +111,6 @@
     <Compile Include="ReloadablePlugin\IGetTypesFromAssembly.cs" />
     <Compile Include="ReloadablePlugin\ReloadablePluginFactory.cs" />
     <Compile Include="Game\ILoadedAssemblyHandle.cs" />
-    <Compile Include="Gui\StrangeWindowView.cs" />
     <Compile Include="Gui\MainWindowMediator.cs" />
     <Compile Include="Names\AssemblyNames.cs" />
     <Compile Include="Names\DirectoryNames.cs" />
@@ -170,7 +173,7 @@
     <Compile Include="Gui\old\Messages\ShowConfigurationWindow.cs" />
     <Compile Include="Gui\old\ConfigurationWindow.cs" />
     <Compile Include="Gui\old\PluginConfigurationWindow.cs" />
-    <Compile Include="CompositeRoot\WindowFactory.cs" />
+    <Compile Include="Gui\WindowFactory.cs" />
     <Compile Include="ReloadablePlugin\Loaders\Addons\AddonLoader.cs" />
     <Compile Include="ReloadablePlugin\Loaders\Addons\AddonUnloader.cs" />
     <Compile Include="ReloadablePlugin\Definition\AssemblyDefinitionFromDiskReader.cs" />

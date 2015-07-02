@@ -2,32 +2,32 @@
 using System.Collections.Generic;
 using AssemblyReloader.Properties;
 using AssemblyReloader.StrangeIoC.extensions.injector;
+using ReeperCommon.Gui;
 using ReeperCommon.Gui.Window;
-using ReeperCommon.Logging;
 using UnityEngine;
 
 namespace AssemblyReloader.Gui
 {
+// ReSharper disable once ClassNeverInstantiated.Global
     public class MainWindowLogic : BasicWindowLogic, IMainView
     {
-        private IEnumerable<IPluginInfo> _plugins;
         private Vector2 _scroll = default(Vector2);
 
-        [Inject]
-        public ILog Log { get; set; }
+        [Inject] public IEnumerable<IPluginInfo> Plugins { get; set; }
+        [Inject] public IMainViewMediator Mediator { get; set; }
 
 
-        [Inject]
-        public IEnumerable<IPluginInfo> Plugins
+        public MainWindowLogic()
+            : base(new Rect(400f, 400f, 400f, 400f), new WindowID(), HighLogic.Skin, true)
         {
-            get { return _plugins; }
-            set { _plugins = value; }
         }
 
 
-        public MainWindowLogic(Rect rect, int winid, GUISkin skin, bool draggable = true)
-            : base(rect, winid, skin, draggable)
+        [PostConstruct]
+// ReSharper disable once UnusedMember.Local
+        private void LinkToMediator()
         {
+            Mediator.View = this;
         }
 
 
@@ -39,7 +39,7 @@ namespace AssemblyReloader.Gui
             {
                 _scroll = GUILayout.BeginScrollView(_scroll, GUILayout.ExpandWidth(true), GUILayout.ExpandHeight(true));
                 {
-                    foreach (var item in _plugins)
+                    foreach (var item in Plugins)
                         DrawReloadableItem(item);
                 }
                 GUILayout.EndScrollView();
@@ -64,6 +64,18 @@ namespace AssemblyReloader.Gui
                 }
             }
             GUILayout.EndHorizontal();
+        }
+
+
+        public void OnOptionsButtonClick()
+        {
+            
+        }
+
+
+        public void OnCloseButtonClick()
+        {
+            
         }
     }
 }

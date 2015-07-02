@@ -16,6 +16,135 @@ using Object = UnityEngine.Object;
 
 namespace TestProject
 {
+
+
+    //[KSPAddon(KSPAddon.Startup.Flight, false)]
+    public class WasteMemoryRunner : MonoBehaviour
+    {
+        private const long KB = 1024;
+        private const long Megs = KB * 1024;
+
+        private Rect _rect = new Rect(200f, 200f, 200f, 200f);
+
+        [NonSerialized]
+        private System.Collections.IEnumerator _projector;
+
+        [NonSerialized]
+        private byte[] _wasted;
+
+        //private List<byte> CreateByteList(int bytes)
+        //{
+        //    return new List<byte>(new byte[bytes]);
+        //}
+
+
+        private void Awake()
+        {
+            GameEvents.onGameSceneSwitchRequested.Add(Evt);
+
+        }
+
+        private void OnDestroy()
+        {
+            GameEvents.onGameSceneSwitchRequested.Remove(Evt);
+            //    Debug.LogWarning("MemoryWaster OnDestroy");
+            _wasted = null;
+            //    _projector = null;
+            //    GC.ReRegisterForFinalize(this);
+            GC.Collect(GC.MaxGeneration);
+        }
+
+        private void Evt(GameEvents.FromToAction<GameScenes, GameScenes> data)
+        {
+            Debug.LogWarning("Switching scenes");
+            Destroy(gameObject);
+        }
+
+        private void Draw(int winid)
+        {
+            GUILayout.BeginVertical();
+            {
+                GUILayout.Label("Allocated: " + ((float)(GC.GetTotalMemory(false) / Megs)).ToString("F2"));
+                if (GUILayout.Button("Waste 10 megs")) WasteMemory(10 * Megs);
+                if (GUILayout.Button("Waste 50 megs")) WasteMemory(50 * Megs);
+                if (GUILayout.Button("Waste 250 megs")) WasteMemory(250 * Megs);
+                if (GUILayout.Button("Force Garbage Collection")) RunGarbageCollection();
+                GUILayout.Space(25f);
+                if (GUILayout.Button("Waste 250 without IEnumerator"))
+                {
+                    _wasted = new byte[250*Megs];
+                    //_wasted = CreateByteList((int)(250 * Megs));
+                }
+                if (GUILayout.Button("Free"))
+                    _wasted = null;
+            }
+            GUILayout.EndVertical();
+            GUI.DragWindow();
+        }
+
+
+        private void RunGarbageCollection()
+        {
+
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+            Resources.UnloadUnusedAssets();
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+            Resources.UnloadUnusedAssets();
+        }
+
+
+        private void WasteMemory(long bytes)
+        {
+
+            //_wasted = null;
+            //_wasted = new Byte[bytes];
+            _projector = DoWasteMemory(bytes);
+        }
+
+
+        private IEnumerator DoWasteMemory(long bytes)
+        {
+            Debug.Log("Wasting " + (bytes / Megs) + " MBs");
+            var start = Time.realtimeSinceStartup;
+
+            _wasted = new byte[bytes];
+            //_wasted = CreateByteList((int)(250 * bytes));
+
+            while (Time.realtimeSinceStartup - start < 3f)
+                yield return 0; // waste 3 seconds
+
+            ScreenMessages.PostScreenMessage("Wasted " + ((float)(bytes / Megs)).ToString("F2") + " MBs");
+            _projector = null;
+
+        }
+
+
+        private void OnGUI()
+        {
+            _rect = GUILayout.Window(5553, _rect, Draw, "Memory Waster 1.0");
+        }
+
+
+        private void Update()
+        {
+            if (_projector != null)
+                _projector.MoveNext();
+
+            //if (_projector != null)
+            //    if (!_projector.MoveNext())
+            //        _projector = null;
+        }
+
+
+
+
+        //~WasteMemoryRunner()
+        //{
+        //    Debug.LogWarning("WasteMemoryRunner finalizer");
+        //}
+    }
     //[KSPAddon(KSPAddon.Startup.SpaceCentre, false)]
     //public class CheckConfigNode : MonoBehaviour
     //{

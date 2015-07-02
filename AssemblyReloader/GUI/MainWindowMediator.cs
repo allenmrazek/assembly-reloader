@@ -1,28 +1,30 @@
-﻿using AssemblyReloader.StrangeIoC.extensions.injector;
-using AssemblyReloader.StrangeIoC.extensions.mediation.impl;
-using ReeperCommon.Gui.Window;
+﻿using System;
+using System.Collections.Generic;
+using AssemblyReloader.StrangeIoC.extensions.injector;
 
 namespace AssemblyReloader.Gui
 {
 // ReSharper disable once ClassNeverInstantiated.Global
-    public class MainWindowMediator : Mediator
+    public class MainWindowMediator : IMainViewMediator
     {
-        [Inject]
-        public IWindowComponent ViewLogic { get; set; }
+        // View injects itself here
+        public IMainView View { get; set; }
 
-        override public void OnRegister()
+        [Inject] public IEnumerable<IPluginInfo> Plugins { get; set; }
+
+
+        public void Reload(IPluginInfo plugin)
         {
-            //view.init();
-            //dispatcher.AddListener
-            //    (ServiceEvent.FULFILL_ONLINE_PLAYERS, onPlayers);
-            //dispatcher.Dispatch
-            //    (ServiceEvent.REQUEST_ONLINE_PLAYERS);
+            if (plugin == null) throw new ArgumentNullException("plugin");
+
+            throw new System.NotImplementedException();
         }
 
-        override public void OnRemove()
+        public void ToggleOptions(IPluginInfo plugin)
         {
-            //dispatcher.RemoveListener
-            //    (ServiceEvent.FULFILL_ONLINE_PLAYERS, onPlayers);
+            if (plugin == null) throw new ArgumentNullException("plugin");
+
+            throw new System.NotImplementedException();
         }
     }
 }

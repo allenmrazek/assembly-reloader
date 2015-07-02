@@ -11,8 +11,58 @@
 //using ReeperCommon.Gui.Window.View;
 //using UnityEngine;
 
-//namespace AssemblyReloader.CompositeRoot
-//{
+using System;
+using AssemblyReloader.Names;
+using AssemblyReloader.Properties;
+using AssemblyReloader.StrangeIoC.extensions.injector;
+using ReeperCommon.Gui.Window.Buttons;
+using ReeperCommon.Gui.Window.Decorators;
+using ReeperCommon.Gui.Window.View;
+using UnityEngine;
+
+namespace AssemblyReloader.Gui
+{
+    public class WindowFactory
+    {
+        private static readonly Vector2 TitleBarButtonOffset = new Vector2(2f, 2f);
+        private static readonly Vector2 ResizableHotzoneSize = new Vector2(10f, 10f);
+
+        [Inject(TextureNames.CloseButton)] public Texture2D CloseButton { get; set; }
+        [Inject(TextureNames.SettingsButton)] public Texture2D SettingsButton { get; set; }
+        [Inject(TextureNames.ResizeCursor)] public Texture2D ResizeCursor { get; set; }
+
+        [Inject(Styles.TitleBarButtonStyle)] public GUIStyle TitleBarButtonStyle { get; set; }
+
+
+        public WindowView CreateMainWindow(
+            [NotNull] MainWindowLogic mainWindowLogic, 
+            [NotNull] MainWindowMediator mediator)
+        {
+            if (mainWindowLogic == null) throw new ArgumentNullException("mainWindowLogic");
+            if (mediator == null) throw new ArgumentNullException("mediator");
+
+            var clamp = new ClampToScreen(mainWindowLogic);
+
+            var withButtons = new TitleBarButtons(clamp, TitleBarButtons.ButtonAlignment.Right, TitleBarButtonOffset);
+
+            withButtons.AddButton(new BasicTitleBarButton(TitleBarButtonStyle, SettingsButton,
+                mainWindowLogic.OnOptionsButtonClick));
+
+            withButtons.AddButton(new BasicTitleBarButton(TitleBarButtonStyle, CloseButton,
+                mainWindowLogic.OnCloseButtonClick));
+
+            var resizable = new Resizable(withButtons, ResizableHotzoneSize, new Vector2(200f, 200f), ResizeCursor)
+            {
+                Title = "Assembly Reloader"
+            };
+
+            var view = WindowView.Create(resizable, "MainWindow");
+            UnityEngine.Object.DontDestroyOnLoad(view);
+
+            return view;
+        }
+    }
+
 //    public class WindowFactory
 //    {
 //        private readonly IWindowIdProvider _idProvider;
@@ -139,4 +189,4 @@
 //            return new WindowDescriptor(pluginWindow, withButtons, view);
 //        }
 //    }
-//}
+}

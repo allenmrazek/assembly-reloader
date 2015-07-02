@@ -1,13 +1,16 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using AssemblyReloader.Commands;
 using AssemblyReloader.Commands.old;
 using AssemblyReloader.DataObjects;
 using AssemblyReloader.FileSystem;
 using AssemblyReloader.Game;
+using AssemblyReloader.Gui;
 using AssemblyReloader.Names;
 using AssemblyReloader.Properties;
 using AssemblyReloader.Queries;
@@ -27,11 +30,14 @@ using Mono.Cecil;
 using Mono.Cecil.Cil;
 using ReeperCommon.FileSystem;
 using ReeperCommon.FileSystem.Providers;
+using ReeperCommon.Gui.Window;
+using ReeperCommon.Gui.Window.View;
 using ReeperCommon.Logging;
 using ReeperCommon.Repositories;
 using ReeperCommon.Serialization;
 using UnityEngine;
 using AssemblyDefinitionWeaver = AssemblyReloader.Weaving.old.AssemblyDefinitionWeaver;
+using Object = UnityEngine.Object;
 
 namespace AssemblyReloader.CompositeRoot
 {
@@ -60,7 +66,6 @@ namespace AssemblyReloader.CompositeRoot
             injectionBinder.Bind<IGetConfigurationFilePath>().To(new GetConfigurationFilePath());
             injectionBinder.Bind<IFileSystemFactory>()
                 .ToValue(new KSPFileSystemFactory(new KSPUrlDir(new KSPGameDataUrlDirProvider().Get())));
-            //injectionBinder.Bind<IEnumerable<ILoadedAssemblyTypeInstaller>>().To(CreateTypeInstallers());
 
             injectionBinder.Bind<IDirectory>()
                 .ToValue(injectionBinder.GetInstance<IFileSystemFactory>().GetGameDataDirectory())
@@ -75,7 +80,8 @@ namespace AssemblyReloader.CompositeRoot
 
             injectionBinder.Bind<IConfigNodeSerializer>().ToValue(
                 new ConfigNodeSerializer(new DefaultSurrogateSelector(new DefaultSurrogateProvider()),
-                    new GetFieldInfoComposite(new GetSerializableFieldsRecursiveType())));
+                    new GetSerializableFieldsRecursiveType()));
+
 
             var assemblyResolver = new DefaultAssemblyResolver();
             assemblyResolver.AddSearchDirectory(injectionBinder.GetInstance<IDirectory>(DirectoryNames.Core).FullPath);
@@ -87,6 +93,14 @@ namespace AssemblyReloader.CompositeRoot
 
             injectionBinder.Bind<IResourceRepository>()
                 .ToValue(ConfigureResourceRepository(injectionBinder.GetInstance<IDirectory>(DirectoryNames.Core)));
+
+            injectionBinder.Bind<WindowFactory>().To<WindowFactory>();
+            injectionBinder.Bind<GUIStyle>().ToValue(ConfigureTitleBarButtonStyle()).ToName(Styles.TitleBarButtonStyle);
+
+            BindTextureToName(injectionBinder.GetInstance<IResourceRepository>(), "Resources/btnClose", TextureNames.CloseButton);
+            BindTextureToName(injectionBinder.GetInstance<IResourceRepository>(), "Resources/btnWrench", TextureNames.SettingsButton);
+            BindTextureToName(injectionBinder.GetInstance<IResourceRepository>(), "Resources/cursor", TextureNames.ResizeCursor);
+
 
             injectionBinder.Bind<IGetAttributesOfType<KSPAddon>>().To<GetAttributesOfType<KSPAddon>>().ToSingleton();
             injectionBinder.Bind<IGetTypesFromAssembly<AddonType>>().To<GetAddonTypesFromAssembly>().ToSingleton();
@@ -114,75 +128,40 @@ namespace AssemblyReloader.CompositeRoot
 
 
 
-            foreach (var file in reloadableFileQuery.Get())
+            var reloadablePlugins = reloadableFileQuery.Get().Select(file =>
             {
-                log.Normal("Performing initial load of " + file.FileName);
+                var plugin = reloadablePluginFactory.Create(file);
 
-                var r = reloadablePluginFactory.Create(file);
-                if (r.Reload())
-                    log.Normal("Load successful");
-                else log.Error("Load failed");
-            }
+                plugin.Reload();
+
+                return plugin;
+            }).ToList();
+
+            injectionBinder.Bind<IEnumerable<IPluginInfo>>().To(reloadablePlugins.Cast<IPluginInfo>()).ToSingleton();
 
             log.Normal("Finished loading initial reloadable plugins.");
 
-            //injectionBinder.Bind<IEnumerable<IPluginInfo>>().ToValue(reloadablePlugins.Cast<IPluginInfo>());
-            //injectionBinder.Bind<IEnumerable<IReloadablePlugin>>().ToValue(reloadablePlugins);
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-            //mediationBinder.Bind<StrangeWindowView>()
-            //    .To<MainWindowMediator>();
-
-
-
-
-
-
-
-
-            //var mainLogic = new MainWindowLogic(new Rect(0, 0, 400, 400), 554, HighLogic.Skin);
-            //injectionBinder.Bind<IWindowComponent>()
-            //    .ToValue(mainLogic);
 
 
 
 
             // create main window ...
-            //var logic = new MainWindowLogic(new Rect(0, 0, 400, 400), 554, HighLogic.Skin);
-            //var view = StrangeWindowView.Create(logic);
-            //var view = new GameObject("TestView", typeof (StrangeWindowView));
-            //view.transform.parent = ((GameObject)contextView).transform;
-            //Object.DontDestroyOnLoad(view);
+            //injectionBinder.Bind<IWindowComponent>().To<IMainView>().To<MainWindowLogic>().ToName(ViewNames.Main).ToSingleton();
+            injectionBinder.Bind<MainWindowLogic>()
+                .To<IMainView>()
+                .To<MainWindowLogic>()
+                .ToName(ViewNames.Main)
+                .ToSingleton();
 
+            injectionBinder.Bind<MainWindowMediator>().To<MainWindowMediator>().ToSingleton();
 
-            //injectionBinder.Bind<IExampleModel>()
-            //    .To<ExampleModel>()
-            //    .ToSingleton();
-            //injectionBinder.Bind<IExampleService>()
-            //    .To<ExampleService>()
-            //    .ToSingleton();
+            var windowFactory = injectionBinder.GetInstance<WindowFactory>();
 
-            //mediationBinder.Bind<ExampleView>()
-            //    .To<ExampleMediator>();
+            windowFactory.CreateMainWindow(injectionBinder.GetInstance<MainWindowLogic>(ViewNames.Main),
+                injectionBinder.GetInstance<MainWindowMediator>());
 
-            //commandBinder.Bind(ExampleEvent.REQUEST_WEB_SERVICE)
-            //    .To<CallWebServiceCommand>();
-            //commandBinder.Bind(ContextEvent.START)
-            //    .To<StartCommand>().Once ();
-
-            //injectionBinder.GetInstance<ILog>().Warning("It seems to work!");
 
 
         }
@@ -195,63 +174,68 @@ namespace AssemblyReloader.CompositeRoot
             injectionBinder.Bind<ICommandBinder>().To<SignalCommandBinder>().ToSingleton();
         }
 
-         
-
-
-        public override void Launch()
-        {
-            base.Launch();
-            //Make sure you've mapped this to a StartCommand!
-            //StartSignal startSignal = (StartSignal)injectionBinder.GetInstance<StartSignal>();
-            //startSignal.Dispatch();
-        }
-
-
-        //private IEnumerable<ILoadedAssemblyTypeInstaller> CreateTypeInstallers()
-        //{
-        //    return new ILoadedAssemblyTypeInstaller[]
-        //    {
-        //        new GenericLoadedAssemblyTypeInstaller<Part>(new GetTypesDerivedFrom<Part>()),
-        //        new GenericLoadedAssemblyTypeInstaller<PartModule>(new GetTypesDerivedFrom<PartModule>()),
-        //        new GenericLoadedAssemblyTypeInstaller<ScenarioModule>(new GetTypesDerivedFrom<ScenarioModule>())
-        //    };
-        //}
-
-
-
-
+      
         private IResourceRepository ConfigureResourceRepository(IDirectory dllDirectory)
         {
+            // Removes extension from string, if an extension exists
+            // Also converts windows-style \\ to / 
+            Func<string, string> stripExtensionFromId = id =>
+            {
+                if (!Path.HasExtension(id) || string.IsNullOrEmpty(id)) return id;
+
+                var dir = Path.GetDirectoryName(id) ?? "";
+                var woExt = Path.Combine(dir, Path.GetFileNameWithoutExtension(id)).Replace('\\', '/');
+
+                return !string.IsNullOrEmpty(woExt) ? woExt : id;
+            };
+
+            // Appends assembly name and replaces slashes of both types with periods to come up with a manifest resource name
+            Func<string, string> convertUrlToResourceName = id =>
+            {
+                var prepend = Assembly.GetExecutingAssembly().GetName().Name + ".";
+
+                if (!id.StartsWith(prepend))
+                    id = prepend + id;
+
+                return id.Replace('/', '.').Replace('\\', '.');
+            };
+
+            var currentAssemblyResource = new ResourceFromEmbeddedResource(Assembly.GetExecutingAssembly());
+
+
             return new ResourceRepositoryComposite(
                 // search GameDatabase first
                 //   note: GameDatabase expects extensionless urls
-                    new ResourceIdentifierAdapter(id =>
-                    {
-                        if (!Path.HasExtension(id) || string.IsNullOrEmpty(id)) return id;
-
-                        var dir = Path.GetDirectoryName(id) ?? "";
-                        var woExt = Path.Combine(dir, Path.GetFileNameWithoutExtension(id)).Replace('\\', '/');
-
-                        return !string.IsNullOrEmpty(woExt) ? woExt : id;
-                    }, new ResourceFromGameDatabase()
-                    ),
+                new ResourceIdentifierAdapter(stripExtensionFromId, new ResourceFromGameDatabase()),
 
                 // then look at physical file system. These work on a list of items cached
                 // by GameDatabase rather than working directly with the disk (unless a resource 
                 // is accessed from here, of course)
-                    new ResourceFromDirectory(dllDirectory),
-
+                new ResourceFromDirectory(dllDirectory),
 
                 // finally search embedded resource
-                //   note: embedded resource ids should be appended by assembly namespace
-                    new ResourceIdentifierAdapter(id => Assembly.GetExecutingAssembly().GetName().Name + "." + id,
+                // we need to handle both cases of the url containing the extension or not...
+                new ResourceRepositoryComposite(
+                    // don't strip extension
+                    new ResourceIdentifierAdapter(convertUrlToResourceName, currentAssemblyResource),
 
-                //   note: expects resource manifest ids (periods instead of slashes), so 
-                //         identifier transformer is needed if we want to specify input identifiers
-                //         as though they were paths
-                    new ResourceIdentifierAdapter(id => id.Replace('/', '.').Replace('\\', '.'),
-                        new ResourceFromEmbeddedResource(Assembly.GetExecutingAssembly()))
-                    ));
+                    // strip extension
+                    new ResourceIdentifierAdapter(stripExtensionFromId,
+                        new ResourceIdentifierAdapter(convertUrlToResourceName, currentAssemblyResource)),
+                        
+                    // there's a potential third issue: if the incoming id doesn't contain an extension,
+                    // we might not fully match any of the manifest resource names. We'll add a special adapter
+                    // that will select the most-closely matching name if there's only one match
+                    new ResourceIdentifierAdapter(convertUrlToResourceName,
+                        new ResourceIdentifierAdapter(s =>
+                        {
+                            var resourceNames = Assembly.GetExecutingAssembly().GetManifestResourceNames()
+                                .Where(name => name.StartsWith(s))
+                                .ToList();
+
+                            return resourceNames.Count == 1 ? resourceNames.First() : s;
+                        }, currentAssemblyResource)
+                        )));   
         }
 
 
@@ -313,6 +297,31 @@ namespace AssemblyReloader.CompositeRoot
                 new ConditionalWeaveOperation(interceptAssemblyCodeBaseCalls, () => pluginConfiguration.RewriteAssemblyLocationCalls),
                 new ConditionalWeaveOperation(interceptAssemblyLocationCalls, () => pluginConfiguration.RewriteAssemblyLocationCalls));
 
+        }
+
+
+        private static GUIStyle ConfigureTitleBarButtonStyle()
+        {
+            var style = new GUIStyle(HighLogic.Skin.button) { border = new RectOffset(), padding = new RectOffset() };
+            style.fixedHeight = style.fixedWidth = 16f;
+            style.margin = new RectOffset();
+
+            return style;
+        }
+
+
+        private void BindTextureToName(IResourceRepository resourceRepo, string url, object name)
+        {
+            if (resourceRepo == null) throw new ArgumentNullException("resourceRepo");
+            if (name == null) throw new ArgumentNullException("name");
+            if (string.IsNullOrEmpty(url)) throw new ArgumentException("url is null or empty");
+
+            var tex = resourceRepo.GetTexture(url);
+
+            if (!tex.Any())
+                throw new Exception("Couldn't bind texture at \"" + url + "\"; texture not found");
+
+            injectionBinder.Bind<Texture2D>().ToValue(tex.Single()).ToName(name);
         }
     }
 }
