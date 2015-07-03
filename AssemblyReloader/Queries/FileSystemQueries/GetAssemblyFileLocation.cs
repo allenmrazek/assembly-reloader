@@ -9,13 +9,13 @@ using ReeperCommon.FileSystem;
 
 namespace AssemblyReloader.Queries.FileSystemQueries
 {
-    public class AssemblyFileLocationQuery : IAssemblyFileLocationQuery
+    public class GetAssemblyFileLocation : IGetAssemblyFileLocation
     {
         private readonly IGameAssemblyLoader _gameAssemblyLoader;
         private readonly IFileSystemFactory _fsFactory;
 
 
-        public AssemblyFileLocationQuery([NotNull] IGameAssemblyLoader gameAssemblyLoader,
+        public GetAssemblyFileLocation([NotNull] IGameAssemblyLoader gameAssemblyLoader,
             [NotNull] IFileSystemFactory fsFactory)
         {
             if (gameAssemblyLoader == null) throw new ArgumentNullException("gameAssemblyLoader");

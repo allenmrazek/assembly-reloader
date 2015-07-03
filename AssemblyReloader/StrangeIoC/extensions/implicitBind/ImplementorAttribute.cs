@@ -105,7 +105,7 @@ namespace AssemblyReloader.StrangeIoC.extensions.implicitBind
     }
 
     /// <summary>
-    /// Declares a View class implicity mediated by one or more named Mediators
+    /// Declares a MainView class implicity mediated by one or more named Mediators
     /// </summary>
     [AttributeUsage(AttributeTargets.Class,
         AllowMultiple = true,
@@ -122,7 +122,7 @@ namespace AssemblyReloader.StrangeIoC.extensions.implicitBind
     }
 
     /// <summary>
-    /// Declare a Mediator class implicitly bound to a provided View
+    /// Declare a Mediator class implicitly bound to a provided MainView
     /// </summary>
     [AttributeUsage(AttributeTargets.Class,
         AllowMultiple = false,
@@ -132,7 +132,7 @@ namespace AssemblyReloader.StrangeIoC.extensions.implicitBind
         /// <summary>
         /// Bind this Mediator to a view
         /// </summary>
-        /// <param name="t">View Type</param>
+        /// <param name="t">MainView Type</param>
         public Mediates(Type t) { ViewType = t; }
 
         public Type ViewType { get; set; }

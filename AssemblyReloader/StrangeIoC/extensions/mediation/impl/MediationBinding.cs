@@ -53,7 +53,7 @@ namespace AssemblyReloader.StrangeIoC.extensions.mediation.impl
 			{
 				Type keyType = key as Type;
 				if (abstractionType.IsAssignableFrom(keyType) == false)
-					throw new MediationException ("The View " + key.ToString() + " has been bound to the abstraction " + typeof(T).ToString() + " which the View neither extends nor implements. " , MediationExceptionType.VIEW_NOT_ASSIGNABLE);
+					throw new MediationException ("The MainView " + key.ToString() + " has been bound to the abstraction " + typeof(T).ToString() + " which the MainView neither extends nor implements. " , MediationExceptionType.VIEW_NOT_ASSIGNABLE);
 			}
 			_abstraction.Add (abstractionType);
 			return this;

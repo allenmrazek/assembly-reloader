@@ -20,7 +20,7 @@
  * Binds Views to Mediators.
  * 
  * Please read strange.extensions.mediation.api.IMediationBinder
- * where I've extensively explained the purpose of View mediation
+ * where I've extensively explained the purpose of MainView mediation
  */
 
 using System;
@@ -109,8 +109,8 @@ namespace AssemblyReloader.StrangeIoC.extensions.mediation.impl
 			return base.Bind<T> () as IMediationBinding;
 		}
 
-		/// Creates and registers one or more Mediators for a specific View instance.
-		/// Takes a specific View instance and a binding and, if a binding is found for that type, creates and registers a Mediator.
+		/// Creates and registers one or more Mediators for a specific MainView instance.
+		/// Takes a specific MainView instance and a binding and, if a binding is found for that type, creates and registers a Mediator.
 		virtual protected void mapView(IView view, IMediationBinding binding)
 		{
 			Type viewType = view.GetType();

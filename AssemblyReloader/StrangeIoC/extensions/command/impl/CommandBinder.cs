@@ -21,11 +21,11 @@
  * 
  * Commands are where the logic of your application belongs.
  * These Commands typically focus on a single function, such as
- * adding a View, requesting a service, reading from or saving to a model.
+ * adding a MainView, requesting a service, reading from or saving to a model.
  * 
  * The act of binding events to Commands means that code needn't know
  * anything about an event recipient, or even how the event will be used.
- * For example, a Mediator might send out an event that two View objects
+ * For example, a Mediator might send out an event that two MainView objects
  * collided. A Command would then determine that the result of that event
  * was to Destroy both objects, tell a ScoreKeeper model to change the
  * score and request a message be sent to the server. Whether that

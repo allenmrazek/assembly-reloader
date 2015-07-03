@@ -4,7 +4,7 @@ using ReeperCommon.FileSystem;
 
 namespace AssemblyReloader.Queries.FileSystemQueries
 {
-    public interface IAssemblyFileLocationQuery
+    public interface IGetAssemblyFileLocation
     {
         Maybe<IFile> Get(Assembly target);
     }

@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Linq;
+using AssemblyReloader.Configuration;
+using AssemblyReloader.Configuration.Names;
 using AssemblyReloader.DataObjects;
 using AssemblyReloader.FileSystem;
 using AssemblyReloader.Properties;
 using AssemblyReloader.ReloadablePlugin.Definition.Operations;
+using AssemblyReloader.StrangeIoC.extensions.injector;
 using Mono.Cecil;
 using ReeperCommon.FileSystem;
 using ReeperCommon.Logging;
@@ -28,7 +31,7 @@ namespace AssemblyReloader.ReloadablePlugin.Definition
             [NotNull] IGetTypeDefinitions getTypeDefinitions,
             [NotNull] IGetMethodDefinitions getMethodDefinitions,
             [NotNull] ILog log,
-            [NotNull] Func<bool> debugOutputToDisk)
+            [NotNull, Name(ConfigurationMethodNames.WriteReweavedAssemblyToDisk)] Func<bool> debugOutputToDisk)
         {
             if (baseAssemblyResolver == null) throw new ArgumentNullException("baseAssemblyResolver");
             if (getDebugSymbolFileExists == null) throw new ArgumentNullException("getDebugSymbolFileExists");

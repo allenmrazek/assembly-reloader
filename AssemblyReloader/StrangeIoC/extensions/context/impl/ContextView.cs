@@ -17,7 +17,7 @@
 /**
  * @class strange.extensions.context.impl.ContextView
  * 
- * The Root View of a Context hierarchy.
+ * The Root MainView of a Context hierarchy.
  * 
  * Extend this class to create your AppRoot, then attach
  * that MonoBehaviour to the GameObject at the very top of

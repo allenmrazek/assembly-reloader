@@ -8,7 +8,7 @@ using ReeperCommon.FileSystem;
 
 namespace AssemblyReloader.Queries.FileSystemQueries
 {
-    class AssemblyDirectoryQuery : IAssemblyDirectoryQuery
+    class GetAssemblyDirectory : IGetAssemblyDirectory
     {
         private readonly IGameAssemblyLoader _gameAssemblyLoader;
         private readonly Assembly _assembly;
@@ -16,7 +16,7 @@ namespace AssemblyReloader.Queries.FileSystemQueries
 
         private IDirectory _location;
 
-        public AssemblyDirectoryQuery([NotNull] IGameAssemblyLoader gameAssemblyLoader, Assembly assembly, IDirectory gameData)
+        public GetAssemblyDirectory([NotNull] IGameAssemblyLoader gameAssemblyLoader, Assembly assembly, IDirectory gameData)
         {
             if (gameAssemblyLoader == null) throw new ArgumentNullException("gameAssemblyLoader");
             if (assembly == null) throw new ArgumentNullException("assembly");

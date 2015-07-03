@@ -1,6 +1,6 @@
 ﻿namespace AssemblyReloader.Game
 {
-    public interface ICurrentSceneIsFlightQuery
+    public interface IGetCurrentSceneIsFlight
     {
         bool Get();
     }

@@ -24,7 +24,7 @@
  * warehouse and ready for you to map your dependencies.
  * 
  * As the name suggests, MVCSContext provides structure for
- * app development using the classic <a href="http://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller">MVC (Model-View-Controller)</a>
+ * app development using the classic <a href="http://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller">MVC (Model-MainView-Controller)</a>
  * design pattern, and adds 'S' (Service) for asynchronous calls outside 
  * the application. Strange is highly modular, so you needn't use
  * MVCSContext if you don't want to (you can extend Context or CrossContext directly)
@@ -318,8 +318,8 @@ namespace AssemblyReloader.StrangeIoC.extensions.context.impl
 
 		/// Caches early-riser Views.
 		/// 
-		/// If a View is on stage at startup, it's possible for that
-		/// View to be Awake before this Context has finished initing.
+		/// If a MainView is on stage at startup, it's possible for that
+		/// MainView to be Awake before this Context has finished initing.
 		/// `cacheView()` maintains a list of such 'early-risers'
 		/// until the Context is ready to mediate them.
 		virtual protected void cacheView(MonoBehaviour view)

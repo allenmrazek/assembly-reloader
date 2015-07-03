@@ -10,10 +10,10 @@ namespace AssemblyReloader.DataObjects
     public class Model : IModel
     {
         private readonly IDictionary<IPluginInfo, IReloadablePlugin> _plugins;
-        private readonly Configuration _configuration;
+        private readonly Configuration.Configuration _configuration;
 
 
-        public Model([NotNull] Configuration configuration, [NotNull] IDictionary<IPluginInfo, IReloadablePlugin> plugins)
+        public Model([NotNull] Configuration.Configuration configuration, [NotNull] IDictionary<IPluginInfo, IReloadablePlugin> plugins)
         {
             if (configuration == null) throw new ArgumentNullException("configuration");
             if (plugins == null) throw new ArgumentNullException("plugins");
@@ -29,7 +29,7 @@ namespace AssemblyReloader.DataObjects
         }
 
 
-        public Configuration Configuration
+        public Configuration.Configuration Configuration
         {
             get { return _configuration; }
         }

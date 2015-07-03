@@ -41,7 +41,7 @@ namespace AssemblyReloader.StrangeIoC.extensions.mediation.api
 		void OnRegister();
 
 		/// This method fires just before a GameObject will be destroyed.
-		/// Override to clean up any listeners, or anything else that might keep the View/Mediator pair from being garbage collected.
+		/// Override to clean up any listeners, or anything else that might keep the MainView/Mediator pair from being garbage collected.
 		void OnRemove();
 	}
 }

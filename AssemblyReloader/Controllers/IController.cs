@@ -2,7 +2,7 @@
 
 namespace AssemblyReloader.Controllers
 {
-    // View interacts with this to make changes to Model
+    // MainView interacts with this to make changes to Model
     public interface IController
     {
         void Reload(IPluginInfo plugin);

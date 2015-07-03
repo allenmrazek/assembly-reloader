@@ -14,21 +14,24 @@ namespace AssemblyReloader.Gui
         private Vector2 _scroll = default(Vector2);
 
         [Inject] public IEnumerable<IPluginInfo> Plugins { get; set; }
-        [Inject] public IMainViewMediator Mediator { get; set; }
+        [Inject] public IViewMediator Mediator { get; set; }
 
 
         public MainWindowLogic()
             : base(new Rect(400f, 400f, 400f, 400f), new WindowID(), HighLogic.Skin, true)
         {
+
         }
 
 
         [PostConstruct]
-// ReSharper disable once UnusedMember.Local
-        private void LinkToMediator()
+// ReSharper disable once UnusedMember.Global
+        public void AttachToMediator()
         {
-            Mediator.View = this;
+            Mediator.MainView = this;
         }
+
+
 
 
         public override void OnWindowDraw(int winid)
@@ -59,23 +62,21 @@ namespace AssemblyReloader.Gui
                 GUILayout.Label(reloadable.Name);
                 GUILayout.FlexibleSpace();
                 if (GUILayout.Button("Reload", GUILayout.ExpandWidth(false), GUILayout.ExpandHeight(false)))
-                {
-                    //_controller.Reload(reloadable);
-                }
+                    Mediator.Reload(reloadable);
             }
             GUILayout.EndHorizontal();
         }
 
 
-        public void OnOptionsButtonClick()
+        public void ToggleSettings()
         {
-            
+            Mediator.ToggleOptions();
         }
 
 
-        public void OnCloseButtonClick()
+        public void Close()
         {
-            
+            Mediator.HideMainWindow();
         }
     }
 }

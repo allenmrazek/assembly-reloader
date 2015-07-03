@@ -1,4 +1,4 @@
-﻿namespace AssemblyReloader.Names
+﻿namespace AssemblyReloader.Configuration.Names
 {
     public enum DirectoryNames
     {

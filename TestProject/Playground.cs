@@ -32,6 +32,8 @@ namespace TestProject
         [NonSerialized]
         private byte[] _wasted;
 
+        private Texture2D[] _wastedTextures;
+
         //private List<byte> CreateByteList(int bytes)
         //{
         //    return new List<byte>(new byte[bytes]);
@@ -60,6 +62,21 @@ namespace TestProject
             Destroy(gameObject);
         }
 
+
+        private void WasteTextures()
+        {
+            _wastedTextures = new Texture2D[250 / 12];
+
+            for (int i = 0; i < (250/12); ++i)
+            {
+                _wastedTextures[i] = new Texture2D(2048, 1024, TextureFormat.ARGB32, true);
+                var pixels = _wastedTextures[i].GetPixels32();
+                _wastedTextures[i].SetPixels32(pixels);
+                _wastedTextures[i].Apply();
+            }
+        }
+
+
         private void Draw(int winid)
         {
             GUILayout.BeginVertical();
@@ -77,6 +94,13 @@ namespace TestProject
                 }
                 if (GUILayout.Button("Free"))
                     _wasted = null;
+                if (GUILayout.Button("Waste Textures")) WasteTextures();
+                if (GUILayout.Button("Free Textures"))
+                {
+// ReSharper disable once ForCanBeConvertedToForeach
+                    for (int i = 0; i < _wastedTextures.Length; ++i)
+                        Destroy(_wastedTextures[i]);
+                }
             }
             GUILayout.EndVertical();
             GUI.DragWindow();

@@ -1,4 +1,5 @@
-﻿using AssemblyReloader.DataObjects;
+﻿using AssemblyReloader.Configuration;
+using AssemblyReloader.DataObjects;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
 {

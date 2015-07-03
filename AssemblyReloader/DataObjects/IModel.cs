@@ -6,7 +6,7 @@ namespace AssemblyReloader.DataObjects
     public interface IModel
     {
         IEnumerable<IPluginInfo> Plugins { get; }
-        Configuration Configuration { get; }
+        Configuration.Configuration Configuration { get; }
 
         bool Reload(IPluginInfo plugin);
     }

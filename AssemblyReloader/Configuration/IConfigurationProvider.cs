@@ -1,6 +1,4 @@
-﻿using AssemblyReloader.DataObjects;
-
-namespace AssemblyReloader.Providers
+﻿namespace AssemblyReloader.Configuration
 {
     public interface IConfigurationProvider
     {

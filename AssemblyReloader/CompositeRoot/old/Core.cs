@@ -157,7 +157,7 @@
 //            //container.Register<IGetAddonAttributesFromType>(new GetAddonAttributesFromType());
 
 //            //var ourDirProvider =
-//            //    container.Resolve<AssemblyDirectoryQuery>(new NamedParameterOverloads
+//            //    container.Resolve<GetAssemblyDirectory>(new NamedParameterOverloads
 //            //    {
 //            //        { "assembly", Assembly.GetExecutingAssembly() },
 //            //        { "gameData", container.Resolve<IDirectory>("GameData") }
@@ -168,7 +168,7 @@
 //            //container.Register(ConfigureEventProvider(container.Resolve<IGetStartupSceneFromGameScene>()));
 //            //container.Register(ConfigureLoadedAssemblyFactory());
 //            //container.Register(mainAssemblyFile.Single(), "Core");
-//            //container.Register<IFilePathProvider>(new ConfigFilePathProvider(container.Resolve<IFile>("Core")), "Core");
+//            //container.Register<IFilePathProvider>(new GetAssemblyConfigPath(container.Resolve<IFile>("Core")), "Core");
 //            //container.Register(container.Resolve<ConfigurationProvider>(new NamedParameterOverloads
 //            //{
 //            //    { "configurationFileProvider", container.Resolve<IFilePathProvider>("Core") },
@@ -287,7 +287,7 @@
 //        //    //    new ContextAdapter<IPluginInfo, SerializationContext>(
 //        //    //        pluginInfo =>
 //        //    //            new SerializationContext(pluginInfo.Configuration,
-//        //    //                new ConfigFilePathProvider(pluginInfo.Location)),
+//        //    //                new GetAssemblyConfigPath(pluginInfo.Location)),
 //        //    //        doPluginConfigurationSerializeCommand);
 
 

@@ -19,7 +19,7 @@
  * 
  * Interface for MediationBindings
  * 
- * Adds porcelain method to clarify View/Mediator binding.
+ * Adds porcelain method to clarify MainView/Mediator binding.
  */
 
 using AssemblyReloader.StrangeIoC.framework.api;
@@ -31,9 +31,9 @@ namespace AssemblyReloader.StrangeIoC.extensions.mediation.api
 		/// Porcelain for To<T> providing a little extra clarity and security.
 		IMediationBinding ToMediator<T>();
 
-		/// Provide an Interface or base Class adapter for the View.
+		/// Provide an Interface or base Class adapter for the MainView.
 		/// When the binding specifies ToAbstraction<T>, the Mediator will be expected to inject <T>
-		/// instead of the concrete View class.
+		/// instead of the concrete MainView class.
 		IMediationBinding ToAbstraction<T>();
 
 		/// Retrieve the abstracted value set by ToAbstraction<T>

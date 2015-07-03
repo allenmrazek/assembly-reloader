@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using AssemblyReloader.Configuration;
 using AssemblyReloader.DataObjects;
 
 namespace AssemblyReloader.ReloadablePlugin.Definition.Operations

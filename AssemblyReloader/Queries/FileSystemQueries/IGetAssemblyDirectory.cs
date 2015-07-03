@@ -2,7 +2,7 @@
 
 namespace AssemblyReloader.Queries.FileSystemQueries
 {
-    public interface IAssemblyDirectoryQuery
+    public interface IGetAssemblyDirectory
     {
         IDirectory Get();
     }

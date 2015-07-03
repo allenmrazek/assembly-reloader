@@ -33,7 +33,7 @@ namespace AssemblyReloader.StrangeIoC.extensions.context.impl
 {
 	public class Context : Binder, IContext
 	{
-		/// The top of the View hierarchy.
+		/// The top of the MainView hierarchy.
 		/// In MVCSContext, this is your top-level GameObject
 		public object contextView{get;set;}
 
@@ -157,13 +157,13 @@ namespace AssemblyReloader.StrangeIoC.extensions.context.impl
 			return null;
 		}
 
-		/// Register a View with this Context
+		/// Register a MainView with this Context
 		virtual public void AddView(object view)
 		{
 			//Override in subclasses
 		}
 
-		/// Remove a View from this Context
+		/// Remove a MainView from this Context
 		virtual public void RemoveView(object view)
 		{
 			//Override in subclasses

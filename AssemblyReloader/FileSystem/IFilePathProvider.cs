@@ -5,8 +5,7 @@
         string Get();
     }
 
-
-    public interface IFilePathProvider<TContext>
+    public interface IFilePathProvider<in TContext>
     {
         string Get(TContext context);
     }

@@ -15,12 +15,12 @@
  */
 
 /**
- * @class strange.extensions.mediation.impl.View
+ * @class strange.extensions.mediation.impl.MainView
  * 
  * Parent class for all your Views. Extends MonoBehaviour.
  * Bubbles its Awake, Start and OnDestroy events to the
  * ContextView, which allows the Context to know when these
- * critical moments occur in the View lifecycle.
+ * critical moments occur in the MainView lifecycle.
  */
 
 using AssemblyReloader.StrangeIoC.extensions.context.api;
@@ -48,12 +48,12 @@ namespace AssemblyReloader.StrangeIoC.extensions.mediation.impl
 			}
 		}
 
-		/// A flag for allowing the View to register with the Context
+		/// A flag for allowing the MainView to register with the Context
 		/// In general you can ignore this. But some developers have asked for a way of disabling
-		///  View registration with a checkbox from Unity, so here it is.
+		///  MainView registration with a checkbox from Unity, so here it is.
 		/// If you want to expose this capability either
 		/// (1) uncomment the commented-out line immediately below, or
-		/// (2) subclass View and override the autoRegisterWithContext method using your own custom (public) field.
+		/// (2) subclass MainView and override the autoRegisterWithContext method using your own custom (public) field.
 		//[SerializeField]
 		protected bool registerWithContext = true;
 		virtual public bool autoRegisterWithContext
@@ -65,7 +65,7 @@ namespace AssemblyReloader.StrangeIoC.extensions.mediation.impl
 		public bool registeredWithContext{get; set;}
 
 		/// A MonoBehaviour Awake handler.
-		/// The View will attempt to connect to the Context at this moment.
+		/// The MainView will attempt to connect to the Context at this moment.
 		protected virtual void Awake ()
 		{
 			if (autoRegisterWithContext && !registeredWithContext)
@@ -73,7 +73,7 @@ namespace AssemblyReloader.StrangeIoC.extensions.mediation.impl
 		}
 
 		/// A MonoBehaviour Start handler
-		/// If the View is not yet registered with the Context, it will 
+		/// If the MainView is not yet registered with the Context, it will 
 		/// attempt to connect again at this moment.
 		protected virtual void Start ()
 		{
@@ -82,7 +82,7 @@ namespace AssemblyReloader.StrangeIoC.extensions.mediation.impl
 		}
 
 		/// A MonoBehaviour OnDestroy handler
-		/// The View will inform the Context that it is about to be
+		/// The MainView will inform the Context that it is about to be
 		/// destroyed.
 		protected virtual void OnDestroy ()
 		{

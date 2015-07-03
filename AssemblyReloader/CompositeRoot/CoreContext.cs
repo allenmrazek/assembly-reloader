@@ -7,12 +7,14 @@ using System.Reflection;
 using System.Text;
 using AssemblyReloader.Commands;
 using AssemblyReloader.Commands.old;
+using AssemblyReloader.Configuration;
+using AssemblyReloader.Configuration.Names;
 using AssemblyReloader.DataObjects;
 using AssemblyReloader.FileSystem;
 using AssemblyReloader.Game;
 using AssemblyReloader.Gui;
-using AssemblyReloader.Names;
 using AssemblyReloader.Properties;
+using AssemblyReloader.Providers;
 using AssemblyReloader.Queries;
 using AssemblyReloader.Queries.CecilQueries;
 using AssemblyReloader.Queries.FileSystemQueries;
@@ -72,21 +74,23 @@ namespace AssemblyReloader.CompositeRoot
                 .ToName(DirectoryNames.GameData);
 
             injectionBinder.Bind<IDirectory>()
-                .ToValue(new AssemblyDirectoryQuery(
+                .ToValue(new GetAssemblyDirectory(
                     injectionBinder.GetInstance<IGameAssemblyLoader>(),
                     Assembly.GetExecutingAssembly(),
                     injectionBinder.GetInstance<IDirectory>(DirectoryNames.GameData)).Get())
                 .ToName(DirectoryNames.Core);
 
-            injectionBinder.Bind<IConfigNodeSerializer>().ToValue(
+            injectionBinder.Bind<IConfigNodeSerializer>().To(
                 new ConfigNodeSerializer(new DefaultSurrogateSelector(new DefaultSurrogateProvider()),
-                    new GetSerializableFieldsRecursiveType()));
+                    new GetSerializableFieldsRecursiveType())).ToSingleton();
 
 
             var assemblyResolver = new DefaultAssemblyResolver();
             assemblyResolver.AddSearchDirectory(injectionBinder.GetInstance<IDirectory>(DirectoryNames.Core).FullPath);
 
-            injectionBinder.Bind<BaseAssemblyResolver>().ToValue(assemblyResolver);
+            injectionBinder.Bind<BaseAssemblyResolver>().To(assemblyResolver).ToSingleton();
+
+            injectionBinder.Bind<Assembly>().To(Assembly.GetExecutingAssembly()).ToName(AssemblyNames.Core).ToSingleton();
 
             injectionBinder.Bind<IUnityObjectDestroyer>()
                 .ToValue(new UnityObjectDestroyer(new PluginReloadRequestedMethodCallCommand()));
@@ -95,7 +99,7 @@ namespace AssemblyReloader.CompositeRoot
                 .ToValue(ConfigureResourceRepository(injectionBinder.GetInstance<IDirectory>(DirectoryNames.Core)));
 
             injectionBinder.Bind<WindowFactory>().To<WindowFactory>();
-            injectionBinder.Bind<GUIStyle>().ToValue(ConfigureTitleBarButtonStyle()).ToName(Styles.TitleBarButtonStyle);
+            injectionBinder.Bind<GUIStyle>().To(ConfigureTitleBarButtonStyle()).ToName(Styles.TitleBarButtonStyle).ToSingleton();
 
             BindTextureToName(injectionBinder.GetInstance<IResourceRepository>(), "Resources/btnClose", TextureNames.CloseButton);
             BindTextureToName(injectionBinder.GetInstance<IResourceRepository>(), "Resources/btnWrench", TextureNames.SettingsButton);
@@ -104,17 +108,36 @@ namespace AssemblyReloader.CompositeRoot
 
             injectionBinder.Bind<IGetAttributesOfType<KSPAddon>>().To<GetAttributesOfType<KSPAddon>>().ToSingleton();
             injectionBinder.Bind<IGetTypesFromAssembly<AddonType>>().To<GetAddonTypesFromAssembly>().ToSingleton();
+            injectionBinder.Bind<IGetAssemblyFileLocation>().To<GetAssemblyFileLocation>().ToSingleton();
 
+            injectionBinder.Bind<IFile>()
+                .ToValue(GetAssemblyFileLocation(Assembly.GetExecutingAssembly()))
+                .ToName(FileNames.Core);
+
+            injectionBinder.Bind<IFilePathProvider<Assembly>>().To<GetAssemblyConfigPath>().ToSingleton();
+
+            injectionBinder.Bind<ConfigurationProvider>().To<ConfigurationProvider>().ToSingleton();
+
+            injectionBinder.Bind<Configuration.Configuration>()
+                .To(injectionBinder.GetInstance<ConfigurationProvider>().Get())
+                .ToSingleton();
+
+            //injectionBinder.Bind<IConfigurationProvider>().To<ConfigurationProvider>().ToSingleton();
+
+
+            //injectionBinder.Bind<Configuration>().To(injectionBinder.GetInstance<IConfigurationProvider>().Get()).ToSingleton();
   
-            injectionBinder.Bind<IAssemblyProviderFactory>().To(new AssemblyProviderFactory(
-                injectionBinder.GetInstance<BaseAssemblyResolver>(),
-                injectionBinder.GetInstance<IGetDebugSymbolsExistForDefinition>(),
-                injectionBinder.GetInstance<IWeaveOperationFactory>(),
-                new GetTypeDefinitionsExcluding(new GetAllTypesFromDefinition(),
-                    new GetInjectedHelperTypeFromDefinition()),
-                new GetAllMethodDefinitions(),
-                log.CreateTag("ILWeaver"),
-                () => true)).ToSingleton();
+
+
+            //injectionBinder.Bind<IAssemblyProviderFactory>().To(new AssemblyProviderFactory(
+            //    injectionBinder.GetInstance<BaseAssemblyResolver>(),
+            //    injectionBinder.GetInstance<IGetDebugSymbolsExistForDefinition>(),
+            //    injectionBinder.GetInstance<IWeaveOperationFactory>(),
+            //    new GetTypeDefinitionsExcluding(new GetAllTypesFromDefinition(),
+            //        new GetInjectedHelperTypeFromDefinition()),
+            //    new GetAllMethodDefinitions(),
+            //    log.CreateTag("ILWeaver"),
+            //    () => true)).ToSingleton();
 
             var reloadableFileQuery =
                 new ReloadableAssemblyFilesInDirectoryQuery(
@@ -147,21 +170,27 @@ namespace AssemblyReloader.CompositeRoot
 
 
 
-            // create main window ...
-            //injectionBinder.Bind<IWindowComponent>().To<IMainView>().To<MainWindowLogic>().ToName(ViewNames.Main).ToSingleton();
-            injectionBinder.Bind<MainWindowLogic>()
-                .To<IMainView>()
-                .To<MainWindowLogic>()
-                .ToName(ViewNames.Main)
-                .ToSingleton();
+            injectionBinder.Bind<IViewMediator>().To<ViewMediator>().ToSingleton();
 
-            injectionBinder.Bind<MainWindowMediator>().To<MainWindowMediator>().ToSingleton();
+            // create main window ...
+            injectionBinder.Bind<IMainView>()
+                .To<MainWindowLogic>();
+                //.ToSingleton();
+
 
             var windowFactory = injectionBinder.GetInstance<WindowFactory>();
 
-            windowFactory.CreateMainWindow(injectionBinder.GetInstance<MainWindowLogic>(ViewNames.Main),
-                injectionBinder.GetInstance<MainWindowMediator>());
+            windowFactory.CreateMainWindow(injectionBinder.GetInstance<IMainView>(),
+                injectionBinder.GetInstance<IViewMediator>());
 
+
+            // create settings window
+            injectionBinder.Bind<ISettingsView>()
+                .To<SettingsWindowLogic>()
+                .ToSingleton();
+
+            windowFactory.CreateSettingsWindow(injectionBinder.GetInstance<ISettingsView>(),
+                injectionBinder.GetInstance<IViewMediator>());
 
 
         }
@@ -323,5 +352,19 @@ namespace AssemblyReloader.CompositeRoot
 
             injectionBinder.Bind<Texture2D>().ToValue(tex.Single()).ToName(name);
         }
+
+
+        private IFile GetAssemblyFileLocation(Assembly target)
+        {
+            if (target == null) throw new ArgumentNullException("target");
+
+            var mf = injectionBinder.GetInstance<IGetAssemblyFileLocation>().Get(target);
+
+            if (!mf.Any()) throw new Exception("Failed to find file location of " + target.FullName);
+            return mf.Single();
+        }
+
+
+
     }
 }

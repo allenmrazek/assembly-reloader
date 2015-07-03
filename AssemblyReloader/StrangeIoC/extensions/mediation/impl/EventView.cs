@@ -17,12 +17,12 @@
 /**
  * @class strange.extensions.mediation.impl.EventView
  * 
- * Injects a local event bus into this View. Intended
- * for local communication between the View and its
+ * Injects a local event bus into this MainView. Intended
+ * for local communication between the MainView and its
  * Mediator.
  * 
  * Caution: we recommend against injecting the context-wide
- * dispatcher into a View.
+ * dispatcher into a MainView.
  */
 
 using AssemblyReloader.StrangeIoC.extensions.dispatcher.eventdispatcher.api;

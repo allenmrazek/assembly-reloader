@@ -1,6 +1,6 @@
 ﻿using ReeperCommon.Serialization;
 
-namespace AssemblyReloader.DataObjects
+namespace AssemblyReloader.Configuration
 {
     public class Configuration
     {
