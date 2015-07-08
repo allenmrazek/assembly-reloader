@@ -97,15 +97,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Config\SettingSerializationSurrogateTests.cs" />
     <Compile Include="Fixtures\AutoDomainDataAttribute.cs" />
     <Compile Include="Fixtures\AssemblyIsLocalAssemblyCustomization.cs" />
-    <Compile Include="Queries\AssemblyQueries\AddonsFromAssemblyQueryTests.cs" />
-    <Compile Include="Queries\CecilQueries\AllMethodsFromDefinitionQueryTests.cs" />
-    <Compile Include="Queries\CecilQueries\AllTypesFromDefinitionQueryTests.cs" />
-    <Compile Include="Queries\CecilQueries\CompositeTypeDefinitionQueryTests.cs" />
-    <Compile Include="Queries\CecilQueries\ExcludingMethodDefinitionsTests.cs" />
-    <Compile Include="Queries\CecilQueries\ExcludingTypeDefinitionsTests.cs" />
-    <Compile Include="Queries\CecilQueries\IntermediateLanguage\MethodCallInMethodBodyQueryTests.cs" />
     <Compile Include="TestData\Addons\IrrelevantAddonContainerClass.cs" />
     <Compile Include="TestData\Addons\MonoBehaviour_WithNoAddon.cs" />
     <Compile Include="TestData\Addons\TestAddon_InvalidResult.cs" />
@@ -118,8 +112,6 @@
     <Compile Include="TestData\PartModules\TestPartModule.cs" />
     <Compile Include="Fixtures\DomainCustomization.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Weaving\AssemblyDefinitionWeaverTests.cs" />
-    <Compile Include="Weaving\Commands\ProxyAssemblyMethodWriterTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

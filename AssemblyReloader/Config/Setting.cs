@@ -6,7 +6,8 @@ namespace AssemblyReloader.Config
 {
     public class Setting<T> : ISetting<T>
     {
-        [ReeperPersistent] public T _value;
+// ReSharper disable once MemberCanBePrivate.Global
+        [ReeperPersistent] public T Value;
 
 
         public Setting() : this(default(T))
@@ -16,19 +17,19 @@ namespace AssemblyReloader.Config
 
         public Setting(T value)
         {
-            _value = value;
+            Value = value;
         }
 
 
         public T Get()
         {
-            return _value;
+            return Value;
         }
 
 
         public void Set(T value)
         {
-            _value = value;
+            Value = value;
         }
 
 
@@ -41,14 +42,14 @@ namespace AssemblyReloader.Config
         {
             if (@from == null) throw new ArgumentNullException("from");
 
-            return from._value;
+            return from.Value;
         }
 
 
         public void Serialize(IConfigNodeSerializer formatter, ConfigNode node)
         {
-            new DebugLog().Normal("Serializing " + _value);
-            formatter.Serialize(_value, node);
+            new DebugLog().Normal("Serializing " + Value);
+            formatter.Serialize(Value, node);
 
             new DebugLog().Normal("Result: {0}", node.ToString());
         }
@@ -56,7 +57,7 @@ namespace AssemblyReloader.Config
 
         public void Deserialize(IConfigNodeSerializer formatter, ConfigNode node)
         {
-            formatter.Deserialize(_value, node);
+            formatter.Deserialize(Value, node);
         }
     }
 }
