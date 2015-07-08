@@ -97,21 +97,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controllers\AddonControllerTests.cs" />
-    <Compile Include="Controllers\PartModuleControllerTests.cs" />
-    <Compile Include="Controllers\ReloadablePluginControllerTests.cs" />
-    <Compile Include="DataObjects\TypeIdentifierTests.cs" />
-    <Compile Include="Destruction\AddonDestroyerTests.cs" />
-    <Compile Include="Destruction\DestructionControllerTests.cs" />
-    <Compile Include="Destruction\ObjectDestroyerTests.cs" />
-    <Compile Include="Disk\AssemblyDefinitionReaderTests.cs" />
-    <Compile Include="FixtureCustomizations\AutoDomainDataAttribute.cs" />
-    <Compile Include="Generators\UniqueAssemblyNameGeneratorTests.cs" />
-    <Compile Include="Loaders\PartModuleDescriptorFactoryTests.cs" />
-    <Compile Include="Loaders\PartModuleFactoryTests.cs" />
-    <Compile Include="Loaders\PartModuleLoaderTests.cs" />
-    <Compile Include="Loaders\PartModuleUnloaderTests.cs" />
-    <Compile Include="FixtureCustomizations\AssemblyIsLocalAssemblyCustomization.cs" />
+    <Compile Include="Fixtures\AutoDomainDataAttribute.cs" />
+    <Compile Include="Fixtures\AssemblyIsLocalAssemblyCustomization.cs" />
     <Compile Include="Queries\AssemblyQueries\AddonsFromAssemblyQueryTests.cs" />
     <Compile Include="Queries\CecilQueries\AllMethodsFromDefinitionQueryTests.cs" />
     <Compile Include="Queries\CecilQueries\AllTypesFromDefinitionQueryTests.cs" />
@@ -119,11 +106,6 @@
     <Compile Include="Queries\CecilQueries\ExcludingMethodDefinitionsTests.cs" />
     <Compile Include="Queries\CecilQueries\ExcludingTypeDefinitionsTests.cs" />
     <Compile Include="Queries\CecilQueries\IntermediateLanguage\MethodCallInMethodBodyQueryTests.cs" />
-    <Compile Include="Queries\ConversionQueries\AddonAttributesFromTypeQueryTests.cs" />
-    <Compile Include="Queries\ConversionQueries\StartupSceneFromGameSceneQueryTests.cs" />
-    <Compile Include="Queries\FileSystemQueries\ReloadableAssemblyFilesInDirectoryQueryTests.cs" />
-    <Compile Include="Queries\TypeIdentifierQueryTests.cs" />
-    <Compile Include="Repositories\FlightConfigRepositoryTests.cs" />
     <Compile Include="TestData\Addons\IrrelevantAddonContainerClass.cs" />
     <Compile Include="TestData\Addons\MonoBehaviour_WithNoAddon.cs" />
     <Compile Include="TestData\Addons\TestAddon_InvalidResult.cs" />
@@ -134,7 +116,7 @@
     <Compile Include="TestData\PartModules\DerivedPartModule.cs" />
     <Compile Include="TestData\PartModules\PartModuleContainerClass.cs" />
     <Compile Include="TestData\PartModules\TestPartModule.cs" />
-    <Compile Include="FixtureCustomizations\DomainCustomization.cs" />
+    <Compile Include="Fixtures\DomainCustomization.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Weaving\AssemblyDefinitionWeaverTests.cs" />
     <Compile Include="Weaving\Commands\ProxyAssemblyMethodWriterTests.cs" />

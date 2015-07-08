@@ -6,7 +6,7 @@ using ReeperCommon.Serialization;
 
 namespace AssemblyReloader.CompositeRoot
 {
-    public class GetSerializableFieldsRecursiveType : IGetFieldInfo
+    public class GetSerializableFieldsRecursiveType : IGetObjectFields
     {
         public IEnumerable<FieldInfo> Get(object target)
         {

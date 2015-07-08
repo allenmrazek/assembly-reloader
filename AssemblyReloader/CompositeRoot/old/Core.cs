@@ -146,8 +146,8 @@
 //            //    if (!mainAssemblyFile.Any()) throw new Exception("Failed to locate executing assembly file!");
 
 //            //container.Register<IConfigNodeSerializer>(
-//            //    new ConfigNodeSerializer(new DefaultSurrogateSelector(new DefaultSurrogateProvider()),
-//            //        new GetFieldInfoComposite(new GetSerializableFieldsRecursiveType())));
+//            //    new ConfigNodeSerializer(new DefaultConfigNodeItemSerializerSelector(new DefaultSurrogateProvider()),
+//            //        new GetObjectFieldsComposite(new GetSerializableFieldsRecursiveType())));
 
 
 //            //container.Register(container.Resolve<IFileSystemFactory>().GetGameDataDirectory(), "GameData");

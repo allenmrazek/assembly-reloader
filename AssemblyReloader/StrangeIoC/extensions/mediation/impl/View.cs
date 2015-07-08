@@ -54,7 +54,7 @@ namespace AssemblyReloader.StrangeIoC.extensions.mediation.impl
 		/// If you want to expose this capability either
 		/// (1) uncomment the commented-out line immediately below, or
 		/// (2) subclass MainView and override the autoRegisterWithContext method using your own custom (public) field.
-		//[SerializeField]
+		//[Serialize]
 		protected bool registerWithContext = true;
 		virtual public bool autoRegisterWithContext
 		{

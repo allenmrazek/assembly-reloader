@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
-using AssemblyReloader.Configuration;
-using AssemblyReloader.Configuration.Names;
+using AssemblyReloader.Config;
+using AssemblyReloader.Config.Names;
 using AssemblyReloader.DataObjects;
 using AssemblyReloader.FileSystem;
 using AssemblyReloader.Properties;

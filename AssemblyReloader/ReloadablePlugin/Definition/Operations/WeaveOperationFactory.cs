@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using AssemblyReloader.Configuration;
+using AssemblyReloader.Config;
 using AssemblyReloader.DataObjects;
 using AssemblyReloader.Properties;
 using AssemblyReloader.StrangeIoC.extensions.implicitBind;

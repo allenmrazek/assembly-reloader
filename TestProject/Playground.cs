@@ -18,6 +18,7 @@ namespace TestProject
 {
 
 
+
     //[KSPAddon(KSPAddon.Startup.Flight, false)]
     public class WasteMemoryRunner : MonoBehaviour
     {

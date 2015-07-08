@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using AssemblyReloader.Configuration;
+using AssemblyReloader.Config;
 using AssemblyReloader.DataObjects;
 using AssemblyReloader.Properties;
 using AssemblyReloader.Queries.FileSystemQueries;

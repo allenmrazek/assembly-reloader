@@ -40,7 +40,7 @@ namespace AssemblyReloader.Queries.FileSystemQueries
             // oddly, the urls in AssemblyLoader don't specify the filename, only the directory
             var url = results.First().url + Path.DirectorySeparatorChar + results.First().dllName;
  
-            return _fsFactory.GetGameDataDirectory().File(new KSPUrlIdentifier(url));
+            return _fsFactory.GameData.File(new KSPUrlIdentifier(url));
         }
     }
 }

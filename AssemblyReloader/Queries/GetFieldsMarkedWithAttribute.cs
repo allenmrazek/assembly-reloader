@@ -7,7 +7,7 @@ using ReeperCommon.Serialization;
 
 namespace AssemblyReloader.Queries
 {
-    public class GetFieldsMarkedWithAttribute<T> : IGetFieldInfo where T:Attribute
+    public class GetFieldsMarkedWithAttribute<T> : IGetObjectFields where T:Attribute
     {
         private readonly BindingFlags _fieldFlags;
 

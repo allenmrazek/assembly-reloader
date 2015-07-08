@@ -1,5 +1,5 @@
 ﻿using System;
-using AssemblyReloader.Configuration.Names;
+using AssemblyReloader.Config.Names;
 using AssemblyReloader.Properties;
 using AssemblyReloader.StrangeIoC.extensions.injector;
 using ReeperCommon.Gui.Window.Buttons;

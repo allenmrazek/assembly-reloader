@@ -1,6 +1,6 @@
 ﻿using System;
 using AssemblyReloader.CompositeRoot;
-using AssemblyReloader.Configuration;
+using AssemblyReloader.Config;
 using AssemblyReloader.DataObjects;
 using AssemblyReloader.Game;
 using AssemblyReloader.Properties;

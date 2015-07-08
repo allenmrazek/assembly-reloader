@@ -7,8 +7,8 @@ using System.Reflection;
 using System.Text;
 using AssemblyReloader.Commands;
 using AssemblyReloader.Commands.old;
-using AssemblyReloader.Configuration;
-using AssemblyReloader.Configuration.Names;
+using AssemblyReloader.Config;
+using AssemblyReloader.Config.Names;
 using AssemblyReloader.DataObjects;
 using AssemblyReloader.FileSystem;
 using AssemblyReloader.Game;
@@ -40,6 +40,7 @@ using ReeperCommon.Serialization;
 using UnityEngine;
 using AssemblyDefinitionWeaver = AssemblyReloader.Weaving.old.AssemblyDefinitionWeaver;
 using Object = UnityEngine.Object;
+using Configuration = AssemblyReloader.Config.Configuration;
 
 namespace AssemblyReloader.CompositeRoot
 {
@@ -70,7 +71,7 @@ namespace AssemblyReloader.CompositeRoot
                 .ToValue(new KSPFileSystemFactory(new KSPUrlDir(new KSPGameDataUrlDirProvider().Get())));
 
             injectionBinder.Bind<IDirectory>()
-                .ToValue(injectionBinder.GetInstance<IFileSystemFactory>().GetGameDataDirectory())
+                .ToValue(injectionBinder.GetInstance<IFileSystemFactory>().GameData)
                 .ToName(DirectoryNames.GameData);
 
             injectionBinder.Bind<IDirectory>()
@@ -81,9 +82,14 @@ namespace AssemblyReloader.CompositeRoot
                 .ToName(DirectoryNames.Core);
 
             injectionBinder.Bind<IConfigNodeSerializer>().To(
-                new ConfigNodeSerializer(new DefaultSurrogateSelector(new DefaultSurrogateProvider()),
+                new ConfigNodeSerializer(new DefaultConfigNodeItemSerializerSelector(new SurrogateProvider(new [] { Assembly.GetExecutingAssembly(), typeof(ConfigNodeSerializer).Assembly })),
                     new GetSerializableFieldsRecursiveType())).ToSingleton();
 
+            var testConfig = new Configuration();
+            var serializer = injectionBinder.GetInstance<IConfigNodeSerializer>();
+            var node = new ConfigNode();
+            serializer.Serialize(testConfig, node);
+            node.Save(KSPUtil.ApplicationRootPath + "/settings_serialize_test.cfg");
 
             var assemblyResolver = new DefaultAssemblyResolver();
             assemblyResolver.AddSearchDirectory(injectionBinder.GetInstance<IDirectory>(DirectoryNames.Core).FullPath);
@@ -118,7 +124,7 @@ namespace AssemblyReloader.CompositeRoot
 
             injectionBinder.Bind<ConfigurationProvider>().To<ConfigurationProvider>().ToSingleton();
 
-            injectionBinder.Bind<Configuration.Configuration>()
+            injectionBinder.Bind<Configuration>()
                 .To(injectionBinder.GetInstance<ConfigurationProvider>().Get())
                 .ToSingleton();
 
