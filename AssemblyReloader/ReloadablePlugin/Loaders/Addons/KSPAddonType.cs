@@ -4,12 +4,13 @@ using UnityEngine;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
 {
-    public class AddonType
+// ReSharper disable once InconsistentNaming
+    public class KSPAddonType
     {
         public Type Type { get; private set; }
         public KSPAddon Attribute { get; private set; }
 
-        public AddonType(Type addonType)
+        public KSPAddonType(Type addonType)
         {
             if (addonType == null) throw new ArgumentNullException("addonType");
 

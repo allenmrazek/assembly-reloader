@@ -15,7 +15,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
         private readonly IGameAssemblyLoader _gameAssemblyLoader;
         private readonly IGameAddonLoader _gameAddonLoader;
         private readonly IGetCurrentStartupScene _getStartupScene;
-        private readonly IGetTypesFromAssembly<AddonType> _getAddonTypesFromAssembly;
+        private readonly IGetTypesFromAssembly<KSPAddonType> _getAddonTypesFromAssembly;
         private readonly IUnityObjectDestroyer _unityDestroyer;
         private readonly IGetLoadedUnityComponents _getLoadedUnityComponents;
 
@@ -23,7 +23,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
             [NotNull] IGameAssemblyLoader gameAssemblyLoader,
             [NotNull] IGameAddonLoader gameAddonLoader, 
             [NotNull] IGetCurrentStartupScene getStartupScene,
-            [NotNull] IGetTypesFromAssembly<AddonType> getAddonTypesFromAssembly,
+            [NotNull] IGetTypesFromAssembly<KSPAddonType> getAddonTypesFromAssembly,
             [NotNull] IUnityObjectDestroyer unityDestroyer, 
             [NotNull] IGetLoadedUnityComponents getLoadedUnityComponents)
         {

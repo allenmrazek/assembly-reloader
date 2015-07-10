@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
 {
-    public class GetAddonTypesFromAssembly : IGetTypesFromAssembly<AddonType>
+    public class GetAddonTypesFromAssembly : IGetTypesFromAssembly<KSPAddonType>
     {
         private readonly IGetAttributesOfType<KSPAddon> _getAttributes;
 
@@ -17,13 +17,13 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
         }
 
 
-        public IEnumerable<AddonType> Get(Assembly assembly)
+        public IEnumerable<KSPAddonType> Get(Assembly assembly)
         {
             if (assembly == null) throw new ArgumentNullException("assembly");
 
             return assembly.GetTypes()
                 .Where(ty => _getAttributes.Get(ty).Any())
-                .Select(t => new AddonType(t));
+                .Select(t => new KSPAddonType(t));
         }
     }
 }

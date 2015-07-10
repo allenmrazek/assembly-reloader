@@ -16,160 +16,257 @@ using Object = UnityEngine.Object;
 
 namespace TestProject
 {
+    //[KSPAddon(KSPAddon.Startup.MainMenu, true)]
+//    public class DumpPlanetTextures : MonoBehaviour
+//    {
+//        private void Start()
+//        {
+//            StartCoroutine(CreateTextures());
+//            StartCoroutine(CreateKerbinMap("Duna"));
+//            StartCoroutine(CreateKerbinMap("Kerbin"));
+//        }
+
+//        IEnumerator CreateKerbinMap(string name)
+//        {
+//            var planetBody = FindObjectsOfType<CelestialBody>().Single(cb => cb.name == name).scaledBody;
+//            planetBody.PrintComponents(new DebugLog(name));
+
+//            for (int i = 0; i < 360; i += 36)
+//            {
+                
+//                var target =
+//                    planetBody.renderer.sharedMaterial.mainTexture.As2D().CreateReadable(planetBody.renderer.sharedMaterial);
+
+//                target.SaveToDisk(name + "_.png");
+//                Destroy(target);
+
+//                yield return 0;
+//            }
+
+//        }
+
+//        IEnumerator CreateTextures()
+//        {
+//            var bodies = FindObjectsOfType<CelestialBody>();
+
+//            print("Found: " + bodies.Length + " CelestialBody");
+
+            
+//            foreach (var body in bodies.Where(cb => cb.name == "Kerbin" || cb.name == "Duna"))
+//                //foreach (var r in body.GetComponentsInChildren<Renderer>(true))
+//                foreach (var r in new [] { body.scaledBody.renderer })
+//                {
+//                    print("Color map for " + body.name);
+
+//                    body.gameObject.PrintComponents(new DebugLog(body.name));
+
+//                    if (r == null)
+//                    {
+//                        print("no r");
+                        
+//                        continue;
+//                    }
+//                    if (r.sharedMaterial == null)
+//                    {
+//                        print("no material");
+//                        continue;
+//                    }
+
+//                    if (r.sharedMaterial.mainTexture == null)
+//                    {
+//                        print("<no main texture");
+//                        continue;
+//                    }
+//                    if (r.sharedMaterial.mainTexture.As2D() == null)
+//                        print("no conversion");
+
+//                    print("Shader: " + r.sharedMaterial.shader.name);
+//                    print("  with keywords: " + string.Join(", ", r.sharedMaterial.shaderKeywords));
+
+//                    Shader.SetGlobalVector("_sunLightDirection", Vector3.back);
+
+//                    var target = r.sharedMaterial.mainTexture.As2D().CreateReadable(r.sharedMaterial);
+//                    if (target == null) print("failed to create readable");
+
+//                    print("Creating texture of dimensions:" + target.width + "," + target.height);
+
+//                    target.SaveToDisk("cb_" + body.name + "_" + r.name + "_COLR.png");
+
+//                    Destroy(target);
+
+//                    print("Bump map");
+//                    if (r.sharedMaterial.GetTexture("_BumpMap") != null)
+//                    {
+//                        target = r.sharedMaterial.GetTexture("_BumpMap").As2D().CreateReadable();
+//                        target.SaveToDisk("cb_" + body.name + "_" + r.name + "_BUMP.png");
+//                        Destroy(target);
+//                    }
+
+//                    print("Spec Map");
+//                    if (r.sharedMaterial.GetTexture("_SpecMap") != null)
+//                    {
+//                        target = r.sharedMaterial.GetTexture("_SpecMap").As2D().CreateReadable();
+//                        target.SaveToDisk("cb_" + body.name + "_" + r.name + "_SPEC.png");
+//                        Destroy(target);
+//                    }
+
+//                    yield return 0;
+//                }
+//        }
+//    }
+
+
+//    //[KSPAddon(KSPAddon.Startup.Flight, false)]
+//    public class WasteMemoryRunner : MonoBehaviour
+//    {
+//        private const long KB = 1024;
+//        private const long Megs = KB * 1024;
+
+//        private Rect _rect = new Rect(200f, 200f, 200f, 200f);
+
+//        [NonSerialized]
+//        private System.Collections.IEnumerator _projector;
+
+//        [NonSerialized]
+//        private byte[] _wasted;
+
+//        private Texture2D[] _wastedTextures;
+
+//        //private List<byte> CreateByteList(int bytes)
+//        //{
+//        //    return new List<byte>(new byte[bytes]);
+//        //}
+
+
+//        private void Awake()
+//        {
+//            GameEvents.onGameSceneSwitchRequested.Add(Evt);
+
+//        }
+
+//        private void OnDestroy()
+//        {
+//            GameEvents.onGameSceneSwitchRequested.Remove(Evt);
+//            //    Debug.LogWarning("MemoryWaster OnDestroy");
+//            _wasted = null;
+//            //    _projector = null;
+//            //    GC.ReRegisterForFinalize(this);
+//            GC.Collect(GC.MaxGeneration);
+//        }
+
+//        private void Evt(GameEvents.FromToAction<GameScenes, GameScenes> data)
+//        {
+//            Debug.LogWarning("Switching scenes");
+//            Destroy(gameObject);
+//        }
+
+
+//        private void WasteTextures()
+//        {
+//            _wastedTextures = new Texture2D[250 / 12];
+
+//            for (int i = 0; i < (250/12); ++i)
+//            {
+//                _wastedTextures[i] = new Texture2D(2048, 1024, TextureFormat.ARGB32, true);
+//                var pixels = _wastedTextures[i].GetPixels32();
+//                _wastedTextures[i].SetPixels32(pixels);
+//                _wastedTextures[i].Apply();
+//            }
+//        }
+
+
+//        private void Draw(int winid)
+//        {
+//            GUILayout.BeginVertical();
+//            {
+//                GUILayout.Label("Allocated: " + ((float)(GC.GetTotalMemory(false) / Megs)).ToString("F2"));
+//                if (GUILayout.Button("Waste 10 megs")) WasteMemory(10 * Megs);
+//                if (GUILayout.Button("Waste 50 megs")) WasteMemory(50 * Megs);
+//                if (GUILayout.Button("Waste 250 megs")) WasteMemory(250 * Megs);
+//                if (GUILayout.Button("Force Garbage Collection")) RunGarbageCollection();
+//                GUILayout.Space(25f);
+//                if (GUILayout.Button("Waste 250 without IEnumerator"))
+//                {
+//                    _wasted = new byte[250*Megs];
+//                    //_wasted = CreateByteList((int)(250 * Megs));
+//                }
+//                if (GUILayout.Button("Free"))
+//                    _wasted = null;
+//                if (GUILayout.Button("Waste Textures")) WasteTextures();
+//                if (GUILayout.Button("Free Textures"))
+//                {
+//// ReSharper disable once ForCanBeConvertedToForeach
+//                    for (int i = 0; i < _wastedTextures.Length; ++i)
+//                        Destroy(_wastedTextures[i]);
+//                }
+//            }
+//            GUILayout.EndVertical();
+//            GUI.DragWindow();
+//        }
+
+
+//        private void RunGarbageCollection()
+//        {
+
+//            GC.Collect();
+//            GC.WaitForPendingFinalizers();
+//            Resources.UnloadUnusedAssets();
+//            GC.Collect();
+//            GC.WaitForPendingFinalizers();
+//            Resources.UnloadUnusedAssets();
+//        }
+
+
+//        private void WasteMemory(long bytes)
+//        {
+
+//            //_wasted = null;
+//            //_wasted = new Byte[bytes];
+//            _projector = DoWasteMemory(bytes);
+//        }
+
+
+//        private IEnumerator DoWasteMemory(long bytes)
+//        {
+//            Debug.Log("Wasting " + (bytes / Megs) + " MBs");
+//            var start = Time.realtimeSinceStartup;
+
+//            _wasted = new byte[bytes];
+//            //_wasted = CreateByteList((int)(250 * bytes));
+
+//            while (Time.realtimeSinceStartup - start < 3f)
+//                yield return 0; // waste 3 seconds
+
+//            ScreenMessages.PostScreenMessage("Wasted " + ((float)(bytes / Megs)).ToString("F2") + " MBs");
+//            _projector = null;
+
+//        }
+
+
+//        private void OnGUI()
+//        {
+//            _rect = GUILayout.Window(5553, _rect, Draw, "Memory Waster 1.0");
+//        }
+
+
+//        private void Update()
+//        {
+//            if (_projector != null)
+//                _projector.MoveNext();
+
+//            //if (_projector != null)
+//            //    if (!_projector.MoveNext())
+//            //        _projector = null;
+//        }
 
 
 
-    //[KSPAddon(KSPAddon.Startup.Flight, false)]
-    public class WasteMemoryRunner : MonoBehaviour
-    {
-        private const long KB = 1024;
-        private const long Megs = KB * 1024;
 
-        private Rect _rect = new Rect(200f, 200f, 200f, 200f);
-
-        [NonSerialized]
-        private System.Collections.IEnumerator _projector;
-
-        [NonSerialized]
-        private byte[] _wasted;
-
-        private Texture2D[] _wastedTextures;
-
-        //private List<byte> CreateByteList(int bytes)
-        //{
-        //    return new List<byte>(new byte[bytes]);
-        //}
-
-
-        private void Awake()
-        {
-            GameEvents.onGameSceneSwitchRequested.Add(Evt);
-
-        }
-
-        private void OnDestroy()
-        {
-            GameEvents.onGameSceneSwitchRequested.Remove(Evt);
-            //    Debug.LogWarning("MemoryWaster OnDestroy");
-            _wasted = null;
-            //    _projector = null;
-            //    GC.ReRegisterForFinalize(this);
-            GC.Collect(GC.MaxGeneration);
-        }
-
-        private void Evt(GameEvents.FromToAction<GameScenes, GameScenes> data)
-        {
-            Debug.LogWarning("Switching scenes");
-            Destroy(gameObject);
-        }
-
-
-        private void WasteTextures()
-        {
-            _wastedTextures = new Texture2D[250 / 12];
-
-            for (int i = 0; i < (250/12); ++i)
-            {
-                _wastedTextures[i] = new Texture2D(2048, 1024, TextureFormat.ARGB32, true);
-                var pixels = _wastedTextures[i].GetPixels32();
-                _wastedTextures[i].SetPixels32(pixels);
-                _wastedTextures[i].Apply();
-            }
-        }
-
-
-        private void Draw(int winid)
-        {
-            GUILayout.BeginVertical();
-            {
-                GUILayout.Label("Allocated: " + ((float)(GC.GetTotalMemory(false) / Megs)).ToString("F2"));
-                if (GUILayout.Button("Waste 10 megs")) WasteMemory(10 * Megs);
-                if (GUILayout.Button("Waste 50 megs")) WasteMemory(50 * Megs);
-                if (GUILayout.Button("Waste 250 megs")) WasteMemory(250 * Megs);
-                if (GUILayout.Button("Force Garbage Collection")) RunGarbageCollection();
-                GUILayout.Space(25f);
-                if (GUILayout.Button("Waste 250 without IEnumerator"))
-                {
-                    _wasted = new byte[250*Megs];
-                    //_wasted = CreateByteList((int)(250 * Megs));
-                }
-                if (GUILayout.Button("Free"))
-                    _wasted = null;
-                if (GUILayout.Button("Waste Textures")) WasteTextures();
-                if (GUILayout.Button("Free Textures"))
-                {
-// ReSharper disable once ForCanBeConvertedToForeach
-                    for (int i = 0; i < _wastedTextures.Length; ++i)
-                        Destroy(_wastedTextures[i]);
-                }
-            }
-            GUILayout.EndVertical();
-            GUI.DragWindow();
-        }
-
-
-        private void RunGarbageCollection()
-        {
-
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
-            Resources.UnloadUnusedAssets();
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
-            Resources.UnloadUnusedAssets();
-        }
-
-
-        private void WasteMemory(long bytes)
-        {
-
-            //_wasted = null;
-            //_wasted = new Byte[bytes];
-            _projector = DoWasteMemory(bytes);
-        }
-
-
-        private IEnumerator DoWasteMemory(long bytes)
-        {
-            Debug.Log("Wasting " + (bytes / Megs) + " MBs");
-            var start = Time.realtimeSinceStartup;
-
-            _wasted = new byte[bytes];
-            //_wasted = CreateByteList((int)(250 * bytes));
-
-            while (Time.realtimeSinceStartup - start < 3f)
-                yield return 0; // waste 3 seconds
-
-            ScreenMessages.PostScreenMessage("Wasted " + ((float)(bytes / Megs)).ToString("F2") + " MBs");
-            _projector = null;
-
-        }
-
-
-        private void OnGUI()
-        {
-            _rect = GUILayout.Window(5553, _rect, Draw, "Memory Waster 1.0");
-        }
-
-
-        private void Update()
-        {
-            if (_projector != null)
-                _projector.MoveNext();
-
-            //if (_projector != null)
-            //    if (!_projector.MoveNext())
-            //        _projector = null;
-        }
-
-
-
-
-        //~WasteMemoryRunner()
-        //{
-        //    Debug.LogWarning("WasteMemoryRunner finalizer");
-        //}
-    }
+//        //~WasteMemoryRunner()
+//        //{
+//        //    Debug.LogWarning("WasteMemoryRunner finalizer");
+//        //}
+//    }
     //[KSPAddon(KSPAddon.Startup.SpaceCentre, false)]
     //public class CheckConfigNode : MonoBehaviour
     //{

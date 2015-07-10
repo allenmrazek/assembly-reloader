@@ -1,21 +1,13 @@
 ﻿//using System;
-//using System.Collections;
 //using System.Collections.Generic;
-//using System.ComponentModel;
 //using System.Linq;
-//using System.Reflection;
-//using Microsoft.SqlServer.Server;
-//using ReeperCommon.Containers;
-//using ReeperCommon.Logging;
 //using ReeperCommon.Serialization;
 //using ReeperCommon.Serialization.Exceptions;
-//using UnityEngine;
 
 //namespace AssemblyReloader.Config
 //{
 //    // ReSharper disable once UnusedMember.Global
-//    public class SettingSerializationSurrogate : ISurrogateSerializer<Setting<bool>>,
-//                                                 ISurrogateSerializer<Setting<string>>
+//    public abstract class SettingSerializationSurrogate<T> : ISurrogateSerializer<Setting<T>>
 //    {
 //        //public void Serialize(object fieldOwner, FieldInfo field, ConfigNode config, IConfigNodeSerializer formatter)
 //        //{
@@ -91,26 +83,26 @@
 //        //        throw new ArgumentException("Type " + type.FullName + " doesn't contain expected generic argument");
 //        //}
 
-//        private interface IProxyAccessor
-//        {
-//            object Value { get; }
-//        }
+//        //private interface IProxyAccessor
+//        //{
+//        //    object Value { get; }
+//        //}
 
-//        public class ProxyAccessor<T> : IProxyAccessor
-//        {
-//            private readonly Setting<T> _setting;
+//        //public class ProxyAccessor : IProxyAccessor
+//        //{
+//        //    private readonly Setting<T> _setting;
 
-//            public ProxyAccessor(Setting<T> setting)
-//            {
-//                _setting = setting;
-//            }
+//        //    public ProxyAccessor(Setting<T> setting)
+//        //    {
+//        //        _setting = setting;
+//        //    }
 
-//            public object Value
-//            {
-//                get { return _setting.Value; }
-//                set { _setting.Value = (T) value; }
-//            }
-//        }
+//        //    public object Value
+//        //    {
+//        //        get { return _setting.Value; }
+//        //        set { _setting.Value = (T)value; }
+//        //    }
+//        //}
 
 
 //        public void Serialize(Type type, object target, string uniqueKey, ConfigNode config, IConfigNodeSerializer serializer)
@@ -121,14 +113,14 @@
 //            if (serializer == null) throw new ArgumentNullException("serializer");
 //            // note: delay target null check so that other runtime exceptions can be detected as early as possible in cycle
 
-//            var wrapped = GetSettingWrappedTypes(type).ToList();
+//            var wrapped = GetTypesThatSettingWraps(type).ToList();
 
 //            if (!wrapped.Any())
-//                throw new WrongSerializerException(type, typeof (Setting<>));
+//                throw new WrongSerializerException(type, typeof(Setting<>));
 
 //            if (wrapped.Count > 1)
 //                throw new Exception(type.FullName + " implements multiple ISetting<>: " +
-//                                    string.Join(",", GetSettingWrappedTypes(type).Select(t => t.FullName).ToArray())
+//                                    string.Join(",", GetTypesThatSettingWraps(type).Select(t => t.FullName).ToArray())
 //                                    + "; type to be serialized is ambiguous");
 
 //            // for a Setting<T>, get a serializer for T
@@ -139,8 +131,8 @@
 
 //            if (target == null) return;
 
-//            var accessor = Activator.CreateInstance(typeof (ProxyAccessor<>).MakeGenericType(wrapped.Single()), new [] { target}) as IProxyAccessor;
-//            if (accessor == null) throw new Exception("Failed to cast ProxyAccessor instance to IProxyAccessor");
+//            var accessor = (Setting<T>)target;
+//            if (accessor == null) throw new Exception("Failed to cast target to " + typeof(Setting<T>).FullName);
 
 //            wrappedSerializer.Single().Serialize(wrapped.Single(), accessor.Value, uniqueKey, config, serializer);
 //        }
@@ -152,14 +144,24 @@
 //        }
 
 
-//        public static IEnumerable<Type> GetSettingWrappedTypes(Type type)
+//        public static IEnumerable<Type> GetTypesThatSettingWraps(Type type)
 //        {
 //            if (type == null) throw new ArgumentNullException("type");
 
 //            return type.GetInterfaces()
 //                .Where(i => i.IsGenericType)
-//                .Where(i => i.GetGenericTypeDefinition() == typeof (Setting<>))
+//                .Where(i => i.GetGenericTypeDefinition() == typeof(Setting<>))
+//                .Where(i => i.GetGenericArguments().Length == 1)
 //                .Select(i => i.GetGenericArguments().First());
 //        }
 //    }
+
+//    //public class SettingSerializationSurrogateBoolean : SettingSerializationSurrogate<bool>
+//    //{
+//    //}
+
+//    //public class SettingSerializationSurrogateString : SettingSerializationSurrogate<string>
+//    //{
+        
+//    //}
 //}

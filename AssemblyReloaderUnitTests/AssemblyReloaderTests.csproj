@@ -97,7 +97,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Config\SettingSerializationSurrogateTests.cs" />
+    <Compile Include="Config\SettingSerializerSelectorTests.cs" />
     <Compile Include="Fixtures\AutoDomainDataAttribute.cs" />
     <Compile Include="Fixtures\AssemblyIsLocalAssemblyCustomization.cs" />
     <Compile Include="TestData\Addons\IrrelevantAddonContainerClass.cs" />

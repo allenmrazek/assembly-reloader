@@ -87,9 +87,10 @@
     <Compile Include="Commands\old\SavePluginConfigurationCommand.cs" />
     <Compile Include="Commands\old\SerializeObjectCommand.cs" />
     <Compile Include="Config\ISetting.cs" />
+    <Compile Include="Config\old\SerializerSelectorWithGenericSupport.cs" />
     <Compile Include="Config\Setting.cs" />
-    <Compile Include="Config\SettingSerializationSurrogate.cs" />
-    <Compile Include="Config\GenericSurrogateSelector.cs" />
+    <Compile Include="Config\old\SettingSerializationSurrogate.cs" />
+    <Compile Include="Config\SettingSerializerSelector.cs" />
     <Compile Include="Gui\ISettingsView.cs" />
     <Compile Include="Gui\IViewMediator.cs" />
     <Compile Include="Gui\SettingsWindowLogic.cs" />
@@ -112,7 +113,7 @@
     <Compile Include="ReloadablePlugin\Definition\Operations\old\InjectedHelperTypeDefinitionWriter.cs" />
     <Compile Include="ReloadablePlugin\Definition\Operations\old\InterceptExecutingAssemblyLocationQueries.cs" />
     <Compile Include="ReloadablePlugin\Definition\Operations\RenameAssemblyOperation.cs" />
-    <Compile Include="ReloadablePlugin\Loaders\Addons\AddonType.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\Addons\KSPAddonType.cs" />
     <Compile Include="ReloadablePlugin\Loaders\Addons\GetAddonTypesFromAssembly.cs" />
     <Compile Include="ReloadablePlugin\GetAttributesOfType.cs" />
     <Compile Include="ReloadablePlugin\IGetAttributesOfType.cs" />

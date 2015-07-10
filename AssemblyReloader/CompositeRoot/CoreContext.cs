@@ -81,12 +81,29 @@ namespace AssemblyReloader.CompositeRoot
                     injectionBinder.GetInstance<IDirectory>(DirectoryNames.GameData)).Get())
                 .ToName(DirectoryNames.Core);
 
-            injectionBinder.Bind<IConfigNodeSerializer>().To(
-                new ConfigNodeSerializer(new DefaultConfigNodeItemSerializerSelector(new SurrogateProvider(new [] { Assembly.GetExecutingAssembly(), typeof(ConfigNodeSerializer).Assembly })),
-                    new GetSerializableFieldsRecursiveType())).ToSingleton();
+
+            injectionBinder.Bind<ISurrogateProvider>()
+                .To(
+                    new SurrogateProvider(new[]
+                    {Assembly.GetExecutingAssembly(), typeof (IConfigNodeSerializer).Assembly}));
+
+            var serializerSelector =
+                new SettingSerializerSelector(new DefaultConfigNodeItemSerializerSelector(injectionBinder.GetInstance<ISurrogateProvider>()));
+
+            //serializerSelector.AddSurrogate(typeof (SettingSerializationSurrogate<Setting<>>),
+            //    new SettingSerializationSurrogate()); 
+
+            injectionBinder.Bind<IConfigNodeItemSerializerSelector>().To(serializerSelector);
+            injectionBinder.Bind<IGetObjectFields>().To<GetSerializableFieldsRecursiveType>().ToSingleton();
+            injectionBinder.Bind<IConfigNodeSerializer>().To<ConfigNodeSerializer>().ToSingleton();
+
+            //injectionBinder.Bind<IConfigNodeSerializer>().To(
+            //    new ConfigNodeSerializer(new DefaultConfigNodeItemSerializerSelector(new SurrogateProvider(new [] { Assembly.GetExecutingAssembly(), typeof(ConfigNodeSerializer).Assembly })),
+            //        new GetSerializableFieldsRecursiveType())).ToSingleton();
 
             var testConfig = new Configuration();
             var serializer = injectionBinder.GetInstance<IConfigNodeSerializer>();
+            log.Normal(serializer.ToString());
             var node = new ConfigNode();
             serializer.Serialize(testConfig, node);
             node.Save(KSPUtil.ApplicationRootPath + "/settings_serialize_test.cfg");
@@ -113,7 +130,7 @@ namespace AssemblyReloader.CompositeRoot
 
 
             injectionBinder.Bind<IGetAttributesOfType<KSPAddon>>().To<GetAttributesOfType<KSPAddon>>().ToSingleton();
-            injectionBinder.Bind<IGetTypesFromAssembly<AddonType>>().To<GetAddonTypesFromAssembly>().ToSingleton();
+            injectionBinder.Bind<IGetTypesFromAssembly<KSPAddonType>>().To<GetAddonTypesFromAssembly>().ToSingleton();
             injectionBinder.Bind<IGetAssemblyFileLocation>().To<GetAssemblyFileLocation>().ToSingleton();
 
             injectionBinder.Bind<IFile>()
@@ -132,18 +149,18 @@ namespace AssemblyReloader.CompositeRoot
 
 
             //injectionBinder.Bind<Configuration>().To(injectionBinder.GetInstance<IConfigurationProvider>().Get()).ToSingleton();
-  
 
 
-            //injectionBinder.Bind<IAssemblyProviderFactory>().To(new AssemblyProviderFactory(
-            //    injectionBinder.GetInstance<BaseAssemblyResolver>(),
-            //    injectionBinder.GetInstance<IGetDebugSymbolsExistForDefinition>(),
-            //    injectionBinder.GetInstance<IWeaveOperationFactory>(),
-            //    new GetTypeDefinitionsExcluding(new GetAllTypesFromDefinition(),
-            //        new GetInjectedHelperTypeFromDefinition()),
-            //    new GetAllMethodDefinitions(),
-            //    log.CreateTag("ILWeaver"),
-            //    () => true)).ToSingleton();
+
+            injectionBinder.Bind<IAssemblyProviderFactory>().To(new AssemblyProviderFactory(
+                injectionBinder.GetInstance<BaseAssemblyResolver>(),
+                injectionBinder.GetInstance<IGetDebugSymbolsExistForDefinition>(),
+                injectionBinder.GetInstance<IWeaveOperationFactory>(),
+                new GetTypeDefinitionsExcluding(new GetAllTypesFromDefinition(),
+                    new GetInjectedHelperTypeFromDefinition()),
+                new GetAllMethodDefinitions(),
+                log.CreateTag("ILWeaver"),
+                () => true)).ToSingleton();
 
             var reloadableFileQuery =
                 new ReloadableAssemblyFilesInDirectoryQuery(

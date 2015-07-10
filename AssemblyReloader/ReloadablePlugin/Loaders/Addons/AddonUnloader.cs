@@ -10,12 +10,12 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
 {
     public class AddonUnloader : IAddonUnloader
     {
-        private readonly IGetTypesFromAssembly<AddonType> _getAddonTypesFromAssembly;
+        private readonly IGetTypesFromAssembly<KSPAddonType> _getAddonTypesFromAssembly;
         private readonly IUnityObjectDestroyer _objectDestroyer;
         private readonly IGetLoadedUnityComponents _unityComponents;
 
         public AddonUnloader(
-            [NotNull] IGetTypesFromAssembly<AddonType> getAddonTypesFromAssembly,
+            [NotNull] IGetTypesFromAssembly<KSPAddonType> getAddonTypesFromAssembly,
             [NotNull] IUnityObjectDestroyer objectDestroyer,
             [NotNull] IGetLoadedUnityComponents unityComponents)
         {

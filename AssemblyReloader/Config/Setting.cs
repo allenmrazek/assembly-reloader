@@ -4,10 +4,10 @@ using ReeperCommon.Serialization;
 
 namespace AssemblyReloader.Config
 {
-    public class Setting<T> : ISetting<T>
+    public class Setting<T> : ISetting<T>//, IReeperPersistent
     {
 // ReSharper disable once MemberCanBePrivate.Global
-        [ReeperPersistent] public T Value;
+        /*[ReeperPersistent]*/ public T Value;
 
 
         public Setting() : this(default(T))
@@ -46,18 +46,18 @@ namespace AssemblyReloader.Config
         }
 
 
-        public void Serialize(IConfigNodeSerializer formatter, ConfigNode node)
-        {
-            new DebugLog().Normal("Serializing " + Value);
-            formatter.Serialize(Value, node);
+        //public void Serialize(IConfigNodeSerializer formatter, ConfigNode node)
+        //{
+        //    new DebugLog().Normal("Serializing " + Value);
+        //    formatter.Serialize(Value, node);
 
-            new DebugLog().Normal("Result: {0}", node.ToString());
-        }
+        //    new DebugLog().Normal("Result: {0}", node.ToString());
+        //}
 
 
-        public void Deserialize(IConfigNodeSerializer formatter, ConfigNode node)
-        {
-            formatter.Deserialize(Value, node);
-        }
+        //public void Deserialize(IConfigNodeSerializer formatter, ConfigNode node)
+        //{
+        //    formatter.Deserialize(Value, node);
+        //}
     }
 }
