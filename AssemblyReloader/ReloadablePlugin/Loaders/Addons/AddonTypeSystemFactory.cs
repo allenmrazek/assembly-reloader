@@ -48,7 +48,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
             if (pluginConfiguration == null) throw new ArgumentNullException("pluginConfiguration");
 
             return new AddonLoader(_gameAssemblyLoader, _gameAddonLoader, _getStartupScene,
-                () => pluginConfiguration.InstantlyAppliesToEveryScene);
+                pluginConfiguration.InstantlyAppliesToEveryScene);
         }
 
 

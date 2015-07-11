@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using AssemblyReloader.Config;
 using AssemblyReloader.Game;
 using AssemblyReloader.Properties;
 using ReeperCommon.Extensions;
@@ -11,13 +12,13 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
         private readonly IGameAssemblyLoader _gameAssemblyLoader;
         private readonly IGameAddonLoader _gameAddonLoader;
         private readonly IGetCurrentStartupScene _getCurrentStartupScene;
-        private readonly Func<bool> _alwaysLoadInstantAddons;
+        private readonly IReadOnlySetting<bool> _alwaysLoadInstantAddons;
 
         public AddonLoader(
             [NotNull] IGameAssemblyLoader gameAssemblyLoader, 
             [NotNull] IGameAddonLoader gameAddonLoader,
             [NotNull] IGetCurrentStartupScene getCurrentStartupScene,
-            [NotNull] Func<bool> alwaysLoadInstantAddons)
+            [NotNull] IReadOnlySetting<bool> alwaysLoadInstantAddons)
         {
             if (gameAssemblyLoader == null) throw new ArgumentNullException("gameAssemblyLoader");
             if (gameAddonLoader == null) throw new ArgumentNullException("gameAddonLoader");
@@ -39,7 +40,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
 
             LoadAddonsForScene(assemblyHandle.LoadedAssembly.assembly, currentScene);
 
-            if (currentScene != KSPAddon.Startup.Instantly && _alwaysLoadInstantAddons())
+            if (currentScene != KSPAddon.Startup.Instantly && _alwaysLoadInstantAddons.Get())
                 LoadAddonsForScene(assemblyHandle.LoadedAssembly.assembly, KSPAddon.Startup.Instantly);
         }
 

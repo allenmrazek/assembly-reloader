@@ -9,6 +9,8 @@
 
         void TogglePluginOptions(IPluginInfo plugin);
         void ToggleOptions();
+
         void HideMainWindow();
+        void SaveConfiguration();
     }
 }

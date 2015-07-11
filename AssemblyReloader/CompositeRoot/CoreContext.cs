@@ -66,6 +66,7 @@ namespace AssemblyReloader.CompositeRoot
             implicitBinder.ScanForAnnotatedClasses(namespaces);
 
             injectionBinder.Bind<ILog>().To(log).ToSingleton();
+            injectionBinder.Bind<ILog>().To(log.CreateTag("Configuration")).ToName(LogNames.Configuration);
 
             injectionBinder.Bind<IGetConfigurationFilePath>().To(new GetConfigurationFilePath());
             injectionBinder.Bind<IFileSystemFactory>()
@@ -97,16 +98,6 @@ namespace AssemblyReloader.CompositeRoot
             injectionBinder.Bind<IGetObjectFields>().To<GetSerializableFieldsRecursiveType>().ToSingleton();
             injectionBinder.Bind<IConfigNodeSerializer>().To<ConfigNodeSerializer>().ToSingleton();
 
-            //injectionBinder.Bind<IConfigNodeSerializer>().To(
-            //    new ConfigNodeSerializer(new DefaultConfigNodeItemSerializerSelector(new SurrogateProvider(new [] { Assembly.GetExecutingAssembly(), typeof(ConfigNodeSerializer).Assembly })),
-            //        new GetSerializableFieldsRecursiveType())).ToSingleton();
-
-            var testConfig = new Configuration();
-            var serializer = injectionBinder.GetInstance<IConfigNodeSerializer>();
-            log.Normal(serializer.ToString());
-            var node = new ConfigNode();
-            serializer.Serialize(testConfig, node);
-            node.Save(KSPUtil.ApplicationRootPath + "/settings_serialize_test.cfg");
 
             var assemblyResolver = new DefaultAssemblyResolver();
             assemblyResolver.AddSearchDirectory(injectionBinder.GetInstance<IDirectory>(DirectoryNames.Core).FullPath);
@@ -137,13 +128,18 @@ namespace AssemblyReloader.CompositeRoot
                 .ToValue(GetAssemblyFileLocation(Assembly.GetExecutingAssembly()))
                 .ToName(FileNames.Core);
 
-            injectionBinder.Bind<IFilePathProvider<Assembly>>().To<GetAssemblyConfigPath>().ToSingleton();
 
-            injectionBinder.Bind<ConfigurationProvider>().To<ConfigurationProvider>().ToSingleton();
+            injectionBinder.Bind<IConfigurationPathProvider>()
+                .To(
+                    new ConfigurationPathProvider(injectionBinder.GetInstance<IGetAssemblyFileLocation>()
+                        .Get(Assembly.GetExecutingAssembly())
+                        .Single(), "config"));
 
-            injectionBinder.Bind<Configuration>()
-                .To(injectionBinder.GetInstance<ConfigurationProvider>().Get())
-                .ToSingleton();
+
+
+
+            injectionBinder.Bind<Configuration>().To<IConfigurationSaver>().To<Configuration>().ToSingleton();
+
 
 
             injectionBinder.Bind<IAssemblyProviderFactory>().To(new AssemblyProviderFactory(
@@ -191,8 +187,8 @@ namespace AssemblyReloader.CompositeRoot
 
             // create main window ...
             injectionBinder.Bind<IMainView>()
-                .To<MainWindowLogic>();
-                //.ToSingleton();
+                .To<MainWindowLogic>()
+                .ToSingleton();
 
 
             var windowFactory = injectionBinder.GetInstance<WindowFactory>();

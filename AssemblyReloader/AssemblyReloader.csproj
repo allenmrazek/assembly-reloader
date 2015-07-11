@@ -74,7 +74,11 @@
     <Compile Include="Commands\PluginReloadRequestedMethodCallCommand.cs" />
     <Compile Include="Commands\old\SavePluginConfigurationCommand.cs" />
     <Compile Include="Commands\old\SerializeObjectCommand.cs" />
+    <Compile Include="Config\ConfigurationPathProvider.cs" />
+    <Compile Include="Config\IConfigurationPathProvider.cs" />
+    <Compile Include="Config\IConfigurationSaver.cs" />
     <Compile Include="Config\ISetting.cs" />
+    <Compile Include="Config\Names\LogNames.cs" />
     <Compile Include="Config\Setting.cs" />
     <Compile Include="Config\SettingSerializer.cs" />
     <Compile Include="Gui\ISettingsView.cs" />
@@ -120,7 +124,6 @@
     <Compile Include="Config\Configuration.cs" />
     <Compile Include="DataObjects\Model.cs" />
     <Compile Include="Config\PluginConfiguration.cs" />
-    <Compile Include="DataObjects\old\SerializationContext.cs" />
     <Compile Include="DataObjects\TemporaryFile.cs" />
     <Compile Include="CompositeRoot\IUnityObjectDestroyer.cs" />
     <Compile Include="CompositeRoot\UnityObjectDestroyer.cs" />
@@ -188,11 +191,9 @@
     <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\ScenarioModuleSnapshotGenerator.cs" />
     <Compile Include="Gui\old\Messages\ShowPluginConfigurationWindow.cs" />
     <Compile Include="ReloadablePlugin\Definition\AssemblyProvider.cs" />
-    <Compile Include="Config\ConfigurationProvider.cs" />
     <Compile Include="Providers\old\FilePathProviderFromContext.cs" />
     <Compile Include="ReloadablePlugin\Definition\IAssemblyDefinitionProvider.cs" />
     <Compile Include="Providers\IConfigNodeFormatterProvider.cs" />
-    <Compile Include="Config\IConfigurationProvider.cs" />
     <Compile Include="FileSystem\IFilePathProvider.cs" />
     <Compile Include="Game\GetLoadedAssemblyFileUrl.cs" />
     <Compile Include="Game\IGetLoadedAssemblyFileUrl.cs" />
@@ -208,7 +209,6 @@
     <Compile Include="Queries\GetFieldsMarkedWithAttribute.cs" />
     <Compile Include="CompositeRoot\FlightConfigNodeRepository.cs" />
     <Compile Include="CompositeRoot\DictionaryQueue.cs" />
-    <Compile Include="FileSystem\GetAssemblyConfigPath.cs" />
     <Compile Include="Signals\PluginLoadedSignal.cs" />
     <Compile Include="Signals\PluginUnloadedSignal.cs" />
     <Compile Include="StrangeIoC\extensions\command\api\CommandExceptionType.cs" />
@@ -435,6 +435,7 @@
     <EmbeddedResource Include="Resources\cursor.png" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Config\old\" />
     <Folder Include="Generators\" />
     <Folder Include="Queries\old\AssemblyQueries\" />
     <Folder Include="Weaving\old\Operations\" />

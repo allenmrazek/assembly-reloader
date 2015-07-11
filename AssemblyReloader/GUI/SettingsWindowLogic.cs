@@ -44,6 +44,7 @@ namespace AssemblyReloader.Gui
         public void Close()
         {
             Visible = false;
+            Mediator.SaveConfiguration();
         }
     }
 }
