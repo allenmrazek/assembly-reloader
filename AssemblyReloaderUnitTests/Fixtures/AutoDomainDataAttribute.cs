@@ -2,8 +2,6 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using AssemblyReloader.Config;
-using AssemblyReloaderTests.FixtureCustomizations;
-using Mono.Cecil;
 using Ploeh.AutoFixture;
 using Ploeh.AutoFixture.Xunit;
 

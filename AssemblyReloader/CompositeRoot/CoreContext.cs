@@ -30,6 +30,7 @@ using AssemblyReloader.StrangeIoC.extensions.context.impl;
 using AssemblyReloader.Weaving.old;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
+using ReeperCommon.Containers;
 using ReeperCommon.FileSystem;
 using ReeperCommon.FileSystem.Providers;
 using ReeperCommon.Gui.Window;
@@ -88,10 +89,9 @@ namespace AssemblyReloader.CompositeRoot
                     {Assembly.GetExecutingAssembly(), typeof (IConfigNodeSerializer).Assembly}));
 
             var serializerSelector =
-                new SettingSerializerSelector(new DefaultConfigNodeItemSerializerSelector(injectionBinder.GetInstance<ISurrogateProvider>()));
+                new DefaultConfigNodeItemSerializerSelector(injectionBinder.GetInstance<ISurrogateProvider>());
 
-            //serializerSelector.AddSurrogate(typeof (SettingSerializationSurrogate<Setting<>>),
-            //    new SettingSerializationSurrogate()); 
+            serializerSelector.AddSerializer(typeof (Setting<>), SettingSerializerFactory.Create);
 
             injectionBinder.Bind<IConfigNodeItemSerializerSelector>().To(serializerSelector);
             injectionBinder.Bind<IGetObjectFields>().To<GetSerializableFieldsRecursiveType>().ToSingleton();
@@ -144,12 +144,6 @@ namespace AssemblyReloader.CompositeRoot
             injectionBinder.Bind<Configuration>()
                 .To(injectionBinder.GetInstance<ConfigurationProvider>().Get())
                 .ToSingleton();
-
-            //injectionBinder.Bind<IConfigurationProvider>().To<ConfigurationProvider>().ToSingleton();
-
-
-            //injectionBinder.Bind<Configuration>().To(injectionBinder.GetInstance<IConfigurationProvider>().Get()).ToSingleton();
-
 
 
             injectionBinder.Bind<IAssemblyProviderFactory>().To(new AssemblyProviderFactory(

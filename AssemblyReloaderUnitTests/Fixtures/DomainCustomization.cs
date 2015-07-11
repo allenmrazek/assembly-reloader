@@ -1,7 +1,7 @@
 using Ploeh.AutoFixture;
 using Ploeh.AutoFixture.AutoNSubstitute;
 
-namespace AssemblyReloaderTests.FixtureCustomizations
+namespace AssemblyReloaderTests.Fixtures
 {
     public class DomainCustomization : CompositeCustomization
     {

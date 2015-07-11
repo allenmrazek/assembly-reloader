@@ -52,20 +52,8 @@
       <HintPath>..\packages\Mono.Cecil.0.9.5.0\lib\net35\Mono.Cecil.Mdb.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Mono.Cecil.Pdb, Version=0.9.4.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
-      <HintPath>..\packages\Mono.Cecil.0.9.5.0\lib\net35\Mono.Cecil.Pdb.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Mono.Cecil.Rocks, Version=0.9.4.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
-      <HintPath>..\packages\Mono.Cecil.0.9.5.0\lib\net35\Mono.Cecil.Rocks.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml" />
     <Reference Include="UnityEngine">
       <HintPath>..\..\..\Kerbal Space Program\KSP_Data\Managed\UnityEngine.dll</HintPath>
     </Reference>
@@ -87,10 +75,8 @@
     <Compile Include="Commands\old\SavePluginConfigurationCommand.cs" />
     <Compile Include="Commands\old\SerializeObjectCommand.cs" />
     <Compile Include="Config\ISetting.cs" />
-    <Compile Include="Config\old\SerializerSelectorWithGenericSupport.cs" />
     <Compile Include="Config\Setting.cs" />
-    <Compile Include="Config\old\SettingSerializationSurrogate.cs" />
-    <Compile Include="Config\SettingSerializerSelector.cs" />
+    <Compile Include="Config\SettingSerializer.cs" />
     <Compile Include="Gui\ISettingsView.cs" />
     <Compile Include="Gui\IViewMediator.cs" />
     <Compile Include="Gui\SettingsWindowLogic.cs" />

@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 using Ploeh.AutoFixture;
 
-namespace AssemblyReloaderTests.FixtureCustomizations
+namespace AssemblyReloaderTests.Fixtures
 {
     public class AssemblyIsLocalAssemblyCustomization : ICustomization
     {
