@@ -8,10 +8,9 @@ using UnityEngine;
 namespace AssemblyReloader.Gui
 {
 // ReSharper disable once UnusedMember.Global
-    public class SettingsWindowLogic : BasicWindowLogic, ISettingsView
+    public class SettingsWindowLogic : BasicWindowLogic
     {
-        [Inject] public IViewMediator Mediator { get; set; }
-        [Inject] public Configuration Configuration { get; set; }
+        public Configuration Configuration { get; set; }
 
         public SettingsWindowLogic()
             : base(new Rect(400f, 400f, 400f, 400f), new WindowID(), HighLogic.Skin, true)
@@ -19,12 +18,12 @@ namespace AssemblyReloader.Gui
         }
 
 
-        [PostConstruct]
-        // ReSharper disable once UnusedMember.Local
-        public void LinkToMediator()
-        {
-            Mediator.SettingsView = this;
-        }
+        //[PostConstruct]
+        //// ReSharper disable once UnusedMember.Local
+        //public void LinkToMediator()
+        //{
+        //    Mediator.SettingsView = this;
+        //}
 
 
         public override void OnWindowDraw(int winid)
@@ -44,7 +43,7 @@ namespace AssemblyReloader.Gui
         public void Close()
         {
             Visible = false;
-            Mediator.SaveConfiguration();
+            //Mediator.SaveConfiguration();
         }
     }
 }

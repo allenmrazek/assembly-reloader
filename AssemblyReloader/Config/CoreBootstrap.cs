@@ -3,10 +3,10 @@ using System.Collections;
 using AssemblyReloader.StrangeIoC.extensions.context.impl;
 using UnityEngine;
 
-namespace AssemblyReloader.CompositeRoot
+namespace AssemblyReloader.Config
 {
     [KSPAddon(KSPAddon.Startup.Instantly, true)]
-    class CoreView : ContextView
+    class CoreBootstrap : ContextView
     {
         private IEnumerator Start()
         {
@@ -41,7 +41,7 @@ namespace AssemblyReloader.CompositeRoot
     }
 
     //[KSPAddon(KSPAddon.Startup.Instantly, true)]
-    //class CoreView : MonoBehaviour
+    //class CoreBootstrap : MonoBehaviour
     //{
     //    private static bool _initialized = false; // this is to cover cases where database is reloaded and AssemblyReloader already exists
     //    [UsedImplicitly]

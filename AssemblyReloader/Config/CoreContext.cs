@@ -1,20 +1,16 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using AssemblyReloader.Commands;
 using AssemblyReloader.Commands.old;
-using AssemblyReloader.Config;
+using AssemblyReloader.CompositeRoot;
 using AssemblyReloader.Config.Names;
-using AssemblyReloader.DataObjects;
 using AssemblyReloader.FileSystem;
 using AssemblyReloader.Game;
 using AssemblyReloader.Gui;
 using AssemblyReloader.Properties;
-using AssemblyReloader.Providers;
 using AssemblyReloader.Queries;
 using AssemblyReloader.Queries.CecilQueries;
 using AssemblyReloader.Queries.FileSystemQueries;
@@ -22,7 +18,6 @@ using AssemblyReloader.ReloadablePlugin;
 using AssemblyReloader.ReloadablePlugin.Definition;
 using AssemblyReloader.ReloadablePlugin.Definition.Operations;
 using AssemblyReloader.ReloadablePlugin.Definition.Operations.old;
-using AssemblyReloader.ReloadablePlugin.Loaders;
 using AssemblyReloader.ReloadablePlugin.Loaders.Addons;
 using AssemblyReloader.StrangeIoC.extensions.command.api;
 using AssemblyReloader.StrangeIoC.extensions.command.impl;
@@ -30,24 +25,19 @@ using AssemblyReloader.StrangeIoC.extensions.context.impl;
 using AssemblyReloader.Weaving.old;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
-using ReeperCommon.Containers;
 using ReeperCommon.FileSystem;
 using ReeperCommon.FileSystem.Providers;
-using ReeperCommon.Gui.Window;
-using ReeperCommon.Gui.Window.View;
 using ReeperCommon.Logging;
 using ReeperCommon.Repositories;
 using ReeperCommon.Serialization;
 using UnityEngine;
 using AssemblyDefinitionWeaver = AssemblyReloader.Weaving.old.AssemblyDefinitionWeaver;
-using Object = UnityEngine.Object;
-using Configuration = AssemblyReloader.Config.Configuration;
 
-namespace AssemblyReloader.CompositeRoot
+namespace AssemblyReloader.Config
 {
-    class CoreContext : MVCSContext
+    public class SignalContext : MVCSContext
     {
-        public CoreContext(MonoBehaviour view, bool autoStartup)
+        public SignalContext(MonoBehaviour view, bool autoStartup)
             : base(view, autoStartup)
         {
         }
@@ -138,9 +128,6 @@ namespace AssemblyReloader.CompositeRoot
 
 
 
-            injectionBinder.Bind<Configuration>().To<IConfigurationSaver>().To<Configuration>().ToSingleton();
-
-
 
             injectionBinder.Bind<IAssemblyProviderFactory>().To(new AssemblyProviderFactory(
                 injectionBinder.GetInstance<BaseAssemblyResolver>(),
@@ -183,27 +170,30 @@ namespace AssemblyReloader.CompositeRoot
 
 
 
-            injectionBinder.Bind<IViewMediator>().To<ViewMediator>().ToSingleton();
+            //injectionBinder.Bind<IViewMediator>().To<ViewMediator>().ToSingleton();
+
 
             // create main window ...
-            injectionBinder.Bind<IMainView>()
-                .To<MainWindowLogic>()
-                .ToSingleton();
+            mediationBinder.BindView<MainView>().ToMediator<ViewMediator>();
+
+            //injectionBinder.Bind<IMainView>()
+            //    .To<MainWindowLogic>()
+            //    .ToSingleton();
 
 
-            var windowFactory = injectionBinder.GetInstance<WindowFactory>();
+            //var windowFactory = injectionBinder.GetInstance<WindowFactory>();
 
-            windowFactory.CreateMainWindow(injectionBinder.GetInstance<IMainView>(),
-                injectionBinder.GetInstance<IViewMediator>());
+            //windowFactory.CreateMainWindow(injectionBinder.GetInstance<IMainView>(),
+            //    injectionBinder.GetInstance<IViewMediator>());
 
 
-            // create settings window
-            injectionBinder.Bind<ISettingsView>()
-                .To<SettingsWindowLogic>()
-                .ToSingleton();
+            //// create settings window
+            //injectionBinder.Bind<ISettingsView>()
+            //    .To<SettingsWindowLogic>()
+            //    .ToSingleton();
 
-            windowFactory.CreateSettingsWindow(injectionBinder.GetInstance<ISettingsView>(),
-                injectionBinder.GetInstance<IViewMediator>());
+            //windowFactory.CreateSettingsWindow(injectionBinder.GetInstance<ISettingsView>(),
+            //    injectionBinder.GetInstance<IViewMediator>());
 
 
         }
@@ -216,7 +206,14 @@ namespace AssemblyReloader.CompositeRoot
             injectionBinder.Bind<ICommandBinder>().To<SignalCommandBinder>().ToSingleton();
         }
 
-      
+
+        public override void Launch()
+        {
+            base.Launch();
+            injectionBinder.GetInstance<StartSignal>().Dispatch();
+        }
+
+
         private IResourceRepository ConfigureResourceRepository(IDirectory dllDirectory)
         {
             // Removes extension from string, if an extension exists

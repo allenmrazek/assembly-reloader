@@ -8,13 +8,12 @@ using UnityEngine;
 
 namespace AssemblyReloader.Gui
 {
-// ReSharper disable once ClassNeverInstantiated.Global
-    public class MainWindowLogic : BasicWindowLogic, IMainView
+    // ReSharper disable once ClassNeverInstantiated.Global
+    public class MainWindowLogic : BasicWindowLogic
     {
         private Vector2 _scroll = default(Vector2);
 
-        [Inject] public IEnumerable<IPluginInfo> Plugins { get; set; }
-        [Inject] public IViewMediator Mediator { get; set; }
+        public IEnumerable<IPluginInfo> Plugins { get; set; }
 
 
         public MainWindowLogic()
@@ -24,12 +23,12 @@ namespace AssemblyReloader.Gui
         }
 
 
-        [PostConstruct]
-// ReSharper disable once UnusedMember.Global
-        public void AttachToMediator()
-        {
-            Mediator.MainView = this;
-        }
+        //        [PostConstruct]
+        //// ReSharper disable once UnusedMember.Global
+        //        public void AttachToMediator()
+        //        {
+        //            Mediator.MainView = this;
+        //        }
 
 
 
@@ -62,7 +61,9 @@ namespace AssemblyReloader.Gui
                 GUILayout.Label(reloadable.Name);
                 GUILayout.FlexibleSpace();
                 if (GUILayout.Button("Reload", GUILayout.ExpandWidth(false), GUILayout.ExpandHeight(false)))
-                    Mediator.Reload(reloadable);
+                {
+                    //Mediator.Reload(reloadable);
+                }
             }
             GUILayout.EndHorizontal();
         }
@@ -70,13 +71,13 @@ namespace AssemblyReloader.Gui
 
         public void ToggleSettings()
         {
-            Mediator.ToggleOptions();
+            //Mediator.ToggleOptions();
         }
 
 
         public void Close()
         {
-            Mediator.HideMainWindow();
+            //Mediator.HideMainWindow();
         }
     }
 }
