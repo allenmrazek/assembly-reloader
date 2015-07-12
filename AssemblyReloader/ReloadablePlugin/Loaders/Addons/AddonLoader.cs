@@ -63,15 +63,11 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
 
             try
             {
-                //AssemblyLoader.loadedAssemblies = new AssemblyLoader.LoadedAssembyList { loadedAssembly };
                 _gameAssemblyLoader.LoadedAssemblies = new AssemblyLoader.LoadedAssembyList {loadedAssembly};
-
-                //global::AddonLoader.Instance.StartAddons(scene);
                 _gameAddonLoader.StartAddons(scene);
             }
             finally
             {
-                //AssemblyLoader.loadedAssemblies = cache;
                 _gameAssemblyLoader.LoadedAssemblies = cache;
             }
         }

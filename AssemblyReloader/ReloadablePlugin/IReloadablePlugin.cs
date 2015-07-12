@@ -1,7 +1,9 @@
-﻿namespace AssemblyReloader.ReloadablePlugin
+﻿using AssemblyReloader.Gui;
+
+namespace AssemblyReloader.ReloadablePlugin
 {
-    public interface IReloadablePlugin
+    public interface IReloadablePlugin : IPluginInfo
     {
-        bool Reload();
+        void Reload();
     }
 }

@@ -5,37 +5,33 @@ using System.Linq;
 using System.Reflection;
 using AssemblyReloader.Commands;
 using AssemblyReloader.Commands.old;
-using AssemblyReloader.CompositeRoot;
-using AssemblyReloader.Config.Names;
+using AssemblyReloader.Common;
 using AssemblyReloader.FileSystem;
-using AssemblyReloader.Game;
 using AssemblyReloader.Gui;
 using AssemblyReloader.Properties;
 using AssemblyReloader.Queries;
 using AssemblyReloader.Queries.CecilQueries;
 using AssemblyReloader.Queries.FileSystemQueries;
 using AssemblyReloader.ReloadablePlugin;
+using AssemblyReloader.ReloadablePlugin.Config;
 using AssemblyReloader.ReloadablePlugin.Definition;
 using AssemblyReloader.ReloadablePlugin.Definition.Operations;
 using AssemblyReloader.ReloadablePlugin.Definition.Operations.old;
-using AssemblyReloader.ReloadablePlugin.Loaders.Addons;
 using AssemblyReloader.Weaving.old;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
 using ReeperCommon.FileSystem;
-using ReeperCommon.FileSystem.Providers;
 using ReeperCommon.Logging;
 using ReeperCommon.Repositories;
-using ReeperCommon.Serialization;
 using UnityEngine;
 using AssemblyDefinitionWeaver = AssemblyReloader.Weaving.old.AssemblyDefinitionWeaver;
 
 namespace AssemblyReloader.Config
 {
-    public class CoreContext : SignalContext
+    public class CoreContext : ReeperCommonContext
     {
-        public CoreContext(MonoBehaviour view, bool autoStartup)
-            : base(view, autoStartup)
+        public CoreContext(MonoBehaviour view)
+            : base(view)
         {
         }
         
@@ -43,17 +39,29 @@ namespace AssemblyReloader.Config
         {
             base.mapBindings();
 
-            var log = new DebugLog("ART");
-
-
-            injectionBinder.Bind<ILog>().To(log).ToSingleton().CrossContext();
+            // cross context bindings
             injectionBinder.Bind<SignalStart>().ToSingleton().CrossContext();
 
-            var reloadable = new GameObject().AddComponent<ReloadablePluginContextBootstrap>();
-            reloadable.Initialize(
-                new GetAssemblyFileLocation(new KspAssemblyLoader(new GetLoadedAssemblyFileUrl()),
-                    new KSPFileSystemFactory(new KSPUrlDir(new KSPGameDataUrlDirProvider().Get()))).Get(Assembly.GetExecutingAssembly())
-                    .Single());
+
+            // core context bindings
+            injectionBinder.Bind<IDirectory>().To(injectionBinder.GetInstance<IFileSystemFactory>().GameData);
+            injectionBinder.Bind<GetReloadableAssemblyFilesFromDirectoryRecursive>().ToSingleton();
+
+    
+            // bootstrap reloadable plugin contexts
+            //var reloadablePluginInfoMapping = 
+            //    injectionBinder.GetInstance<GetReloadableAssemblyFilesFromDirectoryRecursive>().Get()
+            //        .Select(f =>
+            //        {
+            //            var bootstrap = new GameObject("Bootstrap." + f.FileName);
+            //            //bootstrap.transform.parent = ((GameObject)contextView).transform;
+
+            //            return bootstrap.AddComponent<ReloadablePluginContextBootstrap>().Initialize(f);
+            //        })
+            //        .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+
+            //injectionBinder.Bind<IEnumerable<IPluginInfo>>().To(reloadablePluginInfoMapping.Keys);
+            //injectionBinder.Bind<IEnumerable<IReloadablePlugin>>().To(reloadablePluginInfoMapping.Values);
 
 
             commandBinder.Bind<SignalStart>().To<StartCommand>().Once();
@@ -144,7 +152,7 @@ namespace AssemblyReloader.Config
             //    () => true)).ToSingleton();
 
             //var reloadableFileQuery =
-            //    new ReloadableAssemblyFilesInDirectoryQuery(
+            //    new GetReloadableAssemblyFilesFromDirectoryRecursive(
             //        injectionBinder.GetInstance<IDirectory>(DirectoryNames.GameData));
 
             //log.Normal("Reloadable files count: " + reloadableFileQuery.Get().Count());

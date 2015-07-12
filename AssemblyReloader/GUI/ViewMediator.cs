@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using AssemblyReloader.Config;
+using AssemblyReloader.ReloadablePlugin;
 using AssemblyReloader.StrangeIoC.extensions.injector;
 using AssemblyReloader.StrangeIoC.extensions.mediation.impl;
 
@@ -16,7 +17,7 @@ namespace AssemblyReloader.Gui
         [Inject] public MainView MainView { get; set; }
         //[Inject] public ISettingsView SettingsView { get; set; }
 
-        [Inject] public IEnumerable<IPluginInfo> Plugins { get; set; }
+        [Inject] public IEnumerable<IReloadablePlugin> Plugins { get; set; }
         //[Inject] public IConfigurationSaver ConfigurationSaver { get; set; }
 
 
@@ -32,7 +33,7 @@ namespace AssemblyReloader.Gui
         {
             base.OnRegister();
 
-            MainView.ToggleSettingsSignal.AddListener(ToggleOptions);
+
             //MainView.Mediator = SettingsView.Mediator = this;
         }
 
@@ -41,7 +42,6 @@ namespace AssemblyReloader.Gui
         {
             base.OnRemove();
 
-            MainView.ToggleSettingsSignal.RemoveListener(ToggleOptions);
         }
 
 

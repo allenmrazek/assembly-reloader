@@ -1,18 +1,21 @@
 ﻿using System;
-using AssemblyReloader.Commands;
+using AssemblyReloader.Common;
 using AssemblyReloader.Config;
-using AssemblyReloader.ReloadablePlugin.Commands;
+using AssemblyReloader.Gui;
 using ReeperCommon.FileSystem;
 using ReeperCommon.Logging;
 using UnityEngine;
 
-namespace AssemblyReloader.ReloadablePlugin
+namespace AssemblyReloader.ReloadablePlugin.Config
 {
     public class ReloadablePluginContext : SignalContext
     {
         private readonly IFile _reloadableFile;
 
-        public ReloadablePluginContext(MonoBehaviour view, IFile reloadableFile, bool autoStartup) : base(view, autoStartup)
+        public IReloadablePlugin Plugin { get; private set; }
+        public IPluginInfo Info { get; private set; }
+
+        public ReloadablePluginContext(MonoBehaviour view, IFile reloadableFile) : base(view)
         {
             if (reloadableFile == null) throw new ArgumentNullException("reloadableFile");
 
@@ -25,7 +28,10 @@ namespace AssemblyReloader.ReloadablePlugin
             base.mapBindings();
 
 
-            commandBinder.Bind<SignalStart>().To<CommandLoadPlugin>().Once();
+            commandBinder.Bind<SignalStart>().To<CommandLoadPluginAssembly>().Once();
+
+            //commandBinder.Bind<SignalLoadAssembly>().InSequence()
+            //    .To<CommandLoadAddons>();
 
             // todo: map bindings for this file
         }

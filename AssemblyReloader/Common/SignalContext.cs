@@ -3,11 +3,11 @@ using AssemblyReloader.StrangeIoC.extensions.command.impl;
 using AssemblyReloader.StrangeIoC.extensions.context.impl;
 using UnityEngine;
 
-namespace AssemblyReloader.Config
+namespace AssemblyReloader.Common
 {
     public class SignalContext : MVCSContext
     {
-        public SignalContext(MonoBehaviour view, bool autoStartup) : base(view, autoStartup)
+        public SignalContext(MonoBehaviour view) : base(view)
         {
         }
 

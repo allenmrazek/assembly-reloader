@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using AssemblyReloader.ReloadablePlugin;
 using AssemblyReloader.StrangeIoC.extensions.mediation.impl;
 using AssemblyReloader.StrangeIoC.extensions.signal.impl;
 using ReeperCommon.Extensions;
@@ -11,7 +12,6 @@ namespace AssemblyReloader.Gui
 // ReSharper disable once UnusedMember.Global
     public class MainView : View
     {
-        internal Signal ToggleSettingsSignal = new Signal();
         private IWindowComponent _logic;
 
         public IEnumerable<IPluginInfo> Plugins { get; set; }

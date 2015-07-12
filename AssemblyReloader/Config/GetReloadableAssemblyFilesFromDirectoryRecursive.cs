@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using AssemblyReloader.StrangeIoC.extensions.implicitBind;
 using ReeperCommon.FileSystem;
 
-namespace AssemblyReloader.Queries.FileSystemQueries
+namespace AssemblyReloader.Config
 {
-    public class ReloadableAssemblyFilesInDirectoryQuery : IReloadableAssemblyFileLocationQuery
+    public class GetReloadableAssemblyFilesFromDirectoryRecursive
     {
         private readonly IDirectory _topDirectory;
 
-        public ReloadableAssemblyFilesInDirectoryQuery(IDirectory topDirectory)
+        public GetReloadableAssemblyFilesFromDirectoryRecursive(IDirectory topDirectory)
         {
             if (topDirectory == null) throw new ArgumentNullException("topDirectory");
             _topDirectory = topDirectory;

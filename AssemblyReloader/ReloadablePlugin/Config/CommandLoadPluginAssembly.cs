@@ -2,22 +2,20 @@
 using AssemblyReloader.StrangeIoC.extensions.injector;
 using ReeperCommon.Logging;
 
-namespace AssemblyReloader.ReloadablePlugin.Commands
+namespace AssemblyReloader.ReloadablePlugin.Config
 {
 // ReSharper disable once ClassNeverInstantiated.Global
 // ReSharper disable MemberCanBePrivate.Global
-    public class CommandLoadPlugin : Command
+    public class CommandLoadPluginAssembly : Command
     {
         [Inject] public ILog Log { get; set; }
-        [Inject] public SignalAssemblyLoaded LoadedSignal { get; set; }
+        [Inject] public SignalAssemblyWasLoaded LoadedSignal { get; set; }
 
 
         public override void Execute()
         {
-            Log.Warning("CommandLoadPlugin.Execute");
+            Log.Warning("CommandLoadPluginAssembly.Execute");
 
-            // now load the various types for this plugin
-            LoadedSignal.Dispatch(null);
         }
     }
 }

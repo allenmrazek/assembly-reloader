@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Linq;
-using AssemblyReloader.Game;
 using AssemblyReloader.Properties;
 using AssemblyReloader.Providers;
 using ReeperCommon.Extensions;
 using UnityEngine;
 
-namespace AssemblyReloader.CompositeRoot
+namespace AssemblyReloader.Game
 {
     public class KspPartActionWindowListener : MonoBehaviour
     {
