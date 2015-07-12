@@ -7,12 +7,13 @@ namespace AssemblyReloader.Config
 {
     [KSPAddon(KSPAddon.Startup.Instantly, true)]
 // ReSharper disable once UnusedMember.Global
-    class CoreBootstrap : ContextView
+    class CoreBootstrapper : ContextView
     {
         private IEnumerator Start()
         {
             enabled = false;
             yield return 0;
+            //yield return new WaitForSeconds(10f);
             enabled = true;
 
             DontDestroyOnLoad(this);
@@ -20,7 +21,6 @@ namespace AssemblyReloader.Config
             try
             {
                 context = new CoreContext(this);
-                context.Start();
             }
             catch (Exception e)
             {

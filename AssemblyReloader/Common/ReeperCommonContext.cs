@@ -1,4 +1,5 @@
-﻿using ReeperCommon.FileSystem;
+﻿using AssemblyReloader.StrangeIoC.extensions.context.api;
+using ReeperCommon.FileSystem;
 using ReeperCommon.FileSystem.Providers;
 using ReeperCommon.Logging;
 using UnityEngine;
@@ -7,7 +8,8 @@ namespace AssemblyReloader.Common
 {
     public class ReeperCommonContext : SignalContext
     {
-        public ReeperCommonContext(MonoBehaviour view) : base(view)
+        public ReeperCommonContext(MonoBehaviour view, ContextStartupFlags startup)
+            : base(view, startup)
         {
         }
 

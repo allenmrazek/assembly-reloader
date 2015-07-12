@@ -1,5 +1,6 @@
 ﻿using AssemblyReloader.StrangeIoC.extensions.command.api;
 using AssemblyReloader.StrangeIoC.extensions.command.impl;
+using AssemblyReloader.StrangeIoC.extensions.context.api;
 using AssemblyReloader.StrangeIoC.extensions.context.impl;
 using UnityEngine;
 
@@ -7,7 +8,7 @@ namespace AssemblyReloader.Common
 {
     public class SignalContext : MVCSContext
     {
-        public SignalContext(MonoBehaviour view) : base(view)
+        public SignalContext(MonoBehaviour view, ContextStartupFlags flags) : base(view, flags)
         {
         }
 

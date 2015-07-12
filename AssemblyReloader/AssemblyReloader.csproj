@@ -109,7 +109,6 @@
     <Compile Include="ReloadablePlugin\IGetAttributesOfType.cs" />
     <Compile Include="ReloadablePlugin\IGetTypesFromAssembly.cs" />
     <Compile Include="ReloadablePlugin\Config\ReloadablePluginContext.cs" />
-    <Compile Include="ReloadablePlugin\Config\ReloadablePluginContextBootstrap.cs" />
     <Compile Include="ReloadablePlugin\old\ReloadablePluginFactory.cs" />
     <Compile Include="Game\ILoadedAssemblyHandle.cs" />
     <Compile Include="Gui\ViewMediator.cs" />
@@ -364,7 +363,7 @@
     <Compile Include="Game\KspPart.cs" />
     <Compile Include="Game\KspPartLoader.cs" />
     <Compile Include="Game\KspVessel.cs" />
-    <Compile Include="Config\CoreBootstrap.cs" />
+    <Compile Include="Config\CoreBootstrapper.cs" />
     <Compile Include="Commands\old\ICommand.cs" />
     <Compile Include="Commands\old\CompositeCommand.cs" />
     <Compile Include="ReloadablePlugin\Definition\Operations\IUniqueAssemblyNameGenerator.cs" />

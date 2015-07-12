@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -17,6 +18,7 @@ using AssemblyReloader.ReloadablePlugin.Config;
 using AssemblyReloader.ReloadablePlugin.Definition;
 using AssemblyReloader.ReloadablePlugin.Definition.Operations;
 using AssemblyReloader.ReloadablePlugin.Definition.Operations.old;
+using AssemblyReloader.StrangeIoC.extensions.context.api;
 using AssemblyReloader.Weaving.old;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
@@ -31,7 +33,7 @@ namespace AssemblyReloader.Config
     public class CoreContext : ReeperCommonContext
     {
         public CoreContext(MonoBehaviour view)
-            : base(view)
+            : base(view, ContextStartupFlags.AUTOMATIC)
         {
         }
         
@@ -49,22 +51,27 @@ namespace AssemblyReloader.Config
 
     
             // bootstrap reloadable plugin contexts
-            //var reloadablePluginInfoMapping = 
-            //    injectionBinder.GetInstance<GetReloadableAssemblyFilesFromDirectoryRecursive>().Get()
-            //        .Select(f =>
-            //        {
-            //            var bootstrap = new GameObject("Bootstrap." + f.FileName);
-            //            //bootstrap.transform.parent = ((GameObject)contextView).transform;
+            var pluginContexts =
+                injectionBinder.GetInstance<GetReloadableAssemblyFilesFromDirectoryRecursive>().Get()
+                    .Select(f =>
+                    {
+                        var ctx = new ReloadablePluginContext(((GameObject) contextView).GetComponent<CoreBootstrapper>(), f);
+                        ctx.Start();
 
-            //            return bootstrap.AddComponent<ReloadablePluginContextBootstrap>().Initialize(f);
-            //        })
-            //        .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+                        return ctx;
+                    })
+                    .ToList();
 
-            //injectionBinder.Bind<IEnumerable<IPluginInfo>>().To(reloadablePluginInfoMapping.Keys);
-            //injectionBinder.Bind<IEnumerable<IReloadablePlugin>>().To(reloadablePluginInfoMapping.Values);
+            var pluginInfoMapping = pluginContexts.ToDictionary(context => context.Info, context => context.Plugin);
+
+            injectionBinder.Bind<IEnumerable<ReloadablePluginContext>>().To(pluginContexts);
+            injectionBinder.Bind<IEnumerable<IPluginInfo>>().To(pluginInfoMapping.Keys);
+            injectionBinder.Bind<IEnumerable<IReloadablePlugin>>().To(pluginInfoMapping.Values);
 
 
+            // set up command bindings
             commandBinder.Bind<SignalStart>().To<StartCommand>().Once();
+
 
 
             //injectionBinder.Bind<ILog>().To(log).ToSingleton();

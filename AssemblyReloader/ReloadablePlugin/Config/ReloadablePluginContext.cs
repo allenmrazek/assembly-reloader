@@ -1,7 +1,7 @@
 ﻿using System;
 using AssemblyReloader.Common;
-using AssemblyReloader.Config;
 using AssemblyReloader.Gui;
+using AssemblyReloader.StrangeIoC.extensions.context.api;
 using ReeperCommon.FileSystem;
 using ReeperCommon.Logging;
 using UnityEngine;
@@ -15,7 +15,7 @@ namespace AssemblyReloader.ReloadablePlugin.Config
         public IReloadablePlugin Plugin { get; private set; }
         public IPluginInfo Info { get; private set; }
 
-        public ReloadablePluginContext(MonoBehaviour view, IFile reloadableFile) : base(view)
+        public ReloadablePluginContext(MonoBehaviour view, IFile reloadableFile) : base(view, ContextStartupFlags.MANUAL_MAPPING)
         {
             if (reloadableFile == null) throw new ArgumentNullException("reloadableFile");
 
@@ -27,13 +27,20 @@ namespace AssemblyReloader.ReloadablePlugin.Config
         {
             base.mapBindings();
 
+            injectionBinder.Bind<IFile>().To(_reloadableFile);
 
-            commandBinder.Bind<SignalStart>().To<CommandLoadPluginAssembly>().Once();
+            injectionBinder.Bind<IReloadablePlugin>().Bind<IPluginInfo>().To<ReloadablePlugin>().ToSingleton();
+
+
+            //commandBinder.Bind<SignalStart>().To<CommandLoadPluginAssembly>().Once();
 
             //commandBinder.Bind<SignalLoadAssembly>().InSequence()
             //    .To<CommandLoadAddons>();
 
-            // todo: map bindings for this file
+
+
+            Plugin = injectionBinder.GetInstance<IReloadablePlugin>();
+            Info = injectionBinder.GetInstance<IPluginInfo>();
         }
 
 
