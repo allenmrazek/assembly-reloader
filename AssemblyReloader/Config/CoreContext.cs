@@ -19,9 +19,6 @@ using AssemblyReloader.ReloadablePlugin.Definition;
 using AssemblyReloader.ReloadablePlugin.Definition.Operations;
 using AssemblyReloader.ReloadablePlugin.Definition.Operations.old;
 using AssemblyReloader.ReloadablePlugin.Loaders.Addons;
-using AssemblyReloader.StrangeIoC.extensions.command.api;
-using AssemblyReloader.StrangeIoC.extensions.command.impl;
-using AssemblyReloader.StrangeIoC.extensions.context.impl;
 using AssemblyReloader.Weaving.old;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
@@ -35,182 +32,157 @@ using AssemblyDefinitionWeaver = AssemblyReloader.Weaving.old.AssemblyDefinition
 
 namespace AssemblyReloader.Config
 {
-    public class SignalContext : MVCSContext
+    public class CoreContext : SignalContext
     {
-        public SignalContext(MonoBehaviour view, bool autoStartup)
+        public CoreContext(MonoBehaviour view, bool autoStartup)
             : base(view, autoStartup)
         {
         }
         
         protected override void mapBindings()
         {
+            base.mapBindings();
+
             var log = new DebugLog("ART");
 
-            var namespaces = new string[]
-            {
-                "AssemblyReloader.FileSystem",
-                "AssemblyReloader.Game",
-                "AssemblyReloader.Generators",
-                "AssemblyReloader.ReloadablePlugin"
-            };
-            implicitBinder.ScanForAnnotatedClasses(namespaces);
 
-            injectionBinder.Bind<ILog>().To(log).ToSingleton();
-            injectionBinder.Bind<ILog>().To(log.CreateTag("Configuration")).ToName(LogNames.Configuration);
+            injectionBinder.Bind<ILog>().To(log).ToSingleton().CrossContext();
+            injectionBinder.Bind<SignalStart>().ToSingleton().CrossContext();
 
-            injectionBinder.Bind<IGetConfigurationFilePath>().To(new GetConfigurationFilePath());
-            injectionBinder.Bind<IFileSystemFactory>()
-                .ToValue(new KSPFileSystemFactory(new KSPUrlDir(new KSPGameDataUrlDirProvider().Get())));
-
-            injectionBinder.Bind<IDirectory>()
-                .ToValue(injectionBinder.GetInstance<IFileSystemFactory>().GameData)
-                .ToName(DirectoryNames.GameData);
-
-            injectionBinder.Bind<IDirectory>()
-                .ToValue(new GetAssemblyDirectory(
-                    injectionBinder.GetInstance<IGameAssemblyLoader>(),
-                    Assembly.GetExecutingAssembly(),
-                    injectionBinder.GetInstance<IDirectory>(DirectoryNames.GameData)).Get())
-                .ToName(DirectoryNames.Core);
+            var reloadable = new GameObject().AddComponent<ReloadablePluginContextBootstrap>();
+            reloadable.Initialize(
+                new GetAssemblyFileLocation(new KspAssemblyLoader(new GetLoadedAssemblyFileUrl()),
+                    new KSPFileSystemFactory(new KSPUrlDir(new KSPGameDataUrlDirProvider().Get()))).Get(Assembly.GetExecutingAssembly())
+                    .Single());
 
 
-            injectionBinder.Bind<ISurrogateProvider>()
-                .To(
-                    new SurrogateProvider(new[]
-                    {Assembly.GetExecutingAssembly(), typeof (IConfigNodeSerializer).Assembly}));
-
-            var serializerSelector =
-                new DefaultConfigNodeItemSerializerSelector(injectionBinder.GetInstance<ISurrogateProvider>());
-
-            serializerSelector.AddSerializer(typeof (Setting<>), SettingSerializerFactory.Create);
-
-            injectionBinder.Bind<IConfigNodeItemSerializerSelector>().To(serializerSelector);
-            injectionBinder.Bind<IGetObjectFields>().To<GetSerializableFieldsRecursiveType>().ToSingleton();
-            injectionBinder.Bind<IConfigNodeSerializer>().To<ConfigNodeSerializer>().ToSingleton();
+            commandBinder.Bind<SignalStart>().To<StartCommand>().Once();
 
 
-            var assemblyResolver = new DefaultAssemblyResolver();
-            assemblyResolver.AddSearchDirectory(injectionBinder.GetInstance<IDirectory>(DirectoryNames.Core).FullPath);
+            //injectionBinder.Bind<ILog>().To(log).ToSingleton();
+            //injectionBinder.Bind<ILog>().To(log.CreateTag("Configuration")).ToName(LogNames.Configuration);
 
-            injectionBinder.Bind<BaseAssemblyResolver>().To(assemblyResolver).ToSingleton();
+            //injectionBinder.Bind<IGetConfigurationFilePath>().To(new GetConfigurationFilePath());
+            //injectionBinder.Bind<IFileSystemFactory>()
+            //    .ToValue(new KSPFileSystemFactory(new KSPUrlDir(new KSPGameDataUrlDirProvider().Get())));
 
-            injectionBinder.Bind<Assembly>().To(Assembly.GetExecutingAssembly()).ToName(AssemblyNames.Core).ToSingleton();
+            //injectionBinder.Bind<IDirectory>()
+            //    .ToValue(injectionBinder.GetInstance<IFileSystemFactory>().GameData)
+            //    .ToName(DirectoryNames.GameData);
 
-            injectionBinder.Bind<IUnityObjectDestroyer>()
-                .ToValue(new UnityObjectDestroyer(new PluginReloadRequestedMethodCallCommand()));
-
-            injectionBinder.Bind<IResourceRepository>()
-                .ToValue(ConfigureResourceRepository(injectionBinder.GetInstance<IDirectory>(DirectoryNames.Core)));
-
-            injectionBinder.Bind<WindowFactory>().To<WindowFactory>();
-            injectionBinder.Bind<GUIStyle>().To(ConfigureTitleBarButtonStyle()).ToName(Styles.TitleBarButtonStyle).ToSingleton();
-
-            BindTextureToName(injectionBinder.GetInstance<IResourceRepository>(), "Resources/btnClose", TextureNames.CloseButton);
-            BindTextureToName(injectionBinder.GetInstance<IResourceRepository>(), "Resources/btnWrench", TextureNames.SettingsButton);
-            BindTextureToName(injectionBinder.GetInstance<IResourceRepository>(), "Resources/cursor", TextureNames.ResizeCursor);
+            //injectionBinder.Bind<IDirectory>()
+            //    .ToValue(new GetAssemblyDirectory(
+            //        injectionBinder.GetInstance<IGameAssemblyLoader>(),
+            //        Assembly.GetExecutingAssembly(),
+            //        injectionBinder.GetInstance<IDirectory>(DirectoryNames.GameData)).Get())
+            //    .ToName(DirectoryNames.Core);
 
 
-            injectionBinder.Bind<IGetAttributesOfType<KSPAddon>>().To<GetAttributesOfType<KSPAddon>>().ToSingleton();
-            injectionBinder.Bind<IGetTypesFromAssembly<KSPAddonType>>().To<GetAddonTypesFromAssembly>().ToSingleton();
-            injectionBinder.Bind<IGetAssemblyFileLocation>().To<GetAssemblyFileLocation>().ToSingleton();
+            //injectionBinder.Bind<ISurrogateProvider>()
+            //    .To(
+            //        new SurrogateProvider(new[]
+            //        {Assembly.GetExecutingAssembly(), typeof (IConfigNodeSerializer).Assembly}));
 
-            injectionBinder.Bind<IFile>()
-                .ToValue(GetAssemblyFileLocation(Assembly.GetExecutingAssembly()))
-                .ToName(FileNames.Core);
+            //var serializerSelector =
+            //    new DefaultConfigNodeItemSerializerSelector(injectionBinder.GetInstance<ISurrogateProvider>());
 
+            //serializerSelector.AddSerializer(typeof (Setting<>), SettingSerializerFactory.Create);
 
-            injectionBinder.Bind<IConfigurationPathProvider>()
-                .To(
-                    new ConfigurationPathProvider(injectionBinder.GetInstance<IGetAssemblyFileLocation>()
-                        .Get(Assembly.GetExecutingAssembly())
-                        .Single(), "config"));
-
+            //injectionBinder.Bind<IConfigNodeItemSerializerSelector>().To(serializerSelector);
+            //injectionBinder.Bind<IGetObjectFields>().To<GetSerializableFieldsRecursiveType>().ToSingleton();
+            //injectionBinder.Bind<IConfigNodeSerializer>().To<ConfigNodeSerializer>().ToSingleton();
 
 
+            //var assemblyResolver = new DefaultAssemblyResolver();
+            //assemblyResolver.AddSearchDirectory(injectionBinder.GetInstance<IDirectory>(DirectoryNames.Core).FullPath);
+
+            //injectionBinder.Bind<BaseAssemblyResolver>().To(assemblyResolver).ToSingleton();
+
+            //injectionBinder.Bind<Assembly>().To(Assembly.GetExecutingAssembly()).ToName(AssemblyNames.Core).ToSingleton();
+
+            //injectionBinder.Bind<IUnityObjectDestroyer>()
+            //    .ToValue(new UnityObjectDestroyer(new PluginReloadRequestedMethodCallCommand()));
+
+            //injectionBinder.Bind<IResourceRepository>()
+            //    .ToValue(ConfigureResourceRepository(injectionBinder.GetInstance<IDirectory>(DirectoryNames.Core)));
+
+            //injectionBinder.Bind<WindowFactory>().To<WindowFactory>();
+            //injectionBinder.Bind<GUIStyle>().To(ConfigureTitleBarButtonStyle()).ToName(Styles.TitleBarButtonStyle).ToSingleton();
+
+            //BindTextureToName(injectionBinder.GetInstance<IResourceRepository>(), "Resources/btnClose", TextureNames.CloseButton);
+            //BindTextureToName(injectionBinder.GetInstance<IResourceRepository>(), "Resources/btnWrench", TextureNames.SettingsButton);
+            //BindTextureToName(injectionBinder.GetInstance<IResourceRepository>(), "Resources/cursor", TextureNames.ResizeCursor);
 
 
-            injectionBinder.Bind<IAssemblyProviderFactory>().To(new AssemblyProviderFactory(
-                injectionBinder.GetInstance<BaseAssemblyResolver>(),
-                injectionBinder.GetInstance<IGetDebugSymbolsExistForDefinition>(),
-                injectionBinder.GetInstance<IWeaveOperationFactory>(),
-                new GetTypeDefinitionsExcluding(new GetAllTypesFromDefinition(),
-                    new GetInjectedHelperTypeFromDefinition()),
-                new GetAllMethodDefinitions(),
-                log.CreateTag("ILWeaver"),
-                () => true)).ToSingleton();
+            //injectionBinder.Bind<IGetAttributesOfType<KSPAddon>>().To<GetAttributesOfType<KSPAddon>>().ToSingleton();
+            //injectionBinder.Bind<IGetTypesFromAssembly<KSPAddonType>>().To<GetAddonTypesFromAssembly>().ToSingleton();
+            //injectionBinder.Bind<IGetAssemblyFileLocation>().To<GetAssemblyFileLocation>().ToSingleton();
 
-            var reloadableFileQuery =
-                new ReloadableAssemblyFilesInDirectoryQuery(
-                    injectionBinder.GetInstance<IDirectory>(DirectoryNames.GameData));
-
-            log.Normal("Reloadable files count: " + reloadableFileQuery.Get().Count());
-
-            var reloadablePluginFactory = injectionBinder.GetInstance<ReloadablePluginFactory>();
-
-            if (reloadablePluginFactory == null) throw new Exception("failed to create plugin factory");
+            //injectionBinder.Bind<IFile>()
+            //    .ToValue(GetAssemblyFileLocation(Assembly.GetExecutingAssembly()))
+            //    .ToName(FileNames.Core);
 
 
-
-            var reloadablePlugins = reloadableFileQuery.Get().Select(file =>
-            {
-                var plugin = reloadablePluginFactory.Create(file);
-
-                plugin.Reload();
-
-                return plugin;
-            }).ToList();
-
-            injectionBinder.Bind<IEnumerable<IPluginInfo>>().To(reloadablePlugins.Cast<IPluginInfo>()).ToSingleton();
-
-            log.Normal("Finished loading initial reloadable plugins.");
+            //injectionBinder.Bind<IConfigurationPathProvider>()
+            //    .To(
+            //        new ConfigurationPathProvider(injectionBinder.GetInstance<IGetAssemblyFileLocation>()
+            //            .Get(Assembly.GetExecutingAssembly())
+            //            .Single(), "config"));
 
 
 
 
 
+            //injectionBinder.Bind<IAssemblyProviderFactory>().To(new AssemblyProviderFactory(
+            //    injectionBinder.GetInstance<BaseAssemblyResolver>(),
+            //    injectionBinder.GetInstance<IGetDebugSymbolsExistForDefinition>(),
+            //    injectionBinder.GetInstance<IWeaveOperationFactory>(),
+            //    new GetTypeDefinitionsExcluding(new GetAllTypesFromDefinition(),
+            //        new GetInjectedHelperTypeFromDefinition()),
+            //    new GetAllMethodDefinitions(),
+            //    log.CreateTag("ILWeaver"),
+            //    () => true)).ToSingleton();
+
+            //var reloadableFileQuery =
+            //    new ReloadableAssemblyFilesInDirectoryQuery(
+            //        injectionBinder.GetInstance<IDirectory>(DirectoryNames.GameData));
+
+            //log.Normal("Reloadable files count: " + reloadableFileQuery.Get().Count());
+
+            //var reloadablePluginFactory = injectionBinder.GetInstance<ReloadablePluginFactory>();
+
+            //if (reloadablePluginFactory == null) throw new Exception("failed to create plugin factory");
 
 
-            //injectionBinder.Bind<IViewMediator>().To<ViewMediator>().ToSingleton();
+
+            //var reloadablePlugins = reloadableFileQuery.Get().Select(file =>
+            //{
+            //    var plugin = reloadablePluginFactory.Create(file);
+
+            //    plugin.Reload();
+
+            //    return plugin;
+            //}).ToList();
+
+            //injectionBinder.Bind<IEnumerable<IPluginInfo>>().To(reloadablePlugins.Cast<IPluginInfo>()).ToSingleton();
+
+            //log.Normal("Finished loading initial reloadable plugins.");
 
 
-            // create main window ...
-            mediationBinder.BindView<MainView>().ToMediator<ViewMediator>();
-
-            //injectionBinder.Bind<IMainView>()
-            //    .To<MainWindowLogic>()
-            //    .ToSingleton();
 
 
-            //var windowFactory = injectionBinder.GetInstance<WindowFactory>();
 
-            //windowFactory.CreateMainWindow(injectionBinder.GetInstance<IMainView>(),
-            //    injectionBinder.GetInstance<IViewMediator>());
+            //// create main window ...
+            //mediationBinder.BindView<MainView>().ToMediator<ViewMediator>();
 
-
-            //// create settings window
-            //injectionBinder.Bind<ISettingsView>()
-            //    .To<SettingsWindowLogic>()
-            //    .ToSingleton();
-
-            //windowFactory.CreateSettingsWindow(injectionBinder.GetInstance<ISettingsView>(),
-            //    injectionBinder.GetInstance<IViewMediator>());
-
-
-        }
-
-
-        protected override void addCoreComponents()
-        {
-            base.addCoreComponents();
-            injectionBinder.Unbind<ICommandBinder>();
-            injectionBinder.Bind<ICommandBinder>().To<SignalCommandBinder>().ToSingleton();
         }
 
 
         public override void Launch()
         {
             base.Launch();
-            injectionBinder.GetInstance<StartSignal>().Dispatch();
+            injectionBinder.GetInstance<SignalStart>().Dispatch();
+            injectionBinder.GetInstance<SignalReloadPlugin>().Dispatch();
         }
 
 

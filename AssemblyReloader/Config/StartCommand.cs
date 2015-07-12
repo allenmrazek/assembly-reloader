@@ -11,7 +11,7 @@ namespace AssemblyReloader.Config
         public override void Execute()
         {
             Log.Verbose("AssemblyReloader starting");
-            base.Execute();
+
         }
     }
 }

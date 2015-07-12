@@ -59,26 +59,25 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Commands\ContextAdapter.cs" />
-    <Compile Include="Commands\ContextProviderCommand.cs" />
-    <Compile Include="Commands\Command.cs" />
-    <Compile Include="Commands\AwakenPartModuleCommand.cs" />
-    <Compile Include="Commands\ClearDictionaryQueryCommand.cs" />
+    <Compile Include="Commands\old\ContextAdapter.cs" />
+    <Compile Include="Commands\old\ContextProviderCommand.cs" />
+    <Compile Include="Commands\old\Command.cs" />
+    <Compile Include="Commands\old\AwakenPartModuleCommand.cs" />
+    <Compile Include="Commands\old\ClearDictionaryQueryCommand.cs" />
     <Compile Include="Commands\old\DeserializeObjectCommand.cs" />
     <Compile Include="Commands\old\SaveConfigNodeFromCallbacksCommand.cs" />
-    <Compile Include="Commands\ExecutePartModuleOnStartsCommand.cs" />
-    <Compile Include="Commands\OrCommand.cs" />
+    <Compile Include="Commands\old\ExecutePartModuleOnStartsCommand.cs" />
+    <Compile Include="Commands\old\OrCommand.cs" />
     <Compile Include="Commands\old\ProxyAssemblyMethodWriter.cs" />
-    <Compile Include="Commands\RefreshPartActionWindows.cs" />
-    <Compile Include="Commands\NullCommand.cs" />
-    <Compile Include="Commands\PluginReloadRequestedMethodCallCommand.cs" />
+    <Compile Include="Commands\old\RefreshPartActionWindows.cs" />
+    <Compile Include="Commands\old\NullCommand.cs" />
+    <Compile Include="Commands\old\PluginReloadRequestedMethodCallCommand.cs" />
     <Compile Include="Commands\old\SavePluginConfigurationCommand.cs" />
     <Compile Include="Commands\old\SerializeObjectCommand.cs" />
     <Compile Include="Config\ConfigurationPathProvider.cs" />
-    <Compile Include="Config\CoreContext.cs" />
+    <Compile Include="Config\SignalContext.cs" />
     <Compile Include="Config\IConfigurationPathProvider.cs" />
     <Compile Include="Config\ISetting.cs" />
-    <Compile Include="Config\Names\LogNames.cs" />
     <Compile Include="Config\Setting.cs" />
     <Compile Include="Config\SettingSerializer.cs" />
     <Compile Include="Config\Signals.cs" />
@@ -89,10 +88,11 @@
     <Compile Include="Config\Names\ConfigurationMethodNames.cs" />
     <Compile Include="Config\Names\Styles.cs" />
     <Compile Include="Config\Names\TextureNames.cs" />
-    <Compile Include="Config\Names\ViewNames.cs" />
     <Compile Include="Gui\Signals.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\Addons\CommandLoadAddons.cs" />
+    <Compile Include="ReloadablePlugin\CommandLoadPlugin.cs" />
     <Compile Include="ReloadablePlugin\Loaders\Addons\AddonTypeSystemFactory.cs" />
-    <Compile Include="Config\SignalContext.cs" />
+    <Compile Include="Config\CoreContext.cs" />
     <Compile Include="CompositeRoot\FlightConfigNodeKeyValuePairComparer.cs" />
     <Compile Include="ReloadablePlugin\Loaders\Addons\IAddonTypeSystemFactory.cs" />
     <Compile Include="ReloadablePlugin\Definition\AssemblyProviderFactory.cs" />
@@ -108,11 +108,11 @@
     <Compile Include="ReloadablePlugin\GetAttributesOfType.cs" />
     <Compile Include="ReloadablePlugin\IGetAttributesOfType.cs" />
     <Compile Include="ReloadablePlugin\IGetTypesFromAssembly.cs" />
-    <Compile Include="ReloadablePlugin\ReloadablePluginFactory.cs" />
+    <Compile Include="ReloadablePlugin\ReloadablePluginContext.cs" />
+    <Compile Include="ReloadablePlugin\ReloadablePluginContextBootstrap.cs" />
+    <Compile Include="ReloadablePlugin\old\ReloadablePluginFactory.cs" />
     <Compile Include="Game\ILoadedAssemblyHandle.cs" />
     <Compile Include="Gui\ViewMediator.cs" />
-    <Compile Include="Config\Names\AssemblyNames.cs" />
-    <Compile Include="Config\Names\DirectoryNames.cs" />
     <Compile Include="DataObjects\IModel.cs" />
     <Compile Include="CompositeRoot\KspPartActionWindowListener.cs" />
     <Compile Include="CompositeRoot\GetSerializableFieldsRecursiveType.cs" />
@@ -120,7 +120,7 @@
     <Compile Include="Controllers\IController.cs" />
     <Compile Include="ReloadablePlugin\IReloadablePlugin.cs" />
     <Compile Include="ReloadablePlugin\ReloadablePlugin.cs" />
-    <Compile Include="ReloadablePlugin\ScenarioModuleFacade.cs" />
+    <Compile Include="ReloadablePlugin\old\ScenarioModuleFacade.cs" />
     <Compile Include="Config\Configuration.cs" />
     <Compile Include="DataObjects\Model.cs" />
     <Compile Include="Config\PluginConfiguration.cs" />
@@ -208,6 +208,7 @@
     <Compile Include="Queries\GetFieldsMarkedWithAttribute.cs" />
     <Compile Include="CompositeRoot\FlightConfigNodeRepository.cs" />
     <Compile Include="CompositeRoot\DictionaryQueue.cs" />
+    <Compile Include="ReloadablePlugin\Signals.cs" />
     <Compile Include="Signals\PluginLoadedSignal.cs" />
     <Compile Include="Signals\PluginUnloadedSignal.cs" />
     <Compile Include="StrangeIoC\extensions\command\api\CommandExceptionType.cs" />
@@ -345,7 +346,6 @@
     <Compile Include="ReloadablePlugin\Definition\IGetMethodDefinitions.cs" />
     <Compile Include="ReloadablePlugin\Loaders\Addons\AddonTypeSystem.cs" />
     <Compile Include="ReloadablePlugin\IReloadableTypeSystem.cs" />
-    <Compile Include="ReloadablePlugin\PartModuleFacade.cs" />
     <Compile Include="DataObjects\ITypeIdentifier.cs" />
     <Compile Include="DataObjects\TypeIdentifier.cs" />
     <Compile Include="Game\GameEventPublisher.cs" />
@@ -372,8 +372,8 @@
     <Compile Include="Game\KspPartLoader.cs" />
     <Compile Include="Game\KspVessel.cs" />
     <Compile Include="Config\CoreBootstrap.cs" />
-    <Compile Include="Commands\ICommand.cs" />
-    <Compile Include="Commands\CompositeCommand.cs" />
+    <Compile Include="Commands\old\ICommand.cs" />
+    <Compile Include="Commands\old\CompositeCommand.cs" />
     <Compile Include="ReloadablePlugin\Definition\Operations\IUniqueAssemblyNameGenerator.cs" />
     <Compile Include="Game\IGetCurrentSceneIsFlight.cs" />
     <Compile Include="ReloadablePlugin\Definition\IAssemblyProvider.cs" />
@@ -434,9 +434,11 @@
     <EmbeddedResource Include="Resources\cursor.png" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Commands\old\older\" />
     <Folder Include="Config\old\" />
     <Folder Include="Generators\" />
     <Folder Include="Queries\old\AssemblyQueries\" />
+    <Folder Include="ReloadablePlugin\Commands\" />
     <Folder Include="Weaving\old\Operations\" />
   </ItemGroup>
   <ItemGroup>

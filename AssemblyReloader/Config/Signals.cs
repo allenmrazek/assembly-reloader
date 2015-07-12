@@ -2,7 +2,11 @@
 
 namespace AssemblyReloader.Config
 {
-    public class StartSignal : Signal
+    public class SignalStart : Signal
+    {
+    }
+
+    public class SignalReloadPlugin : Signal
     {
     }
 }
