@@ -1,7 +1,11 @@
-﻿using AssemblyReloader.StrangeIoC.extensions.context.api;
+﻿using System.Reflection;
+using AssemblyReloader.CompositeRoot;
+using AssemblyReloader.Config;
+using AssemblyReloader.StrangeIoC.extensions.context.api;
 using ReeperCommon.FileSystem;
 using ReeperCommon.FileSystem.Providers;
 using ReeperCommon.Logging;
+using ReeperCommon.Serialization;
 using UnityEngine;
 
 namespace AssemblyReloader.Common
@@ -27,6 +31,16 @@ namespace AssemblyReloader.Common
             injectionBinder.Bind<IUrlDir>().To(new KSPUrlDir(injectionBinder.GetInstance<IUrlDirProvider>().Get())).CrossContext();
             injectionBinder.Bind<IFileSystemFactory>().To<KSPFileSystemFactory>().ToSingleton().CrossContext();
 
+
+            var serializerSelector =
+                new DefaultConfigNodeItemSerializerSelector(new SurrogateProvider(new[] 
+                    { 
+                        Assembly.GetExecutingAssembly(), 
+                        typeof(IConfigNodeSerializer).Assembly 
+                    }));
+
+            injectionBinder.Bind<IConfigNodeSerializer>().To(
+                new ConfigNodeSerializer(serializerSelector, new GetSerializableFieldsRecursiveType())).CrossContext();
         }
 
 
