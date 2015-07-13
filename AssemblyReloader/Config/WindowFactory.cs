@@ -1,14 +1,12 @@
-﻿using System;
-using AssemblyReloader.Config.Names;
+﻿using AssemblyReloader.Config.Names;
 using AssemblyReloader.Properties;
 using AssemblyReloader.StrangeIoC.extensions.injector;
 using ReeperCommon.Gui.Window;
 using ReeperCommon.Gui.Window.Buttons;
 using ReeperCommon.Gui.Window.Decorators;
-using ReeperCommon.Gui.Window.View;
 using UnityEngine;
 
-namespace AssemblyReloader.Gui
+namespace AssemblyReloader.Config
 {
 // ReSharper disable once ClassNeverInstantiated.Global
     public class WindowFactory
@@ -86,7 +84,7 @@ namespace AssemblyReloader.Gui
 
         public static IWindowComponent CreateMainWindow(MainView view)
         {
-            var baseLogic = new MainWindowLogic();
+            var baseLogic = new MainWindowLogic(view);
             var clamp = new ClampToScreen(baseLogic);
 
             var withButtons = new TitleBarButtons(clamp, TitleBarButtons.ButtonAlignment.Right, TitleBarButtonOffset);

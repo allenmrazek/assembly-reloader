@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using AssemblyReloader.Config;
 using AssemblyReloader.Game;
 using AssemblyReloader.Gui;
 using AssemblyReloader.ReloadablePlugin.Config;

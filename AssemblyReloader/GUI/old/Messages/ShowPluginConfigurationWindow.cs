@@ -1,4 +1,5 @@
 ﻿using System;
+using AssemblyReloader.Config;
 using AssemblyReloader.Properties;
 
 namespace AssemblyReloader.Gui.old.Messages

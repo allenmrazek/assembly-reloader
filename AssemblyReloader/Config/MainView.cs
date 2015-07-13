@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using AssemblyReloader.ReloadablePlugin;
+﻿using System.Collections.Generic;
 using AssemblyReloader.StrangeIoC.extensions.mediation.impl;
-using AssemblyReloader.StrangeIoC.extensions.signal.impl;
 using ReeperCommon.Extensions;
 using ReeperCommon.Gui.Window;
 using UnityEngine;
 
-namespace AssemblyReloader.Gui
+namespace AssemblyReloader.Config
 {
 // ReSharper disable once UnusedMember.Global
     public class MainView : View
@@ -20,7 +17,9 @@ namespace AssemblyReloader.Gui
         protected override void Awake()
         {
             base.Awake();
+            print("MainView.Awake");
             _logic = WindowFactory.CreateMainWindow(this);
+            print(_logic == null ? "logic failed" : "logic success");
         }
 
 
@@ -33,6 +32,8 @@ namespace AssemblyReloader.Gui
 
             _logic.Dimensions = GUILayout.Window(_logic.Id.Value, _logic.Dimensions, DrawWindow,
                 _logic.Title);
+
+            
         }
 
 

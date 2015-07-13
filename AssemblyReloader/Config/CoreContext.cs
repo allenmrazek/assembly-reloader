@@ -80,6 +80,8 @@ namespace AssemblyReloader.Config
             injectionBinder.Bind<IEnumerable<IReloadablePlugin>>().To(pluginInfoMapping.Values);
 
 
+            mediationBinder.BindView<MainView>().ToMediator<ViewMediator>();
+
             // set up command bindings
             commandBinder.Bind<SignalStart>()
                 .To<CommandLoadConfiguration>()
@@ -88,12 +90,12 @@ namespace AssemblyReloader.Config
                 .InSequence();
 
 
-
+            (contextView as GameObject ?? new GameObject("CoreContext")).AddComponent<MainView>();
 
 
             //serializerSelector.AddSerializer(typeof (Setting<>), SettingSerializerFactory.Create);
 
-      
+
 
             //var assemblyResolver = new DefaultAssemblyResolver();
             //assemblyResolver.AddSearchDirectory(injectionBinder.GetInstance<IDirectory>(DirectoryNames.Core).FullPath);

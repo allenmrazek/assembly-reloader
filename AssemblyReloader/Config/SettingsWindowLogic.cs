@@ -1,11 +1,8 @@
-﻿using AssemblyReloader.Config;
-using AssemblyReloader.DataObjects;
-using AssemblyReloader.StrangeIoC.extensions.injector;
-using ReeperCommon.Gui;
+﻿using ReeperCommon.Gui;
 using ReeperCommon.Gui.Window;
 using UnityEngine;
 
-namespace AssemblyReloader.Gui
+namespace AssemblyReloader.Config
 {
 // ReSharper disable once UnusedMember.Global
     public class SettingsWindowLogic : BasicWindowLogic

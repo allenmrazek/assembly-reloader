@@ -1,35 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
 using AssemblyReloader.Properties;
-using AssemblyReloader.StrangeIoC.extensions.injector;
 using ReeperCommon.Gui;
 using ReeperCommon.Gui.Window;
 using UnityEngine;
 
-namespace AssemblyReloader.Gui
+namespace AssemblyReloader.Config
 {
     // ReSharper disable once ClassNeverInstantiated.Global
     public class MainWindowLogic : BasicWindowLogic
     {
+        private readonly MainView _view;
         private Vector2 _scroll = default(Vector2);
 
         public IEnumerable<IPluginInfo> Plugins { get; set; }
 
 
-        public MainWindowLogic()
+        public MainWindowLogic(MainView view)
             : base(new Rect(400f, 400f, 400f, 400f), new WindowID(), HighLogic.Skin, true)
         {
+            if (view == null) throw new ArgumentNullException("view");
 
+            _view = view; // mediator doesn't know about us, MainWindowLogic. But we need to communicate
+            // with it. View will define what we can say to mediator (and what we can hear)
+            // and we'll trigger that communication from here
         }
-
-
-        //        [PostConstruct]
-        //// ReSharper disable once UnusedMember.Global
-        //        public void AttachToMediator()
-        //        {
-        //            Mediator.MainView = this;
-        //        }
-
 
 
 

@@ -1,7 +1,6 @@
-﻿using AssemblyReloader.DataObjects;
-using ReeperCommon.FileSystem;
+﻿using ReeperCommon.FileSystem;
 
-namespace AssemblyReloader.Gui
+namespace AssemblyReloader.Config
 {
     public interface IPluginInfo
     {

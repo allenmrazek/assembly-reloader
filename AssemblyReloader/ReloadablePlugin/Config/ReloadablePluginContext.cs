@@ -1,5 +1,6 @@
 ﻿using System;
 using AssemblyReloader.Common;
+using AssemblyReloader.Config;
 using AssemblyReloader.Gui;
 using AssemblyReloader.ReloadablePlugin.Loaders.Addons;
 using AssemblyReloader.StrangeIoC.extensions.command.impl;

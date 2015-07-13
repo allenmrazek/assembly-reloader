@@ -1,4 +1,5 @@
-﻿using AssemblyReloader.Gui;
+﻿using AssemblyReloader.Config;
+using AssemblyReloader.Gui;
 
 namespace AssemblyReloader.ReloadablePlugin
 {
