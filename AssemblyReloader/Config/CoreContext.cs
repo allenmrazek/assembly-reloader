@@ -12,7 +12,6 @@ using AssemblyReloader.Gui;
 using AssemblyReloader.Properties;
 using AssemblyReloader.Queries;
 using AssemblyReloader.Queries.CecilQueries;
-using AssemblyReloader.Queries.FileSystemQueries;
 using AssemblyReloader.ReloadablePlugin;
 using AssemblyReloader.ReloadablePlugin.Config;
 using AssemblyReloader.ReloadablePlugin.Definition;
@@ -41,20 +40,32 @@ namespace AssemblyReloader.Config
         {
             base.mapBindings();
 
+            var ourLocation =
+                injectionBinder.GetInstance<IGetAssemblyFileLocation>().Get(Assembly.GetExecutingAssembly());
+
+            if (!ourLocation.Any())
+                throw new Exception("Failed to locate IFile for AssemblyReloader");
+
+
             // cross context bindings
             injectionBinder.Bind<SignalStart>().ToSingleton().CrossContext();
+            injectionBinder.Bind<IGetConfigurationFilePath>().To(new GetConfigurationFilePath()).CrossContext();
+            injectionBinder.Bind<Configuration>().ToSingleton().CrossContext();
 
 
             // core context bindings
             injectionBinder.Bind<IDirectory>().To(injectionBinder.GetInstance<IFileSystemFactory>().GameData);
             injectionBinder.Bind<GetReloadableAssemblyFilesFromDirectoryRecursive>().ToSingleton();
-
+            injectionBinder.Bind<IFile>().To(ourLocation.Single());
     
+
             // bootstrap reloadable plugin contexts
             var pluginContexts =
                 injectionBinder.GetInstance<GetReloadableAssemblyFilesFromDirectoryRecursive>().Get()
                     .Select(f =>
                     {
+                        injectionBinder.GetInstance<ILog>().Normal("Bootstrapping context for " + f.Url);
+
                         var ctx = new ReloadablePluginContext(((GameObject) contextView).GetComponent<CoreBootstrapper>(), f);
                         ctx.Start();
 
@@ -70,43 +81,19 @@ namespace AssemblyReloader.Config
 
 
             // set up command bindings
-            commandBinder.Bind<SignalStart>().To<StartCommand>().Once();
+            commandBinder.Bind<SignalStart>()
+                .To<CommandLoadConfiguration>()
+                .To<CommandLaunchReloadablePluginContexts>()
+                .Once()
+                .InSequence();
 
 
 
-            //injectionBinder.Bind<ILog>().To(log).ToSingleton();
-            //injectionBinder.Bind<ILog>().To(log.CreateTag("Configuration")).ToName(LogNames.Configuration);
 
-            //injectionBinder.Bind<IGetConfigurationFilePath>().To(new GetConfigurationFilePath());
-            //injectionBinder.Bind<IFileSystemFactory>()
-            //    .ToValue(new KSPFileSystemFactory(new KSPUrlDir(new KSPGameDataUrlDirProvider().Get())));
-
-            //injectionBinder.Bind<IDirectory>()
-            //    .ToValue(injectionBinder.GetInstance<IFileSystemFactory>().GameData)
-            //    .ToName(DirectoryNames.GameData);
-
-            //injectionBinder.Bind<IDirectory>()
-            //    .ToValue(new GetAssemblyDirectory(
-            //        injectionBinder.GetInstance<IGameAssemblyLoader>(),
-            //        Assembly.GetExecutingAssembly(),
-            //        injectionBinder.GetInstance<IDirectory>(DirectoryNames.GameData)).Get())
-            //    .ToName(DirectoryNames.Core);
-
-
-            //injectionBinder.Bind<ISurrogateProvider>()
-            //    .To(
-            //        new SurrogateProvider(new[]
-            //        {Assembly.GetExecutingAssembly(), typeof (IConfigNodeSerializer).Assembly}));
-
-            //var serializerSelector =
-            //    new DefaultConfigNodeItemSerializerSelector(injectionBinder.GetInstance<ISurrogateProvider>());
 
             //serializerSelector.AddSerializer(typeof (Setting<>), SettingSerializerFactory.Create);
 
-            //injectionBinder.Bind<IConfigNodeItemSerializerSelector>().To(serializerSelector);
-            //injectionBinder.Bind<IGetObjectFields>().To<GetSerializableFieldsRecursiveType>().ToSingleton();
-            //injectionBinder.Bind<IConfigNodeSerializer>().To<ConfigNodeSerializer>().ToSingleton();
-
+      
 
             //var assemblyResolver = new DefaultAssemblyResolver();
             //assemblyResolver.AddSearchDirectory(injectionBinder.GetInstance<IDirectory>(DirectoryNames.Core).FullPath);
@@ -197,7 +184,6 @@ namespace AssemblyReloader.Config
         {
             base.Launch();
             injectionBinder.GetInstance<SignalStart>().Dispatch();
-            injectionBinder.GetInstance<SignalReloadPlugin>().Dispatch();
         }
 
 
@@ -294,11 +280,11 @@ namespace AssemblyReloader.Config
 
             var renameAssembly = new RenameAssemblyOperation(new UniqueAssemblyNameGenerator(new RandomStringGenerator()));
 
-            var writeInjectedHelper =
-                    new InjectedHelperTypeDefinitionWriter(
-                    new CompositeCommand<TypeDefinition>(
-                        new ProxyAssemblyMethodWriter(Uri.UnescapeDataString(uri.AbsoluteUri), getCodeBaseProperty.GetGetMethod()),
-                        new ProxyAssemblyMethodWriter(uri.LocalPath, getLocationProperty.GetGetMethod())));
+            //var writeInjectedHelper =
+            //        new InjectedHelperTypeDefinitionWriter(
+            //        new CompositeCommand<TypeDefinition>(
+            //            new ProxyAssemblyMethodWriter(Uri.UnescapeDataString(uri.AbsoluteUri), getCodeBaseProperty.GetGetMethod()),
+            //            new ProxyAssemblyMethodWriter(uri.LocalPath, getLocationProperty.GetGetMethod())));
 
             var interceptAssemblyCodeBaseCalls = new InterceptExecutingAssemblyLocationQueries(
                 new MethodCallInMethodBodyQuery(
@@ -319,7 +305,7 @@ namespace AssemblyReloader.Config
                 allTypesFromAssemblyExceptInjected,
                 new GetAllMethodDefinitions(),
                 renameAssembly,
-                new ConditionalWeaveOperation(writeInjectedHelper, () => pluginConfiguration.InjectHelperType),
+                //new ConditionalWeaveOperation(writeInjectedHelper, () => pluginConfiguration.InjectHelperType),
                 new ConditionalWeaveOperation(interceptAssemblyCodeBaseCalls, () => pluginConfiguration.RewriteAssemblyLocationCalls),
                 new ConditionalWeaveOperation(interceptAssemblyLocationCalls, () => pluginConfiguration.RewriteAssemblyLocationCalls));
 

@@ -59,30 +59,26 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Commands\old\ContextAdapter.cs" />
     <Compile Include="Commands\old\ContextProviderCommand.cs" />
-    <Compile Include="Commands\old\Command.cs" />
     <Compile Include="Commands\old\AwakenPartModuleCommand.cs" />
     <Compile Include="Commands\old\ClearDictionaryQueryCommand.cs" />
     <Compile Include="Commands\old\DeserializeObjectCommand.cs" />
     <Compile Include="Commands\old\SaveConfigNodeFromCallbacksCommand.cs" />
     <Compile Include="Commands\old\ExecutePartModuleOnStartsCommand.cs" />
-    <Compile Include="Commands\old\OrCommand.cs" />
     <Compile Include="Commands\old\ProxyAssemblyMethodWriter.cs" />
     <Compile Include="Commands\old\RefreshPartActionWindows.cs" />
-    <Compile Include="Commands\old\NullCommand.cs" />
     <Compile Include="Commands\old\PluginReloadRequestedMethodCallCommand.cs" />
     <Compile Include="Commands\old\SavePluginConfigurationCommand.cs" />
-    <Compile Include="Commands\old\SerializeObjectCommand.cs" />
+    <Compile Include="Common\CommandNull.cs" />
+    <Compile Include="Common\CommandTest.cs" />
     <Compile Include="Common\ReeperCommonContext.cs" />
-    <Compile Include="Config\ConfigurationPathProvider.cs" />
+    <Compile Include="Config\CommandLoadConfiguration.cs" />
     <Compile Include="Common\SignalContext.cs" />
-    <Compile Include="Config\IConfigurationPathProvider.cs" />
     <Compile Include="Config\ISetting.cs" />
     <Compile Include="Config\Setting.cs" />
     <Compile Include="Config\SettingSerializer.cs" />
     <Compile Include="Common\Signals.cs" />
-    <Compile Include="Config\StartCommand.cs" />
+    <Compile Include="Config\CommandLaunchReloadablePluginContexts.cs" />
     <Compile Include="Gui\MainView.cs" />
     <Compile Include="Gui\SettingsWindowLogic.cs" />
     <Compile Include="Config\Names\ConfigurationMethodNames.cs" />
@@ -113,7 +109,7 @@
     <Compile Include="Game\ILoadedAssemblyHandle.cs" />
     <Compile Include="Gui\ViewMediator.cs" />
     <Compile Include="Game\KspPartActionWindowListener.cs" />
-    <Compile Include="CompositeRoot\GetSerializableFieldsRecursiveType.cs" />
+    <Compile Include="Common\GetSerializableFieldsRecursiveType.cs" />
     <Compile Include="ReloadablePlugin\ReloadablePlugin.cs" />
     <Compile Include="ReloadablePlugin\old\ScenarioModuleFacade.cs" />
     <Compile Include="Config\Configuration.cs" />
@@ -191,10 +187,10 @@
     <Compile Include="Game\GetLoadedAssemblyFileUrl.cs" />
     <Compile Include="Game\IGetLoadedAssemblyFileUrl.cs" />
     <Compile Include="Queries\GetObjectFieldsComposite.cs" />
-    <Compile Include="Queries\FileSystemQueries\GetAssemblyFileLocation.cs" />
+    <Compile Include="FileSystem\GetAssemblyFileLocation.cs" />
     <Compile Include="ReloadablePlugin\GetConfigurationFilePath.cs" />
     <Compile Include="ReloadablePlugin\Definition\GetDebugSymbolsExistForDefinition.cs" />
-    <Compile Include="Queries\FileSystemQueries\IGetAssemblyFileLocation.cs" />
+    <Compile Include="FileSystem\IGetAssemblyFileLocation.cs" />
     <Compile Include="ReloadablePlugin\IGetConfigurationFilePath.cs" />
     <Compile Include="ReloadablePlugin\Definition\IGetDebugSymbolsExistForDefinition.cs" />
     <Compile Include="ReloadablePlugin\IPluginConfigurationProvider.cs" />
@@ -365,7 +361,6 @@
     <Compile Include="Game\KspVessel.cs" />
     <Compile Include="Config\CoreBootstrapper.cs" />
     <Compile Include="Commands\old\ICommand.cs" />
-    <Compile Include="Commands\old\CompositeCommand.cs" />
     <Compile Include="ReloadablePlugin\Definition\Operations\IUniqueAssemblyNameGenerator.cs" />
     <Compile Include="Game\IGetCurrentSceneIsFlight.cs" />
     <Compile Include="ReloadablePlugin\Definition\IAssemblyProvider.cs" />
@@ -376,8 +371,6 @@
     <Compile Include="ReloadablePlugin\Definition\IGetTypeDefinitions.cs" />
     <Compile Include="Queries\CecilQueries\MethodCallInMethodBodyQuery.cs" />
     <Compile Include="Queries\IGetAddonAttributesFromType.cs" />
-    <Compile Include="Queries\FileSystemQueries\IGetAssemblyDirectory.cs" />
-    <Compile Include="Queries\FileSystemQueries\GetAssemblyDirectory.cs" />
     <Compile Include="Queries\GetInjectedHelperTypeMethod.cs" />
     <Compile Include="Queries\GetInjectedHelperTypeFromDefinition.cs" />
     <Compile Include="Queries\IGetIsPartPrefab.cs" />
@@ -425,7 +418,6 @@
     <EmbeddedResource Include="Resources\cursor.png" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Commands\old\older\" />
     <Folder Include="Config\old\" />
     <Folder Include="Generators\" />
     <Folder Include="Queries\old\AssemblyQueries\" />

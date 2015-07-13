@@ -6,10 +6,4 @@ namespace AssemblyReloader.Common
     public class SignalStart : Signal
     {
     }
-
-
-// ReSharper disable once ClassNeverInstantiated.Global
-    public class SignalReloadPlugin : Signal
-    {
-    }
 }

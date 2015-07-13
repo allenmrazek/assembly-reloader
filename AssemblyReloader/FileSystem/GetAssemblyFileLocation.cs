@@ -4,11 +4,14 @@ using System.Linq;
 using System.Reflection;
 using AssemblyReloader.Game;
 using AssemblyReloader.Properties;
+using AssemblyReloader.StrangeIoC.extensions.implicitBind;
 using ReeperCommon.Containers;
 using ReeperCommon.FileSystem;
 
-namespace AssemblyReloader.Queries.FileSystemQueries
+namespace AssemblyReloader.FileSystem
 {
+    [Implements(typeof(IGetAssemblyFileLocation))]
+// ReSharper disable once UnusedMember.Global
     public class GetAssemblyFileLocation : IGetAssemblyFileLocation
     {
         private readonly IGameAssemblyLoader _gameAssemblyLoader;

@@ -1,7 +1,10 @@
 ﻿using System;
 using AssemblyReloader.Common;
 using AssemblyReloader.Gui;
+using AssemblyReloader.ReloadablePlugin.Loaders.Addons;
+using AssemblyReloader.StrangeIoC.extensions.command.impl;
 using AssemblyReloader.StrangeIoC.extensions.context.api;
+using Mono.Cecil;
 using ReeperCommon.FileSystem;
 using ReeperCommon.Logging;
 using UnityEngine;
@@ -15,7 +18,7 @@ namespace AssemblyReloader.ReloadablePlugin.Config
         public IReloadablePlugin Plugin { get; private set; }
         public IPluginInfo Info { get; private set; }
 
-        public ReloadablePluginContext(MonoBehaviour view, IFile reloadableFile) : base(view, ContextStartupFlags.MANUAL_MAPPING)
+        public ReloadablePluginContext(MonoBehaviour view, IFile reloadableFile) : base(view, ContextStartupFlags.MANUAL_MAPPING | ContextStartupFlags.MANUAL_LAUNCH)
         {
             if (reloadableFile == null) throw new ArgumentNullException("reloadableFile");
 
@@ -27,6 +30,9 @@ namespace AssemblyReloader.ReloadablePlugin.Config
         {
             base.mapBindings();
 
+            if (injectionBinder.GetBinding<DefaultAssemblyResolver>() == null)
+                injectionBinder.Bind<DefaultAssemblyResolver>().ToSingleton().CrossContext();
+
             injectionBinder.Bind<IFile>().To(_reloadableFile);
 
             injectionBinder.Bind<IReloadablePlugin>().Bind<IPluginInfo>().To<ReloadablePlugin>().ToSingleton();
@@ -34,9 +40,21 @@ namespace AssemblyReloader.ReloadablePlugin.Config
 
             //commandBinder.Bind<SignalStart>().To<CommandLoadPluginAssembly>().Once();
 
-            //commandBinder.Bind<SignalLoadAssembly>().InSequence()
-            //    .To<CommandLoadAddons>();
+            commandBinder.Bind<SignalLoadAssembly>().InSequence()
+                .To<CommandNull>();
+                //.To<CommandLoadAddons>();
 
+            commandBinder.Bind<SignalUnloadAssembly>()
+                .To<CommandNull>();
+
+            commandBinder.Bind<SignalAssemblyWasLoaded>()
+                .To<CommandNull>();
+
+            commandBinder.Bind<SignalAssemblyWasUnloaded>()
+                .To<CommandNull>();
+
+            commandBinder.Bind<SignalStart>()
+                .To<CommandTest>().Once();
 
 
             Plugin = injectionBinder.GetInstance<IReloadablePlugin>();
@@ -46,7 +64,7 @@ namespace AssemblyReloader.ReloadablePlugin.Config
 
         public override void Launch()
         {
-            injectionBinder.GetInstance<ILog>().Verbose("ReloadablePluginContext.Launch");
+            injectionBinder.GetInstance<ILog>().Normal(Plugin.Name + " context launching");
             base.Launch();
         }
     }
