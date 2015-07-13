@@ -37,7 +37,7 @@ namespace TestProject
             gameObject.PrintComponents(new DebugLog("TestReloadProject"));
         }
 
-        //void Update()
+        //void OnUpdate()
         //{
         //    WriteString("TestReloadProject: " + typeof(TestReloadProject).FullName + " from " + Assembly.GetExecutingAssembly().Location);
         //    //var r = new SecondClass("secondclass create"); // to verify namespace change hasn't broken something internally

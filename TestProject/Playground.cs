@@ -251,7 +251,7 @@ namespace TestProject
 //        }
 
 
-//        private void Update()
+//        private void OnUpdate()
 //        {
 //            if (_projector != null)
 //                _projector.MoveNext();
@@ -313,7 +313,7 @@ namespace TestProject
 
 
     //    //[KSPEvent(active=true,guiActive=true,guiName="Take Shot",name="Take Shot")]
-    //    public void Update()
+    //    public void OnUpdate()
     //    {
     //        takeHiResShot |= Input.GetKeyDown("k");
     //        if (takeHiResShot)
@@ -584,7 +584,7 @@ public class PqsFence : MonoBehaviour
     //        });
     //    }
 
-    //    private void Update()
+    //    private void OnUpdate()
     //    {
     //        if (Input.GetKeyDown(KeyCode.P))
     //        {
@@ -599,7 +599,7 @@ public class PqsFence : MonoBehaviour
     //{
     //    private class Echoer : MonoBehaviour
     //    {
-    //        private void Update()
+    //        private void OnUpdate()
     //        {
     //            if (Input.GetKeyDown(KeyCode.O))
     //                print("Echo!");
@@ -816,7 +816,7 @@ public class PqsFence : MonoBehaviour
     //        tweakEdgeWarp = pf.edgeWarp;
     //    }
 
-    //    public void Update()
+    //    public void OnUpdate()
     //    {
     //        if (pf != null && HighLogic.LoadedSceneIsEditor)
     //        {
@@ -863,7 +863,7 @@ public class PqsFence : MonoBehaviour
     //        ModuleProceduralFairing pf;
 
 
-    //        public void Update()
+    //        public void OnUpdate()
     //        {
     //            pf.nArcs = (int)tweakArcs;
     //            pf.xSectionHeightMax = tweakSectionHeightMax;
@@ -910,7 +910,7 @@ public class PqsFence : MonoBehaviour
 //    [KSPAddon(KSPAddon.Startup.Flight, false)]
 //    public class PressButtonForConfig : MonoBehaviour
 //    {
-//        private void Update()
+//        private void OnUpdate()
 //        {
 //            if (Input.GetKeyDown(KeyCode.Keypad5))
 //            {
@@ -982,7 +982,7 @@ public class PqsFence : MonoBehaviour
 //                //}
 //            }
 
-//            public void Update()
+//            public void OnUpdate()
 //            {
 //                if (pf != null && HighLogic.LoadedSceneIsEditor)
 //                {
@@ -1596,7 +1596,7 @@ public class PqsFence : MonoBehaviour
         {
             if (enabled)
             {
-                //print("Update!");
+                //print("OnUpdate!");
             }
             else print("BADUPDATE!");
         }

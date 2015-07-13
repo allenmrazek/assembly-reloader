@@ -75,12 +75,13 @@
     <Compile Include="Config\CommandLoadConfiguration.cs" />
     <Compile Include="Common\SignalContext.cs" />
     <Compile Include="Config\ISetting.cs" />
+    <Compile Include="Config\Names\IDirectoryKeys.cs" />
     <Compile Include="Config\Setting.cs" />
     <Compile Include="Config\SettingSerializer.cs" />
     <Compile Include="Common\Signals.cs" />
     <Compile Include="Config\CommandLaunchReloadablePluginContexts.cs" />
-    <Compile Include="Config\MainView.cs" />
-    <Compile Include="Config\SettingsWindowLogic.cs" />
+    <Compile Include="Config\old\MainView.cs" />
+    <Compile Include="Gui\old\SettingsWindowLogic.cs" />
     <Compile Include="Config\Names\ConfigurationMethodNames.cs" />
     <Compile Include="Config\Names\Styles.cs" />
     <Compile Include="Config\Names\TextureNames.cs" />
@@ -157,11 +158,11 @@
     <Compile Include="FileSystem\RandomStringGenerator.cs" />
     <Compile Include="FileSystem\TemporaryFileFactory.cs" />
     <Compile Include="Config\IPluginInfo.cs" />
-    <Compile Include="Config\MainWindowLogic.cs" />
+    <Compile Include="Gui\MainView.cs" />
     <Compile Include="Gui\old\Messages\ShowConfigurationWindow.cs" />
     <Compile Include="Gui\old\ConfigurationWindow.cs" />
     <Compile Include="Gui\old\PluginConfigurationWindow.cs" />
-    <Compile Include="Config\WindowFactory.cs" />
+    <Compile Include="Gui\WindowFactory.cs" />
     <Compile Include="ReloadablePlugin\Loaders\Addons\AddonLoader.cs" />
     <Compile Include="ReloadablePlugin\Loaders\Addons\AddonUnloader.cs" />
     <Compile Include="ReloadablePlugin\Definition\AssemblyDefinitionFromDiskReader.cs" />
@@ -419,7 +420,6 @@
     <EmbeddedResource Include="Resources\cursor.png" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Config\old\" />
     <Folder Include="Generators\" />
     <Folder Include="Queries\old\AssemblyQueries\" />
     <Folder Include="ReloadablePlugin\Commands\" />
