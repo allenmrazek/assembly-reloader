@@ -2,7 +2,7 @@
 
 namespace AssemblyReloader.Config
 {
-    public class SignalReloadPlugin : Signal<IPluginInfo>
+    public class SignalSaveConfiguration : Signal
     {
     }
 }

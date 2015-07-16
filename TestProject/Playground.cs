@@ -16,6 +16,106 @@ using Object = UnityEngine.Object;
 
 namespace TestProject
 {
+    
+    //[KSPAddon(KSPAddon.Startup.Flight, false)]
+    //public class DebugVesselCamera : MonoBehaviour
+    //{
+    //    private const int PreviewSize = 200;
+    //    private const int RenderTextureSize = 200;
+
+    //    // gui stuff
+    //    private Rect _windowRect = new Rect(200f, 280f, 200f, 200f);
+    //    private Material _material;
+
+    //    // camera stuff
+    //    private RenderTexture _renderTexture;
+    //    private float _heightMultiplier = 200f;
+    //    private float _viewSize = 200f;
+
+
+    //    private IEnumerator Start()
+    //    {
+    //        while (!FlightGlobals.ready || FlightGlobals.ActiveVessel == null)
+    //            yield return 0;
+
+    //        gameObject.AddComponent<Camera>();
+
+    //        camera.orthographic = true;
+    //        camera.orthographicSize = 0.5f;
+    //        camera.clearFlags = ~CameraClearFlags.Nothing;
+    //        camera.cullingMask = (1 << 4) | (1 << 15);
+    //        camera.enabled = false;
+
+    //        _renderTexture = new RenderTexture(RenderTextureSize, RenderTextureSize, 8);
+
+    //        camera.targetTexture = _renderTexture;
+
+    //        _material = new Material(Shader.Find("Unlit/Texture")) {mainTexture = _renderTexture};
+    //        UpdateCameraSize();
+    //    }
+
+
+    //    private void OnDestroy()
+    //    {
+    //        _renderTexture.Release();
+    //    }
+
+
+    //    private void UpdateCameraSize()
+    //    {
+    //        camera.orthographicSize = _viewSize * 0.5f;
+    //    }
+
+
+    //    private void LateUpdate()
+    //    {
+    //        if (_renderTexture == null) return;
+
+    //        if (!_renderTexture.IsCreated())
+    //            _renderTexture.Create();
+
+    //        camera.transform.position = FlightGlobals.ActiveVessel.rigidbody.position +
+    //                                    FlightGlobals.upAxis * _heightMultiplier;
+    //        camera.transform.rotation = Quaternion.LookRotation(-FlightGlobals.upAxis,
+    //            FlightGlobals.ActiveVessel.transform.forward);
+    //        camera.Render();
+    //    }
+
+
+    //    private void OnGUI()
+    //    {
+    //        _windowRect =
+    //            KSPUtil.ClampRectToScreen(GUILayout.Window(GetInstanceID(), _windowRect, DrawWindow,
+    //                "Vessel Camera Debug"));
+    //    }
+
+
+    //    private void DrawWindow(int winid)
+    //    {
+    //        GUILayout.BeginHorizontal();
+    //        GUILayout.Label("Camera Height");
+    //        _heightMultiplier = GUILayout.HorizontalSlider(_heightMultiplier, 0f, 1000f, GUILayout.ExpandWidth(true));
+    //        GUILayout.EndHorizontal();
+
+    //        GUILayout.Label("View Region: " + (camera.aspect * camera.orthographicSize * 2f) + "x" +
+    //                        (camera.orthographicSize * 2f) + " m");
+
+    //        GUILayout.BeginHorizontal();
+    //        GUILayout.Label("Size:");
+    //        _viewSize = GUILayout.HorizontalSlider(_viewSize, 0.1f, 1000f, GUILayout.ExpandWidth(true));
+    //        GUILayout.EndHorizontal();
+
+    //        if (GUI.changed)
+    //            UpdateCameraSize();
+
+    //        var textureRect = GUILayoutUtility.GetRect(PreviewSize, PreviewSize);
+
+    //        if (Event.current.type == EventType.Repaint)
+    //            Graphics.DrawTexture(textureRect, _renderTexture, _material);
+
+    //        GUI.DragWindow();
+    //    }
+    //}
 
 
     //[KSPAddon(KSPAddon.Startup.MainMenu, true)]

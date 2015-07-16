@@ -1,6 +1,6 @@
 ﻿using ReeperCommon.FileSystem;
 
-namespace AssemblyReloader.Config
+namespace AssemblyReloader.Gui
 {
     public interface IPluginInfo
     {

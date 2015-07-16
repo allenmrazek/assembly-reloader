@@ -48,8 +48,11 @@ namespace AssemblyReloader.Config
             injectionBinder.Bind<SignalStart>().ToSingleton().CrossContext();
             injectionBinder.Bind<IGetConfigurationFilePath>().To(new GetConfigurationFilePath()).CrossContext();
             injectionBinder.Bind<Configuration>().ToSingleton().CrossContext();
-            
+            injectionBinder.Bind<GameObject>()
+                .To((contextView as GameObject) ?? new GameObject("CoreContext.CastFailed"))
+                .ToName(Keys.GameObjectKeys.CoreContext).CrossContext();
 
+            // gui and resource bindings
             injectionBinder.Bind<GUIStyle>().To(ConfigureTitleBarButtonStyle()).ToName(Styles.TitleBarButtonStyle).ToSingleton().CrossContext();
             BindTextureToName(injectionBinder.GetInstance<IResourceRepository>(), "Resources/btnClose", TextureNames.CloseButton).CrossContext();
             BindTextureToName(injectionBinder.GetInstance<IResourceRepository>(), "Resources/btnWrench", TextureNames.SettingsButton).CrossContext();
@@ -58,7 +61,7 @@ namespace AssemblyReloader.Config
 
             // core context bindings
             injectionBinder.Bind<GetReloadableAssemblyFilesFromDirectoryRecursive>().ToSingleton();
-            
+
             
             
 
@@ -82,20 +85,22 @@ namespace AssemblyReloader.Config
             injectionBinder.Bind<IEnumerable<ReloadablePluginContext>>().To(pluginContexts);
             injectionBinder.Bind<IEnumerable<IPluginInfo>>().To(pluginInfoMapping.Keys);
             injectionBinder.Bind<IEnumerable<IReloadablePlugin>>().To(pluginInfoMapping.Values);
+            injectionBinder.Bind<IDictionary<IPluginInfo, IReloadablePlugin>>().To(pluginInfoMapping);
 
-
-            mediationBinder.BindView<MainView>().ToMediator<ViewMediator>();
+            mediationBinder.BindView<MainView>().ToMediator<MainViewMediator>();
+            mediationBinder.BindView<ConfigurationView>().ToMediator<ConfigurationViewMediator>();
 
             // set up command bindings
             commandBinder.Bind<SignalStart>()
                 .To<CommandLoadConfiguration>()
                 .To<CommandLaunchReloadablePluginContexts>()
+                .To<CommandConfigureGUI>()
                 .Once()
                 .InSequence();
 
 
-
-            (contextView as GameObject ?? new GameObject("CoreContext")).AddComponent<MainView>();
+            //(contextView as GameObject ?? new GameObject("ConfigurationView")).AddComponent<ConfigurationView>();
+            //(contextView as GameObject ?? new GameObject("CoreContext")).AddComponent<MainView>();
 
 
             //serializerSelector.AddSerializer(typeof (Setting<>), SettingSerializerFactory.Create);
@@ -182,7 +187,7 @@ namespace AssemblyReloader.Config
 
 
             //// create main window ...
-            //mediationBinder.BindView<MainView>().ToMediator<ViewMediator>();
+            //mediationBinder.BindView<View>().ToMediator<MainViewMediator>();
 
         }
 
