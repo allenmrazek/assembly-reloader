@@ -2,11 +2,11 @@
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using AssemblyReloader.CompositeRoot;
-using AssemblyReloader.Config;
+using AssemblyReloader.Config.Keys;
 using AssemblyReloader.Config.Names;
 using AssemblyReloader.FileSystem;
 using AssemblyReloader.StrangeIoC.extensions.context.api;
+using AssemblyReloader.StrangeIoC.extensions.injector.api;
 using ReeperCommon.FileSystem;
 using ReeperCommon.FileSystem.Providers;
 using ReeperCommon.Logging;
@@ -31,26 +31,29 @@ namespace AssemblyReloader.Common
             var log = new DebugLog("ART");
             injectionBinder.Bind<ILog>().To(log).ToSingleton().CrossContext();
 
- 
-
+            
 
             // cross context bindings
-            
             injectionBinder.Bind<IUrlDirProvider>().To<KSPGameDataUrlDirProvider>().ToSingleton();
             injectionBinder.Bind<IUrlDir>().To(new KSPUrlDir(injectionBinder.GetInstance<IUrlDirProvider>().Get())).CrossContext();
             injectionBinder.Bind<IFileSystemFactory>().To<KSPFileSystemFactory>().ToSingleton().CrossContext();
 
-            var ourLocation =
-                injectionBinder.GetInstance<IGetAssemblyFileLocation>().Get(Assembly.GetExecutingAssembly());
+            var ourLocation = GetAssemblyFileLocation(Assembly.GetExecutingAssembly());
 
-            if (!ourLocation.Any())
-                throw new Exception("Failed to locate IFile for AssemblyReloader");
+            injectionBinder.Bind<IDirectory>().To(ourLocation.Directory).CrossContext();
+            injectionBinder.Bind<IDirectory>().To(ourLocation.Directory).ToName(DirectoryKeys.Core).CrossContext();
+            injectionBinder.Bind<IDirectory>().To(injectionBinder.GetInstance<IFileSystemFactory>().GameData).ToName(DirectoryKeys.GameData).CrossContext();
+            injectionBinder.Bind<IFile>().To(ourLocation);
 
-            injectionBinder.Bind<IDirectory>().To(ourLocation.Single().Directory).CrossContext();
-            injectionBinder.Bind<IDirectory>().To(ourLocation.Single().Directory).ToName(IDirectoryKeys.Core).CrossContext();
-            injectionBinder.Bind<IDirectory>().To(injectionBinder.GetInstance<IFileSystemFactory>().GameData).ToName(IDirectoryKeys.GameData).CrossContext();
+            injectionBinder.Bind<IResourceRepository>()
+                .To(ConfigureResourceRepository(injectionBinder.GetInstance<IDirectory>()))
+                .CrossContext();
 
-            
+            injectionBinder.Bind<GUIStyle>().To(ConfigureTitleBarButtonStyle()).ToName(Styles.TitleBarButtonStyle).ToSingleton().CrossContext();
+            BindTextureToName(injectionBinder.GetInstance<IResourceRepository>(), "Resources/btnClose", TextureNames.CloseButton).CrossContext();
+            BindTextureToName(injectionBinder.GetInstance<IResourceRepository>(), "Resources/btnWrench", TextureNames.SettingsButton).CrossContext();
+            BindTextureToName(injectionBinder.GetInstance<IResourceRepository>(), "Resources/cursor", TextureNames.ResizeCursor).CrossContext();
+
             var serializerSelector =
                 new DefaultConfigNodeItemSerializerSelector(new SurrogateProvider(new[] 
                     { 
@@ -60,19 +63,35 @@ namespace AssemblyReloader.Common
 
             injectionBinder.Bind<IConfigNodeSerializer>().To(
                 new ConfigNodeSerializer(serializerSelector, new GetSerializableFieldsRecursiveType())).CrossContext();
-
-            injectionBinder.Bind<IResourceRepository>()
-                .To(ConfigureResourceRepository(injectionBinder.GetInstance<IDirectory>()))
-                .CrossContext();
-
-
-            // regular bindings
-            injectionBinder.Bind<IFile>().To(ourLocation.Single());
-
         }
 
 
-        private IResourceRepository ConfigureResourceRepository(IDirectory dllDirectory)
+        private static GUIStyle ConfigureTitleBarButtonStyle()
+        {
+            var style = new GUIStyle(HighLogic.Skin.button) { border = new RectOffset(), padding = new RectOffset() };
+            style.fixedHeight = style.fixedWidth = 16f;
+            style.margin = new RectOffset();
+
+            return style;
+        }
+
+
+        private IInjectionBinding BindTextureToName(IResourceRepository resourceRepo, string url, object name)
+        {
+            if (resourceRepo == null) throw new ArgumentNullException("resourceRepo");
+            if (name == null) throw new ArgumentNullException("name");
+            if (string.IsNullOrEmpty(url)) throw new ArgumentException("url is null or empty");
+
+            var tex = resourceRepo.GetTexture(url);
+
+            if (!tex.Any())
+                throw new Exception("Couldn't bind texture at \"" + url + "\"; texture not found");
+
+            return injectionBinder.Bind<Texture2D>().ToValue(tex.Single()).ToName(name);
+        }
+
+
+        private static IResourceRepository ConfigureResourceRepository(IDirectory dllDirectory)
         {
             // Removes extension from string, if an extension exists
             // Also converts windows-style \\ to / 
@@ -133,6 +152,17 @@ namespace AssemblyReloader.Common
                             return resourceNames.Count == 1 ? resourceNames.First() : s;
                         }, currentAssemblyResource)
                         )));
+        }
+
+
+        private IFile GetAssemblyFileLocation(Assembly target)
+        {
+            if (target == null) throw new ArgumentNullException("target");
+
+            var mf = injectionBinder.GetInstance<IGetAssemblyFileLocation>().Get(target);
+
+            if (!mf.Any()) throw new Exception("Failed to find file location of " + target.FullName);
+            return mf.Single();
         }
     }
 }

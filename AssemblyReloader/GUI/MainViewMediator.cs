@@ -79,7 +79,7 @@ namespace AssemblyReloader.Gui
         }
 
 
-        private void OnCloseAllWindows()
+        public void OnCloseAllWindows()
         {
             View.Visible = false;
         }

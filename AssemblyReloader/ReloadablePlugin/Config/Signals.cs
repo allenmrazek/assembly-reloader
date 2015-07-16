@@ -4,20 +4,11 @@ using ReeperCommon.FileSystem;
 
 namespace AssemblyReloader.ReloadablePlugin.Config
 {
-    public class SignalLoadAssembly : Signal<IFile>
+    public class SignalLoadReloadablePlugin : Signal
     {
     }
 
-    public class SignalUnloadAssembly : Signal<ILoadedAssemblyHandle>
-    {
-    }
-
-// ReSharper disable once ClassNeverInstantiated.Global
-    public class SignalAssemblyWasLoaded: Signal<ILoadedAssemblyHandle>
-    {
-    }
-
-    public class SignalAssemblyWasUnloaded : Signal
+    public class SignalUnloadReloadablePlugin : Signal<ILoadedAssemblyHandle>
     {
     }
 }

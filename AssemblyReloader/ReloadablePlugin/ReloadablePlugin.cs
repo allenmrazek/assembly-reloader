@@ -9,43 +9,31 @@ using ReeperCommon.FileSystem;
 
 namespace AssemblyReloader.ReloadablePlugin
 {
-    public class ReloadablePlugin : IPluginInfo, IReloadablePlugin
+    public class ReloadablePlugin : IReloadablePlugin
     {
         private readonly IFile _reloadableFile;
-        private readonly SignalLoadAssembly _signalLoad;
-        private readonly SignalUnloadAssembly _signalUnload;
-        private readonly SignalAssemblyWasUnloaded _signalWasUnloaded;
-        private readonly SignalAssemblyWasLoaded _signalWasLoaded;
+        private readonly SignalLoadReloadablePlugin _signalLoad;
+        private readonly SignalUnloadReloadablePlugin _signalUnload;
         private Maybe<ILoadedAssemblyHandle> _loaded = Maybe<ILoadedAssemblyHandle>.None;
   
         public ReloadablePlugin(
             IFile reloadableFile, 
-            SignalLoadAssembly signalLoad, 
-            SignalAssemblyWasLoaded signalWasLoaded,
-            SignalUnloadAssembly signalUnload, 
-            SignalAssemblyWasUnloaded signalWasUnloaded)
+            SignalLoadReloadablePlugin signalLoad,
+            SignalUnloadReloadablePlugin signalUnload)
         {
             if (reloadableFile == null) throw new ArgumentNullException("reloadableFile");
             if (signalLoad == null) throw new ArgumentNullException("signalLoad");
             if (signalUnload == null) throw new ArgumentNullException("signalUnload");
-            if (signalWasUnloaded == null) throw new ArgumentNullException("signalWasUnloaded");
-            if (signalWasLoaded == null) throw new ArgumentNullException("signalWasLoaded");
 
             _reloadableFile = reloadableFile;
             _signalLoad = signalLoad;
             _signalUnload = signalUnload;
-            _signalWasUnloaded = signalWasUnloaded;
-            _signalWasLoaded = signalWasLoaded;
-
-            _signalWasLoaded.AddListener(AssemblyLoaded);
-            _signalWasUnloaded.AddListener(AssemblyUnloaded);
         }
 
 
         ~ReloadablePlugin()
         {
-            _signalWasLoaded.RemoveListener(AssemblyLoaded);
-            _signalWasUnloaded.RemoveListener(AssemblyUnloaded);
+
         }
 
 
@@ -79,7 +67,7 @@ namespace AssemblyReloader.ReloadablePlugin
 
         private void Load()
         {
-            _signalLoad.Dispatch(_reloadableFile);
+            _signalLoad.Dispatch();
 
             //if (_loaded.Any())
             //    throw new InvalidOperationException("Previous instance was not unloaded");
