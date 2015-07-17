@@ -1,5 +1,7 @@
-﻿using AssemblyReloader.StrangeIoC.extensions.command.impl;
+﻿using AssemblyReloader.Game;
+using AssemblyReloader.StrangeIoC.extensions.command.impl;
 using AssemblyReloader.StrangeIoC.extensions.injector;
+using ReeperCommon.Containers;
 using ReeperCommon.FileSystem;
 using ReeperCommon.Logging;
 
@@ -8,7 +10,7 @@ namespace AssemblyReloader.ReloadablePlugin.Config
     public class CommandStartReloadablePlugin : Command
     {
         [Inject]
-        public SignalLoadReloadablePlugin LoadPlugin { get; set; }
+        public SignalReloadPlugin ReloadPlugin { get; set; }
 
         [Inject]
         public IFile Plugin { get; set; }
@@ -20,7 +22,7 @@ namespace AssemblyReloader.ReloadablePlugin.Config
         public override void Execute()
         {
             Log.Normal("First-load for plugin {0}", Plugin.Url);
-            LoadPlugin.Dispatch();
+            ReloadPlugin.Dispatch(Maybe<ILoadedAssemblyHandle>.None);
         }
     }
 }

@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using AssemblyReloader.ReloadablePlugin.Definition;
+using AssemblyReloader.ReloadablePlugin.Weaving.old.Definition;
 using Mono.Cecil;
 using ReeperCommon.Logging;
 
-namespace AssemblyReloader.Weaving.old
+namespace AssemblyReloader.ReloadablePlugin.Weaving.old
 {
     public class AssemblyDefinitionWeaver : IAssemblyDefinitionWeaver
     {

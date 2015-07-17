@@ -1,25 +1,24 @@
 ﻿using System;
-using AssemblyReloader.FileSystem;
 using AssemblyReloader.Properties;
 using AssemblyReloader.StrangeIoC.extensions.implicitBind;
 using Mono.Cecil;
 
-namespace AssemblyReloader.ReloadablePlugin.Definition.Operations
+namespace AssemblyReloader.ReloadablePlugin.Weaving.old.Definition.Operations
 {
     [Implements(typeof(IUniqueAssemblyNameGenerator))]
     public class UniqueAssemblyNameGenerator : IUniqueAssemblyNameGenerator
     {
-        private readonly IRandomStringGenerator _stringGenerator;
+        private readonly IGetRandomString _string;
 
-        public UniqueAssemblyNameGenerator([NotNull] IRandomStringGenerator stringGenerator)
+        public UniqueAssemblyNameGenerator([NotNull] IGetRandomString @string)
         {
-            if (stringGenerator == null) throw new ArgumentNullException("stringGenerator");
-            _stringGenerator = stringGenerator;
+            if (@string == null) throw new ArgumentNullException("string");
+            _string = @string;
         }
 
         public string Get(AssemblyDefinition definition)
         {
-            return _stringGenerator.Get() + "." + definition.Name;
+            return _string.Get() + "." + definition.Name;
         }
     }
 }

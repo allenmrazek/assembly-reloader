@@ -1,4 +1,6 @@
-﻿using ReeperCommon.Serialization;
+﻿using AssemblyReloader.StrangeIoC.extensions.implicitBind;
+using AssemblyReloader.StrangeIoC.extensions.injector.api;
+using ReeperCommon.Serialization;
 
 namespace AssemblyReloader.Config
 {

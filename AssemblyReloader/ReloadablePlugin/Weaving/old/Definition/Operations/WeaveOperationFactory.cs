@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using AssemblyReloader.Config;
-using AssemblyReloader.DataObjects;
 using AssemblyReloader.Properties;
 using AssemblyReloader.StrangeIoC.extensions.implicitBind;
 
-namespace AssemblyReloader.ReloadablePlugin.Definition.Operations
+namespace AssemblyReloader.ReloadablePlugin.Weaving.old.Definition.Operations
 {
     [Implements(typeof(IWeaveOperationFactory))]
 // ReSharper disable once UnusedMember.Global

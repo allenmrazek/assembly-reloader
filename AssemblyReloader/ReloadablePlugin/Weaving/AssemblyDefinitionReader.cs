@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using AssemblyReloader.Properties;
+using System.IO;
+using AssemblyReloader.Config.Keys;
+using AssemblyReloader.ReloadablePlugin.Weaving.@new;
 using AssemblyReloader.StrangeIoC.extensions.implicitBind;
+using AssemblyReloader.StrangeIoC.extensions.injector;
 using Mono.Cecil;
 using ReeperCommon.Containers;
 using ReeperCommon.Extensions;
@@ -12,40 +12,48 @@ using ReeperCommon.Logging;
 
 namespace AssemblyReloader.ReloadablePlugin.Weaving
 {
-    [Implements(typeof(IAssemblyDefinitionReader))]
+    [Implements, Implements(typeof(IAssemblyDefinitionReader))]
 // ReSharper disable once UnusedMember.Global
     public class AssemblyDefinitionReader : IAssemblyDefinitionReader
     {
+        private readonly IFile _definitionFile;
         private readonly IGetDebugSymbolsExistForDefinition _getDebugSymbolsExistQuery;
         private readonly BaseAssemblyResolver _resolver;
         private readonly ILog _log;
 
 
         public AssemblyDefinitionReader(
-            [NotNull] IGetDebugSymbolsExistForDefinition getDebugSymbolsExistQuery,
-            [NotNull] BaseAssemblyResolver resolver,
-            [NotNull] ILog log)
+            IFile definitionFile,
+            IGetDebugSymbolsExistForDefinition getDebugSymbolsExistQuery,
+            BaseAssemblyResolver resolver,
+            [Name(LogKeys.PluginContext)] ILog log)
         {
+            if (definitionFile == null) throw new ArgumentNullException("definitionFile");
             if (getDebugSymbolsExistQuery == null) throw new ArgumentNullException("getDebugSymbolsExistQuery");
             if (resolver == null) throw new ArgumentNullException("resolver");
             if (log == null) throw new ArgumentNullException("log");
 
+            _definitionFile = definitionFile;
             _getDebugSymbolsExistQuery = getDebugSymbolsExistQuery;
             _resolver = resolver;
             _log = log;
         }
 
 
-        public Maybe<AssemblyDefinition> Read(IFile location)
+        public Maybe<AssemblyDefinition> Read()
         {
-            if (location == null) throw new ArgumentNullException("location");
+            _log.Debug("Reading assembly definition from {0}", _definitionFile.Url);
 
-            _log.Debug("Reading assembly definition from {0}", location.Url);
+            if (!File.Exists(_definitionFile.FullPath))
+            {
+                _log.Error("No definition found at \"{0}\"", _definitionFile.FullPath);
+                return Maybe<AssemblyDefinition>.None;
+            }
 
-            var readerParameters = ConfigureReaderParameters(location);
+            var readerParameters = ConfigureReaderParameters(_definitionFile);
             _log.Debug("Debug symbols found: " + (readerParameters.ReadSymbols ? "YES" : "NO"));
 
-            var definition = AssemblyDefinition.ReadAssembly(location.FullPath, readerParameters);
+            var definition = AssemblyDefinition.ReadAssembly(_definitionFile.FullPath, readerParameters);
 
             if (definition != null)
                 _log.Debug("Successfully read definition");

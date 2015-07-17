@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using AssemblyReloader.ReloadablePlugin.Definition;
-using AssemblyReloader.ReloadablePlugin.Definition.Operations.old;
+using AssemblyReloader.ReloadablePlugin.Weaving.old.Definition;
+using AssemblyReloader.ReloadablePlugin.Weaving.old.Definition.Operations.old;
 using Mono.Cecil;
 
 namespace AssemblyReloader.Queries

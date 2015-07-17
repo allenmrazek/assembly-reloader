@@ -4,8 +4,8 @@ using ReeperCommon.FileSystem;
 
 namespace AssemblyReloader.ReloadablePlugin.Weaving
 {
-    public interface IAssemblyDefinitionReader
+    public interface IGetAssemblyDefinition
     {
-        Maybe<AssemblyDefinition> Read();
+        Maybe<AssemblyDefinition> Get(IFile definitionFile);
     }
 }

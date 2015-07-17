@@ -13,11 +13,8 @@ namespace AssemblyReloader.Gui
     public class MainViewMediator : Mediator
     {
         [Inject] public MainView View { get; set; }
-
         [Inject] public SignalCloseAllWindows CloseAllWindowsSignal { get; set; }
-
         [Inject] public IDictionary<IPluginInfo, IReloadablePlugin> Plugins { get; set; }
-
         [Inject] public ILog Log { get; set; }
 
 

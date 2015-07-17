@@ -2,7 +2,7 @@
 
 namespace AssemblyReloader.FileSystem
 {
-    public interface ITemporaryFileFactory
+    public interface IGetTemporaryFile
     {
         TemporaryFile Get();
         TemporaryFile Get(string fullPath);

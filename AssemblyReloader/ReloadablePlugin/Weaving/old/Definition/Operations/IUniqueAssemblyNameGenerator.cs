@@ -1,6 +1,6 @@
 ﻿using Mono.Cecil;
 
-namespace AssemblyReloader.ReloadablePlugin.Definition.Operations
+namespace AssemblyReloader.ReloadablePlugin.Weaving.old.Definition.Operations
 {
     public interface IUniqueAssemblyNameGenerator
     {

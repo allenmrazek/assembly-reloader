@@ -1,39 +1,53 @@
 ﻿using System;
 using System.Linq;
-using AssemblyReloader.Config;
+using AssemblyReloader.Config.Keys;
 using AssemblyReloader.Game;
-using AssemblyReloader.Gui;
-using AssemblyReloader.ReloadablePlugin.Config;
+using AssemblyReloader.StrangeIoC.extensions.injector;
 using ReeperCommon.Containers;
 using ReeperCommon.FileSystem;
+using ReeperCommon.Logging;
 
 namespace AssemblyReloader.ReloadablePlugin
 {
     public class ReloadablePlugin : IReloadablePlugin
     {
         private readonly IFile _reloadableFile;
-        private readonly SignalLoadReloadablePlugin _signalLoad;
-        private readonly SignalUnloadReloadablePlugin _signalUnload;
+        private readonly SignalReloadPlugin _reloadPluginSignal;
+        private readonly SignalPluginWasLoaded _pluginWasLoadedSignal;
+        private readonly SignalPluginWasUnloaded _pluginWasUnloadedSignal;
+        private readonly ILog _log;
+
+
         private Maybe<ILoadedAssemblyHandle> _loaded = Maybe<ILoadedAssemblyHandle>.None;
   
         public ReloadablePlugin(
-            IFile reloadableFile, 
-            SignalLoadReloadablePlugin signalLoad,
-            SignalUnloadReloadablePlugin signalUnload)
+            IFile reloadableFile,
+            SignalReloadPlugin reloadPluginSignal,
+            SignalPluginWasLoaded pluginWasLoadedSignal,
+            SignalPluginWasUnloaded pluginWasUnloadedSignal,
+            [Name(LogKeys.PluginContext)] ILog log)
         {
             if (reloadableFile == null) throw new ArgumentNullException("reloadableFile");
-            if (signalLoad == null) throw new ArgumentNullException("signalLoad");
-            if (signalUnload == null) throw new ArgumentNullException("signalUnload");
+            if (reloadPluginSignal == null) throw new ArgumentNullException("reloadPluginSignal");
+            if (pluginWasLoadedSignal == null) throw new ArgumentNullException("pluginWasLoadedSignal");
+            if (pluginWasUnloadedSignal == null) throw new ArgumentNullException("pluginWasUnloadedSignal");
+            if (log == null) throw new ArgumentNullException("log");
 
             _reloadableFile = reloadableFile;
-            _signalLoad = signalLoad;
-            _signalUnload = signalUnload;
+            _reloadPluginSignal = reloadPluginSignal;
+            _pluginWasLoadedSignal = pluginWasLoadedSignal;
+            _pluginWasUnloadedSignal = pluginWasUnloadedSignal;
+            _log = log;
+
+            _pluginWasLoadedSignal.AddListener(OnPluginLoaded);
+            _pluginWasUnloadedSignal.AddListener(OnPluginUnloaded);
         }
 
 
         ~ReloadablePlugin()
         {
-
+            _pluginWasLoadedSignal.RemoveListener(OnPluginLoaded);
+            _pluginWasUnloadedSignal.RemoveListener(OnPluginUnloaded);
         }
 
 
@@ -49,7 +63,7 @@ namespace AssemblyReloader.ReloadablePlugin
         }
 
 
-        private void AssemblyLoaded(ILoadedAssemblyHandle handle)
+        private void OnPluginLoaded(ILoadedAssemblyHandle handle)
         {
             if (handle == null) throw new ArgumentNullException("handle");
             if (_loaded.Any())
@@ -59,56 +73,18 @@ namespace AssemblyReloader.ReloadablePlugin
         }
 
 
-        private void AssemblyUnloaded()
+        private void OnPluginUnloaded()
         {
+            if (!_loaded.Any())
+                throw new Exception("Received OnPluginUnloaded but no previous version was loaded");
+
             _loaded = Maybe<ILoadedAssemblyHandle>.None;
-        }
-
-
-        private void Load()
-        {
-            _signalLoad.Dispatch();
-
-            //if (_loaded.Any())
-            //    throw new InvalidOperationException("Previous instance was not unloaded");
-
-            //var assembly = _assemblyProvider.Get(Location);
-            //if (!assembly.Any())
-            //    throw new Exception("Failed to read assembly at " + Location.FullPath);
-
-            //_loaded = _assemblyLoader.AddToLoadedAssemblies(assembly.Single(), Location);
-
-            ////if (_loaded.Any())
-            ////    _reloadableTypeSystem.CreateReloadableTypesFrom(_loaded.Single());
-
-            //if (_loaded.Any())
-            //    _signalLoaded.Dispatch(_loaded.Single());
-
-            //return _loaded.Any();
-        }
-
-
-        private void Unload()
-        {
-            _signalUnload.Dispatch(_loaded.Single());
-
-            //if (!_loaded.Any())
-            //    throw new InvalidOperationException("No assembly loaded");
-
-            ////_reloadableTypeSystem.DestroyReloadableTypesFrom(_loaded.Single());
-            //_signalUnloading.Dispatch(_loaded.Single());
-
-            //_assemblyLoader.RemoveFromLoadedAssemblies(_loaded.Single());
-            //_loaded = Maybe<ILoadedAssemblyHandle>.None;
         }
 
 
         public void Reload()
         {
-            if (_loaded.Any())
-                Unload();
-
-            Load();
+            _reloadPluginSignal.Dispatch(_loaded);
         }
     }
 }

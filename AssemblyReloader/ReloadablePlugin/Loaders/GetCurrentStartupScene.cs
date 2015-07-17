@@ -3,10 +3,11 @@ using AssemblyReloader.Game;
 using AssemblyReloader.Game.Providers;
 using AssemblyReloader.Queries;
 using AssemblyReloader.StrangeIoC.extensions.implicitBind;
+using AssemblyReloader.StrangeIoC.extensions.injector.api;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders
 {
-    [Implements(typeof(IGetCurrentStartupScene))]
+    [Implements(InjectionBindingScope.CROSS_CONTEXT, typeof(IGetCurrentStartupScene))]
 // ReSharper disable once UnusedMember.Global
     public class GetCurrentStartupScene : IGetCurrentStartupScene
     {

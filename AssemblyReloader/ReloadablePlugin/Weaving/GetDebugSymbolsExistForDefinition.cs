@@ -2,11 +2,11 @@
 using System.IO;
 using AssemblyReloader.Properties;
 using AssemblyReloader.StrangeIoC.extensions.implicitBind;
+using AssemblyReloader.StrangeIoC.extensions.injector.api;
 using ReeperCommon.FileSystem;
 
 namespace AssemblyReloader.ReloadablePlugin.Weaving
 {
-    [Implements(typeof(IGetDebugSymbolsExistForDefinition))]
     public class GetDebugSymbolsExistForDefinition : IGetDebugSymbolsExistForDefinition
     {
         private const string DebugSymbolExtension = ".mdb";

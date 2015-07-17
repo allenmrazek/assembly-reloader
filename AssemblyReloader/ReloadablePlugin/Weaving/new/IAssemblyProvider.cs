@@ -1,8 +1,7 @@
 ﻿using System.Reflection;
 using ReeperCommon.Containers;
-using ReeperCommon.FileSystem;
 
-namespace AssemblyReloader.ReloadablePlugin.Weaving
+namespace AssemblyReloader.ReloadablePlugin.Weaving.@new
 {
     public interface IAssemblyProvider
     {

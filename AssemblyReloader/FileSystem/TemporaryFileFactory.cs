@@ -3,24 +3,27 @@ using System.Globalization;
 using System.IO;
 using AssemblyReloader.DataObjects;
 using AssemblyReloader.Properties;
+using AssemblyReloader.ReloadablePlugin.Weaving;
+using AssemblyReloader.StrangeIoC.extensions.implicitBind;
+using AssemblyReloader.StrangeIoC.extensions.injector.api;
 using ReeperCommon.FileSystem;
 
 namespace AssemblyReloader.FileSystem
 {
 // ReSharper disable once ClassNeverInstantiated.Global
-    public class TemporaryFileFactory : ITemporaryFileFactory
+    public class GetTemporaryFile : IGetTemporaryFile
     {
         private readonly IDirectory _directory;
-        private readonly IRandomStringGenerator _stringGenerator;
+        private readonly IGetRandomString _string;
 
-        public TemporaryFileFactory(
+        public GetTemporaryFile(
             [NotNull] IDirectory directory,
-            [NotNull] IRandomStringGenerator stringGenerator)
+            [NotNull] IGetRandomString @string)
         {
             if (directory == null) throw new ArgumentNullException("directory");
-            if (stringGenerator == null) throw new ArgumentNullException("stringGenerator");
+            if (@string == null) throw new ArgumentNullException("string");
             _directory = directory;
-            _stringGenerator = stringGenerator;
+            _string = @string;
         }
 
 
@@ -61,7 +64,7 @@ namespace AssemblyReloader.FileSystem
                    (!_directory.FullPath.EndsWith(Path.DirectorySeparatorChar.ToString(CultureInfo.InvariantCulture))
                        ? Path.DirectorySeparatorChar.ToString(CultureInfo.InvariantCulture)
                        : "")
-                   + _stringGenerator.Get();
+                   + _string.Get();
         }
     }
 }

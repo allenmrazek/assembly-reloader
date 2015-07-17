@@ -3,6 +3,8 @@ using System.IO;
 using System.Reflection;
 using AssemblyReloader.FileSystem;
 using AssemblyReloader.Properties;
+using AssemblyReloader.StrangeIoC.extensions.implicitBind;
+using AssemblyReloader.StrangeIoC.extensions.injector.api;
 using Mono.Cecil;
 using Mono.CompilerServices.SymbolWriter;
 using ReeperCommon.Containers;
@@ -16,22 +18,18 @@ namespace AssemblyReloader.ReloadablePlugin.Weaving
     {
         private const int InitialMemoryStreamSize = 1024 * 1024;
 
-        private readonly IAssemblyDefinitionProvider _definitionProvider;
-        private readonly ITemporaryFileFactory _tempFileFactory;
+        private readonly IGetTemporaryFile _tempFile;
         private readonly ILog _log;
 
 
         public AssemblyDefinitionLoader(
-            [NotNull] IAssemblyDefinitionProvider definitionProvider,
-            [NotNull] ITemporaryFileFactory tempFileFactory, 
+            [NotNull] IGetTemporaryFile tempFile, 
             [NotNull] ILog log)
         {
-            if (definitionProvider == null) throw new ArgumentNullException("definitionProvider");
-            if (tempFileFactory == null) throw new ArgumentNullException("tempFileFactory");
+            if (tempFile == null) throw new ArgumentNullException("tempFile");
             if (log == null) throw new ArgumentNullException("log");
 
-            _definitionProvider = definitionProvider;
-            _tempFileFactory = tempFileFactory;
+            _tempFile = tempFile;
             _log = log;
         }
 
@@ -77,8 +75,8 @@ namespace AssemblyReloader.ReloadablePlugin.Weaving
             if (!definition.MainModule.HasSymbols)
                 throw new ArgumentException("definition does not contain debug symbols");
 
-            using (var tempDll = _tempFileFactory.Get())
-            using (var tempSymbolMdb = _tempFileFactory.Get(tempDll.FullPath + ".mdb"))
+            using (var tempDll = _tempFile.Get())
+            using (var tempSymbolMdb = _tempFile.Get(tempDll.FullPath + ".mdb"))
             {
                 try
                 {
@@ -123,7 +121,7 @@ namespace AssemblyReloader.ReloadablePlugin.Weaving
                     if (assemblyStream.Length == 0)
                         throw;
                 }
-                catch (FileNotFoundException fnf)
+                catch (FileNotFoundException)
                 {
                     _log.Error("Could not load assembly from temp file (file does not exist): " + tempDll.FullPath);
                     throw;

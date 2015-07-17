@@ -64,6 +64,7 @@ namespace AssemblyReloader.Game
             return Maybe<ILoadedAssemblyHandle>.With(new LoadedAssemblyHandle(loadedAssembly));
         }
 
+
         public void RemoveFromLoadedAssemblies(ILoadedAssemblyHandle handle)
         {
             if (handle == null) throw new ArgumentNullException("handle");

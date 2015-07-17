@@ -4,10 +4,12 @@ using AssemblyReloader.Config.Keys;
 using AssemblyReloader.Config.Names;
 using AssemblyReloader.StrangeIoC.extensions.implicitBind;
 using AssemblyReloader.StrangeIoC.extensions.injector;
+using AssemblyReloader.StrangeIoC.extensions.injector.api;
 using ReeperCommon.FileSystem;
 
 namespace AssemblyReloader.Config
 {
+    [Implements(typeof(GetReloadableAssemblyFilesFromDirectoryRecursive))]
 // ReSharper disable once ClassNeverInstantiated.Global
     public class GetReloadableAssemblyFilesFromDirectoryRecursive
     {

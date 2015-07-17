@@ -8,6 +8,7 @@ using AssemblyReloader.FileSystem;
 using AssemblyReloader.Gui;
 using AssemblyReloader.ReloadablePlugin;
 using AssemblyReloader.ReloadablePlugin.Config;
+using AssemblyReloader.ReloadablePlugin.Weaving;
 using AssemblyReloader.StrangeIoC.extensions.context.api;
 using Mono.Cecil;
 using ReeperCommon.FileSystem;
@@ -31,19 +32,20 @@ namespace AssemblyReloader.Config
 
 
             // core context bindings
-            injectionBinder.Bind<GetReloadableAssemblyFilesFromDirectoryRecursive>().ToSingleton();
-
-
 
 
             // cross context bindings
-            injectionBinder.Bind<IGetConfigurationFilePath>().To(new GetConfigurationFilePath()).CrossContext();
-            injectionBinder.Bind<Configuration>().ToSingleton().CrossContext();
             injectionBinder.Bind<GameObject>()
                 .To(contextView as GameObject)
                 .ToName(Keys.GameObjectKeys.CoreContext).CrossContext();
 
-            
+            injectionBinder.Bind<IGetTemporaryFile>().To<GetTemporaryFile>().ToSingleton().CrossContext();
+            injectionBinder.Bind<IGetRandomString>().To<GetRandomString>().ToSingleton().CrossContext();
+            injectionBinder.Bind<IGetConfigurationFilePath>()
+                .To(new GetConfigurationFilePath())
+                .CrossContext();
+
+            injectionBinder.Bind<Configuration>().ToSingleton().CrossContext();
 
             var assemblyResolver = new DefaultAssemblyResolver();
             assemblyResolver.AddSearchDirectory(injectionBinder.GetInstance<IDirectory>().FullPath);

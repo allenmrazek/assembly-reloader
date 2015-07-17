@@ -14,13 +14,13 @@
 //{
 //    public class AssemblyDefinitionLoader : IAssemblyDefinitionLoader
 //    {
-//        private readonly ITemporaryFileFactory _tempFileFactory;
+//        private readonly IGetTemporaryFile _tempFileFactory;
 //        private readonly ILog _log;
 //        private const int InitialMemoryStreamSize = 1024 * 1024;
 
 
 //        public AssemblyDefinitionLoader(
-//            [NotNull] ITemporaryFileFactory tempFileFactory,
+//            [NotNull] IGetTemporaryFile tempFileFactory,
 //            [NotNull] ILog log)
 //        {
 //            if (tempFileFactory == null) throw new ArgumentNullException("tempFileFactory");

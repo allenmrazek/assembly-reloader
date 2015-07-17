@@ -1,14 +1,35 @@
 ﻿using AssemblyReloader.Game;
 using AssemblyReloader.StrangeIoC.extensions.signal.impl;
-using ReeperCommon.FileSystem;
+using Mono.Cecil;
 
 namespace AssemblyReloader.ReloadablePlugin.Config
 {
-    public class SignalLoadReloadablePlugin : Signal
-    {
-    }
+    //public class SignalReadDefinition : Signal
+    //{
+    //}
 
-    public class SignalUnloadReloadablePlugin : Signal<ILoadedAssemblyHandle>
-    {
-    }
+
+    //public class SignalDefinitionLoaded : Signal<AssemblyDefinition>
+    //{
+        
+    //}
+
+    //public class SignalAssemblyLoaded : Signal<ILoadedAssemblyHandle>
+    //{
+        
+    //}
+
+
+    //public class SignalLoadPlugin : Signal
+    //{
+        
+    //}
+
+
+    //public class SignalUnloadPlugin : Signal<ILoadedAssemblyHandle>
+    //{
+        
+    //}
+
+
 }

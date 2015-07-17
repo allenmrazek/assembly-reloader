@@ -5,15 +5,15 @@ using ReeperCommon.Logging;
 
 namespace AssemblyReloader.Gui
 {
+// ReSharper disable once ClassNeverInstantiated.Global
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable UnusedAutoPropertyAccessor.Global
     class ConfigurationViewMediator : Mediator
     {
+
         [Inject] public ConfigurationView View { get; set; }
-
         [Inject] public Configuration Configuration { get; set; }
-
-        [Inject]
-        public SignalCloseAllWindows CloseAllWindows { get; set; }
-
+        [Inject] public SignalCloseAllWindows CloseAllWindows { get; set; }
         [Inject] public ILog Log { get; set; }
 
         public override void OnRegister()

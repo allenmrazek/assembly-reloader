@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
 using AssemblyReloader.Config;
-using AssemblyReloader.DataObjects;
 
-namespace AssemblyReloader.ReloadablePlugin.Definition.Operations
+namespace AssemblyReloader.ReloadablePlugin.Weaving.old.Definition.Operations
 {
     public interface IWeaveOperationFactory
     {

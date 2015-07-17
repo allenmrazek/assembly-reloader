@@ -1,6 +1,6 @@
 ﻿using Mono.Cecil;
 
-namespace AssemblyReloader.Weaving.old
+namespace AssemblyReloader.ReloadablePlugin.Weaving.old
 {
     public interface IAssemblyDefinitionWeaver
     {

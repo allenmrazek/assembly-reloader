@@ -1,6 +1,6 @@
 ﻿using Mono.Cecil;
 
-namespace AssemblyReloader.ReloadablePlugin.Definition
+namespace AssemblyReloader.ReloadablePlugin.Weaving.old.Definition
 {
     public interface IWeaveOperation
     {

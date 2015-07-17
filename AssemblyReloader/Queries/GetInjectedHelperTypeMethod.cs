@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using AssemblyReloader.Queries.CecilQueries;
-using AssemblyReloader.ReloadablePlugin.Definition;
+using AssemblyReloader.ReloadablePlugin.Weaving.old.Definition;
 using Mono.Cecil;
 
 namespace AssemblyReloader.Queries

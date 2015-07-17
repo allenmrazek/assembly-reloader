@@ -58,7 +58,7 @@
 //            if (temporaryDirectory == null) throw new ArgumentNullException("temporaryDirectory");
 
 //            var provider = new AssemblyDefinitionLoader(
-//                new ConditionalWriteLoadedAssemblyToDisk(
+//                new WriteModifiedAssemblyDefinitionToDisk(
 //                    new AssemblyDefinitionWeaver(
 //                        new AssemblyDefinitionFromDiskReader(_getDebugSymbolFileExists, _baseAssemblyResolver, _log),
 //                        _getTypeDefinitions,
@@ -67,7 +67,7 @@
 //                        _weaveOperationFactory.Create(pluginConfiguration).ToArray()),
 
 //                    _debugOutputToDisk),
-//                new TemporaryFileFactory(temporaryDirectory, new RandomStringGenerator()), _log);
+//                new GetTemporaryFile(temporaryDirectory, new RandomStringGenerator()), _log);
 
 //            return provider;
 //        }

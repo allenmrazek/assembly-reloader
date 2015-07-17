@@ -1,9 +1,8 @@
 ﻿using AssemblyReloader.Config;
-using AssemblyReloader.DataObjects;
-using AssemblyReloader.ReloadablePlugin.Weaving;
+using AssemblyReloader.ReloadablePlugin.Weaving.@new;
 using ReeperCommon.FileSystem;
 
-namespace AssemblyReloader.ReloadablePlugin.Definition
+namespace AssemblyReloader.ReloadablePlugin.Weaving.old.Definition
 {
     public interface IAssemblyProviderFactory
     {

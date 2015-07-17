@@ -2,11 +2,11 @@
 using System.IO;
 using AssemblyReloader.Properties;
 using AssemblyReloader.StrangeIoC.extensions.implicitBind;
+using AssemblyReloader.StrangeIoC.extensions.injector.api;
 using ReeperCommon.FileSystem;
 
 namespace AssemblyReloader.ReloadablePlugin
 {
-    [Implements(typeof(IGetConfigurationFilePath))]
 // ReSharper disable once UnusedMember.Global
     public class GetConfigurationFilePath : IGetConfigurationFilePath
     {

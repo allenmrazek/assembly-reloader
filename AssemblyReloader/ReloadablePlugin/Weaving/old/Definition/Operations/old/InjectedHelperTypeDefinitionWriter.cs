@@ -2,7 +2,7 @@
 using AssemblyReloader.Commands;
 using Mono.Cecil;
 
-namespace AssemblyReloader.ReloadablePlugin.Definition.Operations.old
+namespace AssemblyReloader.ReloadablePlugin.Weaving.old.Definition.Operations.old
 {
     public class InjectedHelperTypeDefinitionWriter : WeaveOperation
     {

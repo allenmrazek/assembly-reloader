@@ -4,7 +4,7 @@ using AssemblyReloader.Queries.CecilQueries;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
 
-namespace AssemblyReloader.ReloadablePlugin.Definition.Operations.old
+namespace AssemblyReloader.ReloadablePlugin.Weaving.old.Definition.Operations.old
 {
     public class InterceptExecutingAssemblyLocationQueries : WeaveOperation
     {
