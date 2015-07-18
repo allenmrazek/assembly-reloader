@@ -100,8 +100,9 @@
     <Compile Include="CompositeRoot\FlightConfigNodeKeyValuePairComparer.cs" />
     <Compile Include="ReloadablePlugin\Loaders\Addons\IAddonTypeSystemFactory.cs" />
     <Compile Include="ReloadablePlugin\Weaving\AssemblyDefinitionWeaver.cs" />
+    <Compile Include="ReloadablePlugin\Weaving\CommandRewriteAssemblyLocationCalls.cs" />
     <Compile Include="ReloadablePlugin\Weaving\IGetAssemblyDefinition.cs" />
-    <Compile Include="ReloadablePlugin\Weaving\new\CommandChangeDefinitionIdentity.cs" />
+    <Compile Include="ReloadablePlugin\Weaving\CommandChangeDefinitionIdentity.cs" />
     <Compile Include="ReloadablePlugin\Weaving\new\CommandReadDefinition.cs" />
     <Compile Include="ReloadablePlugin\Weaving\AssemblyDefinitionReader.cs" />
     <Compile Include="ReloadablePlugin\Weaving\IAssemblyDefinitionReader.cs" />
@@ -176,6 +177,7 @@
     <Compile Include="ReloadablePlugin\Weaving\new\AssemblyDefinitionFromDiskReader.cs" />
     <Compile Include="ReloadablePlugin\Loaders\old\AssemblyDefinitionLoader.cs" />
     <Compile Include="ReloadablePlugin\Loaders\old\AssemblyLoader.cs" />
+    <Compile Include="ReloadablePlugin\Weaving\Signals.cs" />
     <Compile Include="ReloadablePlugin\Weaving\WriteModifiedAssemblyDefinitionToDisk.cs" />
     <Compile Include="ReloadablePlugin\Loaders\Addons\IAddonLoader.cs" />
     <Compile Include="ReloadablePlugin\Loaders\Addons\IAddonUnloader.cs" />

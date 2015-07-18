@@ -1,6 +1,7 @@
 ﻿using System;
 using AssemblyReloader.Common;
 using AssemblyReloader.Config.Keys;
+using AssemblyReloader.FileSystem;
 using AssemblyReloader.Gui;
 using AssemblyReloader.ReloadablePlugin.Weaving;
 using AssemblyReloader.StrangeIoC.extensions.context.api;
@@ -32,21 +33,26 @@ namespace AssemblyReloader.ReloadablePlugin.Config
 
 
             injectionBinder.Bind<IFile>().To(_reloadableFile);
+            injectionBinder.Bind<IDirectory>().To(injectionBinder.GetInstance<IFile>().Directory);
+
             injectionBinder.Bind<ILog>()
-                .To(injectionBinder.GetInstance<ILog>().CreateTag(_reloadableFile.Name))
+                .To(injectionBinder.GetInstance<ILog>().CreateTag(injectionBinder.GetInstance<IFile>().Name))
                 .ToName(LogKeys.PluginContext);
 
+
+            injectionBinder.Bind<IGetTemporaryFile>().To<GetTemporaryFile>().ToSingleton();
             injectionBinder.Bind<IReloadablePlugin>().Bind<IPluginInfo>().To<ReloadablePlugin>().ToSingleton();
             injectionBinder.Bind<IGetDebugSymbolsExistForDefinition>()
                 .To<GetDebugSymbolsExistForDefinition>()
                 .ToSingleton();
 
-            //injectionBinder.Bind<AssemblyDefinitionReader>().ToSingleton();
             injectionBinder.Bind<AssemblyDefinitionLoader>().ToSingleton();
+            injectionBinder.Bind<SignalDefinitionReady>().ToSingleton();
 
             injectionBinder.Bind<IAssemblyDefinitionReader>().To(
                 new AssemblyDefinitionWeaver(
                     injectionBinder.GetInstance<AssemblyDefinitionReader>(),
+                    injectionBinder.GetInstance<SignalDefinitionReady>(),
                     injectionBinder.GetInstance<ILog>(LogKeys.PluginContext)));
 
 
@@ -63,30 +69,18 @@ namespace AssemblyReloader.ReloadablePlugin.Config
                 .To<CommandStartReloadablePlugin>().Once();
 
 
-            commandBinder.Bind<SignalReloadPlugin>()
-                .To<CommandReloadPlugin>();
+            commandBinder.Bind<SignalReloadPlugin>().To<CommandReloadPlugin>();
+            commandBinder.Bind<SignalInstallPluginTypes>().To<CommandNull>();
+            commandBinder.Bind<SignalUninstallPluginTypes>().To<CommandNull>();
 
+            commandBinder.Bind<SignalDefinitionReady>()
+                .InSequence()
+                .To<CommandChangeDefinitionIdentity>();
+                //to intercept Assembly.Location
+                //to intercept Assembly.CodeBase
+                //to intercept calls to LoadedAssembly
 
-            commandBinder.Bind<SignalInstallPluginTypes>()
-                .To<CommandNull>();
-
-            commandBinder.Bind<SignalUninstallPluginTypes>()
-                .To<CommandNull>();
-
-            //commandBinder.Bind<SignalLoadReloadablePlugin>().InSequence()
-            //    .To<CommandLoadAssemblyDefinition>()
-            //    .To<CommandUnloadPlugin>()
-           //     .To<CommandLoadPlugin>()
-
-            //commandBinder.Bind<SignalDefinitionWasRead>()
-            //    .To<CommandChangeDefinitionIdentity>(); // todo: alterations to assembly definition here
-
-
-            //commandBinder.Bind<SignalUnloadReloadablePlugin>()
-            //    .To<CommandNull>();
-
-
-
+           
 
             Plugin = injectionBinder.GetInstance<IReloadablePlugin>();
             Info = injectionBinder.GetInstance<IPluginInfo>();

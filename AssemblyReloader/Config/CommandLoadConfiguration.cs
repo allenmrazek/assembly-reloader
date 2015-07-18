@@ -18,6 +18,7 @@ namespace AssemblyReloader.Config
         [Inject] public IFile Core { get; set; }
         [Inject] public ILog Log { get; set; }
 
+
         public override void Execute()
         {
             var fullPath = Path.Get(Core);

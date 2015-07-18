@@ -4,17 +4,13 @@ using AssemblyReloader.StrangeIoC.extensions.injector;
 using Mono.Cecil;
 using ReeperCommon.Logging;
 
-namespace AssemblyReloader.ReloadablePlugin.Weaving.@new
+namespace AssemblyReloader.ReloadablePlugin.Weaving
 {
     public class CommandChangeDefinitionIdentity : Command
     {
         [Inject] public AssemblyDefinition Definition { get; set; }
-
-        [Inject]
-        public IGetRandomString RandomStringGenerator { get; set; }
-
-        [Inject(LogKeys.PluginContext)]
-        public ILog Log { get; set; }
+        [Inject] public IGetRandomString RandomStringGenerator { get; set; }
+        [Inject(LogKeys.PluginContext)] public ILog Log { get; set; }
 
 
         public override void Execute()

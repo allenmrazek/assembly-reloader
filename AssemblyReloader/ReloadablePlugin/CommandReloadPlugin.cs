@@ -46,7 +46,7 @@ namespace AssemblyReloader.ReloadablePlugin
         [Inject]
         public SignalPluginWasUnloaded PluginWasUnloadedSignal { get; set; }
 
-
+        
         public override void Execute()
         {
             Log.Debug("Reloading {0}", Plugin.Name);
@@ -91,8 +91,5 @@ namespace AssemblyReloader.ReloadablePlugin
             InstallPluginTypesSignal.Dispatch(handle.Single());
             PluginWasLoadedSignal.Dispatch(handle.Single());
         }
-
-
-   
     }
 }

@@ -13,15 +13,21 @@ namespace AssemblyReloader.ReloadablePlugin.Weaving
     {
         private readonly ILog _log;
         private readonly IAssemblyDefinitionReader _definitionReader;
+        private readonly SignalDefinitionReady _definitionReadySignal;
 
 
-        public AssemblyDefinitionWeaver(IAssemblyDefinitionReader definitionReader, [Name(LogKeys.PluginContext)] ILog log)
+        public AssemblyDefinitionWeaver(
+            IAssemblyDefinitionReader definitionReader, 
+            SignalDefinitionReady definitionReadySignal,
+            [Name(LogKeys.PluginContext)] ILog log)
         {
             if (definitionReader == null) throw new ArgumentNullException("definitionReader");
+            if (definitionReadySignal == null) throw new ArgumentNullException("definitionReadySignal");
             if (log == null) throw new ArgumentNullException("log");
 
             _log = log;
             _definitionReader = definitionReader;
+            _definitionReadySignal = definitionReadySignal;
         }
 
 
@@ -32,10 +38,12 @@ namespace AssemblyReloader.ReloadablePlugin.Weaving
             if (!unmodifiedDefinition.Any())
                 return Maybe<AssemblyDefinition>.None;
 
-            _log.Debug("Weaving definition of {0}", unmodifiedDefinition.Single().FullName);
+            var weavedDefinition = unmodifiedDefinition.Single();
 
-            // todo: weave
-            return Maybe<AssemblyDefinition>.None;
+            _log.Debug("Weaving definition of {0}", weavedDefinition.FullName);
+            _definitionReadySignal.Dispatch(weavedDefinition);
+
+            return Maybe<AssemblyDefinition>.With(weavedDefinition);
         }
     }
 }

@@ -31,15 +31,12 @@ namespace AssemblyReloader.Config
             
 
 
-            // core context bindings
-
 
             // cross context bindings
             injectionBinder.Bind<GameObject>()
                 .To(contextView as GameObject)
                 .ToName(Keys.GameObjectKeys.CoreContext).CrossContext();
 
-            injectionBinder.Bind<IGetTemporaryFile>().To<GetTemporaryFile>().ToSingleton().CrossContext();
             injectionBinder.Bind<IGetRandomString>().To<GetRandomString>().ToSingleton().CrossContext();
             injectionBinder.Bind<IGetConfigurationFilePath>()
                 .To(new GetConfigurationFilePath())
@@ -69,6 +66,9 @@ namespace AssemblyReloader.Config
 
             var pluginInfoMapping = pluginContexts.ToDictionary(context => context.Info, context => context.Plugin);
 
+
+            // core context bindings
+
             injectionBinder.Bind<IEnumerable<ReloadablePluginContext>>().To(pluginContexts);
             injectionBinder.Bind<IEnumerable<IPluginInfo>>().To(pluginInfoMapping.Keys);
             injectionBinder.Bind<IEnumerable<IReloadablePlugin>>().To(pluginInfoMapping.Values);
@@ -79,11 +79,11 @@ namespace AssemblyReloader.Config
 
             // set up command bindings
             commandBinder.Bind<SignalStart>()
+                .InSequence()
                 .To<CommandLoadConfiguration>()
                 .To<CommandLaunchReloadablePluginContexts>()
                 .To<CommandConfigureGUI>()
-                .Once()
-                .InSequence();
+                .Once();
 
 
 

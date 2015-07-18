@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
-using AssemblyReloader.Config;
 using AssemblyReloader.StrangeIoC.extensions.signal.impl;
 using ReeperCommon.Gui.Window;
 using ReeperCommon.Gui.Window.Buttons;
@@ -14,7 +12,11 @@ namespace AssemblyReloader.Gui
     // ReSharper disable once ClassNeverInstantiated.Global
     public class MainView : StrangeView
     {
-        public IEnumerable<IPluginInfo> Plugins { get; set; }
+        private IPluginInfo[] _plugins; // backing field to avoid creating garbage every OnGUI with foreach
+        public IEnumerable<IPluginInfo> Plugins {
+            get { return _plugins; }
+            set { _plugins = (value ?? Enumerable.Empty<IPluginInfo>()).ToArray(); }
+        }
 
 
         internal readonly Signal<IPluginInfo> ReloadRequested = new Signal<IPluginInfo>();
@@ -57,8 +59,10 @@ namespace AssemblyReloader.Gui
             {
                 _scroll = GUILayout.BeginScrollView(_scroll, GUILayout.ExpandWidth(true), GUILayout.ExpandHeight(true));
                 {
-                    foreach (var item in Plugins)
-                        DrawReloadableItem(item);
+// foreach would create garbage every frame due to iterator
+// ReSharper disable once ForCanBeConvertedToForeach
+                    for (var idx = 0; idx < _plugins.Length; ++idx)
+                        DrawReloadableItem(_plugins[idx]);
                 }
                 GUILayout.EndScrollView();
             }
@@ -90,9 +94,15 @@ namespace AssemblyReloader.Gui
         }
 
 
+        public override void OnUpdate()
+        {
+            base.OnUpdate();
+            
+        }
+
+
         private void CloseWindow()
         {
-            // main view closes all windows when closed
             Close.Dispatch();
         }
     }
