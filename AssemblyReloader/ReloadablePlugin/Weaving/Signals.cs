@@ -3,7 +3,7 @@ using Mono.Cecil;
 
 namespace AssemblyReloader.ReloadablePlugin.Weaving
 {
-    public class SignalDefinitionReady : Signal<AssemblyDefinition>
+    public class SignalWeaveDefinition : Signal<AssemblyDefinition>
     {
     }
 

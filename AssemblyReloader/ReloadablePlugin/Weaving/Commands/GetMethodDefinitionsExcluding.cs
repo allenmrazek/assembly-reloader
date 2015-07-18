@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Mono.Cecil;
 
-namespace AssemblyReloader.ReloadablePlugin.Weaving.old.Definition
+namespace AssemblyReloader.ReloadablePlugin.Weaving.Commands
 {
     public class GetMethodDefinitionsExcluding : IGetMethodDefinitions
     {

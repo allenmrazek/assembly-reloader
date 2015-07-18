@@ -4,6 +4,7 @@ using AssemblyReloader.Config.Keys;
 using AssemblyReloader.FileSystem;
 using AssemblyReloader.Gui;
 using AssemblyReloader.ReloadablePlugin.Weaving;
+using AssemblyReloader.ReloadablePlugin.Weaving.Commands;
 using AssemblyReloader.StrangeIoC.extensions.context.api;
 using Mono.Cecil;
 using ReeperCommon.FileSystem;
@@ -47,12 +48,12 @@ namespace AssemblyReloader.ReloadablePlugin.Config
                 .ToSingleton();
 
             injectionBinder.Bind<AssemblyDefinitionLoader>().ToSingleton();
-            injectionBinder.Bind<SignalDefinitionReady>().ToSingleton();
+            injectionBinder.Bind<SignalWeaveDefinition>().ToSingleton();
 
             injectionBinder.Bind<IAssemblyDefinitionReader>().To(
                 new AssemblyDefinitionWeaver(
                     injectionBinder.GetInstance<AssemblyDefinitionReader>(),
-                    injectionBinder.GetInstance<SignalDefinitionReady>(),
+                    injectionBinder.GetInstance<SignalWeaveDefinition>(),
                     injectionBinder.GetInstance<ILog>(LogKeys.PluginContext)));
 
 
@@ -60,6 +61,10 @@ namespace AssemblyReloader.ReloadablePlugin.Config
                 .To(new WriteModifiedAssemblyDefinitionToDisk(
                     injectionBinder.GetInstance<AssemblyDefinitionLoader>(), injectionBinder.GetInstance<IDirectory>(),
                     () => true));
+
+            injectionBinder.Bind<HelperTypeParameters>()
+                .To(new HelperTypeParameters("AssemblyReloader", "Helper"));
+
 
             injectionBinder.Bind<SignalPluginWasLoaded>().ToSingleton();
             injectionBinder.Bind<SignalPluginWasUnloaded>().ToSingleton();
@@ -73,9 +78,11 @@ namespace AssemblyReloader.ReloadablePlugin.Config
             commandBinder.Bind<SignalInstallPluginTypes>().To<CommandNull>();
             commandBinder.Bind<SignalUninstallPluginTypes>().To<CommandNull>();
 
-            commandBinder.Bind<SignalDefinitionReady>()
+            commandBinder.Bind<SignalWeaveDefinition>()
                 .InSequence()
-                .To<CommandChangeDefinitionIdentity>();
+                .To<CommandChangeDefinitionIdentity>()
+                .To<CommandInsertHelperType>();
+
                 //to intercept Assembly.Location
                 //to intercept Assembly.CodeBase
                 //to intercept calls to LoadedAssembly

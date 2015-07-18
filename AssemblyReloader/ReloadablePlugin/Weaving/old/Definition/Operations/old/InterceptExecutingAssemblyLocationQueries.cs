@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using AssemblyReloader.Queries.CecilQueries;
+using AssemblyReloader.ReloadablePlugin.Weaving.Commands;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
 

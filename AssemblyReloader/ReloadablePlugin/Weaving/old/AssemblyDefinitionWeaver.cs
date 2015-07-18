@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using AssemblyReloader.ReloadablePlugin.Weaving.Commands;
 using AssemblyReloader.ReloadablePlugin.Weaving.old.Definition;
 using Mono.Cecil;
 using ReeperCommon.Logging;
