@@ -34,8 +34,10 @@ namespace AssemblyReloader.Gui
 
             if (Plugins == null)
                 Plugins = Enumerable.Empty<IPluginInfo>();
-       
-            var clamp = new ClampToScreen(this);
+
+            var scaling = new Scaling(this, Vector2.one * 1f);
+
+            var clamp = new ClampToScreen(scaling);
 
             var withButtons = new TitleBarButtons(clamp, TitleBarButtons.ButtonAlignment.Right, TitleBarButtonOffset);
 

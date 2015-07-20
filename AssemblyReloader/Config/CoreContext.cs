@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using AssemblyReloader.Common;
-using AssemblyReloader.Config.Names;
 using AssemblyReloader.FileSystem;
 using AssemblyReloader.Gui;
 using AssemblyReloader.ReloadablePlugin;

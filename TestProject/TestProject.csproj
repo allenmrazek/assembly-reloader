@@ -69,6 +69,7 @@
     <ProjectReference Include="..\..\ReeperCommon\ReeperCommon\ReeperCommon.csproj">
       <Project>{fecfa8fc-cf80-4685-a2ba-1566e0f3c26e}</Project>
       <Name>ReeperCommon</Name>
+      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
@@ -94,13 +95,6 @@ call:CheckRoboCopyCode "$(TargetFileName).mdb into project GameData"
 REM save a copy for unit testing
 copy "$(ProjectDir)bin\$(Configuration)\$(TargetFileName)" "$(SolutionDir)AssemblyReloader\bin\$(Configuration)\$(TargetFileName)" /Y
 
-
-REM ReeperCommon into Project/GameData
-if exist "$(ProjectDir)bin\$(Configuration)\ReeperCommon.dll" (
-echo copying ReeperCommon to project GameData...
-robocopy "$(ProjectDir)bin\$(Configuration)" "$(ProjectDir)GameData\$(ProjectName)" ReeperCommon.dll
-call:CheckRoboCopyCode "ReeperCommon.dll to project"
-)
 
 REM TargetFileName into Project/GameData
 echo copying project binary to project GameData...

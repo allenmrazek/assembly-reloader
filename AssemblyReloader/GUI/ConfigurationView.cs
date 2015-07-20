@@ -24,12 +24,12 @@ namespace AssemblyReloader.Gui
             withButtons.AddButton(new BasicTitleBarButton(TitleBarButtonStyle, CloseButtonTexture,
                 () => CloseWindow.Dispatch()));
 
-            var resizable = new Resizable(withButtons, ResizableHotzoneSize, MinWindowSize, ResizeCursorTexture)
-            {
-                Title = "Assembly Reloader"
-            };
+            //var resizable = new Resizable(withButtons, ResizableHotzoneSize, MinWindowSize, ResizeCursorTexture)
+            //{
+            //    Title = "Assembly Reloader"
+            //};
 
-            return resizable;
+            return withButtons;
         }
 
         protected override void DrawWindow()

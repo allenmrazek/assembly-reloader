@@ -3,7 +3,6 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using AssemblyReloader.Config.Keys;
-using AssemblyReloader.Config.Names;
 using AssemblyReloader.FileSystem;
 using AssemblyReloader.StrangeIoC.extensions.context.api;
 using AssemblyReloader.StrangeIoC.extensions.injector.api;

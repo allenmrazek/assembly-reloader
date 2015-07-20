@@ -1,4 +1,4 @@
-﻿namespace AssemblyReloader.Config.Names
+﻿namespace AssemblyReloader.Config.Keys
 {
     public enum TextureNames
     {

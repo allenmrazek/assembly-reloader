@@ -1,5 +1,5 @@
 ﻿using System;
-using AssemblyReloader.Config.Names;
+using AssemblyReloader.Config.Keys;
 using AssemblyReloader.StrangeIoC.extensions.injector;
 using AssemblyReloader.StrangeIoC.extensions.mediation.impl;
 using ReeperCommon.Extensions;
@@ -62,6 +62,8 @@ namespace AssemblyReloader.Gui
         {
             if (_logic.IsNull() || !_logic.Visible) return;
 
+            _logic.OnWindowPreDraw();
+
             if (!_logic.Skin.IsNull())
                 GUI.skin = _logic.Skin;
 
@@ -92,6 +94,11 @@ namespace AssemblyReloader.Gui
 
 
         #region IWindowComponent
+
+        public virtual void OnWindowPreDraw()
+        {
+           
+        }
 
         public virtual void OnWindowDraw(int winid)
         {

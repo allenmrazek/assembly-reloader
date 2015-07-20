@@ -31,6 +31,8 @@
         <Command type="AfterBuild" />
       </CustomCommands>
     </CustomCommands>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+    <CodeAnalysisRuleSet>ExtendedDesignGuidelineRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -44,13 +46,14 @@
     <Reference Include="Assembly-CSharp">
       <HintPath>..\..\..\Kerbal Space Program\KSP_Data\Managed\Assembly-CSharp.dll</HintPath>
     </Reference>
-    <Reference Include="Mono.Cecil, Version=0.9.4.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
-      <HintPath>..\packages\Mono.Cecil.0.9.5.0\lib\net35\Mono.Cecil.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Mono.Cecil">
+      <HintPath>..\..\..\Kerbal Space Program\KSP_Data\Managed\Mono.Cecil.dll</HintPath>
     </Reference>
-    <Reference Include="Mono.Cecil.Mdb, Version=0.9.4.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
-      <HintPath>..\packages\Mono.Cecil.0.9.5.0\lib\net35\Mono.Cecil.Mdb.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Mono.Cecil.Mdb">
+      <HintPath>..\..\..\Kerbal Space Program\KSP_Data\Managed\Mono.Cecil.Mdb.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.Cecil.Pdb">
+      <HintPath>..\..\..\Kerbal Space Program\KSP_Data\Managed\Mono.Cecil.Pdb.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -85,7 +88,6 @@
     <Compile Include="Common\Signals.cs" />
     <Compile Include="Config\CommandLaunchReloadablePluginContexts.cs" />
     <Compile Include="Gui\ConfigurationView.cs" />
-    <Compile Include="Config\Keys\ConfigurationMethodNames.cs" />
     <Compile Include="Config\Keys\Styles.cs" />
     <Compile Include="Config\Keys\TextureNames.cs" />
     <Compile Include="Config\Signals.cs" />
@@ -409,6 +411,7 @@
     <ProjectReference Include="..\..\ReeperCommon\ReeperCommon\ReeperCommon.csproj">
       <Project>{FECFA8FC-CF80-4685-A2BA-1566E0F3C26E}</Project>
       <Name>ReeperCommon</Name>
+      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -430,7 +433,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
@@ -450,19 +452,6 @@ call:CheckRoboCopyCode "$(TargetFileName).mdb into project GameData"
 
 :CopyFiles
 
-REM ReeperCommon into Project/GameData
-if exist "$(ProjectDir)bin\$(Configuration)\ReeperCommon.dll" (
-echo copying ReeperCommon to project GameData...
-robocopy "$(ProjectDir)bin\$(Configuration)" "$(ProjectDir)GameData\$(ProjectName)" ReeperCommon.dll
-call:CheckRoboCopyCode "ReeperCommon.dll to project"
-)
-
-REM StrangeIoC into Project/GameData
-if exist "$(ProjectDir)bin\$(Configuration)\StrangeIoC.dll" (
-echo copying StrangeIoC to project GameData...
-robocopy "$(ProjectDir)bin\$(Configuration)" "$(ProjectDir)GameData\$(ProjectName)" StrangeIoC.dll
-call:CheckRoboCopyCode "StrangeIoC.dll to project"
-)
 
 REM TargetFileName into Project/GameData
 echo copying project binary to project GameData...
