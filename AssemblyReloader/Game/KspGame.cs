@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using AssemblyReloader.Properties;
-using AssemblyReloader.Queries;
+using AssemblyReloader.Unsorted;
 using ReeperCommon.Extensions;
 
 namespace AssemblyReloader.Game

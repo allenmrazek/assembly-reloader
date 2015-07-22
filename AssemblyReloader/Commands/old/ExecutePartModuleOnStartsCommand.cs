@@ -4,8 +4,8 @@ using System.Linq;
 using AssemblyReloader.Game;
 using AssemblyReloader.Game.Providers;
 using AssemblyReloader.Properties;
-using AssemblyReloader.Queries;
 using AssemblyReloader.ReloadablePlugin.Loaders.PartModules;
+using AssemblyReloader.Unsorted;
 using ReeperCommon.Containers;
 using ReeperCommon.Logging;
 

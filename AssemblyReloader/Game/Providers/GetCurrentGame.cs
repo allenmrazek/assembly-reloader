@@ -1,6 +1,6 @@
 ﻿using System;
 using AssemblyReloader.Properties;
-using AssemblyReloader.Queries;
+using AssemblyReloader.Unsorted;
 using ReeperCommon.Containers;
 
 namespace AssemblyReloader.Game.Providers

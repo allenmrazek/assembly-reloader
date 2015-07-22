@@ -4,6 +4,7 @@ using System.Linq;
 using AssemblyReloader.CompositeRoot;
 using AssemblyReloader.Game;
 using AssemblyReloader.Properties;
+using AssemblyReloader.Unsorted;
 using UnityEngine;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons

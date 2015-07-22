@@ -44,6 +44,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Kerbal Space Program\KSP_Data\Managed\Assembly-CSharp.dll</HintPath>
     </Reference>
+    <Reference Include="System" />
     <Reference Include="System.Core">
       <HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v3.5\Profile\Unity Full v3.5\System.Core.dll</HintPath>
     </Reference>
@@ -54,6 +55,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="TestData\DerivativePartModule.cs" />
+    <Compile Include="TestData\Intercepted\Test_CodeBase_Interception.cs" />
     <Compile Include="TestData\InternalPartModule.cs" />
     <Compile Include="TestData\KSPAddonData.cs" />
     <Compile Include="TestData\PartModuleUnitTestVersion.cs" />

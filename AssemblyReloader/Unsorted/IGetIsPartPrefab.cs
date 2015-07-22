@@ -1,6 +1,6 @@
 ﻿using AssemblyReloader.Game;
 
-namespace AssemblyReloader.Queries
+namespace AssemblyReloader.Unsorted
 {
     public interface IGetIsPartPrefab
     {

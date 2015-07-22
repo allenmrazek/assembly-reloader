@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using AssemblyReloader.Properties;
-using AssemblyReloader.Providers;
+using AssemblyReloader.Unsorted;
 using ReeperCommon.Extensions;
 using UnityEngine;
 

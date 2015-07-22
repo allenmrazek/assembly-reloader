@@ -40,19 +40,19 @@
 //        }
 
 
-//        public Maybe<AssemblyDefinition> Get([NotNull] IFile location)
+//        public Maybe<Context> Get([NotNull] IFile location)
 //        {
 //            if (location == null) throw new ArgumentNullException("location");
 //            var result = _decorated.Get(location);
 
 //            if (result.Any())
-//                return Weave(result.Single()) ? result : Maybe<AssemblyDefinition>.None;
+//                return Weave(result.Single()) ? result : Maybe<Context>.None;
 
 //            return result;
 //        }
 
 
-//        private bool Weave([NotNull] AssemblyDefinition assemblyDefinition)
+//        private bool Weave([NotNull] Context assemblyDefinition)
 //        {
 //            if (assemblyDefinition == null) throw new ArgumentNullException("assemblyDefinition");
 
@@ -83,7 +83,7 @@
 
 //        private bool RunOperation(
 //            [NotNull] IWeaveOperation op, 
-//            [NotNull] AssemblyDefinition definition, 
+//            [NotNull] Context definition, 
 //            [NotNull] List<TypeDefinition> typeDefinitions,
 //            [NotNull] List<MethodDefinition> methodDefinitions)
 //        {

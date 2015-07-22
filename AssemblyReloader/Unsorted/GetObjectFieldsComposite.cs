@@ -5,7 +5,7 @@ using System.Reflection;
 using AssemblyReloader.Properties;
 using ReeperCommon.Serialization;
 
-namespace AssemblyReloader.Queries
+namespace AssemblyReloader.Unsorted
 {
     public class GetObjectFieldsComposite : IGetObjectFields
     {

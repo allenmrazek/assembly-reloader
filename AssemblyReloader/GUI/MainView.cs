@@ -35,7 +35,7 @@ namespace AssemblyReloader.Gui
             if (Plugins == null)
                 Plugins = Enumerable.Empty<IPluginInfo>();
 
-            var scaling = new Scaling(this, Vector2.one * 1f);
+            var scaling = new Scaling(this, Vector2.one);
 
             var clamp = new ClampToScreen(scaling);
 

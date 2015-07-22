@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using AssemblyReloader.Properties;
-using AssemblyReloader.Queries;
+using AssemblyReloader.Unsorted;
 using ReeperCommon.Logging;
 
 namespace AssemblyReloader.Game.Providers

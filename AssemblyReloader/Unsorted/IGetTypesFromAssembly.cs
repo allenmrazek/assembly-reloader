@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Reflection;
 
-namespace AssemblyReloader.ReloadablePlugin
+namespace AssemblyReloader.Unsorted
 {
     public interface IGetTypesFromAssembly<T>
     {

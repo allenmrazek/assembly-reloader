@@ -1,7 +1,7 @@
 ﻿using System;
 using AssemblyReloader.Game;
 
-namespace AssemblyReloader.Queries
+namespace AssemblyReloader.Unsorted
 {
     public class GetIsPartPrefab : IGetIsPartPrefab
     {

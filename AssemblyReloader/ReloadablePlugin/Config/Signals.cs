@@ -9,7 +9,7 @@ namespace AssemblyReloader.ReloadablePlugin.Config
     //}
 
 
-    //public class SignalDefinitionLoaded : Signal<AssemblyDefinition>
+    //public class SignalDefinitionLoaded : Signal<Context>
     //{
         
     //}

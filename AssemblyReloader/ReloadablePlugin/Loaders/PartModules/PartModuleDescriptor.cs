@@ -4,7 +4,7 @@ using System.Linq;
 using AssemblyReloader.DataObjects;
 using AssemblyReloader.Game;
 using AssemblyReloader.Game.Queries;
-using AssemblyReloader.Queries;
+using AssemblyReloader.Unsorted;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
 {

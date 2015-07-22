@@ -130,9 +130,9 @@ namespace AssemblyReloader.Config
             //    injectionBinder.GetInstance<BaseAssemblyResolver>(),
             //    injectionBinder.GetInstance<IGetDebugSymbolsExistForDefinition>(),
             //    injectionBinder.GetInstance<IWeaveOperationFactory>(),
-            //    new GetTypeDefinitionsExcluding(new GetAllTypesFromDefinition(),
+            //    new GetTypeDefinitionsExcluding(new GetTypeDefinitionsInAssemblyDefinition(),
             //        new GetInjectedHelperTypeFromDefinition()),
-            //    new GetAllMethodDefinitions(),
+            //    new GetMethodDefinitionsInTypeDefinition(),
             //    log.CreateTag("ILWeaver"),
             //    () => true)).ToSingleton();
 
@@ -206,7 +206,7 @@ namespace AssemblyReloader.Config
         //    var injectedHelperTypeQuery = new GetInjectedHelperTypeFromDefinition();
 
         //    var allTypesFromAssemblyExceptInjected = new GetTypeDefinitionsExcluding(
-        //        new GetAllTypesFromDefinition(), new GetInjectedHelperTypeFromDefinition());
+        //        new GetTypeDefinitionsInAssemblyDefinition(), new GetInjectedHelperTypeFromDefinition());
 
         //    var renameAssembly = new RenameAssemblyOperation(new UniqueAssemblyNameGenerator(new RandomStringGenerator()));
 
@@ -217,14 +217,14 @@ namespace AssemblyReloader.Config
         //    //            new ProxyAssemblyMethodWriter(uri.LocalPath, getLocationProperty.GetGetMethod())));
 
         //    var interceptAssemblyCodeBaseCalls = new InterceptExecutingAssemblyLocationQueries(
-        //        new MethodCallInMethodBodyQuery(
+        //        new GetMethodCallsInMethod(
         //            getCodeBaseProperty.GetGetMethod(),
         //            OpCodes.Callvirt),
         //            new GetInjectedHelperTypeMethod(injectedHelperTypeQuery, getCodeBaseProperty.GetGetMethod().Name)
         //        );
 
         //    var interceptAssemblyLocationCalls = new InterceptExecutingAssemblyLocationQueries(
-        //        new MethodCallInMethodBodyQuery(
+        //        new GetMethodCallsInMethod(
         //            getLocationProperty.GetGetMethod(),
         //            OpCodes.Callvirt),
         //        new GetInjectedHelperTypeMethod(injectedHelperTypeQuery, getLocationProperty.GetGetMethod().Name)
@@ -233,7 +233,7 @@ namespace AssemblyReloader.Config
         //    return new AssemblyDefinitionWeaver(
         //        weaverLog,
         //        allTypesFromAssemblyExceptInjected,
-        //        new GetAllMethodDefinitions(),
+        //        new GetMethodDefinitionsInTypeDefinition(),
         //        renameAssembly,
         //        //new ConditionalWeaveOperation(writeInjectedHelper, () => pluginConfiguration.InjectHelperType),
         //        new ConditionalWeaveOperation(interceptAssemblyCodeBaseCalls, () => pluginConfiguration.RewriteAssemblyLocationCalls),

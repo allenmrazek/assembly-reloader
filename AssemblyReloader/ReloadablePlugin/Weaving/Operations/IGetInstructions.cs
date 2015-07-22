@@ -2,9 +2,9 @@
 using Mono.Cecil;
 using Mono.Cecil.Cil;
 
-namespace AssemblyReloader.Queries.CecilQueries
+namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations
 {
-    public interface IInstructionSetQuery
+    public interface IGetInstructionsInMethod
     {
         IEnumerable<Instruction> Get(MethodDefinition methodDefinition);
     }

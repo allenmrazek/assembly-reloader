@@ -1,7 +1,7 @@
 ﻿using System;
 using AssemblyReloader.DataObjects;
 
-namespace AssemblyReloader.Queries
+namespace AssemblyReloader.Unsorted
 {
     // Where type identifier is the name KSP would use to search for this type in assemblies loaded by
     // its AssemblyLoader

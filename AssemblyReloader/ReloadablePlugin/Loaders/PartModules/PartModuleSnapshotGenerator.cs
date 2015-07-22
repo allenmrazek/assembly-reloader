@@ -4,7 +4,7 @@ using AssemblyReloader.CompositeRoot;
 using AssemblyReloader.DataObjects;
 using AssemblyReloader.Game;
 using AssemblyReloader.Properties;
-using AssemblyReloader.Queries;
+using AssemblyReloader.Unsorted;
 using ReeperCommon.Logging;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules

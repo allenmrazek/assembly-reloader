@@ -17,9 +17,9 @@ namespace AssemblyReloaderTests.Fixtures
             if (!File.Exists(filename))
                 throw new FileNotFoundException(filename);
 
-            //var assemblyDefinition = AssemblyDefinition.ReadAssembly(filename);
+            //var assemblyDefinition = Context.ReadAssembly(filename);
 
-            //// AssemblyDefinition
+            //// Context
             //Fixture.Register(() => assemblyDefinition);
 
             // TypeDefintiion

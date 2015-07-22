@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using Mono.Cecil;
 
-namespace AssemblyReloader.ReloadablePlugin.Weaving.Commands
+namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations
 {
-    public class GetAllMethodDefinitions : IGetMethodDefinitions
+    public class GetMethodDefinitionsInTypeDefinition : IGetMethodDefinitions
     {
         public IEnumerable<MethodDefinition> Get(TypeDefinition definition)
         {

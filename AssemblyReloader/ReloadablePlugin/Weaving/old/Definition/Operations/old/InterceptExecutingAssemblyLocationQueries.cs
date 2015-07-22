@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
-using AssemblyReloader.Queries.CecilQueries;
-using AssemblyReloader.ReloadablePlugin.Weaving.Commands;
+using AssemblyReloader.ReloadablePlugin.Weaving.Operations;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
 
@@ -9,11 +8,11 @@ namespace AssemblyReloader.ReloadablePlugin.Weaving.old.Definition.Operations.ol
 {
     public class InterceptExecutingAssemblyLocationQueries : WeaveOperation
     {
-        private readonly IInstructionSetQuery _getCodeBaseCallQuery;
+        private readonly IGetInstructionsInMethod _getCodeBaseCallQuery;
         private readonly IGetMethodDefinitions _replacementCall;
 
         public InterceptExecutingAssemblyLocationQueries(
-            IInstructionSetQuery getCodeBaseCallQuery,
+            IGetInstructionsInMethod getCodeBaseCallQuery,
             IGetMethodDefinitions replacementCall)
         {
             if (getCodeBaseCallQuery == null) throw new ArgumentNullException("getCodeBaseCallQuery");

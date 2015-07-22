@@ -1,10 +1,10 @@
 ﻿using System;
 using AssemblyReloader.CompositeRoot;
 using AssemblyReloader.Config;
-using AssemblyReloader.DataObjects;
 using AssemblyReloader.Game;
 using AssemblyReloader.Properties;
 using AssemblyReloader.StrangeIoC.extensions.implicitBind;
+using AssemblyReloader.Unsorted;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
 {

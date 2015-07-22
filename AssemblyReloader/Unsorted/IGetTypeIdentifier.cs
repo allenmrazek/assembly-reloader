@@ -1,7 +1,7 @@
 ﻿using System;
 using AssemblyReloader.DataObjects;
 
-namespace AssemblyReloader.Queries
+namespace AssemblyReloader.Unsorted
 {
     public interface IGetTypeIdentifier
     {

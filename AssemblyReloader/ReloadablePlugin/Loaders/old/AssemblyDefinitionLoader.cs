@@ -31,7 +31,7 @@
 //        }
 
 
-//        public Maybe<Assembly> LoadDefinition([NotNull] AssemblyDefinition definition)
+//        public Maybe<Assembly> LoadDefinition([NotNull] Context definition)
 //        {
 //            if (definition == null) throw new ArgumentNullException("definition");
 
@@ -61,7 +61,7 @@
 //        /// <param name="assemblyStream"></param>
 //        /// <param name="symbolStream"></param>
 //        private void WriteDefinitionAndSymbolsToStream(
-//            [NotNull] AssemblyDefinition definition,
+//            [NotNull] Context definition,
 //            [NotNull] Stream assemblyStream, 
 //            [NotNull] Stream symbolStream)
 //        {
@@ -113,7 +113,7 @@
 //        }
 
 
-//        private void WriteDefinitionToStream([NotNull] AssemblyDefinition definition, [NotNull] Stream assemblyStream)
+//        private void WriteDefinitionToStream([NotNull] Context definition, [NotNull] Stream assemblyStream)
 //        {
 //            if (definition == null) throw new ArgumentNullException("definition");
 //            if (assemblyStream == null) throw new ArgumentNullException("assemblyStream");

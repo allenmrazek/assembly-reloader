@@ -1,12 +1,15 @@
 ﻿using System;
+using System.Reflection;
 using AssemblyReloader.Common;
 using AssemblyReloader.Config.Keys;
 using AssemblyReloader.FileSystem;
 using AssemblyReloader.Gui;
 using AssemblyReloader.ReloadablePlugin.Weaving;
-using AssemblyReloader.ReloadablePlugin.Weaving.Commands;
+using AssemblyReloader.ReloadablePlugin.Weaving.Operations;
+using AssemblyReloader.ReloadablePlugin.Weaving.Operations.Keys;
 using AssemblyReloader.StrangeIoC.extensions.context.api;
 using Mono.Cecil;
+using Mono.Cecil.Cil;
 using ReeperCommon.FileSystem;
 using ReeperCommon.Logging;
 using UnityEngine;
@@ -62,12 +65,22 @@ namespace AssemblyReloader.ReloadablePlugin.Config
                     injectionBinder.GetInstance<AssemblyDefinitionLoader>(), injectionBinder.GetInstance<IDirectory>(),
                     () => true));
 
-            injectionBinder.Bind<HelperTypeParameters>()
-                .To(new HelperTypeParameters("AssemblyReloader", "Helper"));
-
 
             injectionBinder.Bind<SignalPluginWasLoaded>().ToSingleton();
             injectionBinder.Bind<SignalPluginWasUnloaded>().ToSingleton();
+
+
+            injectionBinder.Bind<MethodInfo>()
+                .To(typeof(Assembly).GetProperty("CodeBase", BindingFlags.Public | BindingFlags.Instance).GetGetMethod())
+                .ToName(InterceptedMethods.CodeBase);
+
+            injectionBinder.Bind<IGetInstructionsInMethod>()
+                .To(new GetMethodCallsInMethod(injectionBinder.GetInstance<MethodInfo>(InterceptedMethods.CodeBase),
+                    OpCodes.Callvirt))
+                .ToName(InterceptedMethods.CodeBase);
+
+            injectionBinder.Bind<IGetMethodDefinitions>().To(new GetMethodDefinitionsInTypeDefinition()).ToSingleton();
+            injectionBinder.Bind<IGetTypeDefinitions>().To(new GetTypeDefinitionsInAssemblyDefinition()).ToSingleton();
 
             // only happens once: initial load of reloadable plugin
             commandBinder.Bind<SignalStart>()
@@ -78,11 +91,18 @@ namespace AssemblyReloader.ReloadablePlugin.Config
             commandBinder.Bind<SignalInstallPluginTypes>().To<CommandNull>();
             commandBinder.Bind<SignalUninstallPluginTypes>().To<CommandNull>();
 
+
+
+
+
             commandBinder.Bind<SignalWeaveDefinition>()
                 .InSequence()
                 .To<CommandChangeDefinitionIdentity>()
                 .To<CommandInsertHelperType>();
+                
 
+            commandBinder.Bind<SignalHelperDefinitionCreated>()
+                .To<CommandRewriteAssemblyCodeBaseCalls>();
                 //to intercept Assembly.Location
                 //to intercept Assembly.CodeBase
                 //to intercept calls to LoadedAssembly

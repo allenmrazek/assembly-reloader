@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using AssemblyReloader.Queries.CecilQueries;
-using AssemblyReloader.ReloadablePlugin.Weaving.Commands;
-using AssemblyReloader.ReloadablePlugin.Weaving.old.Definition;
+using AssemblyReloader.ReloadablePlugin.Weaving.Operations;
 using Mono.Cecil;
 
-namespace AssemblyReloader.Queries
+namespace AssemblyReloader.Unsorted
 {
     public class GetInjectedHelperTypeMethod : IGetMethodDefinitions
     {

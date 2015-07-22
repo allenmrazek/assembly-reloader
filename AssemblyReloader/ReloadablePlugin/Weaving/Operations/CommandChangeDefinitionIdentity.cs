@@ -4,7 +4,7 @@ using AssemblyReloader.StrangeIoC.extensions.injector;
 using Mono.Cecil;
 using ReeperCommon.Logging;
 
-namespace AssemblyReloader.ReloadablePlugin.Weaving.Commands
+namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations
 {
     public class CommandChangeDefinitionIdentity : Command
     {

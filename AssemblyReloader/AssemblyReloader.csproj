@@ -102,11 +102,12 @@
     <Compile Include="CompositeRoot\FlightConfigNodeKeyValuePairComparer.cs" />
     <Compile Include="ReloadablePlugin\Loaders\Addons\IAddonTypeSystemFactory.cs" />
     <Compile Include="ReloadablePlugin\Weaving\AssemblyDefinitionWeaver.cs" />
-    <Compile Include="ReloadablePlugin\Weaving\Commands\CommandInsertHelperType.cs" />
-    <Compile Include="ReloadablePlugin\Weaving\Commands\CommandRewriteAssemblyLocationCalls.cs" />
-    <Compile Include="ReloadablePlugin\Weaving\HelperTypeParamters.cs" />
+    <Compile Include="ReloadablePlugin\Weaving\Operations\CommandInsertHelperType.cs" />
+    <Compile Include="ReloadablePlugin\Weaving\Operations\CommandRewriteAssemblyCodeBaseCalls.cs" />
+    <Compile Include="ReloadablePlugin\Weaving\Operations\Keys\InterceptedMethods.cs" />
+    <Compile Include="ReloadablePlugin\Weaving\Operations\Signals.cs" />
     <Compile Include="ReloadablePlugin\Weaving\IGetAssemblyDefinition.cs" />
-    <Compile Include="ReloadablePlugin\Weaving\Commands\CommandChangeDefinitionIdentity.cs" />
+    <Compile Include="ReloadablePlugin\Weaving\Operations\CommandChangeDefinitionIdentity.cs" />
     <Compile Include="ReloadablePlugin\Weaving\AssemblyDefinitionReader.cs" />
     <Compile Include="ReloadablePlugin\Weaving\IAssemblyDefinitionReader.cs" />
     <Compile Include="ReloadablePlugin\Weaving\IAssemblyDefinitionLoader.cs" />
@@ -120,9 +121,9 @@
     <Compile Include="ReloadablePlugin\Weaving\old\Definition\Operations\RenameAssemblyOperation.cs" />
     <Compile Include="ReloadablePlugin\Loaders\Addons\KSPAddonType.cs" />
     <Compile Include="ReloadablePlugin\Loaders\Addons\GetAddonTypesFromAssembly.cs" />
-    <Compile Include="ReloadablePlugin\GetAttributesOfType.cs" />
-    <Compile Include="ReloadablePlugin\IGetAttributesOfType.cs" />
-    <Compile Include="ReloadablePlugin\IGetTypesFromAssembly.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\Addons\GetAttributesOfType.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\Addons\IGetAttributesOfType.cs" />
+    <Compile Include="Unsorted\IGetTypesFromAssembly.cs" />
     <Compile Include="ReloadablePlugin\Config\ReloadablePluginContext.cs" />
     <Compile Include="Game\ILoadedAssemblyHandle.cs" />
     <Compile Include="Gui\MainViewMediator.cs" />
@@ -191,11 +192,11 @@
     <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\IScenarioModuleUnloader.cs" />
     <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\ScenarioModuleSnapshotGenerator.cs" />
     <Compile Include="ReloadablePlugin\Weaving\AssemblyDefinitionLoader.cs" />
-    <Compile Include="Providers\IConfigNodeFormatterProvider.cs" />
+    <Compile Include="Unsorted\IConfigNodeFormatterProvider.cs" />
     <Compile Include="FileSystem\IFilePathProvider.cs" />
     <Compile Include="Game\GetLoadedAssemblyFileUrl.cs" />
     <Compile Include="Game\IGetLoadedAssemblyFileUrl.cs" />
-    <Compile Include="Queries\GetObjectFieldsComposite.cs" />
+    <Compile Include="Unsorted\GetObjectFieldsComposite.cs" />
     <Compile Include="FileSystem\GetAssemblyFileLocation.cs" />
     <Compile Include="ReloadablePlugin\GetConfigurationFilePath.cs" />
     <Compile Include="ReloadablePlugin\Weaving\GetDebugSymbolsExistForDefinition.cs" />
@@ -204,7 +205,7 @@
     <Compile Include="ReloadablePlugin\Weaving\IGetDebugSymbolsExistForDefinition.cs" />
     <Compile Include="ReloadablePlugin\IPluginConfigurationProvider.cs" />
     <Compile Include="ReloadablePlugin\PluginConfigurationProvider.cs" />
-    <Compile Include="Queries\GetFieldsMarkedWithAttribute.cs" />
+    <Compile Include="Unsorted\GetFieldsMarkedWithAttribute.cs" />
     <Compile Include="CompositeRoot\FlightConfigNodeRepository.cs" />
     <Compile Include="CompositeRoot\DictionaryQueue.cs" />
     <Compile Include="ReloadablePlugin\Config\Signals.cs" />
@@ -333,13 +334,10 @@
     <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\ScenarioModuleLoader.cs" />
     <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\ScenarioModuleUnloader.cs" />
     <Compile Include="Properties\Annotations.cs" />
-    <Compile Include="ReloadablePlugin\Weaving\Commands\GetAllMethodDefinitions.cs" />
-    <Compile Include="ReloadablePlugin\Weaving\Commands\GetAllTypesFromDefinition.cs" />
-    <Compile Include="ReloadablePlugin\Weaving\Commands\GetTypeDefinitionsComposite.cs" />
-    <Compile Include="ReloadablePlugin\Weaving\Commands\GetMethodDefinitionsExcluding.cs" />
-    <Compile Include="ReloadablePlugin\Weaving\Commands\GetTypeDefinitionsExcluding.cs" />
-    <Compile Include="Queries\CecilQueries\IInstructionSetQuery.cs" />
-    <Compile Include="ReloadablePlugin\Weaving\Commands\IGetMethodDefinitions.cs" />
+    <Compile Include="ReloadablePlugin\Weaving\Operations\GetMethodsOfType.cs" />
+    <Compile Include="ReloadablePlugin\Weaving\Operations\GetTypesInAssemblyDefinition.cs" />
+    <Compile Include="ReloadablePlugin\Weaving\Operations\IGetInstructions.cs" />
+    <Compile Include="ReloadablePlugin\Weaving\Operations\IGetMethodDefinitions.cs" />
     <Compile Include="ReloadablePlugin\Loaders\Addons\AddonTypeSystem.cs" />
     <Compile Include="ReloadablePlugin\IReloadableTypeSystem.cs" />
     <Compile Include="DataObjects\ITypeIdentifier.cs" />
@@ -355,8 +353,8 @@
     <Compile Include="Game\KspPartActionWindowController.cs" />
     <Compile Include="Game\IUniqueFlightIdGenerator.cs" />
     <Compile Include="Game\UniqueFlightIdGenerator.cs" />
-    <Compile Include="Providers\GetComponentsInGameObjectHierarchy.cs" />
-    <Compile Include="Providers\IGetComponentsInGameObjectHierarchy.cs" />
+    <Compile Include="Unsorted\GetComponentsInGameObjectHierarchy.cs" />
+    <Compile Include="Unsorted\IGetComponentsInGameObjectHierarchy.cs" />
     <Compile Include="Game\IPart.cs" />
     <Compile Include="Game\IPartLoader.cs" />
     <Compile Include="Game\IVessel.cs" />
@@ -375,23 +373,23 @@
     <Compile Include="ReloadablePlugin\Loaders\IGetTypesDerivedFrom.cs" />
     <Compile Include="ReloadablePlugin\Loaders\IGetTypesFromAssembly.cs" />
     <Compile Include="ReloadablePlugin\Loaders\GetTypesDerivedFrom.cs" />
-    <Compile Include="ReloadablePlugin\Weaving\Commands\IGetTypeDefinitions.cs" />
-    <Compile Include="Queries\CecilQueries\MethodCallInMethodBodyQuery.cs" />
-    <Compile Include="Queries\IGetAddonAttributesFromType.cs" />
-    <Compile Include="Queries\GetInjectedHelperTypeMethod.cs" />
-    <Compile Include="Queries\GetInjectedHelperTypeFromDefinition.cs" />
-    <Compile Include="Queries\IGetIsPartPrefab.cs" />
-    <Compile Include="Queries\IGetPartModulesInPart.cs" />
-    <Compile Include="Queries\IGetTypeIdentifier.cs" />
+    <Compile Include="ReloadablePlugin\Weaving\Operations\IGetTypeDefinitions.cs" />
+    <Compile Include="ReloadablePlugin\Weaving\Operations\GetMethodCallsInMethod.cs" />
+    <Compile Include="Unsorted\IGetAddonAttributesFromType.cs" />
+    <Compile Include="Unsorted\GetInjectedHelperTypeMethod.cs" />
+    <Compile Include="Unsorted\GetInjectedHelperTypeFromDefinition.cs" />
+    <Compile Include="Unsorted\IGetIsPartPrefab.cs" />
+    <Compile Include="Unsorted\IGetPartModulesInPart.cs" />
+    <Compile Include="Unsorted\IGetTypeIdentifier.cs" />
     <Compile Include="Game\IGetStartupSceneFromGameScene.cs" />
     <Compile Include="CompositeRoot\old\Core.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReloadablePlugin\Loaders\Addons\AddonsFromAssembly.cs" />
     <Compile Include="Game\GetStartupSceneFromGameScene.cs" />
     <Compile Include="Config\GetReloadableAssemblyFilesFromDirectoryRecursive.cs" />
-    <Compile Include="Queries\GetIsPartPrefab.cs" />
-    <Compile Include="Queries\GetPartModulesInPart.cs" />
-    <Compile Include="Queries\GetTypeIdentifier.cs" />
+    <Compile Include="Unsorted\GetIsPartPrefab.cs" />
+    <Compile Include="Unsorted\GetPartModulesInPart.cs" />
+    <Compile Include="Unsorted\GetTypeIdentifier.cs" />
     <Compile Include="CompositeRoot\IFlightConfigRepository.cs" />
     <Compile Include="ReloadablePlugin\Weaving\old\AssemblyDefinitionWeaver.cs" />
     <Compile Include="ReloadablePlugin\Weaving\old\IAssemblyDefinitionWeaver.cs" />
@@ -424,10 +422,7 @@
   <ItemGroup>
     <EmbeddedResource Include="Resources\cursor.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Generators\" />
-    <Folder Include="ReloadablePlugin\Commands\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="StrangeIoC\extensions\ReadMe.txt" />
   </ItemGroup>

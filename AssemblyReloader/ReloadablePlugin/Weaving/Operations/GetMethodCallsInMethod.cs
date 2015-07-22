@@ -6,14 +6,14 @@ using Mono.Cecil;
 using Mono.Cecil.Cil;
 using ReeperCommon.Extensions;
 
-namespace AssemblyReloader.Queries.CecilQueries
+namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations
 {
-    public class MethodCallInMethodBodyQuery : IInstructionSetQuery
+    public class GetMethodCallsInMethod : IGetInstructionsInMethod
     {
         private readonly MethodInfo _methodInfo;
         private readonly OpCode _code;
 
-        public MethodCallInMethodBodyQuery(MethodInfo methodInfo, OpCode code)
+        public GetMethodCallsInMethod(MethodInfo methodInfo, OpCode code)
         {
             if (methodInfo == null) throw new ArgumentNullException("methodInfo");
             if (code != OpCodes.Call && code != OpCodes.Callvirt && code != OpCodes.Calli)

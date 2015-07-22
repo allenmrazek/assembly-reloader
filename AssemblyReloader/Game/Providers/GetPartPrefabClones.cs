@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using AssemblyReloader.Game.Queries;
-using AssemblyReloader.Providers;
-using AssemblyReloader.Queries;
 using AssemblyReloader.ReloadablePlugin.Loaders.Addons;
+using AssemblyReloader.Unsorted;
 
 namespace AssemblyReloader.Game.Providers
 {

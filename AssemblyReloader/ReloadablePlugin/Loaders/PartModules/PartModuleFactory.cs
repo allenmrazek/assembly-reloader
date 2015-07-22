@@ -2,7 +2,7 @@
 using AssemblyReloader.Commands;
 using AssemblyReloader.Game;
 using AssemblyReloader.Properties;
-using AssemblyReloader.Queries;
+using AssemblyReloader.Unsorted;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
 {

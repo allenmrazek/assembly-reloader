@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using AssemblyReloader.Game;
 
-namespace AssemblyReloader.Queries
+namespace AssemblyReloader.Unsorted
 {
     public class GetPartModulesInPart : IGetPartModulesInPart
     {

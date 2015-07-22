@@ -1,7 +1,6 @@
 ﻿using System;
 using AssemblyReloader.Game;
 using AssemblyReloader.Game.Providers;
-using AssemblyReloader.Queries;
 using AssemblyReloader.StrangeIoC.extensions.implicitBind;
 using AssemblyReloader.StrangeIoC.extensions.injector.api;
 

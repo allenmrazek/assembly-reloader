@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace AssemblyReloader.Providers
+namespace AssemblyReloader.Unsorted
 {
     public interface IGetComponentsInGameObjectHierarchy<T> where T:Component
     {

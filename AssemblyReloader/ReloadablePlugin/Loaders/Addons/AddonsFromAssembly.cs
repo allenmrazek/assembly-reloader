@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using AssemblyReloader.Queries;
+using AssemblyReloader.Unsorted;
 using UnityEngine;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
