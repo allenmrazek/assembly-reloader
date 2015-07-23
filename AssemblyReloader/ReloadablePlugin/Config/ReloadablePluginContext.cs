@@ -74,13 +74,25 @@ namespace AssemblyReloader.ReloadablePlugin.Config
                 .To(typeof(Assembly).GetProperty("CodeBase", BindingFlags.Public | BindingFlags.Instance).GetGetMethod())
                 .ToName(InterceptedMethods.CodeBase);
 
+            injectionBinder.Bind<MethodInfo>()
+                .To(typeof (Assembly).GetProperty("Location", BindingFlags.Public | BindingFlags.Instance).GetGetMethod())
+                .ToName(InterceptedMethods.Location);
+
             injectionBinder.Bind<IGetInstructionsInMethod>()
                 .To(new GetMethodCallsInMethod(injectionBinder.GetInstance<MethodInfo>(InterceptedMethods.CodeBase),
                     OpCodes.Callvirt))
                 .ToName(InterceptedMethods.CodeBase);
 
+            injectionBinder.Bind<IGetInstructionsInMethod>()
+                .To(new GetMethodCallsInMethod(injectionBinder.GetInstance<MethodInfo>(InterceptedMethods.Location),
+                    OpCodes.Callvirt))
+                .ToName(InterceptedMethods.Location);
+
             injectionBinder.Bind<IGetMethodDefinitions>().To(new GetMethodDefinitionsInTypeDefinition()).ToSingleton();
-            injectionBinder.Bind<IGetTypeDefinitions>().To(new GetTypeDefinitionsInAssemblyDefinition()).ToSingleton();
+            injectionBinder.Bind<IGetTypeDefinitions>().To(new GetTypeDefinitionsInAssemblyDefinitionExcludingHelper()).ToSingleton();
+
+            injectionBinder.Bind<AssemblyLocation>().ToSingleton();
+            injectionBinder.Bind<AssemblyCodeBase>().ToSingleton();
 
             // only happens once: initial load of reloadable plugin
             commandBinder.Bind<SignalStart>()
@@ -102,7 +114,8 @@ namespace AssemblyReloader.ReloadablePlugin.Config
                 
 
             commandBinder.Bind<SignalHelperDefinitionCreated>()
-                .To<CommandRewriteAssemblyCodeBaseCalls>();
+                .To<CommandRewriteAssemblyCodeBaseCalls>()
+                .To<CommandRewriteAssemblyLocationCalls>();
                 //to intercept Assembly.Location
                 //to intercept Assembly.CodeBase
                 //to intercept calls to LoadedAssembly

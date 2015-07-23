@@ -911,7 +911,7 @@
 //            var injectedHelperTypeQuery = new GetInjectedHelperTypeFromDefinition();
 
 //            var allTypesFromAssemblyExceptInjected = new GetTypeDefinitionsExcluding(
-//                new GetTypeDefinitionsInAssemblyDefinition(), new GetInjectedHelperTypeFromDefinition());
+//                new GetTypeDefinitionsInAssemblyDefinitionExcludingHelper(), new GetInjectedHelperTypeFromDefinition());
    
 //            var renameAssembly = new RenameAssemblyOperation(new UniqueAssemblyNameGenerator(new RandomStringGenerator()));
 

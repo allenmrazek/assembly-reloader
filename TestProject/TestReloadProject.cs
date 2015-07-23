@@ -1,4 +1,5 @@
-﻿using ReeperCommon.Extensions;
+﻿using System;
+using ReeperCommon.Extensions;
 using ReeperCommon.Logging;
 using UnityEngine;
 
@@ -35,6 +36,7 @@ namespace TestProject
             print("Printing components ...");
             print("Also here's another message");
             gameObject.PrintComponents(new DebugLog("TestReloadProject"));
+
         }
 
         //void OnUpdate()

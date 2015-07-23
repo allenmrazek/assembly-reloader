@@ -130,7 +130,7 @@ namespace AssemblyReloader.Config
             //    injectionBinder.GetInstance<BaseAssemblyResolver>(),
             //    injectionBinder.GetInstance<IGetDebugSymbolsExistForDefinition>(),
             //    injectionBinder.GetInstance<IWeaveOperationFactory>(),
-            //    new GetTypeDefinitionsExcluding(new GetTypeDefinitionsInAssemblyDefinition(),
+            //    new GetTypeDefinitionsExcluding(new GetTypeDefinitionsInAssemblyDefinitionExcludingHelper(),
             //        new GetInjectedHelperTypeFromDefinition()),
             //    new GetMethodDefinitionsInTypeDefinition(),
             //    log.CreateTag("ILWeaver"),
@@ -206,7 +206,7 @@ namespace AssemblyReloader.Config
         //    var injectedHelperTypeQuery = new GetInjectedHelperTypeFromDefinition();
 
         //    var allTypesFromAssemblyExceptInjected = new GetTypeDefinitionsExcluding(
-        //        new GetTypeDefinitionsInAssemblyDefinition(), new GetInjectedHelperTypeFromDefinition());
+        //        new GetTypeDefinitionsInAssemblyDefinitionExcludingHelper(), new GetInjectedHelperTypeFromDefinition());
 
         //    var renameAssembly = new RenameAssemblyOperation(new UniqueAssemblyNameGenerator(new RandomStringGenerator()));
 

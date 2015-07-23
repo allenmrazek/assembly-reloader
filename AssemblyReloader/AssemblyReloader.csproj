@@ -102,9 +102,14 @@
     <Compile Include="CompositeRoot\FlightConfigNodeKeyValuePairComparer.cs" />
     <Compile Include="ReloadablePlugin\Loaders\Addons\IAddonTypeSystemFactory.cs" />
     <Compile Include="ReloadablePlugin\Weaving\AssemblyDefinitionWeaver.cs" />
+    <Compile Include="ReloadablePlugin\Weaving\Operations\AssemblyCodeBase.cs" />
+    <Compile Include="ReloadablePlugin\Weaving\Operations\AssemblyLocation.cs" />
     <Compile Include="ReloadablePlugin\Weaving\Operations\CommandInsertHelperType.cs" />
+    <Compile Include="ReloadablePlugin\Weaving\Operations\CommandRewriteAssemblyCall.cs" />
     <Compile Include="ReloadablePlugin\Weaving\Operations\CommandRewriteAssemblyCodeBaseCalls.cs" />
+    <Compile Include="ReloadablePlugin\Weaving\Operations\CommandRewriteAssemblyLocationCalls.cs" />
     <Compile Include="ReloadablePlugin\Weaving\Operations\Keys\InterceptedMethods.cs" />
+    <Compile Include="ReloadablePlugin\Weaving\Operations\ReturnTypeMismatchException.cs" />
     <Compile Include="ReloadablePlugin\Weaving\Operations\Signals.cs" />
     <Compile Include="ReloadablePlugin\Weaving\IGetAssemblyDefinition.cs" />
     <Compile Include="ReloadablePlugin\Weaving\Operations\CommandChangeDefinitionIdentity.cs" />
@@ -335,7 +340,7 @@
     <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\ScenarioModuleUnloader.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="ReloadablePlugin\Weaving\Operations\GetMethodsOfType.cs" />
-    <Compile Include="ReloadablePlugin\Weaving\Operations\GetTypesInAssemblyDefinition.cs" />
+    <Compile Include="ReloadablePlugin\Weaving\Operations\GetTypeDefinitionsInAssemblyDefinitionExcludingHelper.cs" />
     <Compile Include="ReloadablePlugin\Weaving\Operations\IGetInstructions.cs" />
     <Compile Include="ReloadablePlugin\Weaving\Operations\IGetMethodDefinitions.cs" />
     <Compile Include="ReloadablePlugin\Loaders\Addons\AddonTypeSystem.cs" />

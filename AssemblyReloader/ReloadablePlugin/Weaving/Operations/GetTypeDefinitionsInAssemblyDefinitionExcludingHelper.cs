@@ -4,7 +4,7 @@ using Mono.Cecil;
 
 namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations
 {
-    public class GetTypeDefinitionsInAssemblyDefinition : IGetTypeDefinitions
+    public class GetTypeDefinitionsInAssemblyDefinitionExcludingHelper : IGetTypeDefinitions
     {
         public IEnumerable<TypeDefinition> Get(AssemblyDefinition assembly)
         {

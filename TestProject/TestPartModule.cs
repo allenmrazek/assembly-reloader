@@ -79,7 +79,8 @@ namespace TestProject
             var current = Assembly.GetExecutingAssembly();
 
             print("Hello, world!");
-            print("Also, I'm running from " + current.CodeBase);
+            print("Also, I'm running from CodeBase: " + current.CodeBase);
+            print("Or Location: " + current.Location);
 
             //SomeMethod(local);
         }
