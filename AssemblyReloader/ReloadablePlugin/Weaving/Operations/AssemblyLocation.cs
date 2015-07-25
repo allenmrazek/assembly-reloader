@@ -3,6 +3,7 @@ using ReeperCommon.FileSystem;
 
 namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations
 {
+// ReSharper disable once ClassNeverInstantiated.Global
     public class AssemblyLocation
     {
         public string Value { get; private set; }
@@ -11,8 +12,9 @@ namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations
         {
             if (assembly == null) throw new ArgumentNullException("assembly");
 
-            // todo: get Assembly.Location using assembly file location
-            Value = "Todo: set this value";
+            var uri = new Uri(assembly.FullPath);
+
+            Value = uri.LocalPath;
         }
     }
 }

@@ -4,6 +4,7 @@ using AssemblyReloader.StrangeIoC.extensions.injector;
 
 namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations
 {
+// ReSharper disable once ClassNeverInstantiated.Global
     public class CommandRewriteAssemblyLocationCalls : CommandRewriteAssemblyCall
     {
         private readonly AssemblyLocation _assemblyLocation;

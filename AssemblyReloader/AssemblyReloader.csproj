@@ -182,14 +182,11 @@
     <Compile Include="Gui\MainView.cs" />
     <Compile Include="ReloadablePlugin\Loaders\Addons\AddonLoader.cs" />
     <Compile Include="ReloadablePlugin\Loaders\Addons\AddonUnloader.cs" />
-    <Compile Include="ReloadablePlugin\Loaders\old\AssemblyDefinitionLoader.cs" />
-    <Compile Include="ReloadablePlugin\Loaders\old\AssemblyLoader.cs" />
     <Compile Include="ReloadablePlugin\Weaving\Signals.cs" />
     <Compile Include="ReloadablePlugin\Weaving\WriteModifiedAssemblyDefinitionToDisk.cs" />
     <Compile Include="ReloadablePlugin\Loaders\Addons\IAddonLoader.cs" />
     <Compile Include="ReloadablePlugin\Loaders\Addons\IAddonUnloader.cs" />
     <Compile Include="ReloadablePlugin\Weaving\old\IAssemblyDefinitionReader.cs" />
-    <Compile Include="ReloadablePlugin\Loaders\old\IAssemblyLoader.cs" />
     <Compile Include="ReloadablePlugin\Loaders\PartModules\IPartModuleOnStartRunner.cs" />
     <Compile Include="ReloadablePlugin\Loaders\PartModules\PartModuleOnStartRunner.cs" />
     <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\IScenarioModuleLoader.cs" />
@@ -427,7 +424,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Resources\cursor.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="ReloadablePlugin\Loaders\old\" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="StrangeIoC\extensions\ReadMe.txt" />
   </ItemGroup>

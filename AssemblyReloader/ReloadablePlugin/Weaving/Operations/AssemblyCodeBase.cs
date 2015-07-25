@@ -3,6 +3,7 @@ using ReeperCommon.FileSystem;
 
 namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations
 {
+// ReSharper disable once ClassNeverInstantiated.Global
     public class AssemblyCodeBase
     {
         public string Value { get; private set; }
@@ -11,7 +12,9 @@ namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations
         {
             if (location == null) throw new ArgumentNullException("location");
 
-            Value = "Todo: set assembly CodeBase from file location";
+            var uri = new Uri(location.FullPath);
+
+            Value = Uri.UnescapeDataString(uri.AbsoluteUri);
         }
     }
 }

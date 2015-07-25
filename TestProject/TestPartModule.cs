@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Reflection;
+using ReeperCommon.Serialization;
 
 namespace TestProject
 {
@@ -90,14 +91,20 @@ namespace TestProject
             
         }
 
-
-        private static string ReturnCodeBaseLocation(Assembly assembly)
+        private void CheckLocationOfOtherAssembly()
         {
-            if (ReferenceEquals(assembly, Assembly.GetExecutingAssembly()))
-                return "this location";
+            var otherAssembly = typeof (IConfigNodeSerializer).Assembly;
 
-            return assembly.CodeBase;
+            print("Location of ReeperCommon: " + otherAssembly.Location);
         }
+
+        //private static string ReturnCodeBaseLocation(Assembly assembly)
+        //{
+        //    if (ReferenceEquals(assembly, Assembly.GetExecutingAssembly()))
+        //        return "this location";
+
+        //    return assembly.CodeBase;
+        //}
 
 #if MODIFIED
         [KSPEvent(guiActive = true, guiName = "Modded TestEvent", guiActiveEditor = true)]

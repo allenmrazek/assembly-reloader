@@ -6,6 +6,7 @@ using ReeperCommon.Logging;
 
 namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations
 {
+// ReSharper disable once ClassNeverInstantiated.Global
     public class CommandChangeDefinitionIdentity : Command
     {
         [Inject] public AssemblyDefinition Definition { get; set; }
