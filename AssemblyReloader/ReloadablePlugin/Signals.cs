@@ -10,25 +10,21 @@ namespace AssemblyReloader.ReloadablePlugin
         
     }
 
-
-    public class SignalInstallPluginTypes : Signal<ILoadedAssemblyHandle>
+    // sent after the next iteration of assembly's definition was created and loaded into memory
+    // successfully: types from the previous plugin should be unloaded at this point
+    public class SignalUnloadPlugin : Signal<ILoadedAssemblyHandle>
     {
         
     }
 
-    public class SignalUninstallPluginTypes : Signal<ILoadedAssemblyHandle>
-    {
-        
-    }
 
-    // plugin was loaded and types installed
+
     public class SignalPluginWasLoaded : Signal<ILoadedAssemblyHandle>
     {
         
     }
 
 
-    // plugin was unloaded and types uninstalled
     public class SignalPluginWasUnloaded : Signal
     {
         

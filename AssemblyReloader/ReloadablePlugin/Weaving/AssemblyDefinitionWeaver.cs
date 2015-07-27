@@ -18,7 +18,7 @@ namespace AssemblyReloader.ReloadablePlugin.Weaving
         public AssemblyDefinitionWeaver(
             IAssemblyDefinitionReader definitionReader, 
             SignalWeaveDefinition weaveDefinitionSignal,
-            [Name(LogKeys.PluginContext)] ILog log)
+            ILog log)
         {
             if (definitionReader == null) throw new ArgumentNullException("definitionReader");
             if (weaveDefinitionSignal == null) throw new ArgumentNullException("weaveDefinitionSignal");

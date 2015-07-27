@@ -12,9 +12,8 @@ namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations
         public CommandRewriteAssemblyLocationCalls(
             [Name(Keys.InterceptedMethods.Location)] MethodInfo targetAssemblyMethod, 
             [Name(Keys.InterceptedMethods.Location)] IGetInstructionsInMethod callsToInterceptedMethodQuery, 
-            IGetMethodDefinitions methodDefinitionQuery, 
             IGetTypeDefinitions typeDefinitionQuery,
-            AssemblyLocation assemblyLocation) : base(targetAssemblyMethod, callsToInterceptedMethodQuery, methodDefinitionQuery, typeDefinitionQuery)
+            AssemblyLocation assemblyLocation) : base(targetAssemblyMethod, callsToInterceptedMethodQuery, typeDefinitionQuery)
         {
             if (assemblyLocation == null) throw new ArgumentNullException("assemblyLocation");
 

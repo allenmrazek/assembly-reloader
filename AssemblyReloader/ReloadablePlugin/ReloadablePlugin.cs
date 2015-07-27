@@ -17,15 +17,15 @@ namespace AssemblyReloader.ReloadablePlugin
         private readonly SignalPluginWasUnloaded _pluginWasUnloadedSignal;
         private readonly ILog _log;
 
-
         private Maybe<ILoadedAssemblyHandle> _loaded = Maybe<ILoadedAssemblyHandle>.None;
   
+
         public ReloadablePlugin(
             IFile reloadableFile,
             SignalReloadPlugin reloadPluginSignal,
             SignalPluginWasLoaded pluginWasLoadedSignal,
             SignalPluginWasUnloaded pluginWasUnloadedSignal,
-            [Name(LogKeys.PluginContext)] ILog log)
+            ILog log)
         {
             if (reloadableFile == null) throw new ArgumentNullException("reloadableFile");
             if (reloadPluginSignal == null) throw new ArgumentNullException("reloadPluginSignal");

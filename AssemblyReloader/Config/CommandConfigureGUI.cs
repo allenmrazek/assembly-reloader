@@ -27,7 +27,7 @@ namespace AssemblyReloader.Config
 
             var mainView = new GameObject("MainView");
             var configView = new GameObject("ConfigurationView");
-            
+
             // views will bubble up the transform hierarchy looking for a context to attach to.
             // For config and mainview, this will be the core context
             configView.transform.parent = mainView.transform.parent = gameObject.transform;

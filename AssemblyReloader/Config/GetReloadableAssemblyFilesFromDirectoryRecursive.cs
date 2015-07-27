@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using AssemblyReloader.Config.Keys;
 using AssemblyReloader.StrangeIoC.extensions.implicitBind;
 using AssemblyReloader.StrangeIoC.extensions.injector;
-using AssemblyReloader.StrangeIoC.extensions.injector.api;
 using ReeperCommon.FileSystem;
 
 namespace AssemblyReloader.Config

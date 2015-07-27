@@ -44,23 +44,6 @@ namespace AssemblyReloader.Game
 
             AssemblyLoader.loadedAssemblies.Add(loadedAssembly);
 
-            //InstallTypes(la, typeof (PartModule), _partModuleQuery.Get(assembly));
-            //InstallTypes(la, typeof (Part), _partQuery.Get(assembly));
-            //InstallTypes(la, typeof (InternalModule), _internalModuleQuery.Get(assembly));
-            //InstallTypes(la, typeof (ScenarioModule), _scenarioModuleQuery.Get(assembly));
-            //InstallTypes(la, typeof (Contract), _contractQuery.Get(assembly));
-            // todo: kerbal experience traits?
-            // todo: kerbal experience effects?
-            // todo: contracts
-            // todo: strategies
-            // todo: ScienceExperiments
-            // todo: parts
-            // todo: VesselModules?
-            // todo: InternalModules?
-
-            //foreach (var installer in _typeInstallers)
-            //    installer.Install(la);
-
             return Maybe<ILoadedAssemblyHandle>.With(new LoadedAssemblyHandle(loadedAssembly));
         }
 

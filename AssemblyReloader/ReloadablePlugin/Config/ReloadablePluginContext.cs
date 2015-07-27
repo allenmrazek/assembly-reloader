@@ -3,7 +3,10 @@ using System.Reflection;
 using AssemblyReloader.Common;
 using AssemblyReloader.Config.Keys;
 using AssemblyReloader.FileSystem;
+using AssemblyReloader.Game;
 using AssemblyReloader.Gui;
+using AssemblyReloader.ReloadablePlugin.Loaders;
+using AssemblyReloader.ReloadablePlugin.Loaders.Addons;
 using AssemblyReloader.ReloadablePlugin.Weaving;
 using AssemblyReloader.ReloadablePlugin.Weaving.Operations;
 using AssemblyReloader.ReloadablePlugin.Weaving.Operations.Keys;
@@ -40,8 +43,7 @@ namespace AssemblyReloader.ReloadablePlugin.Config
             injectionBinder.Bind<IDirectory>().To(injectionBinder.GetInstance<IFile>().Directory);
 
             injectionBinder.Bind<ILog>()
-                .To(injectionBinder.GetInstance<ILog>().CreateTag(injectionBinder.GetInstance<IFile>().Name))
-                .ToName(LogKeys.PluginContext);
+                .To(injectionBinder.GetInstance<ILog>().CreateTag(injectionBinder.GetInstance<IFile>().Name));
 
 
             injectionBinder.Bind<IGetTemporaryFile>().To<GetTemporaryFile>().ToSingleton();
@@ -57,17 +59,21 @@ namespace AssemblyReloader.ReloadablePlugin.Config
                 new AssemblyDefinitionWeaver(
                     injectionBinder.GetInstance<AssemblyDefinitionReader>(),
                     injectionBinder.GetInstance<SignalWeaveDefinition>(),
-                    injectionBinder.GetInstance<ILog>(LogKeys.PluginContext)));
+                    injectionBinder.GetInstance<ILog>()));
 
 
             injectionBinder.Bind<IAssemblyDefinitionLoader>()
                 .To(new WriteModifiedAssemblyDefinitionToDisk(
                     injectionBinder.GetInstance<AssemblyDefinitionLoader>(), injectionBinder.GetInstance<IDirectory>(),
-                    () => true));
+                    () => true, injectionBinder.GetInstance<ILog>()));
 
+            injectionBinder.Bind<IAddonSettings>().To<PluginConfiguration>().ToSingleton();
+
+            injectionBinder.Bind<IReloadableAddonLoader>().To<ReloadableAddonLoader>().ToSingleton();
 
             injectionBinder.Bind<SignalPluginWasLoaded>().ToSingleton();
             injectionBinder.Bind<SignalPluginWasUnloaded>().ToSingleton();
+            injectionBinder.Bind<SignalUnloadPlugin>().ToSingleton(); // here because not auto-bound by commands
 
 
             injectionBinder.Bind<MethodInfo>()
@@ -88,39 +94,48 @@ namespace AssemblyReloader.ReloadablePlugin.Config
                     OpCodes.Callvirt))
                 .ToName(InterceptedMethods.Location);
 
-            injectionBinder.Bind<IGetMethodDefinitions>().To(new GetMethodDefinitionsInTypeDefinition()).ToSingleton();
             injectionBinder.Bind<IGetTypeDefinitions>().To(new GetTypeDefinitionsInAssemblyDefinitionExcludingHelper()).ToSingleton();
 
             injectionBinder.Bind<AssemblyLocation>().ToSingleton();
             injectionBinder.Bind<AssemblyCodeBase>().ToSingleton();
 
+
             // only happens once: initial load of reloadable plugin
             commandBinder.Bind<SignalStart>()
                 .To<CommandStartReloadablePlugin>().Once();
 
-
+            // kicks off reload process
             commandBinder.Bind<SignalReloadPlugin>().To<CommandReloadPlugin>();
-            commandBinder.Bind<SignalInstallPluginTypes>().To<CommandNull>();
-            commandBinder.Bind<SignalUninstallPluginTypes>().To<CommandNull>();
 
-
-
-
-
+            // begin rewriting il
             commandBinder.Bind<SignalWeaveDefinition>()
                 .InSequence()
                 .To<CommandChangeDefinitionIdentity>()
-                .To<CommandInsertHelperType>();
-                
+                .To<CommandInsertHelperType>()
+                .To<CommandReplaceKSPAddonWithReloadableAddon>();
 
+            // these things need the helper type
             commandBinder.Bind<SignalHelperDefinitionCreated>()
+                .InSequence()
                 .To<CommandRewriteAssemblyCodeBaseCalls>()
                 .To<CommandRewriteAssemblyLocationCalls>();
-                //to intercept Assembly.Location
-                //to intercept Assembly.CodeBase
-                //to intercept calls to LoadedAssembly
 
-           
+
+            // other signals
+            commandBinder.Bind<SignalPluginWasLoaded>()
+                .InSequence()
+                .To<CommandSetAddonLoaderHandle>()
+                .To<CommandCreateAddonsForScene>();
+
+            commandBinder.Bind<SignalUnloadPlugin>()
+                .InSequence()
+                .To<CommandResetAddonLoader>();
+
+
+            // GameEvent signals
+            commandBinder.Bind<SignalOnLevelWasLoaded>()
+                .To<CommandCreateAddonsForScene>();
+
 
             Plugin = injectionBinder.GetInstance<IReloadablePlugin>();
             Info = injectionBinder.GetInstance<IPluginInfo>();

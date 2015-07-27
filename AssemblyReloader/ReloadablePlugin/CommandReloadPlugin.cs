@@ -27,24 +27,23 @@ namespace AssemblyReloader.ReloadablePlugin
         [Inject]
         public IGameAssemblyLoader GameAssemblyLoader { get; set; }
 
-        [Inject(LogKeys.PluginContext)]
+        [Inject]
         public ILog Log { get; set; }
 
         [Inject]
         public IPluginInfo Plugin { get; set; }
 
 
-        [Inject]
-        public SignalInstallPluginTypes InstallPluginTypesSignal { get; set; }
 
-        [Inject]
-        public SignalUninstallPluginTypes UninstallPluginTypesSignal { get; set; }
 
         [Inject]
         public SignalPluginWasLoaded PluginWasLoadedSignal { get; set; }
 
         [Inject]
         public SignalPluginWasUnloaded PluginWasUnloadedSignal { get; set; }
+
+        [Inject]
+        public SignalUnloadPlugin PluginUnloadSignal { get; set; }
 
         
         public override void Execute()
@@ -65,7 +64,7 @@ namespace AssemblyReloader.ReloadablePlugin
             if (LoadedHandle.Any())
             {
                 Log.Verbose("Unloading previous handle of {0}", Plugin.Location.Url);
-                UninstallPluginTypesSignal.Dispatch(LoadedHandle.Single());
+                PluginUnloadSignal.Dispatch(LoadedHandle.Single());
                 GameAssemblyLoader.RemoveFromLoadedAssemblies(LoadedHandle.Single());
                 PluginWasUnloadedSignal.Dispatch();
             }
@@ -88,7 +87,6 @@ namespace AssemblyReloader.ReloadablePlugin
                 return;
             }
 
-            InstallPluginTypesSignal.Dispatch(handle.Single());
             PluginWasLoadedSignal.Dispatch(handle.Single());
         }
     }

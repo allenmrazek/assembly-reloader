@@ -11,7 +11,7 @@ namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations
     {
         [Inject] public AssemblyDefinition Definition { get; set; }
         [Inject] public IGetRandomString RandomStringGenerator { get; set; }
-        [Inject(LogKeys.PluginContext)] public ILog Log { get; set; }
+        [Inject] public ILog Log { get; set; }
 
 
         public override void Execute()

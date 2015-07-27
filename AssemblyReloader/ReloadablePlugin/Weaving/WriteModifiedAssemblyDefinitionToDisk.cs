@@ -1,11 +1,11 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using AssemblyReloader.Properties;
 using Mono.Cecil;
 using ReeperCommon.Containers;
 using ReeperCommon.FileSystem;
+using ReeperCommon.Logging;
 
 namespace AssemblyReloader.ReloadablePlugin.Weaving
 {
@@ -14,28 +14,33 @@ namespace AssemblyReloader.ReloadablePlugin.Weaving
         private readonly IAssemblyDefinitionLoader _decorated;
         private readonly IDirectory _dumpDirectory;
         private readonly Func<bool> _condition;
+        private readonly ILog _log;
 
         public WriteModifiedAssemblyDefinitionToDisk(
-            [NotNull] IAssemblyDefinitionLoader decorated,
+            IAssemblyDefinitionLoader decorated,
             IDirectory dumpDirectory,
-            [NotNull] Func<bool> condition)
+            Func<bool> condition,
+            ILog log)
         {
             if (decorated == null) throw new ArgumentNullException("decorated");
             if (dumpDirectory == null) throw new ArgumentNullException("dumpDirectory");
             if (condition == null) throw new ArgumentNullException("condition");
+            if (log == null) throw new ArgumentNullException("log");
 
             _decorated = decorated;
             _dumpDirectory = dumpDirectory;
             _condition = condition;
+            _log = log;
         }
 
 
-        private void WriteToDisk([NotNull] AssemblyDefinition definition)
+        private void WriteToDisk(AssemblyDefinition definition)
         {
             if (definition == null) throw new ArgumentNullException("definition");
 
             var filename = Path.Combine(_dumpDirectory.FullPath, definition.MainModule.Name + ".dump");
 
+            _log.Normal("Saving rewritten assembly to \"" + filename + "\"");
             definition.Write(filename);
         }
 

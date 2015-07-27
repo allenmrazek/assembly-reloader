@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using AssemblyReloader.Properties;
+using AssemblyReloader.ReloadablePlugin.Loaders.Addons;
 using AssemblyReloader.Unsorted;
 using ReeperCommon.Logging;
 

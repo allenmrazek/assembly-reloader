@@ -25,7 +25,7 @@ namespace AssemblyReloader.ReloadablePlugin.Weaving
             IFile definitionFile,
             IGetDebugSymbolsExistForDefinition getDebugSymbolsExistQuery,
             BaseAssemblyResolver resolver,
-            [Name(LogKeys.PluginContext)] ILog log)
+            ILog log)
         {
             if (definitionFile == null) throw new ArgumentNullException("definitionFile");
             if (getDebugSymbolsExistQuery == null) throw new ArgumentNullException("getDebugSymbolsExistQuery");

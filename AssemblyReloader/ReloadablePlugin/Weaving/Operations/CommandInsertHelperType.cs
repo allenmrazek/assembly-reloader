@@ -21,8 +21,9 @@ namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations
         [Inject] public AssemblyDefinition Context { get; set; }
 
 
-        public CommandInsertHelperType(SignalHelperDefinitionCreated helpedCreatedSignal,
-            [Name(LogKeys.PluginContext)] ILog log)
+        public CommandInsertHelperType(
+            SignalHelperDefinitionCreated helpedCreatedSignal,
+            ILog log)
         {
             if (helpedCreatedSignal == null) throw new ArgumentNullException("helpedCreatedSignal");
             if (log == null) throw new ArgumentNullException("log");

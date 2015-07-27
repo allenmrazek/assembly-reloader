@@ -11,10 +11,9 @@ namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations
         public CommandRewriteAssemblyCodeBaseCalls(
             [Name(Keys.InterceptedMethods.CodeBase)] MethodInfo targetAssemblyMethod,
             [Name(Keys.InterceptedMethods.CodeBase)] IGetInstructionsInMethod callsToInterceptedMethodQuery,
-            IGetMethodDefinitions methodDefinitionQuery,
             IGetTypeDefinitions typeDefinitionQuery,
             AssemblyCodeBase assemblyCodeBase)
-            : base(targetAssemblyMethod, callsToInterceptedMethodQuery, methodDefinitionQuery, typeDefinitionQuery)
+            : base(targetAssemblyMethod, callsToInterceptedMethodQuery, typeDefinitionQuery)
         {
             if (assemblyCodeBase == null) throw new ArgumentNullException("assemblyCodeBase");
 

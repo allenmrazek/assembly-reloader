@@ -19,29 +19,25 @@ namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations
     {
         private readonly MethodInfo _targetAssemblyMethod;
         private readonly IGetInstructionsInMethod _callsToInterceptedMethodQuery;
-        private readonly IGetMethodDefinitions _methodDefinitionQuery;
         private readonly IGetTypeDefinitions _typeDefinitionQuery;
 
 
         [Inject] public AssemblyDefinition Context { get; set; }
         [Inject] public TypeDefinition HelperDefinition { get; set; }
-        [Inject(LogKeys.PluginContext)] public ILog Log { get; set; }
+        [Inject] public ILog Log { get; set; }
 
 
         public CommandRewriteAssemblyCall(
             MethodInfo targetAssemblyMethod,
             IGetInstructionsInMethod callsToInterceptedMethodQuery,
-            IGetMethodDefinitions methodDefinitionQuery,
             IGetTypeDefinitions typeDefinitionQuery)
         {
             if (targetAssemblyMethod == null) throw new ArgumentNullException("targetAssemblyMethod");
             if (callsToInterceptedMethodQuery == null) throw new ArgumentNullException("callsToInterceptedMethodQuery");
-            if (methodDefinitionQuery == null) throw new ArgumentNullException("methodDefinitionQuery");
             if (typeDefinitionQuery == null) throw new ArgumentNullException("typeDefinitionQuery");
 
             _targetAssemblyMethod = targetAssemblyMethod;
             _callsToInterceptedMethodQuery = callsToInterceptedMethodQuery;
-            _methodDefinitionQuery = methodDefinitionQuery;
             _typeDefinitionQuery = typeDefinitionQuery;
         }
 
@@ -66,7 +62,7 @@ namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations
         {
             return _typeDefinitionQuery.Get(Context)
                 .SelectMany(
-                    td => _methodDefinitionQuery.Get(td)
+                    td => td.Methods
                         .Where(md => _callsToInterceptedMethodQuery.Get(md).Any()));
         }
 

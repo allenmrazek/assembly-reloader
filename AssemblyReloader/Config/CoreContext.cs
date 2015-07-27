@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using AssemblyReloader.Common;
-using AssemblyReloader.FileSystem;
+using AssemblyReloader.Game;
 using AssemblyReloader.Gui;
 using AssemblyReloader.ReloadablePlugin;
 using AssemblyReloader.ReloadablePlugin.Config;
+using AssemblyReloader.ReloadablePlugin.Loaders;
 using AssemblyReloader.ReloadablePlugin.Weaving;
 using AssemblyReloader.StrangeIoC.extensions.context.api;
 using Mono.Cecil;
@@ -47,6 +46,11 @@ namespace AssemblyReloader.Config
             assemblyResolver.AddSearchDirectory(injectionBinder.GetInstance<IDirectory>().FullPath);
 
             injectionBinder.Bind<BaseAssemblyResolver>().To(assemblyResolver).CrossContext();
+            injectionBinder.Bind<IGetCurrentStartupScene>().To<GetCurrentStartupScene>().ToSingleton().CrossContext();
+            
+                // game events
+                injectionBinder.Bind<SignalOnLevelWasLoaded>().ToSingleton().CrossContext();
+
 
 
             // bootstrap reloadable plugin contexts
@@ -75,11 +79,13 @@ namespace AssemblyReloader.Config
 
             mediationBinder.BindView<MainView>().ToMediator<MainViewMediator>();
             mediationBinder.BindView<ConfigurationView>().ToMediator<ConfigurationViewMediator>();
+            mediationBinder.BindView<GameEventView>().ToMediator<GameEventMediator>();
 
             // set up command bindings
             commandBinder.Bind<SignalStart>()
                 .InSequence()
                 .To<CommandLoadConfiguration>()
+                .To<CommandConfigureGameEvents>()
                 .To<CommandLaunchReloadablePluginContexts>()
                 .To<CommandConfigureGUI>()
                 .Once();
