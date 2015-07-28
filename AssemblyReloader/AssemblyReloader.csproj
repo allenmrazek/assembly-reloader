@@ -147,7 +147,6 @@
     <Compile Include="Game\IGame.cs" />
     <Compile Include="Game\IProtoScenarioModule.cs" />
     <Compile Include="Game\IGameObjectProvider.cs" />
-    <Compile Include="Game\KspAddonLoader.cs" />
     <Compile Include="Game\KspGame.cs" />
     <Compile Include="Game\KspProtoScenarioModule.cs" />
     <Compile Include="Game\KspGameObjectProvider.cs" />

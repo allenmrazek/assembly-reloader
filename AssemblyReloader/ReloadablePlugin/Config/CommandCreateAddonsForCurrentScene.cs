@@ -1,4 +1,5 @@
 ﻿using System;
+using AssemblyReloader.ReloadablePlugin.Loaders;
 using AssemblyReloader.ReloadablePlugin.Loaders.Addons;
 using AssemblyReloader.StrangeIoC.extensions.command.impl;
 using ReeperCommon.Logging;
@@ -8,12 +9,12 @@ namespace AssemblyReloader.ReloadablePlugin.Config
     public class CommandCreateAddonsForScene : Command
     {
         private readonly IReloadableAddonLoader _addonLoader;
-        private readonly IGetCurrentGameScene _getCurrentScene;
+        private readonly IGetCurrentStartupScene _getCurrentScene;
         private readonly ILog _log;
 
         public CommandCreateAddonsForScene(
             IReloadableAddonLoader addonLoader,
-            IGetCurrentGameScene getCurrentScene, 
+            IGetCurrentStartupScene getCurrentScene, 
             ILog log)
         {
             if (addonLoader == null) throw new ArgumentNullException("addonLoader");

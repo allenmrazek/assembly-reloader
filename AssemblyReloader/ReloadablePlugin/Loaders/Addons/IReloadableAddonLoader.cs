@@ -5,7 +5,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
 {
     public interface IReloadableAddonLoader
     {
-        void CreateAddons(GameScenes scene);
+        void CreateAddons(KSPAddon.Startup scene);
         Maybe<ILoadedAssemblyHandle> Handle { get; set; }
     }
 }

@@ -24,7 +24,7 @@ namespace AssemblyReloader.Game
         }
 
 
-        private void LevelWasLoaded(GameScenes scene)
+        private void LevelWasLoaded(KSPAddon.Startup scene)
         {
             LevelWasLoadedSignal.Dispatch(scene);
         }

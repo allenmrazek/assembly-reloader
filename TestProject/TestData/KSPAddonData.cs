@@ -1,8 +1,9 @@
-﻿using UnityEngine;
+﻿using System.Runtime.InteropServices;
+using UnityEngine;
 
 namespace TestProject.TestData
 {
-    [KSPAddon(KSPAddon.Startup.MainMenu, true)]
+    [KSPAddon(KSPAddon.Startup.MainMenu, false)]
     public class KSPAddonMonoBehaviour : MonoBehaviour
     {
     }

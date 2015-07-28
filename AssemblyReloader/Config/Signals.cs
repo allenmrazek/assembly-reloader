@@ -2,7 +2,5 @@
 
 namespace AssemblyReloader.Config
 {
-    public class SignalSaveConfiguration : Signal
-    {
-    }
+
 }

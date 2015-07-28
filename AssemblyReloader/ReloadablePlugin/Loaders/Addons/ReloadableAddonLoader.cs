@@ -4,7 +4,9 @@ using System.Linq;
 using AssemblyReloader.Game;
 using AssemblyReloader.StrangeIoC.extensions.implicitBind;
 using ReeperCommon.Containers;
+using ReeperCommon.Extensions;
 using ReeperCommon.Logging;
+using UnityEngine;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
 {
@@ -16,6 +18,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
 
         private Maybe<ILoadedAssemblyHandle> _handle = Maybe<ILoadedAssemblyHandle>.None;
 
+        private AddonLoader loader;
 
         public ReloadableAddonLoader(
             ILog log,
@@ -26,6 +29,8 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
 
             _log = log;
             _settings = settings;
+
+            loader = AddonLoader.Instance;
         }
 
 
@@ -44,7 +49,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
         //        LoadAddonsForScene(assemblyHandle.LoadedAssembly.assembly, KSPAddon.Startup.Instantly);
         //}
 
-        public void CreateAddons(GameScenes scene)
+        public void CreateAddons(KSPAddon.Startup scene)
         {
             if (!Handle.Any())
             {
@@ -56,7 +61,24 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
             _log.Normal("Here I would create addons for " + scene + " for " +
                         Handle.Single().LoadedAssembly.name);
 
+            var valid = Handle.Single().LoadedAssembly.assembly.GetTypes()
+                .Where(t => t.IsSubclassOf(typeof (MonoBehaviour)))
+                .Where(
+                    t =>
+                        t.GetCustomAttributes(typeof (ReloadableAddonAttribute), true)
+                            .Any(attr => ((ReloadableAddonAttribute) attr).startup == scene))
+                .ToList();
+
+            _log.Normal("These addons would be created now:");
+            valid.ForEach(addon => _log.Normal("Addon: " + addon.FullName));
+            _log.Normal("(end list)");
+
+            AddonLoader.Instance.gameObject.PrintComponents(_log);
+            if (loader == null)
+                _log.Warning("AddonLoader was destroyed");
+            loader = AddonLoader.Instance;
         }
+
 
         public Maybe<ILoadedAssemblyHandle> Handle
         {

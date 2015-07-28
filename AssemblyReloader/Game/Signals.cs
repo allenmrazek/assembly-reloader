@@ -2,7 +2,7 @@
 
 namespace AssemblyReloader.Game
 {
-    public class SignalOnLevelWasLoaded : Signal<GameScenes>
+    public class SignalOnLevelWasLoaded : Signal<KSPAddon.Startup>
     {
     }
 }

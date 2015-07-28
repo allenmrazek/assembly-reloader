@@ -64,6 +64,7 @@
     <Compile Include="TestData\PartModuleTest_WithVariousOnLoadOnSave.cs" />
     <Compile Include="Playground.cs" />
     <Compile Include="TestData\ScenarioModuleTest.cs" />
+    <Compile Include="TestData\Scenes\KSPAddonStartupInstantly.cs" />
     <Compile Include="TestPartModule.cs" />
     <Compile Include="TestReloadProject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

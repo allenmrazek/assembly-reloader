@@ -18,6 +18,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders
         {
             if (query == null) throw new ArgumentNullException("query");
             if (getCurrentGameScene == null) throw new ArgumentNullException("getCurrentGameScene");
+
             _query = query;
             _getCurrentGameScene = getCurrentGameScene;
         }

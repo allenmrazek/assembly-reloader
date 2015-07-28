@@ -5,19 +5,21 @@ using UnityEngine;
 
 namespace AssemblyReloader.Config
 {
+// ReSharper disable once ClassNeverInstantiated.Global
     public class CommandConfigureGameEvents : Command
     {
+// ReSharper disable once InconsistentNaming
+// ReSharper disable once MemberCanBePrivate.Global
         [Inject (Keys.GameObjectKeys.CoreContext)] public GameObject gameObject { get; set; }
 
 
         public override void Execute()
         {
-            //var eventView = new GameObject("GameEventView", typeof (GameEventView));
-            var eventView = AddonLoader.Instance.gameObject.AddComponent<GameEventView>();
-
+            //var eventView = AddonLoader.Instance.gameObject.AddComponent<GameEventView>();
+            var eventView = new GameObject("AssemblyReloader.GameEventView", typeof (GameEventView));
             eventView.transform.parent = gameObject.transform;
 
-            UnityEngine.Object.DontDestroyOnLoad(eventView);
+            Object.DontDestroyOnLoad(eventView);
         }
     }
 }

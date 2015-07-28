@@ -33,8 +33,5 @@ namespace AssemblyReloader.Common
             injectionBinder.Unbind<ICommandBinder>();
             injectionBinder.Bind<ICommandBinder>().To<SignalCommandBinder>().ToSingleton();
         }
-
-
-
     }
 }
