@@ -1,6 +1,6 @@
 ﻿using AssemblyReloader.Game;
 
-namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
+namespace AssemblyReloader.ReloadablePlugin.Loaders.old
 {
     public interface IPartModuleSnapshotGenerator
     {

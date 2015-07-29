@@ -2,7 +2,7 @@
 using AssemblyReloader.CompositeRoot;
 using AssemblyReloader.Properties;
 
-namespace AssemblyReloader.Commands
+namespace AssemblyReloader.Commands.old
 {
     public class ClearDictionaryQueryCommand<TKey, TValue> : ICommand
     {

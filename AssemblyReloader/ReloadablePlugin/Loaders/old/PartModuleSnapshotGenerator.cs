@@ -7,7 +7,7 @@ using AssemblyReloader.Properties;
 using AssemblyReloader.Unsorted;
 using ReeperCommon.Logging;
 
-namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
+namespace AssemblyReloader.ReloadablePlugin.Loaders.old
 {
     public class PartModuleSnapshotGenerator : IPartModuleSnapshotGenerator
     {

@@ -4,24 +4,26 @@ using AssemblyReloader.ReloadablePlugin.Loaders.Addons;
 using AssemblyReloader.StrangeIoC.extensions.command.impl;
 using ReeperCommon.Containers;
 
-namespace AssemblyReloader.ReloadablePlugin.Config
+namespace AssemblyReloader.ReloadablePlugin
 {
-    public class CommandResetAddonLoader : Command
+    public class CommandSetAddonLoaderHandle : Command
     {
         private readonly IReloadableAddonLoader _addonLoader;
+        private readonly ILoadedAssemblyHandle _handle;
 
-        public CommandResetAddonLoader(IReloadableAddonLoader addonLoader)
+        public CommandSetAddonLoaderHandle(IReloadableAddonLoader addonLoader, ILoadedAssemblyHandle handle)
         {
             if (addonLoader == null) throw new ArgumentNullException("addonLoader");
+            if (handle == null) throw new ArgumentNullException("handle");
 
             _addonLoader = addonLoader;
+            _handle = handle;
         }
 
 
         public override void Execute()
         {
-            // todo: destroy existing addons
-            _addonLoader.Handle = Maybe<ILoadedAssemblyHandle>.None;
+            _addonLoader.Handle = Maybe<ILoadedAssemblyHandle>.With(_handle);
         }
     }
 }

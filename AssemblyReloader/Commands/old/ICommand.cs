@@ -1,4 +1,4 @@
-﻿namespace AssemblyReloader.Commands
+﻿namespace AssemblyReloader.Commands.old
 {
     public interface ICommand
     {

@@ -1,6 +1,6 @@
 ﻿using AssemblyReloader.StrangeIoC.extensions.command.impl;
 
-namespace AssemblyReloader.Common
+namespace AssemblyReloader
 {
 // ReSharper disable once ClassNeverInstantiated.Global
     public class CommandNull : Command

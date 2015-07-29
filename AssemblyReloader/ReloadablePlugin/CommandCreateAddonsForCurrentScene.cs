@@ -4,7 +4,7 @@ using AssemblyReloader.ReloadablePlugin.Loaders.Addons;
 using AssemblyReloader.StrangeIoC.extensions.command.impl;
 using ReeperCommon.Logging;
 
-namespace AssemblyReloader.ReloadablePlugin.Config
+namespace AssemblyReloader.ReloadablePlugin
 {
     public class CommandCreateAddonsForScene : Command
     {

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Reflection;
-using AssemblyReloader.Common;
 using AssemblyReloader.Config.Keys;
 using AssemblyReloader.FileSystem;
 using AssemblyReloader.Game;
@@ -45,6 +44,9 @@ namespace AssemblyReloader.ReloadablePlugin.Config
             injectionBinder.Bind<ILog>()
                 .To(injectionBinder.GetInstance<ILog>().CreateTag(injectionBinder.GetInstance<IFile>().Name));
 
+            injectionBinder.Bind<ILog>()
+                .To(injectionBinder.GetInstance<ILog>().CreateTag("AddonLoader"))
+                .ToName(LogKeys.AddonLoader);
 
             injectionBinder.Bind<IGetTemporaryFile>().To<GetTemporaryFile>().ToSingleton();
             injectionBinder.Bind<IReloadablePlugin>().Bind<IPluginInfo>().To<ReloadablePlugin>().ToSingleton();

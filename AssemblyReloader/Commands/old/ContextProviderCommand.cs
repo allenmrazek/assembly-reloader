@@ -1,7 +1,7 @@
 ﻿using System;
 using AssemblyReloader.Properties;
 
-namespace AssemblyReloader.Commands
+namespace AssemblyReloader.Commands.old
 {
     public class ContextProviderCommand<TContext> : ICommand
     {

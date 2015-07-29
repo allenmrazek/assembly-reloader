@@ -4,7 +4,7 @@ using AssemblyReloader.StrangeIoC.extensions.context.api;
 using AssemblyReloader.StrangeIoC.extensions.context.impl;
 using UnityEngine;
 
-namespace AssemblyReloader.Common
+namespace AssemblyReloader
 {
     public class SignalContext : MVCSContext
     {

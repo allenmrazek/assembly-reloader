@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace AssemblyReloader.Commands
+namespace AssemblyReloader.Commands.old
 {
     public class AwakenPartModuleCommand : ICommand<PartModule>
     {

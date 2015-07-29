@@ -1,5 +1,4 @@
-﻿using AssemblyReloader.Game.Providers;
-using AssemblyReloader.StrangeIoC.extensions.implicitBind;
+﻿using AssemblyReloader.StrangeIoC.extensions.implicitBind;
 using UnityEngine;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
@@ -10,11 +9,8 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
     {
         public GameScenes Get()
         {
-            Debug.Log("HighLogic scene is " + HighLogic.LoadedScene + " (" + ((KSPAddon.Startup) HighLogic.LoadedScene) +
-                      ")");
-
             // ER: HighLogic.LoadedLevel might look like the right thing but it'll return incorrect
-            // results, especially noticable when first loading the game ... HighLogic
+            // results, especially noticable when first loading the game
             return (GameScenes)Application.loadedLevel;
         }
     }

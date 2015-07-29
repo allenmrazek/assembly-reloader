@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using AssemblyReloader.StrangeIoC.extensions.command.impl;
+﻿using AssemblyReloader.StrangeIoC.extensions.command.impl;
 using AssemblyReloader.StrangeIoC.extensions.injector;
 using ReeperCommon.Logging;
 
-namespace AssemblyReloader.Common
+namespace AssemblyReloader
 {
     class CommandTest : Command
     {

@@ -2,7 +2,7 @@
 using System.Reflection;
 using Object = UnityEngine.Object;
 
-namespace AssemblyReloader.Commands
+namespace AssemblyReloader.Commands.old
 {
     public class PluginReloadRequestedMethodCallCommand : ICommand<Object>
     {

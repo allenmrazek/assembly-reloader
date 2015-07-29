@@ -1,4 +1,4 @@
-﻿namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
+﻿namespace AssemblyReloader.ReloadablePlugin.Loaders.old
 {
     public interface IPartModuleOnStartRunner
     {

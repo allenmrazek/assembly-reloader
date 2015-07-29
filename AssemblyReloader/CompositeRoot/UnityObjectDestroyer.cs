@@ -1,5 +1,6 @@
 ﻿using System;
 using AssemblyReloader.Commands;
+using AssemblyReloader.Commands.old;
 using Object = UnityEngine.Object;
 
 namespace AssemblyReloader.CompositeRoot

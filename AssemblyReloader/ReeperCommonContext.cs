@@ -13,7 +13,7 @@ using ReeperCommon.Repositories;
 using ReeperCommon.Serialization;
 using UnityEngine;
 
-namespace AssemblyReloader.Common
+namespace AssemblyReloader
 {
     public class ReeperCommonContext : SignalContext
     {

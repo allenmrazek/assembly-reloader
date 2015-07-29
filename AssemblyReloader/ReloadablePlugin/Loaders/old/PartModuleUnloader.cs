@@ -5,7 +5,7 @@ using AssemblyReloader.Game.Providers;
 using AssemblyReloader.Properties;
 using ReeperCommon.Extensions;
 
-namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
+namespace AssemblyReloader.ReloadablePlugin.Loaders.old
 {
     public class PartModuleUnloader : IPartModuleUnloader
     {

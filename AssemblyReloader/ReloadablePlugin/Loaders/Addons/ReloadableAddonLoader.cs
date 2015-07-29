@@ -2,81 +2,97 @@
 using System.Collections.Generic;
 using System.Linq;
 using AssemblyReloader.Game;
-using AssemblyReloader.StrangeIoC.extensions.implicitBind;
+using AssemblyReloader.StrangeIoC.extensions.injector;
 using ReeperCommon.Containers;
-using ReeperCommon.Extensions;
 using ReeperCommon.Logging;
-using UnityEngine;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
 {
+// ReSharper disable once ClassNeverInstantiated.Global
     public class ReloadableAddonLoader : IReloadableAddonLoader
     {
         private readonly ILog _log;
         private readonly IAddonSettings _settings;
-        private readonly Dictionary<Type, bool> _loadedOnce = new Dictionary<Type, bool>();
+        private readonly IGetAddonsForScene _getAddonsForScene;
+        private readonly IMonoBehaviourFactory _mbFactory;
+        private readonly List<Type> _loadedOnce = new List<Type>();
 
         private Maybe<ILoadedAssemblyHandle> _handle = Maybe<ILoadedAssemblyHandle>.None;
 
-        private AddonLoader loader;
-
         public ReloadableAddonLoader(
-            ILog log,
-            IAddonSettings settings)
+            IAddonSettings settings,
+            IGetAddonsForScene getAddonsForScene,
+            IMonoBehaviourFactory mbFactory,
+            [Name(LogKeys.AddonLoader)] ILog log)
         {
             if (log == null) throw new ArgumentNullException("log");
             if (settings == null) throw new ArgumentNullException("settings");
+            if (getAddonsForScene == null) throw new ArgumentNullException("getAddonsForScene");
+            if (mbFactory == null) throw new ArgumentNullException("mbFactory");
 
             _log = log;
             _settings = settings;
-
-            loader = AddonLoader.Instance;
+            _getAddonsForScene = getAddonsForScene;
+            _mbFactory = mbFactory;
         }
 
-
-
-
-
-        //public void CreateAddons([NotNull] ILoadedAssemblyHandle assemblyHandle)
-        //{
-        //    if (assemblyHandle == null) throw new ArgumentNullException("assemblyHandle");
-
-        //    var currentScene = _getCurrentStartupScene.Get();
-
-        //    LoadAddonsForScene(assemblyHandle.LoadedAssembly.assembly, currentScene);
-
-        //    if (currentScene != KSPAddon.Startup.Instantly && _settings.InstantlyAppliesToAllScenes)
-        //        LoadAddonsForScene(assemblyHandle.LoadedAssembly.assembly, KSPAddon.Startup.Instantly);
-        //}
 
         public void CreateAddons(KSPAddon.Startup scene)
         {
             if (!Handle.Any())
             {
-                _log.Warning("AddonLoader: no handle found");
+                _log.Warning("no handle found");
                 return;
             }
 
-            // todo: scan loaded assembly handle for ReloadableAddonAttributes and create them
-            _log.Normal("Here I would create addons for " + scene + " for " +
-                        Handle.Single().LoadedAssembly.name);
+            foreach (var addonType in GetAddonsToBeInitialized(scene))
+            {
+                var onceOnly = addonType.Value.once;
 
-            var valid = Handle.Single().LoadedAssembly.assembly.GetTypes()
-                .Where(t => t.IsSubclassOf(typeof (MonoBehaviour)))
-                .Where(
-                    t =>
-                        t.GetCustomAttributes(typeof (ReloadableAddonAttribute), true)
-                            .Any(attr => ((ReloadableAddonAttribute) attr).startup == scene))
-                .ToList();
+                if (!onceOnly || !_loadedOnce.Contains(addonType.Key))
+                {
+                    _log.Normal("Instantiating addon '{0}'", addonType.Key.Name);
 
-            _log.Normal("These addons would be created now:");
-            valid.ForEach(addon => _log.Normal("Addon: " + addon.FullName));
-            _log.Normal("(end list)");
+                    try
+                    {
+                        _mbFactory.Create(addonType.Key);
+                    }
+                    catch (Exception e)
+                    {
+                        _log.Warning("Caught exception while creating " + addonType.Key.FullName);
+                    }
+                }
+                else
+                    _log.Debug("Skipping creation of " + addonType.Key.FullName + " because it has already been loaded.");
+            }
 
-            AddonLoader.Instance.gameObject.PrintComponents(_log);
-            if (loader == null)
-                _log.Warning("AddonLoader was destroyed");
-            loader = AddonLoader.Instance;
+        }
+
+
+        private void DestroyAddons()
+        {
+            _log.Normal("Unloading current handle");
+
+            foreach (var addonType in Enum.GetValues(typeof (KSPAddon.Startup))
+                .Cast<KSPAddon.Startup>()
+                .SelectMany(startupValue => GetAddonsToBeInitialized(startupValue))
+                .OrderBy(kvp => kvp.Key.FullName)
+                .Distinct())
+            {
+                
+            }
+
+
+        }
+
+
+        private IEnumerable<KeyValuePair<Type, ReloadableAddonAttribute>> GetAddonsToBeInitialized(KSPAddon.Startup scene)
+        {
+            var forThisScene = _getAddonsForScene.Get(scene, Handle.Single());
+
+            return !_settings.InstantlyAppliesToAllScenes ? 
+                forThisScene.Union(_getAddonsForScene.Get(KSPAddon.Startup.Instantly, Handle.Single())) : 
+                forThisScene;
         }
 
 
@@ -88,7 +104,9 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
             }
             set
             {
-                // todo: destroy old addons?
+                if (_handle.Any() && (!value.Any() || (value.Any() && value.Single() == _handle.Single())))
+                    DestroyAddons();
+
                 _handle = value;
             }
         }

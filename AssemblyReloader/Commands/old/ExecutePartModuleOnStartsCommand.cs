@@ -4,12 +4,12 @@ using System.Linq;
 using AssemblyReloader.Game;
 using AssemblyReloader.Game.Providers;
 using AssemblyReloader.Properties;
-using AssemblyReloader.ReloadablePlugin.Loaders.PartModules;
+using AssemblyReloader.ReloadablePlugin.Loaders.old;
 using AssemblyReloader.Unsorted;
 using ReeperCommon.Containers;
 using ReeperCommon.Logging;
 
-namespace AssemblyReloader.Commands
+namespace AssemblyReloader.Commands.old
 {
     public class ExecutePartModuleOnStartsCommand : ICommand, IPartModuleOnStartRunner
     {
