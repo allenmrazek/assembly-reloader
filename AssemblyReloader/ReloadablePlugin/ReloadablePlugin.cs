@@ -15,7 +15,6 @@ namespace AssemblyReloader.ReloadablePlugin
         private readonly SignalReloadPlugin _reloadPluginSignal;
         private readonly SignalPluginWasLoaded _pluginWasLoadedSignal;
         private readonly SignalPluginWasUnloaded _pluginWasUnloadedSignal;
-        private readonly ILog _log;
 
         private Maybe<ILoadedAssemblyHandle> _loaded = Maybe<ILoadedAssemblyHandle>.None;
   
@@ -24,20 +23,17 @@ namespace AssemblyReloader.ReloadablePlugin
             IFile reloadableFile,
             SignalReloadPlugin reloadPluginSignal,
             SignalPluginWasLoaded pluginWasLoadedSignal,
-            SignalPluginWasUnloaded pluginWasUnloadedSignal,
-            ILog log)
+            SignalPluginWasUnloaded pluginWasUnloadedSignal)
         {
             if (reloadableFile == null) throw new ArgumentNullException("reloadableFile");
             if (reloadPluginSignal == null) throw new ArgumentNullException("reloadPluginSignal");
             if (pluginWasLoadedSignal == null) throw new ArgumentNullException("pluginWasLoadedSignal");
             if (pluginWasUnloadedSignal == null) throw new ArgumentNullException("pluginWasUnloadedSignal");
-            if (log == null) throw new ArgumentNullException("log");
 
             _reloadableFile = reloadableFile;
             _reloadPluginSignal = reloadPluginSignal;
             _pluginWasLoadedSignal = pluginWasLoadedSignal;
             _pluginWasUnloadedSignal = pluginWasUnloadedSignal;
-            _log = log;
 
             _pluginWasLoadedSignal.AddListener(OnPluginLoaded);
             _pluginWasUnloadedSignal.AddListener(OnPluginUnloaded);
@@ -84,7 +80,9 @@ namespace AssemblyReloader.ReloadablePlugin
 
         public void Reload()
         {
+
             _reloadPluginSignal.Dispatch(_loaded);
+
         }
     }
 }

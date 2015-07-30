@@ -8,7 +8,7 @@ namespace AssemblyReloader.ReloadablePlugin
 {
     public class CommandCreateAddonsForScene : Command
     {
-        private readonly IReloadableAddonLoader _addonLoader;
+        protected readonly IReloadableAddonLoader AddonLoader;
         private readonly IGetCurrentStartupScene _getCurrentScene;
         private readonly ILog _log;
 
@@ -21,7 +21,7 @@ namespace AssemblyReloader.ReloadablePlugin
             if (getCurrentScene == null) throw new ArgumentNullException("getCurrentScene");
             if (log == null) throw new ArgumentNullException("log");
 
-            _addonLoader = addonLoader;
+            AddonLoader = addonLoader;
             _getCurrentScene = getCurrentScene;
             _log = log;
         }
@@ -30,9 +30,7 @@ namespace AssemblyReloader.ReloadablePlugin
         public override void Execute()
         {
             _log.Verbose("Creating addons for current scene");
-            _addonLoader.CreateAddons(_getCurrentScene.Get());
+            AddonLoader.CreateAddons(_getCurrentScene.Get());
         }
-
-
     }
 }

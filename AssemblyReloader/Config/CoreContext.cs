@@ -96,7 +96,7 @@ namespace AssemblyReloader.Config
                 .ToSingleton()
                 .CrossContext();
 
-            injectionBinder.Bind<IGetAddonsForScene>().To<GetAddonsForScene>()
+            injectionBinder.Bind<IGetAddonTypesForScene>().To<GetAddonTypesForScene>()
                 .ToSingleton()
                 .CrossContext();
 

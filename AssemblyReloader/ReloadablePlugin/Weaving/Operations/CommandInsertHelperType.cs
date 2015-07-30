@@ -14,7 +14,7 @@ namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations
         public const string @Namespace = "AssemblyReloaderInjected";
         public const string TypeName = "Helper";
 
-        private readonly SignalHelperDefinitionCreated _helpedCreatedSignal;
+        private readonly SignalHelperDefinitionCreated _helperCreatedSignal;
         private readonly ILog _log;
 
 
@@ -22,13 +22,13 @@ namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations
 
 
         public CommandInsertHelperType(
-            SignalHelperDefinitionCreated helpedCreatedSignal,
+            SignalHelperDefinitionCreated helperCreatedSignal,
             ILog log)
         {
-            if (helpedCreatedSignal == null) throw new ArgumentNullException("helpedCreatedSignal");
+            if (helperCreatedSignal == null) throw new ArgumentNullException("helperCreatedSignal");
             if (log == null) throw new ArgumentNullException("log");
 
-            _helpedCreatedSignal = helpedCreatedSignal;
+            _helperCreatedSignal = helperCreatedSignal;
             _log = log;
         }
 
@@ -45,7 +45,7 @@ namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations
             }
             _log.Debug("Helper type successfully inserted");
 
-            _helpedCreatedSignal.Dispatch(Context, helperDefinition.Single());
+            _helperCreatedSignal.Dispatch(Context, helperDefinition.Single());
         }
 
 

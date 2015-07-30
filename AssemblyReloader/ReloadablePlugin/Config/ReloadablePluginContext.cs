@@ -48,6 +48,10 @@ namespace AssemblyReloader.ReloadablePlugin.Config
                 .To(injectionBinder.GetInstance<ILog>().CreateTag("AddonLoader"))
                 .ToName(LogKeys.AddonLoader);
 
+            injectionBinder.Bind<ILog>()
+                .To(injectionBinder.GetInstance<ILog>().CreateTag("AddonUnloader"))
+                .ToName(LogKeys.AddonUnloader);
+
             injectionBinder.Bind<IGetTemporaryFile>().To<GetTemporaryFile>().ToSingleton();
             injectionBinder.Bind<IReloadablePlugin>().Bind<IPluginInfo>().To<ReloadablePlugin>().ToSingleton();
             injectionBinder.Bind<IGetDebugSymbolsExistForDefinition>()
@@ -69,14 +73,17 @@ namespace AssemblyReloader.ReloadablePlugin.Config
                     injectionBinder.GetInstance<AssemblyDefinitionLoader>(), injectionBinder.GetInstance<IDirectory>(),
                     () => true, injectionBinder.GetInstance<ILog>()));
 
+            injectionBinder.Bind<IUnityObjectDestroyer>().To<UnityObjectDestroyer>().ToSingleton();
+
             injectionBinder.Bind<IAddonSettings>().To<PluginConfiguration>().ToSingleton();
 
             injectionBinder.Bind<IReloadableAddonLoader>().To<ReloadableAddonLoader>().ToSingleton();
+            injectionBinder.Bind<IReloadableAddonUnloader>().To<ReloadableAddonUnloader>().ToSingleton();
 
             injectionBinder.Bind<SignalPluginWasLoaded>().ToSingleton();
             injectionBinder.Bind<SignalPluginWasUnloaded>().ToSingleton();
-            injectionBinder.Bind<SignalUnloadPlugin>().ToSingleton(); // here because not auto-bound by commands
-
+            //injectionBinder.Bind<SignalUnloadPlugin>().ToSingleton(); // here because not auto-bound by commands
+            injectionBinder.Bind<SignalAboutToDestroyMonoBehaviour>().ToSingleton();
 
             injectionBinder.Bind<MethodInfo>()
                 .To(typeof(Assembly).GetProperty("CodeBase", BindingFlags.Public | BindingFlags.Instance).GetGetMethod())
@@ -107,7 +114,8 @@ namespace AssemblyReloader.ReloadablePlugin.Config
                 .To<CommandStartReloadablePlugin>().Once();
 
             // kicks off reload process
-            commandBinder.Bind<SignalReloadPlugin>().To<CommandReloadPlugin>();
+            commandBinder.Bind<SignalReloadPlugin>()
+                .To<CommandReloadPlugin>();
 
             // begin rewriting il
             commandBinder.Bind<SignalWeaveDefinition>()
@@ -126,12 +134,16 @@ namespace AssemblyReloader.ReloadablePlugin.Config
             // other signals
             commandBinder.Bind<SignalPluginWasLoaded>()
                 .InSequence()
-                .To<CommandSetAddonLoaderHandle>()
-                .To<CommandCreateAddonsForScene>();
+                .To<CommandInitializeAddonLoader>();
+
 
             commandBinder.Bind<SignalUnloadPlugin>()
                 .InSequence()
-                .To<CommandResetAddonLoader>();
+                .To<CommandDeinitializeAddonLoader>();
+
+
+            commandBinder.Bind<SignalAboutToDestroyMonoBehaviour>()
+                .To<CommandSendReloadRequestedMessage>();
 
 
             // GameEvent signals

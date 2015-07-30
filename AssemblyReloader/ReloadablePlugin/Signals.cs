@@ -1,6 +1,7 @@
 ﻿using AssemblyReloader.Game;
 using AssemblyReloader.StrangeIoC.extensions.signal.impl;
 using ReeperCommon.Containers;
+using UnityEngine;
 
 namespace AssemblyReloader.ReloadablePlugin
 {
@@ -26,6 +27,12 @@ namespace AssemblyReloader.ReloadablePlugin
 
 
     public class SignalPluginWasUnloaded : Signal
+    {
+        
+    }
+
+
+    public class SignalAboutToDestroyMonoBehaviour : Signal<MonoBehaviour>
     {
         
     }

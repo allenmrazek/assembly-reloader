@@ -7,11 +7,11 @@ using UnityEngine;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
 {
-    public class GetAddonsForScene : IGetAddonsForScene
+    public class GetAddonTypesForScene : IGetAddonTypesForScene
     {
         private readonly IGetAttributesOfType<ReloadableAddonAttribute> _getAttributes;
 
-        public GetAddonsForScene(IGetAttributesOfType<ReloadableAddonAttribute> getAttributes)
+        public GetAddonTypesForScene(IGetAttributesOfType<ReloadableAddonAttribute> getAttributes)
         {
             if (getAttributes == null) throw new ArgumentNullException("getAttributes");
             _getAttributes = getAttributes;

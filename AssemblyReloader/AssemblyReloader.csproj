@@ -70,7 +70,6 @@
     <Compile Include="Commands\old\ExecutePartModuleOnStartsCommand.cs" />
     <Compile Include="Commands\old\ProxyAssemblyMethodWriter.cs" />
     <Compile Include="Commands\old\RefreshPartActionWindows.cs" />
-    <Compile Include="Commands\old\PluginReloadRequestedMethodCallCommand.cs" />
     <Compile Include="Commands\old\SavePluginConfigurationCommand.cs" />
     <Compile Include="CommandNull.cs" />
     <Compile Include="CommandTest.cs" />
@@ -80,8 +79,12 @@
     <Compile Include="Config\CommandConfigureGUI.cs" />
     <Compile Include="Config\Keys\GameObjectKeys.cs" />
     <Compile Include="Config\CommandLoadConfiguration.cs" />
+    <Compile Include="ReloadablePlugin\CommandSendOnPluginReloadMessage.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\Addons\IReloadableAddonUnloader.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\Addons\ReloadableAddonUnloader.cs" />
     <Compile Include="ReloadablePlugin\Loaders\GetMonoBehavioursInScene.cs" />
     <Compile Include="ReloadablePlugin\Loaders\IGetMonoBehavioursInScene.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\IUnityObjectDestroyer.cs" />
     <Compile Include="SignalContext.cs" />
     <Compile Include="Game\GameEventMediator.cs" />
     <Compile Include="Game\GameEventView.cs" />
@@ -100,8 +103,8 @@
     <Compile Include="Gui\StrangeView.cs" />
     <Compile Include="ReloadablePlugin\CommandCreateAddonsForCurrentScene.cs" />
     <Compile Include="ReloadablePlugin\CommandReloadPlugin.cs" />
-    <Compile Include="ReloadablePlugin\CommandResetAddonLoader.cs" />
-    <Compile Include="ReloadablePlugin\CommandSetAddonLoaderHandle.cs" />
+    <Compile Include="ReloadablePlugin\CommandDeinitializeAddonLoader.cs" />
+    <Compile Include="ReloadablePlugin\CommandInitializeAddonLoader.cs" />
     <Compile Include="ReloadablePlugin\Config\CommandStartReloadablePlugin.cs" />
     <Compile Include="ReloadablePlugin\IReloadablePlugin.cs" />
     <Compile Include="ReloadablePlugin\Loaders\MonoBehaviourFactory.cs" />
@@ -111,7 +114,7 @@
     <Compile Include="ReloadablePlugin\Loaders\Addons\IGetAddonsForScene.cs" />
     <Compile Include="ReloadablePlugin\Loaders\Addons\ISettingInstantlyAppliesToEveryScene.cs" />
     <Compile Include="Config\CoreContext.cs" />
-    <Compile Include="CompositeRoot\FlightConfigNodeKeyValuePairComparer.cs" />
+    <Compile Include="Unsorted\FlightConfigNodeKeyValuePairComparer.cs" />
     <Compile Include="ReloadablePlugin\Loaders\Addons\ReloadableAddonAttribute.cs" />
     <Compile Include="ReloadablePlugin\Loaders\TypeCannotBeAbstractException.cs" />
     <Compile Include="ReloadablePlugin\Weaving\AssemblyDefinitionWeaver.cs" />
@@ -143,10 +146,7 @@
     <Compile Include="Config\Configuration.cs" />
     <Compile Include="ReloadablePlugin\Config\PluginConfiguration.cs" />
     <Compile Include="DataObjects\TemporaryFile.cs" />
-    <Compile Include="CompositeRoot\IUnityObjectDestroyer.cs" />
-    <Compile Include="CompositeRoot\UnityObjectDestroyer.cs" />
-    <Compile Include="DataObjects\WindowAppearanceInfo.cs" />
-    <Compile Include="DataObjects\WindowDescriptor.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\UnityObjectDestroyer.cs" />
     <Compile Include="Game\LoadedAssemblyHandle.cs" />
     <Compile Include="Game\IGame.cs" />
     <Compile Include="Game\IProtoScenarioModule.cs" />
@@ -205,8 +205,8 @@
     <Compile Include="ReloadablePlugin\Weaving\IGetDebugSymbolsExistForDefinition.cs" />
     <Compile Include="ReloadablePlugin\IPluginConfigurationProvider.cs" />
     <Compile Include="ReloadablePlugin\PluginConfigurationProvider.cs" />
-    <Compile Include="CompositeRoot\FlightConfigNodeRepository.cs" />
-    <Compile Include="CompositeRoot\DictionaryQueue.cs" />
+    <Compile Include="Unsorted\FlightConfigNodeRepository.cs" />
+    <Compile Include="Unsorted\DictionaryQueue.cs" />
     <Compile Include="ReloadablePlugin\Signals.cs" />
     <Compile Include="StrangeIoC\extensions\command\api\CommandExceptionType.cs" />
     <Compile Include="StrangeIoC\extensions\command\api\CommandKeys.cs" />
@@ -321,7 +321,7 @@
     <Compile Include="StrangeIoC\framework\impl\SemiBinding.cs" />
     <Compile Include="ReloadablePlugin\Loaders\old\IPartModuleDescriptorFactory.cs" />
     <Compile Include="ReloadablePlugin\Loaders\old\IPartModuleFactory.cs" />
-    <Compile Include="ReloadablePlugin\Loaders\old\IPartModuleLoader.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\PartModules\IPartModuleLoader.cs" />
     <Compile Include="ReloadablePlugin\Loaders\old\IPartModuleSnapshotGenerator.cs" />
     <Compile Include="ReloadablePlugin\Loaders\old\IPartModuleUnloader.cs" />
     <Compile Include="ReloadablePlugin\Loaders\old\PartModuleDescriptor.cs" />
@@ -370,13 +370,13 @@
     <Compile Include="Unsorted\IGetPartModulesInPart.cs" />
     <Compile Include="Unsorted\IGetTypeIdentifier.cs" />
     <Compile Include="Game\IGetStartupSceneFromGameScene.cs" />
-    <Compile Include="CompositeRoot\old\Core.cs" />
+    <Compile Include="Unsorted\old\Core.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Game\GetStartupSceneFromGameScene.cs" />
     <Compile Include="Config\GetReloadableAssemblyFilesFromDirectoryRecursive.cs" />
     <Compile Include="Unsorted\GetIsPartPrefab.cs" />
     <Compile Include="Unsorted\GetPartModulesInPart.cs" />
-    <Compile Include="CompositeRoot\IFlightConfigRepository.cs" />
+    <Compile Include="Unsorted\IFlightConfigRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\toggleChecked.png" />

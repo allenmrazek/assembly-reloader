@@ -13,27 +13,26 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
     {
         private readonly ILog _log;
         private readonly IAddonSettings _settings;
-        private readonly IGetAddonsForScene _getAddonsForScene;
+        private readonly IGetAddonTypesForScene _getAddonTypesForScene;
         private readonly IMonoBehaviourFactory _mbFactory;
         private readonly List<Type> _loadedOnce = new List<Type>();
 
-        private Maybe<ILoadedAssemblyHandle> _handle = Maybe<ILoadedAssemblyHandle>.None;
-
         public ReloadableAddonLoader(
             IAddonSettings settings,
-            IGetAddonsForScene getAddonsForScene,
+            IGetAddonTypesForScene getAddonTypesForScene,
             IMonoBehaviourFactory mbFactory,
             [Name(LogKeys.AddonLoader)] ILog log)
         {
             if (log == null) throw new ArgumentNullException("log");
             if (settings == null) throw new ArgumentNullException("settings");
-            if (getAddonsForScene == null) throw new ArgumentNullException("getAddonsForScene");
+            if (getAddonTypesForScene == null) throw new ArgumentNullException("getAddonTypesForScene");
             if (mbFactory == null) throw new ArgumentNullException("mbFactory");
 
             _log = log;
             _settings = settings;
-            _getAddonsForScene = getAddonsForScene;
+            _getAddonTypesForScene = getAddonTypesForScene;
             _mbFactory = mbFactory;
+            Handle = Maybe<ILoadedAssemblyHandle>.None;
         }
 
 
@@ -69,46 +68,16 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
         }
 
 
-        private void DestroyAddons()
-        {
-            _log.Normal("Unloading current handle");
-
-            foreach (var addonType in Enum.GetValues(typeof (KSPAddon.Startup))
-                .Cast<KSPAddon.Startup>()
-                .SelectMany(startupValue => GetAddonsToBeInitialized(startupValue))
-                .OrderBy(kvp => kvp.Key.FullName)
-                .Distinct())
-            {
-                
-            }
-
-
-        }
-
-
         private IEnumerable<KeyValuePair<Type, ReloadableAddonAttribute>> GetAddonsToBeInitialized(KSPAddon.Startup scene)
         {
-            var forThisScene = _getAddonsForScene.Get(scene, Handle.Single());
+            var forThisScene = _getAddonTypesForScene.Get(scene, Handle.Single());
 
             return !_settings.InstantlyAppliesToAllScenes ? 
-                forThisScene.Union(_getAddonsForScene.Get(KSPAddon.Startup.Instantly, Handle.Single())) : 
+                forThisScene.Union(_getAddonTypesForScene.Get(KSPAddon.Startup.Instantly, Handle.Single())) : 
                 forThisScene;
         }
 
 
-        public Maybe<ILoadedAssemblyHandle> Handle
-        {
-            get
-            {
-                return _handle;
-            }
-            set
-            {
-                if (_handle.Any() && (!value.Any() || (value.Any() && value.Single() == _handle.Single())))
-                    DestroyAddons();
-
-                _handle = value;
-            }
-        }
+        public Maybe<ILoadedAssemblyHandle> Handle { get; set; }
     }
 }

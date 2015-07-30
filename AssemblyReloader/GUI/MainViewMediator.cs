@@ -17,6 +17,11 @@ namespace AssemblyReloader.Gui
         [Inject] public IDictionary<IPluginInfo, IReloadablePlugin> Plugins { get; set; }
         [Inject] public ILog Log { get; set; }
 
+        //public MainViewMediator(MainView view, SignalCloseAllWindows closeAllWindowsSignal,
+        //    IDictionary<IPluginInfo, IReloadablePlugin> plugins, ILog log)
+        //{
+            
+        //}
 
         public override void OnRegister()
         {
@@ -51,6 +56,16 @@ namespace AssemblyReloader.Gui
             if (plugin == null) throw new ArgumentNullException("plugin");
 
             Log.Debug("Reload request for {0} received", plugin.Name);
+            var reloadable = GetReloadableFromInfo(plugin);
+            try
+            {
+                reloadable.Reload();
+            }
+            catch (Exception e)
+            {
+                Log.Error("Encountered unhandled exception while reloading " + plugin.Name + ":" + e);
+                // todo: popup message explaining to the user that something got hosed
+            }
         }
 
 
@@ -79,6 +94,16 @@ namespace AssemblyReloader.Gui
         public void OnCloseAllWindows()
         {
             View.Visible = false;
+        }
+
+
+        private IReloadablePlugin GetReloadableFromInfo(IPluginInfo info)
+        {
+            if (info == null) throw new ArgumentNullException("info");
+
+            IReloadablePlugin plugin;
+
+            return Plugins.TryGetValue(info, out plugin) ? plugin : null;
         }
     }
 }
