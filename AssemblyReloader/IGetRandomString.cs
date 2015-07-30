@@ -1,4 +1,4 @@
-﻿namespace AssemblyReloader.ReloadablePlugin.Weaving
+﻿namespace AssemblyReloader
 {
     public interface IGetRandomString
     {

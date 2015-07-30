@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using AssemblyReloader.DataObjects;
 
-namespace AssemblyReloader.CompositeRoot
+namespace AssemblyReloader.Unsorted
 {
     public class FlightConfigNodeKeyValuePairComparer : IEqualityComparer<KeyValuePair<uint, ITypeIdentifier>> 
     {

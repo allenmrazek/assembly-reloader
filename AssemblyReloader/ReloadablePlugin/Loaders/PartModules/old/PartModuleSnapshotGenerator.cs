@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using AssemblyReloader.CompositeRoot;
 using AssemblyReloader.DataObjects;
 using AssemblyReloader.Game;
 using AssemblyReloader.Properties;
 using AssemblyReloader.Unsorted;
 using ReeperCommon.Logging;
 
-namespace AssemblyReloader.ReloadablePlugin.Loaders.old
+namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules.old
 {
     public class PartModuleSnapshotGenerator : IPartModuleSnapshotGenerator
     {

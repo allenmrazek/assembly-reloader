@@ -2,7 +2,7 @@
 using AssemblyReloader.DataObjects;
 using ReeperCommon.Containers;
 
-namespace AssemblyReloader.CompositeRoot
+namespace AssemblyReloader.Unsorted
 {
     public class FlightConfigNodeRepository : IFlightConfigRepository
     {

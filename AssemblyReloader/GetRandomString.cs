@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AssemblyReloader.ReloadablePlugin.Weaving
+namespace AssemblyReloader
 {
     public class GetRandomString : IGetRandomString
     {

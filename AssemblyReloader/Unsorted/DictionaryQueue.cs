@@ -4,7 +4,7 @@ using System.Linq;
 using AssemblyReloader.Properties;
 using ReeperCommon.Containers;
 
-namespace AssemblyReloader.CompositeRoot
+namespace AssemblyReloader.Unsorted
 {
     public sealed class DictionaryQueue<TKey, TValue>
     {

@@ -1,5 +1,6 @@
 ﻿using System;
 using AssemblyReloader.Game;
+using AssemblyReloader.StrangeIoC.extensions.injector;
 using ReeperCommon.Logging;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
@@ -9,7 +10,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
         private readonly ILog _log = new DebugLog("PartModuleLoader");
 
 
-        public PartModuleLoader(ILog log)
+        public PartModuleLoader([Name(LogKeys.PartModuleLoader)] ILog log)
         {
             if (log == null) throw new ArgumentNullException("log");
 
@@ -17,18 +18,16 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
         }
 
 
-        public void Load(ILoadedAssemblyHandle handle)
-        {
-            if (handle == null) throw new ArgumentNullException("handle");
+        //public void Load(ILoadedAssemblyHandle handle)
+        //{
+        //    if (handle == null) throw new ArgumentNullException("handle");
 
-            _log.Verbose("Loading PartModules from " + handle.LoadedAssembly.name);
+        //    //_log.Verbose("Loading " + type.FullName);
 
-            //_log.Verbose("Loading " + type.FullName);
+        //    //var descriptions = _descriptorFactory.Create(type).ToList();
 
-            //var descriptions = _descriptorFactory.Create(type).ToList();
-
-            //descriptions.ForEach(LoadPartModule);
-        }
+        //    //descriptions.ForEach(LoadPartModule);
+        //}
 
 
 
@@ -47,5 +46,14 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
         //        _partModuleFactory.Create(loadedInstance, description.Type, config);
         //    }
         //}
+        public void LoadPrefabs(ILoadedAssemblyHandle handle)
+        {
+            _log.Verbose("Load prefabs");
+        }
+
+        public void LoadInstances(ILoadedAssemblyHandle handle)
+        {
+            _log.Verbose("Load instances");
+        }
     }
 }

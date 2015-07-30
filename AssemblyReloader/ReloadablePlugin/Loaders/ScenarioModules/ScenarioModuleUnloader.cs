@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using AssemblyReloader.CompositeRoot;
 using AssemblyReloader.Game;
 using AssemblyReloader.Game.Providers;
 using AssemblyReloader.Game.Queries;

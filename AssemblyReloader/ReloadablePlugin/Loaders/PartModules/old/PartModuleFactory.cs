@@ -1,11 +1,10 @@
 ﻿using System;
-using AssemblyReloader.Commands;
 using AssemblyReloader.Commands.old;
 using AssemblyReloader.Game;
 using AssemblyReloader.Properties;
 using AssemblyReloader.Unsorted;
 
-namespace AssemblyReloader.ReloadablePlugin.Loaders.old
+namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules.old
 {
     public class PartModuleFactory : IPartModuleFactory
     {

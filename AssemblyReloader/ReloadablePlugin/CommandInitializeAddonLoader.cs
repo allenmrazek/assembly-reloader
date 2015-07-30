@@ -7,6 +7,7 @@ using ReeperCommon.Logging;
 
 namespace AssemblyReloader.ReloadablePlugin
 {
+// ReSharper disable once ClassNeverInstantiated.Global
     public class CommandInitializeAddonLoader : CommandCreateAddonsForScene
     {
         private readonly ILoadedAssemblyHandle _handle;
@@ -15,7 +16,8 @@ namespace AssemblyReloader.ReloadablePlugin
             IReloadableAddonLoader addonLoader, 
             IGetCurrentStartupScene getCurrentScene, 
             ILoadedAssemblyHandle handle,
-            ILog log) : base(addonLoader, getCurrentScene, log)
+            IAddonSettings settings,
+            ILog log) : base(addonLoader, getCurrentScene, settings, log)
         {
             if (handle == null) throw new ArgumentNullException("handle");
 

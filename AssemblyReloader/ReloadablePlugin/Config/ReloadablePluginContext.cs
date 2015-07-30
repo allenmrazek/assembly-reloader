@@ -6,6 +6,7 @@ using AssemblyReloader.Game;
 using AssemblyReloader.Gui;
 using AssemblyReloader.ReloadablePlugin.Loaders;
 using AssemblyReloader.ReloadablePlugin.Loaders.Addons;
+using AssemblyReloader.ReloadablePlugin.Loaders.PartModules;
 using AssemblyReloader.ReloadablePlugin.Weaving;
 using AssemblyReloader.ReloadablePlugin.Weaving.Operations;
 using AssemblyReloader.ReloadablePlugin.Weaving.Operations.Keys;
@@ -52,11 +53,16 @@ namespace AssemblyReloader.ReloadablePlugin.Config
                 .To(injectionBinder.GetInstance<ILog>().CreateTag("AddonUnloader"))
                 .ToName(LogKeys.AddonUnloader);
 
+            injectionBinder.Bind<ILog>()
+                .To(injectionBinder.GetInstance<ILog>().CreateTag("PartModuleLoader"))
+                .ToName(LogKeys.PartModuleLoader);
+
             injectionBinder.Bind<IGetTemporaryFile>().To<GetTemporaryFile>().ToSingleton();
             injectionBinder.Bind<IReloadablePlugin>().Bind<IPluginInfo>().To<ReloadablePlugin>().ToSingleton();
             injectionBinder.Bind<IGetDebugSymbolsExistForDefinition>()
                 .To<GetDebugSymbolsExistForDefinition>()
                 .ToSingleton();
+            injectionBinder.Bind<IPartModuleDescriptorFactory>().To<PartModuleDescriptorFactory>().ToSingleton();
 
             injectionBinder.Bind<AssemblyDefinitionLoader>().ToSingleton();
             injectionBinder.Bind<SignalWeaveDefinition>().ToSingleton();
@@ -79,6 +85,9 @@ namespace AssemblyReloader.ReloadablePlugin.Config
 
             injectionBinder.Bind<IReloadableAddonLoader>().To<ReloadableAddonLoader>().ToSingleton();
             injectionBinder.Bind<IReloadableAddonUnloader>().To<ReloadableAddonUnloader>().ToSingleton();
+
+            injectionBinder.Bind<IPartModuleLoader>().To<PartModuleLoader>().ToSingleton();
+
 
             injectionBinder.Bind<SignalPluginWasLoaded>().ToSingleton();
             injectionBinder.Bind<SignalPluginWasUnloaded>().ToSingleton();
@@ -134,7 +143,8 @@ namespace AssemblyReloader.ReloadablePlugin.Config
             // other signals
             commandBinder.Bind<SignalPluginWasLoaded>()
                 .InSequence()
-                .To<CommandInitializeAddonLoader>();
+                .To<CommandInitializeAddonLoader>()
+                .To<CommandCreatePartModules>();
 
 
             commandBinder.Bind<SignalUnloadPlugin>()

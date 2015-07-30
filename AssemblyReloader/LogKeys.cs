@@ -3,6 +3,7 @@
     public enum LogKeys
     {
         AddonLoader,
-        AddonUnloader
+        AddonUnloader,
+        PartModuleLoader
     }
 }

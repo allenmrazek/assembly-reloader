@@ -1,6 +1,6 @@
 ﻿using System;
-using AssemblyReloader.CompositeRoot;
 using AssemblyReloader.Properties;
+using AssemblyReloader.Unsorted;
 
 namespace AssemblyReloader.Commands.old
 {

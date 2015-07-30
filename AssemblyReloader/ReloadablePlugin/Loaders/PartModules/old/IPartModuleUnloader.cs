@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AssemblyReloader.ReloadablePlugin.Loaders.old
+namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules.old
 {
     public interface IPartModuleUnloader
     {

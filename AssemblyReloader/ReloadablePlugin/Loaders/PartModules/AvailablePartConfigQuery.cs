@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Linq;
+using AssemblyReloader.Game;
 using ReeperCommon.Containers;
 
-namespace AssemblyReloader.Game.Queries
+namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
 {
-    public class AvailablePartConfigQuery : IAvailablePartConfigQuery
+    public class GetConfigNodeForPart : IGetConfigNodeForPart
     {
         private readonly IGameDatabase _gameDatabase;
 
-        public AvailablePartConfigQuery(IGameDatabase gameDatabase)
+        public GetConfigNodeForPart(IGameDatabase gameDatabase)
         {
             if (gameDatabase == null) throw new ArgumentNullException("gameDatabase");
             _gameDatabase = gameDatabase;

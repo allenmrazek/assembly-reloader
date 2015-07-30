@@ -12,24 +12,20 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
     public class ReloadableAddonLoader : IReloadableAddonLoader
     {
         private readonly ILog _log;
-        private readonly IAddonSettings _settings;
         private readonly IGetAddonTypesForScene _getAddonTypesForScene;
         private readonly IMonoBehaviourFactory _mbFactory;
         private readonly List<Type> _loadedOnce = new List<Type>();
 
         public ReloadableAddonLoader(
-            IAddonSettings settings,
             IGetAddonTypesForScene getAddonTypesForScene,
             IMonoBehaviourFactory mbFactory,
             [Name(LogKeys.AddonLoader)] ILog log)
         {
             if (log == null) throw new ArgumentNullException("log");
-            if (settings == null) throw new ArgumentNullException("settings");
             if (getAddonTypesForScene == null) throw new ArgumentNullException("getAddonTypesForScene");
             if (mbFactory == null) throw new ArgumentNullException("mbFactory");
 
             _log = log;
-            _settings = settings;
             _getAddonTypesForScene = getAddonTypesForScene;
             _mbFactory = mbFactory;
             Handle = Maybe<ILoadedAssemblyHandle>.None;
@@ -44,7 +40,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
                 return;
             }
 
-            foreach (var addonType in GetAddonsToBeInitialized(scene))
+            foreach (var addonType in _getAddonTypesForScene.Get(scene, Handle.Single()))
             {
                 var onceOnly = addonType.Value.once;
 
@@ -65,16 +61,6 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
                     _log.Debug("Skipping creation of " + addonType.Key.FullName + " because it has already been loaded.");
             }
 
-        }
-
-
-        private IEnumerable<KeyValuePair<Type, ReloadableAddonAttribute>> GetAddonsToBeInitialized(KSPAddon.Startup scene)
-        {
-            var forThisScene = _getAddonTypesForScene.Get(scene, Handle.Single());
-
-            return !_settings.InstantlyAppliesToAllScenes ? 
-                forThisScene.Union(_getAddonTypesForScene.Get(KSPAddon.Startup.Instantly, Handle.Single())) : 
-                forThisScene;
         }
 
 
