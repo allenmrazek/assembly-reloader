@@ -7,13 +7,18 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
 {
     public class PartModuleLoader : IPartModuleLoader
     {
+        private readonly IGetTypesDerivedFrom<PartModule> _getPartModuleTypes;
         private readonly ILog _log = new DebugLog("PartModuleLoader");
 
 
-        public PartModuleLoader([Name(LogKeys.PartModuleLoader)] ILog log)
+        public PartModuleLoader(
+            IGetTypesDerivedFrom<PartModule> getPartModuleTypes,
+            [Name(LogKeys.PartModuleLoader)] ILog log)
         {
+            if (getPartModuleTypes == null) throw new ArgumentNullException("getPartModuleTypes");
             if (log == null) throw new ArgumentNullException("log");
 
+            _getPartModuleTypes = getPartModuleTypes;
             _log = log;
         }
 

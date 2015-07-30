@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using AssemblyReloader.Game;
 using AssemblyReloader.ReloadablePlugin.Loaders.Addons;
 using AssemblyReloader.StrangeIoC.extensions.command.impl;
@@ -30,8 +31,11 @@ namespace AssemblyReloader.ReloadablePlugin
 
         public override void Execute()
         {
-            int liveAddonsDestroyed = _addonUnloader.DestroyAddons();
-            _log.Verbose(string.Format("Destroyed {0} live addons", liveAddonsDestroyed));
+            if (_addonLoader.Handle.Any())
+            {
+                int liveAddonsDestroyed = _addonUnloader.DestroyAddons(_addonLoader.Handle.Single());
+                _log.Verbose(string.Format("Destroyed {0} live addons", liveAddonsDestroyed));
+            }
 
             _addonLoader.Handle = Maybe<ILoadedAssemblyHandle>.None;
         }

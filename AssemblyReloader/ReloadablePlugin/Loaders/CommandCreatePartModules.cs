@@ -30,7 +30,9 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders
             _log.Verbose("Loading prefab modules");
             _partModuleLoader.LoadPrefabs(_handle);
 
-            // todo: hotswap PartModules here, if enabled
+            // hotswap PartModules here, if enabled
+            _log.Verbose("Creating live modules");
+            _partModuleLoader.LoadInstances(_handle);
         }
     }
 }

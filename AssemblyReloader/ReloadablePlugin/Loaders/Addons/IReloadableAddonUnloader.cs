@@ -1,7 +1,9 @@
-﻿namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
+﻿using AssemblyReloader.Game;
+
+namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
 {
     public interface IReloadableAddonUnloader
     {
-        int DestroyAddons();
+        int DestroyAddons(ILoadedAssemblyHandle handle);
     }
 }
