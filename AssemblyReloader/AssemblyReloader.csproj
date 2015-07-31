@@ -62,15 +62,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Commands\old\ContextProviderCommand.cs" />
-    <Compile Include="Commands\old\AwakenPartModuleCommand.cs" />
     <Compile Include="Commands\old\ClearDictionaryQueryCommand.cs" />
-    <Compile Include="Commands\old\DeserializeObjectCommand.cs" />
-    <Compile Include="Commands\old\SaveConfigNodeFromCallbacksCommand.cs" />
     <Compile Include="Commands\old\ExecutePartModuleOnStartsCommand.cs" />
-    <Compile Include="Commands\old\ProxyAssemblyMethodWriter.cs" />
     <Compile Include="Commands\old\RefreshPartActionWindows.cs" />
-    <Compile Include="Commands\old\SavePluginConfigurationCommand.cs" />
     <Compile Include="CommandNull.cs" />
     <Compile Include="CommandTest.cs" />
     <Compile Include="LogKeys.cs" />
@@ -79,14 +73,21 @@
     <Compile Include="Config\CommandConfigureGUI.cs" />
     <Compile Include="Config\Keys\GameObjectKeys.cs" />
     <Compile Include="Config\CommandLoadConfiguration.cs" />
-    <Compile Include="ReloadablePlugin\CommandSendOnPluginReloadMessage.cs" />
+    <Compile Include="ReloadablePlugin\CommandDispatchLoadersFinished.cs" />
+    <Compile Include="ReloadablePlugin\CommandSendReloadRequestedMessage.cs" />
     <Compile Include="ReloadablePlugin\Loaders\Addons\IReloadableAddonUnloader.cs" />
     <Compile Include="ReloadablePlugin\Loaders\Addons\ReloadableAddonUnloader.cs" />
-    <Compile Include="ReloadablePlugin\Loaders\CommandCreatePartModules.cs" />
+    <Compile Include="ReloadablePlugin\CommandCreatePartModules.cs" />
     <Compile Include="ReloadablePlugin\Loaders\GetMonoBehavioursInScene.cs" />
     <Compile Include="ReloadablePlugin\Loaders\IGetMonoBehavioursInScene.cs" />
     <Compile Include="ReloadablePlugin\Loaders\IUnityObjectDestroyer.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\PartModules\CommandLoadPartModuleConfigNode.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\PartModules\IPartModuleSettings.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\PartModules\PartModuleConfigNodeLoader.cs" />
     <Compile Include="ReloadablePlugin\Loaders\PartModules\PartModuleDescriptorFactory.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\PartModules\Signals.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\PartModules\TypeMustDeriveFromPartModuleException.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\Signals.cs" />
     <Compile Include="SignalContext.cs" />
     <Compile Include="Game\GameEventMediator.cs" />
     <Compile Include="Game\GameEventView.cs" />
@@ -114,9 +115,9 @@
     <Compile Include="ReloadablePlugin\Loaders\Addons\GetAddonsForScene.cs" />
     <Compile Include="ReloadablePlugin\Loaders\IMonoBehaviourFactory.cs" />
     <Compile Include="ReloadablePlugin\Loaders\Addons\IGetAddonsForScene.cs" />
-    <Compile Include="ReloadablePlugin\Loaders\Addons\ISettingInstantlyAppliesToEveryScene.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\Addons\IAddonSettings.cs" />
     <Compile Include="Config\CoreContext.cs" />
-    <Compile Include="Unsorted\FlightConfigNodeKeyValuePairComparer.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\PartModules\FlightConfigNodeKeyValuePairComparer.cs" />
     <Compile Include="ReloadablePlugin\Loaders\Addons\ReloadableAddonAttribute.cs" />
     <Compile Include="ReloadablePlugin\Loaders\TypeCannotBeAbstractException.cs" />
     <Compile Include="ReloadablePlugin\Weaving\AssemblyDefinitionWeaver.cs" />
@@ -138,6 +139,7 @@
     <Compile Include="ReloadablePlugin\Weaving\IAssemblyDefinitionLoader.cs" />
     <Compile Include="ReloadablePlugin\Loaders\Addons\GetAttributesOfType.cs" />
     <Compile Include="ReloadablePlugin\Loaders\Addons\IGetAttributesOfType.cs" />
+    <Compile Include="Unsorted\GetTypesFromIdentifier.cs" />
     <Compile Include="Unsorted\IGetTypesFromAssembly.cs" />
     <Compile Include="ReloadablePlugin\Config\ReloadablePluginContext.cs" />
     <Compile Include="Game\ILoadedAssemblyHandle.cs" />
@@ -163,19 +165,19 @@
     <Compile Include="ReloadablePlugin\Loaders\IGetCurrentStartupScene.cs" />
     <Compile Include="Game\Providers\IGetPartModuleStartState.cs" />
     <Compile Include="Game\Providers\GetPartModuleStartState.cs" />
-    <Compile Include="ReloadablePlugin\Loaders\PartModules\AvailablePartConfigQuery.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\PartModules\GetConfigNodeForPart.cs" />
     <Compile Include="Game\Providers\GetCurrentGame.cs" />
     <Compile Include="Game\Queries\GameObjectComponentQuery.cs" />
-    <Compile Include="ReloadablePlugin\Loaders\PartModules\IAvailablePartConfigQuery.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\PartModules\IGetConfigNodeForPart.cs" />
     <Compile Include="Game\Providers\IGetCurrentGame.cs" />
     <Compile Include="Game\Queries\IGameObjectComponentQuery.cs" />
     <Compile Include="Game\Providers\IGetLoadedVessels.cs" />
     <Compile Include="ReloadablePlugin\Loaders\PartModules\IGetPartModuleConfigsFromPartConfig.cs" />
-    <Compile Include="Game\Providers\IGetPartPrefabClones.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\PartModules\IGetPartPrefabClones.cs" />
     <Compile Include="Game\Providers\IGetProtoScenarioModules.cs" />
     <Compile Include="Game\Providers\GetLoadedVessels.cs" />
     <Compile Include="ReloadablePlugin\Loaders\PartModules\GetPartModuleConfigsFromPartConfig.cs" />
-    <Compile Include="Game\Providers\GetPartPrefabClones.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\PartModules\GetPartPrefabClones.cs" />
     <Compile Include="Game\Providers\GetProtoScenarioModules.cs" />
     <Compile Include="IGetRandomString.cs" />
     <Compile Include="FileSystem\ITemporaryFileFactory.cs" />
@@ -194,11 +196,9 @@
     <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\IScenarioModuleUnloader.cs" />
     <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\ScenarioModuleSnapshotGenerator.cs" />
     <Compile Include="ReloadablePlugin\Weaving\AssemblyDefinitionLoader.cs" />
-    <Compile Include="Unsorted\IConfigNodeFormatterProvider.cs" />
     <Compile Include="FileSystem\IFilePathProvider.cs" />
     <Compile Include="Game\GetLoadedAssemblyFileUrl.cs" />
     <Compile Include="Game\IGetLoadedAssemblyFileUrl.cs" />
-    <Compile Include="Unsorted\GetObjectFieldsComposite.cs" />
     <Compile Include="FileSystem\GetAssemblyFileLocation.cs" />
     <Compile Include="ReloadablePlugin\GetConfigurationFilePath.cs" />
     <Compile Include="ReloadablePlugin\Weaving\GetDebugSymbolsExistForDefinition.cs" />
@@ -207,8 +207,8 @@
     <Compile Include="ReloadablePlugin\Weaving\IGetDebugSymbolsExistForDefinition.cs" />
     <Compile Include="ReloadablePlugin\IPluginConfigurationProvider.cs" />
     <Compile Include="ReloadablePlugin\PluginConfigurationProvider.cs" />
-    <Compile Include="Unsorted\FlightConfigNodeRepository.cs" />
-    <Compile Include="Unsorted\DictionaryQueue.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\PartModules\FlightConfigNodeRepository.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\PartModules\DictionaryQueue.cs" />
     <Compile Include="ReloadablePlugin\Signals.cs" />
     <Compile Include="StrangeIoC\extensions\command\api\CommandExceptionType.cs" />
     <Compile Include="StrangeIoC\extensions\command\api\CommandKeys.cs" />
@@ -322,12 +322,12 @@
     <Compile Include="StrangeIoC\framework\impl\Binding.cs" />
     <Compile Include="StrangeIoC\framework\impl\SemiBinding.cs" />
     <Compile Include="ReloadablePlugin\Loaders\PartModules\IPartModuleDescriptorFactory.cs" />
-    <Compile Include="ReloadablePlugin\Loaders\PartModules\old\IPartModuleFactory.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\PartModules\IPartModuleFactory.cs" />
     <Compile Include="ReloadablePlugin\Loaders\PartModules\IPartModuleLoader.cs" />
     <Compile Include="ReloadablePlugin\Loaders\PartModules\old\IPartModuleSnapshotGenerator.cs" />
     <Compile Include="ReloadablePlugin\Loaders\PartModules\old\IPartModuleUnloader.cs" />
     <Compile Include="ReloadablePlugin\Loaders\PartModules\PartModuleDescriptor.cs" />
-    <Compile Include="ReloadablePlugin\Loaders\PartModules\old\PartModuleFactory.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\PartModules\PartModuleFactory.cs" />
     <Compile Include="ReloadablePlugin\Loaders\PartModules\PartModuleLoader.cs" />
     <Compile Include="ReloadablePlugin\Loaders\PartModules\old\PartModuleSnapshotGenerator.cs" />
     <Compile Include="ReloadablePlugin\Loaders\PartModules\old\PartModuleUnloader.cs" />
@@ -347,8 +347,6 @@
     <Compile Include="Game\KspPartActionWindowController.cs" />
     <Compile Include="Game\IUniqueFlightIdGenerator.cs" />
     <Compile Include="Game\UniqueFlightIdGenerator.cs" />
-    <Compile Include="Unsorted\GetComponentsInGameObjectHierarchy.cs" />
-    <Compile Include="Unsorted\IGetComponentsInGameObjectHierarchy.cs" />
     <Compile Include="Game\IPart.cs" />
     <Compile Include="Game\IPartLoader.cs" />
     <Compile Include="Game\IVessel.cs" />
@@ -367,18 +365,16 @@
     <Compile Include="ReloadablePlugin\Loaders\GetTypesDerivedFrom.cs" />
     <Compile Include="ReloadablePlugin\Weaving\Operations\IGetTypeDefinitions.cs" />
     <Compile Include="ReloadablePlugin\Weaving\Operations\GetMethodCallsInMethod.cs" />
-    <Compile Include="Unsorted\IGetAddonAttributesFromType.cs" />
-    <Compile Include="Unsorted\IGetIsPartPrefab.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\PartModules\IGetIsPartPrefab.cs" />
     <Compile Include="Unsorted\IGetPartModulesInPart.cs" />
     <Compile Include="Unsorted\IGetTypeIdentifier.cs" />
     <Compile Include="Game\IGetStartupSceneFromGameScene.cs" />
-    <Compile Include="Unsorted\old\Core.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Game\GetStartupSceneFromGameScene.cs" />
     <Compile Include="Config\GetReloadableAssemblyFilesFromDirectoryRecursive.cs" />
-    <Compile Include="Unsorted\GetIsPartPrefab.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\PartModules\GetIsPartPrefab.cs" />
     <Compile Include="Unsorted\GetPartModulesInPart.cs" />
-    <Compile Include="Unsorted\IFlightConfigRepository.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\PartModules\IFlightConfigRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\toggleChecked.png" />

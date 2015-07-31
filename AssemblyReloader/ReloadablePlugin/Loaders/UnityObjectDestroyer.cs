@@ -4,6 +4,7 @@ using Object = UnityEngine.Object;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders
 {
+// ReSharper disable once ClassNeverInstantiated.Global
     public class UnityObjectDestroyer : IUnityObjectDestroyer
     {
         private readonly SignalAboutToDestroyMonoBehaviour _mbDestructionSignal;

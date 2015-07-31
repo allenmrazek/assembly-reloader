@@ -1,6 +1,6 @@
 ﻿using AssemblyReloader.Game;
 
-namespace AssemblyReloader.Unsorted
+namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
 {
     public interface IGetIsPartPrefab
     {

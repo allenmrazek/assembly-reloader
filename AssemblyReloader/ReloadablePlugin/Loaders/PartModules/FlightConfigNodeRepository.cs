@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using AssemblyReloader.DataObjects;
+using AssemblyReloader.Unsorted;
 using ReeperCommon.Containers;
 
-namespace AssemblyReloader.Unsorted
+namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
 {
-    public class FlightConfigNodeRepository : IFlightConfigRepository
+    public class PartModuleConfigNodeSnapshotRepository : IPartModuleConfigNodeSnapshotRepository
     {
         private readonly DictionaryQueue<KeyValuePair<uint, ITypeIdentifier>, ConfigNode> _storedNodes = new
             DictionaryQueue<KeyValuePair<uint, ITypeIdentifier>, ConfigNode>();

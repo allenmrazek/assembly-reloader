@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
+using AssemblyReloader.Game;
 
-namespace AssemblyReloader.Game.Providers
+namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
 {
     public interface IGetPartPrefabClones
     {

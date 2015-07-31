@@ -1,6 +1,5 @@
 ﻿using System;
-using AssemblyReloader.Properties;
-using AssemblyReloader.Unsorted;
+using AssemblyReloader.ReloadablePlugin.Loaders.PartModules;
 
 namespace AssemblyReloader.Commands.old
 {
@@ -8,7 +7,7 @@ namespace AssemblyReloader.Commands.old
     {
         private readonly DictionaryQueue<TKey, TValue> _queue;
 
-        public ClearDictionaryQueryCommand([NotNull] DictionaryQueue<TKey, TValue> queue)
+        public ClearDictionaryQueryCommand(DictionaryQueue<TKey, TValue> queue)
         {
             if (queue == null) throw new ArgumentNullException("queue");
             _queue = queue;

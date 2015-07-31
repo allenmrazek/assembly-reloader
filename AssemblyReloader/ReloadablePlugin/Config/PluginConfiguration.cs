@@ -1,8 +1,9 @@
 ﻿using AssemblyReloader.ReloadablePlugin.Loaders.Addons;
+using AssemblyReloader.ReloadablePlugin.Loaders.PartModules;
 
 namespace AssemblyReloader.ReloadablePlugin.Config
 {
-    public class PluginConfiguration : IAddonSettings
+    public class PluginConfiguration : IAddonSettings, IPartModuleSettings
     {
         // ReSharper disable FieldCanBeMadeReadOnly.Global
         // ReSharper disable UnusedMember.Global
@@ -17,6 +18,7 @@ namespace AssemblyReloader.ReloadablePlugin.Config
 
         #region PartModule
 
+        public bool SaveAndReloadPartModuleConfigNodes { get; set; }
 
         #endregion
 
@@ -36,6 +38,8 @@ namespace AssemblyReloader.ReloadablePlugin.Config
             // set defaults
             InstantlyAppliesToAllScenes = true;
             StartAddonsForCurrentScene = true;
+
+            SaveAndReloadPartModuleConfigNodes = true;
         }
     }
 }

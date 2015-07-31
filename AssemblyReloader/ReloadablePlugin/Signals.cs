@@ -32,8 +32,4 @@ namespace AssemblyReloader.ReloadablePlugin
     }
 
 
-    public class SignalAboutToDestroyMonoBehaviour : Signal<MonoBehaviour>
-    {
-        
-    }
 }
