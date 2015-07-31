@@ -207,7 +207,7 @@
     <Compile Include="ReloadablePlugin\Weaving\IGetDebugSymbolsExistForDefinition.cs" />
     <Compile Include="ReloadablePlugin\IPluginConfigurationProvider.cs" />
     <Compile Include="ReloadablePlugin\PluginConfigurationProvider.cs" />
-    <Compile Include="ReloadablePlugin\Loaders\PartModules\FlightConfigNodeRepository.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\PartModules\PartModuleConfigNodeSnapshotRepository.cs" />
     <Compile Include="ReloadablePlugin\Loaders\PartModules\DictionaryQueue.cs" />
     <Compile Include="ReloadablePlugin\Signals.cs" />
     <Compile Include="StrangeIoC\extensions\command\api\CommandExceptionType.cs" />
@@ -374,7 +374,7 @@
     <Compile Include="Config\GetReloadableAssemblyFilesFromDirectoryRecursive.cs" />
     <Compile Include="ReloadablePlugin\Loaders\PartModules\GetIsPartPrefab.cs" />
     <Compile Include="Unsorted\GetPartModulesInPart.cs" />
-    <Compile Include="ReloadablePlugin\Loaders\PartModules\IFlightConfigRepository.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\PartModules\IPartModuleConfigNodeSnapshotRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\toggleChecked.png" />

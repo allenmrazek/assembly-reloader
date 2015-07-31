@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using AssemblyReloader.DataObjects;
-using AssemblyReloader.Unsorted;
 using ReeperCommon.Containers;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
