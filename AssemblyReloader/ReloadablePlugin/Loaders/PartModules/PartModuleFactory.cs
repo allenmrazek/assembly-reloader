@@ -5,14 +5,15 @@ using ReeperCommon.Logging;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
 {
+// ReSharper disable once ClassNeverInstantiated.Global
     public class PartModuleFactory : IPartModuleFactory
     {
-        private readonly IGetIsPartPrefab _getIsPartPrefab;
+        private readonly IGetPartIsPrefab _getIsPartPrefab;
         private readonly SignalPartModuleCreated _partModuleCreatedSignal;
         private readonly ILog _log;
 
         public PartModuleFactory(
-            IGetIsPartPrefab getIsPartPrefab,
+            IGetPartIsPrefab getIsPartPrefab,
             SignalPartModuleCreated partModuleCreatedSignal,
             ILog log)
         {
@@ -45,7 +46,6 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
             // get called so we must do it ourselves
             if (_getIsPartPrefab.Get(part))
             {
-
                 var method = typeof (PartModule).GetMethod("Awake",
                     BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.FlattenHierarchy);
 
@@ -53,7 +53,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
                     method.Invoke(result, null);
             }
 
-            _partModuleCreatedSignal.Dispatch(result, descriptor);
+            _partModuleCreatedSignal.Dispatch(part, result, descriptor);
         }
     }
 }

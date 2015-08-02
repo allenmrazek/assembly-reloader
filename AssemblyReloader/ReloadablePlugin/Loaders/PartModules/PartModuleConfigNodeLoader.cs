@@ -9,14 +9,14 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
     public class PartModuleConfigNodeLoader
     {
         private readonly IPartModuleSettings _partModuleSettings;
-        private readonly IGetIsPartPrefab _partIsPrefabQuery;
+        private readonly IGetPartIsPrefab _partIsPrefabQuery;
         private readonly IPartModuleConfigNodeSnapshotRepository _configNodeRepository;
         private readonly ILog _log;
 
 
         public PartModuleConfigNodeLoader(
             IPartModuleSettings partModuleSettings,
-            IGetIsPartPrefab partIsPrefabQuery,
+            IGetPartIsPrefab partIsPrefabQuery,
             IPartModuleConfigNodeSnapshotRepository configNodeRepository,
             [Name(LogKeys.PartModuleLoader)] ILog log)
         {

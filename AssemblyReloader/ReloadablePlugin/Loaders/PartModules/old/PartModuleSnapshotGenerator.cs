@@ -11,14 +11,14 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules.old
     public class PartModuleSnapshotGenerator : IPartModuleSnapshotGenerator
     {
         private readonly DictionaryQueue<KeyValuePair<uint, ITypeIdentifier>, ConfigNode> _configNodeQueue;
-        private readonly IGetIsPartPrefab _getIsPartPrefab;
+        private readonly IGetPartIsPrefab _getIsPartPrefab;
         private readonly IGetTypeIdentifier _getTypeIdentifier;
         private readonly IUniqueFlightIdGenerator _flightIdGenerator;
         private readonly ILog _log;
 
         public PartModuleSnapshotGenerator(
             [NotNull] DictionaryQueue<KeyValuePair<uint, ITypeIdentifier>, ConfigNode> configNodeQueue,
-            [NotNull] IGetIsPartPrefab getIsPartPrefab,
+            [NotNull] IGetPartIsPrefab getIsPartPrefab,
             [NotNull] IGetTypeIdentifier getTypeIdentifier, 
             [NotNull] IUniqueFlightIdGenerator flightIdGenerator,
             [NotNull] ILog log)

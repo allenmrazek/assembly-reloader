@@ -3,7 +3,7 @@ using AssemblyReloader.Game;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
 {
-    public class GetIsPartPrefab : IGetIsPartPrefab
+    public class GetPartIsPrefab : IGetPartIsPrefab
     {
         public bool Get(IPart part)
         {

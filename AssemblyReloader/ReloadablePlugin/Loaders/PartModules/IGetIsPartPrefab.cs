@@ -2,7 +2,7 @@
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
 {
-    public interface IGetIsPartPrefab
+    public interface IGetPartIsPrefab
     {
         bool Get(IPart part);
     }

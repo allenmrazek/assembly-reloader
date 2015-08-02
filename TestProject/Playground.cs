@@ -16,6 +16,9 @@ using Object = UnityEngine.Object;
 
 namespace TestProject
 {
+
+
+
     //[KSPAddon(KSPAddon.Startup.Flight, false)]
     //public class DebugVesselCamera : MonoBehaviour
     //{

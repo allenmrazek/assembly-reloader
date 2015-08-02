@@ -175,7 +175,7 @@ namespace AssemblyReloader.ReloadablePlugin.Config
 
 
             commandBinder.Bind<SignalAboutToDestroyMonoBehaviour>()
-                .To<CommandSendReloadRequestedMessage>();
+                .To<CommandSendReloadRequestedMessageToTarget>();
 
 
             commandBinder.Bind<SignalPartModuleCreated>()

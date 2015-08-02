@@ -13,6 +13,7 @@ namespace AssemblyReloader.ReloadablePlugin
     {
         private readonly IPartModuleLoader _partModuleLoader;
         private readonly ILoadedAssemblyHandle _handle;
+        private readonly IPartModuleSettings _partModuleSettings;
         private readonly SignalLoadersFinished _loadersFinishedSignal;
         private readonly SignalPartModuleCreated _createdSignal;
         private readonly ILog _log;
@@ -23,18 +24,21 @@ namespace AssemblyReloader.ReloadablePlugin
         public CommandCreatePartModules(
             IPartModuleLoader partModuleLoader, 
             ILoadedAssemblyHandle handle,
+            IPartModuleSettings partModuleSettings,
             SignalLoadersFinished loadersFinishedSignal,
             SignalPartModuleCreated createdSignal,
             ILog log)
         {
             if (partModuleLoader == null) throw new ArgumentNullException("partModuleLoader");
             if (handle == null) throw new ArgumentNullException("handle");
+            if (partModuleSettings == null) throw new ArgumentNullException("partModuleSettings");
             if (loadersFinishedSignal == null) throw new ArgumentNullException("loadersFinishedSignal");
             if (createdSignal == null) throw new ArgumentNullException("createdSignal");
             if (log == null) throw new ArgumentNullException("log");
 
             _partModuleLoader = partModuleLoader;
             _handle = handle;
+            _partModuleSettings = partModuleSettings;
             _loadersFinishedSignal = loadersFinishedSignal;
             _createdSignal = createdSignal;
             _log = log;
@@ -46,7 +50,7 @@ namespace AssemblyReloader.ReloadablePlugin
             _log.Verbose("Creating PartModules");
 
             _createdSignal.AddListener(OnPartModuleCreated);
-            _partModuleLoader.CreatePartModules(_handle);
+            _partModuleLoader.Load(_handle, !_partModuleSettings.ReplacePartModulesInstancesImmediately);
             _createdSignal.RemoveListener(OnPartModuleCreated);
 
             _loadersFinishedSignal.AddListener(OnLoadersFinished);
@@ -54,8 +58,9 @@ namespace AssemblyReloader.ReloadablePlugin
         }
 
 
-        private void OnPartModuleCreated(PartModule pm, PartModuleDescriptor descriptor)
+        private void OnPartModuleCreated(IPart part, PartModule pm, PartModuleDescriptor descriptor)
         {
+            if (part == null) throw new ArgumentNullException("part");
             if (pm == null) throw new ArgumentNullException("pm");
             if (descriptor == null) throw new ArgumentNullException("descriptor");
 

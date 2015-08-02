@@ -54,6 +54,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="InstructorGreenScreen.cs" />
     <Compile Include="TestData\ClassThatAccessesKSPAddonAttribute.cs" />
     <Compile Include="TestData\DerivativePartModule.cs" />
     <Compile Include="TestData\Intercepted\Test_CodeBase_Interception.cs" />

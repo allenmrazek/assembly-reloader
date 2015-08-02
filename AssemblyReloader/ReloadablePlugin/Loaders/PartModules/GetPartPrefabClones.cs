@@ -12,11 +12,11 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
 // ReSharper disable once ClassNeverInstantiated.Global
     public class GetPartPrefabClones : IGetPartPrefabClones
     {
-        private readonly IGetIsPartPrefab _partIsPrefabQuery;
+        private readonly IGetPartIsPrefab _partIsPrefabQuery;
         private readonly IKspFactory _kspFactory;
 
         public GetPartPrefabClones(
-            IGetIsPartPrefab partIsPrefabQuery,
+            IGetPartIsPrefab partIsPrefabQuery,
             IKspFactory kspFactory)
         {
             if (partIsPrefabQuery == null) throw new ArgumentNullException("partIsPrefabQuery");

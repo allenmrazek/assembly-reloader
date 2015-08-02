@@ -4,6 +4,7 @@ using AssemblyReloader.StrangeIoC.extensions.command.impl;
 
 namespace AssemblyReloader.ReloadablePlugin
 {
+// ReSharper disable once ClassNeverInstantiated.Global
     public class CommandDispatchLoadersFinished : Command
     {
         private readonly SignalLoadersFinished _loadersFinishedSignal;

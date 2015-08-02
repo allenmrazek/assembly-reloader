@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,6 +11,7 @@ using AssemblyReloader.StrangeIoC.extensions.command.impl;
 using AssemblyReloader.StrangeIoC.extensions.injector;
 using ReeperCommon.Containers;
 using ReeperCommon.Logging;
+using UnityEngine;
 
 namespace AssemblyReloader.ReloadablePlugin
 {
@@ -26,6 +28,9 @@ namespace AssemblyReloader.ReloadablePlugin
 
         [Inject]
         public IGameAssemblyLoader GameAssemblyLoader { get; set; }
+
+        [Inject]
+        public IRoutineRunner CoroutineRunner { get; set; }
 
         [Inject]
         public ILog Log { get; set; }
@@ -45,8 +50,15 @@ namespace AssemblyReloader.ReloadablePlugin
         [Inject]
         public SignalUnloadPlugin PluginUnloadSignal { get; set; }
 
-        
+
         public override void Execute()
+        {
+            Retain();
+            CoroutineRunner.StartCoroutine(DoExecute());
+        }
+
+
+        private IEnumerator DoExecute()
         {
             Log.Debug("Reloading {0}", Plugin.Name);
 
@@ -56,7 +68,8 @@ namespace AssemblyReloader.ReloadablePlugin
             {
                 Log.Error("Failed to read {0} definition", Plugin.Location.Url);
                 Fail();
-                return;
+                Release();
+                yield break;
             }
 
 
@@ -65,6 +78,10 @@ namespace AssemblyReloader.ReloadablePlugin
             {
                 Log.Verbose("Unloading previous handle of {0}", Plugin.Location.Url);
                 PluginUnloadSignal.Dispatch(LoadedHandle.Single());
+
+                // wait for OnDestroys to run
+                yield return new WaitForEndOfFrame();
+
                 GameAssemblyLoader.RemoveFromLoadedAssemblies(LoadedHandle.Single());
                 PluginWasUnloadedSignal.Dispatch();
             }
@@ -75,7 +92,8 @@ namespace AssemblyReloader.ReloadablePlugin
             {
                 Log.Error("Failed to load assembly definition of {0} into memory", Plugin.Location.Url);
                 Fail();
-                return;
+                Release();
+                yield break;;
             }
 
             var handle = GameAssemblyLoader.AddToLoadedAssemblies(loadedAssembly.Single(), Plugin.Location);
@@ -84,7 +102,8 @@ namespace AssemblyReloader.ReloadablePlugin
             {
                 Log.Error("Failed to create loaded assembly handle of {0}", Plugin.Location.Url);
                 Fail();
-                return;
+                Release();
+                yield break;
             }
 
             PluginWasLoadedSignal.Dispatch(handle.Single());

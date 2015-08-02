@@ -75,15 +75,9 @@ namespace AssemblyReloader.Config
                 .ToName(Keys.GameObjectKeys.CoreContext)
                 .CrossContext();
 
-            injectionBinder.Bind<IGetRandomString>().To<GetRandomString>()
-                .ToSingleton()
-                .CrossContext();
-
             injectionBinder.Bind<IGetConfigurationFilePath>()
                 .To(new GetConfigurationFilePath())
                 .CrossContext();
-
-            injectionBinder.Bind<Configuration>().ToSingleton().CrossContext();
 
             var assemblyResolver = new DefaultAssemblyResolver();
             assemblyResolver.AddSearchDirectory(injectionBinder.GetInstance<IDirectory>().FullPath);
@@ -119,7 +113,7 @@ namespace AssemblyReloader.Config
             injectionBinder.Bind<IGetTypeIdentifier>().To<GetTypeIdentifier>().ToSingleton().CrossContext();
             injectionBinder.Bind<IGameDatabase>().To<KspGameDatabase>().ToSingleton().CrossContext();
             injectionBinder.Bind<IGetPartPrefabClones>().To<GetPartPrefabClones>().ToSingleton().CrossContext();
-            injectionBinder.Bind<IGetIsPartPrefab>().To<GetIsPartPrefab>().ToSingleton().CrossContext();
+            injectionBinder.Bind<IGetPartIsPrefab>().To<GetPartIsPrefab>().ToSingleton().CrossContext();
             injectionBinder.Bind<IPartLoader>().To<KspPartLoader>().ToSingleton().CrossContext();
             injectionBinder.Bind<IGetConfigNodeForPart>().To<GetConfigNodeForPart>().ToSingleton().CrossContext();
             injectionBinder.Bind<IGetPartModuleConfigsFromPartConfig>()

@@ -13,6 +13,7 @@ namespace AssemblyReloader.ReloadablePlugin
         private readonly IAddonSettings _addonSettings;
         private readonly ILog _log;
 
+// ReSharper disable once MemberCanBeProtected.Global
         public CommandCreateAddonsForScene(
             IReloadableAddonLoader addonLoader,
             IGetCurrentStartupScene getCurrentScene, 

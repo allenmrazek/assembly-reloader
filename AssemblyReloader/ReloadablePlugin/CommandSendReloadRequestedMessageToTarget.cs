@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace AssemblyReloader.ReloadablePlugin
 {
-    public class CommandSendReloadRequestedMessage : Command
+    public class CommandSendReloadRequestedMessageToTarget : Command
     {
         public const string MessageMethodName = "OnPluginReloadRequested";
 
@@ -14,7 +14,7 @@ namespace AssemblyReloader.ReloadablePlugin
         private readonly ILog _log;
 
 
-        public CommandSendReloadRequestedMessage(MonoBehaviour context, ILog log)
+        public CommandSendReloadRequestedMessageToTarget(MonoBehaviour context, ILog log)
         {
             if (context == null) throw new ArgumentNullException("context");
             if (log == null) throw new ArgumentNullException("log");

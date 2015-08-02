@@ -4,6 +4,6 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
 {
     public interface IPartModuleLoader
     {
-        void CreatePartModules(ILoadedAssemblyHandle handle);
+        void Load(ILoadedAssemblyHandle handle, bool prefabOnly);
     }
 }

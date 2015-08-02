@@ -19,6 +19,7 @@ namespace AssemblyReloader.ReloadablePlugin.Config
         #region PartModule
 
         public bool SaveAndReloadPartModuleConfigNodes { get; set; }
+        public bool ReplacePartModulesInstancesImmediately { get; set; }
 
         #endregion
 
@@ -40,6 +41,7 @@ namespace AssemblyReloader.ReloadablePlugin.Config
             StartAddonsForCurrentScene = true;
 
             SaveAndReloadPartModuleConfigNodes = true;
+            ReplacePartModulesInstancesImmediately = true;
         }
     }
 }

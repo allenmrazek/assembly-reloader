@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Reflection;
 using AssemblyReloader.Properties;
+using AssemblyReloader.ReloadablePlugin.Loaders;
 using AssemblyReloader.StrangeIoC.extensions.implicitBind;
 using ReeperCommon.Containers;
 using ReeperCommon.Extensions;
@@ -15,14 +16,18 @@ namespace AssemblyReloader.Game
     public class KspAssemblyLoader : IGameAssemblyLoader
     {
         private readonly IGetLoadedAssemblyFileUrl _laFileUrl;
+        private readonly IGetTypesDerivedFrom<PartModule> _partModuleTypeQuery;
 
 
         public KspAssemblyLoader(
-            [NotNull] IGetLoadedAssemblyFileUrl laFileUrl)
+            IGetLoadedAssemblyFileUrl laFileUrl,
+            IGetTypesDerivedFrom<PartModule> partModuleTypeQuery)
         {
             if (laFileUrl == null) throw new ArgumentNullException("laFileUrl");
+            if (partModuleTypeQuery == null) throw new ArgumentNullException("partModuleTypeQuery");
 
             _laFileUrl = laFileUrl;
+            _partModuleTypeQuery = partModuleTypeQuery;
         }
 
 
@@ -44,6 +49,7 @@ namespace AssemblyReloader.Game
 
             AssemblyLoader.loadedAssemblies.Add(loadedAssembly);
 
+            InstallTypes(loadedAssembly);
             return Maybe<ILoadedAssemblyHandle>.With(new LoadedAssemblyHandle(loadedAssembly));
         }
 
@@ -72,6 +78,15 @@ namespace AssemblyReloader.Game
 
                 AssemblyLoader.loadedAssemblies = value;
             }
+        }
+
+
+        // The game looks inside this type list for certain types; we need to make sure they're there to be found
+        private void InstallTypes(AssemblyLoader.LoadedAssembly loadedAssembly)
+        {
+            var partModules = _partModuleTypeQuery.Get(loadedAssembly.assembly).ToList();
+
+            loadedAssembly.types[typeof(PartModule)] = partModules;
         }
     }
 }

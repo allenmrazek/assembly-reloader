@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Linq;
 using AssemblyReloader.Game;
 using AssemblyReloader.StrangeIoC.extensions.injector;
@@ -38,11 +37,9 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
         }
 
 
-        public void CreatePartModules(ILoadedAssemblyHandle handle)
+        public void Load(ILoadedAssemblyHandle handle, bool prefabOnly)
         {
             if (handle == null) throw new ArgumentNullException("handle");
-
-            var partModuleTypes = _partModuleTypeQuery.Get(handle.LoadedAssembly.assembly);
 
             var descriptions =
                 _partModuleTypeQuery.Get(handle.LoadedAssembly.assembly)
@@ -52,22 +49,24 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
             _log.Verbose(string.Format("Found {0} PartModule descriptions", descriptions.Count));
 
             foreach (var description in descriptions)
-                CreatePartModulesFromDescription(description);
+                CreatePartModulesFromDescription(description, prefabOnly);
         }
 
 
 
-        private void CreatePartModulesFromDescription(PartModuleDescriptor description)
+        private void CreatePartModulesFromDescription(PartModuleDescriptor description, bool prefabOnly)
         {
             if (description == null) throw new ArgumentNullException("description");
 
             _log.Debug("Creating PartModules from description " + description.Identifier);
 
             // create prefab's PartModule
-            // (not included in list because it won't be started)
             _partModuleFactory.Create(description.Prefab, description);
 
-            // todo: if we're not in a scene that has PartModule instances, return an empty list
+            if (prefabOnly)
+                return;
+
+            // todo: (?) if we're not in a scene that has PartModule instances, return an empty list
 
             // create partmodules for loaded instances of the prefab
             foreach (var loadedInstance in _clonesOfPrefabQuery.Get(description.Prefab))
