@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace AssemblyReloader.ReloadablePlugin.Loaders
+namespace AssemblyReloader
 {
     public interface IGetTypesDerivedFrom<T>
     {

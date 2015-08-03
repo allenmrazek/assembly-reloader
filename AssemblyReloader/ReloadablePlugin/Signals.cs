@@ -1,7 +1,6 @@
 ﻿using AssemblyReloader.Game;
 using AssemblyReloader.StrangeIoC.extensions.signal.impl;
 using ReeperCommon.Containers;
-using UnityEngine;
 
 namespace AssemblyReloader.ReloadablePlugin
 {

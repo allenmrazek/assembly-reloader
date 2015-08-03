@@ -1,10 +1,11 @@
 ﻿using System;
 using AssemblyReloader.Properties;
 using AssemblyReloader.StrangeIoC.extensions.implicitBind;
+using AssemblyReloader.StrangeIoC.extensions.injector.api;
 
 namespace AssemblyReloader.Game
 {
-    [Implements(typeof(IKspFactory))]
+    [Implements(typeof(IKspFactory), InjectionBindingScope.CROSS_CONTEXT)]
 // ReSharper disable once ClassNeverInstantiated.Global
     public class KspFactory : IKspFactory
     {

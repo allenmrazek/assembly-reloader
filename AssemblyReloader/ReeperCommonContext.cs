@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using AssemblyReloader.Config.Keys;
 using AssemblyReloader.FileSystem;
+using AssemblyReloader.ReloadablePlugin.Loaders;
 using AssemblyReloader.StrangeIoC.extensions.context.api;
 using AssemblyReloader.StrangeIoC.extensions.injector.api;
 using ReeperCommon.FileSystem;
@@ -33,6 +34,11 @@ namespace AssemblyReloader
             
 
             // cross context bindings
+            injectionBinder.Bind<IGetTypesDerivedFrom<PartModule>>()
+                .To<GetTypesDerivedFrom<PartModule>>()
+                .ToSingleton()
+                .CrossContext();
+
             injectionBinder.Bind<IUrlDirProvider>().To<KSPGameDataUrlDirProvider>().ToSingleton();
             injectionBinder.Bind<IUrlDir>().To(new KSPUrlDir(injectionBinder.GetInstance<IUrlDirProvider>().Get())).CrossContext();
             injectionBinder.Bind<IFileSystemFactory>().To<KSPFileSystemFactory>().ToSingleton().CrossContext();

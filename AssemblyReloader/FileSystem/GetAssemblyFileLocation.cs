@@ -18,8 +18,9 @@ namespace AssemblyReloader.FileSystem
         private readonly IFileSystemFactory _fsFactory;
 
 
-        public GetAssemblyFileLocation([NotNull] IGameAssemblyLoader gameAssemblyLoader,
-            [NotNull] IFileSystemFactory fsFactory)
+        public GetAssemblyFileLocation(
+            IGameAssemblyLoader gameAssemblyLoader,
+            IFileSystemFactory fsFactory)
         {
             if (gameAssemblyLoader == null) throw new ArgumentNullException("gameAssemblyLoader");
             if (fsFactory == null) throw new ArgumentNullException("fsFactory");

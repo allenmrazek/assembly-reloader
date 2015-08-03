@@ -106,7 +106,7 @@
     <Compile Include="Config\Keys\TextureNames.cs" />
     <Compile Include="Gui\Signals.cs" />
     <Compile Include="Gui\StrangeView.cs" />
-    <Compile Include="ReloadablePlugin\CommandCreateAddonsForCurrentScene.cs" />
+    <Compile Include="CommandCreateAddonsForCurrentScene.cs" />
     <Compile Include="ReloadablePlugin\CommandReloadPlugin.cs" />
     <Compile Include="ReloadablePlugin\CommandDeinitializeAddonLoader.cs" />
     <Compile Include="ReloadablePlugin\CommandInitializeAddonLoader.cs" />
@@ -362,9 +362,9 @@
     <Compile Include="Config\CoreBootstrapper.cs" />
     <Compile Include="Commands\old\ICommand.cs" />
     <Compile Include="Game\IGetCurrentSceneIsFlight.cs" />
-    <Compile Include="ReloadablePlugin\Loaders\IGetTypesDerivedFrom.cs" />
+    <Compile Include="IGetTypesDerivedFrom.cs" />
     <Compile Include="ReloadablePlugin\Loaders\IGetTypesFromAssembly.cs" />
-    <Compile Include="ReloadablePlugin\Loaders\GetTypesDerivedFrom.cs" />
+    <Compile Include="GetTypesDerivedFrom.cs" />
     <Compile Include="ReloadablePlugin\Weaving\Operations\IGetTypeDefinitions.cs" />
     <Compile Include="ReloadablePlugin\Weaving\Operations\GetMethodCallsInMethod.cs" />
     <Compile Include="ReloadablePlugin\Loaders\PartModules\IGetIsPartPrefab.cs" />

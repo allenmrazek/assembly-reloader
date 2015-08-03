@@ -4,6 +4,7 @@ using System.Reflection;
 using AssemblyReloader.Properties;
 using AssemblyReloader.ReloadablePlugin.Loaders;
 using AssemblyReloader.StrangeIoC.extensions.implicitBind;
+using AssemblyReloader.StrangeIoC.extensions.injector.api;
 using ReeperCommon.Containers;
 using ReeperCommon.Extensions;
 using ReeperCommon.FileSystem;
@@ -11,7 +12,7 @@ using ReeperCommon.Logging;
 
 namespace AssemblyReloader.Game
 {
-    [Implements(typeof(IGameAssemblyLoader))]
+    [Implements(typeof(IGameAssemblyLoader), InjectionBindingScope.CROSS_CONTEXT)]
 // ReSharper disable once ClassNeverInstantiated.Global
     public class KspAssemblyLoader : IGameAssemblyLoader
     {
