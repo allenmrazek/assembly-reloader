@@ -7,7 +7,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
     public class PartModuleConfigNodeSnapshotRepository : IPartModuleConfigNodeSnapshotRepository
     {
         private readonly DictionaryQueue<KeyValuePair<uint, ITypeIdentifier>, ConfigNode> _storedNodes = new
-            DictionaryQueue<KeyValuePair<uint, ITypeIdentifier>, ConfigNode>();
+            DictionaryQueue<KeyValuePair<uint, ITypeIdentifier>, ConfigNode>(new FlightConfigNodeKeyValuePairComparer());
 
 
         public void Store(uint flightid, ITypeIdentifier key, ConfigNode data)

@@ -37,6 +37,12 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
         }
 
 
+        ~PartModuleLoader()
+        {
+            _log.Warning("PartModuleLoader.Destructor");
+        }
+
+
         public void Load(ILoadedAssemblyHandle handle, bool prefabOnly)
         {
             if (handle == null) throw new ArgumentNullException("handle");
@@ -58,7 +64,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
         {
             if (description == null) throw new ArgumentNullException("description");
 
-            _log.Debug("Creating PartModules from description " + description.Identifier);
+            _log.Debug("Creating PartModules from description " + description);
 
             // create prefab's PartModule
             _partModuleFactory.Create(description.Prefab, description);

@@ -1,8 +1,7 @@
 ﻿using System;
-using AssemblyReloader.ReloadablePlugin.Loaders;
 using AssemblyReloader.StrangeIoC.extensions.command.impl;
 
-namespace AssemblyReloader.ReloadablePlugin
+namespace AssemblyReloader.ReloadablePlugin.Loaders
 {
 // ReSharper disable once ClassNeverInstantiated.Global
     public class CommandDispatchLoadersFinished : Command

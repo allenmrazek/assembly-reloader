@@ -31,5 +31,10 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
 
         }
 
+
+        public override string ToString()
+        {
+            return "PartModuleDescriptor: " + Type.FullName + ", " + Prefab.PartInfo.Name;
+        }
     }
 }

@@ -74,18 +74,20 @@
     <Compile Include="Config\CommandConfigureGUI.cs" />
     <Compile Include="Config\Keys\GameObjectKeys.cs" />
     <Compile Include="Config\CommandLoadConfiguration.cs" />
-    <Compile Include="ReloadablePlugin\CommandDispatchLoadersFinished.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\CommandDispatchLoadersFinished.cs" />
     <Compile Include="ReloadablePlugin\CommandSendReloadRequestedMessageToTarget.cs" />
     <Compile Include="ReloadablePlugin\Loaders\Addons\IReloadableAddonUnloader.cs" />
     <Compile Include="ReloadablePlugin\Loaders\Addons\ReloadableAddonUnloader.cs" />
-    <Compile Include="ReloadablePlugin\CommandCreatePartModules.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\PartModules\CommandCreatePartModuleConfigSnapshot.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\PartModules\CommandCreatePartModules.cs" />
     <Compile Include="ReloadablePlugin\Loaders\GetMonoBehavioursInScene.cs" />
     <Compile Include="ReloadablePlugin\Loaders\IGetMonoBehavioursInScene.cs" />
-    <Compile Include="ReloadablePlugin\Loaders\IUnityObjectDestroyer.cs" />
-    <Compile Include="ReloadablePlugin\Loaders\PartModules\CommandLoadPartModuleConfigNode.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\IMonoBehaviourDestroyer.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\PartModules\CommandUnloadPartModules.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\PartModules\IPartModuleDestroyer.cs" />
     <Compile Include="ReloadablePlugin\Loaders\PartModules\IPartModuleSettings.cs" />
-    <Compile Include="ReloadablePlugin\Loaders\PartModules\PartModuleConfigNodeLoader.cs" />
     <Compile Include="ReloadablePlugin\Loaders\PartModules\PartModuleDescriptorFactory.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\PartModules\PartModuleDestroyer.cs" />
     <Compile Include="ReloadablePlugin\Loaders\PartModules\Signals.cs" />
     <Compile Include="ReloadablePlugin\Loaders\PartModules\TypeMustDeriveFromPartModuleException.cs" />
     <Compile Include="ReloadablePlugin\Loaders\Signals.cs" />
@@ -108,8 +110,8 @@
     <Compile Include="Gui\StrangeView.cs" />
     <Compile Include="CommandCreateAddonsForCurrentScene.cs" />
     <Compile Include="ReloadablePlugin\CommandReloadPlugin.cs" />
-    <Compile Include="ReloadablePlugin\CommandDeinitializeAddonLoader.cs" />
-    <Compile Include="ReloadablePlugin\CommandInitializeAddonLoader.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\Addons\CommandDeinitializeAddonLoader.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\Addons\CommandInitializeAddonLoader.cs" />
     <Compile Include="ReloadablePlugin\Config\CommandStartReloadablePlugin.cs" />
     <Compile Include="ReloadablePlugin\IReloadablePlugin.cs" />
     <Compile Include="ReloadablePlugin\Loaders\MonoBehaviourFactory.cs" />
@@ -152,7 +154,7 @@
     <Compile Include="Config\Configuration.cs" />
     <Compile Include="ReloadablePlugin\Config\PluginConfiguration.cs" />
     <Compile Include="DataObjects\TemporaryFile.cs" />
-    <Compile Include="ReloadablePlugin\Loaders\UnityObjectDestroyer.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\MonoBehaviourDestroyer.cs" />
     <Compile Include="Game\LoadedAssemblyHandle.cs" />
     <Compile Include="Game\IGame.cs" />
     <Compile Include="Game\IProtoScenarioModule.cs" />
@@ -169,10 +171,8 @@
     <Compile Include="Game\Providers\GetPartModuleStartState.cs" />
     <Compile Include="ReloadablePlugin\Loaders\PartModules\GetConfigNodeForPart.cs" />
     <Compile Include="Game\Providers\GetCurrentGame.cs" />
-    <Compile Include="Game\Queries\GameObjectComponentQuery.cs" />
     <Compile Include="ReloadablePlugin\Loaders\PartModules\IGetConfigNodeForPart.cs" />
     <Compile Include="Game\Providers\IGetCurrentGame.cs" />
-    <Compile Include="Game\Queries\IGameObjectComponentQuery.cs" />
     <Compile Include="Game\Providers\IGetLoadedVessels.cs" />
     <Compile Include="ReloadablePlugin\Loaders\PartModules\IGetPartModuleConfigsFromPartConfig.cs" />
     <Compile Include="ReloadablePlugin\Loaders\PartModules\IGetPartPrefabClones.cs" />
@@ -327,12 +327,12 @@
     <Compile Include="ReloadablePlugin\Loaders\PartModules\IPartModuleFactory.cs" />
     <Compile Include="ReloadablePlugin\Loaders\PartModules\IPartModuleLoader.cs" />
     <Compile Include="ReloadablePlugin\Loaders\PartModules\old\IPartModuleSnapshotGenerator.cs" />
-    <Compile Include="ReloadablePlugin\Loaders\PartModules\old\IPartModuleUnloader.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\PartModules\IPartModuleUnloader.cs" />
     <Compile Include="ReloadablePlugin\Loaders\PartModules\PartModuleDescriptor.cs" />
     <Compile Include="ReloadablePlugin\Loaders\PartModules\PartModuleFactory.cs" />
     <Compile Include="ReloadablePlugin\Loaders\PartModules\PartModuleLoader.cs" />
     <Compile Include="ReloadablePlugin\Loaders\PartModules\old\PartModuleSnapshotGenerator.cs" />
-    <Compile Include="ReloadablePlugin\Loaders\PartModules\old\PartModuleUnloader.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\PartModules\PartModuleUnloader.cs" />
     <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\ScenarioModuleLoader.cs" />
     <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\ScenarioModuleUnloader.cs" />
     <Compile Include="Properties\Annotations.cs" />
@@ -347,8 +347,8 @@
     <Compile Include="Game\IKspFactory.cs" />
     <Compile Include="Game\IPartActionWindowController.cs" />
     <Compile Include="Game\KspPartActionWindowController.cs" />
-    <Compile Include="Game\IUniqueFlightIdGenerator.cs" />
-    <Compile Include="Game\UniqueFlightIdGenerator.cs" />
+    <Compile Include="Game\IGetUniqueFlightID.cs" />
+    <Compile Include="Game\GetUniqueFlightId.cs" />
     <Compile Include="Game\IPart.cs" />
     <Compile Include="Game\IPartLoader.cs" />
     <Compile Include="Game\IVessel.cs" />
@@ -403,7 +403,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Resources\cursor.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Game\Queries\" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="StrangeIoC\extensions\ReadMe.txt" />
   </ItemGroup>

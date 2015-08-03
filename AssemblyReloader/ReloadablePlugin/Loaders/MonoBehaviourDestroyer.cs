@@ -5,11 +5,11 @@ using Object = UnityEngine.Object;
 namespace AssemblyReloader.ReloadablePlugin.Loaders
 {
 // ReSharper disable once ClassNeverInstantiated.Global
-    public class UnityObjectDestroyer : IUnityObjectDestroyer
+    public class MonoBehaviourDestroyer : IMonoBehaviourDestroyer
     {
         private readonly SignalAboutToDestroyMonoBehaviour _mbDestructionSignal;
 
-        public UnityObjectDestroyer(SignalAboutToDestroyMonoBehaviour mbDestructionSignal)
+        public MonoBehaviourDestroyer(SignalAboutToDestroyMonoBehaviour mbDestructionSignal)
         {
             if (mbDestructionSignal == null) throw new ArgumentNullException("mbDestructionSignal");
 
@@ -17,7 +17,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders
         }
 
 
-        public void Destroy(MonoBehaviour target)
+        public void DestroyMonoBehaviour(MonoBehaviour target)
         {
             if (target == null)
                 return; // Unity overloads this operator to check for existing of unmanaged side

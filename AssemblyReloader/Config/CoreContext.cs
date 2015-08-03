@@ -109,6 +109,7 @@ namespace AssemblyReloader.Config
 
             injectionBinder.Bind<IGetTypeIdentifier>().To<GetTypeIdentifier>().ToSingleton().CrossContext();
             //injectionBinder.Bind<IGameDatabase>().To<KspGameDatabase>().ToSingleton().CrossContext();
+            injectionBinder.Bind<IGetUniqueFlightID>().To<GetUniqueFlightId>().ToSingleton().CrossContext();
             injectionBinder.Bind<IGetPartPrefabClones>().To<GetPartPrefabClones>().ToSingleton().CrossContext();
             injectionBinder.Bind<IGetPartIsPrefab>().To<GetPartIsPrefab>().ToSingleton().CrossContext();
             injectionBinder.Bind<IPartLoader>().To<KspPartLoader>().ToSingleton().CrossContext();

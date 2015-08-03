@@ -4,6 +4,9 @@
     {
         AddonLoader,
         AddonUnloader,
-        PartModuleLoader
+        PartModuleLoader,
+        PartModuleFactory,
+        PartModuleUnloader,
+        PartModuleSnapshotGenerator
     }
 }

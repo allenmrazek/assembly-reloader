@@ -5,6 +5,7 @@ using ReeperCommon.Containers;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
 {
+// ReSharper disable once ClassNeverInstantiated.Global
     public class GetConfigNodeForPart : IGetConfigNodeForPart
     {
         private readonly IGameDatabase _gameDatabase;

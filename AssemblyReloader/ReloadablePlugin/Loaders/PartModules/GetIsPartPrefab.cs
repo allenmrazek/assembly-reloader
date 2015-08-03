@@ -3,6 +3,7 @@ using AssemblyReloader.Game;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
 {
+// ReSharper disable once ClassNeverInstantiated.Global
     public class GetPartIsPrefab : IGetPartIsPrefab
     {
         public bool Get(IPart part)

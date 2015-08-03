@@ -57,6 +57,15 @@ namespace AssemblyReloader.ReloadablePlugin.Config
                 .To(injectionBinder.GetInstance<ILog>().CreateTag("PartModuleLoader"))
                 .ToName(LogKeys.PartModuleLoader);
 
+            injectionBinder.Bind<ILog>()
+                .To(injectionBinder.GetInstance<ILog>().CreateTag("PartModuleFactory"))
+                .ToName(LogKeys.PartModuleFactory);
+
+            injectionBinder.Bind<ILog>()
+                .To(injectionBinder.GetInstance<ILog>().CreateTag("PartModuleUnloader"))
+                .ToName(LogKeys.PartModuleUnloader);
+
+
             injectionBinder.Bind<IGetTemporaryFile>().To<GetTemporaryFile>().ToSingleton();
             injectionBinder.Bind<IReloadablePlugin>().Bind<IPluginInfo>().To<ReloadablePlugin>().ToSingleton();
             injectionBinder.Bind<IGetDebugSymbolsExistForDefinition>()
@@ -78,7 +87,7 @@ namespace AssemblyReloader.ReloadablePlugin.Config
                     injectionBinder.GetInstance<AssemblyDefinitionLoader>(), injectionBinder.GetInstance<IDirectory>(),
                     () => true, injectionBinder.GetInstance<ILog>()));
 
-            injectionBinder.Bind<IUnityObjectDestroyer>().To<UnityObjectDestroyer>().ToSingleton();
+            injectionBinder.Bind<IMonoBehaviourDestroyer>().To<MonoBehaviourDestroyer>().ToSingleton();
 
             injectionBinder
                 .Bind<IAddonSettings>()
@@ -93,12 +102,8 @@ namespace AssemblyReloader.ReloadablePlugin.Config
             injectionBinder.Bind<IPartModuleFactory>().To<PartModuleFactory>().ToSingleton();
             injectionBinder.Bind<IPartModuleDescriptorFactory>().To<PartModuleDescriptorFactory>().ToSingleton();
             injectionBinder.Bind<IPartModuleLoader>().To<PartModuleLoader>().ToSingleton();
-
-
-            injectionBinder.Bind<SignalPluginWasLoaded>().ToSingleton();
-            injectionBinder.Bind<SignalPluginWasUnloaded>().ToSingleton();
-            injectionBinder.Bind<SignalAboutToDestroyMonoBehaviour>().ToSingleton();
-            injectionBinder.Bind<SignalLoadersFinished>().ToSingleton();
+            injectionBinder.Bind<IPartModuleUnloader>().To<PartModuleUnloader>().ToSingleton();
+            injectionBinder.Bind<IPartModuleDestroyer>().To<PartModuleDestroyer>().ToSingleton();
 
             injectionBinder.Bind<MethodInfo>()
                 .To(typeof(Assembly).GetProperty("CodeBase", BindingFlags.Public | BindingFlags.Instance).GetGetMethod())
@@ -123,6 +128,12 @@ namespace AssemblyReloader.ReloadablePlugin.Config
             injectionBinder.Bind<AssemblyLocation>().ToSingleton();
             injectionBinder.Bind<AssemblyCodeBase>().ToSingleton();
 
+
+            injectionBinder.Bind<SignalPluginWasLoaded>().ToSingleton();
+            injectionBinder.Bind<SignalPluginWasUnloaded>().ToSingleton();
+            injectionBinder.Bind<SignalAboutToDestroyMonoBehaviour>().ToSingleton();
+            injectionBinder.Bind<SignalLoadersFinished>().ToSingleton();
+            injectionBinder.Bind<SignalPartModuleCreated>().ToSingleton();
 
             SetupCommandBindings();
 
@@ -171,15 +182,14 @@ namespace AssemblyReloader.ReloadablePlugin.Config
 
             commandBinder.Bind<SignalUnloadPlugin>()
                 .InSequence()
-                .To<CommandDeinitializeAddonLoader>();
+                .To<CommandDeinitializeAddonLoader>()
+                .To<CommandUnloadPartModules>();
 
 
             commandBinder.Bind<SignalAboutToDestroyMonoBehaviour>()
+                .To<CommandCreatePartModuleConfigNodeSnapshot>()
                 .To<CommandSendReloadRequestedMessageToTarget>();
 
-
-            commandBinder.Bind<SignalPartModuleCreated>()
-                .To<CommandLoadPartModuleConfigNode>();
 
             // GameEvent signals
             commandBinder.Bind<SignalOnLevelWasLoaded>()

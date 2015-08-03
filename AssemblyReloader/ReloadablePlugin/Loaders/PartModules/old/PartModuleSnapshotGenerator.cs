@@ -13,26 +13,26 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules.old
         private readonly DictionaryQueue<KeyValuePair<uint, ITypeIdentifier>, ConfigNode> _configNodeQueue;
         private readonly IGetPartIsPrefab _getIsPartPrefab;
         private readonly IGetTypeIdentifier _getTypeIdentifier;
-        private readonly IUniqueFlightIdGenerator _flightIdGenerator;
+        private readonly IGetUniqueFlightID _flightId;
         private readonly ILog _log;
 
         public PartModuleSnapshotGenerator(
             [NotNull] DictionaryQueue<KeyValuePair<uint, ITypeIdentifier>, ConfigNode> configNodeQueue,
             [NotNull] IGetPartIsPrefab getIsPartPrefab,
             [NotNull] IGetTypeIdentifier getTypeIdentifier, 
-            [NotNull] IUniqueFlightIdGenerator flightIdGenerator,
+            [NotNull] IGetUniqueFlightID flightId,
             [NotNull] ILog log)
         {
             if (configNodeQueue == null) throw new ArgumentNullException("configNodeQueue");
             if (getIsPartPrefab == null) throw new ArgumentNullException("getIsPartPrefab");
             if (getTypeIdentifier == null) throw new ArgumentNullException("getTypeIdentifier");
-            if (flightIdGenerator == null) throw new ArgumentNullException("flightIdGenerator");
+            if (flightId == null) throw new ArgumentNullException("flightId");
             if (log == null) throw new ArgumentNullException("log");
 
             _configNodeQueue = configNodeQueue;
             _getIsPartPrefab = getIsPartPrefab;
             _getTypeIdentifier = getTypeIdentifier;
-            _flightIdGenerator = flightIdGenerator;
+            _flightId = flightId;
             _log = log;
         }
 
@@ -49,7 +49,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules.old
                 instance.Save(node);
 
                 if (part.FlightID == 0)
-                    part.FlightID = _flightIdGenerator.Get();
+                    part.FlightID = _flightId.Get();
 
                 _configNodeQueue.Store(
                     new KeyValuePair<uint, ITypeIdentifier>(part.FlightID, _getTypeIdentifier.Get(instance.GetType())),

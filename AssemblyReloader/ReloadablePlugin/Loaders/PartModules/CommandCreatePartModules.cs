@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using AssemblyReloader.Game;
-using AssemblyReloader.ReloadablePlugin.Loaders;
-using AssemblyReloader.ReloadablePlugin.Loaders.PartModules;
 using AssemblyReloader.StrangeIoC.extensions.command.impl;
 using ReeperCommon.Logging;
 
-namespace AssemblyReloader.ReloadablePlugin
+namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
 {
 // ReSharper disable once ClassNeverInstantiated.Global
     public class CommandCreatePartModules : Command
@@ -14,6 +12,7 @@ namespace AssemblyReloader.ReloadablePlugin
         private readonly IPartModuleLoader _partModuleLoader;
         private readonly ILoadedAssemblyHandle _handle;
         private readonly IPartModuleSettings _partModuleSettings;
+        private readonly IPartModuleConfigNodeSnapshotRepository _snapshotRepository;
         private readonly SignalLoadersFinished _loadersFinishedSignal;
         private readonly SignalPartModuleCreated _createdSignal;
         private readonly ILog _log;
@@ -25,6 +24,7 @@ namespace AssemblyReloader.ReloadablePlugin
             IPartModuleLoader partModuleLoader, 
             ILoadedAssemblyHandle handle,
             IPartModuleSettings partModuleSettings,
+            IPartModuleConfigNodeSnapshotRepository snapshotRepository,
             SignalLoadersFinished loadersFinishedSignal,
             SignalPartModuleCreated createdSignal,
             ILog log)
@@ -32,6 +32,7 @@ namespace AssemblyReloader.ReloadablePlugin
             if (partModuleLoader == null) throw new ArgumentNullException("partModuleLoader");
             if (handle == null) throw new ArgumentNullException("handle");
             if (partModuleSettings == null) throw new ArgumentNullException("partModuleSettings");
+            if (snapshotRepository == null) throw new ArgumentNullException("snapshotRepository");
             if (loadersFinishedSignal == null) throw new ArgumentNullException("loadersFinishedSignal");
             if (createdSignal == null) throw new ArgumentNullException("createdSignal");
             if (log == null) throw new ArgumentNullException("log");
@@ -39,6 +40,7 @@ namespace AssemblyReloader.ReloadablePlugin
             _partModuleLoader = partModuleLoader;
             _handle = handle;
             _partModuleSettings = partModuleSettings;
+            _snapshotRepository = snapshotRepository;
             _loadersFinishedSignal = loadersFinishedSignal;
             _createdSignal = createdSignal;
             _log = log;
@@ -73,7 +75,8 @@ namespace AssemblyReloader.ReloadablePlugin
         private void OnLoadersFinished()
         {
             _loadersFinishedSignal.RemoveListener(OnLoadersFinished);
-            
+            _snapshotRepository.Clear();
+
             Release();
 
             _log.Warning("CommandRunPartModuleOnStarts ready to run onstarts on " + _targets.Count + " targets");

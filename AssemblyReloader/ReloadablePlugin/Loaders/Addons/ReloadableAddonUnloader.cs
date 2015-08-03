@@ -12,13 +12,13 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
     {
         private readonly IGetAddonTypesForScene _addonTypeQuery;
         private readonly IGetMonoBehavioursInScene _monoBehaviourQuery;
-        private readonly IUnityObjectDestroyer _addonDestroyer;
+        private readonly IMonoBehaviourDestroyer _addonDestroyer;
         private readonly ILog _log;
 
         public ReloadableAddonUnloader(
             IGetAddonTypesForScene addonTypeQuery, 
             IGetMonoBehavioursInScene monoBehaviourQuery,
-            IUnityObjectDestroyer addonDestroyer,
+            IMonoBehaviourDestroyer addonDestroyer,
             [Name(LogKeys.AddonUnloader)] ILog log)
         {
             if (addonTypeQuery == null) throw new ArgumentNullException("addonTypeQuery");
@@ -54,7 +54,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
                 {
                     _log.Verbose("Destroying addon instance: " + activeInstances[idx].name + ", " +
                                  activeInstances[idx].GetType().FullName);
-                    _addonDestroyer.Destroy(activeInstances[idx]);
+                    _addonDestroyer.DestroyMonoBehaviour(activeInstances[idx]);
                 }
             }
 

@@ -1,11 +1,9 @@
 ﻿using System;
 using AssemblyReloader.Game;
-using AssemblyReloader.ReloadablePlugin.Loaders;
-using AssemblyReloader.ReloadablePlugin.Loaders.Addons;
 using ReeperCommon.Containers;
 using ReeperCommon.Logging;
 
-namespace AssemblyReloader.ReloadablePlugin
+namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
 {
 // ReSharper disable once ClassNeverInstantiated.Global
     public class CommandInitializeAddonLoader : CommandCreateAddonsForScene
