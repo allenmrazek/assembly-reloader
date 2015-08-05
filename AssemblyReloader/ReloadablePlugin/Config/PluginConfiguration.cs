@@ -20,6 +20,9 @@ namespace AssemblyReloader.ReloadablePlugin.Config
 
         public bool SaveAndReloadPartModuleConfigNodes { get; set; }
         public bool ReplacePartModulesInstancesImmediately { get; set; }
+        public bool ResetPartModuleActions { get; set; }
+        public bool ResetPartModuleEvents { get; set; }
+        
 
         #endregion
 
@@ -42,6 +45,8 @@ namespace AssemblyReloader.ReloadablePlugin.Config
 
             SaveAndReloadPartModuleConfigNodes = true;
             ReplacePartModulesInstancesImmediately = true;
+            ResetPartModuleActions = true;
+            ResetPartModuleEvents = true;
         }
     }
 }

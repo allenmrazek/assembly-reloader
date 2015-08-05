@@ -4,5 +4,7 @@
     {
         bool SaveAndReloadPartModuleConfigNodes { get; }
         bool ReplacePartModulesInstancesImmediately { get; }
+        bool ResetPartModuleEvents { get; }
+        bool ResetPartModuleActions { get; }
     }
 }

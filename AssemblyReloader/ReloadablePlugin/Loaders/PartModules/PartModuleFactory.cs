@@ -4,17 +4,22 @@ using System.Reflection;
 using AssemblyReloader.Game;
 using AssemblyReloader.StrangeIoC.extensions.injector;
 using ReeperCommon.Logging;
+using UnityEngine;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
 {
 // ReSharper disable once ClassNeverInstantiated.Global
     public class PartModuleFactory : IPartModuleFactory
     {
+        private const string ActionNodeName = "ACTIONS";
+        private const string EventNodeName = "EVENTS";
+
         private readonly IGetPartIsPrefab _isPartPrefabQuery;
         private readonly IPartModuleSettings _partModuleSettings;
         private readonly IPartModuleConfigNodeSnapshotRepository _configNodeSnapshots;
         private readonly SignalPartModuleCreated _partModuleCreatedSignal;
         private readonly ILog _log;
+
 
         public PartModuleFactory(
             IGetPartIsPrefab isPartPrefabQuery,
@@ -77,6 +82,28 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
                 if (_configNodeSnapshots.Peek(part.FlightID, descriptor.Identifier).Any())
                 {
                     var config = _configNodeSnapshots.Retrieve(part.FlightID, descriptor.Identifier).Single();
+
+                    if (_partModuleSettings.ResetPartModuleActions)
+                    {
+                        if (config.HasNode(ActionNodeName))
+                        {
+                            _log.Verbose("Removing PartModule ACTIONS node from snapshot");
+                            config.RemoveNode(ActionNodeName);
+                        }
+                        else _log.Warning("Did not find ACTIONS node on snapshot");
+                    }
+
+                    if (_partModuleSettings.ResetPartModuleEvents)
+                    {
+                        if (config.HasNode(EventNodeName))
+                        {
+                            _log.Verbose("Removing PartModule EVENTS node from snapshot");
+                            config.RemoveNode(EventNodeName);
+                        }
+                        else _log.Warning("Did not find EVENTS node on snapshot");
+                    }
+
+                    _log.Debug("will use configNode: {0}", config.ToString());
 
                     try
                     {
