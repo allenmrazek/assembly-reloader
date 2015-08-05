@@ -32,6 +32,8 @@ namespace AssemblyReloader.Gui
             return withButtons;
         }
 
+
+
         protected override void DrawWindow()
         {
             GUILayout.Label("This is the Configuration view");

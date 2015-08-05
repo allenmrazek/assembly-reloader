@@ -31,6 +31,7 @@ namespace AssemblyReloader.Gui
         {
             Skin = HighLogic.Skin;
             Draggable = true;
+            Height = 128f;
 
             if (Plugins == null)
                 Plugins = Enumerable.Empty<IPluginInfo>();

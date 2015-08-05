@@ -8,7 +8,7 @@ namespace AssemblyReloader.Gui
 // ReSharper disable once ClassNeverInstantiated.Global
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable UnusedAutoPropertyAccessor.Global
-    class ConfigurationViewMediator : Mediator
+    public class ConfigurationViewMediator : Mediator
     {
 
         [Inject] public ConfigurationView View { get; set; }
@@ -22,6 +22,8 @@ namespace AssemblyReloader.Gui
 
             View.CloseWindow.AddListener(CloseConfigurationWindow);
             CloseAllWindows.AddListener(CloseConfigurationWindow);
+
+            View.Visible = false; // initially start closed
         }
 
 
