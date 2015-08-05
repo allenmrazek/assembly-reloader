@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using ReeperCommon.Containers;
+using UnityEngine;
 
 namespace AssemblyReloader.Game
 {
@@ -12,5 +13,6 @@ namespace AssemblyReloader.Game
         string PartName { get; }
         IAvailablePart PartInfo { get; }
         uint FlightID { get; set; }
+        Maybe<IVessel> Vessel { get; }
     }
 }

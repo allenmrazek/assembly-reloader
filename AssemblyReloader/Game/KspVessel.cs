@@ -26,9 +26,14 @@ namespace AssemblyReloader.Game
             get { return _vessel.Parts.Select(p => _kspFactory.Create(p)).ToList(); }
         }
 
-        public Vessel.Situations situation
+        public Vessel.Situations Situation
         {
             get { return _vessel.situation; }
+        }
+
+        public Guid ID
+        {
+            get { return _vessel.id; }
         }
     }
 }

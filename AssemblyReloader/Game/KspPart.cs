@@ -1,5 +1,6 @@
 ﻿using System;
 using FinePrint;
+using ReeperCommon.Containers;
 using UnityEngine;
 
 namespace AssemblyReloader.Game
@@ -51,6 +52,12 @@ namespace AssemblyReloader.Game
         public uint FlightID {
             get { return _target.flightID; }
             set { _target.flightID = value; }
+        }
+
+
+        public Maybe<IVessel> Vessel
+        {
+            get { return _target.vessel != null ? Maybe<IVessel>.With(_kspFactory.Create(_target.vessel)) : Maybe<IVessel>.None; }
         }
 
         public override string ToString()

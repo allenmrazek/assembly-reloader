@@ -67,6 +67,8 @@
     <Compile Include="Commands\old\RefreshPartActionWindows.cs" />
     <Compile Include="CommandNull.cs" />
     <Compile Include="CommandTest.cs" />
+    <Compile Include="Game\DuplicatePartPrefabException.cs" />
+    <Compile Include="Game\PrefabNotFoundException.cs" />
     <Compile Include="IRoutineRunner.cs" />
     <Compile Include="LogKeys.cs" />
     <Compile Include="ReeperCommonContext.cs" />
@@ -84,6 +86,9 @@
     <Compile Include="ReloadablePlugin\Loaders\IGetMonoBehavioursInScene.cs" />
     <Compile Include="ReloadablePlugin\Loaders\IMonoBehaviourDestroyer.cs" />
     <Compile Include="ReloadablePlugin\Loaders\PartModules\CommandUnloadPartModules.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\PartModules\GetVesselFromPartModule.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\PartModules\IGetVesselFromPartModule.cs" />
+    <Compile Include="Game\IPartLoaderPrefabProvider.cs" />
     <Compile Include="ReloadablePlugin\Loaders\PartModules\IPartModuleDestroyer.cs" />
     <Compile Include="ReloadablePlugin\Loaders\PartModules\IPartModuleSettings.cs" />
     <Compile Include="ReloadablePlugin\Loaders\PartModules\PartModuleDescriptorFactory.cs" />
@@ -167,8 +172,8 @@
     <Compile Include="ReloadablePlugin\Loaders\GetCurrentStartupScene.cs" />
     <Compile Include="ReloadablePlugin\Loaders\Addons\IGetCurrentGameScene.cs" />
     <Compile Include="ReloadablePlugin\Loaders\IGetCurrentStartupScene.cs" />
-    <Compile Include="Game\Providers\IGetPartModuleStartState.cs" />
-    <Compile Include="Game\Providers\GetPartModuleStartState.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\PartModules\IGetPartModuleStartState.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\PartModules\GetPartModuleStartState.cs" />
     <Compile Include="ReloadablePlugin\Loaders\PartModules\GetConfigNodeForPart.cs" />
     <Compile Include="Game\Providers\GetCurrentGame.cs" />
     <Compile Include="ReloadablePlugin\Loaders\PartModules\IGetConfigNodeForPart.cs" />
@@ -191,8 +196,6 @@
     <Compile Include="ReloadablePlugin\Weaving\Signals.cs" />
     <Compile Include="ReloadablePlugin\Weaving\WriteModifiedAssemblyDefinitionToDisk.cs" />
     <Compile Include="ReloadablePlugin\Loaders\Addons\IReloadableAddonLoader.cs" />
-    <Compile Include="ReloadablePlugin\Loaders\PartModules\old\IPartModuleOnStartRunner.cs" />
-    <Compile Include="ReloadablePlugin\Loaders\PartModules\old\PartModuleOnStartRunner.cs" />
     <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\IScenarioModuleLoader.cs" />
     <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\IScenarioModuleSnapshotGenerator.cs" />
     <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\IScenarioModuleUnloader.cs" />
@@ -326,12 +329,10 @@
     <Compile Include="ReloadablePlugin\Loaders\PartModules\IPartModuleDescriptorFactory.cs" />
     <Compile Include="ReloadablePlugin\Loaders\PartModules\IPartModuleFactory.cs" />
     <Compile Include="ReloadablePlugin\Loaders\PartModules\IPartModuleLoader.cs" />
-    <Compile Include="ReloadablePlugin\Loaders\PartModules\old\IPartModuleSnapshotGenerator.cs" />
     <Compile Include="ReloadablePlugin\Loaders\PartModules\IPartModuleUnloader.cs" />
     <Compile Include="ReloadablePlugin\Loaders\PartModules\PartModuleDescriptor.cs" />
     <Compile Include="ReloadablePlugin\Loaders\PartModules\PartModuleFactory.cs" />
     <Compile Include="ReloadablePlugin\Loaders\PartModules\PartModuleLoader.cs" />
-    <Compile Include="ReloadablePlugin\Loaders\PartModules\old\PartModuleSnapshotGenerator.cs" />
     <Compile Include="ReloadablePlugin\Loaders\PartModules\PartModuleUnloader.cs" />
     <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\ScenarioModuleLoader.cs" />
     <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\ScenarioModuleUnloader.cs" />

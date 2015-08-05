@@ -16,7 +16,48 @@ using Object = UnityEngine.Object;
 
 namespace TestProject
 {
+    [KSPAddon(KSPAddon.Startup.EditorAny, false)]
+    public class DumpPartInstanceIDs : MonoBehaviour
+    {
+        private void OnGUI()
+        {
+            if (GUI.Button(new Rect(Screen.width - 128f, Screen.height - 128, 128f, 32f), "Check"))
+            {
+                //PartLoader.LoadedPartsList.ForEach(ap => print("AvailablePart: " + ap.name));
+                FindObjectsOfType<Part>().ToList().ForEach(p => print("FlightID: " + p.flightID));
+                var correct = PartLoader.LoadedPartsList.Find(ap => ap.name == "mk1pod");
 
+                print("Correct Part Id: " + correct.partPrefab.GetInstanceID()); 
+                print("Correct GO Id: " + correct.partPrefab.gameObject.GetInstanceID());
+
+                FindObjectsOfType<Part>()
+                    .Where(p => p.partInfo.name == "mk1pod")
+                    .ToList()
+                    .ForEach(p =>
+                    {
+                        print("On Part: " + p.flightID);
+                        print("Prefab? " +
+                              (p.gameObject.GetInstanceID() == p.partInfo.partPrefab.gameObject.GetInstanceID()
+                                  ? "yes"
+                                  : "no"));
+                        print("refEquals: " + ReferenceEquals(p.gameObject, p.partInfo.partPrefab.gameObject));
+                        print("this ID: " + p.gameObject.GetInstanceID());
+                        print("prefab ID: " + p.partInfo.partPrefab.gameObject.GetInstanceID());
+                        //print("partPrefab: " + (p.GetInstanceID() == p.partInfo.partPrefab.GetInstanceID()));
+                        //print("part Id: " + p.GetInstanceID() + ", prefab Id: " + p.partInfo.partPrefab.GetInstanceID());
+
+                        if (p.gameObject.GetInstanceID() == p.partInfo.partPrefab.gameObject.GetInstanceID())
+                            p.partInfo.partPrefab.GetComponentsInChildren<Renderer>()
+                                .ToList()
+                                .ForEach(r => r.enabled = false);
+
+                        p.gameObject.GetComponents<PartModule>()
+                            .ToList()
+                            .ForEach(pm => print("PartModule on prefab: " + pm.moduleName));
+                    });
+            }
+        }
+    }
 
 
     //[KSPAddon(KSPAddon.Startup.Flight, false)]

@@ -82,12 +82,12 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
                     {
                         partModule.Load(config);
                         _log.Verbose("Loaded stored ConfigNode for " + descriptor.Identifier + " on " + part.FlightID);
+                        return;
                     }
                     catch (Exception e)
                     {
                         LoadFailed("Encountered exception while loading snapshot ConfigNode", part, config, descriptor, e);
                     }
-                    return;
                 }
             }
 
@@ -114,7 +114,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
             _log.Warning(message + " on PartModule " + descriptor.Identifier + " on " + part.FlightID);
             _log.Warning("Tried to use ConfigNode: " + (config == null ? "<null>" : config.ToString()));
             _log.Warning("Exception was: " + e);
-            _log.Warning("This ParTModule may have been partially initialized");
+            _log.Warning("This PartModule may have been partially initialized");
         }
     }
 }

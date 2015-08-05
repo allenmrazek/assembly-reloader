@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using AssemblyReloader.Game;
 using AssemblyReloader.StrangeIoC.extensions.command.impl;
+using ReeperCommon.Containers;
 using ReeperCommon.Logging;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
@@ -15,9 +17,11 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
         private readonly IPartModuleConfigNodeSnapshotRepository _snapshotRepository;
         private readonly SignalLoadersFinished _loadersFinishedSignal;
         private readonly SignalPartModuleCreated _createdSignal;
+        private readonly IGetPartModuleStartState _startStateProvider;
+        private readonly IGetPartIsPrefab _partIsPrefabQuery;
         private readonly ILog _log;
 
-        private readonly List<PartModule> _targets = new List<PartModule>();
+        private readonly List<KeyValuePair<IPart, PartModule>> _targets = new List<KeyValuePair<IPart, PartModule>>();
 
 
         public CommandCreatePartModules(
@@ -27,6 +31,8 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
             IPartModuleConfigNodeSnapshotRepository snapshotRepository,
             SignalLoadersFinished loadersFinishedSignal,
             SignalPartModuleCreated createdSignal,
+            IGetPartModuleStartState startStateProvider,
+            IGetPartIsPrefab partIsPrefabQuery,
             ILog log)
         {
             if (partModuleLoader == null) throw new ArgumentNullException("partModuleLoader");
@@ -35,6 +41,8 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
             if (snapshotRepository == null) throw new ArgumentNullException("snapshotRepository");
             if (loadersFinishedSignal == null) throw new ArgumentNullException("loadersFinishedSignal");
             if (createdSignal == null) throw new ArgumentNullException("createdSignal");
+            if (startStateProvider == null) throw new ArgumentNullException("startStateProvider");
+            if (partIsPrefabQuery == null) throw new ArgumentNullException("partIsPrefabQuery");
             if (log == null) throw new ArgumentNullException("log");
 
             _partModuleLoader = partModuleLoader;
@@ -43,6 +51,8 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
             _snapshotRepository = snapshotRepository;
             _loadersFinishedSignal = loadersFinishedSignal;
             _createdSignal = createdSignal;
+            _startStateProvider = startStateProvider;
+            _partIsPrefabQuery = partIsPrefabQuery;
             _log = log;
         }
 
@@ -66,9 +76,10 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
             if (pm == null) throw new ArgumentNullException("pm");
             if (descriptor == null) throw new ArgumentNullException("descriptor");
 
-            // todo: filter out prefab PartModule
+            if (_partIsPrefabQuery.Get(part))
+                return;
 
-            _targets.Add(pm);
+            _targets.Add(new KeyValuePair<IPart, PartModule>(part, pm));
         }
 
 
@@ -78,8 +89,56 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
             _snapshotRepository.Clear();
 
             Release();
+            RunOnStarts();
+        }
 
-            _log.Warning("CommandRunPartModuleOnStarts ready to run onstarts on " + _targets.Count + " targets");
+
+        private void RunOnStarts()
+        {
+            // note to self: it's possible for parts not to be associated with any vessel,
+            // such as when constructing a ship in the editor
+            //
+            // todo: figure out whether unattached parts in editor are handled differently
+
+            var defaultGuid = Guid.NewGuid();
+
+            var groupedByVessel = _targets
+                .GroupBy(target => target.Key.Vessel.Any() ? target.Key.Vessel.Single().ID : defaultGuid, target => target)
+                .ToList();
+
+            foreach (var group in groupedByVessel)
+            {
+                var partModulesInGroup = group.ToList();
+
+                if (!partModulesInGroup.Any())
+                {
+                    _log.Debug("No PartModules in grouping; skipping");
+                    continue;
+                }
+
+                RunOnStartsForVessel(partModulesInGroup.First().Key.Vessel, group.ToList());
+            }
+        }
+
+
+        private void RunOnStartsForVessel(Maybe<IVessel> vessel, IEnumerable<KeyValuePair<IPart, PartModule>> targets)
+        {
+            var state = _startStateProvider.Get(vessel);
+
+            // group target partModules by part
+            foreach (var target in targets.OrderBy(t => t.Key.FlightID))
+            {
+                try
+                {
+                    _log.Debug("Running OnStart for " + target.Value.moduleName + " on " + target.Key.FlightID);
+                    target.Value.OnStart(state);
+                }
+                catch (Exception e)
+                {
+                    _log.Warning("Exception while running OnStart for " + target.Value.moduleName + " on " +
+                                 target.Key.FlightID + ": " + e);
+                }
+            }
         }
     }
 }

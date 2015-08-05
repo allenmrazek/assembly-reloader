@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Linq;
+using AssemblyReloader.Game;
+using AssemblyReloader.StrangeIoC.extensions.implicitBind;
+using AssemblyReloader.StrangeIoC.extensions.injector.api;
 using ReeperCommon.Containers;
 
-namespace AssemblyReloader.Game.Providers
+namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
 {
     public class GetPartModuleStartState : IGetPartModuleStartState
     {
@@ -23,32 +26,32 @@ namespace AssemblyReloader.Game.Providers
 
                 if (HighLogic.LoadedSceneIsFlight)
                 {
-                    if (v.situation == Vessel.Situations.PRELAUNCH)
+                    if (v.Situation == Vessel.Situations.PRELAUNCH)
                     {
                         state |= PartModule.StartState.PreLaunch;
                         state |= PartModule.StartState.Landed;
                     }
-                    if (v.situation == Vessel.Situations.DOCKED)
+                    if (v.Situation == Vessel.Situations.DOCKED)
                     {
                         state |= PartModule.StartState.Docked;
                     }
-                    if (v.situation == Vessel.Situations.ORBITING || v.situation == Vessel.Situations.ESCAPING)
+                    if (v.Situation == Vessel.Situations.ORBITING || v.Situation == Vessel.Situations.ESCAPING)
                     {
                         state |= PartModule.StartState.Orbital;
                     }
-                    if (v.situation == Vessel.Situations.SUB_ORBITAL)
+                    if (v.Situation == Vessel.Situations.SUB_ORBITAL)
                     {
                         state |= PartModule.StartState.SubOrbital;
                     }
-                    if (v.situation == Vessel.Situations.SPLASHED)
+                    if (v.Situation == Vessel.Situations.SPLASHED)
                     {
                         state |= PartModule.StartState.Splashed;
                     }
-                    if (v.situation == Vessel.Situations.FLYING)
+                    if (v.Situation == Vessel.Situations.FLYING)
                     {
                         state |= PartModule.StartState.Flying;
                     }
-                    if (v.situation == Vessel.Situations.LANDED)
+                    if (v.Situation == Vessel.Situations.LANDED)
                     {
                         state |= PartModule.StartState.Landed;
                     }

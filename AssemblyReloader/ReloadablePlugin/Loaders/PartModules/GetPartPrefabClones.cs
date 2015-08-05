@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using AssemblyReloader.Game;
-using AssemblyReloader.Unsorted;
+using Debug = UnityEngine.Debug;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
 {
@@ -33,16 +33,11 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
             if (!_partIsPrefabQuery.Get(prefab))
                 throw new ArgumentException("argument must be a part prefab");
 
-
             var loadedParts = UnityEngine.Object.FindObjectsOfType<Part>();
 
-            // Bit tricky here: loadedParts is looking for loose parts so if the parts are actually attached to each
-            // other via parenting instead of joints (such as when building a ship in the editor), we'll only find
-            // the top-level ones! Better look for children too
             return loadedParts
-                .SelectMany(p => p.gameObject.GetComponentsInChildren<Part>())
                 .Select(p => _kspFactory.Create(p))
-                .Where(p => !_partIsPrefabQuery.Get(p) && ReferenceEquals(p.PartInfo.PartPrefab.GameObject, prefab.GameObject));
+                .Where(p => !_partIsPrefabQuery.Get(p));
         }
     }
 }

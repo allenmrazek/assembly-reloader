@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using ReeperCommon.Serialization;
@@ -13,6 +14,11 @@ namespace TestProject
         ////{
         ////    print("TestPartModule awake");
         ////}
+        public override void OnStart(StartState state)
+        {
+            base.OnStart(state);
+            print("TestPartModule OnStart: " + state);
+        }
 
         public override void OnAwake()
         {
@@ -29,6 +35,23 @@ namespace TestProject
             //print("TestPartModule is running from " +
             //      (part == null || ReferenceEquals(part, part.partInfo.partPrefab) ? "prefab" : "clone"));
             print("Done running checks");
+
+            //print("Our InstanceID: " + gameObject.GetInstanceID());
+            //print("Prefab InstanceID: " + part.partInfo.partPrefab.gameObject.GetInstanceID());
+
+            //Action<Part, int> printDetails = (p, i) => { };
+            //Action<Part, int> details = printDetails;
+
+            //printDetails = (p, i) => 
+            //{
+            //    print("Level " + i + " instanceID: " + p.gameObject.GetInstanceID());
+            //    print("Level " + i + " prefab ID: " + p.partInfo.partPrefab.gameObject.GetInstanceID());
+
+            //    if (p.parent != null)
+            //        details(p.parent, i + 1);
+            //};
+
+            //printDetails(part, 0);
 
             //AssemblyLoader.loadedAssemblies.Where(la => la.dllName.StartsWith("TestProject")).ToList().ForEach(asm =>
             //{
@@ -71,20 +94,20 @@ namespace TestProject
         public override void OnLoad(ConfigNode node)
         {
            // print("TestPartModule running from " + Assembly.GetExecutingAssembly().CodeBase);
-            print(string.Format("TestPartModule.OnLoad: {0}", node.ToString()));
+            //print(string.Format("TestPartModule.OnLoad: {0}", node.ToString()));
         }
 
         public override void OnSave(ConfigNode node)
         {
-            print(string.Format("TestPartModule.OnSave: {0}", node.ToString()));
+            //print(string.Format("TestPartModule.OnSave: {0}", node.ToString()));
 
-            var current = Assembly.GetExecutingAssembly();
+            //var current = Assembly.GetExecutingAssembly();
 
-            print("Hello, world!");
-            print("Also, I'm running from CodeBase: " + current.CodeBase);
-            print("Or Location: " + current.Location);
+            //print("Hello, world!");
+            //print("Also, I'm running from CodeBase: " + current.CodeBase);
+            //print("Or Location: " + current.Location);
 
-            //SomeMethod(local);
+            ////SomeMethod(local);
         }
 
         private void SomeMethod(ConfigNode node)

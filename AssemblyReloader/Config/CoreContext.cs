@@ -7,7 +7,6 @@ using AssemblyReloader.ReloadablePlugin.Config;
 using AssemblyReloader.ReloadablePlugin.Loaders;
 using AssemblyReloader.ReloadablePlugin.Loaders.Addons;
 using AssemblyReloader.ReloadablePlugin.Loaders.PartModules;
-using AssemblyReloader.ReloadablePlugin.Weaving;
 using AssemblyReloader.StrangeIoC.extensions.context.api;
 using AssemblyReloader.Unsorted;
 using Mono.Cecil;
@@ -108,11 +107,12 @@ namespace AssemblyReloader.Config
 
 
             injectionBinder.Bind<IGetTypeIdentifier>().To<GetTypeIdentifier>().ToSingleton().CrossContext();
-            //injectionBinder.Bind<IGameDatabase>().To<KspGameDatabase>().ToSingleton().CrossContext();
             injectionBinder.Bind<IGetUniqueFlightID>().To<GetUniqueFlightId>().ToSingleton().CrossContext();
+            injectionBinder.Bind<IGetPartModuleStartState>().To<GetPartModuleStartState>().ToSingleton().CrossContext();
+            injectionBinder.Bind<IGetVesselFromPartModule>().To<GetVesselFromPartModule>().ToSingleton().CrossContext();
             injectionBinder.Bind<IGetPartPrefabClones>().To<GetPartPrefabClones>().ToSingleton().CrossContext();
             injectionBinder.Bind<IGetPartIsPrefab>().To<GetPartIsPrefab>().ToSingleton().CrossContext();
-            injectionBinder.Bind<IPartLoader>().To<KspPartLoader>().ToSingleton().CrossContext();
+            injectionBinder.Bind<IPartLoader>().Bind<IPartLoaderPrefabProvider>().To<KspPartLoader>().ToSingleton().CrossContext();
             injectionBinder.Bind<IGetConfigNodeForPart>().To<GetConfigNodeForPart>().ToSingleton().CrossContext();
             injectionBinder.Bind<IGetPartModuleConfigsFromPartConfig>()
                 .To<GetPartModuleConfigsFromPartConfig>()

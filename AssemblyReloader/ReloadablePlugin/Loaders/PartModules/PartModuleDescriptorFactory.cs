@@ -35,6 +35,9 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
         // Note: returns IEnumerable because there may be multiple duplicate PartModules on one part
         private IEnumerable<PartModuleDescriptor> CreatePartModuleInfo(IPart prefab, ConfigNode partConfig, Type pmType)
         {
+            var configNodes = _getPartModuleConfig.Get(partConfig, _getTypeIdentifier.Get(pmType).Identifier).ToList();
+
+
             return
                 _getPartModuleConfig.Get(partConfig, _getTypeIdentifier.Get(pmType).Identifier)
                     .Select(config => new PartModuleDescriptor(prefab, config, pmType, _getTypeIdentifier.Get(pmType)));
@@ -55,7 +58,10 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
                 var partConfig = _configQuery.Get(ap);
                 if (!partConfig.Any()) return;
 
-                infoList.AddRange(CreatePartModuleInfo(ap.PartPrefab, partConfig.Single(), pmType));
+                var pmInfo = CreatePartModuleInfo(ap.PartPrefab, partConfig.Single(), pmType).ToList();
+
+                if (pmInfo.Any())
+                    infoList.AddRange(pmInfo);
             });
 
             return infoList;

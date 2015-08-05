@@ -37,7 +37,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
         }
 
 
-        public void Unload(ILoadedAssemblyHandle handle)
+        public void Unload(ILoadedAssemblyHandle handle, bool prefabOnly)
         {
             if (handle == null) throw new ArgumentNullException("handle");
  

@@ -73,7 +73,10 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
             // some parts (specifically those in the editor) don't have a flightID assigned by default. It's how
             // the game uniquely identifies parts so we might as well make use of it, too
             if (part.FlightID == 0)
+            {
+                _log.Debug("Non-prefab part does not have a flightID; assigning it a unique id");
                 part.FlightID = _flightId.Get();
+            }
 
             try
             {
