@@ -54,10 +54,7 @@ namespace AssemblyReloader
                 .To(ConfigureResourceRepository(injectionBinder.GetInstance<IDirectory>()))
                 .CrossContext();
 
-            injectionBinder.Bind<GUIStyle>().To(ConfigureTitleBarButtonStyle()).ToName(Styles.TitleBarButtonStyle).ToSingleton().CrossContext();
-            BindTextureToName(injectionBinder.GetInstance<IResourceRepository>(), "Resources/btnClose", TextureNames.CloseButton).CrossContext();
-            BindTextureToName(injectionBinder.GetInstance<IResourceRepository>(), "Resources/btnWrench", TextureNames.SettingsButton).CrossContext();
-            BindTextureToName(injectionBinder.GetInstance<IResourceRepository>(), "Resources/cursor", TextureNames.ResizeCursor).CrossContext();
+
 
             var serializerSelector =
                 new DefaultConfigNodeItemSerializerSelector(new SurrogateProvider(new[] 
@@ -70,30 +67,6 @@ namespace AssemblyReloader
                 new ConfigNodeSerializer(serializerSelector, new GetSerializableFieldsRecursiveType())).CrossContext();
         }
 
-
-        private static GUIStyle ConfigureTitleBarButtonStyle()
-        {
-            var style = new GUIStyle(HighLogic.Skin.button) { border = new RectOffset(), padding = new RectOffset() };
-            style.fixedHeight = style.fixedWidth = 16f;
-            style.margin = new RectOffset();
-
-            return style;
-        }
-
-
-        private IInjectionBinding BindTextureToName(IResourceRepository resourceRepo, string url, object name)
-        {
-            if (resourceRepo == null) throw new ArgumentNullException("resourceRepo");
-            if (name == null) throw new ArgumentNullException("name");
-            if (string.IsNullOrEmpty(url)) throw new ArgumentException("url is null or empty");
-
-            var tex = resourceRepo.GetTexture(url);
-
-            if (!tex.Any())
-                throw new Exception("Couldn't bind texture at \"" + url + "\"; texture not found");
-
-            return injectionBinder.Bind<Texture2D>().ToValue(tex.Single()).ToName(name);
-        }
 
 
         private static IResourceRepository ConfigureResourceRepository(IDirectory dllDirectory)

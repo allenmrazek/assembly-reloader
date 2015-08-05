@@ -60,24 +60,40 @@ namespace AssemblyReloader.Gui
 // ReSharper disable once InconsistentNaming
         private void OnGUI()
         {
+            
             if (_logic.IsNull() || !_logic.Visible) return;
 
-            _logic.OnWindowPreDraw();
+            try
+            {
+                _logic.OnWindowPreDraw();
 
-            if (!_logic.Skin.IsNull())
-                GUI.skin = _logic.Skin;
+                if (!_logic.Skin.IsNull())
+                    GUI.skin = _logic.Skin;
 
 
-            _logic.Dimensions = GUILayout.Window(_logic.Id.Value, _logic.Dimensions, DrawWindow,
-                _logic.Title);
-
+                _logic.Dimensions = GUILayout.Window(_logic.Id.Value, _logic.Dimensions, DrawWindow,
+                    _logic.Title);
+            }
+            catch (Exception)
+            {
+                CloseWindowDueToError("Exception in StrangeView.OnGUI");
+                throw;
+            }
         }
 
 
         private void DrawWindow(int winid)
         {
-            _logic.OnWindowDraw(winid);
-            _logic.OnWindowFinalize(winid);
+            try
+            {
+                _logic.OnWindowDraw(winid);
+                _logic.OnWindowFinalize(winid);
+            }
+            catch (Exception)
+            {
+                CloseWindowDueToError("Exception in StrangeView.DrawWindow");
+                throw;
+            }
         }
 
 
@@ -89,6 +105,13 @@ namespace AssemblyReloader.Gui
             _logic.OnUpdate();
         }
 
+
+        private void CloseWindowDueToError(string message)
+        {
+            Visible = false;
+            Debug.LogError(Title + ", id: " + Id +
+               " has caused window to close: " + message); 
+        }
 
         #endregion
 

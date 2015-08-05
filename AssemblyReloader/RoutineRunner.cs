@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using AssemblyReloader.Config.Keys;
+using AssemblyReloader.StrangeIoC.extensions.context.api;
 using AssemblyReloader.StrangeIoC.extensions.implicitBind;
 using AssemblyReloader.StrangeIoC.extensions.injector;
 using AssemblyReloader.StrangeIoC.extensions.injector.api;
@@ -22,7 +23,7 @@ namespace AssemblyReloader
         }
 
 
-        public RoutineRunner([Name(GameObjectKeys.CoreContext)] GameObject gameObject)
+        public RoutineRunner([Name(ContextKeys.CONTEXT_VIEW)] GameObject gameObject)
         {
             if (gameObject == null) throw new ArgumentNullException("gameObject");
 

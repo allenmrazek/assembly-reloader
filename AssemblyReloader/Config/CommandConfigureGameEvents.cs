@@ -1,5 +1,6 @@
 ﻿using AssemblyReloader.Game;
 using AssemblyReloader.StrangeIoC.extensions.command.impl;
+using AssemblyReloader.StrangeIoC.extensions.context.api;
 using AssemblyReloader.StrangeIoC.extensions.injector;
 using UnityEngine;
 
@@ -10,7 +11,8 @@ namespace AssemblyReloader.Config
     {
 // ReSharper disable once InconsistentNaming
 // ReSharper disable once MemberCanBePrivate.Global
-        [Inject (Keys.GameObjectKeys.CoreContext)] public GameObject gameObject { get; set; }
+        [Inject(ContextKeys.CONTEXT_VIEW)]
+        public GameObject gameObject { get; set; }
 
 
         public override void Execute()

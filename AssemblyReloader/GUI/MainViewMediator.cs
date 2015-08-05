@@ -12,16 +12,14 @@ namespace AssemblyReloader.Gui
 // ReSharper disable UnusedAutoPropertyAccessor.Global
     public class MainViewMediator : Mediator
     {
-        [Inject] public MainView View { get; set; }
         [Inject] public SignalCloseAllWindows CloseAllWindowsSignal { get; set; }
+        [Inject] public SignalTogglePluginConfigurationView TogglePluginOptionsSignal { get; set; }
+        [Inject] public SignalToggleConfigurationView ToggleConfigurationOptionsSignal { get; set; }
+
+        [Inject] public MainView View { get; set; }
         [Inject] public IDictionary<IPluginInfo, IReloadablePlugin> Plugins { get; set; }
         [Inject] public ILog Log { get; set; }
 
-        //public MainViewMediator(MainView view, SignalCloseAllWindows closeAllWindowsSignal,
-        //    IDictionary<IPluginInfo, IReloadablePlugin> plugins, ILog log)
-        //{
-            
-        //}
 
         public override void OnRegister()
         {
@@ -31,7 +29,7 @@ namespace AssemblyReloader.Gui
 
             View.ReloadRequested.AddListener(ReloadRequested);
             View.ToggleConfiguration.AddListener(ToggleConfigurationWindow);
-            View.TogglePluginOptions.AddListener(TogglePluginOptions);
+            View.TogglePluginConfiguration.AddListener(TogglePluginOptions);
             View.Close.AddListener(CloseWindow);
 
             CloseAllWindowsSignal.AddListener(OnCloseAllWindows);
@@ -44,7 +42,7 @@ namespace AssemblyReloader.Gui
 
             View.ReloadRequested.RemoveListener(ReloadRequested);
             View.ToggleConfiguration.RemoveListener(ToggleConfigurationWindow);
-            View.TogglePluginOptions.RemoveListener(TogglePluginOptions);
+            View.TogglePluginConfiguration.RemoveListener(TogglePluginOptions);
             View.Close.RemoveListener(CloseWindow);
 
             CloseAllWindowsSignal.RemoveListener(OnCloseAllWindows);
@@ -73,14 +71,17 @@ namespace AssemblyReloader.Gui
         {
             Log.Debug("Toggle configuration window received");
 
-            //ConfigurationView.Visible = !ConfigurationView.Visible;
+            ToggleConfigurationOptionsSignal.Dispatch();
         }
 
 
         private void TogglePluginOptions(IPluginInfo plugin)
         {
+            if (plugin == null) throw new ArgumentNullException("plugin");
+
             Log.Debug("Toggle plugin options for {0} received", plugin.Name);
 
+            TogglePluginOptionsSignal.Dispatch(plugin);
         }
 
 

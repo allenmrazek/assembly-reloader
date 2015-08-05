@@ -20,7 +20,7 @@ namespace AssemblyReloader.Gui
 
 
         internal readonly Signal<IPluginInfo> ReloadRequested = new Signal<IPluginInfo>();
-        internal readonly Signal<IPluginInfo> TogglePluginOptions = new Signal<IPluginInfo>();
+        internal readonly Signal<IPluginInfo> TogglePluginConfiguration = new Signal<IPluginInfo>();
         internal readonly Signal Close = new Signal();
         internal readonly Signal ToggleConfiguration = new Signal();
 
@@ -85,7 +85,7 @@ namespace AssemblyReloader.Gui
                     ReloadRequested.Dispatch(reloadable);
 
                 if (GUILayout.Button("Options", GUILayout.ExpandWidth(false), GUILayout.ExpandHeight(false)))
-                    TogglePluginOptions.Dispatch(reloadable);
+                    TogglePluginConfiguration.Dispatch(reloadable);
             }
             GUILayout.EndHorizontal();
         }

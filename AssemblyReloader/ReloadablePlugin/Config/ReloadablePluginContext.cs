@@ -4,6 +4,7 @@ using AssemblyReloader.Config.Keys;
 using AssemblyReloader.FileSystem;
 using AssemblyReloader.Game;
 using AssemblyReloader.Gui;
+using AssemblyReloader.ReloadablePlugin.Gui;
 using AssemblyReloader.ReloadablePlugin.Loaders;
 using AssemblyReloader.ReloadablePlugin.Loaders.Addons;
 using AssemblyReloader.ReloadablePlugin.Loaders.PartModules;
@@ -11,7 +12,6 @@ using AssemblyReloader.ReloadablePlugin.Weaving;
 using AssemblyReloader.ReloadablePlugin.Weaving.Operations;
 using AssemblyReloader.ReloadablePlugin.Weaving.Operations.Keys;
 using AssemblyReloader.StrangeIoC.extensions.context.api;
-using Mono.Cecil;
 using Mono.Cecil.Cil;
 using ReeperCommon.FileSystem;
 using ReeperCommon.Logging;
@@ -26,6 +26,7 @@ namespace AssemblyReloader.ReloadablePlugin.Config
         public IReloadablePlugin Plugin { get; private set; }
         public IPluginInfo Info { get; private set; }
 
+
         public ReloadablePluginContext(MonoBehaviour view, IFile reloadableFile) : base(view, ContextStartupFlags.MANUAL_MAPPING | ContextStartupFlags.MANUAL_LAUNCH)
         {
             if (reloadableFile == null) throw new ArgumentNullException("reloadableFile");
@@ -37,7 +38,6 @@ namespace AssemblyReloader.ReloadablePlugin.Config
         protected override void mapBindings()
         {
             base.mapBindings();
-
 
             injectionBinder.Bind<IFile>().To(_reloadableFile);
             injectionBinder.Bind<IDirectory>().To(injectionBinder.GetInstance<IFile>().Directory);
@@ -138,6 +138,8 @@ namespace AssemblyReloader.ReloadablePlugin.Config
             SetupCommandBindings();
 
 
+            mediationBinder.BindView<PluginConfigurationView>().ToMediator<PluginConfigurationViewMediator>();
+
             Plugin = injectionBinder.GetInstance<IReloadablePlugin>();
             Info = injectionBinder.GetInstance<IPluginInfo>();
         }
@@ -155,7 +157,9 @@ namespace AssemblyReloader.ReloadablePlugin.Config
         {
             // only happens once: initial load of reloadable plugin
             commandBinder.Bind<SignalStart>()
-                .To<CommandStartReloadablePlugin>().Once();
+                .To<CommandConfigurePluginGUI>()
+                .To<CommandStartReloadablePlugin>()
+                .Once();
 
             // kicks off reload process
             commandBinder.Bind<SignalReloadPlugin>()

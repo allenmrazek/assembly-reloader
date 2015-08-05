@@ -2,8 +2,7 @@
 
 namespace AssemblyReloader.Gui
 {
-    public class SignalCloseAllWindows : Signal
+    public class SignalToggleConfigurationView : Signal
     {
-
     }
 }

@@ -69,13 +69,16 @@
     <Compile Include="CommandTest.cs" />
     <Compile Include="Game\DuplicatePartPrefabException.cs" />
     <Compile Include="Game\PrefabNotFoundException.cs" />
+    <Compile Include="ReloadablePlugin\Config\BootstrapReloadablePlugin.cs" />
+    <Compile Include="ReloadablePlugin\Gui\PluginConfigurationView.cs" />
+    <Compile Include="ReloadablePlugin\Gui\PluginConfigurationViewMediator.cs" />
     <Compile Include="IRoutineRunner.cs" />
     <Compile Include="LogKeys.cs" />
     <Compile Include="ReeperCommonContext.cs" />
     <Compile Include="Config\CommandConfigureGameEvents.cs" />
     <Compile Include="Config\CommandConfigureGUI.cs" />
-    <Compile Include="Config\Keys\GameObjectKeys.cs" />
     <Compile Include="Config\CommandLoadConfiguration.cs" />
+    <Compile Include="ReloadablePlugin\Config\CommandConfigurePluginGUI.cs" />
     <Compile Include="ReloadablePlugin\Loaders\CommandDispatchLoadersFinished.cs" />
     <Compile Include="ReloadablePlugin\CommandSendReloadRequestedMessageToTarget.cs" />
     <Compile Include="ReloadablePlugin\Loaders\Addons\IReloadableAddonUnloader.cs" />
@@ -360,7 +363,7 @@
     <Compile Include="Game\KspPart.cs" />
     <Compile Include="Game\KspPartLoader.cs" />
     <Compile Include="Game\KspVessel.cs" />
-    <Compile Include="Config\CoreBootstrapper.cs" />
+    <Compile Include="Config\BootstrapCore.cs" />
     <Compile Include="Commands\old\ICommand.cs" />
     <Compile Include="Game\IGetCurrentSceneIsFlight.cs" />
     <Compile Include="IGetTypesDerivedFrom.cs" />
@@ -404,9 +407,7 @@
   <ItemGroup>
     <EmbeddedResource Include="Resources\cursor.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Game\Queries\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="StrangeIoC\extensions\ReadMe.txt" />
   </ItemGroup>

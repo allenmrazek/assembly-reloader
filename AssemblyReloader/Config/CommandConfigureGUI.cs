@@ -1,7 +1,14 @@
-﻿using AssemblyReloader.Gui;
+﻿using System;
+using System.Linq;
+using AssemblyReloader.Config.Keys;
+using AssemblyReloader.Gui;
 using AssemblyReloader.StrangeIoC.extensions.command.impl;
+using AssemblyReloader.StrangeIoC.extensions.context.api;
 using AssemblyReloader.StrangeIoC.extensions.injector;
+using AssemblyReloader.StrangeIoC.extensions.injector.api;
+using ReeperCommon.Repositories;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace AssemblyReloader.Config
 {
@@ -11,12 +18,28 @@ namespace AssemblyReloader.Config
 // ReSharper disable InconsistentNaming
     public class CommandConfigureGUI : Command
     {
-        [Inject (Keys.GameObjectKeys.CoreContext)] public GameObject gameObject { get; set; }
+        [Inject(ContextKeys.CONTEXT_VIEW)]
+        public GameObject gameObject { get; set; }
+
 
         public override void Execute()
         {
-            injectionBinder.Bind<SignalCloseAllWindows>().ToSingleton().CrossContext();
+            BindSignals();
+            SetupTexturesAndSkin(injectionBinder.GetInstance<IResourceRepository>());
+            CreateViews();
+        }
 
+
+        private void BindSignals()
+        {
+            injectionBinder.Bind<SignalCloseAllWindows>().ToSingleton().CrossContext();
+            injectionBinder.Bind<SignalTogglePluginConfigurationView>().ToSingleton().CrossContext();
+            injectionBinder.Bind<SignalToggleConfigurationView>().ToSingleton();
+        }
+
+
+        private void CreateViews()
+        {
             var mainView = new GameObject("MainView");
             var configView = new GameObject("ConfigurationView");
 
@@ -28,7 +51,42 @@ namespace AssemblyReloader.Config
             Object.DontDestroyOnLoad(configView);
 
             mainView.AddComponent<MainView>();
-            configView.AddComponent<ConfigurationView>();
+            configView.AddComponent<ConfigurationView>(); 
+        }
+
+
+        private void SetupTexturesAndSkin(IResourceRepository resources)
+        {
+            injectionBinder.Bind<GUIStyle>().To(ConfigureTitleBarButtonStyle()).ToName(Styles.TitleBarButtonStyle).ToSingleton().CrossContext();
+
+            BindTextureToName(resources, "Resources/btnClose", TextureNames.CloseButton).CrossContext();
+            BindTextureToName(resources, "Resources/btnWrench", TextureNames.SettingsButton).CrossContext();
+            BindTextureToName(resources, "Resources/cursor", TextureNames.ResizeCursor).CrossContext();
+        }
+
+
+        private static GUIStyle ConfigureTitleBarButtonStyle()
+        {
+            var style = new GUIStyle(HighLogic.Skin.button) { border = new RectOffset(), padding = new RectOffset() };
+            style.fixedHeight = style.fixedWidth = 16f;
+            style.margin = new RectOffset();
+
+            return style;
+        }
+
+
+        private IInjectionBinding BindTextureToName(IResourceRepository resourceRepo, string url, object name)
+        {
+            if (resourceRepo == null) throw new ArgumentNullException("resourceRepo");
+            if (name == null) throw new ArgumentNullException("name");
+            if (string.IsNullOrEmpty(url)) throw new ArgumentException("url is null or empty");
+
+            var tex = resourceRepo.GetTexture(url);
+
+            if (!tex.Any())
+                throw new Exception("Couldn't bind texture at \"" + url + "\"; texture not found");
+
+            return injectionBinder.Bind<Texture2D>().ToValue(tex.Single()).ToName(name);
         }
     }
 }

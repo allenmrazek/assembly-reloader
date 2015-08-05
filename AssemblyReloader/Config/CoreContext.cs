@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using AssemblyReloader.Config.Keys;
 using AssemblyReloader.Game;
 using AssemblyReloader.Gui;
 using AssemblyReloader.ReloadablePlugin;
@@ -19,7 +20,7 @@ namespace AssemblyReloader.Config
     public class CoreContext : ReeperCommonContext
     {
         public CoreContext(MonoBehaviour view)
-            : base(view, ContextStartupFlags.AUTOMATIC)
+            : base(view, ContextStartupFlags.MANUAL_MAPPING)
         {
         }
         
@@ -32,14 +33,19 @@ namespace AssemblyReloader.Config
             // bootstrap reloadable plugin contexts
             var pluginContexts =
                 injectionBinder.GetInstance<GetReloadableAssemblyFilesFromDirectoryRecursive>().Get()
-                    .Select(f =>
+                    .Select(reloadableFile =>
                     {
-                        injectionBinder.GetInstance<ILog>().Normal("Bootstrapping context for " + f.Url);
+                        injectionBinder.GetInstance<ILog>().Normal("Bootstrapping context for " + reloadableFile.Url);
 
-                        var ctx = new ReloadablePluginContext(((GameObject) contextView).GetComponent<CoreBootstrapper>(), f);
-                        ctx.Start();
+                        var reloadablePluginBootstrap = new GameObject("ContextView." + reloadableFile.Name);
+                        reloadablePluginBootstrap.transform.parent = ((GameObject)contextView).transform;
+                        Object.DontDestroyOnLoad(reloadablePluginBootstrap);
 
-                        return ctx;
+                        var pluginContextView = reloadablePluginBootstrap.AddComponent<BootstrapReloadablePlugin>();
+
+                        pluginContextView.Bootstrap(reloadableFile);
+
+                        return pluginContextView.context as ReloadablePluginContext;
                     })
                     .ToList();
 
@@ -61,19 +67,14 @@ namespace AssemblyReloader.Config
                 .InSequence()
                 .To<CommandLoadConfiguration>()
                 .To<CommandConfigureGameEvents>()
-                .To<CommandLaunchReloadablePluginContexts>()
                 .To<CommandConfigureGUI>()
+                .To<CommandLaunchReloadablePluginContexts>()
                 .Once();
         }
 
 
         private void MapCrossContextBindings()
         {
-            injectionBinder.Bind<GameObject>()
-                .To(contextView as GameObject)
-                .ToName(Keys.GameObjectKeys.CoreContext)
-                .CrossContext();
-
             injectionBinder.Bind<IGetConfigurationFilePath>()
                 .To(new GetConfigurationFilePath())
                 .CrossContext();

@@ -10,10 +10,11 @@ namespace AssemblyReloader.Gui
 // ReSharper disable UnusedAutoPropertyAccessor.Global
     public class ConfigurationViewMediator : Mediator
     {
+        [Inject] public SignalCloseAllWindows CloseAllWindows { get; set; }
+        [Inject] public SignalToggleConfigurationView ToggleConfigurationViewSignal { get; set; }
 
         [Inject] public ConfigurationView View { get; set; }
         [Inject] public Configuration Configuration { get; set; }
-        [Inject] public SignalCloseAllWindows CloseAllWindows { get; set; }
         [Inject] public ILog Log { get; set; }
 
         public override void OnRegister()
@@ -22,6 +23,7 @@ namespace AssemblyReloader.Gui
 
             View.CloseWindow.AddListener(CloseConfigurationWindow);
             CloseAllWindows.AddListener(CloseConfigurationWindow);
+            ToggleConfigurationViewSignal.AddListener(OnToggleConfigurationWindow);
 
             View.Visible = false; // initially start closed
         }
@@ -33,6 +35,7 @@ namespace AssemblyReloader.Gui
 
             View.CloseWindow.RemoveListener(CloseConfigurationWindow);
             CloseAllWindows.RemoveListener(CloseConfigurationWindow);
+            ToggleConfigurationViewSignal.RemoveListener(OnToggleConfigurationWindow);
         }
 
 
@@ -41,6 +44,12 @@ namespace AssemblyReloader.Gui
             Log.Debug("Received close configuration window");
 
             View.Visible = false;
+        }
+
+
+        private void OnToggleConfigurationWindow()
+        {
+            View.Visible = !View.Visible;
         }
     }
 }
