@@ -57,7 +57,15 @@ namespace AssemblyReloader.Config
 
         private void SetupTexturesAndSkin(IResourceRepository resources)
         {
+            var defaultSkin = Object.Instantiate(AssetBase.GetGUISkin("KSP window 4")) as GUISkin;
+            if (defaultSkin == null) throw new InvalidCastException("Failed to cast to GUISkin");
+
+            defaultSkin.label.wordWrap = false;
+
             injectionBinder.Bind<GUIStyle>().To(ConfigureTitleBarButtonStyle()).ToName(Styles.TitleBarButtonStyle).ToSingleton().CrossContext();
+            injectionBinder.Bind<GUISkin>()
+                .To(defaultSkin)
+                .CrossContext();
 
             BindTextureToName(resources, "Resources/btnClose", TextureNames.CloseButton).CrossContext();
             BindTextureToName(resources, "Resources/btnWrench", TextureNames.SettingsButton).CrossContext();

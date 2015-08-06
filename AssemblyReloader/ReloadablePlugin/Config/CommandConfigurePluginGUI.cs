@@ -1,10 +1,8 @@
-﻿using AssemblyReloader.Config.Keys;
-using AssemblyReloader.Gui;
+﻿using AssemblyReloader.Gui;
 using AssemblyReloader.ReloadablePlugin.Gui;
 using AssemblyReloader.StrangeIoC.extensions.command.impl;
 using AssemblyReloader.StrangeIoC.extensions.context.api;
 using AssemblyReloader.StrangeIoC.extensions.injector;
-using ReeperCommon.Extensions;
 using ReeperCommon.Logging;
 using UnityEngine;
 

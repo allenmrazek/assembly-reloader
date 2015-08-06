@@ -1,4 +1,9 @@
-﻿using AssemblyReloader.Gui;
+﻿using AssemblyReloader.Config.Keys;
+using AssemblyReloader.Gui;
+using AssemblyReloader.ReloadablePlugin.Config;
+using AssemblyReloader.ReloadablePlugin.Loaders.Addons;
+using AssemblyReloader.ReloadablePlugin.Loaders.PartModules;
+using AssemblyReloader.StrangeIoC.extensions.injector;
 using AssemblyReloader.StrangeIoC.extensions.signal.impl;
 using ReeperCommon.Gui.Window;
 using ReeperCommon.Gui.Window.Buttons;
@@ -9,22 +14,28 @@ namespace AssemblyReloader.ReloadablePlugin.Gui
 {
     public class PluginConfigurationView : StrangeView
     {
+        [Inject(Styles.TitleBarButtonStyle)] public GUIStyle TitleBarButtonStyle { get; set; }
+        [Inject(TextureNames.CloseButton)] public Texture2D CloseButtonTexture { get; set; }
+        [Inject(TextureNames.SettingsButton)] public Texture2D SettingsButtonTexture { get; set; }
+        [Inject(TextureNames.ResizeCursor)] public Texture2D ResizeCursorTexture { get; set; }
+        [Inject] public GUISkin WindowSkin { get; set; }
+
+
         public IPluginInfo PluginInfo { get; set; }
+        public IAddonSettings AddonSettings { get; set; }
+        public IPartModuleSettings PartModuleSettings { get; set; }
 
 
         internal readonly Signal CloseWindow = new Signal();
+        internal readonly Signal ToggleInstantlyAppliesToAllScenesSignal = new Signal();
 
-        protected override void Awake()
-        {
-            print("PluginConfigurationView.awake");
-
-            base.Awake();
-        }
 
 
         protected override IWindowComponent Initialize()
         {
-            Skin = HighLogic.Skin;
+            //Skin = HighLogic.Skin;
+            //Skin = UnityEngine.Object.Instantiate(AssetBase.GetGUISkin("OrbitMapSkin")) as GUISkin;
+            Skin = WindowSkin;
             Draggable = true;
 
             var clamp = new ClampToScreen(this);
@@ -34,24 +45,41 @@ namespace AssemblyReloader.ReloadablePlugin.Gui
             withButtons.AddButton(new BasicTitleBarButton(TitleBarButtonStyle, CloseButtonTexture,
                 () => CloseWindow.Dispatch()));
 
-            //var resizable = new Resizable(withButtons, ResizableHotzoneSize, MinWindowSize, ResizeCursorTexture)
-            //{
-            //    Title = "Assembly Reloader"
-            //};
+            var resizable = new Resizable(withButtons, ResizableHotzoneSize, MinWindowSize, ResizeCursorTexture)
+            {
+                Title = PluginInfo.Name + " Configuration"
+            };
 
-            return withButtons;
+            return resizable;
         }
 
 
         protected override void DrawWindow()
         {
-            GUILayout.Label("Plugin Options for " + PluginInfo.Name + " go here");
+            GUILayout.Label("Addon Settings");
+
+            GUILayout.BeginHorizontal();
+            GUILayout.Space(10f);
+            GUILayout.BeginVertical();
+            DrawToggleSetting("Instantly applies to all scenes", AddonSettings.InstantlyAppliesToAllScenes,
+                ToggleInstantlyAppliesToAllScenesSignal);
+            GUILayout.Label("Addon setting 2");
+            GUILayout.EndVertical();
+            GUILayout.EndHorizontal();
         }
 
 
         protected override void FinalizeWindow()
         {
             // no-op
+        }
+
+
+        private void DrawToggleSetting(string text, bool value, Signal signal)
+        {
+            var result = GUILayout.Toggle(value, text, GUILayout.ExpandWidth(false), GUILayout.ExpandHeight(false));
+            if (result != value)
+                signal.Dispatch();
         }
     }
 }

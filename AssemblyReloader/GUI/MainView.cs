@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using AssemblyReloader.Config.Keys;
+using AssemblyReloader.StrangeIoC.extensions.injector;
 using AssemblyReloader.StrangeIoC.extensions.signal.impl;
 using ReeperCommon.Gui.Window;
 using ReeperCommon.Gui.Window.Buttons;
@@ -12,6 +14,18 @@ namespace AssemblyReloader.Gui
     // ReSharper disable once ClassNeverInstantiated.Global
     public class MainView : StrangeView
     {
+        [Inject(Styles.TitleBarButtonStyle)]
+        public GUIStyle TitleBarButtonStyle { get; set; }
+        [Inject(TextureNames.CloseButton)]
+        public Texture2D CloseButtonTexture { get; set; }
+        [Inject(TextureNames.SettingsButton)]
+        public Texture2D SettingsButtonTexture { get; set; }
+        [Inject(TextureNames.ResizeCursor)]
+        public Texture2D ResizeCursorTexture { get; set; }
+        [Inject]
+        public GUISkin WindowSkin { get; set; }
+
+
         private IPluginInfo[] _plugins; // backing field to avoid creating garbage every OnGUI with foreach
         public IEnumerable<IPluginInfo> Plugins {
             get { return _plugins; }
@@ -25,11 +39,12 @@ namespace AssemblyReloader.Gui
         internal readonly Signal ToggleConfiguration = new Signal();
 
         private Vector2 _scroll = default(Vector2);
-
+        private bool _firstLayout = true;
 
         protected override IWindowComponent Initialize()
         {
-            Skin = HighLogic.Skin;
+            //Skin = HighLogic.Skin;
+            Skin = WindowSkin;
             Draggable = true;
             Height = 128f;
 
@@ -66,6 +81,9 @@ namespace AssemblyReloader.Gui
 // ReSharper disable once ForCanBeConvertedToForeach
                     for (var idx = 0; idx < _plugins.Length; ++idx)
                         DrawReloadableItem(_plugins[idx]);
+
+                    if (Event.current.type == EventType.Repaint && _firstLayout)
+                        CalculateIdealInitialWindowSize();
                 }
                 GUILayout.EndScrollView();
             }
@@ -97,16 +115,26 @@ namespace AssemblyReloader.Gui
         }
 
 
-        public override void OnUpdate()
-        {
-            base.OnUpdate();
-            
-        }
-
-
         private void CloseWindow()
         {
             Close.Dispatch();
+        }
+
+
+        private void CalculateIdealInitialWindowSize()
+        {
+            _firstLayout = false;
+
+            var r = GUILayoutUtility.GetLastRect();
+
+            var windowSize = Skin.window.CalcScreenSize(new Vector2(r.width + 
+                Skin.scrollView.padding.left + 
+                Skin.scrollView.padding.right +
+                Skin.scrollView.margin.left +
+                Skin.scrollView.margin.right, r.height)); // height not particularly important
+            
+            if (Width < windowSize.x)
+                Width = windowSize.x;
         }
     }
 }

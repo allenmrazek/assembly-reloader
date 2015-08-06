@@ -92,6 +92,7 @@ namespace AssemblyReloader.ReloadablePlugin.Config
             injectionBinder
                 .Bind<IAddonSettings>()
                 .Bind<IPartModuleSettings>()
+                .Bind<PluginConfiguration>()
                 .To<PluginConfiguration>().ToSingleton();
 
             injectionBinder.Bind<IReloadableAddonLoader>().To<ReloadableAddonLoader>().ToSingleton();

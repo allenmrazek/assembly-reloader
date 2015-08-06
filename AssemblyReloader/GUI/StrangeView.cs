@@ -16,11 +16,6 @@ namespace AssemblyReloader.Gui
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable RedundantDefaultFieldInitializer
 
-        [Inject(Styles.TitleBarButtonStyle)] public GUIStyle TitleBarButtonStyle { get; set; }
-        [Inject(TextureNames.CloseButton)] public Texture2D CloseButtonTexture { get; set; }
-        [Inject(TextureNames.SettingsButton)] public Texture2D SettingsButtonTexture { get; set; }
-        [Inject(TextureNames.ResizeCursor)] public Texture2D ResizeCursorTexture { get; set; }
-
         protected static readonly Vector2 TitleBarButtonOffset = new Vector2(2f, 2f);
         protected static readonly Vector2 ResizableHotzoneSize = new Vector2(10f, 10f);
         protected static readonly Vector2 MinWindowSize = new Vector2(200f, 100f);
@@ -72,11 +67,11 @@ namespace AssemblyReloader.Gui
 
 
                 _logic.Dimensions = GUILayout.Window(_logic.Id.Value, _logic.Dimensions, DrawWindow,
-                    _logic.Title);
+                    _logic.Title, Skin.window);
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                CloseWindowDueToError("Exception in StrangeView.OnGUI");
+                CloseWindowDueToError("Exception in StrangeView.OnGUI", e);
                 throw;
             }
         }
@@ -89,9 +84,9 @@ namespace AssemblyReloader.Gui
                 _logic.OnWindowDraw(winid);
                 _logic.OnWindowFinalize(winid);
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                CloseWindowDueToError("Exception in StrangeView.DrawWindow");
+                CloseWindowDueToError("Exception in StrangeView.DrawWindow", e);
                 throw;
             }
         }
@@ -106,11 +101,11 @@ namespace AssemblyReloader.Gui
         }
 
 
-        private void CloseWindowDueToError(string message)
+        private void CloseWindowDueToError(string message, Exception e)
         {
             Visible = false;
             Debug.LogError(Title + ", id: " + Id +
-               " has caused window to close: " + message); 
+               " has caused window to close: " + message + ", exception: " + e); 
         }
 
         #endregion

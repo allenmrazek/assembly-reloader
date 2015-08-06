@@ -1,4 +1,6 @@
-﻿using AssemblyReloader.StrangeIoC.extensions.signal.impl;
+﻿using AssemblyReloader.Config.Keys;
+using AssemblyReloader.StrangeIoC.extensions.injector;
+using AssemblyReloader.StrangeIoC.extensions.signal.impl;
 using ReeperCommon.Gui.Window;
 using ReeperCommon.Gui.Window.Buttons;
 using ReeperCommon.Gui.Window.Decorators;
@@ -9,12 +11,25 @@ namespace AssemblyReloader.Gui
 // ReSharper disable once ClassNeverInstantiated.Global
     public class ConfigurationView : StrangeView
     {
+        [Inject(Styles.TitleBarButtonStyle)]
+        public GUIStyle TitleBarButtonStyle { get; set; }
+        [Inject(TextureNames.CloseButton)]
+        public Texture2D CloseButtonTexture { get; set; }
+        [Inject(TextureNames.SettingsButton)]
+        public Texture2D SettingsButtonTexture { get; set; }
+        [Inject(TextureNames.ResizeCursor)]
+        public Texture2D ResizeCursorTexture { get; set; }
+        [Inject]
+        public GUISkin WindowSkin { get; set; }
+
+
         internal readonly Signal CloseWindow = new Signal();
 
 
         protected override IWindowComponent Initialize()
         {
-            Skin = HighLogic.Skin;
+            //Skin = HighLogic.Skin;
+            Skin = WindowSkin;
             Draggable = true;
 
             var clamp = new ClampToScreen(this);
