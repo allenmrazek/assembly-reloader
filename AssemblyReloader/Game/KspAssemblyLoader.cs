@@ -1,8 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using AssemblyReloader.Properties;
-using AssemblyReloader.ReloadablePlugin.Loaders;
 using AssemblyReloader.StrangeIoC.extensions.implicitBind;
 using AssemblyReloader.StrangeIoC.extensions.injector.api;
 using ReeperCommon.Containers;
@@ -14,21 +13,26 @@ namespace AssemblyReloader.Game
 {
     [Implements(typeof(IGameAssemblyLoader), InjectionBindingScope.CROSS_CONTEXT)]
 // ReSharper disable once ClassNeverInstantiated.Global
+// ReSharper disable once UnusedMember.Global
     public class KspAssemblyLoader : IGameAssemblyLoader
     {
         private readonly IGetLoadedAssemblyFileUrl _laFileUrl;
         private readonly IGetTypesDerivedFrom<PartModule> _partModuleTypeQuery;
+        private readonly IGetTypesDerivedFrom<ScenarioModule> _scenarioModuleQuery;
 
 
         public KspAssemblyLoader(
             IGetLoadedAssemblyFileUrl laFileUrl,
-            IGetTypesDerivedFrom<PartModule> partModuleTypeQuery)
+            IGetTypesDerivedFrom<PartModule> partModuleTypeQuery,
+            IGetTypesDerivedFrom<ScenarioModule> scenarioModuleQuery)
         {
             if (laFileUrl == null) throw new ArgumentNullException("laFileUrl");
             if (partModuleTypeQuery == null) throw new ArgumentNullException("partModuleTypeQuery");
+            if (scenarioModuleQuery == null) throw new ArgumentNullException("scenarioModuleQuery");
 
             _laFileUrl = laFileUrl;
             _partModuleTypeQuery = partModuleTypeQuery;
+            _scenarioModuleQuery = scenarioModuleQuery;
         }
 
 
@@ -51,6 +55,7 @@ namespace AssemblyReloader.Game
             AssemblyLoader.loadedAssemblies.Add(loadedAssembly);
 
             InstallTypes(loadedAssembly);
+
             return Maybe<ILoadedAssemblyHandle>.With(new LoadedAssemblyHandle(loadedAssembly));
         }
 
@@ -86,8 +91,28 @@ namespace AssemblyReloader.Game
         private void InstallTypes(AssemblyLoader.LoadedAssembly loadedAssembly)
         {
             var partModules = _partModuleTypeQuery.Get(loadedAssembly.assembly).ToList();
+            var scenarioModules = _scenarioModuleQuery.Get(loadedAssembly.assembly).ToList();
 
-            loadedAssembly.types[typeof(PartModule)] = partModules;
+            InsertTypeListIntoLoadedAssembly<PartModule>(loadedAssembly, partModules);
+            InsertTypeListIntoLoadedAssembly<ScenarioModule>(loadedAssembly, scenarioModules);
+
+            //loadedAssembly.types[typeof(PartModule)] = partModules;
+            //loadedAssembly.types[typeof (ScenarioModule)] = scenarioModules;
+        }
+
+
+        private static void InsertTypeListIntoLoadedAssembly<TKey>(
+            AssemblyLoader.LoadedAssembly loadedAssembly, 
+            List<Type> typesToInsert)
+        {
+            if (loadedAssembly == null) throw new ArgumentNullException("loadedAssembly");
+            if (typesToInsert == null) throw new ArgumentNullException("typesToInsert");
+
+            List<Type> loadedTypes;
+
+            if (!loadedAssembly.types.TryGetValue(typeof (TKey), out loadedTypes))
+                loadedAssembly.types.Add(typeof (TKey), typesToInsert);
+            else loadedTypes.AddRange(typesToInsert);
         }
     }
 }

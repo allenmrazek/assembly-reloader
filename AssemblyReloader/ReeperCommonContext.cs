@@ -34,10 +34,20 @@ namespace AssemblyReloader
             
 
             // cross context bindings
+
+            // note: these required as dependencies of KspAssemblyLoader, which is in turn a dependency of
+            // GetAssemblyFileLocation, so they need to be initialized here instead of the more logical
+            // CoreContext
             injectionBinder.Bind<IGetTypesDerivedFrom<PartModule>>()
                 .To<GetTypesDerivedFrom<PartModule>>()
                 .ToSingleton()
                 .CrossContext();
+
+            injectionBinder.Bind<IGetTypesDerivedFrom<ScenarioModule>>()
+                .To<GetTypesDerivedFrom<ScenarioModule>>()
+                .ToSingleton()
+                .CrossContext();
+               
 
             injectionBinder.Bind<IUrlDirProvider>().To<KSPGameDataUrlDirProvider>().ToSingleton();
             injectionBinder.Bind<IUrlDir>().To(new KSPUrlDir(injectionBinder.GetInstance<IUrlDirProvider>().Get())).CrossContext();

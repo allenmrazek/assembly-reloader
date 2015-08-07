@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using AssemblyReloader.Properties;
+using AssemblyReloader.Game;
+using AssemblyReloader.Game.Providers;
 using AssemblyReloader.ReloadablePlugin.Loaders.Addons;
+using AssemblyReloader.StrangeIoC.extensions.implicitBind;
+using AssemblyReloader.StrangeIoC.extensions.injector.api;
 using AssemblyReloader.Unsorted;
-using ReeperCommon.Logging;
 
-namespace AssemblyReloader.Game.Providers
+namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
 {
+    [Implements(typeof(IGetProtoScenarioModules), InjectionBindingScope.CROSS_CONTEXT)]
     public class GetProtoScenarioModules : IGetProtoScenarioModules
     {
         private readonly IKspFactory _kspFactory;
@@ -16,10 +19,10 @@ namespace AssemblyReloader.Game.Providers
         private readonly IGetCurrentGameScene _getCurrentGameScene;
 
         public GetProtoScenarioModules(
-            [NotNull] IKspFactory kspFactory,
-            [NotNull] IGetTypeIdentifier getTypeIdentifier,
-            [NotNull] IGetCurrentGame getCurrentGame,
-            [NotNull] IGetCurrentGameScene getCurrentGameScene)
+            IKspFactory kspFactory,
+            IGetTypeIdentifier getTypeIdentifier,
+            IGetCurrentGame getCurrentGame,
+            IGetCurrentGameScene getCurrentGameScene)
         {
             if (kspFactory == null) throw new ArgumentNullException("kspFactory");
             if (getTypeIdentifier == null) throw new ArgumentNullException("getTypeIdentifier");
@@ -33,13 +36,10 @@ namespace AssemblyReloader.Game.Providers
         }
 
 
-        public IEnumerable<IProtoScenarioModule> Get([NotNull] Type type)
+        public IEnumerable<IProtoScenarioModule> Get(Type type)
         {
             if (type == null) throw new ArgumentNullException("type");
-            if (!_getCurrentGame.Get().Any()) return new IProtoScenarioModule[0];
-
-            var tempLog = new DebugLog("GetProtoScenarioModules");
-
+            if (!_getCurrentGame.Get().Any()) return Enumerable.Empty<IProtoScenarioModule>(); //new IProtoScenarioModule[0];
 
             return HighLogic.CurrentGame.scenarios
                 .Where(psm => psm != null)

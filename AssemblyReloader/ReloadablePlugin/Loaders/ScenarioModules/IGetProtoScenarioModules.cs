@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using AssemblyReloader.Game;
 
-namespace AssemblyReloader.Game.Providers
+namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
 {
     public interface IGetProtoScenarioModules
     {

@@ -4,6 +4,7 @@ using ReeperCommon.Containers;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
 {
+// ReSharper disable once ClassNeverInstantiated.Global
     public class PartModuleConfigNodeSnapshotRepository : IPartModuleConfigNodeSnapshotRepository
     {
         private readonly DictionaryQueue<KeyValuePair<uint, ITypeIdentifier>, ConfigNode> _storedNodes = new

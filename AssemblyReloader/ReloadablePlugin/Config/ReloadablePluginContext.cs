@@ -8,6 +8,7 @@ using AssemblyReloader.ReloadablePlugin.Gui;
 using AssemblyReloader.ReloadablePlugin.Loaders;
 using AssemblyReloader.ReloadablePlugin.Loaders.Addons;
 using AssemblyReloader.ReloadablePlugin.Loaders.PartModules;
+using AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules;
 using AssemblyReloader.ReloadablePlugin.Weaving;
 using AssemblyReloader.ReloadablePlugin.Weaving.Operations;
 using AssemblyReloader.ReloadablePlugin.Weaving.Operations.Keys;
@@ -182,17 +183,20 @@ namespace AssemblyReloader.ReloadablePlugin.Config
             commandBinder.Bind<SignalPluginWasLoaded>()
                 .To<CommandInitializeAddonLoader>()
                 .To<CommandCreatePartModules>()
+                .To<CommandCreateScenarioModules>()
                 .To<CommandDispatchLoadersFinished>();
 
 
             commandBinder.Bind<SignalUnloadPlugin>()
                 .InSequence()
                 .To<CommandDeinitializeAddonLoader>()
-                .To<CommandUnloadPartModules>();
+                .To<CommandUnloadPartModules>()
+                .To<CommandUnloadScenarioModules>();
 
 
             commandBinder.Bind<SignalAboutToDestroyMonoBehaviour>()
                 .To<CommandCreatePartModuleConfigNodeSnapshot>()
+                .To<CommandCreateScenarioModuleConfigNode>()
                 .To<CommandSendReloadRequestedMessageToTarget>();
 
 

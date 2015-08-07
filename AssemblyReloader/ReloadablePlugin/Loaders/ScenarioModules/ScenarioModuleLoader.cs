@@ -1,45 +1,143 @@
 ﻿using System;
 using System.Linq;
+using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
 using AssemblyReloader.Game;
 using AssemblyReloader.Game.Providers;
-using AssemblyReloader.Properties;
+using AssemblyReloader.ReloadablePlugin.Loaders.Addons;
+using AssemblyReloader.Unsorted;
+using ReeperCommon.Logging;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
 {
     public class ScenarioModuleLoader : IScenarioModuleLoader
     {
-        private readonly IGetProtoScenarioModules _psmProvider;
+        private static readonly GameScenes[] ValidScenarioModuleScenes =
+        {
+            GameScenes.EDITOR, GameScenes.FLIGHT,
+            GameScenes.SPACECENTER, GameScenes.TRACKSTATION
+        };
+
+        private readonly IGetTypesDerivedFrom<ScenarioModule> _smTypeQuery;
+        private readonly IGetProtoScenarioModules _protoScenarioModuleQuery;
+        private readonly IGetCurrentGameScene _gameSceneQuery;
+        private readonly IGetAttributesOfType<KSPScenario> _scenarioAttributeQuery;
+        private readonly IScenarioModuleFactory _smFactory;
+        private readonly IGetTypeIdentifier _typeIdentifierQuery;
+        private readonly ILog _log;
 
 
         public ScenarioModuleLoader(
-            [NotNull] IGetProtoScenarioModules psmProvider)
+            IGetTypesDerivedFrom<ScenarioModule> smTypeQuery,
+            IGetProtoScenarioModules protoScenarioModuleQuery,
+            IGetCurrentGameScene gameSceneQuery,
+            IGetAttributesOfType<KSPScenario> scenarioAttributeQuery,
+            IScenarioModuleFactory smFactory,
+            IGetTypeIdentifier typeIdentifierQuery,
+            ILog log)
         {
-            if (psmProvider == null) throw new ArgumentNullException("psmProvider");
+            if (smTypeQuery == null) throw new ArgumentNullException("smTypeQuery");
+            if (protoScenarioModuleQuery == null) throw new ArgumentNullException("protoScenarioModuleQuery");
+            if (gameSceneQuery == null) throw new ArgumentNullException("gameSceneQuery");
+            if (scenarioAttributeQuery == null) throw new ArgumentNullException("scenarioAttributeQuery");
+            if (smFactory == null) throw new ArgumentNullException("smFactory");
+            if (typeIdentifierQuery == null) throw new ArgumentNullException("typeIdentifierQuery");
+            if (log == null) throw new ArgumentNullException("log");
 
-            _psmProvider = psmProvider;
+            _smTypeQuery = smTypeQuery;
+            _protoScenarioModuleQuery = protoScenarioModuleQuery;
+            _gameSceneQuery = gameSceneQuery;
+            _scenarioAttributeQuery = scenarioAttributeQuery;
+            _smFactory = smFactory;
+            _typeIdentifierQuery = typeIdentifierQuery;
+            _log = log;
         }
 
 
-        public void Load([NotNull] Type type)
+        public void Load(ILoadedAssemblyHandle handle)
         {
-            if (type == null) throw new ArgumentNullException("type");
+            if (handle == null) throw new ArgumentNullException("handle");
 
-            // note: it's possible in theory for there to be multiple, duplicate ScenarioModules
-            // note: we do not add ScenarioModule entries ourselves: the stock behaviour is that these
-            //       are added during the transition from main menu into space center and I want to duplicate
-            //       that behaviour
-            foreach (var psm in _psmProvider.Get(type))
-                InstallScenarioModule(type, psm);
+            if (!ValidScenarioModuleScenes.Contains(_gameSceneQuery.Get()))
+                return;
+
+            if (NameCollisionsExist(handle))
+            {
+                _log.Error("Cannot load ScenarioModules due to name collisions");
+                return;
+            }
+
+            foreach (var smType in _smTypeQuery.Get(handle.LoadedAssembly.assembly))
+                LoadInstanceForEachProtoScenarioModule(smType);
         }
 
 
-        private void InstallScenarioModule(Type type, IProtoScenarioModule psm)
+        /// <summary>
+        /// It's possible for ScenarioModules in different namespaces with the same name to 
+        /// confuse us.
+        /// TODO: come up with a better more elegant fix
+        /// </summary>
+        /// <param name="handle"></param>
+        /// <returns></returns>
+        private bool NameCollisionsExist(ILoadedAssemblyHandle handle)
         {
-            if (psm.moduleRef.Any())
-                throw new InvalidOperationException("Cannot install " + type.FullName +
-                                                    " because the given ProtoScenarioModule already contains a reference to an existing instance");
+            var collisions = _smTypeQuery.Get(handle.LoadedAssembly.assembly)
+                .GroupBy(smType => _typeIdentifierQuery.Get(smType).Identifier, smType => smType)
+                .Where(grouping => grouping.Count() > 1)
+                .ToList();
 
-            psm.Load();
+            _log.Error("ScenarioModule name collisions! Collisions: " +
+                       string.Join("\n",
+                           collisions
+                           .Select(g => string.Join(", ", 
+                               g.Select(t => t.FullName)
+                               .ToArray()))
+                           .ToArray()));
+
+            return collisions.Count == 0;
+        }
+
+
+        private void LoadInstanceForEachProtoScenarioModule(Type smType)
+        {
+            // there should be realistically only one but nothing technically prevents ScenarioModules
+            // from different namespaces but the same type name from confusing us ... hmm...
+            //
+            // todo: recreate ProtoScenarioModules so we don't get confused?
+
+            foreach (var psm in _protoScenarioModuleQuery.Get(smType))
+                Load(smType, psm);
+        }
+
+
+        private void Load(Type smType, IProtoScenarioModule psm)
+        {
+            // come up with target scenes by looking at KSPScenario on the type. If that doesn't exist,
+            // look instead into a PSM with the right identifier (this is the legacy method)
+            //
+            // we need to do this because the user might've decided to change them while writing
+            // the ScenarioModule and the old ProtoScenarioModule would then be out of date
+            var kspScenario = _scenarioAttributeQuery.Get(smType).ToList();
+
+            if (kspScenario.Any())
+            {
+                psm.TargetScenes = kspScenario.Single().TargetScenes;
+            }
+            else
+            {
+                // reuse old scenes
+                // todo: tell user to update their ScenarioModule in a more blatant way
+                _log.Warning("ScenarioModule " + _typeIdentifierQuery.Get(smType) +
+                             " does not have KSPScenario attribute. It is recommended to " +
+                             "utilize it rather than the legacy ScenarioModule installation of " +
+                             "modifying the game's ProtoScenarioModules directly.");
+
+            }
+
+            if (!psm.TargetScenes.Contains(_gameSceneQuery.Get())) return;
+
+            if (!_smFactory.Create(psm, smType).Any())
+                _log.Error("Failed to create ScenarioModule " + _typeIdentifierQuery.Get(smType));
         }
     }
 }

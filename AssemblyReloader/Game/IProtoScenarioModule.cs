@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ReeperCommon.Containers;
+﻿using ReeperCommon.Containers;
 
 namespace AssemblyReloader.Game
 {
@@ -13,5 +9,6 @@ namespace AssemblyReloader.Game
         GameScenes[] TargetScenes { get; set; }
 
         Maybe<ScenarioModule> Load();
+        ConfigNode GetData();
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using AssemblyReloader.ReloadablePlugin.Loaders;
 using AssemblyReloader.ReloadablePlugin.Loaders.PartModules;
 
 namespace AssemblyReloader.Commands.old

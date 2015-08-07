@@ -1,18 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using AssemblyReloader.Properties;
 using ReeperCommon.Containers;
 
-namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
+namespace AssemblyReloader.ReloadablePlugin.Loaders
 {
-    public sealed class DictionaryQueue<TKey, TValue>
+    public class DictionaryQueue<TKey, TValue>
     {
         private readonly Dictionary<TKey, Queue<TValue>> _items;
+       
 
 
-
-        public DictionaryQueue([NotNull] IEqualityComparer<TKey> comparer)
+        public DictionaryQueue(IEqualityComparer<TKey> comparer)
         {
             if (comparer == null) throw new ArgumentNullException("comparer");
 
@@ -21,9 +20,8 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
 
 
         public DictionaryQueue()
-            : this(EqualityComparer<TKey>.Default)
         {
-
+            _items = new Dictionary<TKey, Queue<TValue>>();
         }
 
 

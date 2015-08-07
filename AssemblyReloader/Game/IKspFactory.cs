@@ -1,4 +1,6 @@
-﻿namespace AssemblyReloader.Game
+﻿using AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules;
+
+namespace AssemblyReloader.Game
 {
     public interface IKspFactory
     {
@@ -6,5 +8,6 @@
         IAvailablePart Create(AvailablePart part);
         IVessel Create(Vessel vessel);
         IProtoScenarioModule Create(ProtoScenarioModule psm);
+        IScenarioRunner Create(ScenarioRunner runner);
     }
 }

@@ -62,7 +62,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
             _log.Verbose("Creating PartModules");
 
             _createdSignal.AddListener(OnPartModuleCreated);
-            _partModuleLoader.Load(_handle, !_partModuleSettings.ReplacePartModulesInstancesImmediately);
+            _partModuleLoader.Load(_handle, !_partModuleSettings.ReloadPartModuleInstancesImmediately);
             _createdSignal.RemoveListener(OnPartModuleCreated);
 
             _loadersFinishedSignal.AddListener(OnLoadersFinished);
@@ -97,9 +97,6 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
         {
             // note to self: it's possible for parts not to be associated with any vessel,
             // such as when constructing a ship in the editor
-            //
-            // todo: figure out whether unattached parts in editor are handled differently
-
             var defaultGuid = Guid.NewGuid();
 
             var groupedByVessel = _targets
@@ -116,7 +113,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
                     continue;
                 }
 
-                RunOnStartsForVessel(partModulesInGroup.First().Key.Vessel, group.ToList());
+                RunOnStartsForVessel(partModulesInGroup.First().Key.Vessel, partModulesInGroup);
             }
         }
 

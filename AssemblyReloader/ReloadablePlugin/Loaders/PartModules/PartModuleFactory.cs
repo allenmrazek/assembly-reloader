@@ -74,6 +74,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
         }
 
 
+        // todo: clean this up, zomg cyclomatic complexity batman
         private void LoadConfigNodeFor(IPart part, PartModule partModule, PartModuleDescriptor descriptor)
         {
             if (_partModuleSettings.SaveAndReloadPartModuleConfigNodes && !_isPartPrefabQuery.Get(part))

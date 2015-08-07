@@ -1,9 +1,10 @@
 ﻿using AssemblyReloader.Game;
+using ReeperCommon.Containers;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
 {
-    public interface IScenarioModuleLoader
+    public interface IGetCurrentGame
     {
-        void Load(ILoadedAssemblyHandle handle);
+        Maybe<IGame> Get();
     }
 }

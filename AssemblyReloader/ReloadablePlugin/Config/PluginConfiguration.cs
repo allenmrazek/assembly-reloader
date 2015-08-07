@@ -1,9 +1,10 @@
 ﻿using AssemblyReloader.ReloadablePlugin.Loaders.Addons;
 using AssemblyReloader.ReloadablePlugin.Loaders.PartModules;
+using AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules;
 
 namespace AssemblyReloader.ReloadablePlugin.Config
 {
-    public class PluginConfiguration : IAddonSettings, IPartModuleSettings
+    public class PluginConfiguration : IAddonSettings, IPartModuleSettings, IScenarioModuleSettings
     {
         // ReSharper disable FieldCanBeMadeReadOnly.Global
         // ReSharper disable UnusedMember.Global
@@ -19,7 +20,7 @@ namespace AssemblyReloader.ReloadablePlugin.Config
         #region PartModule
 
         public bool SaveAndReloadPartModuleConfigNodes { get; set; }
-        public bool ReplacePartModulesInstancesImmediately { get; set; }
+        public bool ReloadPartModuleInstancesImmediately { get; set; }
         public bool ResetPartModuleActions { get; set; }
         public bool ResetPartModuleEvents { get; set; }
         
@@ -28,6 +29,9 @@ namespace AssemblyReloader.ReloadablePlugin.Config
 
 
         #region ScenarioModule
+
+        public bool ReloadScenarioModulesImmediately { get; set; }
+        public bool SaveScenarioModuleBeforeDestroying { get; set; }
 
         #endregion
 
@@ -44,9 +48,11 @@ namespace AssemblyReloader.ReloadablePlugin.Config
             StartAddonsForCurrentScene = true;
 
             SaveAndReloadPartModuleConfigNodes = true;
-            ReplacePartModulesInstancesImmediately = true;
+            ReloadPartModuleInstancesImmediately = true;
             ResetPartModuleActions = true;
             ResetPartModuleEvents = true;
+
+            ReloadScenarioModulesImmediately = true;
         }
     }
 }

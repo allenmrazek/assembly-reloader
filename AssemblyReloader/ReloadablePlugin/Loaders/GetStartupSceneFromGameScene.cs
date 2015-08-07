@@ -1,7 +1,7 @@
 ﻿using System;
 using AssemblyReloader.StrangeIoC.extensions.implicitBind;
 
-namespace AssemblyReloader.Game
+namespace AssemblyReloader.ReloadablePlugin.Loaders
 {
     [Implements(typeof(IGetStartupSceneFromGameScene))]
 // ReSharper disable once UnusedMember.Global

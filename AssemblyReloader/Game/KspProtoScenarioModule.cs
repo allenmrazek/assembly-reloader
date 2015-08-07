@@ -1,22 +1,27 @@
 ﻿using System;
 using System.Linq;
 using AssemblyReloader.Properties;
+using AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules;
 using ReeperCommon.Containers;
+using ReeperCommon.Logging;
 
 namespace AssemblyReloader.Game
 {
     public class KspProtoScenarioModule : IProtoScenarioModule
     {
         private readonly ProtoScenarioModule _psm;
-        private readonly IGameObjectProvider _gameObjectProvider;
+        private readonly IScenarioRunnerProvider _scenarioRunnerProvider;
+
 
         public KspProtoScenarioModule(
             ProtoScenarioModule psm, 
-            [NotNull] IGameObjectProvider gameObjectProvider)
+            IScenarioRunnerProvider scenarioRunnerProvider)
         {
-            if (gameObjectProvider == null) throw new ArgumentNullException("gameObjectProvider");
+            if (psm == null) throw new ArgumentNullException("psm");
+            if (scenarioRunnerProvider == null) throw new ArgumentNullException("scenarioRunnerProvider");
+
             _psm = psm;
-            _gameObjectProvider = gameObjectProvider;
+            _scenarioRunnerProvider = scenarioRunnerProvider;
         }
 
 
@@ -33,20 +38,37 @@ namespace AssemblyReloader.Game
         }
 
 
-        public Maybe<ScenarioModule> Load()
-        {
-            var inst = _gameObjectProvider.Get();
-
-            if (!inst.Any())
-                throw new ArgumentException("Failed to retrieve scenario runner");
-
-            return _psm.Load(inst.First()) != null ? moduleRef : Maybe<ScenarioModule>.None;
-        }
-
         public GameScenes[] TargetScenes
         {
             get { return _psm.targetScenes.ToArray(); }
             set { _psm.SetTargetScenes(value); }
+        }
+
+
+        public Maybe<ScenarioModule> Load()
+        {
+            return _psm.Load(ScenarioRunner.fetch) != null ? moduleRef : Maybe<ScenarioModule>.None;
+        }
+
+
+        public ConfigNode GetData()
+        {
+            return _psm.GetData();
+        }
+
+
+        public override bool Equals(object obj)
+        {
+            var other = obj as ProtoScenarioModule;
+            if (other == null) return false;
+
+            return _psm.moduleName == other.moduleName && _psm.moduleRef == other.moduleRef;
+        }
+
+
+        public override int GetHashCode()
+        {
+            return _psm.GetHashCode();
         }
     }
 }

@@ -1,9 +1,10 @@
 ﻿using System;
+using AssemblyReloader.Game;
 using AssemblyReloader.Properties;
 using AssemblyReloader.Unsorted;
 using ReeperCommon.Containers;
 
-namespace AssemblyReloader.Game.Providers
+namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
 {
     public class GetCurrentGame : IGetCurrentGame
     {

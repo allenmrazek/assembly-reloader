@@ -1,5 +1,6 @@
 ﻿using System;
 using AssemblyReloader.Properties;
+using AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules;
 using AssemblyReloader.StrangeIoC.extensions.implicitBind;
 using AssemblyReloader.StrangeIoC.extensions.injector.api;
 
@@ -9,12 +10,12 @@ namespace AssemblyReloader.Game
 // ReSharper disable once ClassNeverInstantiated.Global
     public class KspFactory : IKspFactory
     {
-        private readonly IGameObjectProvider _gameObjectProvider;
+        private readonly IScenarioRunnerProvider _scenarioRunnerProvider;
 
-        public KspFactory([NotNull] IGameObjectProvider gameObjectProvider)
+        public KspFactory([NotNull] IScenarioRunnerProvider scenarioRunnerProvider)
         {
-            if (gameObjectProvider == null) throw new ArgumentNullException("gameObjectProvider");
-            _gameObjectProvider = gameObjectProvider;
+            if (scenarioRunnerProvider == null) throw new ArgumentNullException("scenarioRunnerProvider");
+            _scenarioRunnerProvider = scenarioRunnerProvider;
         }
 
         public IPart Create(Part part)
@@ -34,7 +35,14 @@ namespace AssemblyReloader.Game
 
         public IProtoScenarioModule Create(ProtoScenarioModule psm)
         {
-            return new KspProtoScenarioModule(psm, _gameObjectProvider);
+            return new KspProtoScenarioModule(psm, _scenarioRunnerProvider);
+        }
+
+        public IScenarioRunner Create(ScenarioRunner runner)
+        {
+            if (runner == null) throw new ArgumentNullException("runner");
+
+            return new KspScenarioRunner(runner, this);
         }
     }
 }
