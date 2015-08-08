@@ -7,6 +7,7 @@ using ReeperCommon.Containers;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
 {
+    [Implements(typeof(IGetPartModuleStartState), InjectionBindingScope.CROSS_CONTEXT)]
     public class GetPartModuleStartState : IGetPartModuleStartState
     {
         public PartModule.StartState Get(Maybe<IVessel> vessel)

@@ -3,6 +3,8 @@
     public enum MethodKeys
     {
         AssemblyCodeBase,
-        AssemblyLocation
+        AssemblyLocation,
+
+        ScenarioRunnerGetLoadedModules,
     }
 }

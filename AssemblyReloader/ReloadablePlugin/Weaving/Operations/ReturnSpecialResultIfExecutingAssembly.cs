@@ -11,7 +11,7 @@ namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations
 {
     public abstract class ReturnSpecialResultIfExecutingAssembly : RewriteCall
     {
-        private MethodDefinition replacementMethodDefinition;
+        private MethodDefinition _replacementMethodDefinition;
 
 
         public ReturnSpecialResultIfExecutingAssembly(
@@ -25,7 +25,7 @@ namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations
 
         public override void Execute()
         {
-            replacementMethodDefinition = CreateProxyMethod();
+            _replacementMethodDefinition = CreateProxyMethod();
             base.Execute();
         }
 
@@ -33,11 +33,11 @@ namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations
         protected override void ReplaceOriginalCallWithProxy(MethodDefinition inMethod, Instruction callInstruction)
         {
             Log.Verbose("Replacing call at " + callInstruction.Offset + " in " + inMethod.FullName + " with " +
-                       replacementMethodDefinition.FullName);
+                       _replacementMethodDefinition.FullName);
 
             var processor = inMethod.Body.GetILProcessor();
 
-            processor.Replace(callInstruction, Instruction.Create(OpCodes.Call, inMethod.Module.Import(replacementMethodDefinition)));
+            processor.Replace(callInstruction, Instruction.Create(OpCodes.Call, inMethod.Module.Import(_replacementMethodDefinition)));
         }
 
 

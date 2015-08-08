@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Linq;
 using AssemblyReloader.Game;
+using AssemblyReloader.StrangeIoC.extensions.implicitBind;
+using AssemblyReloader.StrangeIoC.extensions.injector.api;
 using ReeperCommon.Containers;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
 {
 // ReSharper disable once ClassNeverInstantiated.Global
+    [Implements(typeof(IGetConfigNodeForPart), InjectionBindingScope.CROSS_CONTEXT)]
     public class GetConfigNodeForPart : IGetConfigNodeForPart
     {
         private readonly IGameDatabase _gameDatabase;

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using AssemblyReloader.ReloadablePlugin.Weaving.Operations.Replacements;
 using AssemblyReloader.StrangeIoC.extensions.command.impl;
 
 namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations

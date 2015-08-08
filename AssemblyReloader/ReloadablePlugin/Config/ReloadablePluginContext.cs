@@ -112,19 +112,29 @@ namespace AssemblyReloader.ReloadablePlugin.Config
                 .To(typeof(Assembly).GetProperty("CodeBase", BindingFlags.Public | BindingFlags.Instance).GetGetMethod())
                 .ToName(MethodKeys.AssemblyCodeBase);
 
-            injectionBinder.Bind<MethodInfo>()
-                .To(typeof (Assembly).GetProperty("Location", BindingFlags.Public | BindingFlags.Instance).GetGetMethod())
-                .ToName(MethodKeys.AssemblyLocation);
-
             injectionBinder.Bind<IGetInstructionsInMethod>()
                 .To(new GetMethodCallsInMethod(injectionBinder.GetInstance<MethodInfo>(MethodKeys.AssemblyCodeBase),
                     OpCodes.Callvirt))
                 .ToName(MethodKeys.AssemblyCodeBase);
 
+            injectionBinder.Bind<MethodInfo>()
+                .To(typeof (Assembly).GetProperty("Location", BindingFlags.Public | BindingFlags.Instance).GetGetMethod())
+                .ToName(MethodKeys.AssemblyLocation);
+
             injectionBinder.Bind<IGetInstructionsInMethod>()
                 .To(new GetMethodCallsInMethod(injectionBinder.GetInstance<MethodInfo>(MethodKeys.AssemblyLocation),
                     OpCodes.Callvirt))
                 .ToName(MethodKeys.AssemblyLocation);
+
+            injectionBinder.Bind<MethodInfo>()
+                .To(typeof(ScenarioRunner).GetMethod("GetLoadedModules", BindingFlags.Public | BindingFlags.Static))
+                .ToName(MethodKeys.ScenarioRunnerGetLoadedModules);
+
+            injectionBinder.Bind<IGetInstructionsInMethod>()
+                .To(new GetMethodCallsInMethod(injectionBinder.GetInstance<MethodInfo>(MethodKeys.ScenarioRunnerGetLoadedModules),
+                    OpCodes.Call))
+                .ToName(MethodKeys.ScenarioRunnerGetLoadedModules);
+
 
             injectionBinder.Bind<IGetTypeDefinitions>().To(new GetTypeDefinitionsInAssemblyDefinitionExcludingHelper()).ToSingleton();
 
@@ -177,22 +187,23 @@ namespace AssemblyReloader.ReloadablePlugin.Config
             // these things need the helper type
             commandBinder.Bind<SignalHelperDefinitionCreated>()
                 .To<CommandRewriteAssemblyCodeBaseCalls>()
-                .To<CommandRewriteAssemblyLocationCalls>();
+                .To<CommandRewriteAssemblyLocationCalls>()
+                .To<CommandRewriteScenarioRunnerGetLoadedModulesCalls>();
 
 
             // other signals
             commandBinder.Bind<SignalPluginWasLoaded>()
                 .To<CommandInitializeAddonLoader>()
                 .To<CommandCreatePartModules>()
-                //.To<CommandCreateScenarioModules>()
+                .To<CommandCreateScenarioModules>()
                 .To<CommandDispatchLoadersFinished>();
 
 
             commandBinder.Bind<SignalUnloadPlugin>()
                 .InSequence()
                 .To<CommandDeinitializeAddonLoader>()
-                .To<CommandUnloadPartModules>();
-                //.To<CommandUnloadScenarioModules>();
+                .To<CommandUnloadPartModules>()
+                .To<CommandUnloadScenarioModules>();
 
 
             commandBinder.Bind<SignalAboutToDestroyMonoBehaviour>()

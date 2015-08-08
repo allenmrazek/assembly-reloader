@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text.RegularExpressions;
 using AssemblyReloader.Game;
-using AssemblyReloader.Game.Providers;
 using AssemblyReloader.ReloadablePlugin.Loaders.Addons;
+using AssemblyReloader.StrangeIoC.extensions.implicitBind;
 using AssemblyReloader.Unsorted;
 using ReeperCommon.Logging;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
 {
+    [Implements(typeof(IScenarioModuleLoader))]
     public class ScenarioModuleLoader : IScenarioModuleLoader
     {
         private static readonly GameScenes[] ValidScenarioModuleScenes =

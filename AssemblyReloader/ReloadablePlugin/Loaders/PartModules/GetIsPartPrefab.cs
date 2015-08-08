@@ -1,9 +1,12 @@
 ﻿using System;
 using AssemblyReloader.Game;
+using AssemblyReloader.StrangeIoC.extensions.implicitBind;
+using AssemblyReloader.StrangeIoC.extensions.injector.api;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
 {
 // ReSharper disable once ClassNeverInstantiated.Global
+    [Implements(typeof(IGetPartIsPrefab), InjectionBindingScope.CROSS_CONTEXT)]
     public class GetPartIsPrefab : IGetPartIsPrefab
     {
         private readonly IPartLoaderPrefabProvider _prefabProvider;

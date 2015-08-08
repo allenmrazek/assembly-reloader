@@ -51,7 +51,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
 
         private void UpdateConfigNode()
         {
-            
+            _log.Normal("Here I would update ScenarioModule ConfigNode");
         }
     }
 }

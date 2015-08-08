@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Linq;
 using AssemblyReloader.Game;
+using AssemblyReloader.StrangeIoC.extensions.implicitBind;
 using AssemblyReloader.Unsorted;
 using ReeperCommon.Containers;
-using UnityEngine;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
 {
+    [Implements(typeof(IScenarioModuleFactory))]
     public class ScenarioModuleFactory : IScenarioModuleFactory
     {
         private readonly IScenarioModuleConfigNodeRepository _configRepository;

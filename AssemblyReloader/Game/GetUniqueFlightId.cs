@@ -3,7 +3,7 @@ using AssemblyReloader.StrangeIoC.extensions.injector.api;
 
 namespace AssemblyReloader.Game
 {
-    //[Implements(typeof(IGetUniqueFlightID), InjectionBindingScope.CROSS_CONTEXT)]
+    [Implements(typeof(IGetUniqueFlightID), InjectionBindingScope.CROSS_CONTEXT)]
     public class GetUniqueFlightId : IGetUniqueFlightID
     {
         private static uint _internalCounter = 1;

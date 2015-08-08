@@ -35,9 +35,9 @@ namespace TestProject
             //gameObject.GetComponents<Component>().ToList().ForEach(c => print("Have component: " + c.name));
             //WriteString("TestReloadProject: " + typeof(TestReloadProject).FullName);
 
-            print("Printing components ...");
-            print("Also here's another message");
-            gameObject.PrintComponents(new DebugLog("TestReloadProject"));
+            //print("Printing components ...");
+            //print("Also here's another message");
+            //gameObject.PrintComponents(new DebugLog("TestReloadProject"));
 
         }
 

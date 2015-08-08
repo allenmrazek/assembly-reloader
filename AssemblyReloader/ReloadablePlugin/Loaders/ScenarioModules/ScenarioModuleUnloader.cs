@@ -7,6 +7,20 @@
 //using ReeperCommon.Containers;
 //using ReeperCommon.Logging;
 
+using System;
+using AssemblyReloader.StrangeIoC.extensions.implicitBind;
+
+namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
+{
+    [Implements(typeof(IScenarioModuleUnloader))]
+    public class ScenarioModuleUnloader : IScenarioModuleUnloader
+    {
+        public void Unload(Type type)
+        {
+            
+        }
+    }
+}
 //namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
 //{
 //    public class ScenarioModuleUnloader : IScenarioModuleUnloader

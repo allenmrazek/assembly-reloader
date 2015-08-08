@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using AssemblyReloader.Game;
+using AssemblyReloader.StrangeIoC.extensions.implicitBind;
+using AssemblyReloader.StrangeIoC.extensions.injector.api;
 using Debug = UnityEngine.Debug;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
@@ -10,6 +12,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
     // the editor doesn't seem to keep a list of all the parts it spawns and I couldn't find any way to 
     // locate those parts except for a basic FindObjectsOfType call.
 // ReSharper disable once ClassNeverInstantiated.Global
+    [Implements(typeof(IGetPartPrefabClones), InjectionBindingScope.CROSS_CONTEXT)]
     public class GetPartPrefabClones : IGetPartPrefabClones
     {
         private readonly IGetPartIsPrefab _partIsPrefabQuery;

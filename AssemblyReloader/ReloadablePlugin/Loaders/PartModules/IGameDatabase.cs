@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace AssemblyReloader.Game
+namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
 {
     public interface IGameDatabase
     {

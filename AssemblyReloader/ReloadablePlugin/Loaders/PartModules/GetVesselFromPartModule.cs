@@ -1,9 +1,12 @@
 ﻿using System;
 using AssemblyReloader.Game;
+using AssemblyReloader.StrangeIoC.extensions.implicitBind;
+using AssemblyReloader.StrangeIoC.extensions.injector.api;
 using ReeperCommon.Containers;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
 {
+    [Implements(typeof(IGetVesselFromPartModule), InjectionBindingScope.CROSS_CONTEXT)]
     public class GetVesselFromPartModule : IGetVesselFromPartModule
     {
         private readonly IKspFactory _kspFactory;

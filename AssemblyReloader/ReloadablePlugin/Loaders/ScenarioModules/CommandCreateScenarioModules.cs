@@ -50,12 +50,12 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
             if (!_scenarioModuleSettings.ReloadScenarioModulesImmediately)
                 return;
 
-            //_log.Debug("Creating ScenarioModules");
-            
-            //foreach (var smType in _scenarioModuleTypeQuery.Get(_loadedHandle.LoadedAssembly.assembly))
-            //    LoadScenarioModule(smType);
+            _log.Debug("Creating ScenarioModules");
 
-            //_log.Debug("Finished creating ScenarioModules");
+            foreach (var smType in _scenarioModuleTypeQuery.Get(_loadedHandle.LoadedAssembly.assembly))
+                LoadScenarioModule(smType);
+
+            _log.Debug("Finished creating ScenarioModules");
         }
 
 
@@ -78,9 +78,9 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
 
                 try
                 {
-                    if (psm.Load().Any())
-                        _log.Verbose("Successfully created ScenarioModule " + identifier);
-                    else _log.Warning("Failed to create ScenarioModule " + identifier);
+                    //if (psm.Load().Any())
+                    //    _log.Verbose("Successfully created ScenarioModule " + identifier);
+                    /*else*/ _log.Warning("Failed to create ScenarioModule " + identifier);
                 }
                 catch (Exception e) // large scope intended
                 {

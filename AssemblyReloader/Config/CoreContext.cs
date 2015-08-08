@@ -106,15 +106,7 @@ namespace AssemblyReloader.Config
                 .CrossContext();
 
 
-
-            injectionBinder.Bind<IGetTypeIdentifier>().To<GetTypeIdentifier>().ToSingleton().CrossContext();
-            injectionBinder.Bind<IGetUniqueFlightID>().To<GetUniqueFlightId>().ToSingleton().CrossContext();
-            injectionBinder.Bind<IGetPartModuleStartState>().To<GetPartModuleStartState>().ToSingleton().CrossContext();
-            injectionBinder.Bind<IGetVesselFromPartModule>().To<GetVesselFromPartModule>().ToSingleton().CrossContext();
-            injectionBinder.Bind<IGetPartPrefabClones>().To<GetPartPrefabClones>().ToSingleton().CrossContext();
-            injectionBinder.Bind<IGetPartIsPrefab>().To<GetPartIsPrefab>().ToSingleton().CrossContext();
             injectionBinder.Bind<IPartLoader>().Bind<IPartLoaderPrefabProvider>().To<KspPartLoader>().ToSingleton().CrossContext();
-            injectionBinder.Bind<IGetConfigNodeForPart>().To<GetConfigNodeForPart>().ToSingleton().CrossContext();
             injectionBinder.Bind<IGetPartModuleConfigsFromPartConfig>()
                 .To<GetPartModuleConfigsFromPartConfig>()
                 .ToSingleton()
