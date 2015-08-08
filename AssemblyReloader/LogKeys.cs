@@ -4,9 +4,16 @@
     {
         AddonLoader,
         AddonUnloader,
+
         PartModuleLoader,
         PartModuleFactory,
         PartModuleUnloader,
-        PartModuleSnapshotGenerator
+        PartModuleSnapshotGenerator,
+
+        ScenarioModuleLoader,
+        ScenarioModuleFactory,
+        ScenarioModuleUnloader,
+        ScenarioModuleDestroyer,
+        ScenarioModuleConfigNodeUpdater,
     }
 }

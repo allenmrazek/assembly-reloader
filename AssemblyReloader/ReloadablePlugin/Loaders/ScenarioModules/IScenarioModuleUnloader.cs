@@ -1,9 +1,10 @@
 ﻿using System;
+using AssemblyReloader.Game;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
 {
     public interface IScenarioModuleUnloader
     {
-        void Unload(Type type);
+        void Unload(ILoadedAssemblyHandle handle);
     }
 }

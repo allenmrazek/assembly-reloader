@@ -50,6 +50,8 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
             if (!_scenarioModuleSettings.ReloadScenarioModulesImmediately)
                 return;
 
+            return;
+
             _log.Debug("Creating ScenarioModules");
 
             foreach (var smType in _scenarioModuleTypeQuery.Get(_loadedHandle.LoadedAssembly.assembly))

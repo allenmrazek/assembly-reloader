@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using AssemblyReloader.ReloadablePlugin.Loaders;
 using ReeperCommon.Extensions;
 using ReeperCommon.Logging;
 

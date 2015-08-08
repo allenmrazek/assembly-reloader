@@ -43,28 +43,7 @@ namespace AssemblyReloader.ReloadablePlugin.Config
             injectionBinder.Bind<IFile>().To(_reloadableFile);
             injectionBinder.Bind<IDirectory>().To(injectionBinder.GetInstance<IFile>().Directory);
 
-            injectionBinder.Bind<ILog>()
-                .To(injectionBinder.GetInstance<ILog>().CreateTag(injectionBinder.GetInstance<IFile>().Name));
-
-            injectionBinder.Bind<ILog>()
-                .To(injectionBinder.GetInstance<ILog>().CreateTag("AddonLoader"))
-                .ToName(LogKeys.AddonLoader);
-
-            injectionBinder.Bind<ILog>()
-                .To(injectionBinder.GetInstance<ILog>().CreateTag("AddonUnloader"))
-                .ToName(LogKeys.AddonUnloader);
-
-            injectionBinder.Bind<ILog>()
-                .To(injectionBinder.GetInstance<ILog>().CreateTag("PartModuleLoader"))
-                .ToName(LogKeys.PartModuleLoader);
-
-            injectionBinder.Bind<ILog>()
-                .To(injectionBinder.GetInstance<ILog>().CreateTag("PartModuleFactory"))
-                .ToName(LogKeys.PartModuleFactory);
-
-            injectionBinder.Bind<ILog>()
-                .To(injectionBinder.GetInstance<ILog>().CreateTag("PartModuleUnloader"))
-                .ToName(LogKeys.PartModuleUnloader);
+            SetupNamedLogs();
 
 
             injectionBinder.Bind<IGetTemporaryFile>().To<GetTemporaryFile>().ToSingleton();
@@ -215,6 +194,60 @@ namespace AssemblyReloader.ReloadablePlugin.Config
             // GameEvent signals
             commandBinder.Bind<SignalOnLevelWasLoaded>()
                 .To<CommandCreateAddonsForScene>();
+        }
+
+
+        private void SetupNamedLogs()
+        {
+            injectionBinder.Bind<ILog>()
+                .To(injectionBinder.GetInstance<ILog>().CreateTag(injectionBinder.GetInstance<IFile>().Name));
+
+            injectionBinder.Bind<ILog>()
+                .To(injectionBinder.GetInstance<ILog>().CreateTag("AddonLoader"))
+                .ToName(LogKeys.AddonLoader);
+
+            injectionBinder.Bind<ILog>()
+                .To(injectionBinder.GetInstance<ILog>().CreateTag("AddonUnloader"))
+                .ToName(LogKeys.AddonUnloader);
+
+
+
+            injectionBinder.Bind<ILog>()
+                .To(injectionBinder.GetInstance<ILog>().CreateTag("PartModuleLoader"))
+                .ToName(LogKeys.PartModuleLoader);
+
+            injectionBinder.Bind<ILog>()
+                .To(injectionBinder.GetInstance<ILog>().CreateTag("PartModuleFactory"))
+                .ToName(LogKeys.PartModuleFactory);
+
+            injectionBinder.Bind<ILog>()
+                .To(injectionBinder.GetInstance<ILog>().CreateTag("PartModuleUnloader"))
+                .ToName(LogKeys.PartModuleUnloader);
+
+            injectionBinder.Bind<ILog>()
+                .To(injectionBinder.GetInstance<ILog>().CreateTag("PartModuleSnapshotGenerator"))
+                .ToName(LogKeys.PartModuleSnapshotGenerator);
+
+
+            injectionBinder.Bind<ILog>()
+                .To(injectionBinder.GetInstance<ILog>().CreateTag("ScenarioModuleLoader"))
+                .ToName(LogKeys.ScenarioModuleLoader);
+
+            injectionBinder.Bind<ILog>()
+                .To(injectionBinder.GetInstance<ILog>().CreateTag("ScenarioModuleFactory"))
+                .ToName(LogKeys.ScenarioModuleFactory);
+
+            injectionBinder.Bind<ILog>()
+                .To(injectionBinder.GetInstance<ILog>().CreateTag("ScenarioModuleUnloader"))
+                .ToName(LogKeys.ScenarioModuleUnloader);
+
+            injectionBinder.Bind<ILog>()
+                .To(injectionBinder.GetInstance<ILog>().CreateTag("ScenarioModuleDestroyer"))
+                .ToName(LogKeys.ScenarioModuleDestroyer);
+
+            injectionBinder.Bind<ILog>()
+                .To(injectionBinder.GetInstance<ILog>().CreateTag("ScenarioModuleConfigNodeUpdater"))
+                .ToName(LogKeys.ScenarioModuleConfigNodeUpdater);
         }
     }
 }

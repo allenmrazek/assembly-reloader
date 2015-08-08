@@ -1,4 +1,5 @@
 ﻿using System;
+using AssemblyReloader.ReloadablePlugin.Loaders;
 
 namespace AssemblyReloader.Game
 {

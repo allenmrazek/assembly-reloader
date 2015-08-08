@@ -16,20 +16,6 @@ using Object = UnityEngine.Object;
 
 namespace TestProject
 {
-    [KSPAddon(KSPAddon.Startup.SpaceCentre, false)]
-    public class ScenarioRunnerGetLoadedModulesRunner : MonoBehaviour
-    {
-        private void Start()
-        {
-            print("ScenarioRunnerGetLoadedModulesRunner starting");
-            print("Loaded modules:");
-            foreach (var sm in ScenarioRunner.GetLoadedModules())
-                print("Loaded: " + sm.ClassName);
-
-            print("End loaded modules");
-        }
-    }
-
     //[KSPAddon(KSPAddon.Startup.EditorAny, false)]
     public class DumpPartInstanceIDs : MonoBehaviour
     {

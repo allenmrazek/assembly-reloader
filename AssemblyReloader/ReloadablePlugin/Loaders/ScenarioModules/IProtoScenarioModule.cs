@@ -1,6 +1,6 @@
 ﻿using ReeperCommon.Containers;
 
-namespace AssemblyReloader.Game
+namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
 {
     public interface IProtoScenarioModule
     {

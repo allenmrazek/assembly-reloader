@@ -62,8 +62,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Commands\old\ClearDictionaryQueryCommand.cs" />
-    <Compile Include="Commands\old\ExecutePartModuleOnStartsCommand.cs" />
     <Compile Include="Commands\old\RefreshPartActionWindows.cs" />
     <Compile Include="CommandNull.cs" />
     <Compile Include="CommandTest.cs" />
@@ -100,16 +98,22 @@
     <Compile Include="ReloadablePlugin\Loaders\PartModules\TypeMustDeriveFromPartModuleException.cs" />
     <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\CommandCreateScenarioModules.cs" />
     <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\CommandUnloadScenarioModules.cs" />
-    <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\CommandUpdateScenarioModuleConfigNode.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\CommandCreateScenarioModuleConfigNode.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\GetCurrentSceneIsValidForScenarioModules.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\IGetCurrentSceneIsValidForScenarioModules.cs" />
     <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\IScenarioModuleConfigNodeRepository.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\IScenarioModuleDestroyer.cs" />
     <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\IScenarioModuleFactory.cs" />
     <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\IScenarioModuleLoader.cs" />
     <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\IScenarioModuleSettings.cs" />
     <Compile Include="Game\IScenarioRunner.cs" />
     <Compile Include="Game\KspScenarioRunner.cs" />
     <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\ModuleRefAlreadyExistsException.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\MultipleScenarioModuleInstancesException.cs" />
     <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\NoConfigNodeFoundException.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\NoScenarioModuleReferenceException.cs" />
     <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\ScenarioModuleConfigNodeRepository.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\ScenarioModuleDestroyer.cs" />
     <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\ScenarioModuleFactory.cs" />
     <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\ScenarioModuleLoader.cs" />
     <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\ScenarioRunnerNotFound.cs" />
@@ -139,7 +143,7 @@
     <Compile Include="Config\Keys\TextureNames.cs" />
     <Compile Include="Gui\Signals.cs" />
     <Compile Include="Gui\StrangeView.cs" />
-    <Compile Include="CommandCreateAddonsForCurrentScene.cs" />
+    <Compile Include="CommandCreateAddonsForScene.cs" />
     <Compile Include="ReloadablePlugin\CommandReloadPlugin.cs" />
     <Compile Include="ReloadablePlugin\Loaders\Addons\CommandDeinitializeAddonLoader.cs" />
     <Compile Include="ReloadablePlugin\Loaders\Addons\CommandInitializeAddonLoader.cs" />
@@ -187,10 +191,10 @@
     <Compile Include="ReloadablePlugin\Loaders\MonoBehaviourDestroyer.cs" />
     <Compile Include="Game\LoadedAssemblyHandle.cs" />
     <Compile Include="Game\IGame.cs" />
-    <Compile Include="Game\IProtoScenarioModule.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\IProtoScenarioModule.cs" />
     <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\IScenarioRunnerProvider.cs" />
     <Compile Include="Game\KspGame.cs" />
-    <Compile Include="Game\KspProtoScenarioModule.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\KspProtoScenarioModule.cs" />
     <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\KspScenarioRunnerProvider.cs" />
     <Compile Include="Game\PartPrefabReferenceComparer.cs" />
     <Compile Include="ReloadablePlugin\Loaders\Addons\GetCurrentGameScene.cs" />
@@ -368,7 +372,7 @@
     <Compile Include="Game\IGameAssemblyLoader.cs" />
     <Compile Include="Game\IAvailablePart.cs" />
     <Compile Include="ReloadablePlugin\Loaders\PartModules\IGameDatabase.cs" />
-    <Compile Include="Game\IKspFactory.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\IKspFactory.cs" />
     <Compile Include="Game\IPartActionWindowController.cs" />
     <Compile Include="Game\KspPartActionWindowController.cs" />
     <Compile Include="Game\IGetUniqueFlightID.cs" />
@@ -378,13 +382,12 @@
     <Compile Include="Game\IVessel.cs" />
     <Compile Include="Game\KspAssemblyLoader.cs" />
     <Compile Include="Game\KspAvailablePart.cs" />
-    <Compile Include="Game\KspFactory.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\KspFactory.cs" />
     <Compile Include="ReloadablePlugin\Loaders\PartModules\KspGameDatabase.cs" />
     <Compile Include="Game\KspPart.cs" />
     <Compile Include="Game\KspPartLoader.cs" />
     <Compile Include="Game\KspVessel.cs" />
     <Compile Include="Config\BootstrapCore.cs" />
-    <Compile Include="Commands\old\ICommand.cs" />
     <Compile Include="Game\IGetCurrentSceneIsFlight.cs" />
     <Compile Include="IGetTypesDerivedFrom.cs" />
     <Compile Include="ReloadablePlugin\Loaders\IGetTypesFromAssembly.cs" />

@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Linq;
-using AssemblyReloader.Config.Keys;
 using AssemblyReloader.Game;
-using AssemblyReloader.StrangeIoC.extensions.injector;
 using ReeperCommon.Containers;
 using ReeperCommon.FileSystem;
-using ReeperCommon.Logging;
 
 namespace AssemblyReloader.ReloadablePlugin
 {

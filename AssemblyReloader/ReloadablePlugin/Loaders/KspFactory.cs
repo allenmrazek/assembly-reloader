@@ -1,8 +1,10 @@
 ﻿using System;
+using AssemblyReloader.Game;
+using AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules;
 using AssemblyReloader.StrangeIoC.extensions.implicitBind;
 using AssemblyReloader.StrangeIoC.extensions.injector.api;
 
-namespace AssemblyReloader.Game
+namespace AssemblyReloader.ReloadablePlugin.Loaders
 {
     [Implements(typeof(IKspFactory), InjectionBindingScope.CROSS_CONTEXT)]
 // ReSharper disable once ClassNeverInstantiated.Global

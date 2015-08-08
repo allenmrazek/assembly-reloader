@@ -21,11 +21,13 @@ namespace AssemblyReloader.Config
         [Inject(ContextKeys.CONTEXT_VIEW)]
         public GameObject gameObject { get; set; }
 
+        [Inject]
+        public IResourceRepository Resources { get; set; }
 
         public override void Execute()
         {
             BindSignals();
-            SetupTexturesAndSkin(injectionBinder.GetInstance<IResourceRepository>());
+            SetupTexturesAndSkin();
             CreateViews();
         }
 
@@ -55,7 +57,7 @@ namespace AssemblyReloader.Config
         }
 
 
-        private void SetupTexturesAndSkin(IResourceRepository resources)
+        private void SetupTexturesAndSkin()
         {
             var defaultSkin = Object.Instantiate(AssetBase.GetGUISkin("KSP window 4")) as GUISkin;
             if (defaultSkin == null) throw new InvalidCastException("Failed to cast to GUISkin");
@@ -67,9 +69,9 @@ namespace AssemblyReloader.Config
                 .To(defaultSkin)
                 .CrossContext();
 
-            BindTextureToName(resources, "Resources/btnClose", TextureNames.CloseButton).CrossContext();
-            BindTextureToName(resources, "Resources/btnWrench", TextureNames.SettingsButton).CrossContext();
-            BindTextureToName(resources, "Resources/cursor", TextureNames.ResizeCursor).CrossContext();
+            BindTextureToName(Resources, "Resources/btnClose", TextureNames.CloseButton).CrossContext();
+            BindTextureToName(Resources, "Resources/btnWrench", TextureNames.SettingsButton).CrossContext();
+            BindTextureToName(Resources, "Resources/cursor", TextureNames.ResizeCursor).CrossContext();
         }
 
 

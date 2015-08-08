@@ -3,6 +3,7 @@ using System.Linq;
 using AssemblyReloader.Game;
 using AssemblyReloader.ReloadablePlugin.Loaders.Addons;
 using AssemblyReloader.StrangeIoC.extensions.implicitBind;
+using AssemblyReloader.StrangeIoC.extensions.injector;
 using AssemblyReloader.Unsorted;
 using ReeperCommon.Logging;
 
@@ -33,7 +34,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
             IGetAttributesOfType<KSPScenario> scenarioAttributeQuery,
             IScenarioModuleFactory smFactory,
             IGetTypeIdentifier typeIdentifierQuery,
-            ILog log)
+            [Name(LogKeys.ScenarioModuleLoader)] ILog log)
         {
             if (smTypeQuery == null) throw new ArgumentNullException("smTypeQuery");
             if (protoScenarioModuleQuery == null) throw new ArgumentNullException("protoScenarioModuleQuery");

@@ -1,6 +1,7 @@
 ﻿using System;
 using AssemblyReloader.Game;
 using AssemblyReloader.StrangeIoC.extensions.command.impl;
+using AssemblyReloader.StrangeIoC.extensions.injector;
 using AssemblyReloader.Unsorted;
 using ReeperCommon.Logging;
 using UnityEngine;
@@ -26,7 +27,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
             IKspFactory kspFactory,
             IGetUniqueFlightID flightId,
             IGetTypeIdentifier typeIdentifierQuery,
-            ILog log)
+            [Name(LogKeys.PartModuleSnapshotGenerator)] ILog log)
         {
             if (mbBeingDestroyed == null) throw new ArgumentNullException("mbBeingDestroyed");
             if (partIsPrefabQuery == null) throw new ArgumentNullException("partIsPrefabQuery");

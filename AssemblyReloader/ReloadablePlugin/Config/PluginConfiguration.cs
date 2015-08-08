@@ -53,6 +53,7 @@ namespace AssemblyReloader.ReloadablePlugin.Config
             ResetPartModuleEvents = true;
 
             ReloadScenarioModulesImmediately = true;
+            SaveScenarioModuleBeforeDestroying = true;
         }
     }
 }

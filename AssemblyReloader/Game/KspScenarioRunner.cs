@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using AssemblyReloader.ReloadablePlugin.Loaders;
+using AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules;
 
 namespace AssemblyReloader.Game
 {
@@ -16,12 +18,6 @@ namespace AssemblyReloader.Game
 
             _runner = runner;
             _kspFactory = kspFactory;
-        }
-
-
-        public List<IProtoScenarioModule> GetUpdatedProtoScenarioModules()
-        {
-            throw new NotImplementedException();
         }
     }
 }

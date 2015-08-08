@@ -1,6 +1,7 @@
-﻿using AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules;
+﻿using AssemblyReloader.Game;
+using AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules;
 
-namespace AssemblyReloader.Game
+namespace AssemblyReloader.ReloadablePlugin.Loaders
 {
     public interface IKspFactory
     {

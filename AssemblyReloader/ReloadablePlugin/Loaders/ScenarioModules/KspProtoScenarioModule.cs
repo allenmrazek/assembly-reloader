@@ -2,7 +2,7 @@
 using System.Linq;
 using ReeperCommon.Containers;
 
-namespace AssemblyReloader.Game
+namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
 {
     public class KspProtoScenarioModule : IProtoScenarioModule
     {

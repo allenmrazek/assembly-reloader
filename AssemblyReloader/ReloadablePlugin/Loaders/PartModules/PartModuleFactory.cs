@@ -47,6 +47,8 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
             if (part == null) throw new ArgumentNullException("part");
             if (descriptor == null) throw new ArgumentNullException("descriptor");
 
+            // todo: update ProtoPartSnapshots
+
             _log.Debug("Creating PartModule " + descriptor.Identifier + " on " + part.FlightID);
 
             var result = part.GameObject.AddComponent(descriptor.Type) as PartModule;

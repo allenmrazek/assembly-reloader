@@ -1,114 +1,75 @@
-﻿//using System;
-//using System.Linq;
-//using AssemblyReloader.Game;
-//using AssemblyReloader.Game.Providers;
-//using AssemblyReloader.Game.Queries;
-//using AssemblyReloader.Properties;
-//using ReeperCommon.Containers;
-//using ReeperCommon.Logging;
-
-using System;
+﻿using System;
+using System.Linq;
+using AssemblyReloader.Game;
 using AssemblyReloader.StrangeIoC.extensions.implicitBind;
+using AssemblyReloader.StrangeIoC.extensions.injector;
+using ReeperCommon.Logging;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
 {
     [Implements(typeof(IScenarioModuleUnloader))]
     public class ScenarioModuleUnloader : IScenarioModuleUnloader
     {
-        public void Unload(Type type)
+        private readonly IGetTypesDerivedFrom<ScenarioModule> _smTypeQuery;
+        private readonly IGetProtoScenarioModules _psmQuery;
+        private readonly IScenarioModuleDestroyer _smDestroyer;
+        private readonly ILog _log;
+
+
+        public ScenarioModuleUnloader(
+            IGetTypesDerivedFrom<ScenarioModule> smTypeQuery,
+            IGetProtoScenarioModules psmQuery,
+            IScenarioModuleDestroyer smDestroyer,
+            [Name(LogKeys.ScenarioModuleUnloader)] ILog log)
         {
-            
+            if (smTypeQuery == null) throw new ArgumentNullException("smTypeQuery");
+            if (psmQuery == null) throw new ArgumentNullException("psmQuery");
+            if (smDestroyer == null) throw new ArgumentNullException("smDestroyer");
+            if (log == null) throw new ArgumentNullException("log");
+
+            _smTypeQuery = smTypeQuery;
+            _psmQuery = psmQuery;
+            _smDestroyer = smDestroyer;
+            _log = log;
+        }
+
+
+        public void Unload(ILoadedAssemblyHandle handle)
+        {
+            if (handle == null) throw new ArgumentNullException("handle");
+
+            foreach (var smType in _smTypeQuery.Get(handle.LoadedAssembly.assembly))
+                UnloadScenarioModule(smType);
+        }
+
+
+        private void UnloadScenarioModule(Type smType)
+        {
+            _log.Debug("Unloading ScenarioModule " + smType.FullName);
+
+            // there should only be at most one instance ever unless something is broken or has changed
+            var psms = _psmQuery.Get(smType).ToList();
+
+            if (psms.Count > 1)
+                throw new MultipleScenarioModuleInstancesException(smType);
+
+            if (!psms.Any())
+            {
+                _log.Debug("No ProtoScenarioModules for " + smType.FullName + " found in current scene");
+                return;
+            }
+
+            var psm = psms.Single();
+
+            if (!psm.moduleRef.Any())
+            {
+                // how odd: could be a problem. Better make noise
+                _log.Warning("ProtoScenarioModule for " + psm.moduleName +
+                             " does not contain a reference to an existing instance");
+                return;
+            }
+
+            _smDestroyer.Destroy(psm);
         }
     }
 }
-//namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
-//{
-//    public class ScenarioModuleUnloader : IScenarioModuleUnloader
-//    {
-//        private readonly IGetComponentsInGameObject _gameObjectComponentQuery;
-//        private readonly IGetProtoScenarioModules _psmProvider;
-//        private readonly IMonoBehaviourDestroyer _objectDestroyer;
-//        private readonly Func<bool> _saveBeforeDestroying;
-//        private readonly IScenarioModuleSnapshotGenerator _snapshotGenerator;
-//        private readonly ILog _log;
-
-//        public ScenarioModuleUnloader(
-//            [NotNull] IGetComponentsInGameObject gameObjectComponentQuery,
-//            [NotNull] IGetProtoScenarioModules psmProvider,
-//            [NotNull] IMonoBehaviourDestroyer objectDestroyer, 
-//            [NotNull] Func<bool> saveBeforeDestroying,
-//            [NotNull] IScenarioModuleSnapshotGenerator snapshotGenerator,
-//            [NotNull] ILog log)
-//        {
-//            if (gameObjectComponentQuery == null) throw new ArgumentNullException("gameObjectComponentQuery");
-//            if (psmProvider == null) throw new ArgumentNullException("psmProvider");
-//            if (objectDestroyer == null) throw new ArgumentNullException("objectDestroyer");
-//            if (saveBeforeDestroying == null) throw new ArgumentNullException("saveBeforeDestroying");
-//            if (snapshotGenerator == null) throw new ArgumentNullException("snapshotGenerator");
-//            if (log == null) throw new ArgumentNullException("log");
-
-//            _gameObjectComponentQuery = gameObjectComponentQuery;
-//            _psmProvider = psmProvider;
-//            _objectDestroyer = objectDestroyer;
-//            _saveBeforeDestroying = saveBeforeDestroying;
-//            _snapshotGenerator = snapshotGenerator;
-//            _log = log;
-//        }
-
-
-//        public void Unload([NotNull] Type type)
-//        {
-//            if (type == null) throw new ArgumentNullException("type");
-
-//            var psms = _psmProvider.Get(type).ToArray();
-
-//            if (psms.Length > 1)
-//                throw new Exception("Found multiple ProtoScenarioModules for " + type.FullName +
-//                                    "; this should be impossible");
-
-//            if (psms.Any())
-//                UninstallScenarioModule(type, psms.Single());
-//        }
-
-
-//        private void UninstallScenarioModule(Type type, [NotNull] IProtoScenarioModule psm)
-//        {
-//            if (psm == null) throw new ArgumentNullException("psm");
-
-//            if (!psm.moduleRef.Any())
-//            {
-//                _log.Warning("Psm.ModuleRef is not set to anything for " + psm.moduleName);
-//                return; //? could be that the player has uninstalled a mod (or the dev has renamed their ScenarioModule)
-//                        // leaving ProtoScenarioModules which are never successfully initialized with moduleRefs
-//            }
-
-
-//            var sm = GetScenarioModuleInstanceFromRunner(type);
-
-//            if (!sm.Any())
-//                throw new Exception("Did not find ScenarioModule of type " + type.FullName + "(" + psm.moduleName + ") on ScenarioRunner");
-
-
-//            if (_saveBeforeDestroying())
-//                _snapshotGenerator.Snapshot(sm.Single(), psm);
-
-//            _log.Normal("Destroying ScenarioModule " + type.FullName + " (called " + psm.moduleName + ")");
-
-//            _objectDestroyer.DestroyMonoBehaviour(sm.First());
-//            psm.moduleRef = Maybe<ScenarioModule>.None;
-//        }
-
-
-//        private Maybe<ScenarioModule> GetScenarioModuleInstanceFromRunner(Type type)
-//        {
-
-//            var smInstancesOfType = _gameObjectComponentQuery.Get(type).Where(c => c is ScenarioModule).ToList();
-
-//            // game enforces one unique instance so somebody has done something naughty and we can't be sure how to proceed
-//            if (smInstancesOfType.Count > 1)
-//                throw new InvalidOperationException("Found multiple ScenarioModules of type " + type.FullName + " on ScenarioRunner");
-
-//            return smInstancesOfType.Any() ? Maybe<ScenarioModule>.With(smInstancesOfType.Single() as ScenarioModule) : Maybe<ScenarioModule>.None;
-//        }
-//    }
-//}

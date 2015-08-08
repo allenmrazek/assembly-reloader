@@ -2,8 +2,10 @@
 using System.Linq;
 using AssemblyReloader.Game;
 using AssemblyReloader.StrangeIoC.extensions.implicitBind;
+using AssemblyReloader.StrangeIoC.extensions.injector;
 using AssemblyReloader.Unsorted;
 using ReeperCommon.Containers;
+using ReeperCommon.Logging;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
 {
@@ -13,20 +15,24 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
         private readonly IScenarioModuleConfigNodeRepository _configRepository;
         private readonly IGetTypeIdentifier _typeIdentifierQuery;
         private readonly IScenarioRunnerProvider _scenarioRunnerProvider;
+        private readonly ILog _log;
 
 
         public ScenarioModuleFactory(
             IScenarioModuleConfigNodeRepository configRepository,
             IGetTypeIdentifier typeIdentifierQuery,
-            IScenarioRunnerProvider scenarioRunnerProvider)
+            IScenarioRunnerProvider scenarioRunnerProvider,
+            [Name(LogKeys.ScenarioModuleFactory)] ILog log)
         {
             if (configRepository == null) throw new ArgumentNullException("configRepository");
             if (typeIdentifierQuery == null) throw new ArgumentNullException("typeIdentifierQuery");
             if (scenarioRunnerProvider == null) throw new ArgumentNullException("scenarioRunnerProvider");
+            if (log == null) throw new ArgumentNullException("log");
 
             _configRepository = configRepository;
             _typeIdentifierQuery = typeIdentifierQuery;
             _scenarioRunnerProvider = scenarioRunnerProvider;
+            _log = log;
         }
 
 
