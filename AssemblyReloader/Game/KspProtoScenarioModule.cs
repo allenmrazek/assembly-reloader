@@ -1,27 +1,20 @@
 ﻿using System;
 using System.Linq;
-using AssemblyReloader.Properties;
-using AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules;
 using ReeperCommon.Containers;
-using ReeperCommon.Logging;
 
 namespace AssemblyReloader.Game
 {
     public class KspProtoScenarioModule : IProtoScenarioModule
     {
         private readonly ProtoScenarioModule _psm;
-        private readonly IScenarioRunnerProvider _scenarioRunnerProvider;
 
 
         public KspProtoScenarioModule(
-            ProtoScenarioModule psm, 
-            IScenarioRunnerProvider scenarioRunnerProvider)
+            ProtoScenarioModule psm)
         {
             if (psm == null) throw new ArgumentNullException("psm");
-            if (scenarioRunnerProvider == null) throw new ArgumentNullException("scenarioRunnerProvider");
 
             _psm = psm;
-            _scenarioRunnerProvider = scenarioRunnerProvider;
         }
 
 

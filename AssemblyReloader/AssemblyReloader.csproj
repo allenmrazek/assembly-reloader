@@ -116,6 +116,10 @@
     <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\WrongProtoScenarioModuleForTypeException.cs" />
     <Compile Include="ReloadablePlugin\Loaders\Signals.cs" />
     <Compile Include="ReloadablePlugin\Weaving\Operations\CommandInsertScenarioRunnerProxies.cs" />
+    <Compile Include="ReloadablePlugin\Weaving\Operations\Keys\MethodKeys.cs" />
+    <Compile Include="ReloadablePlugin\Weaving\Operations\ProxyMethodAlreadyDefinedException.cs" />
+    <Compile Include="ReloadablePlugin\Weaving\Operations\ReturnSpecialResultIfExecutingAssembly.cs" />
+    <Compile Include="ReloadablePlugin\Weaving\Operations\CommandRewriteCall.cs" />
     <Compile Include="ReloadablePlugin\Weaving\Operations\Replacements\ScenarioRunnerProxyMethods.cs" />
     <Compile Include="RoutineRunner.cs" />
     <Compile Include="SignalContext.cs" />
@@ -155,10 +159,9 @@
     <Compile Include="ReloadablePlugin\Weaving\Operations\AssemblyLocation.cs" />
     <Compile Include="ReloadablePlugin\Weaving\Operations\CommandInsertHelperType.cs" />
     <Compile Include="ReloadablePlugin\Weaving\Operations\CommandReplaceKSPAddonWithReloadableAddon.cs" />
-    <Compile Include="ReloadablePlugin\Weaving\Operations\CommandRewriteAssemblyCall.cs" />
+    <Compile Include="ReloadablePlugin\Weaving\Operations\phasing out\CommandRewriteAssemblyCall.cs" />
     <Compile Include="ReloadablePlugin\Weaving\Operations\CommandRewriteAssemblyCodeBaseCalls.cs" />
     <Compile Include="ReloadablePlugin\Weaving\Operations\CommandRewriteAssemblyLocationCalls.cs" />
-    <Compile Include="ReloadablePlugin\Weaving\Operations\Keys\InterceptedMethods.cs" />
     <Compile Include="ReloadablePlugin\Weaving\Operations\NoConstructorArgumentFoundsException.cs" />
     <Compile Include="ReloadablePlugin\Weaving\Operations\ReturnTypeMismatchException.cs" />
     <Compile Include="ReloadablePlugin\Weaving\Operations\Signals.cs" />

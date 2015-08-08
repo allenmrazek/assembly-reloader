@@ -12,6 +12,7 @@ using ReeperCommon.Logging;
 namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations
 {
 // ReSharper disable once InconsistentNaming
+// ReSharper disable once ClassNeverInstantiated.Global
     public class CommandReplaceKSPAddonWithReloadableAddon : Command
     {
         [Inject]
@@ -43,7 +44,8 @@ namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations
         }
 
 
-        private void ReplaceKSPAddonReferencesWithReloadableAddon(TypeDefinition type)
+// ReSharper disable once InconsistentNaming
+        private static void ReplaceKSPAddonReferencesWithReloadableAddon(TypeDefinition type)
         {
             if (type == null) throw new ArgumentNullException("type");
 
@@ -71,6 +73,9 @@ namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations
             if (!addonAttribute.HasConstructorArguments)
                 throw new NoConstructorArgumentFoundsException(addonAttribute, decoratedType);
 
+            if (addonAttribute.ConstructorArguments.Count != 2)
+                throw new ArgumentException("KSPAddon attribute has incorrect number of arguments");
+
             var reloadableAddonConstructor =
                     decoratedType.Module.Import(typeof(ReloadableAddonAttribute).GetConstructor(new[] { typeof(KSPAddon.Startup), typeof(bool) }));
 
@@ -96,7 +101,7 @@ namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations
         }
 
 
-        private Maybe<CustomAttribute> GetAddonAttribute(TypeDefinition type)
+        private static Maybe<CustomAttribute> GetAddonAttribute(TypeDefinition type)
         {
             var addon =
                 type.CustomAttributes.FirstOrDefault(ca => ca.AttributeType.FullName == type.Module.Import(typeof (KSPAddon)).FullName);

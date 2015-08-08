@@ -34,7 +34,7 @@ namespace AssemblyReloader
 
         public override void Execute()
         {
-            if (_addonSettings.InstantlyAppliesToAllScenes)
+            if (_addonSettings.InstantlyAppliesToAllScenes && _getCurrentScene.Get() != KSPAddon.Startup.Instantly)
             {
                 _log.Verbose("Creating instant addons");
                 AddonLoader.CreateAddons(KSPAddon.Startup.Instantly);

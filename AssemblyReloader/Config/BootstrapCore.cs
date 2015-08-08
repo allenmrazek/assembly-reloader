@@ -12,16 +12,16 @@ namespace AssemblyReloader.Config
         private IEnumerator Start()
         {
             DontDestroyOnLoad(this);
-            //enabled = false;
-            //yield return 0;
-            ////yield return new WaitForSeconds(10f);
-            //enabled = true;
+            enabled = false;
+            yield return new WaitForSeconds(10f);
+            enabled = true;
 
 
             try
             {
                 context = new CoreContext(this);
                 context.Start();
+                context.Launch();
             }
             catch (Exception e)
             {

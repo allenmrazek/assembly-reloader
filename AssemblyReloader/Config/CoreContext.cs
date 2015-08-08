@@ -20,7 +20,7 @@ namespace AssemblyReloader.Config
     public class CoreContext : ReeperCommonContext
     {
         public CoreContext(MonoBehaviour view)
-            : base(view, ContextStartupFlags.MANUAL_MAPPING)
+            : base(view, ContextStartupFlags.MANUAL_MAPPING | ContextStartupFlags.MANUAL_LAUNCH)
         {
         }
         

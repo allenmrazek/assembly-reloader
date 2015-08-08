@@ -106,7 +106,22 @@ namespace AssemblyReloader.ReloadablePlugin
                 yield break;
             }
 
-            PluginWasLoadedSignal.Dispatch(handle.Single());
+            // todo: the context exception handler won't catch exceptions in here, so this command needs
+            // to be shredded into manageable pieces that each handle exceptions appropriately like below
+            // so things don't silently fail if configuration is wrong (due to unexpected exception or
+            // programmer fail)
+            try
+            {
+                PluginWasLoadedSignal.Dispatch(handle.Single());
+            }
+            catch (Exception e)
+            {
+                Debug.LogError("AssemblyReloader: Encountered an uncaught exception while reloading plugin: " + e);
+
+                PopupDialog.SpawnPopupDialog("AssemblyReloader unhandled exception",
+                    "AssemblyReloader encountered an exception with the following message: " + e.Message + "\n\nAssemblyReloader has been disabled.", "Okay",
+                    true, HighLogic.Skin);
+            }
         }
     }
 }

@@ -93,6 +93,7 @@ namespace AssemblyReloader.ReloadablePlugin.Config
             injectionBinder
                 .Bind<IAddonSettings>()
                 .Bind<IPartModuleSettings>()
+                .Bind<IScenarioModuleSettings>()
                 .Bind<PluginConfiguration>()
                 .To<PluginConfiguration>().ToSingleton();
 
@@ -109,21 +110,21 @@ namespace AssemblyReloader.ReloadablePlugin.Config
 
             injectionBinder.Bind<MethodInfo>()
                 .To(typeof(Assembly).GetProperty("CodeBase", BindingFlags.Public | BindingFlags.Instance).GetGetMethod())
-                .ToName(InterceptedMethods.CodeBase);
+                .ToName(MethodKeys.AssemblyCodeBase);
 
             injectionBinder.Bind<MethodInfo>()
                 .To(typeof (Assembly).GetProperty("Location", BindingFlags.Public | BindingFlags.Instance).GetGetMethod())
-                .ToName(InterceptedMethods.Location);
+                .ToName(MethodKeys.AssemblyLocation);
 
             injectionBinder.Bind<IGetInstructionsInMethod>()
-                .To(new GetMethodCallsInMethod(injectionBinder.GetInstance<MethodInfo>(InterceptedMethods.CodeBase),
+                .To(new GetMethodCallsInMethod(injectionBinder.GetInstance<MethodInfo>(MethodKeys.AssemblyCodeBase),
                     OpCodes.Callvirt))
-                .ToName(InterceptedMethods.CodeBase);
+                .ToName(MethodKeys.AssemblyCodeBase);
 
             injectionBinder.Bind<IGetInstructionsInMethod>()
-                .To(new GetMethodCallsInMethod(injectionBinder.GetInstance<MethodInfo>(InterceptedMethods.Location),
+                .To(new GetMethodCallsInMethod(injectionBinder.GetInstance<MethodInfo>(MethodKeys.AssemblyLocation),
                     OpCodes.Callvirt))
-                .ToName(InterceptedMethods.Location);
+                .ToName(MethodKeys.AssemblyLocation);
 
             injectionBinder.Bind<IGetTypeDefinitions>().To(new GetTypeDefinitionsInAssemblyDefinitionExcludingHelper()).ToSingleton();
 
@@ -183,15 +184,15 @@ namespace AssemblyReloader.ReloadablePlugin.Config
             commandBinder.Bind<SignalPluginWasLoaded>()
                 .To<CommandInitializeAddonLoader>()
                 .To<CommandCreatePartModules>()
-                .To<CommandCreateScenarioModules>()
+                //.To<CommandCreateScenarioModules>()
                 .To<CommandDispatchLoadersFinished>();
 
 
             commandBinder.Bind<SignalUnloadPlugin>()
                 .InSequence()
                 .To<CommandDeinitializeAddonLoader>()
-                .To<CommandUnloadPartModules>()
-                .To<CommandUnloadScenarioModules>();
+                .To<CommandUnloadPartModules>();
+                //.To<CommandUnloadScenarioModules>();
 
 
             commandBinder.Bind<SignalAboutToDestroyMonoBehaviour>()
