@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace AssemblyReloader.DataObjects
 {
-    public class TypeIdentifier : ITypeIdentifier
+    public class TypeIdentifier
     {
         public TypeIdentifier(string name)
         {

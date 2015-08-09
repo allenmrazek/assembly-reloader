@@ -3,6 +3,7 @@ using System.Linq;
 using AssemblyReloader.Game;
 using AssemblyReloader.StrangeIoC.extensions.command.impl;
 using AssemblyReloader.StrangeIoC.extensions.injector;
+using AssemblyReloader.Unsorted;
 using ReeperCommon.Containers;
 using ReeperCommon.Logging;
 using UnityEngine;
@@ -16,6 +17,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
         private readonly IScenarioModuleConfigNodeRepository _configRepository;
         private readonly IGetProtoScenarioModules _protoScenarioModuleQuery;
         private readonly IScenarioModuleSettings _scenarioModuleSettings;
+        private readonly IGetTypeIdentifier _typeIdentifierQuery;
         private readonly ILog _log;
 
 
@@ -24,18 +26,21 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
             IScenarioModuleConfigNodeRepository configRepository,
             IGetProtoScenarioModules protoScenarioModuleQuery,
             IScenarioModuleSettings scenarioModuleSettings,
+            IGetTypeIdentifier typeIdentifierQuery,
             [Name(LogKeys.ScenarioModuleConfigNodeUpdater)] ILog log)
         {
             if (mbToBeDestroyed == null) throw new ArgumentNullException("mbToBeDestroyed");
             if (configRepository == null) throw new ArgumentNullException("configRepository");
             if (protoScenarioModuleQuery == null) throw new ArgumentNullException("protoScenarioModuleQuery");
             if (scenarioModuleSettings == null) throw new ArgumentNullException("scenarioModuleSettings");
+            if (typeIdentifierQuery == null) throw new ArgumentNullException("typeIdentifierQuery");
             if (log == null) throw new ArgumentNullException("log");
 
             _mbToBeDestroyed = mbToBeDestroyed;
             _configRepository = configRepository;
             _protoScenarioModuleQuery = protoScenarioModuleQuery;
             _scenarioModuleSettings = scenarioModuleSettings;
+            _typeIdentifierQuery = typeIdentifierQuery;
             _log = log;
         }
 
@@ -67,7 +72,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
                 var config = new ConfigNode(psm.GetData().name);
 
                 scenarioModule.Save(config);
-                _configRepository.Store(scenarioModule.GetType(), config);
+                _configRepository.Store(_typeIdentifierQuery.Get(scenarioModule.GetType()), config);
                 _log.Verbose("Stored updated ConfigNode for " + psm.moduleName);
             }
             catch (Exception e)
@@ -82,7 +87,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
 
         private void StoreLastConfigNodeGameUsed(IProtoScenarioModule psm, ScenarioModule scenarioModule)
         {
-            _configRepository.Store(scenarioModule.GetType(), psm.GetData().CreateCopy());
+            _configRepository.Store(_typeIdentifierQuery.Get(scenarioModule.GetType()), psm.GetData().CreateCopy());
             _log.Verbose("Stored last game ConfigNode for " + psm.moduleName);
         }
 

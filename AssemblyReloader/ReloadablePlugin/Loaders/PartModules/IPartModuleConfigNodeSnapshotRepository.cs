@@ -5,9 +5,9 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
 {
     public interface IPartModuleConfigNodeSnapshotRepository
     {
-        void Store(uint flightid, ITypeIdentifier key, ConfigNode data);
-        Maybe<ConfigNode> Retrieve(uint flightid, ITypeIdentifier key);
-        Maybe<ConfigNode> Peek(uint flightid, ITypeIdentifier key);
+        void Store(uint flightid, TypeIdentifier key, ConfigNode data);
+        Maybe<ConfigNode> Retrieve(uint flightid, TypeIdentifier key);
+        Maybe<ConfigNode> Peek(uint flightid, TypeIdentifier key);
         void Clear();
     }
 }

@@ -6,7 +6,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
 {
     public interface IScenarioModuleConfigNodeRepository
     {
-        void Store(ITypeIdentifier identifier, ConfigNode config);
-        Maybe<ConfigNode> Retrieve(Type smType);
+        void Store(TypeIdentifier identifier, ConfigNode config);
+        Maybe<ConfigNode> Retrieve(TypeIdentifier smType);
     }
 }

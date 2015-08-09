@@ -3,14 +3,14 @@ using AssemblyReloader.DataObjects;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
 {
-    public class FlightConfigNodeKeyValuePairComparer : IEqualityComparer<KeyValuePair<uint, ITypeIdentifier>> 
+    public class FlightConfigNodeKeyValuePairComparer : IEqualityComparer<KeyValuePair<uint, TypeIdentifier>> 
     {
-        public bool Equals(KeyValuePair<uint, ITypeIdentifier> x, KeyValuePair<uint, ITypeIdentifier> y)
+        public bool Equals(KeyValuePair<uint, TypeIdentifier> x, KeyValuePair<uint, TypeIdentifier> y)
         {
             return x.Key == y.Key && string.Equals(x.Value.Identifier, y.Value.Identifier);
         }
 
-        public int GetHashCode(KeyValuePair<uint, ITypeIdentifier> obj)
+        public int GetHashCode(KeyValuePair<uint, TypeIdentifier> obj)
         {
             return obj.Key.GetHashCode();
         }

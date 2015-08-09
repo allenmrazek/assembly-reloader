@@ -5,6 +5,6 @@ namespace AssemblyReloader.Unsorted
 {
     public interface IGetTypeIdentifier
     {
-        ITypeIdentifier Get(Type type);
+        TypeIdentifier Get(Type type);
     }
 }

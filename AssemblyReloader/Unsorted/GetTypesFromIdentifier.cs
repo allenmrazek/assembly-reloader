@@ -10,7 +10,7 @@ namespace AssemblyReloader.Unsorted
     [Implements(typeof(IGetTypeIdentifier), InjectionBindingScope.CROSS_CONTEXT)]
     public class GetTypeIdentifier : IGetTypeIdentifier
     {
-        public ITypeIdentifier Get(Type type)
+        public TypeIdentifier Get(Type type)
         {
             return new TypeIdentifier(type.Name);
         }

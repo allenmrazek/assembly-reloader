@@ -13,9 +13,9 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
         public IPart Prefab { get; private set; }
         public ConfigNode Config { get; private set; }
         public Type Type { get; private set; }
-        public ITypeIdentifier Identifier { get; private set; }
+        public TypeIdentifier Identifier { get; private set; }
 
-        public PartModuleDescriptor(IPart prefab, ConfigNode config, Type type, ITypeIdentifier typeIdentifier)
+        public PartModuleDescriptor(IPart prefab, ConfigNode config, Type type, TypeIdentifier typeIdentifier)
         {
             if (prefab == null) throw new ArgumentNullException("prefab");
             if (config == null) throw new ArgumentNullException("config");
@@ -27,8 +27,6 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
             Config = config;
             Type = type;
             Identifier = typeIdentifier;
-
-
         }
 
 

@@ -117,6 +117,7 @@
     <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\ScenarioModuleFactory.cs" />
     <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\ScenarioModuleLoader.cs" />
     <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\ScenarioRunnerNotFound.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\TypeIdentifierComparer.cs" />
     <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\WrongProtoScenarioModuleForTypeException.cs" />
     <Compile Include="ReloadablePlugin\Loaders\Signals.cs" />
     <Compile Include="ReloadablePlugin\Weaving\Operations\CommandInsertScenarioRunnerProxies.cs" />
