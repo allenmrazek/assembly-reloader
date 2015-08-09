@@ -53,16 +53,12 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
 
             var infoList = new List<PartModuleDescriptor>();
 
-            _partLoader.LoadedParts.ForEach(ap =>
-            {
-                var partConfig = _configQuery.Get(ap);
-                if (!partConfig.Any()) return;
-
-                var pmInfo = CreatePartModuleInfo(ap.PartPrefab, partConfig.Single(), pmType).ToList();
-
-                if (pmInfo.Any())
-                    infoList.AddRange(pmInfo);
-            });
+            foreach (var pmInfo in from ap in _partLoader.LoadedParts 
+                                   let partConfig = _configQuery.Get(ap) 
+                                   where partConfig.Any() 
+                                   select CreatePartModuleInfo(ap.PartPrefab, partConfig.Single(), pmType).ToList() into pmInfo 
+                                   where pmInfo.Any() select pmInfo)
+                infoList.AddRange(pmInfo);
 
             return infoList;
         }

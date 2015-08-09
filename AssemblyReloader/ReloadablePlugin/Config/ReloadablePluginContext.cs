@@ -166,8 +166,7 @@ namespace AssemblyReloader.ReloadablePlugin.Config
             // these things need the helper type
             commandBinder.Bind<SignalHelperDefinitionCreated>()
                 .To<CommandRewriteAssemblyCodeBaseCalls>()
-                .To<CommandRewriteAssemblyLocationCalls>()
-                .To<CommandRewriteScenarioRunnerGetLoadedModulesCalls>();
+                .To<CommandRewriteAssemblyLocationCalls>();
 
 
             // other signals

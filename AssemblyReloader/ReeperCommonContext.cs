@@ -134,7 +134,7 @@ namespace AssemblyReloader
                         new ResourceIdentifierAdapter(s =>
                         {
                             var resourceNames = Assembly.GetExecutingAssembly().GetManifestResourceNames()
-                                .Where(name => name.StartsWith(s))
+                                .Where(name => name.StartsWith(s, StringComparison.InvariantCulture))
                                 .ToList();
 
                             return resourceNames.Count == 1 ? resourceNames.First() : s;
@@ -149,7 +149,7 @@ namespace AssemblyReloader
 
             var mf = injectionBinder.GetInstance<IGetAssemblyFileLocation>().Get(target);
 
-            if (!mf.Any()) throw new Exception("Failed to find file location of " + target.FullName);
+            if (!mf.Any()) throw new AssemblyFileLocationNotFoundException(target);
             return mf.Single();
         }
     }

@@ -62,10 +62,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AssemblyFileLocationNotFoundException.cs" />
     <Compile Include="Commands\old\RefreshPartActionWindows.cs" />
     <Compile Include="CommandNull.cs" />
     <Compile Include="CommandTest.cs" />
+    <Compile Include="Game\DuplicateLoadedAssemblyException.cs" />
     <Compile Include="Game\DuplicatePartPrefabException.cs" />
+    <Compile Include="Game\DuplicateProtoScenarioModuleException.cs" />
+    <Compile Include="Game\LoadedAssemblyHandleNotFoundException.cs" />
     <Compile Include="Game\PrefabNotFoundException.cs" />
     <Compile Include="ReloadablePlugin\Config\BootstrapReloadablePlugin.cs" />
     <Compile Include="ReloadablePlugin\Gui\PluginConfigurationView.cs" />
@@ -107,8 +111,6 @@
     <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\IScenarioModuleFactory.cs" />
     <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\IScenarioModuleLoader.cs" />
     <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\IScenarioModuleSettings.cs" />
-    <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\old\IScenarioRunner.cs" />
-    <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\old\KspScenarioRunner.cs" />
     <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\ModuleRefAlreadyExistsException.cs" />
     <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\MultipleScenarioModuleInstancesException.cs" />
     <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\NoConfigNodeFoundException.cs" />
@@ -120,13 +122,10 @@
     <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\ScenarioRunnerNotFound.cs" />
     <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\WrongProtoScenarioModuleForTypeException.cs" />
     <Compile Include="ReloadablePlugin\Loaders\Signals.cs" />
-    <Compile Include="ReloadablePlugin\Weaving\Operations\CommandInsertScenarioRunnerProxies.cs" />
-    <Compile Include="ReloadablePlugin\Weaving\Operations\CommandRewriteScenarioRunnerGetLoadedModulesCalls.cs" />
     <Compile Include="ReloadablePlugin\Weaving\Operations\Keys\MethodKeys.cs" />
     <Compile Include="ReloadablePlugin\Weaving\Operations\ProxyMethodAlreadyDefinedException.cs" />
     <Compile Include="ReloadablePlugin\Weaving\Operations\ReturnSpecialResultIfExecutingAssembly.cs" />
     <Compile Include="ReloadablePlugin\Weaving\Operations\CommandRewriteCall.cs" />
-    <Compile Include="ReloadablePlugin\Weaving\Operations\Proxies\ScenarioRunnerProxyMethods.cs" />
     <Compile Include="RoutineRunner.cs" />
     <Compile Include="SignalContext.cs" />
     <Compile Include="Game\GameEventMediator.cs" />
@@ -165,7 +164,6 @@
     <Compile Include="ReloadablePlugin\Weaving\Operations\AssemblyLocation.cs" />
     <Compile Include="ReloadablePlugin\Weaving\Operations\CommandInsertHelperType.cs" />
     <Compile Include="ReloadablePlugin\Weaving\Operations\CommandReplaceKSPAddonWithReloadableAddon.cs" />
-    <Compile Include="ReloadablePlugin\Weaving\Operations\phasing out\CommandRewriteAssemblyCall.cs" />
     <Compile Include="ReloadablePlugin\Weaving\Operations\CommandRewriteAssemblyCodeBaseCalls.cs" />
     <Compile Include="ReloadablePlugin\Weaving\Operations\CommandRewriteAssemblyLocationCalls.cs" />
     <Compile Include="ReloadablePlugin\Weaving\Operations\NoConstructorArgumentFoundsException.cs" />
@@ -193,10 +191,8 @@
     <Compile Include="Game\LoadedAssemblyHandle.cs" />
     <Compile Include="Game\IGame.cs" />
     <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\IProtoScenarioModule.cs" />
-    <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\old\IScenarioRunnerProvider.cs" />
     <Compile Include="Game\KspGame.cs" />
     <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\KspProtoScenarioModule.cs" />
-    <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\old\KspScenarioRunnerProvider.cs" />
     <Compile Include="Game\PartPrefabReferenceComparer.cs" />
     <Compile Include="ReloadablePlugin\Loaders\Addons\GetCurrentGameScene.cs" />
     <Compile Include="ReloadablePlugin\Loaders\GetCurrentStartupScene.cs" />
@@ -226,9 +222,7 @@
     <Compile Include="ReloadablePlugin\Weaving\Signals.cs" />
     <Compile Include="ReloadablePlugin\Weaving\WriteModifiedAssemblyDefinitionToDisk.cs" />
     <Compile Include="ReloadablePlugin\Loaders\Addons\IReloadableAddonLoader.cs" />
-    <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\old\IScenarioModuleSnapshotGenerator.cs" />
     <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\IScenarioModuleUnloader.cs" />
-    <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\old\ScenarioModuleSnapshotGenerator.cs" />
     <Compile Include="ReloadablePlugin\Weaving\AssemblyDefinitionLoader.cs" />
     <Compile Include="FileSystem\IFilePathProvider.cs" />
     <Compile Include="Game\GetLoadedAssemblyFileUrl.cs" />

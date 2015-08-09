@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using AssemblyReloader.ReloadablePlugin.Loaders;
 
@@ -22,9 +23,9 @@ namespace AssemblyReloader.Game
         }
 
 
-        public List<IPart> Parts
+        public ReadOnlyCollection<IPart> Parts
         {
-            get { return _vessel.Parts.Select(p => _kspFactory.Create(p)).ToList(); }
+            get { return _vessel.Parts.Select(p => _kspFactory.Create(p)).ToList().AsReadOnly(); }
         }
 
         public Vessel.Situations Situation

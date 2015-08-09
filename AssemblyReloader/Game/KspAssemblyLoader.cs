@@ -48,7 +48,7 @@ namespace AssemblyReloader.Game
             var url = _laFileUrl.Get(location);
 
             if (AssemblyLoader.loadedAssemblies.Any(la => la.url == url && la.dllName == location.Name))
-                throw new Exception("An assembly with this URL and name is already loaded by KSP. Duplicate entries?");
+                throw new DuplicateLoadedAssemblyException(assembly, location);
 
             var loadedAssembly = new AssemblyLoader.LoadedAssembly(assembly, location.FullPath, _laFileUrl.Get(location), null);
 
@@ -71,7 +71,7 @@ namespace AssemblyReloader.Game
                     return;
                 }
 
-            throw new Exception("handle was not found in AssemblyLoader.loadedAssemblies");
+            throw new LoadedAssemblyHandleNotFoundException(handle);
         }
 
 
@@ -95,9 +95,6 @@ namespace AssemblyReloader.Game
 
             InsertTypeListIntoLoadedAssembly<PartModule>(loadedAssembly, partModules);
             InsertTypeListIntoLoadedAssembly<ScenarioModule>(loadedAssembly, scenarioModules);
-
-            //loadedAssembly.types[typeof(PartModule)] = partModules;
-            //loadedAssembly.types[typeof (ScenarioModule)] = scenarioModules;
         }
 
 

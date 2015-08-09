@@ -1,11 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace AssemblyReloader.Game
 {
     public interface IVessel
     {
-        List<IPart> Parts { get; }
+        ReadOnlyCollection<IPart> Parts { get; }
         Vessel.Situations Situation { get; }
 
 // ReSharper disable once InconsistentNaming

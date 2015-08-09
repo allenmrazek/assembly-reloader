@@ -55,8 +55,7 @@ namespace AssemblyReloader.Game
             if (string.IsNullOrEmpty(moduleName)) throw new ArgumentException("moduleName");
 
             if (_game.scenarios.Any(psm => psm.moduleName == moduleName))
-                throw new Exception("A ProtoScenarioModule of type " + moduleName +
-                                    " already exists");
+                throw new DuplicateProtoScenarioModuleException(moduleName);
         }
     }
 }

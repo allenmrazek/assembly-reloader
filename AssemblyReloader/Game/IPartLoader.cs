@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.ObjectModel;
 
 namespace AssemblyReloader.Game
 {
     public interface IPartLoader
     {
-        List<IAvailablePart> LoadedParts { get; }
+        ReadOnlyCollection<IAvailablePart> LoadedParts { get; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using AssemblyReloader.ReloadablePlugin.Loaders;
 using ReeperCommon.Extensions;
@@ -27,7 +28,7 @@ namespace AssemblyReloader.Game
                 _partPrefabs = PartLoader.LoadedPartsList.ToDictionary(ap => ap.name,
                     ap => _kspFactory.Create(ap.partPrefab));
             }
-            catch (ArgumentException e)
+            catch (ArgumentException)
             {
                 // duplicate keys?
                 var firstDuplicate = PartLoader.LoadedPartsList
@@ -41,9 +42,14 @@ namespace AssemblyReloader.Game
         }
 
 
-        public List<IAvailablePart> LoadedParts
+        public ReadOnlyCollection<IAvailablePart> LoadedParts
         {
-            get { return (!PartLoader.Instance.IsNull() && !PartLoader.LoadedPartsList.IsNull()) ? PartLoader.LoadedPartsList.Select(ap => _kspFactory.Create(ap)).ToList() : new List<IAvailablePart>(); }
+            get
+            {
+                return (!PartLoader.Instance.IsNull() && !PartLoader.LoadedPartsList.IsNull())
+                    ? PartLoader.LoadedPartsList.Select(ap => _kspFactory.Create(ap)).ToList().AsReadOnly()
+                    : Enumerable.Empty<IAvailablePart>().ToList().AsReadOnly();
+            }
         }
 
 
