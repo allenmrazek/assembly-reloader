@@ -11,34 +11,13 @@ namespace AssemblyReloader.Game
     public class KspPartLoader : IPartLoader, IPartLoaderPrefabProvider
     {
         private readonly IKspFactory _kspFactory;
-        private readonly ILog _log;
-        private readonly Dictionary<string, IPart> _partPrefabs = new Dictionary<string, IPart>();
- 
 
-        public KspPartLoader(IKspFactory kspFactory, ILog log)
+
+        public KspPartLoader(IKspFactory kspFactory)
         {
             if (kspFactory == null) throw new ArgumentNullException("kspFactory");
-            if (log == null) throw new ArgumentNullException("log");
 
             _kspFactory = kspFactory;
-            _log = log;
-
-            try
-            {
-                _partPrefabs = PartLoader.LoadedPartsList.ToDictionary(ap => ap.name,
-                    ap => _kspFactory.Create(ap.partPrefab));
-            }
-            catch (ArgumentException)
-            {
-                // duplicate keys?
-                var firstDuplicate = PartLoader.LoadedPartsList
-                    .FirstOrDefault(ap => GetPrefabCount(ap.name) > 0);
-
-                if (firstDuplicate != null)
-                    throw new DuplicatePartPrefabException(firstDuplicate);
-
-                throw; // unknown
-            }
         }
 
 
@@ -68,22 +47,6 @@ namespace AssemblyReloader.Game
             if (availablePart == null) throw new PrefabNotFoundException(@from);
 
             return _kspFactory.Create(availablePart.partPrefab);
-
-            //IPart prefab;
-
-            //if (_partPrefabs.TryGetValue(@from.PartInfo.Name, out prefab))
-            //    return prefab;
-
-            //_partPrefabs.Keys.ToList().ForEach(prefabName => _log.Debug("Prefab: " + prefabName));
-
-
-
-        }
-
-
-        private int GetPrefabCount(string partName)
-        {
-            return PartLoader.LoadedPartsList.Count(ap => ap.name == partName);
         }
     }
 }

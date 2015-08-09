@@ -106,13 +106,17 @@
     <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\CommandUnloadScenarioModules.cs" />
     <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\CommandCreateScenarioModuleConfigNode.cs" />
     <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\ConfigNodeDoesNotSpecifyTypeException.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\GetCurrentGame.cs" />
     <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\GetCurrentSceneIsValidForScenarioModules.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\IGame.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\IGetCurrentGame.cs" />
     <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\IGetCurrentSceneIsValidForScenarioModules.cs" />
     <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\IScenarioModuleConfigNodeRepository.cs" />
     <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\IScenarioModuleDestroyer.cs" />
     <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\IScenarioModuleFactory.cs" />
     <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\IScenarioModuleLoader.cs" />
     <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\IScenarioModuleSettings.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\KspGame.cs" />
     <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\ModuleRefAlreadyExistsException.cs" />
     <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\MultipleScenarioModuleInstancesException.cs" />
     <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\NoConfigNodeFoundException.cs" />
@@ -169,7 +173,6 @@
     <Compile Include="ReloadablePlugin\Weaving\Operations\CommandRewriteAssemblyCodeBaseCalls.cs" />
     <Compile Include="ReloadablePlugin\Weaving\Operations\CommandRewriteAssemblyLocationCalls.cs" />
     <Compile Include="ReloadablePlugin\Weaving\Operations\NoConstructorArgumentFoundsException.cs" />
-    <Compile Include="ReloadablePlugin\Weaving\Operations\ReturnTypeMismatchException.cs" />
     <Compile Include="ReloadablePlugin\Weaving\Operations\Signals.cs" />
     <Compile Include="ReloadablePlugin\Weaving\IGetAssemblyDefinition.cs" />
     <Compile Include="ReloadablePlugin\Weaving\Operations\CommandChangeDefinitionIdentity.cs" />
@@ -191,11 +194,8 @@
     <Compile Include="DataObjects\TemporaryFile.cs" />
     <Compile Include="ReloadablePlugin\Loaders\MonoBehaviourDestroyer.cs" />
     <Compile Include="Game\LoadedAssemblyHandle.cs" />
-    <Compile Include="Game\IGame.cs" />
     <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\IProtoScenarioModule.cs" />
-    <Compile Include="Game\KspGame.cs" />
     <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\KspProtoScenarioModule.cs" />
-    <Compile Include="Game\PartPrefabReferenceComparer.cs" />
     <Compile Include="ReloadablePlugin\Loaders\Addons\GetCurrentGameScene.cs" />
     <Compile Include="ReloadablePlugin\Loaders\GetCurrentStartupScene.cs" />
     <Compile Include="ReloadablePlugin\Loaders\Addons\IGetCurrentGameScene.cs" />
@@ -203,9 +203,7 @@
     <Compile Include="ReloadablePlugin\Loaders\PartModules\IGetPartModuleStartState.cs" />
     <Compile Include="ReloadablePlugin\Loaders\PartModules\GetPartModuleStartState.cs" />
     <Compile Include="ReloadablePlugin\Loaders\PartModules\GetConfigNodeForPart.cs" />
-    <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\GetCurrentGame.cs" />
     <Compile Include="ReloadablePlugin\Loaders\PartModules\IGetConfigNodeForPart.cs" />
-    <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\IGetCurrentGame.cs" />
     <Compile Include="Game\Providers\IGetLoadedVessels.cs" />
     <Compile Include="ReloadablePlugin\Loaders\PartModules\IGetPartModuleConfigsFromPartConfig.cs" />
     <Compile Include="ReloadablePlugin\Loaders\PartModules\IGetPartPrefabClones.cs" />

@@ -71,7 +71,7 @@ namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations
         private static CustomAttribute CreateReloadableAttribute(CustomAttribute addonAttribute, TypeDefinition decoratedType)
         {
             if (!addonAttribute.HasConstructorArguments)
-                throw new NoConstructorArgumentFoundsException(addonAttribute, decoratedType);
+                throw new NoConstructorArgumentFoundException(addonAttribute, decoratedType);
 
             if (addonAttribute.ConstructorArguments.Count != 2)
                 throw new ArgumentException("KSPAddon attribute has incorrect number of arguments");

@@ -33,6 +33,7 @@ namespace AssemblyReloader.DataObjects
         public void Dispose()
         {
             Dispose(true);
+            GC.SuppressFinalize(this);
         }
 
 
@@ -44,8 +45,6 @@ namespace AssemblyReloader.DataObjects
 
         private void Dispose(bool managed)
         {
-            GC.SuppressFinalize(this);
-
             if (managed)
             {
                 if (_stream != null) _stream.Dispose();

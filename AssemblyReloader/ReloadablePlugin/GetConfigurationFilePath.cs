@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using AssemblyReloader.Properties;
 using ReeperCommon.FileSystem;
 
 namespace AssemblyReloader.ReloadablePlugin
@@ -10,14 +9,20 @@ namespace AssemblyReloader.ReloadablePlugin
     {
         private readonly string _extension;
 
-        public GetConfigurationFilePath([NotNull] string extension = ".config")
+        public GetConfigurationFilePath() : this(".config")
+        {
+            
+        }
+
+
+        public GetConfigurationFilePath(string extension)
         {
             if (extension == null) throw new ArgumentNullException("extension");
             if (string.IsNullOrEmpty(extension))
                 throw new ArgumentException("cannot be null or empty", "extension");
 
             _extension = extension;
-            if (!_extension.StartsWith(".")) _extension = "." + extension;
+            if (!_extension.StartsWith(".", StringComparison.InvariantCulture)) _extension = "." + extension;
         }
 
 

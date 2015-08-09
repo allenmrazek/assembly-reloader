@@ -6,7 +6,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
     // stick reloadable plugins in the loaded assembly list KSP uses while at the same time cloaking
     // KSPAddons inside said assembly from KSP's AddonLoader, allowing us to implement our own
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
-    public class ReloadableAddonAttribute : Attribute
+    public sealed class ReloadableAddonAttribute : Attribute
     {
         public bool once;
         public KSPAddon.Startup startup;

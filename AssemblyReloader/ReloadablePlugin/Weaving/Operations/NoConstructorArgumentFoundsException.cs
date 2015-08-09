@@ -3,24 +3,24 @@ using Mono.Cecil;
 
 namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations
 {
-    class NoConstructorArgumentFoundsException : Exception
+    public class NoConstructorArgumentFoundException : Exception
     {
-        public NoConstructorArgumentFoundsException() : base("No constructor arguments found")
+        public NoConstructorArgumentFoundException() : base("No constructor arguments found")
         {
             
         }
 
-        public NoConstructorArgumentFoundsException(string message) : base(message)
+        public NoConstructorArgumentFoundException(string message) : base(message)
         {
         }
 
-        public NoConstructorArgumentFoundsException(string message, Exception innerException)
+        public NoConstructorArgumentFoundException(string message, Exception innerException)
             : base(message, innerException)
         {
             
         }
 
-        public NoConstructorArgumentFoundsException(CustomAttribute attribute, TypeDefinition owner)
+        public NoConstructorArgumentFoundException(CustomAttribute attribute, TypeDefinition owner)
             : base("No constructor arguments found for " + attribute.AttributeType.FullName + " on " + owner.FullName)
         {
             

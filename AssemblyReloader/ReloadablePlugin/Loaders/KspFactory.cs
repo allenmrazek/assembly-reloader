@@ -29,5 +29,12 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders
         {
             return new KspProtoScenarioModule(psm);
         }
+
+        public IGame Create(global::Game game)
+        {
+            if (game == null) throw new ArgumentNullException("game");
+
+            return new KspGame(game, this);
+        }
     }
 }

@@ -1,9 +1,6 @@
 ﻿using System;
-using AssemblyReloader.Game;
-using AssemblyReloader.Properties;
 using AssemblyReloader.StrangeIoC.extensions.implicitBind;
 using AssemblyReloader.StrangeIoC.extensions.injector.api;
-using AssemblyReloader.Unsorted;
 using ReeperCommon.Containers;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
@@ -11,18 +8,21 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
     [Implements(typeof(IGetCurrentGame), InjectionBindingScope.CROSS_CONTEXT)]
     public class GetCurrentGame : IGetCurrentGame
     {
-        private readonly IGetTypeIdentifier _getTypeIdentifier;
+        private readonly IKspFactory _kspFactory;
 
-        public GetCurrentGame([NotNull] IGetTypeIdentifier getTypeIdentifier)
+        public GetCurrentGame(IKspFactory kspFactory)
         {
-            if (getTypeIdentifier == null) throw new ArgumentNullException("getTypeIdentifier");
-            _getTypeIdentifier = getTypeIdentifier;
+            if (kspFactory == null) throw new ArgumentNullException("kspFactory");
+
+            _kspFactory = kspFactory;
         }
 
 
         public Maybe<IGame> Get()
         {
-            return HighLogic.CurrentGame == null ? Maybe<IGame>.None : Maybe<IGame>.With(new KspGame(HighLogic.CurrentGame, _getTypeIdentifier));
+            return HighLogic.CurrentGame != null
+            ? Maybe<IGame>.With(_kspFactory.Create(HighLogic.CurrentGame)) 
+            : Maybe<IGame>.None;
         }
     }
 }

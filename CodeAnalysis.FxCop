@@ -1487,14 +1487,6 @@
              <Item>'AssemblyFileLocationNotFoundException'</Item>
              <Item>protected AssemblyFileLocationNotFoundException(SerializationInfo, StreamingContext)</Item>
             </Issue>
-            <Issue Name="MissingConstructor">
-             <Item>'AssemblyFileLocationNotFoundException'</Item>
-             <Item>public AssemblyFileLocationNotFoundException()</Item>
-            </Issue>
-            <Issue Name="MissingConstructor">
-             <Item>'AssemblyFileLocationNotFoundException'</Item>
-             <Item>public AssemblyFileLocationNotFoundException(String, Exception)</Item>
-            </Issue>
            </Message>
            <Message TypeName="MarkISerializableTypesWithSerializable" Category="Microsoft.Usage" CheckId="CA2237" Status="Excluded" Created="2015-08-09 07:34:16Z">
             <Issue Certainty="95" Level="Error">
@@ -1540,15 +1532,6 @@
             </Messages>
            </Member>
           </Members>
-         </Type>
-         <Type Name="CommandTest">
-          <Messages>
-           <Message TypeName="AvoidUninstantiatedInternalClasses" Category="Microsoft.Performance" CheckId="CA1812" Created="2015-08-09 07:34:16Z">
-            <Issue>
-             <Item>'CommandTest'</Item>
-            </Issue>
-           </Message>
-          </Messages>
          </Type>
          <Type Name="IGetRandomString">
           <Members>
@@ -1785,177 +1768,32 @@
            </Member>
           </Members>
          </Type>
-         <Type Name="Configuration">
+         <Type Name="GuiSkinNotFoundException">
           <Messages>
-           <Message TypeName="TypeNamesShouldNotMatchNamespaces" Category="Microsoft.Naming" CheckId="CA1724" Created="2015-08-09 07:34:16Z">
-            <Issue Name="System">
-             <Item>'Configuration'</Item>
-             <Item>System.Configuration</Item>
+           <Message TypeName="ImplementStandardExceptionConstructors" Category="Microsoft.Design" CheckId="CA1032" Created="2015-08-09 07:51:11Z">
+            <Issue Name="MissingConstructor">
+             <Item>'GuiSkinNotFoundException'</Item>
+             <Item>protected GuiSkinNotFoundException(SerializationInfo, StreamingContext)</Item>
             </Issue>
            </Message>
-          </Messages>
-          <Members>
-           <Member Name="#ReloadAllReloadablesUponWindowFocus">
-            <Messages>
-             <Message TypeName="DoNotDeclareVisibleInstanceFields" Category="Microsoft.Design" CheckId="CA1051" Created="2015-08-09 07:34:16Z">
-              <Issue>
-               <Item>'Configuration.ReloadAllReloadablesUponWindowFocus'</Item>
-              </Issue>
-             </Message>
-             <Message Id="Reloadables" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2015-08-09 07:34:16Z">
-              <Issue Name="Member">
-               <Item>Reloadables</Item>
-               <Item>'Configuration.ReloadAllReloadablesUponWindowFocus'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-           <Member Name="#StartKSPAddonsForCurrentScene">
-            <Messages>
-             <Message TypeName="DoNotDeclareVisibleInstanceFields" Category="Microsoft.Design" CheckId="CA1051" Created="2015-08-09 07:34:16Z">
-              <Issue>
-               <Item>'Configuration.StartKSPAddonsForCurrentScene'</Item>
-              </Issue>
-             </Message>
-             <Message Id="Addons" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2015-08-09 07:34:16Z">
-              <Issue Name="Member">
-               <Item>Addons</Item>
-               <Item>'Configuration.StartKSPAddonsForCurrentScene'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-          </Members>
-         </Type>
-         <Type Name="IReadOnlySetting`1">
-          <Members>
-           <Member Name="#Get()">
-            <Messages>
-             <Message Id="Get" TypeName="IdentifiersShouldNotMatchKeywords" Category="Microsoft.Naming" CheckId="CA1716" Status="Excluded" Created="2015-08-09 07:34:16Z">
-              <Issue Name="Member">
-               <Item>'IReadOnlySetting&lt;T&gt;.Get()'</Item>
-               <Item>Get</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-          </Members>
-         </Type>
-         <Type Name="ISetting`1">
-          <Members>
-           <Member Name="#Set(!0)">
-            <Messages>
-             <Message Id="Set" TypeName="IdentifiersShouldNotMatchKeywords" Category="Microsoft.Naming" CheckId="CA1716" Status="Excluded" Created="2015-08-09 07:34:16Z">
-              <Issue Name="Member">
-               <Item>'ISetting&lt;T&gt;.Set(T)'</Item>
-               <Item>Set</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-          </Members>
-         </Type>
-         <Type Name="Setting`1">
-          <Members>
-           <Member Name="#op_Implicit(!0):AssemblyReloader.Config.Setting`1&lt;!0&gt;">
-            <Messages>
-             <Message TypeName="OperatorOverloadsHaveNamedAlternates" Category="Microsoft.Usage" CheckId="CA2225" Created="2015-08-09 07:34:16Z">
-              <Issue Name="Multiple">
-               <Item>ToXXX</Item>
-               <Item>FromXXX</Item>
-               <Item>'Setting&lt;T&gt;.implicit operator Setting&lt;T&gt;(T)'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-           <Member Name="#op_Implicit(AssemblyReloader.Config.Setting`1&lt;!0&gt;):!0">
-            <Messages>
-             <Message TypeName="DoNotRaiseExceptionsInUnexpectedLocations" Category="Microsoft.Design" CheckId="CA1065" Created="2015-08-09 07:34:16Z" FixCategory="Breaking">
-              <Issue Name="NoAllowedExceptions" Level="Error">
-               <Item>'Setting&lt;T&gt;.implicit operator T(Setting&lt;T&gt;)'</Item>
-               <Item>'ArgumentNullException'</Item>
-              </Issue>
-             </Message>
-             <Message TypeName="OperatorOverloadsHaveNamedAlternates" Category="Microsoft.Usage" CheckId="CA2225" Created="2015-08-09 07:34:16Z">
-              <Issue Name="Multiple">
-               <Item>ToXXX</Item>
-               <Item>FromXXX</Item>
-               <Item>'Setting&lt;T&gt;.implicit operator T(Setting&lt;T&gt;)'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-           <Member Name="#Value">
-            <Messages>
-             <Message TypeName="DoNotDeclareVisibleInstanceFields" Category="Microsoft.Design" CheckId="CA1051" Created="2015-08-09 07:34:16Z">
-              <Issue>
-               <Item>'Setting&lt;T&gt;.Value'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-          </Members>
-         </Type>
-         <Type Name="SettingSerializer`1">
-          <Members>
-           <Member Name="#Deserialize(System.Type,System.Object,System.String,ConfigNode,ReeperCommon.Serialization.IConfigNodeSerializer)">
-            <Messages>
-             <Message TypeName="DoNotRaiseReservedExceptionTypes" Category="Microsoft.Usage" CheckId="CA2201" Created="2015-08-09 07:34:16Z">
-              <Issue Name="TooGeneric">
-               <Item>'SettingSerializer&lt;T&gt;.Deserialize(Type, object, string, ConfigNode, IConfigNodeSerializer)'</Item>
-               <Item>'Exception'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-           <Member Name="#GetSerializerForT(ReeperCommon.Serialization.IConfigNodeItemSerializerSelector)">
-            <Messages>
-             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Created="2015-08-09 07:34:16Z" FixCategory="NonBreaking">
-              <Issue>
-               <Item>'SettingSerializer&lt;T&gt;.GetSerializerForT(IConfigNodeItemSerializerSelector)'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-           <Member Name="#Serialize(System.Type,System.Object,System.String,ConfigNode,ReeperCommon.Serialization.IConfigNodeSerializer)">
-            <Messages>
-             <Message TypeName="DoNotRaiseReservedExceptionTypes" Category="Microsoft.Usage" CheckId="CA2201" Created="2015-08-09 07:34:16Z">
-              <Issue Name="TooGeneric">
-               <Item>'SettingSerializer&lt;T&gt;.Serialize(Type, object, string, ConfigNode, IConfigNodeSerializer)'</Item>
-               <Item>'Exception'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-          </Members>
-         </Type>
-        </Types>
-       </Namespace>
-       <Namespace Name="AssemblyReloader.Config.Keys">
-        <Types>
-         <Type Name="DirectoryKeys">
-          <Messages>
-           <Message TypeName="OnlyFlagsEnumsShouldHavePluralNames" Category="Microsoft.Naming" CheckId="CA1717" Created="2015-08-09 07:34:16Z">
-            <Issue>
-             <Item>'DirectoryKeys'</Item>
+           <Message TypeName="MarkISerializableTypesWithSerializable" Category="Microsoft.Usage" CheckId="CA2237" Status="Excluded" Created="2015-08-09 07:51:11Z">
+            <Issue Certainty="95" Level="Error">
+             <Item>'GuiSkinNotFoundException'</Item>
             </Issue>
            </Message>
           </Messages>
          </Type>
-         <Type Name="Styles">
+         <Type Name="UnityInstantiationFailedException">
           <Messages>
-           <Message TypeName="OnlyFlagsEnumsShouldHavePluralNames" Category="Microsoft.Naming" CheckId="CA1717" Created="2015-08-09 07:34:16Z">
-            <Issue>
-             <Item>'Styles'</Item>
+           <Message TypeName="ImplementStandardExceptionConstructors" Category="Microsoft.Design" CheckId="CA1032" Created="2015-08-09 07:51:11Z">
+            <Issue Name="MissingConstructor">
+             <Item>'UnityInstantiationFailedException'</Item>
+             <Item>protected UnityInstantiationFailedException(SerializationInfo, StreamingContext)</Item>
             </Issue>
            </Message>
-          </Messages>
-         </Type>
-         <Type Name="TextureNames">
-          <Messages>
-           <Message TypeName="OnlyFlagsEnumsShouldHavePluralNames" Category="Microsoft.Naming" CheckId="CA1717" Created="2015-08-09 07:34:16Z">
-            <Issue>
-             <Item>'TextureNames'</Item>
+           <Message TypeName="MarkISerializableTypesWithSerializable" Category="Microsoft.Usage" CheckId="CA2237" Status="Excluded" Created="2015-08-09 07:51:11Z">
+            <Issue Certainty="95" Level="Error">
+             <Item>'UnityInstantiationFailedException'</Item>
             </Issue>
            </Message>
           </Messages>
@@ -1996,10 +1834,10 @@
           <Members>
            <Member Name="#GenerateFilePath()">
             <Messages>
-             <Message Id="System.String.EndsWith(System.String)" TypeName="SpecifyStringComparison" Category="Microsoft.Globalization" CheckId="CA1307" Created="2015-08-09 07:34:16Z">
-              <Issue>
-               <Item>'string.EndsWith(string)'</Item>
+             <Message Id="System.String.EndsWith(System.String,System.StringComparison)" TypeName="UseOrdinalStringComparison" Category="Microsoft.Globalization" CheckId="CA1309" Created="2015-08-09 07:51:11Z">
+              <Issue Name="StringComparison">
                <Item>'GetTemporaryFile.GenerateFilePath()'</Item>
+               <Item>StringComparison.InvariantCulture</Item>
                <Item>'string.EndsWith(string, StringComparison)'</Item>
               </Issue>
              </Message>
@@ -2070,14 +1908,6 @@
              <Item>'DuplicateLoadedAssemblyException'</Item>
              <Item>protected DuplicateLoadedAssemblyException(SerializationInfo, StreamingContext)</Item>
             </Issue>
-            <Issue Name="MissingConstructor">
-             <Item>'DuplicateLoadedAssemblyException'</Item>
-             <Item>public DuplicateLoadedAssemblyException(String)</Item>
-            </Issue>
-            <Issue Name="MissingConstructor">
-             <Item>'DuplicateLoadedAssemblyException'</Item>
-             <Item>public DuplicateLoadedAssemblyException(String, Exception)</Item>
-            </Issue>
            </Message>
            <Message TypeName="MarkISerializableTypesWithSerializable" Category="Microsoft.Usage" CheckId="CA2237" Status="Excluded" Created="2015-08-09 07:34:16Z">
             <Issue Certainty="95" Level="Error">
@@ -2092,14 +1922,6 @@
             <Issue Name="MissingConstructor">
              <Item>'DuplicatePartPrefabException'</Item>
              <Item>protected DuplicatePartPrefabException(SerializationInfo, StreamingContext)</Item>
-            </Issue>
-            <Issue Name="MissingConstructor">
-             <Item>'DuplicatePartPrefabException'</Item>
-             <Item>public DuplicatePartPrefabException(String)</Item>
-            </Issue>
-            <Issue Name="MissingConstructor">
-             <Item>'DuplicatePartPrefabException'</Item>
-             <Item>public DuplicatePartPrefabException(String, Exception)</Item>
             </Issue>
            </Message>
            <Message TypeName="MarkISerializableTypesWithSerializable" Category="Microsoft.Usage" CheckId="CA2237" Status="Excluded" Created="2015-08-09 07:34:16Z">
@@ -2116,14 +1938,6 @@
              <Item>'DuplicateProtoScenarioModuleException'</Item>
              <Item>protected DuplicateProtoScenarioModuleException(SerializationInfo, StreamingContext)</Item>
             </Issue>
-            <Issue Name="MissingConstructor">
-             <Item>'DuplicateProtoScenarioModuleException'</Item>
-             <Item>public DuplicateProtoScenarioModuleException()</Item>
-            </Issue>
-            <Issue Name="MissingConstructor">
-             <Item>'DuplicateProtoScenarioModuleException'</Item>
-             <Item>public DuplicateProtoScenarioModuleException(String, Exception)</Item>
-            </Issue>
            </Message>
            <Message TypeName="MarkISerializableTypesWithSerializable" Category="Microsoft.Usage" CheckId="CA2237" Status="Excluded" Created="2015-08-09 07:34:16Z">
             <Issue Certainty="95" Level="Error">
@@ -2131,56 +1945,6 @@
             </Issue>
            </Message>
           </Messages>
-         </Type>
-         <Type Name="GetUniqueFlightId">
-          <Members>
-           <Member Name="#.cctor()">
-            <Messages>
-             <Message TypeName="InitializeReferenceTypeStaticFieldsInline" Category="Microsoft.Performance" CheckId="CA1810" Created="2015-08-09 07:34:16Z">
-              <Issue>
-               <Item>'GetUniqueFlightId'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-          </Members>
-         </Type>
-         <Type Name="IGame">
-          <Members>
-           <Member Name="#AddProtoScenarioModule(ConfigNode)">
-            <Messages>
-             <Message Id="scn" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2015-08-09 07:34:16Z">
-              <Issue Name="MemberParameter">
-               <Item>'IGame.AddProtoScenarioModule(ConfigNode)'</Item>
-               <Item>scn</Item>
-               <Item>'scnConfig'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-           <Member Name="#AddProtoScenarioModule(System.Type,GameScenes[])">
-            <Messages>
-             <Message Id="scn" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2015-08-09 07:34:16Z">
-              <Issue Name="MemberParameter">
-               <Item>'IGame.AddProtoScenarioModule(Type, params GameScenes[])'</Item>
-               <Item>scn</Item>
-               <Item>'scnType'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-           <Member Name="#RemoveProtoScenarioModule(System.Type)">
-            <Messages>
-             <Message Id="scn" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2015-08-09 07:34:16Z">
-              <Issue Name="MemberParameter">
-               <Item>'IGame.RemoveProtoScenarioModule(Type)'</Item>
-               <Item>scn</Item>
-               <Item>'scnType'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-          </Members>
          </Type>
          <Type Name="IGetCurrentSceneIsFlight">
           <Members>
@@ -2265,7 +2029,7 @@
          </Type>
          <Type Name="KspAssemblyLoader">
           <Messages>
-           <Message Id="Ksp" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2015-08-09 07:34:16Z">
+           <Message Id="Ksp" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2015-08-09 07:34:16Z">
             <Issue Name="Type">
              <Item>Ksp</Item>
              <Item>'KspAssemblyLoader'</Item>
@@ -2275,7 +2039,7 @@
          </Type>
          <Type Name="KspAvailablePart">
           <Messages>
-           <Message Id="Ksp" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2015-08-09 07:34:16Z">
+           <Message Id="Ksp" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2015-08-09 07:34:16Z">
             <Issue Name="Type">
              <Item>Ksp</Item>
              <Item>'KspAvailablePart'</Item>
@@ -2285,7 +2049,7 @@
           <Members>
            <Member Name="#.ctor(AvailablePart,AssemblyReloader.ReloadablePlugin.Loaders.IKspFactory)">
             <Messages>
-             <Message Id="ksp" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2015-08-09 07:34:16Z">
+             <Message Id="ksp" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2015-08-09 07:34:16Z">
               <Issue Name="MemberParameter">
                <Item>'KspAvailablePart.KspAvailablePart(AvailablePart, IKspFactory)'</Item>
                <Item>ksp</Item>
@@ -2296,19 +2060,9 @@
            </Member>
           </Members>
          </Type>
-         <Type Name="KspGame">
-          <Messages>
-           <Message Id="Ksp" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2015-08-09 07:34:16Z">
-            <Issue Name="Type">
-             <Item>Ksp</Item>
-             <Item>'KspGame'</Item>
-            </Issue>
-           </Message>
-          </Messages>
-         </Type>
          <Type Name="KspPart">
           <Messages>
-           <Message Id="Ksp" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2015-08-09 07:34:16Z">
+           <Message Id="Ksp" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2015-08-09 07:34:16Z">
             <Issue Name="Type">
              <Item>Ksp</Item>
              <Item>'KspPart'</Item>
@@ -2318,7 +2072,7 @@
           <Members>
            <Member Name="#.ctor(Part,AssemblyReloader.ReloadablePlugin.Loaders.IKspFactory)">
             <Messages>
-             <Message Id="ksp" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2015-08-09 07:34:16Z">
+             <Message Id="ksp" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2015-08-09 07:34:16Z">
               <Issue Name="MemberParameter">
                <Item>'KspPart.KspPart(Part, IKspFactory)'</Item>
                <Item>ksp</Item>
@@ -2341,7 +2095,7 @@
           <Members>
            <Member Name="#.ctor(AssemblyReloader.ReloadablePlugin.Loaders.IKspFactory,ReeperCommon.Logging.ILog)">
             <Messages>
-             <Message Id="ksp" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2015-08-09 07:34:16Z">
+             <Message Id="ksp" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Status="Excluded" Created="2015-08-09 07:34:16Z">
               <Issue Name="MemberParameter">
                <Item>'KspPartLoader.KspPartLoader(IKspFactory, ILog)'</Item>
                <Item>ksp</Item>
@@ -2409,16 +2163,8 @@
              <Item>'LoadedAssemblyHandleNotFoundException'</Item>
              <Item>protected LoadedAssemblyHandleNotFoundException(SerializationInfo, StreamingContext)</Item>
             </Issue>
-            <Issue Name="MissingConstructor">
-             <Item>'LoadedAssemblyHandleNotFoundException'</Item>
-             <Item>public LoadedAssemblyHandleNotFoundException(String)</Item>
-            </Issue>
-            <Issue Name="MissingConstructor">
-             <Item>'LoadedAssemblyHandleNotFoundException'</Item>
-             <Item>public LoadedAssemblyHandleNotFoundException(String, Exception)</Item>
-            </Issue>
            </Message>
-           <Message TypeName="MarkISerializableTypesWithSerializable" Category="Microsoft.Usage" CheckId="CA2237" Created="2015-08-09 07:34:16Z">
+           <Message TypeName="MarkISerializableTypesWithSerializable" Category="Microsoft.Usage" CheckId="CA2237" Status="Excluded" Created="2015-08-09 07:34:16Z">
             <Issue Certainty="95" Level="Error">
              <Item>'LoadedAssemblyHandleNotFoundException'</Item>
             </Issue>
@@ -2441,16 +2187,8 @@
              <Item>'PrefabNotFoundException'</Item>
              <Item>protected PrefabNotFoundException(SerializationInfo, StreamingContext)</Item>
             </Issue>
-            <Issue Name="MissingConstructor">
-             <Item>'PrefabNotFoundException'</Item>
-             <Item>public PrefabNotFoundException(String)</Item>
-            </Issue>
-            <Issue Name="MissingConstructor">
-             <Item>'PrefabNotFoundException'</Item>
-             <Item>public PrefabNotFoundException(String, Exception)</Item>
-            </Issue>
            </Message>
-           <Message TypeName="MarkISerializableTypesWithSerializable" Category="Microsoft.Usage" CheckId="CA2237" Created="2015-08-09 07:34:16Z">
+           <Message TypeName="MarkISerializableTypesWithSerializable" Category="Microsoft.Usage" CheckId="CA2237" Status="Excluded" Created="2015-08-09 07:34:16Z">
             <Issue Certainty="95" Level="Error">
              <Item>'PrefabNotFoundException'</Item>
             </Issue>
@@ -2516,14 +2254,14 @@
           <Members>
            <Member Name="#Plugins">
             <Messages>
-             <Message TypeName="CollectionPropertiesShouldBeReadOnly" Category="Microsoft.Usage" CheckId="CA2227" Created="2015-08-09 07:34:16Z">
-              <Issue>
-               <Item>'MainViewMediator.Plugins'</Item>
-              </Issue>
-             </Message>
              <Message Id="Plugins" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2015-08-09 07:34:16Z">
               <Issue Name="Member">
                <Item>Plugins</Item>
+               <Item>'MainViewMediator.Plugins'</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="CollectionPropertiesShouldBeReadOnly" Category="Microsoft.Usage" CheckId="CA2227" Status="Excluded" Created="2015-08-09 07:34:16Z">
+              <Issue>
                <Item>'MainViewMediator.Plugins'</Item>
               </Issue>
              </Message>
@@ -2555,7 +2293,7 @@
           <Members>
            <Member Name="#OnGUI()">
             <Messages>
-             <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2015-08-09 07:34:16Z">
+             <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Status="Excluded" Created="2015-08-09 07:34:16Z">
               <Issue>
                <Item>'StrangeView.OnGUI()'</Item>
               </Issue>
@@ -2584,7 +2322,7 @@
            </Member>
            <Member Name="#Update()">
             <Messages>
-             <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2015-08-09 07:34:16Z">
+             <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Status="Excluded" Created="2015-08-09 07:34:16Z">
               <Issue>
                <Item>'StrangeView.Update()'</Item>
               </Issue>
@@ -2629,15 +2367,15 @@
          </Type>
          <Type Name="AspMvcAreaMasterLocationFormatAttribute">
           <Messages>
-           <Message TypeName="DefineAccessorsForAttributeArguments" Category="Microsoft.Design" CheckId="CA1019" Created="2015-08-09 07:34:16Z">
-            <Issue>
-             <Item>'format'</Item>
-             <Item>'AspMvcAreaMasterLocationFormatAttribute'</Item>
-            </Issue>
-           </Message>
            <Message Id="Mvc" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2015-08-09 07:34:16Z">
             <Issue Name="Type">
              <Item>Mvc</Item>
+             <Item>'AspMvcAreaMasterLocationFormatAttribute'</Item>
+            </Issue>
+           </Message>
+           <Message TypeName="DefineAccessorsForAttributeArguments" Category="Microsoft.Design" CheckId="CA1019" Status="Excluded" Created="2015-08-09 07:34:16Z">
+            <Issue>
+             <Item>'format'</Item>
              <Item>'AspMvcAreaMasterLocationFormatAttribute'</Item>
             </Issue>
            </Message>
@@ -2657,15 +2395,15 @@
          </Type>
          <Type Name="AspMvcAreaPartialViewLocationFormatAttribute">
           <Messages>
-           <Message TypeName="DefineAccessorsForAttributeArguments" Category="Microsoft.Design" CheckId="CA1019" Created="2015-08-09 07:34:16Z">
-            <Issue>
-             <Item>'format'</Item>
-             <Item>'AspMvcAreaPartialViewLocationFormatAttribute'</Item>
-            </Issue>
-           </Message>
            <Message Id="Mvc" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2015-08-09 07:34:16Z">
             <Issue Name="Type">
              <Item>Mvc</Item>
+             <Item>'AspMvcAreaPartialViewLocationFormatAttribute'</Item>
+            </Issue>
+           </Message>
+           <Message TypeName="DefineAccessorsForAttributeArguments" Category="Microsoft.Design" CheckId="CA1019" Status="Excluded" Created="2015-08-09 07:34:16Z">
+            <Issue>
+             <Item>'format'</Item>
              <Item>'AspMvcAreaPartialViewLocationFormatAttribute'</Item>
             </Issue>
            </Message>
@@ -2685,15 +2423,15 @@
          </Type>
          <Type Name="AspMvcAreaViewLocationFormatAttribute">
           <Messages>
-           <Message TypeName="DefineAccessorsForAttributeArguments" Category="Microsoft.Design" CheckId="CA1019" Created="2015-08-09 07:34:16Z">
-            <Issue>
-             <Item>'format'</Item>
-             <Item>'AspMvcAreaViewLocationFormatAttribute'</Item>
-            </Issue>
-           </Message>
            <Message Id="Mvc" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2015-08-09 07:34:16Z">
             <Issue Name="Type">
              <Item>Mvc</Item>
+             <Item>'AspMvcAreaViewLocationFormatAttribute'</Item>
+            </Issue>
+           </Message>
+           <Message TypeName="DefineAccessorsForAttributeArguments" Category="Microsoft.Design" CheckId="CA1019" Status="Excluded" Created="2015-08-09 07:34:16Z">
+            <Issue>
+             <Item>'format'</Item>
              <Item>'AspMvcAreaViewLocationFormatAttribute'</Item>
             </Issue>
            </Message>
@@ -2753,15 +2491,15 @@
          </Type>
          <Type Name="AspMvcMasterLocationFormatAttribute">
           <Messages>
-           <Message TypeName="DefineAccessorsForAttributeArguments" Category="Microsoft.Design" CheckId="CA1019" Created="2015-08-09 07:34:16Z">
-            <Issue>
-             <Item>'format'</Item>
-             <Item>'AspMvcMasterLocationFormatAttribute'</Item>
-            </Issue>
-           </Message>
            <Message Id="Mvc" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2015-08-09 07:34:16Z">
             <Issue Name="Type">
              <Item>Mvc</Item>
+             <Item>'AspMvcMasterLocationFormatAttribute'</Item>
+            </Issue>
+           </Message>
+           <Message TypeName="DefineAccessorsForAttributeArguments" Category="Microsoft.Design" CheckId="CA1019" Status="Excluded" Created="2015-08-09 07:34:16Z">
+            <Issue>
+             <Item>'format'</Item>
              <Item>'AspMvcMasterLocationFormatAttribute'</Item>
             </Issue>
            </Message>
@@ -2801,15 +2539,15 @@
          </Type>
          <Type Name="AspMvcPartialViewLocationFormatAttribute">
           <Messages>
-           <Message TypeName="DefineAccessorsForAttributeArguments" Category="Microsoft.Design" CheckId="CA1019" Created="2015-08-09 07:34:16Z">
-            <Issue>
-             <Item>'format'</Item>
-             <Item>'AspMvcPartialViewLocationFormatAttribute'</Item>
-            </Issue>
-           </Message>
            <Message Id="Mvc" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2015-08-09 07:34:16Z">
             <Issue Name="Type">
              <Item>Mvc</Item>
+             <Item>'AspMvcPartialViewLocationFormatAttribute'</Item>
+            </Issue>
+           </Message>
+           <Message TypeName="DefineAccessorsForAttributeArguments" Category="Microsoft.Design" CheckId="CA1019" Status="Excluded" Created="2015-08-09 07:34:16Z">
+            <Issue>
+             <Item>'format'</Item>
              <Item>'AspMvcPartialViewLocationFormatAttribute'</Item>
             </Issue>
            </Message>
@@ -2865,15 +2603,15 @@
          </Type>
          <Type Name="AspMvcViewLocationFormatAttribute">
           <Messages>
-           <Message TypeName="DefineAccessorsForAttributeArguments" Category="Microsoft.Design" CheckId="CA1019" Created="2015-08-09 07:34:16Z">
-            <Issue>
-             <Item>'format'</Item>
-             <Item>'AspMvcViewLocationFormatAttribute'</Item>
-            </Issue>
-           </Message>
            <Message Id="Mvc" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2015-08-09 07:34:16Z">
             <Issue Name="Type">
              <Item>Mvc</Item>
+             <Item>'AspMvcViewLocationFormatAttribute'</Item>
+            </Issue>
+           </Message>
+           <Message TypeName="DefineAccessorsForAttributeArguments" Category="Microsoft.Design" CheckId="CA1019" Status="Excluded" Created="2015-08-09 07:34:16Z">
+            <Issue>
+             <Item>'format'</Item>
              <Item>'AspMvcViewLocationFormatAttribute'</Item>
             </Issue>
            </Message>
@@ -3747,20 +3485,8 @@
              <Item>'TypeCannotBeAbstractException'</Item>
              <Item>protected TypeCannotBeAbstractException(SerializationInfo, StreamingContext)</Item>
             </Issue>
-            <Issue Name="MissingConstructor">
-             <Item>'TypeCannotBeAbstractException'</Item>
-             <Item>public TypeCannotBeAbstractException()</Item>
-            </Issue>
-            <Issue Name="MissingConstructor">
-             <Item>'TypeCannotBeAbstractException'</Item>
-             <Item>public TypeCannotBeAbstractException(String)</Item>
-            </Issue>
-            <Issue Name="MissingConstructor">
-             <Item>'TypeCannotBeAbstractException'</Item>
-             <Item>public TypeCannotBeAbstractException(String, Exception)</Item>
-            </Issue>
            </Message>
-           <Message TypeName="MarkISerializableTypesWithSerializable" Category="Microsoft.Usage" CheckId="CA2237" Created="2015-08-09 07:34:16Z">
+           <Message TypeName="MarkISerializableTypesWithSerializable" Category="Microsoft.Usage" CheckId="CA2237" Status="Excluded" Created="2015-08-09 07:34:16Z">
             <Issue Certainty="95" Level="Error">
              <Item>'TypeCannotBeAbstractException'</Item>
             </Issue>
@@ -3780,20 +3506,8 @@
              <Item>'TypeMustBeAMonoBehaviourException'</Item>
              <Item>protected TypeMustBeAMonoBehaviourException(SerializationInfo, StreamingContext)</Item>
             </Issue>
-            <Issue Name="MissingConstructor">
-             <Item>'TypeMustBeAMonoBehaviourException'</Item>
-             <Item>public TypeMustBeAMonoBehaviourException()</Item>
-            </Issue>
-            <Issue Name="MissingConstructor">
-             <Item>'TypeMustBeAMonoBehaviourException'</Item>
-             <Item>public TypeMustBeAMonoBehaviourException(String)</Item>
-            </Issue>
-            <Issue Name="MissingConstructor">
-             <Item>'TypeMustBeAMonoBehaviourException'</Item>
-             <Item>public TypeMustBeAMonoBehaviourException(String, Exception)</Item>
-            </Issue>
            </Message>
-           <Message TypeName="MarkISerializableTypesWithSerializable" Category="Microsoft.Usage" CheckId="CA2237" Created="2015-08-09 07:34:16Z">
+           <Message TypeName="MarkISerializableTypesWithSerializable" Category="Microsoft.Usage" CheckId="CA2237" Status="Excluded" Created="2015-08-09 07:34:16Z">
             <Issue Certainty="95" Level="Error">
              <Item>'TypeMustBeAMonoBehaviourException'</Item>
             </Issue>
@@ -4035,16 +3749,6 @@
              <Item>'ReloadableAddonAttribute'</Item>
             </Issue>
            </Message>
-           <Message TypeName="DefineAccessorsForAttributeArguments" Category="Microsoft.Design" CheckId="CA1019" Created="2015-08-09 07:34:16Z">
-            <Issue>
-             <Item>'once'</Item>
-             <Item>'ReloadableAddonAttribute'</Item>
-            </Issue>
-            <Issue>
-             <Item>'startup'</Item>
-             <Item>'ReloadableAddonAttribute'</Item>
-            </Issue>
-           </Message>
            <Message Id="Addon" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2015-08-09 07:34:16Z">
             <Issue Name="Type">
              <Item>Addon</Item>
@@ -4055,6 +3759,16 @@
             <Issue Name="Member">
              <Item>'startup'</Item>
              <Item>Startup</Item>
+            </Issue>
+           </Message>
+           <Message TypeName="DefineAccessorsForAttributeArguments" Category="Microsoft.Design" CheckId="CA1019" Status="Excluded" Created="2015-08-09 07:34:16Z">
+            <Issue>
+             <Item>'once'</Item>
+             <Item>'ReloadableAddonAttribute'</Item>
+            </Issue>
+            <Issue>
+             <Item>'startup'</Item>
+             <Item>'ReloadableAddonAttribute'</Item>
             </Issue>
            </Message>
           </Messages>
@@ -4582,20 +4296,8 @@
              <Item>'TypeMustDeriveFromPartModuleException'</Item>
              <Item>protected TypeMustDeriveFromPartModuleException(SerializationInfo, StreamingContext)</Item>
             </Issue>
-            <Issue Name="MissingConstructor">
-             <Item>'TypeMustDeriveFromPartModuleException'</Item>
-             <Item>public TypeMustDeriveFromPartModuleException()</Item>
-            </Issue>
-            <Issue Name="MissingConstructor">
-             <Item>'TypeMustDeriveFromPartModuleException'</Item>
-             <Item>public TypeMustDeriveFromPartModuleException(String)</Item>
-            </Issue>
-            <Issue Name="MissingConstructor">
-             <Item>'TypeMustDeriveFromPartModuleException'</Item>
-             <Item>public TypeMustDeriveFromPartModuleException(String, Exception)</Item>
-            </Issue>
            </Message>
-           <Message TypeName="MarkISerializableTypesWithSerializable" Category="Microsoft.Usage" CheckId="CA2237" Created="2015-08-09 07:34:16Z">
+           <Message TypeName="MarkISerializableTypesWithSerializable" Category="Microsoft.Usage" CheckId="CA2237" Status="Excluded" Created="2015-08-09 07:34:16Z">
             <Issue Certainty="95" Level="Error">
              <Item>'TypeMustDeriveFromPartModuleException'</Item>
             </Issue>
@@ -4642,20 +4344,8 @@
              <Item>'ConfigNodeDoesNotSpecifyTypeException'</Item>
              <Item>protected ConfigNodeDoesNotSpecifyTypeException(SerializationInfo, StreamingContext)</Item>
             </Issue>
-            <Issue Name="MissingConstructor">
-             <Item>'ConfigNodeDoesNotSpecifyTypeException'</Item>
-             <Item>public ConfigNodeDoesNotSpecifyTypeException()</Item>
-            </Issue>
-            <Issue Name="MissingConstructor">
-             <Item>'ConfigNodeDoesNotSpecifyTypeException'</Item>
-             <Item>public ConfigNodeDoesNotSpecifyTypeException(String)</Item>
-            </Issue>
-            <Issue Name="MissingConstructor">
-             <Item>'ConfigNodeDoesNotSpecifyTypeException'</Item>
-             <Item>public ConfigNodeDoesNotSpecifyTypeException(String, Exception)</Item>
-            </Issue>
            </Message>
-           <Message TypeName="MarkISerializableTypesWithSerializable" Category="Microsoft.Usage" CheckId="CA2237" Created="2015-08-09 07:34:16Z">
+           <Message TypeName="MarkISerializableTypesWithSerializable" Category="Microsoft.Usage" CheckId="CA2237" Status="Excluded" Created="2015-08-09 07:34:16Z">
             <Issue Certainty="95" Level="Error">
              <Item>'ConfigNodeDoesNotSpecifyTypeException'</Item>
             </Issue>
@@ -4677,13 +4367,13 @@
            </Member>
           </Members>
          </Type>
-         <Type Name="GetProtoScenarioModules">
+         <Type Name="GetCurrentGame">
           <Members>
-           <Member Name="#.ctor(AssemblyReloader.ReloadablePlugin.Loaders.IKspFactory,AssemblyReloader.Unsorted.IGetTypeIdentifier,AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules.IGetCurrentGame,AssemblyReloader.ReloadablePlugin.Loaders.Addons.IGetCurrentGameScene)">
+           <Member Name="#.ctor(AssemblyReloader.ReloadablePlugin.Loaders.IKspFactory)">
             <Messages>
-             <Message Id="ksp" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2015-08-09 07:34:16Z">
+             <Message Id="ksp" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2015-08-09 08:19:40Z">
               <Issue Name="MemberParameter">
-               <Item>'GetProtoScenarioModules.GetProtoScenarioModules(IKspFactory, IGetTypeIdentifier, IGetCurrentGame, IGetCurrentGameScene)'</Item>
+               <Item>'GetCurrentGame.GetCurrentGame(IKspFactory)'</Item>
                <Item>ksp</Item>
                <Item>'kspFactory'</Item>
               </Issue>
@@ -4803,6 +4493,29 @@
            </Message>
           </Messages>
          </Type>
+         <Type Name="KspGame">
+          <Messages>
+           <Message Id="Ksp" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2015-08-09 08:19:40Z">
+            <Issue Name="Type">
+             <Item>Ksp</Item>
+             <Item>'KspGame'</Item>
+            </Issue>
+           </Message>
+          </Messages>
+          <Members>
+           <Member Name="#.ctor(Game,AssemblyReloader.ReloadablePlugin.Loaders.IKspFactory)">
+            <Messages>
+             <Message Id="ksp" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2015-08-09 08:19:40Z">
+              <Issue Name="MemberParameter">
+               <Item>'KspGame.KspGame(Game, IKspFactory)'</Item>
+               <Item>ksp</Item>
+               <Item>'kspFactory'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
          <Type Name="KspProtoScenarioModule">
           <Messages>
            <Message Id="Ksp" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2015-08-09 07:34:16Z">
@@ -4833,20 +4546,8 @@
              <Item>'ModuleRefAlreadyExistsException'</Item>
              <Item>protected ModuleRefAlreadyExistsException(SerializationInfo, StreamingContext)</Item>
             </Issue>
-            <Issue Name="MissingConstructor">
-             <Item>'ModuleRefAlreadyExistsException'</Item>
-             <Item>public ModuleRefAlreadyExistsException()</Item>
-            </Issue>
-            <Issue Name="MissingConstructor">
-             <Item>'ModuleRefAlreadyExistsException'</Item>
-             <Item>public ModuleRefAlreadyExistsException(String)</Item>
-            </Issue>
-            <Issue Name="MissingConstructor">
-             <Item>'ModuleRefAlreadyExistsException'</Item>
-             <Item>public ModuleRefAlreadyExistsException(String, Exception)</Item>
-            </Issue>
            </Message>
-           <Message TypeName="MarkISerializableTypesWithSerializable" Category="Microsoft.Usage" CheckId="CA2237" Created="2015-08-09 07:34:16Z">
+           <Message TypeName="MarkISerializableTypesWithSerializable" Category="Microsoft.Usage" CheckId="CA2237" Status="Excluded" Created="2015-08-09 07:34:16Z">
             <Issue Certainty="95" Level="Error">
              <Item>'ModuleRefAlreadyExistsException'</Item>
             </Issue>
@@ -4873,20 +4574,8 @@
              <Item>'MultipleScenarioModuleInstancesException'</Item>
              <Item>protected MultipleScenarioModuleInstancesException(SerializationInfo, StreamingContext)</Item>
             </Issue>
-            <Issue Name="MissingConstructor">
-             <Item>'MultipleScenarioModuleInstancesException'</Item>
-             <Item>public MultipleScenarioModuleInstancesException()</Item>
-            </Issue>
-            <Issue Name="MissingConstructor">
-             <Item>'MultipleScenarioModuleInstancesException'</Item>
-             <Item>public MultipleScenarioModuleInstancesException(String)</Item>
-            </Issue>
-            <Issue Name="MissingConstructor">
-             <Item>'MultipleScenarioModuleInstancesException'</Item>
-             <Item>public MultipleScenarioModuleInstancesException(String, Exception)</Item>
-            </Issue>
            </Message>
-           <Message TypeName="MarkISerializableTypesWithSerializable" Category="Microsoft.Usage" CheckId="CA2237" Created="2015-08-09 07:34:16Z">
+           <Message TypeName="MarkISerializableTypesWithSerializable" Category="Microsoft.Usage" CheckId="CA2237" Status="Excluded" Created="2015-08-09 07:34:16Z">
             <Issue Certainty="95" Level="Error">
              <Item>'MultipleScenarioModuleInstancesException'</Item>
             </Issue>
@@ -4900,20 +4589,8 @@
              <Item>'NoConfigNodeFoundException'</Item>
              <Item>protected NoConfigNodeFoundException(SerializationInfo, StreamingContext)</Item>
             </Issue>
-            <Issue Name="MissingConstructor">
-             <Item>'NoConfigNodeFoundException'</Item>
-             <Item>public NoConfigNodeFoundException()</Item>
-            </Issue>
-            <Issue Name="MissingConstructor">
-             <Item>'NoConfigNodeFoundException'</Item>
-             <Item>public NoConfigNodeFoundException(String)</Item>
-            </Issue>
-            <Issue Name="MissingConstructor">
-             <Item>'NoConfigNodeFoundException'</Item>
-             <Item>public NoConfigNodeFoundException(String, Exception)</Item>
-            </Issue>
            </Message>
-           <Message TypeName="MarkISerializableTypesWithSerializable" Category="Microsoft.Usage" CheckId="CA2237" Created="2015-08-09 07:34:16Z">
+           <Message TypeName="MarkISerializableTypesWithSerializable" Category="Microsoft.Usage" CheckId="CA2237" Status="Excluded" Created="2015-08-09 07:34:16Z">
             <Issue Certainty="95" Level="Error">
              <Item>'NoConfigNodeFoundException'</Item>
             </Issue>
@@ -4927,20 +4604,8 @@
              <Item>'NoScenarioModuleReferenceException'</Item>
              <Item>protected NoScenarioModuleReferenceException(SerializationInfo, StreamingContext)</Item>
             </Issue>
-            <Issue Name="MissingConstructor">
-             <Item>'NoScenarioModuleReferenceException'</Item>
-             <Item>public NoScenarioModuleReferenceException()</Item>
-            </Issue>
-            <Issue Name="MissingConstructor">
-             <Item>'NoScenarioModuleReferenceException'</Item>
-             <Item>public NoScenarioModuleReferenceException(String)</Item>
-            </Issue>
-            <Issue Name="MissingConstructor">
-             <Item>'NoScenarioModuleReferenceException'</Item>
-             <Item>public NoScenarioModuleReferenceException(String, Exception)</Item>
-            </Issue>
            </Message>
-           <Message TypeName="MarkISerializableTypesWithSerializable" Category="Microsoft.Usage" CheckId="CA2237" Created="2015-08-09 07:34:16Z">
+           <Message TypeName="MarkISerializableTypesWithSerializable" Category="Microsoft.Usage" CheckId="CA2237" Status="Excluded" Created="2015-08-09 07:34:16Z">
             <Issue Certainty="95" Level="Error">
              <Item>'NoScenarioModuleReferenceException'</Item>
             </Issue>
@@ -5000,7 +4665,7 @@
              <Item>public ScenarioRunnerNotFound(String, Exception)</Item>
             </Issue>
            </Message>
-           <Message TypeName="MarkISerializableTypesWithSerializable" Category="Microsoft.Usage" CheckId="CA2237" Created="2015-08-09 07:34:16Z">
+           <Message TypeName="MarkISerializableTypesWithSerializable" Category="Microsoft.Usage" CheckId="CA2237" Status="Excluded" Created="2015-08-09 07:34:16Z">
             <Issue Certainty="95" Level="Error">
              <Item>'ScenarioRunnerNotFound'</Item>
             </Issue>
@@ -5014,20 +4679,8 @@
              <Item>'WrongProtoScenarioModuleForTypeException'</Item>
              <Item>protected WrongProtoScenarioModuleForTypeException(SerializationInfo, StreamingContext)</Item>
             </Issue>
-            <Issue Name="MissingConstructor">
-             <Item>'WrongProtoScenarioModuleForTypeException'</Item>
-             <Item>public WrongProtoScenarioModuleForTypeException()</Item>
-            </Issue>
-            <Issue Name="MissingConstructor">
-             <Item>'WrongProtoScenarioModuleForTypeException'</Item>
-             <Item>public WrongProtoScenarioModuleForTypeException(String)</Item>
-            </Issue>
-            <Issue Name="MissingConstructor">
-             <Item>'WrongProtoScenarioModuleForTypeException'</Item>
-             <Item>public WrongProtoScenarioModuleForTypeException(String, Exception)</Item>
-            </Issue>
            </Message>
-           <Message TypeName="MarkISerializableTypesWithSerializable" Category="Microsoft.Usage" CheckId="CA2237" Created="2015-08-09 07:34:16Z">
+           <Message TypeName="MarkISerializableTypesWithSerializable" Category="Microsoft.Usage" CheckId="CA2237" Status="Excluded" Created="2015-08-09 07:34:16Z">
             <Issue Certainty="95" Level="Error">
              <Item>'WrongProtoScenarioModuleForTypeException'</Item>
             </Issue>
@@ -5170,22 +4823,17 @@
            </Member>
           </Members>
          </Type>
-         <Type Name="NoConstructorArgumentFoundsException">
+         <Type Name="NoConstructorArgumentFoundException">
           <Messages>
-           <Message TypeName="ExceptionsShouldBePublic" Category="Microsoft.Design" CheckId="CA1064" Created="2015-08-09 07:34:16Z">
-            <Issue>
-             <Item>'NoConstructorArgumentFoundsException'</Item>
-            </Issue>
-           </Message>
-           <Message TypeName="ImplementStandardExceptionConstructors" Category="Microsoft.Design" CheckId="CA1032" Created="2015-08-09 07:34:16Z">
+           <Message TypeName="ImplementStandardExceptionConstructors" Category="Microsoft.Design" CheckId="CA1032" Created="2015-08-09 08:21:23Z">
             <Issue Name="MissingConstructor">
-             <Item>'NoConstructorArgumentFoundsException'</Item>
-             <Item>protected NoConstructorArgumentFoundsException(SerializationInfo, StreamingContext)</Item>
+             <Item>'NoConstructorArgumentFoundException'</Item>
+             <Item>protected NoConstructorArgumentFoundException(SerializationInfo, StreamingContext)</Item>
             </Issue>
            </Message>
-           <Message TypeName="MarkISerializableTypesWithSerializable" Category="Microsoft.Usage" CheckId="CA2237" Created="2015-08-09 07:34:16Z">
+           <Message TypeName="MarkISerializableTypesWithSerializable" Category="Microsoft.Usage" CheckId="CA2237" Created="2015-08-09 08:21:23Z">
             <Issue Certainty="95" Level="Error">
-             <Item>'NoConstructorArgumentFoundsException'</Item>
+             <Item>'NoConstructorArgumentFoundException'</Item>
             </Issue>
            </Message>
           </Messages>
@@ -5197,20 +4845,8 @@
              <Item>'ProxyMethodAlreadyDefinedException'</Item>
              <Item>protected ProxyMethodAlreadyDefinedException(SerializationInfo, StreamingContext)</Item>
             </Issue>
-            <Issue Name="MissingConstructor">
-             <Item>'ProxyMethodAlreadyDefinedException'</Item>
-             <Item>public ProxyMethodAlreadyDefinedException()</Item>
-            </Issue>
-            <Issue Name="MissingConstructor">
-             <Item>'ProxyMethodAlreadyDefinedException'</Item>
-             <Item>public ProxyMethodAlreadyDefinedException(String)</Item>
-            </Issue>
-            <Issue Name="MissingConstructor">
-             <Item>'ProxyMethodAlreadyDefinedException'</Item>
-             <Item>public ProxyMethodAlreadyDefinedException(String, Exception)</Item>
-            </Issue>
            </Message>
-           <Message TypeName="MarkISerializableTypesWithSerializable" Category="Microsoft.Usage" CheckId="CA2237" Created="2015-08-09 07:34:16Z">
+           <Message TypeName="MarkISerializableTypesWithSerializable" Category="Microsoft.Usage" CheckId="CA2237" Status="Excluded" Created="2015-08-09 07:34:16Z">
             <Issue Certainty="95" Level="Error">
              <Item>'ProxyMethodAlreadyDefinedException'</Item>
             </Issue>
@@ -5264,7 +4900,7 @@
              <Item>protected ReturnTypeMismatchException(SerializationInfo, StreamingContext)</Item>
             </Issue>
            </Message>
-           <Message TypeName="MarkISerializableTypesWithSerializable" Category="Microsoft.Usage" CheckId="CA2237" Created="2015-08-09 07:34:16Z">
+           <Message TypeName="MarkISerializableTypesWithSerializable" Category="Microsoft.Usage" CheckId="CA2237" Status="Excluded" Created="2015-08-09 07:34:16Z">
             <Issue Certainty="95" Level="Error">
              <Item>'ReturnTypeMismatchException'</Item>
             </Issue>
@@ -12578,9 +12214,6 @@
    <Rule TypeName="DoNotNestGenericTypesInMemberSignatures" Category="Microsoft.Design" CheckId="CA1006">
     <Resolution Name="Default">Consider a design where {0} doesn't nest generic type {1}.</Resolution>
    </Rule>
-   <Rule TypeName="DoNotRaiseExceptionsInUnexpectedLocations" Category="Microsoft.Design" CheckId="CA1065">
-    <Resolution Name="NoAllowedExceptions">{0} creates an exception of type {1}. Exceptions should not be raised in this type of method. If this exception instance might be raised, change this method's logic so it no longer raises an exception.</Resolution>
-   </Rule>
    <Rule TypeName="DoNotRaiseReservedExceptionTypes" Category="Microsoft.Usage" CheckId="CA2201">
     <Resolution Name="TooGeneric">{0} creates an exception of type {1}, an exception type that is not sufficiently specific and should never be raised by user code. If this exception instance might be thrown, use a different exception type.</Resolution>
    </Rule>
@@ -12632,9 +12265,6 @@
    <Rule TypeName="ImplementStandardExceptionConstructors" Category="Microsoft.Design" CheckId="CA1032">
     <Resolution Name="MissingConstructor">Add the following constructor to {0}: {1}.</Resolution>
    </Rule>
-   <Rule TypeName="InitializeReferenceTypeStaticFieldsInline" Category="Microsoft.Performance" CheckId="CA1810">
-    <Resolution Name="Default">Initialize all static fields in {0} when those fields are declared and remove the explicit static constructor.</Resolution>
-   </Rule>
    <Rule TypeName="InterfaceMethodsShouldBeCallableByChildTypes" Category="Microsoft.Design" CheckId="CA1033">
     <Resolution Name="Default">Make {0} sealed (a breaking change if this class has previously shipped), implement the method non-explicitly, or implement a new method that exposes the functionality of {1} and is visible to derived classes.</Resolution>
    </Rule>
@@ -12659,9 +12289,6 @@
    <Rule TypeName="OnlyFlagsEnumsShouldHavePluralNames" Category="Microsoft.Naming" CheckId="CA1717">
     <Resolution Name="Default">If the name {0} is plural, change it to its singular form.</Resolution>
    </Rule>
-   <Rule TypeName="OperatorOverloadsHaveNamedAlternates" Category="Microsoft.Usage" CheckId="CA2225">
-    <Resolution Name="Multiple">Provide a method named '{0}' or '{1}' as an alternate for operator {2}.</Resolution>
-   </Rule>
    <Rule TypeName="ParameterNamesShouldMatchBaseDeclaration" Category="Microsoft.Naming" CheckId="CA1725">
     <Resolution Name="Default">In member {0}, change parameter name {1} to {2} in order to match the identifier as it has been declared in {3}.</Resolution>
    </Rule>
@@ -12685,7 +12312,6 @@
    </Rule>
    <Rule TypeName="TypeNamesShouldNotMatchNamespaces" Category="Microsoft.Naming" CheckId="CA1724">
     <Resolution Name="Default">The type name {0} conflicts in whole or in part with the namespace name '{1}'. Change either name to eliminate the conflict.</Resolution>
-    <Resolution Name="System">The type name {0} conflicts in whole or in part with the namespace name '{1}' defined in the .NET Framework. Rename the type to eliminate the conflict.</Resolution>
    </Rule>
    <Rule TypeName="UseOrdinalStringComparison" Category="Microsoft.Globalization" CheckId="CA1309">
     <Resolution Name="StringComparison">{0} passes '{1}' as the 'StringComparison' parameter to {2}. To perform a non-linguistic comparison, specify 'StringComparison.Ordinal' or 'StringComparison.OrdinalIgnoreCase' instead.</Resolution>
