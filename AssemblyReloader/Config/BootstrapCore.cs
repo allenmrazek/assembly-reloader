@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Linq;
 using AssemblyReloader.StrangeIoC.extensions.context.impl;
 using UnityEngine;
 
@@ -11,6 +12,14 @@ namespace AssemblyReloader.Config
     {
         private IEnumerator Start()
         {
+            // avoid duplicates if GameDatabase is reloaded
+            // todo: update GameDatabase urls with new data
+            if (FindObjectsOfType<BootstrapCore>().Count() > 1)
+            {
+                Destroy(gameObject);
+                yield return null;
+            }
+
             DontDestroyOnLoad(this);
             enabled = false;
             //yield return new WaitForSeconds(10f);

@@ -105,6 +105,10 @@ namespace AssemblyReloader.Config
                 .ToSingleton()
                 .CrossContext();
 
+            injectionBinder.Bind<IGetAttributesOfType<KSPScenario>>()
+                .To<GetAttributesOfType<KSPScenario>>()
+                .ToSingleton()
+                .CrossContext();
 
             injectionBinder.Bind<IPartLoader>().Bind<IPartLoaderPrefabProvider>().To<KspPartLoader>().ToSingleton().CrossContext();
             injectionBinder.Bind<IGetPartModuleConfigsFromPartConfig>()

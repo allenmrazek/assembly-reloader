@@ -47,7 +47,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
             if (psm.moduleRef.Any())
                 throw new ModuleRefAlreadyExistsException(psm);
 
-            var configToUse = _configRepository.Retrieve(type);
+            var configToUse = _configRepository.Retrieve(_typeIdentifierQuery.Get(type));
 
             if (!configToUse.Any())
                 throw new NoConfigNodeFoundException(type);

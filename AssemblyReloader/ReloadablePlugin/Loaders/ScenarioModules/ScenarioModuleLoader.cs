@@ -86,15 +86,16 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
                 .Where(grouping => grouping.Count() > 1)
                 .ToList();
 
-            _log.Error("ScenarioModule name collisions! Collisions: " +
-                       string.Join("\n",
-                           collisions
-                           .Select(g => string.Join(", ", 
-                               g.Select(t => t.FullName)
-                               .ToArray()))
-                           .ToArray()));
+            if (collisions.Any())
+                _log.Error("ScenarioModule name collisions! Collisions: " +
+                           string.Join("\n",
+                               collisions
+                               .Select(g => string.Join(", ", 
+                                   g.Select(t => t.FullName)
+                                   .ToArray()))
+                               .ToArray()));
 
-            return collisions.Count == 0;
+            return collisions.Count != 0;
         }
 
 

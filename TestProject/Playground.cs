@@ -16,6 +16,8 @@ using Object = UnityEngine.Object;
 
 namespace TestProject
 {
+
+
     //[KSPAddon(KSPAddon.Startup.EditorAny, false)]
     public class DumpPartInstanceIDs : MonoBehaviour
     {
