@@ -29,12 +29,5 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders
         {
             return new KspProtoScenarioModule(psm);
         }
-
-        public IScenarioRunner Create(ScenarioRunner runner)
-        {
-            if (runner == null) throw new ArgumentNullException("runner");
-
-            return new KspScenarioRunner(runner, this);
-        }
     }
 }

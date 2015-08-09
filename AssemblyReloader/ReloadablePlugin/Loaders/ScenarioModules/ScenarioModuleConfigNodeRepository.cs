@@ -7,9 +7,5 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
     [Implements(typeof(IScenarioModuleConfigNodeRepository))]
     public class ScenarioModuleConfigNodeRepository : DictionaryQueue<TypeIdentifier, ConfigNode>, IScenarioModuleConfigNodeRepository
     {
-        public ScenarioModuleConfigNodeRepository() : base(new TypeIdentifierComparer())
-        {
-            
-        }
     }
 }

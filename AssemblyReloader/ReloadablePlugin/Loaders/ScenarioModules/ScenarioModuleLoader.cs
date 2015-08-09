@@ -74,8 +74,11 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
 
         /// <summary>
         /// It's possible for ScenarioModules in different namespaces with the same name to 
-        /// confuse us.
+        /// confuse us. They'll confuse the game too so things are going to be broken anyway and
+        /// poking at the pieces is a bad plan
+        /// 
         /// TODO: come up with a better more elegant fix
+        /// TODO: check other loaded assemblies also for collisions?
         /// </summary>
         /// <param name="handle"></param>
         /// <returns></returns>
@@ -137,8 +140,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
 
             if (!psm.TargetScenes.Contains(_gameSceneQuery.Get())) return;
 
-            if (!_smFactory.Create(psm, smType).Any())
-                _log.Error("Failed to create ScenarioModule " + _typeIdentifierQuery.Get(smType));
+            _smFactory.Create(psm, smType);
         }
     }
 }

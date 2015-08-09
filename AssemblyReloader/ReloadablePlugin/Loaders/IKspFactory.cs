@@ -9,6 +9,5 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders
         IAvailablePart Create(AvailablePart part);
         IVessel Create(Vessel vessel);
         IProtoScenarioModule Create(ProtoScenarioModule psm);
-        IScenarioRunner Create(ScenarioRunner runner);
     }
 }

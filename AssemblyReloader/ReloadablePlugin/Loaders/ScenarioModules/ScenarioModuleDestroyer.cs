@@ -38,7 +38,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
             _log.Debug("Destroying ScenarioModule " + protoScenarioModule.moduleName);
             _aboutToDestroySignal.Dispatch(target);
 
-            UnityEngine.Object.Destroy(target);
+            ScenarioRunner.RemoveModule(target);
             protoScenarioModule.moduleRef = Maybe<ScenarioModule>.None;
         }
     }
