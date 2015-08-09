@@ -16,7 +16,38 @@ using Object = UnityEngine.Object;
 
 namespace TestProject
 {
+    public class NoisyVesselModule : VesselModule
+    {
+        private void Awake()
+        {
+            print("NoisyVesselModule.Awake");
+        }
+    }
 
+    [KSPScenario(ScenarioCreationOptions.AddToAllGames, new [] { GameScenes.FLIGHT, GameScenes.SPACECENTER, GameScenes.TRACKSTATION, GameScenes.EDITOR })]
+    public class NoisyScenarioModule : ScenarioModule
+    {
+        public override void OnAwake()
+        {
+            base.OnAwake();
+            print("NoisyScenarioModule.Awake");
+        }
+
+        public override void OnLoad(ConfigNode node)
+        {
+            base.OnLoad(node);
+            print("NoisyScenarioModule.OnLoad");
+        }
+    }
+
+
+    public class AddonStartPrinter : MonoBehaviour
+    {
+        private void Awake()
+        {
+            print("AddonStartPrinter.Awake");
+        }
+    }
 
     //[KSPAddon(KSPAddon.Startup.EditorAny, false)]
     public class DumpPartInstanceIDs : MonoBehaviour

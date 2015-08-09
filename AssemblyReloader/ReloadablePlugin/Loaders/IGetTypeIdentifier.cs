@@ -1,7 +1,7 @@
 ﻿using System;
 using AssemblyReloader.DataObjects;
 
-namespace AssemblyReloader.Unsorted
+namespace AssemblyReloader.ReloadablePlugin.Loaders
 {
     public interface IGetTypeIdentifier
     {

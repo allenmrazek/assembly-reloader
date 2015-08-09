@@ -1,5 +1,6 @@
 ﻿using AssemblyReloader.Game;
 using AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules;
+using AssemblyReloader.ReloadablePlugin.Loaders.VesselModules;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders
 {

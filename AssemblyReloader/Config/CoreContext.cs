@@ -9,7 +9,6 @@ using AssemblyReloader.ReloadablePlugin.Loaders;
 using AssemblyReloader.ReloadablePlugin.Loaders.Addons;
 using AssemblyReloader.ReloadablePlugin.Loaders.PartModules;
 using AssemblyReloader.StrangeIoC.extensions.context.api;
-using AssemblyReloader.Unsorted;
 using Mono.Cecil;
 using ReeperCommon.FileSystem;
 using ReeperCommon.Logging;

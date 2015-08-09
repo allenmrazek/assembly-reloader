@@ -88,7 +88,7 @@
     <Compile Include="ReloadablePlugin\Loaders\Addons\IReloadableAddonUnloader.cs" />
     <Compile Include="ReloadablePlugin\Loaders\Addons\ReloadableAddonUnloader.cs" />
     <Compile Include="ReloadablePlugin\Loaders\PartModules\CommandCreatePartModuleConfigSnapshot.cs" />
-    <Compile Include="ReloadablePlugin\Loaders\PartModules\CommandCreatePartModules.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\PartModules\CommandLoadPartModules.cs" />
     <Compile Include="ReloadablePlugin\Loaders\GetMonoBehavioursInScene.cs" />
     <Compile Include="ReloadablePlugin\Loaders\IGetMonoBehavioursInScene.cs" />
     <Compile Include="ReloadablePlugin\Loaders\IMonoBehaviourDestroyer.cs" />
@@ -102,7 +102,7 @@
     <Compile Include="ReloadablePlugin\Loaders\PartModules\PartModuleDestroyer.cs" />
     <Compile Include="ReloadablePlugin\Loaders\PartModules\Signals.cs" />
     <Compile Include="ReloadablePlugin\Loaders\PartModules\TypeMustDeriveFromPartModuleException.cs" />
-    <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\CommandCreateScenarioModules.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\CommandLoadScenarioModules.cs" />
     <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\CommandUnloadScenarioModules.cs" />
     <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\CommandCreateScenarioModuleConfigNode.cs" />
     <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\ConfigNodeDoesNotSpecifyTypeException.cs" />
@@ -128,6 +128,17 @@
     <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\ScenarioRunnerNotFound.cs" />
     <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\WrongProtoScenarioModuleForTypeException.cs" />
     <Compile Include="ReloadablePlugin\Loaders\Signals.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\VesselModules\CommandLoadVesselModules.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\VesselModules\CommandUnloadVesselModules.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\VesselModules\GetCurrentSceneIsFlight.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\VesselModules\IVesselModuleLoader.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\VesselModules\IVesselModuleManager.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\VesselModules\IVesselModuleUnloader.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\VesselModules\VesselModuleLoader.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\VesselModules\VesselModuleManager.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\VesselModules\VesselModuleType.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\VesselModules\VesselModuleUnloader.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\VesselModules\VesselModuleWrapperNotFoundException.cs" />
     <Compile Include="ReloadablePlugin\Weaving\Operations\Keys\MethodKeys.cs" />
     <Compile Include="ReloadablePlugin\Weaving\Operations\ProxyMethodAlreadyDefinedException.cs" />
     <Compile Include="ReloadablePlugin\Weaving\Operations\ReturnSpecialResultIfExecutingAssembly.cs" />
@@ -181,8 +192,7 @@
     <Compile Include="ReloadablePlugin\Weaving\IAssemblyDefinitionLoader.cs" />
     <Compile Include="ReloadablePlugin\Loaders\Addons\GetAttributesOfType.cs" />
     <Compile Include="ReloadablePlugin\Loaders\Addons\IGetAttributesOfType.cs" />
-    <Compile Include="Unsorted\GetTypesFromIdentifier.cs" />
-    <Compile Include="Unsorted\IGetTypesFromAssembly.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\GetTypeIdentifier.cs" />
     <Compile Include="ReloadablePlugin\Config\ReloadablePluginContext.cs" />
     <Compile Include="Game\ILoadedAssemblyHandle.cs" />
     <Compile Include="Gui\MainViewMediator.cs" />
@@ -204,11 +214,11 @@
     <Compile Include="ReloadablePlugin\Loaders\PartModules\GetPartModuleStartState.cs" />
     <Compile Include="ReloadablePlugin\Loaders\PartModules\GetConfigNodeForPart.cs" />
     <Compile Include="ReloadablePlugin\Loaders\PartModules\IGetConfigNodeForPart.cs" />
-    <Compile Include="Game\Providers\IGetLoadedVessels.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\VesselModules\IGetLoadedVessels.cs" />
     <Compile Include="ReloadablePlugin\Loaders\PartModules\IGetPartModuleConfigsFromPartConfig.cs" />
     <Compile Include="ReloadablePlugin\Loaders\PartModules\IGetPartPrefabClones.cs" />
     <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\IGetProtoScenarioModules.cs" />
-    <Compile Include="Game\Providers\GetLoadedVessels.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\VesselModules\GetLoadedVessels.cs" />
     <Compile Include="ReloadablePlugin\Loaders\PartModules\GetPartModuleConfigsFromPartConfig.cs" />
     <Compile Include="ReloadablePlugin\Loaders\PartModules\GetPartPrefabClones.cs" />
     <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\GetProtoScenarioModules.cs" />
@@ -382,21 +392,19 @@
     <Compile Include="Game\KspPartLoader.cs" />
     <Compile Include="Game\KspVessel.cs" />
     <Compile Include="Config\BootstrapCore.cs" />
-    <Compile Include="Game\IGetCurrentSceneIsFlight.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\VesselModules\IGetCurrentSceneIsFlight.cs" />
     <Compile Include="IGetTypesDerivedFrom.cs" />
     <Compile Include="ReloadablePlugin\Loaders\IGetTypesFromAssembly.cs" />
     <Compile Include="GetTypesDerivedFrom.cs" />
     <Compile Include="ReloadablePlugin\Weaving\Operations\IGetTypeDefinitions.cs" />
     <Compile Include="ReloadablePlugin\Weaving\Operations\GetMethodCallsInMethod.cs" />
     <Compile Include="ReloadablePlugin\Loaders\PartModules\IGetIsPartPrefab.cs" />
-    <Compile Include="Unsorted\IGetPartModulesInPart.cs" />
-    <Compile Include="Unsorted\IGetTypeIdentifier.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\IGetTypeIdentifier.cs" />
     <Compile Include="ReloadablePlugin\Loaders\IGetStartupSceneFromGameScene.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReloadablePlugin\Loaders\GetStartupSceneFromGameScene.cs" />
     <Compile Include="Config\GetReloadableAssemblyFilesFromDirectoryRecursive.cs" />
     <Compile Include="ReloadablePlugin\Loaders\PartModules\GetIsPartPrefab.cs" />
-    <Compile Include="Unsorted\GetPartModulesInPart.cs" />
     <Compile Include="ReloadablePlugin\Loaders\PartModules\IPartModuleConfigNodeSnapshotRepository.cs" />
   </ItemGroup>
   <ItemGroup>

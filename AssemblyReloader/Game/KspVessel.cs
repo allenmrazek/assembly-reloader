@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using AssemblyReloader.ReloadablePlugin.Loaders;
+using UnityEngine;
 
 namespace AssemblyReloader.Game
 {
@@ -36,6 +37,11 @@ namespace AssemblyReloader.Game
         public Guid ID
         {
             get { return _vessel.id; }
+        }
+
+        public GameObject gameObject
+        {
+            get { return _vessel.gameObject; }
         }
     }
 }

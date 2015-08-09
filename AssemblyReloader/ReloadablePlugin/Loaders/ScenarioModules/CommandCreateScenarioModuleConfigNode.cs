@@ -3,7 +3,6 @@ using System.Linq;
 using AssemblyReloader.Game;
 using AssemblyReloader.StrangeIoC.extensions.command.impl;
 using AssemblyReloader.StrangeIoC.extensions.injector;
-using AssemblyReloader.Unsorted;
 using ReeperCommon.Containers;
 using ReeperCommon.Logging;
 using UnityEngine;

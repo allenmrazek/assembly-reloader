@@ -9,7 +9,7 @@ using ReeperCommon.Logging;
 namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
 {
 // ReSharper disable once ClassNeverInstantiated.Global
-    public class CommandCreatePartModules : Command
+    public class CommandLoadPartModules : Command
     {
         private readonly IPartModuleLoader _partModuleLoader;
         private readonly ILoadedAssemblyHandle _handle;
@@ -24,7 +24,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
         private readonly List<KeyValuePair<IPart, PartModule>> _targets = new List<KeyValuePair<IPart, PartModule>>();
 
 
-        public CommandCreatePartModules(
+        public CommandLoadPartModules(
             IPartModuleLoader partModuleLoader, 
             ILoadedAssemblyHandle handle,
             IPartModuleSettings partModuleSettings,

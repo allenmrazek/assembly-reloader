@@ -5,7 +5,6 @@ using AssemblyReloader.Game;
 using AssemblyReloader.ReloadablePlugin.Loaders.Addons;
 using AssemblyReloader.StrangeIoC.extensions.implicitBind;
 using AssemblyReloader.StrangeIoC.extensions.injector.api;
-using AssemblyReloader.Unsorted;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
 {

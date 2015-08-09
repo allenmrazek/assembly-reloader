@@ -47,7 +47,11 @@ namespace AssemblyReloader
                 .To<GetTypesDerivedFrom<ScenarioModule>>()
                 .ToSingleton()
                 .CrossContext();
-               
+
+            injectionBinder.Bind<IGetTypesDerivedFrom<VesselModule>>()
+                .To<GetTypesDerivedFrom<VesselModule>>()
+                .ToSingleton()
+                .CrossContext();
 
             injectionBinder.Bind<IUrlDirProvider>().To<KSPGameDataUrlDirProvider>().ToSingleton();
             injectionBinder.Bind<IUrlDir>().To(new KSPUrlDir(injectionBinder.GetInstance<IUrlDirProvider>().Get())).CrossContext();

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using UnityEngine;
 
 namespace AssemblyReloader.Game
 {
@@ -10,5 +11,6 @@ namespace AssemblyReloader.Game
 
 // ReSharper disable once InconsistentNaming
         Guid ID { get; }
+        GameObject gameObject { get; }
     }
 }

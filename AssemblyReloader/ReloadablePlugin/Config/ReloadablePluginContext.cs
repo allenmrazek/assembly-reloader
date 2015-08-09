@@ -9,6 +9,7 @@ using AssemblyReloader.ReloadablePlugin.Loaders;
 using AssemblyReloader.ReloadablePlugin.Loaders.Addons;
 using AssemblyReloader.ReloadablePlugin.Loaders.PartModules;
 using AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules;
+using AssemblyReloader.ReloadablePlugin.Loaders.VesselModules;
 using AssemblyReloader.ReloadablePlugin.Weaving;
 using AssemblyReloader.ReloadablePlugin.Weaving.Operations;
 using AssemblyReloader.ReloadablePlugin.Weaving.Operations.Keys;
@@ -172,14 +173,16 @@ namespace AssemblyReloader.ReloadablePlugin.Config
             // other signals
             commandBinder.Bind<SignalPluginWasLoaded>()
                 .To<CommandInitializeAddonLoader>()
-                .To<CommandCreatePartModules>()
-                .To<CommandCreateScenarioModules>()
+                .To<CommandLoadPartModules>()
+                .To<CommandLoadVesselModules>()
+                .To<CommandLoadScenarioModules>()
                 .To<CommandDispatchLoadersFinished>();
 
 
             commandBinder.Bind<SignalUnloadPlugin>()
                 .InSequence()
                 .To<CommandDeinitializeAddonLoader>()
+                .To<CommandUnloadVesselModules>()
                 .To<CommandUnloadPartModules>()
                 .To<CommandUnloadScenarioModules>();
 

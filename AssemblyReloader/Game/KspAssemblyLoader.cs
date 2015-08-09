@@ -17,22 +17,26 @@ namespace AssemblyReloader.Game
     public class KspAssemblyLoader : IGameAssemblyLoader
     {
         private readonly IGetLoadedAssemblyFileUrl _laFileUrl;
-        private readonly IGetTypesDerivedFrom<PartModule> _partModuleTypeQuery;
-        private readonly IGetTypesDerivedFrom<ScenarioModule> _scenarioModuleQuery;
+        private readonly IGetTypesDerivedFrom<PartModule> _partModules;
+        private readonly IGetTypesDerivedFrom<ScenarioModule> _scenarioModules;
+        private readonly IGetTypesDerivedFrom<VesselModule> _vesselModules;
 
 
         public KspAssemblyLoader(
             IGetLoadedAssemblyFileUrl laFileUrl,
-            IGetTypesDerivedFrom<PartModule> partModuleTypeQuery,
-            IGetTypesDerivedFrom<ScenarioModule> scenarioModuleQuery)
+            IGetTypesDerivedFrom<PartModule> partModules,
+            IGetTypesDerivedFrom<ScenarioModule> scenarioModules,
+            IGetTypesDerivedFrom<VesselModule> vesselModules)
         {
             if (laFileUrl == null) throw new ArgumentNullException("laFileUrl");
-            if (partModuleTypeQuery == null) throw new ArgumentNullException("partModuleTypeQuery");
-            if (scenarioModuleQuery == null) throw new ArgumentNullException("scenarioModuleQuery");
+            if (partModules == null) throw new ArgumentNullException("partModules");
+            if (scenarioModules == null) throw new ArgumentNullException("scenarioModules");
+            if (vesselModules == null) throw new ArgumentNullException("vesselModules");
 
             _laFileUrl = laFileUrl;
-            _partModuleTypeQuery = partModuleTypeQuery;
-            _scenarioModuleQuery = scenarioModuleQuery;
+            _partModules = partModules;
+            _scenarioModules = scenarioModules;
+            _vesselModules = vesselModules;
         }
 
 
@@ -90,11 +94,13 @@ namespace AssemblyReloader.Game
         // The game looks inside this type list for certain types; we need to make sure they're there to be found
         private void InstallTypes(AssemblyLoader.LoadedAssembly loadedAssembly)
         {
-            var partModules = _partModuleTypeQuery.Get(loadedAssembly.assembly).ToList();
-            var scenarioModules = _scenarioModuleQuery.Get(loadedAssembly.assembly).ToList();
+            var partModules = _partModules.Get(loadedAssembly.assembly).ToList();
+            var scenarioModules = _scenarioModules.Get(loadedAssembly.assembly).ToList();
+            var vesselModules = _vesselModules.Get(loadedAssembly.assembly).ToList();
 
             InsertTypeListIntoLoadedAssembly<PartModule>(loadedAssembly, partModules);
             InsertTypeListIntoLoadedAssembly<ScenarioModule>(loadedAssembly, scenarioModules);
+            InsertTypeListIntoLoadedAssembly<VesselModule>(loadedAssembly, vesselModules);
         }
 
 

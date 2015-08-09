@@ -41,6 +41,8 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
             _log.Debug("Destroying ScenarioModules");
 
             _scenarioModuleUnloader.Unload(_loadedHandle);
+
+            _log.Debug("Finishing destroyed ScenarioModules");
         }
     }
 }

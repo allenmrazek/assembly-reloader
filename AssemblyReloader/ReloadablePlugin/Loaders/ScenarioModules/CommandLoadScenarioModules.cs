@@ -2,16 +2,14 @@
 using System.Linq;
 using AssemblyReloader.DataObjects;
 using AssemblyReloader.Game;
-using AssemblyReloader.Game.Providers;
 using AssemblyReloader.StrangeIoC.extensions.command.impl;
-using AssemblyReloader.Unsorted;
 using ReeperCommon.Logging;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
 {
 
 // ReSharper disable once ClassNeverInstantiated.Global
-    public class CommandCreateScenarioModules : Command
+    public class CommandLoadScenarioModules : Command
     {
         private readonly ILoadedAssemblyHandle _loadedHandle;
         private readonly IScenarioModuleLoader _scenarioModuleLoader;
@@ -19,7 +17,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
         private readonly ILog _log;
 
 
-        public CommandCreateScenarioModules(
+        public CommandLoadScenarioModules(
             ILoadedAssemblyHandle loadedHandle,
             IScenarioModuleLoader scenarioModuleLoader,
             IScenarioModuleSettings scenarioModuleSettings,
@@ -46,41 +44,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
 
             _scenarioModuleLoader.Load(_loadedHandle);
 
-            //foreach (var smType in _scenarioModuleTypeQuery.Get(_loadedHandle.LoadedAssembly.assembly))
-            //    LoadScenarioModule(smType);
-
             _log.Debug("Finished creating ScenarioModules");
         }
-
-
-        //private void LoadScenarioModule(Type scenarioType)
-        //{
-        //    var identifier = _typeIdentifierQuery.Get(scenarioType);
-
-        //    // there should be only a single instance; this done in case the target plugin has managed to do
-        //    // something very hacky
-        //    foreach (var psm in _protoScenarioModuleProvider.Get(scenarioType))
-        //    {
-        //        if (psm.moduleRef.Any())
-        //        {
-        //            _log.Error("A ScenarioModule instance of type " + identifier +
-        //                       " already referenced by ScenarioRunner");
-        //            continue;
-        //        }
-
-        //        // todo: update target scenes
-
-        //        try
-        //        {
-        //            //if (psm.Load().Any())
-        //            //    _log.Verbose("Successfully created ScenarioModule " + identifier);
-        //            /*else*/ _log.Warning("Failed to create ScenarioModule " + identifier);
-        //        }
-        //        catch (Exception e) // large scope intended
-        //        {
-        //            _log.Error("Failed to load " + identifier + ": " + e);
-        //        }
-        //    }
-        //}
     }
 }
