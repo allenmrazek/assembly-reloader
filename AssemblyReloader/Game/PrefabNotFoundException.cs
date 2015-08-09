@@ -15,5 +15,18 @@ namespace AssemblyReloader.Game
         {
             
         }
+
+
+        public PrefabNotFoundException(string message)
+            :base(message)
+        {
+            
+        }
+
+        public PrefabNotFoundException(string message, Exception innerException)
+            : base(message, innerException)
+        {
+            
+        }
     }
 }

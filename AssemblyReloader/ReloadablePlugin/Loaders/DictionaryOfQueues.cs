@@ -5,13 +5,13 @@ using ReeperCommon.Containers;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders
 {
-    public class DictionaryQueue<TKey, TValue>
+    public class DictionaryOfQueues<TKey, TValue>
     {
         private readonly Dictionary<TKey, Queue<TValue>> _items;
        
 
 
-        public DictionaryQueue(IEqualityComparer<TKey> comparer)
+        public DictionaryOfQueues(IEqualityComparer<TKey> comparer)
         {
             if (comparer == null) throw new ArgumentNullException("comparer");
 
@@ -19,7 +19,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders
         }
 
 
-        public DictionaryQueue()
+        public DictionaryOfQueues()
         {
             _items = new Dictionary<TKey, Queue<TValue>>();
         }

@@ -67,7 +67,7 @@ namespace AssemblyReloader.Config
                 .InSequence()
                 .To<CommandLoadConfiguration>()
                 .To<CommandConfigureGameEvents>()
-                .To<CommandConfigureGUI>()
+                .To<CommandConfigureGui>()
                 .To<CommandLaunchReloadablePluginContexts>()
                 .Once();
         }

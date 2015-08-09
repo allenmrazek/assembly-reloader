@@ -1,6 +1,6 @@
 ﻿namespace AssemblyReloader.Config.Keys
 {
-    public enum TextureNames
+    public enum TextureNameKey
     {
         // for windows
         CloseButton,

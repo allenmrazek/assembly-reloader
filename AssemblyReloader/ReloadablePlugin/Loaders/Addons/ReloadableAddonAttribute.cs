@@ -31,6 +31,9 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
             Flight = 7,
             TrackingStation = 8,
             PSystemSpawn = 9,
+
+
+            None = 99,
         }
     }
 }

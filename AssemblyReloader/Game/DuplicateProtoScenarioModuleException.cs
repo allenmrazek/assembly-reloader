@@ -9,5 +9,18 @@ namespace AssemblyReloader.Game
         {
             
         }
+
+        public DuplicateProtoScenarioModuleException()
+            : base("A duplicate ProtoScenarioModule exists for a type")
+        {
+
+        }
+
+
+        public DuplicateProtoScenarioModuleException(string message, Exception innerException)
+            : base(message, innerException)
+        {
+            
+        }
     }
 }

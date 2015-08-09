@@ -13,7 +13,7 @@ namespace AssemblyReloader.Config
     {
         private readonly IDirectory _topDirectory;
 
-        public GetReloadableAssemblyFilesFromDirectoryRecursive([Name(DirectoryKeys.GameData)] IDirectory topDirectory)
+        public GetReloadableAssemblyFilesFromDirectoryRecursive([Name(DirectoryKey.GameData)] IDirectory topDirectory)
         {
             if (topDirectory == null) throw new ArgumentNullException("topDirectory");
             _topDirectory = topDirectory;

@@ -1,6 +1,6 @@
 ﻿namespace AssemblyReloader.Config.Keys
 {
-    public enum Styles
+    public enum StyleKey
     {
         // title bar buttons
         TitleBarButtonStyle,

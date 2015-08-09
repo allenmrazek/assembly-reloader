@@ -19,7 +19,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
             IGetAddonTypesForScene addonTypeQuery, 
             IGetMonoBehavioursInScene monoBehaviourQuery,
             IMonoBehaviourDestroyer addonDestroyer,
-            [Name(LogKeys.AddonUnloader)] ILog log)
+            [Name(LogKey.AddonUnloader)] ILog log)
         {
             if (addonTypeQuery == null) throw new ArgumentNullException("addonTypeQuery");
             if (monoBehaviourQuery == null) throw new ArgumentNullException("monoBehaviourQuery");
@@ -42,7 +42,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
             foreach (var activeInstances in Enum.GetValues(typeof (KSPAddon.Startup))
                 .Cast<KSPAddon.Startup>()
                 .SelectMany(scene => _addonTypeQuery.Get(scene, handle))
-                .Select(kvp => kvp.Key)
+                .Select(kvp => kvp.Type)
                 .OrderBy(kvp => kvp.FullName)
                 .Distinct()
                 .Select(addonType => _monoBehaviourQuery.Get(addonType).ToArray()))

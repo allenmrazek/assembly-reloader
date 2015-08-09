@@ -34,7 +34,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
             IGetAttributesOfType<KSPScenario> scenarioAttributeQuery,
             IScenarioModuleFactory smFactory,
             IGetTypeIdentifier typeIdentifierQuery,
-            [Name(LogKeys.ScenarioModuleLoader)] ILog log)
+            [Name(LogKey.ScenarioModuleLoader)] ILog log)
         {
             if (smTypeQuery == null) throw new ArgumentNullException("smTypeQuery");
             if (protoScenarioModuleQuery == null) throw new ArgumentNullException("protoScenarioModuleQuery");

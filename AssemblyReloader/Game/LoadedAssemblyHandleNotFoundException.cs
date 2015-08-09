@@ -15,5 +15,17 @@ namespace AssemblyReloader.Game
         {
             
         }
+
+        public LoadedAssemblyHandleNotFoundException(string message)
+            : base(message)
+        {
+            
+        }
+
+        public LoadedAssemblyHandleNotFoundException(string message, Exception innerException)
+            : base(message, innerException)
+        {
+            
+        }
     }
 }

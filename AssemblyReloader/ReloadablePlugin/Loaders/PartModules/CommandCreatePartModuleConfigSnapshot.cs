@@ -27,7 +27,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
             IKspFactory kspFactory,
             IGetUniqueFlightID flightId,
             IGetTypeIdentifier typeIdentifierQuery,
-            [Name(LogKeys.PartModuleSnapshotGenerator)] ILog log)
+            [Name(LogKey.PartModuleSnapshotGenerator)] ILog log)
         {
             if (mbBeingDestroyed == null) throw new ArgumentNullException("mbBeingDestroyed");
             if (partIsPrefabQuery == null) throw new ArgumentNullException("partIsPrefabQuery");

@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace AssemblyReloader.ReloadablePlugin.Config
 {
-    public class CommandConfigurePluginGUI : Command
+    public class CommandConfigurePluginGui : Command
     {
         [Inject(ContextKeys.CONTEXT_VIEW)] public GameObject gameObject { get; set; }
         [Inject] public ILog Log { get; set; }

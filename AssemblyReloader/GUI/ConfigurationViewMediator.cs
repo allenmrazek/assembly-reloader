@@ -14,7 +14,7 @@ namespace AssemblyReloader.Gui
         [Inject] public SignalToggleConfigurationView ToggleConfigurationViewSignal { get; set; }
 
         [Inject] public ConfigurationView View { get; set; }
-        [Inject] public Configuration Configuration { get; set; }
+        [Inject] public CoreConfiguration CoreConfiguration { get; set; }
         [Inject] public ILog Log { get; set; }
 
         public override void OnRegister()

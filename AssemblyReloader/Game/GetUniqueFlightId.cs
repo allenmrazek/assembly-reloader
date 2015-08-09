@@ -8,11 +8,6 @@ namespace AssemblyReloader.Game
     {
         private static uint _internalCounter = 1;
 
-        static GetUniqueFlightId()
-        {
-            _internalCounter = 1;
-        }
-
         public uint Get()
         {
             return HighLogic.CurrentGame != null ? ShipConstruction.GetUniqueFlightID(HighLogic.CurrentGame.Updated().flightState) : _internalCounter++;

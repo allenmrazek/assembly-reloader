@@ -20,7 +20,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
         public ScenarioModuleFactory(
             IScenarioModuleConfigNodeRepository configRepository,
             IGetTypeIdentifier typeIdentifierQuery,
-            [Name(LogKeys.ScenarioModuleFactory)] ILog log)
+            [Name(LogKey.ScenarioModuleFactory)] ILog log)
         {
             if (configRepository == null) throw new ArgumentNullException("configRepository");
             if (typeIdentifierQuery == null) throw new ArgumentNullException("typeIdentifierQuery");

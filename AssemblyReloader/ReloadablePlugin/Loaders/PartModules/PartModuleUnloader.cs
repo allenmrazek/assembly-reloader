@@ -21,7 +21,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
             IPartModuleDescriptorFactory descriptorFactory,
             IGetPartPrefabClones loadedInstancesOfPrefabQuery,
             IPartModuleDestroyer partModuleDestroyer,
-            [Name(LogKeys.PartModuleUnloader)] ILog log)
+            [Name(LogKey.PartModuleUnloader)] ILog log)
         {
             if (partModuleTypeQuery == null) throw new ArgumentNullException("partModuleTypeQuery");
             if (descriptorFactory == null) throw new ArgumentNullException("descriptorFactory");

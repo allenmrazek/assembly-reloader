@@ -61,7 +61,7 @@ namespace AssemblyReloader.FileSystem
         private string GenerateFilePath()
         {
             return _directory.FullPath +
-                   (!_directory.FullPath.EndsWith(Path.DirectorySeparatorChar.ToString(CultureInfo.InvariantCulture))
+                   (!_directory.FullPath.EndsWith(Path.DirectorySeparatorChar.ToString(CultureInfo.InvariantCulture), StringComparison.InvariantCulture)
                        ? Path.DirectorySeparatorChar.ToString(CultureInfo.InvariantCulture)
                        : "")
                    + _string.Get();

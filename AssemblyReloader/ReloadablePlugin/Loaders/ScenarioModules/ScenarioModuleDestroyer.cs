@@ -16,7 +16,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
 
         public ScenarioModuleDestroyer(
             SignalAboutToDestroyMonoBehaviour aboutToDestroySignal,
-            [Name(LogKeys.ScenarioModuleDestroyer)] ILog log)
+            [Name(LogKey.ScenarioModuleDestroyer)] ILog log)
         {
             if (aboutToDestroySignal == null) throw new ArgumentNullException("aboutToDestroySignal");
             if (log == null) throw new ArgumentNullException("log");

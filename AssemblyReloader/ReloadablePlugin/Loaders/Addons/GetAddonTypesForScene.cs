@@ -18,7 +18,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
         }
 
 
-        public IEnumerable<KeyValuePair<Type, ReloadableAddonAttribute>> Get(KSPAddon.Startup scene, ILoadedAssemblyHandle handle)
+        public IEnumerable<ReloadableAddonType> Get(KSPAddon.Startup scene, ILoadedAssemblyHandle handle)
         {
             if (handle == null) throw new ArgumentNullException("handle");
 
@@ -26,8 +26,9 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
                 .Where(t => t.IsSubclassOf(typeof (MonoBehaviour)))
                 .Where(
                     t =>
-                        _getAttributes.Get(t).Any(attr => attr.startup == scene || attr.startup == KSPAddon.Startup.EveryScene))
-                .Select(t => new KeyValuePair<Type, ReloadableAddonAttribute>(t, _getAttributes.Get(t).Single()));
+                        _getAttributes.Get(t)
+                            .Any(attr => attr.startup == scene || attr.startup == KSPAddon.Startup.EveryScene))
+                .Select(t => new ReloadableAddonType(t, _getAttributes.Get(t).Single()));
         }
     }
 }

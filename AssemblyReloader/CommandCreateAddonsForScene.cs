@@ -8,7 +8,7 @@ namespace AssemblyReloader
 {
     public class CommandCreateAddonsForScene : Command
     {
-        protected readonly IReloadableAddonLoader AddonLoader;
+        private readonly IReloadableAddonLoader _addonLoader;
         private readonly IGetCurrentStartupScene _getCurrentScene;
         private readonly IAddonSettings _addonSettings;
         private readonly ILog _log;
@@ -25,7 +25,7 @@ namespace AssemblyReloader
             if (addonSettings == null) throw new ArgumentNullException("addonSettings");
             if (log == null) throw new ArgumentNullException("log");
 
-            AddonLoader = addonLoader;
+            _addonLoader = addonLoader;
             _getCurrentScene = getCurrentScene;
             _addonSettings = addonSettings;
             _log = log;
@@ -37,15 +37,21 @@ namespace AssemblyReloader
             if (_addonSettings.InstantlyAppliesToAllScenes && _getCurrentScene.Get() != KSPAddon.Startup.Instantly)
             {
                 _log.Verbose("Creating instant addons");
-                AddonLoader.CreateAddons(KSPAddon.Startup.Instantly);
+                _addonLoader.CreateAddons(KSPAddon.Startup.Instantly);
             }
 
 
             if (_addonSettings.StartAddonsForCurrentScene)
             {
                 _log.Verbose("Creating addons for current scene");
-                AddonLoader.CreateAddons(_getCurrentScene.Get());
+                _addonLoader.CreateAddons(_getCurrentScene.Get());
             }
+        }
+
+
+        protected IReloadableAddonLoader AddonLoader
+        {
+            get { return _addonLoader; }
         }
     }
 }

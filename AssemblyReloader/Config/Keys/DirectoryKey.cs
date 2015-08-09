@@ -1,6 +1,6 @@
 ﻿namespace AssemblyReloader.Config.Keys
 {
-    public enum DirectoryKeys
+    public enum DirectoryKey
     {
         Core,
         GameData

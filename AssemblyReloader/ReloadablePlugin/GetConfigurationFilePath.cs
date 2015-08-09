@@ -14,7 +14,7 @@ namespace AssemblyReloader.ReloadablePlugin
         {
             if (extension == null) throw new ArgumentNullException("extension");
             if (string.IsNullOrEmpty(extension))
-                throw new ArgumentException("extension");
+                throw new ArgumentException("cannot be null or empty", "extension");
 
             _extension = extension;
             if (!_extension.StartsWith(".")) _extension = "." + extension;

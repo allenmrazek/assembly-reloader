@@ -149,7 +149,7 @@ namespace AssemblyReloader.ReloadablePlugin.Config
         {
             // only happens once: initial load of reloadable plugin
             commandBinder.Bind<SignalStart>()
-                .To<CommandConfigurePluginGUI>()
+                .To<CommandConfigurePluginGui>()
                 .To<CommandStartReloadablePlugin>()
                 .Once();
 
@@ -203,50 +203,50 @@ namespace AssemblyReloader.ReloadablePlugin.Config
 
             injectionBinder.Bind<ILog>()
                 .To(injectionBinder.GetInstance<ILog>().CreateTag("AddonLoader"))
-                .ToName(LogKeys.AddonLoader);
+                .ToName(LogKey.AddonLoader);
 
             injectionBinder.Bind<ILog>()
                 .To(injectionBinder.GetInstance<ILog>().CreateTag("AddonUnloader"))
-                .ToName(LogKeys.AddonUnloader);
+                .ToName(LogKey.AddonUnloader);
 
 
 
             injectionBinder.Bind<ILog>()
                 .To(injectionBinder.GetInstance<ILog>().CreateTag("PartModuleLoader"))
-                .ToName(LogKeys.PartModuleLoader);
+                .ToName(LogKey.PartModuleLoader);
 
             injectionBinder.Bind<ILog>()
                 .To(injectionBinder.GetInstance<ILog>().CreateTag("PartModuleFactory"))
-                .ToName(LogKeys.PartModuleFactory);
+                .ToName(LogKey.PartModuleFactory);
 
             injectionBinder.Bind<ILog>()
                 .To(injectionBinder.GetInstance<ILog>().CreateTag("PartModuleUnloader"))
-                .ToName(LogKeys.PartModuleUnloader);
+                .ToName(LogKey.PartModuleUnloader);
 
             injectionBinder.Bind<ILog>()
                 .To(injectionBinder.GetInstance<ILog>().CreateTag("PartModuleSnapshotGenerator"))
-                .ToName(LogKeys.PartModuleSnapshotGenerator);
+                .ToName(LogKey.PartModuleSnapshotGenerator);
 
 
             injectionBinder.Bind<ILog>()
                 .To(injectionBinder.GetInstance<ILog>().CreateTag("ScenarioModuleLoader"))
-                .ToName(LogKeys.ScenarioModuleLoader);
+                .ToName(LogKey.ScenarioModuleLoader);
 
             injectionBinder.Bind<ILog>()
                 .To(injectionBinder.GetInstance<ILog>().CreateTag("ScenarioModuleFactory"))
-                .ToName(LogKeys.ScenarioModuleFactory);
+                .ToName(LogKey.ScenarioModuleFactory);
 
             injectionBinder.Bind<ILog>()
                 .To(injectionBinder.GetInstance<ILog>().CreateTag("ScenarioModuleUnloader"))
-                .ToName(LogKeys.ScenarioModuleUnloader);
+                .ToName(LogKey.ScenarioModuleUnloader);
 
             injectionBinder.Bind<ILog>()
                 .To(injectionBinder.GetInstance<ILog>().CreateTag("ScenarioModuleDestroyer"))
-                .ToName(LogKeys.ScenarioModuleDestroyer);
+                .ToName(LogKey.ScenarioModuleDestroyer);
 
             injectionBinder.Bind<ILog>()
                 .To(injectionBinder.GetInstance<ILog>().CreateTag("ScenarioModuleConfigNodeUpdater"))
-                .ToName(LogKeys.ScenarioModuleConfigNodeUpdater);
+                .ToName(LogKey.ScenarioModuleConfigNodeUpdater);
         }
     }
 }

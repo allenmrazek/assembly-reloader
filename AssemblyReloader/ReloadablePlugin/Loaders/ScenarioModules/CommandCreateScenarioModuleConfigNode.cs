@@ -27,7 +27,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
             IGetProtoScenarioModules protoScenarioModuleQuery,
             IScenarioModuleSettings scenarioModuleSettings,
             IGetTypeIdentifier typeIdentifierQuery,
-            [Name(LogKeys.ScenarioModuleConfigNodeUpdater)] ILog log)
+            [Name(LogKey.ScenarioModuleConfigNodeUpdater)] ILog log)
         {
             if (mbToBeDestroyed == null) throw new ArgumentNullException("mbToBeDestroyed");
             if (configRepository == null) throw new ArgumentNullException("configRepository");

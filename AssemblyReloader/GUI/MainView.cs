@@ -14,13 +14,13 @@ namespace AssemblyReloader.Gui
     // ReSharper disable once ClassNeverInstantiated.Global
     public class MainView : StrangeView
     {
-        [Inject(Styles.TitleBarButtonStyle)]
+        [Inject(StyleKey.TitleBarButtonStyle)]
         public GUIStyle TitleBarButtonStyle { get; set; }
-        [Inject(TextureNames.CloseButton)]
+        [Inject(TextureNameKey.CloseButton)]
         public Texture2D CloseButtonTexture { get; set; }
-        [Inject(TextureNames.SettingsButton)]
+        [Inject(TextureNameKey.SettingsButton)]
         public Texture2D SettingsButtonTexture { get; set; }
-        [Inject(TextureNames.ResizeCursor)]
+        [Inject(TextureNameKey.ResizeCursor)]
         public Texture2D ResizeCursorTexture { get; set; }
         [Inject]
         public GUISkin WindowSkin { get; set; }

@@ -13,5 +13,16 @@ namespace AssemblyReloader.Game
         {
             
         }
+
+        public DuplicatePartPrefabException(string message) : base(message)
+        {
+            
+        }
+
+        public DuplicatePartPrefabException(string message, Exception innerException)
+            : base(message, innerException)
+        {
+            
+        }
     }
 }

@@ -13,16 +13,17 @@ using Object = UnityEngine.Object;
 namespace AssemblyReloader.Config
 {
 // ReSharper disable once ClassNeverInstantiated.Global
-// ReSharper disable once InconsistentNaming
-// ReSharper disable MemberCanBePrivate.Global
-// ReSharper disable InconsistentNaming
-    public class CommandConfigureGUI : Command
+    public class CommandConfigureGui : Command
     {
+        private const string GuiSkinPrefabName = "KSP window 4";
+
+
         [Inject(ContextKeys.CONTEXT_VIEW)]
         public GameObject gameObject { get; set; }
 
         [Inject]
         public IResourceRepository Resources { get; set; }
+
 
         public override void Execute()
         {
@@ -59,19 +60,23 @@ namespace AssemblyReloader.Config
 
         private void SetupTexturesAndSkin()
         {
-            var defaultSkin = Object.Instantiate(AssetBase.GetGUISkin("KSP window 4")) as GUISkin;
-            if (defaultSkin == null) throw new InvalidCastException("Failed to cast to GUISkin");
+            var skinPrefab = AssetBase.GetGUISkin(GuiSkinPrefabName);
+            if (skinPrefab == null)
+                throw new GuiSkinNotFoundException("KSP window 4");
+
+            var defaultSkin = Object.Instantiate(skinPrefab) as GUISkin;
+            if (defaultSkin == null) throw new UnityInstantiationFailedException("GUISkin");
 
             defaultSkin.label.wordWrap = false;
 
-            injectionBinder.Bind<GUIStyle>().To(ConfigureTitleBarButtonStyle()).ToName(Styles.TitleBarButtonStyle).ToSingleton().CrossContext();
+            injectionBinder.Bind<GUIStyle>().To(ConfigureTitleBarButtonStyle()).ToName(StyleKey.TitleBarButtonStyle).ToSingleton().CrossContext();
             injectionBinder.Bind<GUISkin>()
                 .To(defaultSkin)
                 .CrossContext();
 
-            BindTextureToName(Resources, "Resources/btnClose", TextureNames.CloseButton).CrossContext();
-            BindTextureToName(Resources, "Resources/btnWrench", TextureNames.SettingsButton).CrossContext();
-            BindTextureToName(Resources, "Resources/cursor", TextureNames.ResizeCursor).CrossContext();
+            BindTextureToName(Resources, "Resources/btnClose", TextureNameKey.CloseButton).CrossContext();
+            BindTextureToName(Resources, "Resources/btnWrench", TextureNameKey.SettingsButton).CrossContext();
+            BindTextureToName(Resources, "Resources/cursor", TextureNameKey.ResizeCursor).CrossContext();
         }
 
 

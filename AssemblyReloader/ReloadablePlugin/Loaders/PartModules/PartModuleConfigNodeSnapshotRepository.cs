@@ -7,8 +7,8 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
 // ReSharper disable once ClassNeverInstantiated.Global
     public class PartModuleConfigNodeSnapshotRepository : IPartModuleConfigNodeSnapshotRepository
     {
-        private readonly DictionaryQueue<KeyValuePair<uint, TypeIdentifier>, ConfigNode> _storedNodes = new
-            DictionaryQueue<KeyValuePair<uint, TypeIdentifier>, ConfigNode>(new FlightConfigNodeKeyValuePairComparer());
+        private readonly DictionaryOfQueues<KeyValuePair<uint, TypeIdentifier>, ConfigNode> _storedNodes = new
+            DictionaryOfQueues<KeyValuePair<uint, TypeIdentifier>, ConfigNode>(new FlightConfigNodeKeyValuePairComparer());
 
 
         public void Store(uint flightid, TypeIdentifier key, ConfigNode data)

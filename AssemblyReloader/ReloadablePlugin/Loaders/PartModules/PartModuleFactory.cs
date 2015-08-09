@@ -26,7 +26,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
             IPartModuleSettings partModuleSettings,
             IPartModuleConfigNodeSnapshotRepository configNodeSnapshots,
             SignalPartModuleCreated partModuleCreatedSignal,
-            [Name(LogKeys.PartModuleFactory)] ILog log)
+            [Name(LogKey.PartModuleFactory)] ILog log)
         {
             if (isPartPrefabQuery == null) throw new ArgumentNullException("isPartPrefabQuery");
             if (partModuleSettings == null) throw new ArgumentNullException("partModuleSettings");

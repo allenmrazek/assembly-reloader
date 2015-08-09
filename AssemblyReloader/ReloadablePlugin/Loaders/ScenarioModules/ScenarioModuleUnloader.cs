@@ -20,7 +20,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
             IGetTypesDerivedFrom<ScenarioModule> smTypeQuery,
             IGetProtoScenarioModules psmQuery,
             IScenarioModuleDestroyer smDestroyer,
-            [Name(LogKeys.ScenarioModuleUnloader)] ILog log)
+            [Name(LogKey.ScenarioModuleUnloader)] ILog log)
         {
             if (smTypeQuery == null) throw new ArgumentNullException("smTypeQuery");
             if (psmQuery == null) throw new ArgumentNullException("psmQuery");

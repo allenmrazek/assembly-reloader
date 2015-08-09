@@ -1,6 +1,6 @@
 ﻿namespace AssemblyReloader
 {
-    public enum LogKeys
+    public enum LogKey
     {
         AddonLoader,
         AddonUnloader,

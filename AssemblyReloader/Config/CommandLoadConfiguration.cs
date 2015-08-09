@@ -12,7 +12,7 @@ namespace AssemblyReloader.Config
 // ReSharper disable once ClassNeverInstantiated.Global
     public class CommandLoadConfiguration : Command
     {
-        [Inject] public Configuration Configuration { get; set; }
+        [Inject] public CoreConfiguration CoreConfiguration { get; set; }
         [Inject] public IConfigNodeSerializer Serializer { get; set; }
         [Inject] public IGetConfigurationFilePath Path { get; set; }
         [Inject] public IFile Core { get; set; }
@@ -38,7 +38,7 @@ namespace AssemblyReloader.Config
 
             try
             {
-                Serializer.Deserialize(Configuration, config);
+                Serializer.Deserialize(CoreConfiguration, config);
                 Log.Normal("Loaded configuration successfully");
             }
             catch (Exception e)

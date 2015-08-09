@@ -56,8 +56,8 @@ namespace AssemblyReloader
             var ourLocation = GetAssemblyFileLocation(Assembly.GetExecutingAssembly());
 
             injectionBinder.Bind<IDirectory>().To(ourLocation.Directory).CrossContext();
-            injectionBinder.Bind<IDirectory>().To(ourLocation.Directory).ToName(DirectoryKeys.Core).CrossContext();
-            injectionBinder.Bind<IDirectory>().To(injectionBinder.GetInstance<IFileSystemFactory>().GameData).ToName(DirectoryKeys.GameData).CrossContext();
+            injectionBinder.Bind<IDirectory>().To(ourLocation.Directory).ToName(DirectoryKey.Core).CrossContext();
+            injectionBinder.Bind<IDirectory>().To(injectionBinder.GetInstance<IFileSystemFactory>().GameData).ToName(DirectoryKey.GameData).CrossContext();
             injectionBinder.Bind<IFile>().To(ourLocation);
 
             injectionBinder.Bind<IResourceRepository>()

@@ -14,10 +14,10 @@ namespace AssemblyReloader.ReloadablePlugin.Gui
 {
     public class PluginConfigurationView : StrangeView
     {
-        [Inject(Styles.TitleBarButtonStyle)] public GUIStyle TitleBarButtonStyle { get; set; }
-        [Inject(TextureNames.CloseButton)] public Texture2D CloseButtonTexture { get; set; }
-        [Inject(TextureNames.SettingsButton)] public Texture2D SettingsButtonTexture { get; set; }
-        [Inject(TextureNames.ResizeCursor)] public Texture2D ResizeCursorTexture { get; set; }
+        [Inject(StyleKey.TitleBarButtonStyle)] public GUIStyle TitleBarButtonStyle { get; set; }
+        [Inject(TextureNameKey.CloseButton)] public Texture2D CloseButtonTexture { get; set; }
+        [Inject(TextureNameKey.SettingsButton)] public Texture2D SettingsButtonTexture { get; set; }
+        [Inject(TextureNameKey.ResizeCursor)] public Texture2D ResizeCursorTexture { get; set; }
         [Inject] public GUISkin WindowSkin { get; set; }
 
 

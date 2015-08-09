@@ -19,7 +19,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
         public ReloadableAddonLoader(
             IGetAddonTypesForScene getAddonTypesForScene,
             IMonoBehaviourFactory mbFactory,
-            [Name(LogKeys.AddonLoader)] ILog log)
+            [Name(LogKey.AddonLoader)] ILog log)
         {
             if (log == null) throw new ArgumentNullException("log");
             if (getAddonTypesForScene == null) throw new ArgumentNullException("getAddonTypesForScene");
@@ -42,23 +42,23 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
 
             foreach (var addonType in _getAddonTypesForScene.Get(scene, Handle.Single()))
             {
-                var onceOnly = addonType.Value.once;
+                var onceOnly = addonType.Attribute.once;
 
-                if (!onceOnly || !_loadedOnce.Contains(addonType.Key))
+                if (!onceOnly || !_loadedOnce.Contains(addonType.Type))
                 {
-                    _log.Normal("Instantiating addon '{0}'", addonType.Key.Name);
+                    _log.Normal("Instantiating addon '{0}'", addonType.Type.Name);
 
                     try
                     {
-                        _mbFactory.Create(addonType.Key);
+                        _mbFactory.Create(addonType.Type);
                     }
                     catch (Exception e)
                     {
-                        _log.Warning("Caught exception while creating " + addonType.Key.FullName);
+                        _log.Warning("Caught exception while creating " + addonType.Type.FullName);
                     }
                 }
                 else
-                    _log.Debug("Skipping creation of " + addonType.Key.FullName + " because it has already been loaded.");
+                    _log.Debug("Skipping creation of " + addonType.Type.FullName + " because it has already been loaded.");
             }
 
         }

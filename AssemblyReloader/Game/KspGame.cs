@@ -52,7 +52,7 @@ namespace AssemblyReloader.Game
 
         private void CheckForDuplicateProtoScenarioModule([NotNull] string moduleName)
         {
-            if (string.IsNullOrEmpty(moduleName)) throw new ArgumentException("moduleName");
+            if (string.IsNullOrEmpty(moduleName)) throw new ArgumentException("Cannot be null or empty", "moduleName");
 
             if (_game.scenarios.Any(psm => psm.moduleName == moduleName))
                 throw new DuplicateProtoScenarioModuleException(moduleName);

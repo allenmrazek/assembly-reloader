@@ -20,5 +20,19 @@ namespace AssemblyReloader.Game
         {
 
         }
+
+
+        public DuplicateLoadedAssemblyException(string message)
+            : base(message)
+        {
+            
+        }
+
+
+        public DuplicateLoadedAssemblyException(string message, Exception innerException)
+            : base(message, innerException)
+        {
+            
+        }
     }
 }
