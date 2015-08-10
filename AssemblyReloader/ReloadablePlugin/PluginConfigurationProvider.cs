@@ -2,7 +2,6 @@
 using System.IO;
 using System.Linq;
 using AssemblyReloader.Config;
-using AssemblyReloader.DataObjects;
 using AssemblyReloader.Properties;
 using AssemblyReloader.ReloadablePlugin.Config;
 using AssemblyReloader.StrangeIoC.extensions.implicitBind;

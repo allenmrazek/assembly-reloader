@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using AssemblyReloader.DataObjects;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
 {

@@ -1,5 +1,4 @@
 ﻿using System;
-using AssemblyReloader.DataObjects;
 using ReeperCommon.Containers;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules

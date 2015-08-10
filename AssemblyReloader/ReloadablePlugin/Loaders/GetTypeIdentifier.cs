@@ -1,5 +1,4 @@
 ﻿using System;
-using AssemblyReloader.DataObjects;
 using AssemblyReloader.StrangeIoC.extensions.implicitBind;
 using AssemblyReloader.StrangeIoC.extensions.injector.api;
 

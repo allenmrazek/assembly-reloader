@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using AssemblyReloader.DataObjects;
 using ReeperCommon.Containers;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules

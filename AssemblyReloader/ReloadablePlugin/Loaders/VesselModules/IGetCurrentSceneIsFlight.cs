@@ -1,4 +1,4 @@
-﻿namespace AssemblyReloader.Game
+﻿namespace AssemblyReloader.ReloadablePlugin.Loaders.VesselModules
 {
     public interface IGetCurrentSceneIsFlight
     {

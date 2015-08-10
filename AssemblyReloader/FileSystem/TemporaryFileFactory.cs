@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Globalization;
 using System.IO;
-using AssemblyReloader.DataObjects;
 using AssemblyReloader.Properties;
 using AssemblyReloader.ReloadablePlugin.Weaving;
 using AssemblyReloader.StrangeIoC.extensions.implicitBind;

@@ -1,5 +1,4 @@
 ﻿using System;
-using AssemblyReloader.DataObjects;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders
 {

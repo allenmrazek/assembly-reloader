@@ -1,5 +1,4 @@
 ﻿using System;
-using AssemblyReloader.DataObjects;
 using AssemblyReloader.Game;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules

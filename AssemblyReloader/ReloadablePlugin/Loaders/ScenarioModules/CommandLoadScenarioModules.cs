@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using AssemblyReloader.DataObjects;
 using AssemblyReloader.Game;
 using AssemblyReloader.StrangeIoC.extensions.command.impl;
 using ReeperCommon.Logging;

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace AssemblyReloader.DataObjects
+namespace AssemblyReloader.FileSystem
 {
     public class TemporaryFile : IDisposable
     {

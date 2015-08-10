@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace AssemblyReloader.DataObjects
+namespace AssemblyReloader.ReloadablePlugin.Loaders
 {
     public class TypeIdentifier : IEquatable<TypeIdentifier>
     {

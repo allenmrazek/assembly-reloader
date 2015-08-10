@@ -1,6 +1,4 @@
-﻿using AssemblyReloader.DataObjects;
-
-namespace AssemblyReloader.FileSystem
+﻿namespace AssemblyReloader.FileSystem
 {
     public interface IGetTemporaryFile
     {
