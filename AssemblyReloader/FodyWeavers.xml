@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Weavers>
+  <Costura DisableCompression="true" IncludeDebugSymbols="false">
+    <ExcludeAssemblies>
+      Assembly-CSharp
+      Assembly-CSharp-firstpass
+      System.Xml
+      TDx.TDxInput
+      TrackIRUnity
+      Mono.Security
+    </ExcludeAssemblies>
+  </Costura>
+  
+</Weavers>

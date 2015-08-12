@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+﻿extern alias KSP;
+using System.Collections.Generic;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
 {
     public interface IGameDatabase
     {
-        IEnumerable<UrlDir.UrlConfig> GetConfigs(string typeName);
+        IEnumerable<KSP::UrlDir.UrlConfig> GetConfigs(string typeName);
     }
 }

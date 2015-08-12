@@ -1,4 +1,5 @@
-﻿using System;
+﻿extern alias KSP;
+using System;
 using System.Reflection;
 using AssemblyReloader.Config.Keys;
 using AssemblyReloader.FileSystem;
@@ -107,7 +108,7 @@ namespace AssemblyReloader.ReloadablePlugin.Config
                 .ToName(MethodKeys.AssemblyLocation);
 
             injectionBinder.Bind<MethodInfo>()
-                .To(typeof(ScenarioRunner).GetMethod("GetLoadedModules", BindingFlags.Public | BindingFlags.Static))
+                .To(typeof(KSP::ScenarioRunner).GetMethod("GetLoadedModules", BindingFlags.Public | BindingFlags.Static))
                 .ToName(MethodKeys.ScenarioRunnerGetLoadedModules);
 
             injectionBinder.Bind<IGetInstructionsInMethod>()

@@ -1,4 +1,5 @@
-﻿using System;
+﻿extern alias KSP;
+using System;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
 {
@@ -21,7 +22,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
         }
 
 
-        public ConfigNodeDoesNotSpecifyTypeException(ConfigNode config)
+        public ConfigNodeDoesNotSpecifyTypeException(KSP::ConfigNode config)
             : base(
                 string.Format("The following ConfigNode does not specify a type to instantiate: {0}", config.ToString())
                 )

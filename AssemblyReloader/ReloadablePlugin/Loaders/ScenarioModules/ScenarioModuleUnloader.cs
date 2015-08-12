@@ -1,4 +1,5 @@
-﻿using System;
+﻿extern alias KSP;
+using System;
 using System.Linq;
 using AssemblyReloader.Game;
 using AssemblyReloader.StrangeIoC.extensions.implicitBind;
@@ -10,14 +11,14 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
     [Implements(typeof(IScenarioModuleUnloader))]
     public class ScenarioModuleUnloader : IScenarioModuleUnloader
     {
-        private readonly IGetTypesDerivedFrom<ScenarioModule> _smTypeQuery;
+        private readonly IGetTypesDerivedFrom<KSP::ScenarioModule> _smTypeQuery;
         private readonly IGetProtoScenarioModules _psmQuery;
         private readonly IScenarioModuleDestroyer _smDestroyer;
         private readonly ILog _log;
 
 
         public ScenarioModuleUnloader(
-            IGetTypesDerivedFrom<ScenarioModule> smTypeQuery,
+            IGetTypesDerivedFrom<KSP::ScenarioModule> smTypeQuery,
             IGetProtoScenarioModules psmQuery,
             IScenarioModuleDestroyer smDestroyer,
             [Name(LogKey.ScenarioModuleUnloader)] ILog log)

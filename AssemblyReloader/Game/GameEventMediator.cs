@@ -1,4 +1,5 @@
-﻿using AssemblyReloader.StrangeIoC.extensions.injector;
+﻿extern alias KSP;
+using AssemblyReloader.StrangeIoC.extensions.injector;
 using AssemblyReloader.StrangeIoC.extensions.mediation.impl;
 
 namespace AssemblyReloader.Game
@@ -24,7 +25,7 @@ namespace AssemblyReloader.Game
         }
 
 
-        private void LevelWasLoaded(KSPAddon.Startup scene)
+        private void LevelWasLoaded(KSP::KSPAddon.Startup scene)
         {
             LevelWasLoadedSignal.Dispatch(scene);
         }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿extern alias KSP;
+using System;
 using AssemblyReloader.Game;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
@@ -10,16 +11,16 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
     public class PartModuleDescriptor
     {
         public IPart Prefab { get; private set; }
-        public ConfigNode Config { get; private set; }
+        public KSP::ConfigNode Config { get; private set; }
         public Type Type { get; private set; }
         public TypeIdentifier Identifier { get; private set; }
 
-        public PartModuleDescriptor(IPart prefab, ConfigNode config, Type type, TypeIdentifier typeIdentifier)
+        public PartModuleDescriptor(IPart prefab, KSP::ConfigNode config, Type type, TypeIdentifier typeIdentifier)
         {
             if (prefab == null) throw new ArgumentNullException("prefab");
             if (config == null) throw new ArgumentNullException("config");
             if (type == null) throw new ArgumentNullException("type");
-            if (!type.IsSubclassOf(typeof (PartModule)))
+            if (!type.IsSubclassOf(typeof(KSP::PartModule)))
                 throw new TypeMustDeriveFromPartModuleException(type);
 
             Prefab = prefab;

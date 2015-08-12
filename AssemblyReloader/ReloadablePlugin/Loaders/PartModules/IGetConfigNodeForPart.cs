@@ -1,10 +1,11 @@
-﻿using AssemblyReloader.Game;
+﻿extern alias KSP;
+using AssemblyReloader.Game;
 using ReeperCommon.Containers;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
 {
     public interface IGetConfigNodeForPart
     {
-        Maybe<ConfigNode> Get(IAvailablePart availablePart);
+        Maybe<KSP::ConfigNode> Get(IAvailablePart availablePart);
     }
 }

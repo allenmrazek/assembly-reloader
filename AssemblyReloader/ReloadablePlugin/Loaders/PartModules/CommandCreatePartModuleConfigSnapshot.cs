@@ -1,4 +1,5 @@
-﻿using System;
+﻿extern alias KSP;
+using System;
 using AssemblyReloader.Game;
 using AssemblyReloader.StrangeIoC.extensions.command.impl;
 using AssemblyReloader.StrangeIoC.extensions.injector;
@@ -48,10 +49,10 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
 
         public override void Execute()
         {
-            if (!_mbBeingDestroyed.GetType().IsSubclassOf(typeof(PartModule)))
+            if (!_mbBeingDestroyed.GetType().IsSubclassOf(typeof(KSP::PartModule)))
                 return;
 
-            var partModule = _mbBeingDestroyed as PartModule;
+            var partModule = _mbBeingDestroyed as KSP::PartModule;
 
             if (partModule == null)
             {
@@ -68,7 +69,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
         }
 
 
-        private void CreateSnapshot(IPart part, PartModule partModule)
+        private void CreateSnapshot(IPart part, KSP::PartModule partModule)
         {
             // some parts (specifically those in the editor) don't have a flightID assigned by default. It's how
             // the game uniquely identifies parts so we might as well make use of it, too
@@ -80,7 +81,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
 
             try
             {
-                var config = new ConfigNode("MODULE");
+                var config = new KSP::ConfigNode("MODULE");
                 var identifier = _typeIdentifierQuery.Get(partModule.GetType());
 
                 partModule.Save(config);

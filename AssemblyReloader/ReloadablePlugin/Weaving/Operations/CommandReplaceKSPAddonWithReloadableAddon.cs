@@ -1,4 +1,5 @@
-﻿using System;
+﻿extern alias KSP;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using AssemblyReloader.ReloadablePlugin.Loaders.Addons;
@@ -8,6 +9,7 @@ using Mono.Cecil;
 using Mono.Cecil.Cil;
 using ReeperCommon.Containers;
 using ReeperCommon.Logging;
+using KSPAddon = KSP::KSPAddon;
 
 namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations
 {

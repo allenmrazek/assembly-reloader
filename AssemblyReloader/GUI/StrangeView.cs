@@ -1,4 +1,5 @@
-﻿using System;
+﻿extern alias KSP;
+using System;
 using AssemblyReloader.Config.Keys;
 using AssemblyReloader.StrangeIoC.extensions.injector;
 using AssemblyReloader.StrangeIoC.extensions.mediation.impl;
@@ -7,6 +8,7 @@ using ReeperCommon.Gui;
 using ReeperCommon.Gui.Window;
 using ReeperCommon.Serialization;
 using UnityEngine;
+using ConfigNode = KSP::ConfigNode;
 
 namespace AssemblyReloader.Gui
 {

@@ -1,10 +1,10 @@
-﻿using System;
+﻿extern alias KSP;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using AssemblyReloader.Game;
 using AssemblyReloader.StrangeIoC.extensions.implicitBind;
 using AssemblyReloader.StrangeIoC.extensions.injector.api;
-using Debug = UnityEngine.Debug;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
 {
@@ -36,7 +36,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
             if (!_partIsPrefabQuery.Get(prefab))
                 throw new ArgumentException("argument must be a part prefab");
 
-            var loadedParts = UnityEngine.Object.FindObjectsOfType<Part>();
+            var loadedParts = UnityEngine.Object.FindObjectsOfType<KSP::Part>();
 
             return loadedParts
                 .Select(p => _kspFactory.Create(p))

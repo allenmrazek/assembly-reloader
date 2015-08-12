@@ -1,4 +1,5 @@
-﻿using System;
+﻿extern alias KSP;
+using System;
 using AssemblyReloader.Game;
 using AssemblyReloader.StrangeIoC.extensions.implicitBind;
 
@@ -18,7 +19,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
         }
 
 
-        public void Destroy(IPart owner, PartModule target)
+        public void Destroy(IPart owner, KSP::PartModule target)
         {
             if (owner == null) throw new ArgumentNullException("owner");
             if (target == null) throw new ArgumentNullException("target");

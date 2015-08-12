@@ -1,8 +1,13 @@
-﻿using System;
+﻿extern alias KSP;
+using System;
 using System.Collections;
 using System.Linq;
 using AssemblyReloader.StrangeIoC.extensions.context.impl;
+//using ReeperCommon.Logging;
 using UnityEngine;
+using KSPAddon = KSP::KSPAddon;
+using HighLogic = KSP::HighLogic;
+using PopupDialog = KSP::PopupDialog;
 
 namespace AssemblyReloader.Config
 {
@@ -10,8 +15,14 @@ namespace AssemblyReloader.Config
 // ReSharper disable once UnusedMember.Global
     public class BootstrapCore : ContextView
     {
+        //private static Logger logger = LogManager.GetCurrentClassLogger();
+
         private IEnumerator Start()
         {
+            //logger.Debug("Boostrapping...");
+
+            //new DebugLog("Test").Normal("Test log output");
+
             // avoid duplicates if GameDatabase is reloaded
             // todo: update GameDatabase urls with new data
             if (FindObjectsOfType<BootstrapCore>().Count() > 1)
@@ -22,7 +33,7 @@ namespace AssemblyReloader.Config
 
             DontDestroyOnLoad(this);
             enabled = false;
-            //yield return new WaitForSeconds(10f);
+            yield return new WaitForSeconds(10f);
             enabled = true;
 
 

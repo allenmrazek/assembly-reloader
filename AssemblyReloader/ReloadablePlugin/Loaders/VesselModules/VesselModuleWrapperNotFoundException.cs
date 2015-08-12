@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿extern alias KSP;
+using System;
+
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.VesselModules
 {
@@ -18,7 +17,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.VesselModules
             
         }
 
-        public VesselModuleWrapperNotFoundException(VesselModuleManager.VesselModuleWrapper wrapper)
+        public VesselModuleWrapperNotFoundException(KSP::VesselModuleManager.VesselModuleWrapper wrapper)
             : base("VesselModuleWrapper for " + wrapper.type.FullName + " not found")
         {
             

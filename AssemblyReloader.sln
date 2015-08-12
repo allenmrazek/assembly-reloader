@@ -29,6 +29,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssemblyReloaderTests", "As
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReeperCommonUnitTests", "..\ReeperCommon\ReeperCommonUnitTests\ReeperCommonUnitTests.csproj", "{1357D99D-A242-4418-AEF8-460C02A46EA0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReeperLoader", "..\ReeperLoader\ReeperLoader\ReeperLoader.csproj", "{5192D8EF-1D16-4307-9C18-13BD523F767F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Coverage|Any CPU = Coverage|Any CPU
@@ -77,6 +79,14 @@ Global
 		{1357D99D-A242-4418-AEF8-460C02A46EA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1357D99D-A242-4418-AEF8-460C02A46EA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1357D99D-A242-4418-AEF8-460C02A46EA0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5192D8EF-1D16-4307-9C18-13BD523F767F}.Coverage|Any CPU.ActiveCfg = Release|Any CPU
+		{5192D8EF-1D16-4307-9C18-13BD523F767F}.Coverage|Any CPU.Build.0 = Release|Any CPU
+		{5192D8EF-1D16-4307-9C18-13BD523F767F}.Debug_Modified|Any CPU.ActiveCfg = Debug|Any CPU
+		{5192D8EF-1D16-4307-9C18-13BD523F767F}.Debug_Modified|Any CPU.Build.0 = Debug|Any CPU
+		{5192D8EF-1D16-4307-9C18-13BD523F767F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5192D8EF-1D16-4307-9C18-13BD523F767F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5192D8EF-1D16-4307-9C18-13BD523F767F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5192D8EF-1D16-4307-9C18-13BD523F767F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

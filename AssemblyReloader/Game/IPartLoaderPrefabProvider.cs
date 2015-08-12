@@ -1,4 +1,6 @@
-﻿namespace AssemblyReloader.Game
+﻿using AssemblyReloader.ReloadablePlugin.Loaders;
+
+namespace AssemblyReloader.Game
 {
     public interface IPartLoaderPrefabProvider
     {

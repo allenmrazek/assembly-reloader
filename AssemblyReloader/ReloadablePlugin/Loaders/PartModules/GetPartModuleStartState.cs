@@ -1,22 +1,26 @@
-﻿using System;
+﻿extern alias KSP;
+using System;
 using System.Linq;
 using AssemblyReloader.Game;
 using AssemblyReloader.StrangeIoC.extensions.implicitBind;
 using AssemblyReloader.StrangeIoC.extensions.injector.api;
 using ReeperCommon.Containers;
+using PartModule = KSP::PartModule;
+using Vessel = KSP::Vessel;
+using HighLogic = KSP::HighLogic;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
 {
     [Implements(typeof(IGetPartModuleStartState), InjectionBindingScope.CROSS_CONTEXT)]
     public class GetPartModuleStartState : IGetPartModuleStartState
     {
-        public PartModule.StartState Get(Maybe<IVessel> vessel)
+        public KSP::PartModule.StartState Get(Maybe<IVessel> vessel)
         {
-            var state = PartModule.StartState.None;
+            var state = KSP::PartModule.StartState.None;
 
-            if (HighLogic.LoadedSceneIsEditor)
+            if (KSP::HighLogic.LoadedSceneIsEditor)
             {
-                state |= PartModule.StartState.Editor;
+                state |= KSP::PartModule.StartState.Editor;
             }
             else
             {
@@ -27,7 +31,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
 
                 if (HighLogic.LoadedSceneIsFlight)
                 {
-                    if (v.Situation == Vessel.Situations.PRELAUNCH)
+                    if (v.Situation == KSP::Vessel.Situations.PRELAUNCH)
                     {
                         state |= PartModule.StartState.PreLaunch;
                         state |= PartModule.StartState.Landed;

@@ -1,4 +1,5 @@
-﻿using System;
+﻿extern alias KSP;
+using System;
 using System.Linq;
 using AssemblyReloader.Config.Keys;
 using AssemblyReloader.Gui;
@@ -60,7 +61,7 @@ namespace AssemblyReloader.Config
 
         private void SetupTexturesAndSkin()
         {
-            var skinPrefab = AssetBase.GetGUISkin(GuiSkinPrefabName);
+            var skinPrefab = KSP::AssetBase.GetGUISkin(GuiSkinPrefabName);
             if (skinPrefab == null)
                 throw new GuiSkinNotFoundException("KSP window 4");
 
@@ -82,7 +83,7 @@ namespace AssemblyReloader.Config
 
         private static GUIStyle ConfigureTitleBarButtonStyle()
         {
-            var style = new GUIStyle(HighLogic.Skin.button) { border = new RectOffset(), padding = new RectOffset() };
+            var style = new GUIStyle(KSP::HighLogic.Skin.button) { border = new RectOffset(), padding = new RectOffset() };
             style.fixedHeight = style.fixedWidth = 16f;
             style.margin = new RectOffset();
 

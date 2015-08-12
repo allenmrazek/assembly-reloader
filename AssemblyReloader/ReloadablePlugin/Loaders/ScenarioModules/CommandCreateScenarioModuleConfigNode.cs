@@ -1,4 +1,5 @@
-﻿using System;
+﻿extern alias KSP;
+using System;
 using System.Linq;
 using AssemblyReloader.Game;
 using AssemblyReloader.StrangeIoC.extensions.command.impl;
@@ -46,7 +47,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
 
         public override void Execute()
         {
-            var scenarioModule = _mbToBeDestroyed as ScenarioModule;
+            var scenarioModule = _mbToBeDestroyed as KSP::ScenarioModule;
 
             if (scenarioModule == null)
                 return;
@@ -64,11 +65,11 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
         }
 
 
-        private void CreateConfigNodeFromCurrentState(IProtoScenarioModule psm, ScenarioModule scenarioModule)
+        private void CreateConfigNodeFromCurrentState(IProtoScenarioModule psm, KSP::ScenarioModule scenarioModule)
         {
             try
             {
-                var config = new ConfigNode(psm.GetData().name);
+                var config = new KSP::ConfigNode(psm.GetData().name);
 
                 scenarioModule.Save(config);
                 _configRepository.Store(_typeIdentifierQuery.Get(scenarioModule.GetType()), config);
@@ -84,14 +85,14 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
         }
 
 
-        private void StoreLastConfigNodeGameUsed(IProtoScenarioModule psm, ScenarioModule scenarioModule)
+        private void StoreLastConfigNodeGameUsed(IProtoScenarioModule psm, KSP::ScenarioModule scenarioModule)
         {
             _configRepository.Store(_typeIdentifierQuery.Get(scenarioModule.GetType()), psm.GetData().CreateCopy());
             _log.Verbose("Stored last game ConfigNode for " + psm.moduleName);
         }
 
 
-        private Maybe<IProtoScenarioModule> GetProtoScenarioModuleFor(ScenarioModule scenarioModule)
+        private Maybe<IProtoScenarioModule> GetProtoScenarioModuleFor(KSP::ScenarioModule scenarioModule)
         {
             var psmWithThisRef =
                 _protoScenarioModuleQuery.Get(scenarioModule.GetType())

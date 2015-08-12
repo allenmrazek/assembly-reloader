@@ -1,4 +1,4 @@
-﻿using System;
+﻿extern alias KSP;
 using System.Collections.Generic;
 using AssemblyReloader.Game;
 
@@ -6,7 +6,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
 {
     public interface IGetAddonTypesForScene
     {
-        IEnumerable<ReloadableAddonType> Get(KSPAddon.Startup scene,
+        IEnumerable<ReloadableAddonType> Get(KSP::KSPAddon.Startup scene,
             ILoadedAssemblyHandle handle);
     }
 }

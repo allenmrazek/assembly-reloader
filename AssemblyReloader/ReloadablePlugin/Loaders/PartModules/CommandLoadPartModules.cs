@@ -1,10 +1,12 @@
-﻿using System;
+﻿extern alias KSP;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using AssemblyReloader.Game;
 using AssemblyReloader.StrangeIoC.extensions.command.impl;
 using ReeperCommon.Containers;
 using ReeperCommon.Logging;
+
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
 {
@@ -21,7 +23,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
         private readonly IGetPartIsPrefab _partIsPrefabQuery;
         private readonly ILog _log;
 
-        private readonly List<KeyValuePair<IPart, PartModule>> _targets = new List<KeyValuePair<IPart, PartModule>>();
+        private readonly List<KeyValuePair<IPart, KSP::PartModule>> _targets = new List<KeyValuePair<IPart, KSP::PartModule>>();
 
 
         public CommandLoadPartModules(
@@ -70,7 +72,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
         }
 
 
-        private void OnPartModuleCreated(IPart part, PartModule pm, PartModuleDescriptor descriptor)
+        private void OnPartModuleCreated(IPart part, KSP::PartModule pm, PartModuleDescriptor descriptor)
         {
             if (part == null) throw new ArgumentNullException("part");
             if (pm == null) throw new ArgumentNullException("pm");
@@ -79,7 +81,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
             if (_partIsPrefabQuery.Get(part))
                 return;
 
-            _targets.Add(new KeyValuePair<IPart, PartModule>(part, pm));
+            _targets.Add(new KeyValuePair<IPart, KSP::PartModule>(part, pm));
         }
 
 
@@ -118,7 +120,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
         }
 
 
-        private void RunOnStartsForVessel(Maybe<IVessel> vessel, IEnumerable<KeyValuePair<IPart, PartModule>> targets)
+        private void RunOnStartsForVessel(Maybe<IVessel> vessel, IEnumerable<KeyValuePair<IPart, KSP::PartModule>> targets)
         {
             var state = _startStateProvider.Get(vessel);
 

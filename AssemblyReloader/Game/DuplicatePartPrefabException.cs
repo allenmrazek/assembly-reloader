@@ -1,4 +1,5 @@
-﻿using System;
+﻿extern alias KSP;
+using System;
 
 namespace AssemblyReloader.Game
 {
@@ -9,7 +10,8 @@ namespace AssemblyReloader.Game
             
         }
 
-        public DuplicatePartPrefabException(AvailablePart ap) : base("Duplicate part prefab: " + ap.name)
+        public DuplicatePartPrefabException(KSP::AvailablePart ap)
+            : base("Duplicate part prefab: " + ap.name)
         {
             
         }

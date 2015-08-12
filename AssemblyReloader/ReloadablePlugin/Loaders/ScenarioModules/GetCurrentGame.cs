@@ -1,4 +1,5 @@
-﻿using System;
+﻿extern alias KSP;
+using System;
 using AssemblyReloader.StrangeIoC.extensions.implicitBind;
 using AssemblyReloader.StrangeIoC.extensions.injector.api;
 using ReeperCommon.Containers;
@@ -20,8 +21,8 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
 
         public Maybe<IGame> Get()
         {
-            return HighLogic.CurrentGame != null
-            ? Maybe<IGame>.With(_kspFactory.Create(HighLogic.CurrentGame)) 
+            return KSP::HighLogic.CurrentGame != null
+            ? Maybe<IGame>.With(_kspFactory.Create(KSP::HighLogic.CurrentGame)) 
             : Maybe<IGame>.None;
         }
     }

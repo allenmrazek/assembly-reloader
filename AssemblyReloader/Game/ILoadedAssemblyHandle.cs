@@ -1,7 +1,9 @@
-﻿namespace AssemblyReloader.Game
+﻿extern alias KSP;
+
+namespace AssemblyReloader.Game
 {
     public interface ILoadedAssemblyHandle
     {
-        AssemblyLoader.LoadedAssembly LoadedAssembly { get; }
+        KSP::AssemblyLoader.LoadedAssembly LoadedAssembly { get; }
     }
 }

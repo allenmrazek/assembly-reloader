@@ -1,7 +1,9 @@
-﻿namespace AssemblyReloader.ReloadablePlugin.Loaders
+﻿extern alias KSP;
+
+namespace AssemblyReloader.ReloadablePlugin.Loaders
 {
     public interface IGetStartupSceneFromGameScene
     {
-        KSPAddon.Startup Get(GameScenes gameScene);
+        KSP::KSPAddon.Startup Get(KSP::GameScenes gameScene);
     }
 }

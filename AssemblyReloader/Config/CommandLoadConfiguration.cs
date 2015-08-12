@@ -1,4 +1,5 @@
-﻿using System;
+﻿extern alias KSP;
+using System;
 using System.IO;
 using AssemblyReloader.ReloadablePlugin;
 using AssemblyReloader.StrangeIoC.extensions.command.impl;
@@ -28,8 +29,8 @@ namespace AssemblyReloader.Config
                 Log.Warning("No configuration path found at \"" + fullPath + "\"; using default configuration settings");
                 return;
             }
-
-            var config = ConfigNode.Load(fullPath);
+            
+            var config = KSP::ConfigNode.Load(fullPath);
             if (config == null || !config.HasData)
             {
                 Log.Error("Failed to load ConfigNode at " + fullPath);

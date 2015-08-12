@@ -1,4 +1,5 @@
-﻿using System;
+﻿extern alias KSP;
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using AssemblyReloader.StrangeIoC.extensions.implicitBind;
@@ -9,11 +10,11 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
     [Implements(typeof(IGame), InjectionBindingScope.CROSS_CONTEXT)]
     public class KspGame : IGame
     {
-        private readonly global::Game _game;
+        private readonly KSP::Game _game;
         private readonly IKspFactory _kspFactory;
 
 
-        public KspGame(global::Game game, IKspFactory kspFactory)
+        public KspGame(KSP::Game game, IKspFactory kspFactory)
         {
             if (game == null) throw new ArgumentNullException("game");
             if (kspFactory == null) throw new ArgumentNullException("kspFactory");

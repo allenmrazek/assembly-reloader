@@ -1,4 +1,5 @@
-﻿using System;
+﻿extern alias KSP;
+using System;
 using AssemblyReloader.Game;
 using AssemblyReloader.ReloadablePlugin.Loaders.Addons;
 using AssemblyReloader.StrangeIoC.extensions.implicitBind;
@@ -23,7 +24,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders
         }
 
 
-        public KSPAddon.Startup Get()
+        public KSP::KSPAddon.Startup Get()
         {
             return _query.Get(_getCurrentGameScene.Get());
         }

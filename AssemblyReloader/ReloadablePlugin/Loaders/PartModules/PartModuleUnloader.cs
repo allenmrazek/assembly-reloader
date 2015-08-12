@@ -1,4 +1,5 @@
-﻿using System;
+﻿extern alias KSP;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using AssemblyReloader.Game;
@@ -9,7 +10,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
 {
     public class PartModuleUnloader : IPartModuleUnloader
     {
-        private readonly IGetTypesDerivedFrom<PartModule> _partModuleTypeQuery;
+        private readonly IGetTypesDerivedFrom<KSP::PartModule> _partModuleTypeQuery;
         private readonly IPartModuleDescriptorFactory _descriptorFactory;
         private readonly IGetPartPrefabClones _loadedInstancesOfPrefabQuery;
         private readonly IPartModuleDestroyer _partModuleDestroyer;
@@ -17,7 +18,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
 
 
         public PartModuleUnloader(
-            IGetTypesDerivedFrom<PartModule> partModuleTypeQuery,
+            IGetTypesDerivedFrom<KSP::PartModule> partModuleTypeQuery,
             IPartModuleDescriptorFactory descriptorFactory,
             IGetPartPrefabClones loadedInstancesOfPrefabQuery,
             IPartModuleDestroyer partModuleDestroyer,
@@ -71,7 +72,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
 
             foreach (var targetPart in targetList)
             {
-                var partModule = targetPart.GameObject.GetComponent(descriptor.Type) as PartModule;
+                var partModule = targetPart.GameObject.GetComponent(descriptor.Type) as KSP::PartModule;
 
                 if (partModule == null)
                 {

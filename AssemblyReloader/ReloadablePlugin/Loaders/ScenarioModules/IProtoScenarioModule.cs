@@ -1,14 +1,15 @@
-﻿using ReeperCommon.Containers;
+﻿extern alias KSP;
+using ReeperCommon.Containers;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
 {
     public interface IProtoScenarioModule
     {
-        Maybe<ScenarioModule> moduleRef { get; set; }
+        Maybe<KSP::ScenarioModule> moduleRef { get; set; }
         string moduleName { get; }
-        GameScenes[] TargetScenes { get; set; }
+        KSP::GameScenes[] TargetScenes { get; set; }
 
-        Maybe<ScenarioModule> Load();
-        ConfigNode GetData();
+        Maybe<KSP::ScenarioModule> Load();
+        KSP::ConfigNode GetData();
     }
 }

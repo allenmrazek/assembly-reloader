@@ -1,4 +1,5 @@
-﻿using System;
+﻿extern alias KSP;
+using System;
 using System.Linq;
 using AssemblyReloader.StrangeIoC.extensions.implicitBind;
 using AssemblyReloader.StrangeIoC.extensions.injector;
@@ -38,8 +39,8 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
             _log.Debug("Destroying ScenarioModule " + protoScenarioModule.moduleName);
             _aboutToDestroySignal.Dispatch(target);
 
-            ScenarioRunner.RemoveModule(target);
-            protoScenarioModule.moduleRef = Maybe<ScenarioModule>.None;
+            KSP::ScenarioRunner.RemoveModule(target);
+            protoScenarioModule.moduleRef = Maybe<KSP::ScenarioModule>.None;
         }
     }
 }

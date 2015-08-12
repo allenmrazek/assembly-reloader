@@ -1,4 +1,5 @@
-﻿using System;
+﻿extern alias KSP;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using AssemblyReloader.Game;
@@ -32,7 +33,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
         }
 
 
-        public void CreateAddons(KSPAddon.Startup scene)
+        public void CreateAddons(KSP::KSPAddon.Startup scene)
         {
             if (!Handle.Any())
             {

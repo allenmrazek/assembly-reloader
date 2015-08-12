@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿extern alias KSP;
+using System.Collections.Generic;
 using System.Linq;
 using AssemblyReloader.Config.Keys;
 using AssemblyReloader.Game;
@@ -104,8 +105,8 @@ namespace AssemblyReloader.Config
                 .ToSingleton()
                 .CrossContext();
 
-            injectionBinder.Bind<IGetAttributesOfType<KSPScenario>>()
-                .To<GetAttributesOfType<KSPScenario>>()
+            injectionBinder.Bind<IGetAttributesOfType<KSP::KSPScenario>>()
+                .To<GetAttributesOfType<KSP::KSPScenario>>()
                 .ToSingleton()
                 .CrossContext();
 

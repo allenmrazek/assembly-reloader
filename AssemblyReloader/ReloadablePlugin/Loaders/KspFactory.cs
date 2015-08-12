@@ -1,4 +1,5 @@
-﻿using System;
+﻿extern alias KSP;
+using System;
 using AssemblyReloader.Game;
 using AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules;
 using AssemblyReloader.ReloadablePlugin.Loaders.VesselModules;
@@ -11,27 +12,27 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders
 // ReSharper disable once ClassNeverInstantiated.Global
     public class KspFactory : IKspFactory
     {
-        public IPart Create(Part part)
+        public IPart Create(KSP::Part part)
         {
             return new KspPart(part, this);
         }
 
-        public IAvailablePart Create(AvailablePart part)
+        public IAvailablePart Create(KSP::AvailablePart part)
         {
             return new KspAvailablePart(part, this);
         }
 
-        public IVessel Create(Vessel vessel)
+        public IVessel Create(KSP::Vessel vessel)
         {
             return new KspVessel(vessel, this);
         }
 
-        public IProtoScenarioModule Create(ProtoScenarioModule psm)
+        public IProtoScenarioModule Create(KSP::ProtoScenarioModule psm)
         {
             return new KspProtoScenarioModule(psm);
         }
 
-        public IGame Create(global::Game game)
+        public IGame Create(KSP::Game game)
         {
             if (game == null) throw new ArgumentNullException("game");
 

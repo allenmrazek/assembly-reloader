@@ -1,4 +1,5 @@
-﻿using System;
+﻿extern alias KSP;
+using System;
 using System.Linq;
 using AssemblyReloader.Game;
 using AssemblyReloader.StrangeIoC.extensions.injector;
@@ -9,7 +10,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
 // ReSharper disable once ClassNeverInstantiated.Global
     public class PartModuleLoader : IPartModuleLoader
     {
-        private readonly IGetTypesDerivedFrom<PartModule> _partModuleTypeQuery;
+        private readonly IGetTypesDerivedFrom<KSP::PartModule> _partModuleTypeQuery;
         private readonly IPartModuleDescriptorFactory _descriptorFactory;
         private readonly IPartModuleFactory _partModuleFactory;
         private readonly IGetPartPrefabClones _clonesOfPrefabQuery;
@@ -17,7 +18,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
 
 
         public PartModuleLoader(
-            IGetTypesDerivedFrom<PartModule> partModuleTypeQuery,
+            IGetTypesDerivedFrom<KSP::PartModule> partModuleTypeQuery,
             IPartModuleDescriptorFactory descriptorFactory,
             IPartModuleFactory partModuleFactory,
             IGetPartPrefabClones clonesOfPrefabQuery,

@@ -1,4 +1,5 @@
-﻿using System;
+﻿extern alias KSP;
+using System;
 using System.Linq;
 using AssemblyReloader.Game;
 using AssemblyReloader.StrangeIoC.extensions.implicitBind;
@@ -9,7 +10,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.VesselModules
     [Implements(typeof(IVesselModuleUnloader))]
     public class VesselModuleUnloader : IVesselModuleUnloader
     {
-        private readonly IGetTypesDerivedFrom<VesselModule> _vesselModules;
+        private readonly IGetTypesDerivedFrom<KSP::VesselModule> _vesselModules;
         private readonly IGetLoadedVessels _loadedVessels;
         private readonly IVesselModuleManager _vesselModuleManager;
         private readonly IMonoBehaviourDestroyer _mbDestroyer;
@@ -17,7 +18,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.VesselModules
 
 
         public VesselModuleUnloader(
-            IGetTypesDerivedFrom<VesselModule> vesselModules,
+            IGetTypesDerivedFrom<KSP::VesselModule> vesselModules,
             IGetLoadedVessels loadedVessels,
             IVesselModuleManager vesselModuleManager,
             IMonoBehaviourDestroyer mbDestroyer,
@@ -57,7 +58,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.VesselModules
             foreach (var modules in _loadedVessels.Get()
                 .Select(vessel => vessel.gameObject.GetComponents(vesselModule.Type)
                 .Where(c => c != null && c.GetType().IsSubclassOf(vesselModule.Type))
-                .Cast<VesselModule>()
+                .Cast<KSP::VesselModule>()
                 .ToArray()))
             {
                 if (!modules.Any())

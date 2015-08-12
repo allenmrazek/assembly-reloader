@@ -1,4 +1,5 @@
-﻿using System;
+﻿extern alias KSP;
+using System;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -13,6 +14,9 @@ using ReeperCommon.Logging;
 using ReeperCommon.Repositories;
 using ReeperCommon.Serialization;
 using UnityEngine;
+using PartModule = KSP::PartModule;
+using ScenarioModule = KSP::ScenarioModule;
+using VesselModule = KSP::VesselModule;
 
 namespace AssemblyReloader
 {

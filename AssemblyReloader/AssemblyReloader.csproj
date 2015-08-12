@@ -45,20 +45,26 @@
   <ItemGroup>
     <Reference Include="Assembly-CSharp">
       <HintPath>..\..\..\Kerbal Space Program\KSP_Data\Managed\Assembly-CSharp.dll</HintPath>
+      <Aliases>KSP</Aliases>
+      <Private>False</Private>
     </Reference>
-    <Reference Include="Mono.Cecil">
+    <Reference Include="Mono.Cecil, Version=0.9.5.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
       <HintPath>..\..\..\Kerbal Space Program\KSP_Data\Managed\Mono.Cecil.dll</HintPath>
+      <Private>False</Private>
     </Reference>
-    <Reference Include="Mono.Cecil.Mdb">
+    <Reference Include="Mono.Cecil.Mdb, Version=0.9.5.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
       <HintPath>..\..\..\Kerbal Space Program\KSP_Data\Managed\Mono.Cecil.Mdb.dll</HintPath>
+      <Private>False</Private>
     </Reference>
-    <Reference Include="Mono.Cecil.Pdb">
+    <Reference Include="Mono.Cecil.Pdb, Version=0.9.5.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
       <HintPath>..\..\..\Kerbal Space Program\KSP_Data\Managed\Mono.Cecil.Pdb.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="UnityEngine">
       <HintPath>..\..\..\Kerbal Space Program\KSP_Data\Managed\UnityEngine.dll</HintPath>
+      <Private>False</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -195,7 +201,6 @@
     <Compile Include="ReloadablePlugin\Config\ReloadablePluginContext.cs" />
     <Compile Include="Game\ILoadedAssemblyHandle.cs" />
     <Compile Include="Gui\MainViewMediator.cs" />
-    <Compile Include="Game\KspPartActionWindowListener.cs" />
     <Compile Include="GetSerializableFieldsRecursiveType.cs" />
     <Compile Include="ReloadablePlugin\ReloadablePlugin.cs" />
     <Compile Include="Config\Configuration.cs" />
@@ -373,21 +378,19 @@
     <Compile Include="ReloadablePlugin\IReloadableTypeSystem.cs" />
     <Compile Include="ReloadablePlugin\Loaders\TypeIdentifier.cs" />
     <Compile Include="Game\IGameAssemblyLoader.cs" />
-    <Compile Include="Game\IAvailablePart.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\IAvailablePart.cs" />
     <Compile Include="ReloadablePlugin\Loaders\PartModules\IGameDatabase.cs" />
     <Compile Include="ReloadablePlugin\Loaders\IKspFactory.cs" />
-    <Compile Include="Game\IPartActionWindowController.cs" />
-    <Compile Include="Game\KspPartActionWindowController.cs" />
     <Compile Include="Game\IGetUniqueFlightID.cs" />
     <Compile Include="Game\GetUniqueFlightId.cs" />
-    <Compile Include="Game\IPart.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\IPart.cs" />
     <Compile Include="Game\IPartLoader.cs" />
     <Compile Include="Game\IVessel.cs" />
     <Compile Include="Game\KspAssemblyLoader.cs" />
-    <Compile Include="Game\KspAvailablePart.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\KspAvailablePart.cs" />
     <Compile Include="ReloadablePlugin\Loaders\KspFactory.cs" />
     <Compile Include="ReloadablePlugin\Loaders\PartModules\KspGameDatabase.cs" />
-    <Compile Include="Game\KspPart.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\KspPart.cs" />
     <Compile Include="Game\KspPartLoader.cs" />
     <Compile Include="Game\KspVessel.cs" />
     <Compile Include="Config\BootstrapCore.cs" />
@@ -418,7 +421,7 @@
     <ProjectReference Include="..\..\ReeperCommon\ReeperCommon\ReeperCommon.csproj">
       <Project>{FECFA8FC-CF80-4685-A2BA-1566E0F3C26E}</Project>
       <Name>ReeperCommon</Name>
-      <Private>False</Private>
+      <Private>True</Private>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -433,21 +436,23 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Content Include="FodyWeavers.xml" />
     <Content Include="StrangeIoC\extensions\ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>set ksp=D:\For New Computer\Kerbal Space Program
 set unity=C:\Program Files (x86)\Unity464
 
-
 if NOT $(Configuration) == Debug GOTO CopyFiles
 
 call:CheckUnity
 call:CreateMdb "$(ProjectDir)bin\$(Configuration)\$(TargetFileName)"
+
 
 echo copying mdb into project GameData
 robocopy "$(ProjectDir)bin\$(Configuration)" "$(ProjectDir)GameData\$(ProjectName)" $(TargetFileName).mdb
@@ -456,11 +461,19 @@ call:CheckRoboCopyCode "$(TargetFileName).mdb into project GameData"
 
 :CopyFiles
 
-
 REM TargetFileName into Project/GameData
 echo copying project binary to project GameData...
 robocopy "$(ProjectDir)bin\$(Configuration)" "$(ProjectDir)GameData\$(ProjectName)" $(TargetFileName)
 call:CheckRoboCopyCode "Project binary to project GameData"
+
+REM TargetFileName to TargetFileName.reloadable
+echo renaming project binary to $(TargetFileName).reeper...
+rename "$(ProjectDir)GameData\$(ProjectName)\$(TargetFileName)" $(TargetFileName).reeper
+
+if exist "$(ProjectDir)GameData\$(ProjectName)\$(TargetFileName).mdb" (
+echo renaming project debug symbols to $(TargetFileName).reeper.mdb
+rename "$(ProjectDir)GameData\$(ProjectName)\$(TargetFileName).mdb" $(TargetFileName).reeper.mdb
+)
 
 REM Project/GameData into KSP/GameData/Project
 echo copying files to KSP GameData...
@@ -531,8 +544,26 @@ goto:eof</PostBuildEvent>
 echo Deleting $(TargetFileName).mdb...
 del "$(TargetFileName).mdb"
 echo Done
-)</PreBuildEvent>
+)
+
+set ksp=D:\For New Computer\Kerbal Space Program\GameData
+
+del "%25ksp%25\$(ProjectName)\$(TargetFileName)*.reeper"
+del "%25ksp%25\$(ProjectName)\$(TargetFileName)*.mdb"
+
+del "$(ProjectDir)bin\$(Configuration)\$(TargetFileName).reeper"
+del "$(ProjectDir)bin\$(Configuration)\$(TargetFileName)*.mdb"
+
+del "$(ProjectDir)\GameData\$(ProjectName)\$(TargetFileName)*.reeper"
+del "$(ProjectDir)\GameData\$(ProjectName)\$(TargetFileName)*.mdb"</PreBuildEvent>
   </PropertyGroup>
+  <Import Project="..\packages\Fody.1.28.3\build\Fody.targets" Condition="Exists('..\packages\Fody.1.28.3\build\Fody.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Fody.1.28.3\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Fody.1.28.3\build\Fody.targets'))" />
+  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

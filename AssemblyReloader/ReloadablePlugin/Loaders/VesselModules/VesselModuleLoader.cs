@@ -1,4 +1,5 @@
-﻿using System;
+﻿extern alias KSP;
+using System;
 using System.Linq;
 using AssemblyReloader.Game;
 using AssemblyReloader.StrangeIoC.extensions.implicitBind;
@@ -10,13 +11,13 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.VesselModules
     public class VesselModuleLoader : IVesselModuleLoader
     {
         private readonly IVesselModuleManager _vesselModuleManager;
-        private readonly IGetTypesDerivedFrom<VesselModule> _vesselModules;
+        private readonly IGetTypesDerivedFrom<KSP::VesselModule> _vesselModules;
         private readonly IGetLoadedVessels _loadedVessels;
         private readonly ILog _log;
 
         public VesselModuleLoader(
             IVesselModuleManager vesselModuleManager,
-            IGetTypesDerivedFrom<VesselModule> vesselModules,
+            IGetTypesDerivedFrom<KSP::VesselModule> vesselModules,
             IGetLoadedVessels loadedVessels,
             ILog log)
         {
@@ -59,7 +60,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.VesselModules
             }
 
             _log.Debug("Inserting " + vesselModule + " wrapper");
-            _vesselModuleManager.AddWrapper(new VesselModuleManager.VesselModuleWrapper(vesselModule.Type)
+            _vesselModuleManager.AddWrapper(new KSP::VesselModuleManager.VesselModuleWrapper(vesselModule.Type)
             {
                 active = true,
                 order = 0

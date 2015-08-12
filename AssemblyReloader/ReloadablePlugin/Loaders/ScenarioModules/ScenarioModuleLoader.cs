@@ -1,4 +1,5 @@
-﻿using System;
+﻿extern alias KSP;
+using System;
 using System.Linq;
 using AssemblyReloader.Game;
 using AssemblyReloader.ReloadablePlugin.Loaders.Addons;
@@ -11,26 +12,28 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
     [Implements(typeof(IScenarioModuleLoader))]
     public class ScenarioModuleLoader : IScenarioModuleLoader
     {
-        private static readonly GameScenes[] ValidScenarioModuleScenes =
+        private static readonly KSP::GameScenes[] ValidScenarioModuleScenes =
         {
-            GameScenes.EDITOR, GameScenes.FLIGHT,
-            GameScenes.SPACECENTER, GameScenes.TRACKSTATION
+            KSP::GameScenes.EDITOR, 
+            KSP::GameScenes.FLIGHT,
+            KSP::GameScenes.SPACECENTER, 
+            KSP::GameScenes.TRACKSTATION
         };
 
-        private readonly IGetTypesDerivedFrom<ScenarioModule> _smTypeQuery;
+        private readonly IGetTypesDerivedFrom<KSP::ScenarioModule> _smTypeQuery;
         private readonly IGetProtoScenarioModules _protoScenarioModuleQuery;
         private readonly IGetCurrentGameScene _gameSceneQuery;
-        private readonly IGetAttributesOfType<KSPScenario> _scenarioAttributeQuery;
+        private readonly IGetAttributesOfType<KSP::KSPScenario> _scenarioAttributeQuery;
         private readonly IScenarioModuleFactory _smFactory;
         private readonly IGetTypeIdentifier _typeIdentifierQuery;
         private readonly ILog _log;
 
 
         public ScenarioModuleLoader(
-            IGetTypesDerivedFrom<ScenarioModule> smTypeQuery,
+            IGetTypesDerivedFrom<KSP::ScenarioModule> smTypeQuery,
             IGetProtoScenarioModules protoScenarioModuleQuery,
             IGetCurrentGameScene gameSceneQuery,
-            IGetAttributesOfType<KSPScenario> scenarioAttributeQuery,
+            IGetAttributesOfType<KSP::KSPScenario> scenarioAttributeQuery,
             IScenarioModuleFactory smFactory,
             IGetTypeIdentifier typeIdentifierQuery,
             [Name(LogKey.ScenarioModuleLoader)] ILog log)

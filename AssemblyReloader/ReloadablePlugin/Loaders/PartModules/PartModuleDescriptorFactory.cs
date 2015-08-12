@@ -1,3 +1,4 @@
+extern alias KSP;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,7 +33,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
 
 
         // Note: returns IEnumerable because there may be multiple duplicate PartModules on one part
-        private IEnumerable<PartModuleDescriptor> CreatePartModuleInfo(IPart prefab, ConfigNode partConfig, Type pmType)
+        private IEnumerable<PartModuleDescriptor> CreatePartModuleInfo(IPart prefab, KSP::ConfigNode partConfig, Type pmType)
         {
             var configNodes = _getPartModuleConfig.Get(partConfig, _getTypeIdentifier.Get(pmType).Identifier).ToList();
 
@@ -47,7 +48,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
         public IEnumerable<PartModuleDescriptor> Create(Type pmType)
         {
             if (pmType == null) throw new ArgumentNullException("pmType");
-            if (!typeof (PartModule).IsAssignableFrom(pmType))
+            if (!typeof(KSP::PartModule).IsAssignableFrom(pmType))
                 throw new ArgumentException("pmType must be derived from PartModule");
 
             var infoList = new List<PartModuleDescriptor>();

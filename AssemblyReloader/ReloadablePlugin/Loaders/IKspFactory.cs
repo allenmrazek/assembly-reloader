@@ -1,15 +1,15 @@
-﻿using AssemblyReloader.Game;
+﻿extern alias KSP;
+using AssemblyReloader.Game;
 using AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules;
-using AssemblyReloader.ReloadablePlugin.Loaders.VesselModules;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders
 {
     public interface IKspFactory
     {
-        IPart Create(Part part);
-        IAvailablePart Create(AvailablePart part);
-        IVessel Create(Vessel vessel);
-        IProtoScenarioModule Create(ProtoScenarioModule psm);
-        IGame Create(global::Game game);
+        IPart Create(KSP::Part part);
+        IAvailablePart Create(KSP::AvailablePart part);
+        IVessel Create(KSP::Vessel vessel);
+        IProtoScenarioModule Create(KSP::ProtoScenarioModule psm);
+        IGame Create(KSP::Game game);
     }
 }

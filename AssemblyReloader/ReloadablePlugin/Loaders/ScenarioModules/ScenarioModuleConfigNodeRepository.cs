@@ -1,10 +1,11 @@
-﻿using AssemblyReloader.StrangeIoC.extensions.implicitBind;
+﻿extern alias KSP;
+using AssemblyReloader.StrangeIoC.extensions.implicitBind;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
 {
 // ReSharper disable once UnusedMember.Global
     [Implements(typeof(IScenarioModuleConfigNodeRepository))]
-    public class ScenarioModuleConfigNodeRepository : DictionaryOfQueues<TypeIdentifier, ConfigNode>, IScenarioModuleConfigNodeRepository
+    public class ScenarioModuleConfigNodeRepository : DictionaryOfQueues<TypeIdentifier, KSP::ConfigNode>, IScenarioModuleConfigNodeRepository
     {
     }
 }

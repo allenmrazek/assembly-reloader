@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿extern alias KSP;
+using System.Reflection;
 using ReeperCommon.Containers;
 using ReeperCommon.FileSystem;
 
@@ -9,6 +10,6 @@ namespace AssemblyReloader.Game
         Maybe<ILoadedAssemblyHandle> AddToLoadedAssemblies(Assembly assembly, IFile location);
         void RemoveFromLoadedAssemblies(ILoadedAssemblyHandle handle);
 
-        AssemblyLoader.LoadedAssembyList LoadedAssemblies { get; set; }
+        KSP::AssemblyLoader.LoadedAssembyList LoadedAssemblies { get; set; }
     }
 }

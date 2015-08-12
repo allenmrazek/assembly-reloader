@@ -1,6 +1,9 @@
-﻿using System;
+﻿extern alias KSP;
+using System;
 using System.Collections.ObjectModel;
+using AssemblyReloader.ReloadablePlugin.Loaders;
 using UnityEngine;
+using Vessel = KSP::Vessel;
 
 namespace AssemblyReloader.Game
 {

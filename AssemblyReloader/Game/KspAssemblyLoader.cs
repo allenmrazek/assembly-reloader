@@ -1,4 +1,5 @@
-﻿using System;
+﻿extern alias KSP;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -17,16 +18,16 @@ namespace AssemblyReloader.Game
     public class KspAssemblyLoader : IGameAssemblyLoader
     {
         private readonly IGetLoadedAssemblyFileUrl _laFileUrl;
-        private readonly IGetTypesDerivedFrom<PartModule> _partModules;
-        private readonly IGetTypesDerivedFrom<ScenarioModule> _scenarioModules;
-        private readonly IGetTypesDerivedFrom<VesselModule> _vesselModules;
+        private readonly IGetTypesDerivedFrom<KSP::PartModule> _partModules;
+        private readonly IGetTypesDerivedFrom<KSP::ScenarioModule> _scenarioModules;
+        private readonly IGetTypesDerivedFrom<KSP::VesselModule> _vesselModules;
 
 
         public KspAssemblyLoader(
             IGetLoadedAssemblyFileUrl laFileUrl,
-            IGetTypesDerivedFrom<PartModule> partModules,
-            IGetTypesDerivedFrom<ScenarioModule> scenarioModules,
-            IGetTypesDerivedFrom<VesselModule> vesselModules)
+            IGetTypesDerivedFrom<KSP::PartModule> partModules,
+            IGetTypesDerivedFrom<KSP::ScenarioModule> scenarioModules,
+            IGetTypesDerivedFrom<KSP::VesselModule> vesselModules)
         {
             if (laFileUrl == null) throw new ArgumentNullException("laFileUrl");
             if (partModules == null) throw new ArgumentNullException("partModules");
@@ -44,19 +45,19 @@ namespace AssemblyReloader.Game
         {
             if (assembly == null) throw new ArgumentNullException("assembly");
             if (location == null) throw new ArgumentNullException("location");
-            if (AssemblyLoader.loadedAssemblies == null)
+            if (KSP::AssemblyLoader.loadedAssemblies == null)
                 throw new InvalidOperationException("AssemblyLoader.loadedAssemblies is null");
 
             new DebugLog().Normal("LoadedAssembly URL of " + location.FileName + " is " + _laFileUrl.Get(location));
 
             var url = _laFileUrl.Get(location);
 
-            if (AssemblyLoader.loadedAssemblies.Any(la => la.url == url && la.dllName == location.Name))
+            if (KSP::AssemblyLoader.loadedAssemblies.Any(la => la.url == url && la.dllName == location.Name))
                 throw new DuplicateLoadedAssemblyException(assembly, location);
 
-            var loadedAssembly = new AssemblyLoader.LoadedAssembly(assembly, location.FullPath, _laFileUrl.Get(location), null);
+            var loadedAssembly = new KSP::AssemblyLoader.LoadedAssembly(assembly, location.FullPath, _laFileUrl.Get(location), null);
 
-            AssemblyLoader.loadedAssemblies.Add(loadedAssembly);
+            KSP::AssemblyLoader.loadedAssemblies.Add(loadedAssembly);
 
             InstallTypes(loadedAssembly);
 
@@ -68,10 +69,10 @@ namespace AssemblyReloader.Game
         {
             if (handle == null) throw new ArgumentNullException("handle");
 
-            for (var idx = 0; idx < AssemblyLoader.loadedAssemblies.Count; ++idx)
-                if (ReferenceEquals(handle.LoadedAssembly, AssemblyLoader.loadedAssemblies[idx]))
+            for (var idx = 0; idx < KSP::AssemblyLoader.loadedAssemblies.Count; ++idx)
+                if (ReferenceEquals(handle.LoadedAssembly, KSP::AssemblyLoader.loadedAssemblies[idx]))
                 {
-                    AssemblyLoader.loadedAssemblies.RemoveAt(idx);
+                    KSP::AssemblyLoader.loadedAssemblies.RemoveAt(idx);
                     return;
                 }
 
@@ -79,33 +80,33 @@ namespace AssemblyReloader.Game
         }
 
 
-        public AssemblyLoader.LoadedAssembyList LoadedAssemblies
+        public KSP::AssemblyLoader.LoadedAssembyList LoadedAssemblies
         {
-            get { return AssemblyLoader.loadedAssemblies; }
+            get { return KSP::AssemblyLoader.loadedAssemblies; }
             set
             {
                 if (value.IsNull()) throw new ArgumentNullException("value");
 
-                AssemblyLoader.loadedAssemblies = value;
+                KSP::AssemblyLoader.loadedAssemblies = value;
             }
         }
 
 
         // The game looks inside this type list for certain types; we need to make sure they're there to be found
-        private void InstallTypes(AssemblyLoader.LoadedAssembly loadedAssembly)
+        private void InstallTypes(KSP::AssemblyLoader.LoadedAssembly loadedAssembly)
         {
             var partModules = _partModules.Get(loadedAssembly.assembly).ToList();
             var scenarioModules = _scenarioModules.Get(loadedAssembly.assembly).ToList();
             var vesselModules = _vesselModules.Get(loadedAssembly.assembly).ToList();
 
-            InsertTypeListIntoLoadedAssembly<PartModule>(loadedAssembly, partModules);
-            InsertTypeListIntoLoadedAssembly<ScenarioModule>(loadedAssembly, scenarioModules);
-            InsertTypeListIntoLoadedAssembly<VesselModule>(loadedAssembly, vesselModules);
+            InsertTypeListIntoLoadedAssembly<KSP::PartModule>(loadedAssembly, partModules);
+            InsertTypeListIntoLoadedAssembly<KSP::ScenarioModule>(loadedAssembly, scenarioModules);
+            InsertTypeListIntoLoadedAssembly<KSP::VesselModule>(loadedAssembly, vesselModules);
         }
 
 
         private static void InsertTypeListIntoLoadedAssembly<TKey>(
-            AssemblyLoader.LoadedAssembly loadedAssembly, 
+            KSP::AssemblyLoader.LoadedAssembly loadedAssembly, 
             List<Type> typesToInsert)
         {
             if (loadedAssembly == null) throw new ArgumentNullException("loadedAssembly");

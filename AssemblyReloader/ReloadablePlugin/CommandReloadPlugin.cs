@@ -1,4 +1,5 @@
-﻿using System;
+﻿extern alias KSP;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,8 @@ using AssemblyReloader.StrangeIoC.extensions.injector;
 using ReeperCommon.Containers;
 using ReeperCommon.Logging;
 using UnityEngine;
+using HighLogic = KSP::HighLogic;
+using PopupDialog = KSP::PopupDialog;
 
 namespace AssemblyReloader.ReloadablePlugin
 {

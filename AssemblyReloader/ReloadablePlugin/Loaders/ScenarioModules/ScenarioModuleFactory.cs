@@ -1,4 +1,5 @@
-﻿using System;
+﻿extern alias KSP;
+using System;
 using System.Linq;
 using AssemblyReloader.Game;
 using AssemblyReloader.StrangeIoC.extensions.implicitBind;
@@ -54,11 +55,11 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
         }
 
 
-        private void CreateScenarioModule(IProtoScenarioModule psm, ConfigNode config)
+        private void CreateScenarioModule(IProtoScenarioModule psm, KSP::ConfigNode config)
         {
             if (config == null) throw new ArgumentNullException("config");
 
-            var runner = ScenarioRunner.fetch;
+            var runner = KSP::ScenarioRunner.fetch;
 
             if (runner == null)
                 throw new ScenarioRunnerNotFound();
@@ -69,11 +70,11 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
                 psmConfig.ClearData();
                 config.CopyTo(psmConfig);
 
-                var scenarioModule = ScenarioRunner.fetch.AddModule(config);
+                var scenarioModule = KSP::ScenarioRunner.fetch.AddModule(config);
 
                 psm.moduleRef = scenarioModule != null
-                    ? Maybe<ScenarioModule>.With(scenarioModule)
-                    : Maybe<ScenarioModule>.None;
+                    ? Maybe<KSP::ScenarioModule>.With(scenarioModule)
+                    : Maybe<KSP::ScenarioModule>.None;
             }
             catch (Exception e) // wide net intended
             {

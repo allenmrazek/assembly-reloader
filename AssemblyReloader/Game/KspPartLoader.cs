@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿extern alias KSP;
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using AssemblyReloader.ReloadablePlugin.Loaders;
 using ReeperCommon.Extensions;
-using ReeperCommon.Logging;
 
 namespace AssemblyReloader.Game
 {
@@ -25,8 +24,8 @@ namespace AssemblyReloader.Game
         {
             get
             {
-                return (!PartLoader.Instance.IsNull() && !PartLoader.LoadedPartsList.IsNull())
-                    ? PartLoader.LoadedPartsList.Select(ap => _kspFactory.Create(ap)).ToList().AsReadOnly()
+                return (!KSP::PartLoader.Instance.IsNull() && !KSP::PartLoader.LoadedPartsList.IsNull())
+                    ? KSP::PartLoader.LoadedPartsList.Select(ap => _kspFactory.Create(ap)).ToList().AsReadOnly()
                     : Enumerable.Empty<IAvailablePart>().ToList().AsReadOnly();
             }
         }
@@ -42,7 +41,7 @@ namespace AssemblyReloader.Game
         {
             if (@from == null) throw new ArgumentNullException("from");
 
-            var availablePart = PartLoader.getPartInfoByName(@from.PartInfo.Name);
+            var availablePart = KSP::PartLoader.getPartInfoByName(@from.PartInfo.Name);
 
             if (availablePart == null) throw new PrefabNotFoundException(@from);
 
