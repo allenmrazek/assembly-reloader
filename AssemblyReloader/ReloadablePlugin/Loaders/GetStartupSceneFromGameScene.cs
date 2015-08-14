@@ -1,6 +1,5 @@
 ﻿extern alias KSP;
 using System;
-using AssemblyReloader.StrangeIoC.extensions.implicitBind;
 using KSPAddon = KSP::KSPAddon;
 using GameScenes = KSP::GameScenes;
 

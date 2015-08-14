@@ -2,11 +2,10 @@
 using System;
 using System.IO;
 using AssemblyReloader.ReloadablePlugin;
-using AssemblyReloader.StrangeIoC.extensions.command.impl;
-using AssemblyReloader.StrangeIoC.extensions.injector;
 using ReeperCommon.FileSystem;
 using ReeperCommon.Logging;
 using ReeperCommon.Serialization;
+using strange.extensions.command.impl;
 
 namespace AssemblyReloader.Config
 {

@@ -1,5 +1,5 @@
 ﻿using System;
-using AssemblyReloader.StrangeIoC.extensions.command.impl;
+using strange.extensions.command.impl;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders
 {

@@ -1,8 +1,7 @@
 ﻿extern alias KSP;
 using System;
-using AssemblyReloader.StrangeIoC.extensions.implicitBind;
-using AssemblyReloader.StrangeIoC.extensions.injector.api;
 using ReeperCommon.Containers;
+using strange.extensions.injector.api;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
 {

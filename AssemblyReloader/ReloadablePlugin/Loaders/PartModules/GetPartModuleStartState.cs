@@ -2,9 +2,8 @@
 using System;
 using System.Linq;
 using AssemblyReloader.Game;
-using AssemblyReloader.StrangeIoC.extensions.implicitBind;
-using AssemblyReloader.StrangeIoC.extensions.injector.api;
 using ReeperCommon.Containers;
+using strange.extensions.injector.api;
 using PartModule = KSP::PartModule;
 using Vessel = KSP::Vessel;
 using HighLogic = KSP::HighLogic;

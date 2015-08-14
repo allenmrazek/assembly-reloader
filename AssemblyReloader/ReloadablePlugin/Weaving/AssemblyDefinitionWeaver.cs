@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Linq;
-using AssemblyReloader.Config.Keys;
-using AssemblyReloader.StrangeIoC.extensions.injector;
 using Mono.Cecil;
 using ReeperCommon.Containers;
 using ReeperCommon.Logging;

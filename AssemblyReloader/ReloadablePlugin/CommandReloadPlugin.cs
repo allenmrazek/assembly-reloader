@@ -1,17 +1,13 @@
 ﻿extern alias KSP;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using AssemblyReloader.Config.Keys;
 using AssemblyReloader.Game;
 using AssemblyReloader.Gui;
 using AssemblyReloader.ReloadablePlugin.Weaving;
-using AssemblyReloader.StrangeIoC.extensions.command.impl;
-using AssemblyReloader.StrangeIoC.extensions.injector;
 using ReeperCommon.Containers;
 using ReeperCommon.Logging;
+using strange.extensions.command.impl;
 using UnityEngine;
 using HighLogic = KSP::HighLogic;
 using PopupDialog = KSP::PopupDialog;

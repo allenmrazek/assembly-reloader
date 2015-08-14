@@ -1,7 +1,7 @@
 ﻿using System;
 using AssemblyReloader.Game;
-using AssemblyReloader.StrangeIoC.extensions.command.impl;
 using ReeperCommon.Logging;
+using strange.extensions.command.impl;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.VesselModules
 {

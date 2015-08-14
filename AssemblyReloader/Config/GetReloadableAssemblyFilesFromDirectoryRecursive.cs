@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using AssemblyReloader.Config.Keys;
-using AssemblyReloader.StrangeIoC.extensions.implicitBind;
-using AssemblyReloader.StrangeIoC.extensions.injector;
 using ReeperCommon.FileSystem;
 
 namespace AssemblyReloader.Config

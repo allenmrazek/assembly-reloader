@@ -2,7 +2,6 @@
 using System;
 using System.Linq;
 using AssemblyReloader.Game;
-using AssemblyReloader.StrangeIoC.extensions.implicitBind;
 using ReeperCommon.Logging;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.VesselModules

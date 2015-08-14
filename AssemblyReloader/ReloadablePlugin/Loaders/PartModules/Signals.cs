@@ -1,6 +1,5 @@
 ﻿extern alias KSP;
-using AssemblyReloader.Game;
-using AssemblyReloader.StrangeIoC.extensions.signal.impl;
+using strange.extensions.signal.impl;
 
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules

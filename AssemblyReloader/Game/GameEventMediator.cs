@@ -1,6 +1,5 @@
 ﻿extern alias KSP;
-using AssemblyReloader.StrangeIoC.extensions.injector;
-using AssemblyReloader.StrangeIoC.extensions.mediation.impl;
+using strange.extensions.mediation.impl;
 
 namespace AssemblyReloader.Game
 {

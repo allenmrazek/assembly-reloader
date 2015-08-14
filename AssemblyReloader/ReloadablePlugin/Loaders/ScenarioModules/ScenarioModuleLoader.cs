@@ -3,8 +3,6 @@ using System;
 using System.Linq;
 using AssemblyReloader.Game;
 using AssemblyReloader.ReloadablePlugin.Loaders.Addons;
-using AssemblyReloader.StrangeIoC.extensions.implicitBind;
-using AssemblyReloader.StrangeIoC.extensions.injector;
 using ReeperCommon.Logging;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules

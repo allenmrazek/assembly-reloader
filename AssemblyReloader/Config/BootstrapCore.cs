@@ -1,9 +1,9 @@
 ﻿extern alias KSP;
 using System;
 using System.Collections;
-using System.Linq;
-using AssemblyReloader.StrangeIoC.extensions.context.impl;
 //using ReeperCommon.Logging;
+using ReeperLoader;
+using strange.extensions.context.impl;
 using UnityEngine;
 using KSPAddon = KSP::KSPAddon;
 using HighLogic = KSP::HighLogic;
@@ -11,7 +11,8 @@ using PopupDialog = KSP::PopupDialog;
 
 namespace AssemblyReloader.Config
 {
-    [KSPAddon(KSPAddon.Startup.Instantly, true)]
+    //[KSPAddon(KSPAddon.Startup.Instantly, true)]
+    [ReeperLoadTarget(true)]
 // ReSharper disable once UnusedMember.Global
     public class BootstrapCore : ContextView
     {
@@ -25,7 +26,7 @@ namespace AssemblyReloader.Config
 
             // avoid duplicates if GameDatabase is reloaded
             // todo: update GameDatabase urls with new data
-            if (FindObjectsOfType<BootstrapCore>().Count() > 1)
+            if (FindObjectsOfType<BootstrapCore>().Length > 1)
             {
                 Destroy(gameObject);
                 yield return null;
@@ -33,7 +34,7 @@ namespace AssemblyReloader.Config
 
             DontDestroyOnLoad(this);
             enabled = false;
-            yield return new WaitForSeconds(10f);
+            //yield return new WaitForSeconds(10f);
             enabled = true;
 
 

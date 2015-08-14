@@ -1,5 +1,5 @@
-﻿using AssemblyReloader.StrangeIoC.extensions.signal.impl;
-using Mono.Cecil;
+﻿using Mono.Cecil;
+using strange.extensions.signal.impl;
 
 namespace AssemblyReloader.ReloadablePlugin.Weaving
 {

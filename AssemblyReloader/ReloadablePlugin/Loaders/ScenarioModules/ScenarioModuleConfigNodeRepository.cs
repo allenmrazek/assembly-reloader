@@ -1,5 +1,4 @@
 ﻿extern alias KSP;
-using AssemblyReloader.StrangeIoC.extensions.implicitBind;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
 {

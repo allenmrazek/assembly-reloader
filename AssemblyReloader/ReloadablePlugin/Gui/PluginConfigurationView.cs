@@ -1,13 +1,11 @@
 ﻿using AssemblyReloader.Config.Keys;
 using AssemblyReloader.Gui;
-using AssemblyReloader.ReloadablePlugin.Config;
 using AssemblyReloader.ReloadablePlugin.Loaders.Addons;
 using AssemblyReloader.ReloadablePlugin.Loaders.PartModules;
-using AssemblyReloader.StrangeIoC.extensions.injector;
-using AssemblyReloader.StrangeIoC.extensions.signal.impl;
 using ReeperCommon.Gui.Window;
 using ReeperCommon.Gui.Window.Buttons;
 using ReeperCommon.Gui.Window.Decorators;
+using strange.extensions.signal.impl;
 using UnityEngine;
 
 namespace AssemblyReloader.ReloadablePlugin.Gui

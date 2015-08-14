@@ -3,11 +3,10 @@ using System;
 using System.Linq;
 using AssemblyReloader.Config.Keys;
 using AssemblyReloader.Gui;
-using AssemblyReloader.StrangeIoC.extensions.command.impl;
-using AssemblyReloader.StrangeIoC.extensions.context.api;
-using AssemblyReloader.StrangeIoC.extensions.injector;
-using AssemblyReloader.StrangeIoC.extensions.injector.api;
 using ReeperCommon.Repositories;
+using strange.extensions.command.impl;
+using strange.extensions.context.api;
+using strange.extensions.injector.api;
 using UnityEngine;
 using Object = UnityEngine.Object;
 

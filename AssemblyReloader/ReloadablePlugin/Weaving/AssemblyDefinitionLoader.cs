@@ -3,8 +3,6 @@ using System.IO;
 using System.Reflection;
 using AssemblyReloader.FileSystem;
 using AssemblyReloader.Properties;
-using AssemblyReloader.StrangeIoC.extensions.implicitBind;
-using AssemblyReloader.StrangeIoC.extensions.injector.api;
 using Mono.Cecil;
 using Mono.CompilerServices.SymbolWriter;
 using ReeperCommon.Containers;

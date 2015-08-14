@@ -1,7 +1,5 @@
 ﻿extern alias KSP;
 using System;
-using AssemblyReloader.Game;
-using AssemblyReloader.StrangeIoC.extensions.implicitBind;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
 {

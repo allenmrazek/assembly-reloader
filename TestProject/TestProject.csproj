@@ -107,12 +107,12 @@ robocopy "$(ProjectDir)bin\$(Configuration)" "$(ProjectDir)GameData\$(ProjectNam
 call:CheckRoboCopyCode "Project binary to project GameData"
 
 REM TargetFileName to TargetFileName.reloadable
-echo renaming project binary to $(TargetFileName).reloadable...
-rename "$(ProjectDir)GameData\$(ProjectName)\$(TargetFileName)" $(TargetFileName).reloadable
+REM echo renaming project binary to $(TargetFileName).reloadable...
+REM rename "$(ProjectDir)GameData\$(ProjectName)\$(TargetFileName)" $(TargetFileName).reloadable
 
 if exist "$(ProjectDir)GameData\$(ProjectName)\$(TargetFileName).mdb" (
-echo renaming project debug symbols to $(TargetFileName).reloadable.mdb
-rename "$(ProjectDir)GameData\$(ProjectName)\$(TargetFileName).mdb" $(TargetFileName).reloadable.mdb
+REM echo renaming project debug symbols to $(TargetFileName).reloadable.mdb
+REM rename "$(ProjectDir)GameData\$(ProjectName)\$(TargetFileName).mdb" $(TargetFileName).reloadable.mdb
 )
 
 

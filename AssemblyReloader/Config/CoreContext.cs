@@ -1,7 +1,6 @@
 ﻿extern alias KSP;
 using System.Collections.Generic;
 using System.Linq;
-using AssemblyReloader.Config.Keys;
 using AssemblyReloader.Game;
 using AssemblyReloader.Gui;
 using AssemblyReloader.ReloadablePlugin;
@@ -9,10 +8,10 @@ using AssemblyReloader.ReloadablePlugin.Config;
 using AssemblyReloader.ReloadablePlugin.Loaders;
 using AssemblyReloader.ReloadablePlugin.Loaders.Addons;
 using AssemblyReloader.ReloadablePlugin.Loaders.PartModules;
-using AssemblyReloader.StrangeIoC.extensions.context.api;
 using Mono.Cecil;
 using ReeperCommon.FileSystem;
 using ReeperCommon.Logging;
+using strange.extensions.context.api;
 using UnityEngine;
 
 namespace AssemblyReloader.Config

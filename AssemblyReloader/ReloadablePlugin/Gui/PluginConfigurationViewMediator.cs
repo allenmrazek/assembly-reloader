@@ -2,9 +2,8 @@
 using AssemblyReloader.ReloadablePlugin.Config;
 using AssemblyReloader.ReloadablePlugin.Loaders.Addons;
 using AssemblyReloader.ReloadablePlugin.Loaders.PartModules;
-using AssemblyReloader.StrangeIoC.extensions.injector;
-using AssemblyReloader.StrangeIoC.extensions.mediation.impl;
 using ReeperCommon.Logging;
+using strange.extensions.mediation.impl;
 
 namespace AssemblyReloader.ReloadablePlugin.Gui
 {

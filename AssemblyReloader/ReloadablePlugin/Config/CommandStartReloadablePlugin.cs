@@ -1,9 +1,8 @@
 ﻿using AssemblyReloader.Game;
-using AssemblyReloader.StrangeIoC.extensions.command.impl;
-using AssemblyReloader.StrangeIoC.extensions.injector;
 using ReeperCommon.Containers;
 using ReeperCommon.FileSystem;
 using ReeperCommon.Logging;
+using strange.extensions.command.impl;
 
 namespace AssemblyReloader.ReloadablePlugin.Config
 {

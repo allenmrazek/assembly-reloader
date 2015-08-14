@@ -1,4 +1,4 @@
-﻿using AssemblyReloader.StrangeIoC.extensions.signal.impl;
+﻿using strange.extensions.signal.impl;
 using UnityEngine;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders

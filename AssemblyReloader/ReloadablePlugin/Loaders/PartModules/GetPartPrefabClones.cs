@@ -2,9 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using AssemblyReloader.Game;
-using AssemblyReloader.StrangeIoC.extensions.implicitBind;
-using AssemblyReloader.StrangeIoC.extensions.injector.api;
+using strange.extensions.injector.api;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
 {

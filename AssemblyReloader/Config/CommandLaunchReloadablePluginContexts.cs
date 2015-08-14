@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using AssemblyReloader.ReloadablePlugin.Config;
-using AssemblyReloader.StrangeIoC.extensions.command.impl;
-using AssemblyReloader.StrangeIoC.extensions.injector;
 using ReeperCommon.Logging;
+using strange.extensions.command.impl;
 
 namespace AssemblyReloader.Config
 {

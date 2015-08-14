@@ -1,6 +1,6 @@
 ﻿using System;
-using AssemblyReloader.StrangeIoC.extensions.context.impl;
 using ReeperCommon.FileSystem;
+using strange.extensions.context.impl;
 
 namespace AssemblyReloader.ReloadablePlugin.Config
 {

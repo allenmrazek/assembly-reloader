@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections;
-using AssemblyReloader.Config.Keys;
-using AssemblyReloader.StrangeIoC.extensions.context.api;
-using AssemblyReloader.StrangeIoC.extensions.implicitBind;
-using AssemblyReloader.StrangeIoC.extensions.injector;
-using AssemblyReloader.StrangeIoC.extensions.injector.api;
+using strange.extensions.context.api;
+using strange.extensions.injector.api;
 using UnityEngine;
 
 namespace AssemblyReloader

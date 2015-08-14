@@ -3,12 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using AssemblyReloader.ReloadablePlugin.Loaders.Addons;
-using AssemblyReloader.StrangeIoC.extensions.command.impl;
-using AssemblyReloader.StrangeIoC.extensions.injector;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
 using ReeperCommon.Containers;
 using ReeperCommon.Logging;
+using strange.extensions.command.impl;
 using KSPAddon = KSP::KSPAddon;
 
 namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations

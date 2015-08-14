@@ -1,7 +1,9 @@
-﻿using AssemblyReloader.StrangeIoC.extensions.command.api;
-using AssemblyReloader.StrangeIoC.extensions.command.impl;
-using AssemblyReloader.StrangeIoC.extensions.context.api;
-using AssemblyReloader.StrangeIoC.extensions.context.impl;
+﻿using System.Reflection;
+using strange.extensions.command.api;
+using strange.extensions.command.impl;
+using strange.extensions.context.api;
+using strange.extensions.context.impl;
+using strange.extensions.implicitBind.api;
 using UnityEngine;
 
 namespace AssemblyReloader
@@ -16,7 +18,10 @@ namespace AssemblyReloader
         protected override void mapBindings()
         {
             base.mapBindings();
-            implicitBinder.ScanForAnnotatedClasses(new[] {"AssemblyReloader"});
+            implicitBinder.ScanForAnnotatedClasses(new []
+            {
+                new AnnotatedAssembly(Assembly.GetExecutingAssembly(), new [] { "AssemblyReloader" })
+            });
         }
 
 

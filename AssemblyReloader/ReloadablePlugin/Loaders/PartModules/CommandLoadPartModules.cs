@@ -3,9 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using AssemblyReloader.Game;
-using AssemblyReloader.StrangeIoC.extensions.command.impl;
 using ReeperCommon.Containers;
 using ReeperCommon.Logging;
+using strange.extensions.command.impl;
 
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules

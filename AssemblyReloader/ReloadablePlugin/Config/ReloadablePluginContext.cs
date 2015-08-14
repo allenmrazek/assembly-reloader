@@ -1,7 +1,6 @@
 ﻿extern alias KSP;
 using System;
 using System.Reflection;
-using AssemblyReloader.Config.Keys;
 using AssemblyReloader.FileSystem;
 using AssemblyReloader.Game;
 using AssemblyReloader.Gui;
@@ -14,10 +13,10 @@ using AssemblyReloader.ReloadablePlugin.Loaders.VesselModules;
 using AssemblyReloader.ReloadablePlugin.Weaving;
 using AssemblyReloader.ReloadablePlugin.Weaving.Operations;
 using AssemblyReloader.ReloadablePlugin.Weaving.Operations.Keys;
-using AssemblyReloader.StrangeIoC.extensions.context.api;
 using Mono.Cecil.Cil;
 using ReeperCommon.FileSystem;
 using ReeperCommon.Logging;
+using strange.extensions.context.api;
 using UnityEngine;
 
 namespace AssemblyReloader.ReloadablePlugin.Config

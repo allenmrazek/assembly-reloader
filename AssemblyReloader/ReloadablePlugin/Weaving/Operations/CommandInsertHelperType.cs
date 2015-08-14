@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Linq;
-using AssemblyReloader.Config.Keys;
-using AssemblyReloader.StrangeIoC.extensions.command.impl;
-using AssemblyReloader.StrangeIoC.extensions.injector;
 using Mono.Cecil;
 using ReeperCommon.Containers;
 using ReeperCommon.Logging;
+using strange.extensions.command.impl;
 
 namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations
 {

@@ -2,10 +2,7 @@
 using System;
 using System.Linq;
 using System.Reflection;
-using AssemblyReloader.Game;
-using AssemblyReloader.StrangeIoC.extensions.injector;
 using ReeperCommon.Logging;
-using UnityEngine;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
 {

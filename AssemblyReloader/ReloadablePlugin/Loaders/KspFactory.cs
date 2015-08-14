@@ -2,9 +2,7 @@
 using System;
 using AssemblyReloader.Game;
 using AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules;
-using AssemblyReloader.ReloadablePlugin.Loaders.VesselModules;
-using AssemblyReloader.StrangeIoC.extensions.implicitBind;
-using AssemblyReloader.StrangeIoC.extensions.injector.api;
+using strange.extensions.injector.api;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders
 {

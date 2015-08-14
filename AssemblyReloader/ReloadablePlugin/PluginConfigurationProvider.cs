@@ -2,10 +2,8 @@
 using System;
 using System.IO;
 using System.Linq;
-using AssemblyReloader.Config;
 using AssemblyReloader.Properties;
 using AssemblyReloader.ReloadablePlugin.Config;
-using AssemblyReloader.StrangeIoC.extensions.implicitBind;
 using ReeperCommon.Containers;
 using ReeperCommon.FileSystem;
 using ConfigNode = KSP::ConfigNode;

@@ -1,9 +1,8 @@
 ﻿extern alias KSP;
 using System;
-using AssemblyReloader.StrangeIoC.extensions.implicitBind;
-using AssemblyReloader.StrangeIoC.extensions.injector.api;
 using ReeperCommon.Containers;
 using ReeperCommon.Logging;
+using strange.extensions.injector.api;
 using VesselModuleManager = KSP::VesselModuleManager;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.VesselModules

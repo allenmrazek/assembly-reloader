@@ -1,8 +1,5 @@
 ﻿using System;
 using System.IO;
-using AssemblyReloader.Config.Keys;
-using AssemblyReloader.StrangeIoC.extensions.implicitBind;
-using AssemblyReloader.StrangeIoC.extensions.injector;
 using Mono.Cecil;
 using ReeperCommon.Containers;
 using ReeperCommon.Extensions;

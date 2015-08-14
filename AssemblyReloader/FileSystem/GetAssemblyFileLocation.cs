@@ -4,7 +4,6 @@ using System.Linq;
 using System.Reflection;
 using AssemblyReloader.Game;
 using AssemblyReloader.Properties;
-using AssemblyReloader.StrangeIoC.extensions.implicitBind;
 using ReeperCommon.Containers;
 using ReeperCommon.FileSystem;
 

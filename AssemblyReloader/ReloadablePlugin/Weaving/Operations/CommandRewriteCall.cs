@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using AssemblyReloader.StrangeIoC.extensions.command.impl;
-using AssemblyReloader.StrangeIoC.extensions.injector;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
 using ReeperCommon.Logging;
+using strange.extensions.command.impl;
 
 namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations
 {

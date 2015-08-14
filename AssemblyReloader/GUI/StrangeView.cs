@@ -1,12 +1,10 @@
 ﻿extern alias KSP;
 using System;
-using AssemblyReloader.Config.Keys;
-using AssemblyReloader.StrangeIoC.extensions.injector;
-using AssemblyReloader.StrangeIoC.extensions.mediation.impl;
 using ReeperCommon.Extensions;
 using ReeperCommon.Gui;
 using ReeperCommon.Gui.Window;
 using ReeperCommon.Serialization;
+using strange.extensions.mediation.impl;
 using UnityEngine;
 using ConfigNode = KSP::ConfigNode;
 

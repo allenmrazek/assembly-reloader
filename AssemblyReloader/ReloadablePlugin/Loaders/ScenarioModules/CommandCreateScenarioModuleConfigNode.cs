@@ -1,11 +1,9 @@
 ﻿extern alias KSP;
 using System;
 using System.Linq;
-using AssemblyReloader.Game;
-using AssemblyReloader.StrangeIoC.extensions.command.impl;
-using AssemblyReloader.StrangeIoC.extensions.injector;
 using ReeperCommon.Containers;
 using ReeperCommon.Logging;
+using strange.extensions.command.impl;
 using UnityEngine;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules

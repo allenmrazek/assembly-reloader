@@ -3,12 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using AssemblyReloader.StrangeIoC.extensions.implicitBind;
-using AssemblyReloader.StrangeIoC.extensions.injector.api;
 using ReeperCommon.Containers;
 using ReeperCommon.Extensions;
 using ReeperCommon.FileSystem;
 using ReeperCommon.Logging;
+using strange.extensions.injector.api;
 
 namespace AssemblyReloader.Game
 {

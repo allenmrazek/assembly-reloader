@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
-using AssemblyReloader.StrangeIoC.extensions.command.impl;
 using ReeperCommon.Logging;
+using strange.extensions.command.impl;
 using UnityEngine;
 
 namespace AssemblyReloader.ReloadablePlugin

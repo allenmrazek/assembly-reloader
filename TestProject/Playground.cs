@@ -16,6 +16,57 @@ using Object = UnityEngine.Object;
 
 namespace TestProject
 {
+//public class SSTUConverter : PartModule
+//{
+//    //converter recipe field -- SHOULD be serialized from the prefab into any sub-instances; but is not....
+//    //does not work with or without the serializeField attribute
+//    [Persistent] public ConverterRecipe recipe = ScriptableObject.CreateInstance<ConverterRecipe>();
+
+//    public override void OnStart(StartState state)
+//    {
+//        base.OnStart(state);
+//        print("SSTUConverter.OnStart");
+
+//        if (recipe != null)
+//            print("Recipe: " + recipe);
+//        else Debug.LogError("(No recipe)");
+
+//    }
+
+//    public override void OnLoad(ConfigNode node)
+//    {
+//        base.OnLoad(node);
+
+//        if (node.HasNode("CONVERTERRECIPE"))
+//            ConfigNode.LoadObjectFromConfig(recipe, node.GetNode("CONVERTERRECIPE"));
+//    }
+//}
+
+
+//public class ConverterRecipe : ScriptableObject
+//{
+//    [Persistent]
+//    private List<ConverterResourceEntry> inputs = new List<ConverterResourceEntry>();
+
+//    [Persistent]
+//    private List<ConverterResourceEntry> outputs = new List<ConverterResourceEntry>();
+
+
+//    public override string ToString()
+//    {
+//        return string.Format("Recipe: using {0}, you get {1}", string.Join(",", inputs.Select(i => i.Resource).ToArray()),
+//            string.Join(",", outputs.Select(i => i.Resource).ToArray()));
+//    }
+//}
+
+
+//public class ConverterResourceEntry
+//{
+//    [Persistent]
+//    public string Resource = "default value";
+//}
+
+
     public class NoisyVesselModule : VesselModule
     {
         private void Awake()
