@@ -12,7 +12,7 @@ using PopupDialog = KSP::PopupDialog;
 namespace AssemblyReloader.Config
 {
     //[KSPAddon(KSPAddon.Startup.Instantly, true)]
-    [ReeperLoadTarget(true)]
+    [ReeperLoadTarget]
 // ReSharper disable once UnusedMember.Global
     public class BootstrapCore : ContextView
     {

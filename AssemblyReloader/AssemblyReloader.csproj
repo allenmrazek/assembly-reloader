@@ -344,10 +344,8 @@
     <PostBuildEvent>call "$(SolutionDir)SetEnvironment.bat"
 call "$(SolutionDir)CopyToLocation.bat" "$(TargetDir)" "$(ProjectDir)GameData\$(ProjectName)"  /E /xo /LEV:1 $(TargetFileName)
 call "$(SolutionDir)CreateMdb.bat" "$(TargetPath)" "$(ProjectDir)GameData\$(ProjectName)"
-REM call "$(SolutionDir)SetupReeperLoaderTargets.bat" "$(ProjectDir)GameData\$(ProjectName)\" $(TargetFileName)
-REM call "$(SolutionDir)ReplaceExtensions.bat" "$(ProjectDir)GameData\$(ProjectName)\" dll reeper dll.mdb reeper.mdb
 
-REM Rename dll to loader, .dll.mdb to .reeper.mdb
+REM Rename dll to reeper, .dll.mdb to .reeper.mdb
 cd "$(ProjectDir)GameData\$(ProjectName)"
 ren *.dll *.reeper
 ren *.dll.mdb *.
@@ -365,7 +363,7 @@ exit 0</PostBuildEvent>
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <PropertyGroup>
     <PreBuildEvent>call "$(SolutionDir)SetEnvironment.bat"
-call "$(SolutionDir)CleanDirectories.bat" "$(ProjectDir)GameData\$(ProjectName)" "%25ksp%25\$(SolutionName)"</PreBuildEvent>
+call "$(SolutionDir)CleanDirectories.bat" "$(ProjectDir)GameData\$(ProjectName)" "%25ksp%25\$(ProjectName)"</PreBuildEvent>
   </PropertyGroup>
   <Import Project="..\packages\Fody.1.28.3\build\Fody.targets" Condition="Exists('..\packages\Fody.1.28.3\build\Fody.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

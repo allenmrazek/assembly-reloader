@@ -18,9 +18,7 @@ namespace TestProject
 {
 //public class SSTUConverter : PartModule
 //{
-//    //converter recipe field -- SHOULD be serialized from the prefab into any sub-instances; but is not....
-//    //does not work with or without the serializeField attribute
-//    [Persistent] public ConverterRecipe recipe = ScriptableObject.CreateInstance<ConverterRecipe>();
+//    [Persistent] public ConverterRecipe recipe = new ConverterRecipe();
 
 //    public override void OnStart(StartState state)
 //    {
@@ -37,20 +35,37 @@ namespace TestProject
 //    {
 //        base.OnLoad(node);
 
-//        if (node.HasNode("CONVERTERRECIPE"))
-//            ConfigNode.LoadObjectFromConfig(recipe, node.GetNode("CONVERTERRECIPE"));
+//        recipe = node.HasNode("CONVERTERRECIPE")
+//            ? LoadRecipe(node.GetNode("CONVERTERRECIPE"))
+//            : LoadRecipeFromPrefab();
+
 //    }
+
+//    private ConverterRecipe LoadRecipe(ConfigNode config)
+//    {
+//        return ConfigNode.LoadObjectFromConfig(recipe, config) ? recipe : LoadRecipeFromPrefab();
+//    }
+
+//    private ConverterRecipe LoadRecipeFromPrefab()
+//    {
+//        var availablePart = PartLoader.getPartInfoByName(part.partInfo.name);
+
+//        if (ReferenceEquals(part, availablePart.partPrefab))
+//            Debug.LogWarning("Prefab does not appear to have a converter recipe defined");
+
+//        return availablePart.partPrefab.GetComponent<SSTUConverter>().recipe; // could clone to avoid reference
+//    }
+    
 //}
 
 
-//public class ConverterRecipe : ScriptableObject
+//public class ConverterRecipe
 //{
 //    [Persistent]
 //    private List<ConverterResourceEntry> inputs = new List<ConverterResourceEntry>();
 
 //    [Persistent]
 //    private List<ConverterResourceEntry> outputs = new List<ConverterResourceEntry>();
-
 
 //    public override string ToString()
 //    {
