@@ -16,6 +16,65 @@ using Object = UnityEngine.Object;
 
 namespace TestProject
 {
+    //[KSPAddon(KSPAddon.Startup.MainMenu, true)]
+    //public class FlappyDoorInstaller : MonoBehaviour
+    //{
+    //    private void Start()
+    //    {
+    //        var scienceBay = PartLoader.getPartInfoByName("ServiceBay.125");
+    //        if (scienceBay == null)
+    //        {
+    //            print("FAILED TO FIND ServiceBay!");
+    //        }
+    //        else
+    //        {
+    //            scienceBay.partPrefab.gameObject.PrintComponents(new DebugLog("FlappyDoor"));
+    //            scienceBay.partPrefab.AddModule("FlappyDoorModule");
+    //        }
+    //    }
+    //}
+
+    //public class FlappyDoorModule : PartModule
+    //{
+    //    private bool _shouldFlap = false;
+    //    private List<Coroutine> _routines = new List<Coroutine>();
+    //    private const float DegreeRotation = 45f;
+
+    //    public override void OnAwake()
+    //    {
+    //        base.OnAwake();
+    //        print("FlappyDoorModule awake");
+
+    //    }
+
+    //    [KSPEvent(guiActive = true, guiName = "Toggle FlappyDoors", guiActiveEditor = true)]
+    //    public void ToggleDoors()
+    //    {
+    //        if (!_shouldFlap && _routines.Any())
+    //            return; // busy
+
+    //        // note to self: odd doors swing right, even doors swing left
+    //        for (int i = 1; i <= 4; ++i)
+    //        {
+    //            var targetTransform = part.FindModelTransform(string.Format("Door0{0}", i));
+
+    //            _routines.Add(StartCoroutine(FlapDoors(targetTransform, i %2  != 0)));
+    //        }
+    //    }
+
+
+    //    private IEnumerator FlapDoors(Transform door, bool toRight)
+    //    {
+    //        var startTime = Time.realtimeSinceStartup;
+    //        bool opening = true;
+    //        float openDirection = toRight ? DegreeRotation : -DegreeRotation;
+
+    //        while (_shouldFlap)
+    //        {
+                        
+    //        }
+    //    }
+    //}
 //public class SSTUConverter : PartModule
 //{
 //    [Persistent] public ConverterRecipe recipe = new ConverterRecipe();

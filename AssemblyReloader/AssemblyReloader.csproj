@@ -72,6 +72,7 @@
     <Compile Include="CommandNull.cs" />
     <Compile Include="Config\GUISkinNotFoundException.cs" />
     <Compile Include="Config\UnityInstantiationFailedException.cs" />
+    <Compile Include="FileSystem\CannotInferFileTypeFromUrlException.cs" />
     <Compile Include="Game\DuplicateLoadedAssemblyException.cs" />
     <Compile Include="Game\DuplicatePartPrefabException.cs" />
     <Compile Include="Game\DuplicateProtoScenarioModuleException.cs" />

@@ -124,6 +124,9 @@ namespace AssemblyReloader.Gui
         {
             _firstLayout = false;
 
+            if (!_plugins.Any())
+                return; // if nothing was drawn, calculating min size gets a lot harder and it doesn't matter anyway
+
             var r = GUILayoutUtility.GetLastRect();
 
             var windowSize = Skin.window.CalcScreenSize(new Vector2(r.width + 
