@@ -6,7 +6,7 @@ using ReeperCommon.Serialization;
 
 namespace AssemblyReloader
 {
-    // todo: check whether this is necessary, or can we replace it with FlattenHeirarchy?
+    // todo: check whether this is necessary, or can we replace it with FlattenHierarchy?
     public class GetSerializableFieldsRecursiveType : IGetObjectFields
     {
         public IEnumerable<FieldInfo> Get(object target)

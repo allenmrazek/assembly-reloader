@@ -9,6 +9,7 @@ using AssemblyReloader.ReloadablePlugin.Loaders;
 using AssemblyReloader.ReloadablePlugin.Loaders.Addons;
 using AssemblyReloader.ReloadablePlugin.Loaders.PartModules;
 using Mono.Cecil;
+using ReeperAssemblyLibrary;
 using ReeperCommon.FileSystem;
 using ReeperCommon.Logging;
 using strange.extensions.context.api;
@@ -112,6 +113,21 @@ namespace AssemblyReloader.Config
             injectionBinder.Bind<IPartLoader>().Bind<IPartLoaderPrefabProvider>().To<KspPartLoader>().ToSingleton().CrossContext();
             injectionBinder.Bind<IGetPartModuleConfigsFromPartConfig>()
                 .To<GetPartModuleConfigsFromPartConfig>()
+                .ToSingleton()
+                .CrossContext();
+
+            injectionBinder.Bind<IGetTypesDerivedFrom<KSP::PartModule>>()
+                .To<GetTypesDerivedFrom<KSP::PartModule>>()
+                .ToSingleton()
+                .CrossContext();
+
+            injectionBinder.Bind<IGetTypesDerivedFrom<KSP::ScenarioModule>>()
+                .To<GetTypesDerivedFrom<KSP::ScenarioModule>>()
+                .ToSingleton()
+                .CrossContext();
+
+            injectionBinder.Bind<IGetTypesDerivedFrom<KSP::VesselModule>>()
+                .To<GetTypesDerivedFrom<KSP::VesselModule>>()
                 .ToSingleton()
                 .CrossContext();
 

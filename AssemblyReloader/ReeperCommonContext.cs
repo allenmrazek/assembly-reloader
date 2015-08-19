@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using AssemblyReloader.Config.Keys;
 using AssemblyReloader.FileSystem;
+using ReeperAssemblyLibrary;
 using ReeperCommon.FileSystem;
 using ReeperCommon.FileSystem.Providers;
 using ReeperCommon.Logging;
@@ -40,19 +41,12 @@ namespace AssemblyReloader
             // note: these required as dependencies of KspAssemblyLoader, which is in turn a dependency of
             // GetAssemblyFileLocation, so they need to be initialized here instead of the more logical
             // CoreContext
-            injectionBinder.Bind<IGetTypesDerivedFrom<PartModule>>()
-                .To<GetTypesDerivedFrom<PartModule>>()
+            injectionBinder.Bind<ILoadedAssemblyInstaller>().To<LoadedAssemblyInstaller>()
                 .ToSingleton()
                 .CrossContext();
 
-            injectionBinder.Bind<IGetTypesDerivedFrom<ScenarioModule>>()
-                .To<GetTypesDerivedFrom<ScenarioModule>>()
-                .ToSingleton()
-                .CrossContext();
-
-            injectionBinder.Bind<IGetTypesDerivedFrom<VesselModule>>()
-                .To<GetTypesDerivedFrom<VesselModule>>()
-                .ToSingleton()
+            injectionBinder.Bind<IReeperAssemblyFactory>()
+                .To(new ReeperAssemblyFactory("reloadable", "mdb"))
                 .CrossContext();
 
             injectionBinder.Bind<IUrlDirProvider>().To<KSPGameDataUrlDirProvider>().ToSingleton();

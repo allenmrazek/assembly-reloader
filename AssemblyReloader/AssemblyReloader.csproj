@@ -240,8 +240,8 @@
     <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\IScenarioModuleUnloader.cs" />
     <Compile Include="ReloadablePlugin\Weaving\AssemblyDefinitionLoader.cs" />
     <Compile Include="FileSystem\IFilePathProvider.cs" />
-    <Compile Include="Game\GetLoadedAssemblyFileUrl.cs" />
-    <Compile Include="Game\IGetLoadedAssemblyFileUrl.cs" />
+    <Compile Include="Game\old\GetLoadedAssemblyFileUrl.cs" />
+    <Compile Include="Game\old\IGetLoadedAssemblyFileUrl.cs" />
     <Compile Include="FileSystem\GetAssemblyFileLocation.cs" />
     <Compile Include="ReloadablePlugin\GetConfigurationFilePath.cs" />
     <Compile Include="ReloadablePlugin\Weaving\GetDebugSymbolsExistForDefinition.cs" />
@@ -308,6 +308,10 @@
     <EmbeddedResource Include="Resources\btnClose.png" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\ReeperAssemblyLibrary\ReeperAssemblyLibrary\ReeperAssemblyLibrary.csproj">
+      <Project>{9ad53029-b93d-434f-9e17-b8374640bebf}</Project>
+      <Name>ReeperAssemblyLibrary</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\ReeperCommon\ReeperCommon\ReeperCommon.csproj">
       <Project>{FECFA8FC-CF80-4685-A2BA-1566E0F3C26E}</Project>
       <Name>ReeperCommon</Name>

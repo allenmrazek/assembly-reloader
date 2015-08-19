@@ -16,6 +16,32 @@ using Object = UnityEngine.Object;
 
 namespace TestProject
 {
+    [KSPAddon(KSPAddon.Startup.MainMenu, false)]
+    public class GameEventTester : MonoBehaviour
+    {
+        private void Start()
+        {
+            AddDirect();
+            AddNewEventData();
+        }
+
+        private void AddDirect()
+        {
+            GameEvents.onEditorLoad.Add(EditorLoadCallback);
+        }
+
+        private void AddNewEventData()
+        {
+            GameEvents.onEditorLoad.Add(new EventData<ShipConstruct, CraftBrowser.LoadType>.OnEvent(EditorLoadCallback));
+        }
+
+
+        private void EditorLoadCallback(ShipConstruct ship, CraftBrowser.LoadType lt)
+        {
+            print("EditorLoadCallback called");
+        }
+    }
+
     //[KSPAddon(KSPAddon.Startup.MainMenu, true)]
     //public class FlappyDoorInstaller : MonoBehaviour
     //{

@@ -14,6 +14,7 @@ using PopupDialog = KSP::PopupDialog;
 
 namespace AssemblyReloader.ReloadablePlugin
 {
+// ReSharper disable once ClassNeverInstantiated.Global
     public class CommandReloadPlugin : Command
     {
         [Inject]
@@ -92,12 +93,24 @@ namespace AssemblyReloader.ReloadablePlugin
                 Log.Error("Failed to load assembly definition of {0} into memory", Plugin.Location.Url);
                 Fail();
                 Release();
-                yield break;;
+                yield break;
             }
 
-            var handle = GameAssemblyLoader.AddToLoadedAssemblies(loadedAssembly.Single(), Plugin.Location);
+            ILoadedAssemblyHandle handle;
 
-            if (!handle.Any())
+            try
+            {
+                handle = GameAssemblyLoader.AddToLoadedAssemblies(loadedAssembly.Single(), Plugin.Location);
+            }
+            catch (DuplicateLoadedAssemblyException ex)
+            {
+                Log.Error("Failed to create loaded assembly handle of {0}", Plugin.Location.Url);
+                Log.Error("Exception: " + ex);
+                Fail();
+                Release();
+                yield break;
+            }
+            catch (Exception e)
             {
                 Log.Error("Failed to create loaded assembly handle of {0}", Plugin.Location.Url);
                 Fail();
@@ -105,13 +118,15 @@ namespace AssemblyReloader.ReloadablePlugin
                 yield break;
             }
 
+            
+
             // todo: the context exception handler won't catch exceptions in here, so this command needs
             // to be shredded into manageable pieces that each handle exceptions appropriately like below
             // so things don't silently fail if configuration is wrong (due to unexpected exception or
             // programmer fail)
             try
             {
-                PluginWasLoadedSignal.Dispatch(handle.Single());
+                PluginWasLoadedSignal.Dispatch(handle);
             }
             catch (Exception e)
             {
