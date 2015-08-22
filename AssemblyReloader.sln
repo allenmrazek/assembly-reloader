@@ -39,6 +39,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "strange", "..\StrangeIoC\St
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReeperAssemblyLibrary", "..\ReeperAssemblyLibrary\ReeperAssemblyLibrary\ReeperAssemblyLibrary.csproj", "{9AD53029-B93D-434F-9E17-B8374640BEBF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WeavingTestData", "WeavingTestData\WeavingTestData.csproj", "{21F2A582-7084-465C-B133-C8AEC8357CFE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Coverage|Any CPU = Coverage|Any CPU
@@ -111,6 +113,14 @@ Global
 		{9AD53029-B93D-434F-9E17-B8374640BEBF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9AD53029-B93D-434F-9E17-B8374640BEBF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9AD53029-B93D-434F-9E17-B8374640BEBF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{21F2A582-7084-465C-B133-C8AEC8357CFE}.Coverage|Any CPU.ActiveCfg = Release|Any CPU
+		{21F2A582-7084-465C-B133-C8AEC8357CFE}.Coverage|Any CPU.Build.0 = Release|Any CPU
+		{21F2A582-7084-465C-B133-C8AEC8357CFE}.Debug_Modified|Any CPU.ActiveCfg = Debug|Any CPU
+		{21F2A582-7084-465C-B133-C8AEC8357CFE}.Debug_Modified|Any CPU.Build.0 = Debug|Any CPU
+		{21F2A582-7084-465C-B133-C8AEC8357CFE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{21F2A582-7084-465C-B133-C8AEC8357CFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{21F2A582-7084-465C-B133-C8AEC8357CFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{21F2A582-7084-465C-B133-C8AEC8357CFE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

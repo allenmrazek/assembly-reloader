@@ -13,9 +13,6 @@ namespace AssemblyReloader.Game
 // ReSharper disable once UnusedMember.Local
         private void OnLevelWasLoaded(int level)
         {
-            print("GameEventView: OnLevelWasLoaded " + level);
-            print("That's the same as " + ((KSPAddon.Startup) level));
-
             // note: apparently it's intended to be cast to KSPAddon.Startup; GameScenes doesn't quite match up
             // with what AddonLoader is doing
             LevelWasLoaded.Dispatch((KSPAddon.Startup)level);

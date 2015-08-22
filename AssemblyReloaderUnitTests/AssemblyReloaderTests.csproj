@@ -45,6 +45,22 @@
     <Reference Include="Assembly-CSharp">
       <HintPath>..\..\..\Kerbal Space Program\KSP_Data\Managed\Assembly-CSharp.dll</HintPath>
     </Reference>
+    <Reference Include="Mono.Cecil, Version=0.9.5.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
+      <HintPath>..\packages\Mono.Cecil.0.9.5.1\lib\net35\Mono.Cecil.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Mono.Cecil.Mdb, Version=0.9.5.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
+      <HintPath>..\packages\Mono.Cecil.0.9.5.1\lib\net35\Mono.Cecil.Mdb.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Mono.Cecil.Pdb, Version=0.9.5.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
+      <HintPath>..\packages\Mono.Cecil.0.9.5.1\lib\net35\Mono.Cecil.Pdb.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Mono.Cecil.Rocks, Version=0.9.5.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
+      <HintPath>..\packages\Mono.Cecil.0.9.5.1\lib\net35\Mono.Cecil.Rocks.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="NSubstitute, Version=1.8.2.0, Culture=neutral, PublicKeyToken=92dd2e9066daa5ca, processorArchitecture=MSIL">
       <HintPath>..\packages\NSubstitute.1.8.2.0\lib\net35\NSubstitute.dll</HintPath>
       <Private>True</Private>
@@ -65,6 +81,7 @@
       <HintPath>..\packages\AutoFixture.2.16.2\lib\net35\Ploeh.SemanticComparison.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="UnityEngine">
       <HintPath>..\..\..\Kerbal Space Program\KSP_Data\Managed\UnityEngine.dll</HintPath>
@@ -79,10 +96,15 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Config\SettingSerializerSelectorTests.cs" />
-    <Compile Include="Config\SettingSerializerTests.cs" />
     <Compile Include="Fixtures\AutoDomainDataAttribute.cs" />
     <Compile Include="Fixtures\AssemblyIsLocalAssemblyCustomization.cs" />
+    <Compile Include="Fixtures\MockGameEventsDomainDataAttribute.cs" />
+    <Compile Include="Fixtures\RealGameEventsDomainDataAttribute.cs" />
+    <Compile Include="InProgress\TestReplacement.cs" />
+    <Compile Include="InProgress\Test_InterceptGameEventsReal.cs" />
+    <Compile Include="InProgress\Test_InterceptGameEventsProxy.cs" />
+    <Compile Include="ReloadablePlugin\Weaving\Operations\GameEventInterception\GetGenericParameterTypeTests.cs" />
+    <Compile Include="ReloadablePlugin\Weaving\Operations\GetGameEventTypesTests.cs" />
     <Compile Include="TestData\Addons\IrrelevantAddonContainerClass.cs" />
     <Compile Include="TestData\Addons\MonoBehaviour_WithNoAddon.cs" />
     <Compile Include="TestData\Addons\TestAddon_InvalidResult.cs" />
@@ -109,6 +131,10 @@
     <ProjectReference Include="..\AssemblyReloader\AssemblyReloader.csproj">
       <Project>{70f9f908-ccc3-41b4-944d-ea3de3ef55bd}</Project>
       <Name>AssemblyReloader</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WeavingTestData\WeavingTestData.csproj">
+      <Project>{21f2a582-7084-465c-b133-c8aec8357cfe}</Project>
+      <Name>WeavingTestData</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

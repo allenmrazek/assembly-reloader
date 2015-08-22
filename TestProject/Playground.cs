@@ -16,25 +16,124 @@ using Object = UnityEngine.Object;
 
 namespace TestProject
 {
-    [KSPAddon(KSPAddon.Startup.MainMenu, false)]
-    public class GameEventTester : MonoBehaviour
+    [KSPAddon(KSPAddon.Startup.MainMenu, true)]
+    public class TestOnCrashEventRedirection : MonoBehaviour
     {
         private void Start()
         {
-            AddDirect();
-            AddNewEventData();
+            GameEvents.onCrash.Add(OnCrashCallbackMethod);
         }
+
+        private void OnCrashCallbackMethod(EventReport report)
+        {
+            print("OnCrashCallbackMethod called");
+        }
+    }
+    
+    [KSPAddon(KSPAddon.Startup.MainMenu, false)]
+    public class GameEventTester : MonoBehaviour
+    {
+        private readonly List<EventData<ShipConstruct, CraftBrowser.LoadType>.OnEvent> _callbacks =
+            new List<EventData<ShipConstruct, CraftBrowser.LoadType>.OnEvent>();
+ 
+        private void Start()
+        {
+            print("adding direct data");
+            AddDirect();
+            print("removing direct");
+            RemoveDirect();
+
+            print("adding indirect data");
+            AddIndirect();
+            print("removing indirect");
+            RemoveIndirect();
+
+
+
+            print("adding new event data");
+            AddNewEventData();
+            print("removing new event data");
+            RemoveNewEventData();
+
+        }
+
+
 
         private void AddDirect()
         {
-            GameEvents.onEditorLoad.Add(EditorLoadCallback);
+            RegisterCallback(EditorLoadCallback);
         }
+
+        private void RemoveDirect()
+        {
+            UnregisterCallback(EditorLoadCallback);
+        }
+
+
 
         private void AddNewEventData()
         {
-            GameEvents.onEditorLoad.Add(new EventData<ShipConstruct, CraftBrowser.LoadType>.OnEvent(EditorLoadCallback));
+            RegisterCallback(new EventData<ShipConstruct, CraftBrowser.LoadType>.OnEvent(EditorLoadCallback));
+
+            // see if it's picked up
+            print("Firing event to see if it works");
+            GameEvents.onEditorLoad.Fire(null, CraftBrowser.LoadType.Normal);
         }
 
+
+        private void RemoveNewEventData()
+        {
+            UnregisterCallback(new EventData<ShipConstruct, CraftBrowser.LoadType>.OnEvent(EditorLoadCallback));
+        }
+
+        private void AddIndirect()
+        {
+            RegisterCallback(EditorLoadCallback);
+        }
+
+
+
+        private void RemoveIndirect()
+        {
+            UnregisterCallback(EditorLoadCallback);
+        }
+
+
+
+        private void RegisterCallback(EventData<ShipConstruct, CraftBrowser.LoadType>.OnEvent cb)
+        {
+            _callbacks.Add(cb);
+            GameEvents.onEditorLoad.Add(cb);
+        }
+
+        private void UnregisterCallback(EventData<ShipConstruct, CraftBrowser.LoadType>.OnEvent cb)
+        {
+            print("Checking " + _callbacks.Count + " callbacks for presence of specific one");
+
+            if (_callbacks.Contains(cb))
+            {
+                print("UnregisterCallback: success! found callback");
+                GameEvents.onEditorLoad.Remove(cb);
+                _callbacks.Remove(cb);
+            }
+            else
+            {
+                print("UnregisterCallback: failure! could not find callback");
+                if (_callbacks.Any(c => c == cb))
+                    print("Found a matching method");
+                else
+                {
+                    _callbacks.Select(
+                        c =>
+                            string.Format("Method: {0}, Target: {1}, List: {2}", c.Method == cb.Method,
+                                c.Target == cb.Target, c.GetInvocationList() == cb.GetInvocationList()))
+                                .ToList().ForEach(s => print(s));
+
+                }
+        }
+
+
+        }
 
         private void EditorLoadCallback(ShipConstruct ship, CraftBrowser.LoadType lt)
         {

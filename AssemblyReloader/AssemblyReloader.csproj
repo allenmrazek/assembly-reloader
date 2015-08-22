@@ -49,16 +49,20 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="Mono.Cecil, Version=0.9.5.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
-      <HintPath>..\..\..\Kerbal Space Program\KSP_Data\Managed\Mono.Cecil.dll</HintPath>
+      <HintPath>..\packages\Mono.Cecil.0.9.5.1\lib\net35\Mono.Cecil.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Mono.Cecil.Mdb, Version=0.9.5.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
-      <HintPath>..\..\..\Kerbal Space Program\KSP_Data\Managed\Mono.Cecil.Mdb.dll</HintPath>
+      <HintPath>..\packages\Mono.Cecil.0.9.5.1\lib\net35\Mono.Cecil.Mdb.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Mono.Cecil.Pdb, Version=0.9.5.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
-      <HintPath>..\..\..\Kerbal Space Program\KSP_Data\Managed\Mono.Cecil.Pdb.dll</HintPath>
+      <HintPath>..\packages\Mono.Cecil.0.9.5.1\lib\net35\Mono.Cecil.Pdb.dll</HintPath>
       <Private>False</Private>
+    </Reference>
+    <Reference Include="Mono.Cecil.Rocks, Version=0.9.5.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
+      <HintPath>..\packages\Mono.Cecil.0.9.5.1\lib\net35\Mono.Cecil.Rocks.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -76,6 +80,7 @@
     <Compile Include="Game\DuplicateLoadedAssemblyException.cs" />
     <Compile Include="Game\DuplicatePartPrefabException.cs" />
     <Compile Include="Game\DuplicateProtoScenarioModuleException.cs" />
+    <Compile Include="ReloadablePlugin\Weaving\Operations\GameEventInterception\GameEventProxy.cs" />
     <Compile Include="Game\LoadedAssemblyHandleNotFoundException.cs" />
     <Compile Include="Game\PrefabNotFoundException.cs" />
     <Compile Include="ReloadablePlugin\Config\BootstrapReloadablePlugin.cs" />
@@ -145,6 +150,12 @@
     <Compile Include="ReloadablePlugin\Loaders\VesselModules\VesselModuleType.cs" />
     <Compile Include="ReloadablePlugin\Loaders\VesselModules\VesselModuleUnloader.cs" />
     <Compile Include="ReloadablePlugin\Loaders\VesselModules\VesselModuleWrapperNotFoundException.cs" />
+    <Compile Include="ReloadablePlugin\Weaving\Operations\GameEventInterception\CommandCreateGameEventHelper.cs" />
+    <Compile Include="ReloadablePlugin\Weaving\Operations\GameEventInterception\CommandRewriteGameEventCalls.cs" />
+    <Compile Include="ReloadablePlugin\Weaving\Operations\GameEventInterception\GetGameEventTypes.cs" />
+    <Compile Include="ReloadablePlugin\Weaving\Operations\GameEventInterception\GetGenericParameterType.cs" />
+    <Compile Include="ReloadablePlugin\Weaving\Operations\GameEventInterception\IGetGameEventTypes.cs" />
+    <Compile Include="ReloadablePlugin\Weaving\Operations\GameEventInterception\IGetGenericParameterType.cs" />
     <Compile Include="ReloadablePlugin\Weaving\Operations\Keys\MethodKeys.cs" />
     <Compile Include="ReloadablePlugin\Weaving\Operations\ProxyMethodAlreadyDefinedException.cs" />
     <Compile Include="ReloadablePlugin\Weaving\Operations\ReturnSpecialResultIfExecutingAssembly.cs" />

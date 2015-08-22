@@ -12,6 +12,7 @@ using AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules;
 using AssemblyReloader.ReloadablePlugin.Loaders.VesselModules;
 using AssemblyReloader.ReloadablePlugin.Weaving;
 using AssemblyReloader.ReloadablePlugin.Weaving.Operations;
+using AssemblyReloader.ReloadablePlugin.Weaving.Operations.GameEventInterception;
 using AssemblyReloader.ReloadablePlugin.Weaving.Operations.Keys;
 using Mono.Cecil.Cil;
 using ReeperCommon.FileSystem;
@@ -162,12 +163,14 @@ namespace AssemblyReloader.ReloadablePlugin.Config
             commandBinder.Bind<SignalWeaveDefinition>()
                 .To<CommandChangeDefinitionIdentity>()
                 .To<CommandInsertHelperType>()
-                .To<CommandReplaceKSPAddonWithReloadableAddon>();
+                .To<CommandReplaceKSPAddonWithReloadableAddon>()
+                .To<CommandRewriteGameEventCalls>();
 
             // these things need the helper type
             commandBinder.Bind<SignalHelperDefinitionCreated>()
                 .To<CommandRewriteAssemblyCodeBaseCalls>()
-                .To<CommandRewriteAssemblyLocationCalls>();
+                .To<CommandRewriteAssemblyLocationCalls>()
+                .To<CommandCreateGameEventHelper>();
 
 
             // other signals

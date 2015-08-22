@@ -2,6 +2,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using AssemblyReloader.Config;
+using Mono.Cecil;
 using Ploeh.AutoFixture;
 using Ploeh.AutoFixture.Xunit;
 
@@ -12,15 +13,15 @@ namespace AssemblyReloaderTests.Fixtures
         public AutoDomainDataAttribute()
             : base(new Fixture().Customize(new DomainCustomization()))
         {
-            var filename = Assembly.GetExecutingAssembly().Location;
+            const string filename = "WeavingTestData.dll";
 
             if (!File.Exists(filename))
                 throw new FileNotFoundException(filename);
 
-            //var assemblyDefinition = Context.ReadAssembly(filename);
+            var assemblyDefinition = AssemblyDefinition.ReadAssembly(filename);
 
-            //// Context
-            //Fixture.Register(() => assemblyDefinition);
+            // Context
+            Fixture.Register(() => assemblyDefinition);
 
             // TypeDefintiion
             //var typesWithAtLeastOneMethod =
