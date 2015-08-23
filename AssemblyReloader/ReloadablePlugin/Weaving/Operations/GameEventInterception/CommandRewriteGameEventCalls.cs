@@ -6,6 +6,7 @@ using System.Reflection;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
 using Mono.Cecil.Rocks;
+using ReeperCommon.Extensions;
 using ReeperCommon.Logging;
 using strange.extensions.command.impl;
 using EventReport = KSP::EventReport;
@@ -39,8 +40,6 @@ namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations.GameEventIntercep
         {
             _log.Normal("Rewriting GameEvent calls");
 
-            //CreateProxy();
-
 
             foreach (var method in _context.Modules.SelectMany(module => module.Types).SelectMany(td => td.Methods))
                 ReplaceGameEventCallsInMethod(method);
@@ -54,58 +53,129 @@ namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations.GameEventIntercep
             for (int i = 0; i < 4; ++i) // up to 3 generic arguments (0 is for EventVoid)
                 foreach (var evt in _gameEvents.Get(i))
                 {
-                    var gameEventAddMethod = method.Module.Import(evt).Resolve().Methods.Single(m => m.Name == "Add");
-                    var addMethodDeclaringType = GetMethodDeclaringType(evt, gameEventAddMethod);
-                    var registerCall = GetRegisterMethod(evt, method.Module);
+                    var typeThatOwnsMethodsToIntercept = method.Module.Import(evt);
 
-                    ReplaceEventDataAddCallsWithParameters(method, addMethodDeclaringType, registerCall);
-                }
-        }
+                    var calls = GetCallsToDeclaredType(method, typeThatOwnsMethodsToIntercept);
 
+                    if (!calls.Any()) continue;
 
-        private void ReplaceEventDataAddCallsWithParameters(MethodDefinition method, TypeReference gameEventType, MethodReference replacementCall)
-        {
-            var processor = method.Body.GetILProcessor();
+                    var processor = method.Body.GetILProcessor();
 
-            var targetInstructions = new Queue<Instruction>();
-            foreach (var instr in method.Body.Instructions)
-            {
-                if (instr.OpCode == OpCodes.Callvirt)
-                {
-                    var methodOperand = instr.Operand as MethodReference;
-
-                    if (methodOperand != null)
+                    while (calls.Any())
                     {
+                        var next = calls.Pop();
+                        var m = next.Operand as MethodReference;
 
-                        if (methodOperand.DeclaringType.FullName == gameEventType.FullName &&
-                            methodOperand.Name == "Add")
-                            targetInstructions.Enqueue(instr);
+                        if (m == null)
+                        {
+                            // this shouldn't happen; added to make resharper happy and catch mistakes
+                            _log.Error(
+                                "Failed to cast instruction operand to MethodReference in ReplaceGameEventCallsInMethod");
+                            continue;
+                        }
+
+                        _log.Verbose("Replacing " + m.FullName + " call of " + typeThatOwnsMethodsToIntercept.Name + " at " +
+                                     next.Offset + " in " + method.FullName);
+
+                        switch (m.Name)
+                        {
+                            case "Add":
+                                processor.Replace(next,
+                                    processor.Create(OpCodes.Callvirt, GetReplacementMethod(evt, "Register", method.Module)));
+                                break;
+
+                            case "Remove":
+                                processor.Replace(next,
+                                    processor.Create(OpCodes.Callvirt, GetReplacementMethod(evt, "Unregister", method.Module)));
+                                break;
+
+// ReSharper disable once RedundantCaseLabel
+                            case "Fire":
+                                // no-op
+                                break;
+
+                            default:
+                                _log.Warning("Unrecognized GameEvent type method called: " + m.FullName);
+                                break;
+                        }
                     }
                 }
-            }
-
-            while (targetInstructions.Any())
-            {
-                var next = targetInstructions.Dequeue();
-                _log.Normal("Replacing call in " + method.FullName + " at " + next.Offset + " for " + gameEventType.FullName);
-                processor.Replace(next, processor.Create(OpCodes.Callvirt, replacementCall));
-            }
         }
 
 
+        private Stack<Instruction> GetCallsToDeclaredType(MethodDefinition method, TypeReference declaredType)
+        {
+            var calls = new Stack<Instruction>();
 
-        private static MethodReference GetRegisterMethod(Type gameEventType, ModuleDefinition module)
+            foreach (var instr in method.Body.Instructions)
+            {
+                if (instr.OpCode != OpCodes.Callvirt) continue;
+
+                var methodOperand = instr.Operand as MethodReference;
+
+                if (methodOperand == null) continue;
+
+                if (methodOperand.DeclaringType.FullName == declaredType.FullName)
+                    calls.Push(instr);
+            }
+
+            return calls;
+        }
+
+        //private void ReplaceEventDataAddCallsWithParameters(MethodDefinition method, TypeReference gameEventType, MethodReference replacementCall)
+        //{
+        //    var processor = method.Body.GetILProcessor();
+
+        //    var targetInstructions = new Queue<Instruction>();
+        //    foreach (var instr in method.Body.Instructions)
+        //    {
+        //        if (instr.OpCode == OpCodes.Callvirt)
+        //        {
+        //            var methodOperand = instr.Operand as MethodReference;
+
+        //            if (methodOperand != null)
+        //            {
+
+        //                if (methodOperand.DeclaringType.FullName == gameEventType.FullName &&
+        //                    methodOperand.Name == "Add")
+        //                    targetInstructions.Enqueue(instr);
+        //            }
+        //        }
+        //    }
+
+        //    while (targetInstructions.Any())
+        //    {
+        //        var next = targetInstructions.Dequeue();
+        //        _log.Normal("Replacing call in " + method.FullName + " at " + next.Offset + " for " + gameEventType.FullName);
+        //        processor.Replace(next, processor.Create(OpCodes.Callvirt, replacementCall));
+        //    }
+        //}
+
+
+
+        private static MethodReference GetReplacementMethod(Type gameEventType, string replacementName, ModuleDefinition module)
         {
             if (!gameEventType.IsGenericType)
-                return
-                    module.Import(typeof(GameEventProxy).GetMethod("Register",
-                        BindingFlags.Static | BindingFlags.Public, null,
-                        new[] { typeof(EventVoid), typeof(EventVoid.OnEvent) }, null));
+            {
+                var replacement = typeof (GameEventProxy).GetMethod(replacementName,
+                    BindingFlags.Static | BindingFlags.Public, null,
+                    new[] {typeof (EventVoid), typeof (EventVoid.OnEvent)}, null);
 
+                if (replacement.IsNull())
+                    throw new ArgumentException(
+                        "Did not find method called \"" + replacementName + "\" in " + typeof(GameEventProxy).Name,
+                        "replacementName");
+
+                return module.Import(replacement);
+            }
             var genericMethod =
                 typeof(GameEventProxy).GetMethods(BindingFlags.Public | BindingFlags.Static)
-                    .Single(m => m.Name == "Register" && m.IsGenericMethodDefinition && m.GetGenericArguments().Length == gameEventType.GetGenericArguments().Length);
+                    .Single(m => m.Name == replacementName && m.IsGenericMethodDefinition && m.GetGenericArguments().Length == gameEventType.GetGenericArguments().Length);
 
+            if (genericMethod.IsNull())
+                throw new ArgumentException(
+                        "Did not find generic method called \"" + replacementName + "\" in " + typeof(GameEventProxy).Name,
+                        "replacementName");
             return module.Import(genericMethod.MakeGenericMethod(gameEventType.GetGenericArguments()));
         }
 
@@ -120,6 +190,8 @@ namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations.GameEventIntercep
             return method.DeclaringType;
         }
 
+
+    
         //private void OnCrash(EventReport report)
         //{
         //    _log.Normal("OnCrash received!");

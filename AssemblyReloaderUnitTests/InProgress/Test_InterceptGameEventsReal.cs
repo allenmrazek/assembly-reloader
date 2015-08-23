@@ -117,6 +117,69 @@ namespace AssemblyReloaderTests.InProgress
 
             Assert.True(replacements > 0);
 #if DEBUG
+            //context.Write("gameEventsRealResult.dll");
+#endif
+        }
+
+        [Theory, RealGameEventsDomainData]
+        public void VariableArgumentInterception_UsingDeclaringTypeImportDirectly(AssemblyDefinition context, GetGameEventTypes gameEvents)
+        {
+            int replacements = 0;
+
+            foreach (var method in context.Modules.SelectMany(module => module.Types).Where(td => td.Namespace.Contains("GameEventsReal")).SelectMany(td => td.Methods))
+                for (int i = 0; i < 4; ++i)
+                {
+                    foreach (var evt in gameEvents.Get(i))
+                    {
+                        if (!method.HasBody)
+                            break;
+
+                        TypeReference targetType;
+
+                        var simpleImport = method.Module.Import(evt);
+
+                        if (evt.IsGenericType)
+                            targetType =
+                                method.Module.Import(evt)
+                                    .Resolve()
+                                    .MakeGenericInstanceType(
+                                        evt.GetGenericArguments().Select(ga => method.Module.Import(ga)).ToArray());
+                        else targetType = method.Module.Import(evt).Resolve();
+
+                        var registerCall = GetRegisterMethod(evt, method.Module);
+
+
+                        var processor = method.Body.GetILProcessor();
+
+                        var targetInstructions = new Queue<Instruction>();
+                        foreach (var instr in method.Body.Instructions)
+                        {
+                            if (instr.OpCode == OpCodes.Callvirt)
+                            {
+                                var methodOperand = instr.Operand as MethodReference;
+
+                                if (methodOperand != null)
+                                {
+
+                                    if (methodOperand.DeclaringType.FullName == targetType.FullName &&
+                                        methodOperand.Name == "Add")
+                                        targetInstructions.Enqueue(instr);
+                                }
+                            }
+                        }
+
+                        while (targetInstructions.Any())
+                        {
+                            var next = targetInstructions.Dequeue();
+
+                            ++replacements;
+                            processor.Replace(next, processor.Create(OpCodes.Callvirt, registerCall));
+                        }
+                    }
+                }
+
+            Assert.True(replacements > 0);
+#if DEBUG
             context.Write("gameEventsRealResult.dll");
 #endif
         }
