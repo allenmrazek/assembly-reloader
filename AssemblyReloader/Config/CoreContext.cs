@@ -8,6 +8,7 @@ using AssemblyReloader.ReloadablePlugin.Config;
 using AssemblyReloader.ReloadablePlugin.Loaders;
 using AssemblyReloader.ReloadablePlugin.Loaders.Addons;
 using AssemblyReloader.ReloadablePlugin.Loaders.PartModules;
+using AssemblyReloader.ReloadablePlugin.Weaving.Operations.GameEventInterception;
 using Mono.Cecil;
 using ReeperAssemblyLibrary;
 using ReeperCommon.FileSystem;
@@ -129,6 +130,11 @@ namespace AssemblyReloader.Config
             injectionBinder.Bind<IGetTypesDerivedFrom<KSP::VesselModule>>()
                 .To<GetTypesDerivedFrom<KSP::VesselModule>>()
                 .ToSingleton()
+                .CrossContext();
+
+            injectionBinder.Bind<IGameEventProxy>()
+                .To(GameEventProxy.Create(injectionBinder.GetInstance<IGameEventReferenceFactory>(),
+                    injectionBinder.GetInstance<ILog>().CreateTag("GameEventProxy")))
                 .CrossContext();
 
             // game events

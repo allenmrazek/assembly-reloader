@@ -1,10 +1,11 @@
 ﻿using AssemblyReloader.ReloadablePlugin.Loaders.Addons;
 using AssemblyReloader.ReloadablePlugin.Loaders.PartModules;
 using AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules;
+using AssemblyReloader.ReloadablePlugin.Weaving;
 
 namespace AssemblyReloader.ReloadablePlugin.Config
 {
-    public class PluginConfiguration : IAddonSettings, IPartModuleSettings, IScenarioModuleSettings
+    public class PluginConfiguration : IAddonSettings, IPartModuleSettings, IScenarioModuleSettings, IWeavingSettings
     {
         // ReSharper disable FieldCanBeMadeReadOnly.Global
         // ReSharper disable UnusedMember.Global
@@ -38,6 +39,9 @@ namespace AssemblyReloader.ReloadablePlugin.Config
 
         #region Intermediate Language
 
+        public bool InterceptGameEvents { get; private set; }
+        public bool DontInlineFunctionsThatCallGameEvents { get; private set; }
+
         #endregion
 
 
@@ -54,6 +58,11 @@ namespace AssemblyReloader.ReloadablePlugin.Config
 
             ReloadScenarioModulesImmediately = true;
             SaveScenarioModuleBeforeDestroying = true;
+
+            InterceptGameEvents = true;
+            DontInlineFunctionsThatCallGameEvents = true;
         }
+
+
     }
 }

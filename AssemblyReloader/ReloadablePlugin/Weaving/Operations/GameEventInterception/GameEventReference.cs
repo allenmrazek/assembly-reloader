@@ -1,6 +1,8 @@
 ﻿extern alias KSP;
 using System;
 using System.Linq;
+using System.Reflection;
+using ReeperCommon.Containers;
 
 namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations.GameEventInterception
 {
@@ -8,7 +10,7 @@ namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations.GameEventIntercep
     {
         private readonly object _geRef;
 
-        public GameEventReference(object geRef)
+        public GameEventReference(object geRef, string gameEventName)
         {
             if (geRef == null) throw new ArgumentNullException("geRef");
 
@@ -23,7 +25,9 @@ namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations.GameEventIntercep
                     gt => ty.GetGenericTypeDefinition() != gt))
                 throw new ArgumentException("Must be a GameEvent type", "geRef");
 
+
             _geRef = geRef;
+            Name = gameEventName;
         }
 
 
@@ -37,5 +41,13 @@ namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations.GameEventIntercep
         {
             return _geRef.GetHashCode();
         }
+
+
+        public override string ToString()
+        {
+            return typeof (GameEventReference).Name + ": " + Name;
+        }
+
+        public string Name { get; private set; }
     }
 }

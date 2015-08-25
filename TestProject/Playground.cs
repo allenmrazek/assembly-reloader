@@ -16,7 +16,7 @@ using Object = UnityEngine.Object;
 
 namespace TestProject
 {
-    [KSPAddon(KSPAddon.Startup.MainMenu, true)]
+    //[KSPAddon(KSPAddon.Startup.MainMenu, true)]
     public class TestOnCrashEventRedirection : MonoBehaviour
     {
         private void Start()
@@ -29,8 +29,22 @@ namespace TestProject
             print("OnCrashCallbackMethod called");
         }
     }
-    
+
     [KSPAddon(KSPAddon.Startup.MainMenu, false)]
+    public class GameEventTesterSimple : MonoBehaviour
+    {
+        private void Start()
+        {
+            GameEvents.onCrash.Add(OnCallback);
+            GameEvents.onCrash.Remove(OnCallback);
+        }
+
+        private void OnCallback(EventReport report)
+        {
+            
+        }
+    }
+    //[KSPAddon(KSPAddon.Startup.MainMenu, false)]
     public class GameEventTester : MonoBehaviour
     {
         private readonly List<EventData<ShipConstruct, CraftBrowser.LoadType>.OnEvent> _callbacks =

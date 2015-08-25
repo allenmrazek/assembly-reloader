@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
+using ReeperCommon.Containers;
 using Xunit;
 // ReSharper disable once CheckNamespace
 namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations.GameEventInterception.Tests
@@ -9,9 +11,9 @@ namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations.GameEventIntercep
         [Fact()]
         public void GameEventCallbackTest()
         {
-            Assert.Throws<ArgumentNullException>(() => new GameEventCallback(null));
-            Assert.Throws<ArgumentException>(() => new GameEventCallback("notADelegate"));
-            Assert.DoesNotThrow(() => new GameEventCallback(new EventVoid.OnEvent(() => { })));
+            Assert.Throws<ArgumentNullException>(() => new GameEventCallback(null, Maybe<MethodBase>.None));
+            Assert.Throws<ArgumentException>(() => new GameEventCallback("notADelegate", Maybe<MethodBase>.None));
+            Assert.DoesNotThrow(() => new GameEventCallback(new EventVoid.OnEvent(() => { }), Maybe<MethodBase>.None));
         }
 
 
@@ -21,12 +23,13 @@ namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations.GameEventIntercep
             Action del = () => { };
             var list = new List<GameEventCallback>();
 
-            var sut1 = new GameEventCallback(del);
-            var sut2 = new GameEventCallback(del);
+            var sut1 = new GameEventCallback(del, Maybe<MethodBase>.None);
+            var sut2 = new GameEventCallback(del, Maybe<MethodBase>.None);
             list.Add(sut1);
 
             Assert.Equal(sut1, sut2);
             Assert.Contains(sut2, list);
         }
+
     }
 }

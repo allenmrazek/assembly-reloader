@@ -2,6 +2,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using AssemblyReloader.Config;
+using AssemblyReloader.ReloadablePlugin.Weaving.Operations.GameEventInterception;
 using Mono.Cecil;
 using Ploeh.AutoFixture;
 using Ploeh.AutoFixture.Xunit;
@@ -22,6 +23,7 @@ namespace AssemblyReloaderTests.Fixtures
 
             // Context
             Fixture.Register(() => assemblyDefinition);
+
 
             // TypeDefintiion
             //var typesWithAtLeastOneMethod =

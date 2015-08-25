@@ -136,8 +136,6 @@ namespace AssemblyReloaderTests.InProgress
 
                         TypeReference targetType;
 
-                        var simpleImport = method.Module.Import(evt);
-
                         if (evt.IsGenericType)
                             targetType =
                                 method.Module.Import(evt)

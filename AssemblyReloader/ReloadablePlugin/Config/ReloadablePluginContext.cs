@@ -75,6 +75,7 @@ namespace AssemblyReloader.ReloadablePlugin.Config
                 .Bind<IAddonSettings>()
                 .Bind<IPartModuleSettings>()
                 .Bind<IScenarioModuleSettings>()
+                .Bind<IWeavingSettings>()
                 .Bind<PluginConfiguration>()
                 .To<PluginConfiguration>().ToSingleton();
 
@@ -118,6 +119,7 @@ namespace AssemblyReloader.ReloadablePlugin.Config
 
 
             injectionBinder.Bind<IGetTypeDefinitions>().To(new GetTypeDefinitionsInAssemblyDefinitionExcludingHelper()).ToSingleton();
+            injectionBinder.Bind<IGameEventRegistry>().To<GameEventRegistry>().ToSingleton();
 
             injectionBinder.Bind<AssemblyLocation>().ToSingleton();
             injectionBinder.Bind<AssemblyCodeBase>().ToSingleton();
@@ -169,12 +171,12 @@ namespace AssemblyReloader.ReloadablePlugin.Config
             // these things need the helper type
             commandBinder.Bind<SignalHelperDefinitionCreated>()
                 .To<CommandRewriteAssemblyCodeBaseCalls>()
-                .To<CommandRewriteAssemblyLocationCalls>()
-                .To<CommandCreateGameEventHelper>();
+                .To<CommandRewriteAssemblyLocationCalls>();
 
 
             // other signals
             commandBinder.Bind<SignalPluginWasLoaded>()
+                .To<CommandSetupGameEventProxyRegistryEntry>()
                 .To<CommandInitializeAddonLoader>()
                 .To<CommandLoadPartModules>()
                 .To<CommandLoadVesselModules>()
@@ -187,7 +189,8 @@ namespace AssemblyReloader.ReloadablePlugin.Config
                 .To<CommandDeinitializeAddonLoader>()
                 .To<CommandUnloadVesselModules>()
                 .To<CommandUnloadPartModules>()
-                .To<CommandUnloadScenarioModules>();
+                .To<CommandUnloadScenarioModules>()
+                .To<CommandClearGameEventProxyRegistryEntry>();
 
 
             commandBinder.Bind<SignalAboutToDestroyMonoBehaviour>()
