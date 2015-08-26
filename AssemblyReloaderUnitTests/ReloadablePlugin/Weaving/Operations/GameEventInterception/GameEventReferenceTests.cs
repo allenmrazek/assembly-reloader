@@ -65,19 +65,69 @@ namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations.GameEventIntercep
             Assert.True(entries.ContainsKey(sut));
             Assert.True(entries.ContainsKey(new GameEventReference(evt, evtName)));
         }
+
+
+        [Fact]
+        public void DelegateEqualityTest_NonGeneric()
+        {
+            var sut = new EventVoid.OnEvent(OnVoidCallback);
+            var sut2 = new EventVoid.OnEvent(OnVoidCallback);
+
+            Assert.Equal(sut, sut2);
+        }
+
+
+        [Fact]
+        public void DelegateEqualityTest_Generic()
+        {
+            var sut = new EventData<T1>.OnEvent(OnCallback);
+            var sut2 = new EventData<T1>.OnEvent(OnCallback);
+
+            Assert.Equal(sut, sut2);
+        }
+
+
+        [Theory, AutoDomainData]
+        public void DelegateEqualityTest_NonGeneric_AsObject([Frozen] string evtName)
+        {
+            var evt = new EventVoid(evtName);
+            var list = new List<object>();
+
+            object sut = new EventVoid.OnEvent(OnVoidCallback);
+            object sut2 = new EventVoid.OnEvent(OnVoidCallback);
+
+            list.Add(sut);
+
+            Assert.Equal(sut, sut2);
+            Assert.Contains(sut2, list);
+        }
+
+
+        private void OnVoidCallback()
+        {
+            
+        }
+
+        private void OnCallback(T1 arg)
+        {
+            
+        }
     }
 
-    public class TestSimple : GameEventReferenceTests<double, float, int>
+// ReSharper disable once InconsistentNaming
+    public class GameEventReferenceTest_Simple : GameEventReferenceTests<double, float, int>
     {
        
     }
 
-    public class TestKspTypes : GameEventReferenceTests<Vessel, Part, PartModule>
+// ReSharper disable once InconsistentNaming
+    public class GameEventReferenceTest_KspTypes : GameEventReferenceTests<Vessel, Part, PartModule>
     {
         
     }
 
-    public class TestKspTypesTricky :
+// ReSharper disable once InconsistentNaming
+    public class GameEventReferenceTest_Tricky :
         GameEventReferenceTests
             <GameEvents.FromToAction<Part, Part>, GameEvents.HostTargetAction<Vessel, Vessel>,
                 GameEvents.ExplosionReaction>

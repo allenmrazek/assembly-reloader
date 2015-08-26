@@ -109,12 +109,7 @@ namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations.GameEventIntercep
             if (geCallback == null) throw new ArgumentNullException("geCallback");
 
             if (!registry.Remove(geRef, geCallback))
-            {
                 _log.Warning("Did not unregister " + geCallback + "from " + geCallback + " successfully");
-                _log.Debug("Listing registered callbacks:");
-                foreach (var cb in registry)
-                    _log.Normal("Callback: " + cb);
-            }
             else _log.Verbose("Unregistered callback for " + geRef + " for " + geCallback);
         }
 

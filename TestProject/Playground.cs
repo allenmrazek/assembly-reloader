@@ -36,15 +36,31 @@ namespace TestProject
         private void Start()
         {
             GameEvents.onCrash.Add(OnCallback);
+            GameEvents.onCrash.Add(OnCallback);
             GameEvents.onCrash.Remove(OnCallback);
+            GameEvents.onCrash.Remove(OnCallback);
+
+            GameEvents.onFlightReady.Add(OnFlightReadyCallback);
+            GameEvents.onFlightReady.Add(OnFlightReadyCallback);
+            print("Firing onFlightReady GameEvent; expect two messages");
+            GameEvents.onFlightReady.Fire();
+            GameEvents.onFlightReady.Remove(OnFlightReadyCallback);
+            GameEvents.onFlightReady.Remove(OnFlightReadyCallback);
+            print("Firing onFlightReady gameEvent again; expect no messages");
+            GameEvents.onFlightReady.Fire();
         }
 
         private void OnCallback(EventReport report)
         {
             
         }
+
+        private void OnFlightReadyCallback()
+        {
+            print("Received: FlightReady event");
+        }
     }
-    //[KSPAddon(KSPAddon.Startup.MainMenu, false)]
+    [KSPAddon(KSPAddon.Startup.MainMenu, false)]
     public class GameEventTester : MonoBehaviour
     {
         private readonly List<EventData<ShipConstruct, CraftBrowser.LoadType>.OnEvent> _callbacks =

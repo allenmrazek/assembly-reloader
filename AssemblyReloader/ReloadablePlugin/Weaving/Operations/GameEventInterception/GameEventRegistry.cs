@@ -2,15 +2,29 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using ReeperCommon.Containers;
 using ReeperCommon.Logging;
 
 namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations.GameEventInterception
 {
+// ReSharper disable once ClassNeverInstantiated.Global
     public class GameEventRegistry : IGameEventRegistry
     {
+        private const string GameEventAddMethodName = "Add";
+        private const string GameEventRemoveMethodName = "Remove";
+
+        private readonly ILog _log;
+
         private readonly IDictionary<GameEventReference, List<GameEventCallback>> _registrations =
             new Dictionary<GameEventReference, List<GameEventCallback>>();
+
+        public GameEventRegistry(ILog log)
+        {
+            if (log == null) throw new ArgumentNullException("log");
+
+            _log = log;
+        }
 
 
         public void Add(GameEventReference gameEvent, GameEventCallback callback)
@@ -18,9 +32,17 @@ namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations.GameEventIntercep
             if (gameEvent == null) throw new ArgumentNullException("gameEvent");
             if (callback == null) throw new ArgumentNullException("callback");
 
-            // note to self: duplicate registrations allowed (probably an error from the caller
-            // but not our business)
-            GetCallbackList(gameEvent).Add(callback);
+            try
+            {
+                // note to self: duplicate registrations allowed (probably an error from the caller
+                // but not our business)
+                InvokeMethod(gameEvent, GameEventAddMethodName, callback);
+                GetCallbackList(gameEvent).Add(callback);
+            }
+            catch (Exception e)
+            {
+                _log.Error("Exception adding game event to registry: " + e);
+            }
         }
 
 
@@ -29,18 +51,21 @@ namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations.GameEventIntercep
             if (gameEvent == null) throw new ArgumentNullException("gameEvent");
             if (callback == null) throw new ArgumentNullException("callback");
 
-            var log = new DebugLog("GameEventRegistryTemp");
+            try
+            {
+                // note to self: duplicate registrations allowed (probably an error from the caller
+                // but not our business)
+                bool result = GetCallbackList(gameEvent).Remove(callback);
+                InvokeMethod(gameEvent, GameEventRemoveMethodName, callback);
 
-            log.Normal("Have callback list? " + (GetCallbackList(gameEvent) == null));
-            log.Normal("Looking for " + gameEvent);
-            log.Normal("Have " + _registrations.Keys.ToArray().Length + " game event lists");
-            foreach (var k in _registrations.Keys)
-                log.Normal("List for: " + k + " with " + _registrations[k].Count + " entries");
+                return result;
+            }
+            catch (Exception e)
+            {
+                _log.Error("Exception removing game event from registry: " + e);
+            }
 
-            log.Normal("Found? " + GetCallbackList(gameEvent)
-                .Return(list => list.Contains(callback), false));
-
-            return GetCallbackList(gameEvent).Remove(callback);
+            return false;
         }
 
 
@@ -76,6 +101,14 @@ namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations.GameEventIntercep
             _registrations.Add(gameEvent, result);
 
             return result;
+        }
+
+
+        private void InvokeMethod(GameEventReference gameEvent, string methodName, GameEventCallback callback)
+        {
+            gameEvent.GameEventRef.GetType()
+                .GetMethod(methodName, BindingFlags.Public | BindingFlags.Instance)
+                .Do(mi => mi.Invoke(gameEvent.GameEventRef, new object[] {callback.CallbackDelegate}));
         }
 
         IEnumerator<GameEventCallback> IEnumerable<GameEventCallback>.GetEnumerator()

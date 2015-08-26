@@ -8,7 +8,7 @@ namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations.GameEventIntercep
 {
     public class GameEventReference : IEquatable<GameEventReference>
     {
-        private readonly object _geRef;
+        public readonly object GameEventRef;
 
         public GameEventReference(object geRef, string gameEventName)
         {
@@ -26,20 +26,20 @@ namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations.GameEventIntercep
                 throw new ArgumentException("Must be a GameEvent type", "geRef");
 
 
-            _geRef = geRef;
+            GameEventRef = geRef;
             Name = gameEventName;
         }
 
 
         public bool Equals(GameEventReference other)
         {
-            return _geRef == other._geRef;
+            return GameEventRef == other.GameEventRef;
         }
 
 
         public override int GetHashCode()
         {
-            return _geRef.GetHashCode();
+            return GameEventRef.GetHashCode();
         }
 
 
@@ -49,5 +49,18 @@ namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations.GameEventIntercep
         }
 
         public string Name { get; private set; }
+
+        bool IEquatable<GameEventReference>.Equals(GameEventReference other)
+        {
+            return GameEventRef == other.GameEventRef;
+        }
+
+        public override bool Equals(object obj)
+        {
+            var other = obj as GameEventReference;
+            if (other == null) return false;
+
+            return GameEventRef == other.GameEventRef;
+        }
     }
 }

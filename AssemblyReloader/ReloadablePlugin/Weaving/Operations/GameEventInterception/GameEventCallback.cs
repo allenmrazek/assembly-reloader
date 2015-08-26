@@ -8,7 +8,7 @@ namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations.GameEventIntercep
     public class GameEventCallback : IEquatable<GameEventCallback>
     {
         public Maybe<MethodBase> CallingMethod { get; private set; }
-        private readonly object _del;
+        public readonly MulticastDelegate CallbackDelegate;
 
         public GameEventCallback(object del, Maybe<MethodBase> callingMethod )
         {
@@ -19,19 +19,17 @@ namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations.GameEventIntercep
             if (ty.BaseType == null || !typeof (MulticastDelegate).IsAssignableFrom(ty.BaseType))
                 throw new ArgumentException("Must be a delegate", "del");
 
-            _del = del;
+            CallbackDelegate = (MulticastDelegate)del;
         }
 
-        public bool Equals(GameEventCallback other)
+
+
+        bool IEquatable<GameEventCallback>.Equals(GameEventCallback other)
         {
-            return _del == other._del;
+            return CallbackDelegate == other.CallbackDelegate;
         }
 
-        public override int GetHashCode()
-        {
-            return _del.GetHashCode();
-        }
-
+       
         public override string ToString()
         {
             return

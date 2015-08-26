@@ -105,6 +105,7 @@
     <Compile Include="InProgress\Test_InterceptGameEventsProxy.cs" />
     <Compile Include="ReloadablePlugin\Weaving\Operations\GameEventInterception\GameEventCallbackTests.cs" />
     <Compile Include="ReloadablePlugin\Weaving\Operations\GameEventInterception\GameEventReferenceTests.cs" />
+    <Compile Include="ReloadablePlugin\Weaving\Operations\GameEventInterception\GameEventRegistryTests.cs" />
     <Compile Include="ReloadablePlugin\Weaving\Operations\GameEventInterception\GetGenericParameterTypeTests.cs" />
     <Compile Include="ReloadablePlugin\Weaving\Operations\GetGameEventTypesTests.cs" />
     <Compile Include="TestData\Addons\IrrelevantAddonContainerClass.cs" />
