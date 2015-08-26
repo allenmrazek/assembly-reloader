@@ -190,8 +190,7 @@ namespace AssemblyReloader.ReloadablePlugin.Config
                 .To<CommandUnloadVesselModules>()
                 .To<CommandUnloadPartModules>()
                 .To<CommandUnloadScenarioModules>()
-                .To<CommandClearGameEventProxyRegistryEntry>();
-
+                .To<CommandClearGameEventProxyRegistryEntry>(); // waits for SignalPluginWasUnloaded and checks for dangling GameEvent callbacks
 
             commandBinder.Bind<SignalAboutToDestroyMonoBehaviour>()
                 .To<CommandCreatePartModuleConfigNodeSnapshot>()

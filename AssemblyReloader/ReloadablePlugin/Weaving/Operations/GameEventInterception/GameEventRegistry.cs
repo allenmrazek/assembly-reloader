@@ -111,9 +111,12 @@ namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations.GameEventIntercep
                 .Do(mi => mi.Invoke(gameEvent.GameEventRef, new object[] {callback.CallbackDelegate}));
         }
 
-        IEnumerator<GameEventCallback> IEnumerable<GameEventCallback>.GetEnumerator()
+        IEnumerator<KeyValuePair<GameEventReference, GameEventCallback>> IEnumerable<KeyValuePair<GameEventReference, GameEventCallback>>.GetEnumerator()
         {
-            return _registrations.SelectMany(kvp => kvp.Value).GetEnumerator();
+            return _registrations
+                .SelectMany(kvp => kvp.Value
+                    .Select(cb => new KeyValuePair<GameEventReference, GameEventCallback>(kvp.Key, cb)))
+                    .GetEnumerator();
         }
 
         public IEnumerator GetEnumerator()

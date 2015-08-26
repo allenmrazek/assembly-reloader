@@ -2,7 +2,7 @@
 
 namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations.GameEventInterception
 {
-    public interface IGameEventRegistry : IEnumerable<GameEventCallback>
+    public interface IGameEventRegistry : IEnumerable<KeyValuePair<GameEventReference, GameEventCallback>>
     {
         void Add(GameEventReference gameEvent, GameEventCallback callback);
         bool Remove(GameEventReference gameEvent, GameEventCallback callback);

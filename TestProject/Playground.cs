@@ -48,6 +48,10 @@ namespace TestProject
             GameEvents.onFlightReady.Remove(OnFlightReadyCallback);
             print("Firing onFlightReady gameEvent again; expect no messages");
             GameEvents.onFlightReady.Fire();
+
+            print(
+                "Adding an event that won't be removed; expect to see a message about not unregistering onFlightReady when reloaded");
+            GameEvents.onFlightReady.Add(OnFlightReadyCallback);
         }
 
         private void OnCallback(EventReport report)

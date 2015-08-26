@@ -33,7 +33,7 @@ namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations.GameEventIntercep
         public override string ToString()
         {
             return
-                typeof (GameEventCallback).Name + ": " +
+                typeof (GameEventCallback).Name + " inside " +
                 CallingMethod.Return(mi => mi.Name, "Unknown method") + " in " + CallingMethod
                     .SingleOrDefault()
                     .Return(mi =>
