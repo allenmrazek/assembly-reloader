@@ -131,6 +131,8 @@ namespace AssemblyReloader.ReloadablePlugin.Config
             injectionBinder.Bind<SignalAboutToDestroyMonoBehaviour>().ToSingleton();
             injectionBinder.Bind<SignalLoadersFinished>().ToSingleton();
             injectionBinder.Bind<SignalPartModuleCreated>().ToSingleton();
+            injectionBinder.Bind<SignalPluginCannotBeLoaded>().ToSingleton();
+            injectionBinder.Bind<SignalErrorWhileUnloading>().ToSingleton();
 
             SetupCommandBindings();
 
@@ -158,16 +160,24 @@ namespace AssemblyReloader.ReloadablePlugin.Config
                 .To<CommandStartReloadablePlugin>()
                 .Once();
 
+
             // kicks off reload process
             commandBinder.Bind<SignalReloadPlugin>()
-                .To<CommandReloadPlugin>();
+                .InSequence()
+                .To<CommandReadAssemblyDefinition>()
+                .To<CommandUnloadPreviousPlugin>()
+                .To<CommandLoadAssemblyDefinition>();
+
 
             // begin rewriting il
             commandBinder.Bind<SignalWeaveDefinition>()
+                .InSequence()
+                .To<CommandCheckForUnsupportedTypes>()
                 .To<CommandChangeDefinitionIdentity>()
                 .To<CommandInsertHelperType>()
                 .To<CommandReplaceKSPAddonWithReloadableAddon>()
                 .To<CommandRewriteGameEventCalls>();
+
 
             // these things need the helper type
             commandBinder.Bind<SignalHelperDefinitionCreated>()
@@ -186,18 +196,24 @@ namespace AssemblyReloader.ReloadablePlugin.Config
 
 
             commandBinder.Bind<SignalUnloadPlugin>()
-                .InSequence()
                 .To<CommandDeinitializeAddonLoader>()
                 .To<CommandUnloadVesselModules>()
                 .To<CommandUnloadPartModules>()
                 .To<CommandUnloadScenarioModules>()
                 .To<CommandClearGameEventProxyRegistryEntry>(); // waits for SignalPluginWasUnloaded and checks for dangling GameEvent callbacks
 
+
             commandBinder.Bind<SignalAboutToDestroyMonoBehaviour>()
                 .To<CommandCreatePartModuleConfigNodeSnapshot>()
                 .To<CommandCreateScenarioModuleConfigNode>()
                 .To<CommandSendReloadRequestedMessageToTarget>();
 
+
+            commandBinder.Bind<SignalPluginCannotBeLoaded>()
+                .To<CommandDisplayFailureMessage>();
+
+            commandBinder.Bind<SignalErrorWhileUnloading>()
+                .To<CommandDisplayFailureMessage>();
 
             // GameEvent signals
             commandBinder.Bind<SignalOnLevelWasLoaded>()

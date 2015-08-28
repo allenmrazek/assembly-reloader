@@ -21,7 +21,9 @@ namespace AssemblyReloaderTests.Fixtures
                 throw new FileNotFoundException(filename);
 
             // changes will be made so we must provide a fresh one for each test
-            Fixture.Register(() => AssemblyDefinition.ReadAssembly(filename));
+            var assembly = AssemblyDefinition.ReadAssembly(filename, new ReaderParameters {AssemblyResolver = Resolver});
+            Fixture.Register(() => assembly);
+            //Fixture.Register(() => AssemblyDefinition.ReadAssembly(filename, new ReaderParameters { AssemblyResolver = Resolver }));
 
             Fixture.Register(() => new GetGameEventTypes(new GetGameEventFields()));
         }

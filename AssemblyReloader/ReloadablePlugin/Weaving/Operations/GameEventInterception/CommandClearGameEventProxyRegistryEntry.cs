@@ -47,7 +47,7 @@ namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations.GameEventIntercep
         private void PluginWasUnloaded()
         {
             _pluginWasUnloaded.RemoveListener(PluginWasUnloaded);
-            Release();
+
 
             _log.Verbose("Removing game event proxy registry");
 
@@ -56,6 +56,7 @@ namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations.GameEventIntercep
 
             _gameEventRegistry.ClearCallbacks();
             _gameEventProxy.RemoveRegistry(_handle);
+            Release();
         }
     }
 }

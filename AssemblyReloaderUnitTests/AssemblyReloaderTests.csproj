@@ -98,16 +98,19 @@
   <ItemGroup>
     <Compile Include="Fixtures\AutoDomainDataAttribute.cs" />
     <Compile Include="Fixtures\AssemblyIsLocalAssemblyCustomization.cs" />
+    <Compile Include="Fixtures\AutoDomainDataWithInlineDataAttribute.cs" />
     <Compile Include="Fixtures\MockGameEventsDomainDataAttribute.cs" />
     <Compile Include="Fixtures\RealGameEventsDomainDataAttribute.cs" />
     <Compile Include="InProgress\TestReplacement.cs" />
     <Compile Include="InProgress\Test_InterceptGameEventsReal.cs" />
     <Compile Include="InProgress\Test_InterceptGameEventsProxy.cs" />
+    <Compile Include="ReloadablePlugin\Weaving\GetAllTypesInAssemblyDefinitionTests.cs" />
     <Compile Include="ReloadablePlugin\Weaving\Operations\GameEventInterception\GameEventCallbackTests.cs" />
     <Compile Include="ReloadablePlugin\Weaving\Operations\GameEventInterception\GameEventReferenceTests.cs" />
     <Compile Include="ReloadablePlugin\Weaving\Operations\GameEventInterception\GameEventRegistryTests.cs" />
     <Compile Include="ReloadablePlugin\Weaving\Operations\GameEventInterception\GetGenericParameterTypeTests.cs" />
     <Compile Include="ReloadablePlugin\Weaving\Operations\GetGameEventTypesTests.cs" />
+    <Compile Include="ReloadablePlugin\Weaving\Operations\GetTypeIsUnsupportedTests.cs" />
     <Compile Include="TestData\Addons\IrrelevantAddonContainerClass.cs" />
     <Compile Include="TestData\Addons\MonoBehaviour_WithNoAddon.cs" />
     <Compile Include="TestData\Addons\TestAddon_InvalidResult.cs" />

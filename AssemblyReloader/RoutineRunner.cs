@@ -42,5 +42,10 @@ namespace AssemblyReloader
 
             return _monoBehaviour.StartCoroutine(coroutine);
         }
+
+        public void StopCoroutine(Coroutine routine)
+        {
+            _monoBehaviour.StopCoroutine(routine);
+        }
     }
 }

@@ -22,7 +22,7 @@ namespace TestProject
         {
             GUILayout.BeginVertical();
 
-            if (GUILayout.Button("Destroy This, Gingerbread Man!"))
+            if (GUILayout.Button("Destroy This"))
                 Destroy(this);
 
             GUILayout.EndVertical();

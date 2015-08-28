@@ -80,6 +80,14 @@
     <Compile Include="Game\DuplicateLoadedAssemblyException.cs" />
     <Compile Include="Game\DuplicatePartPrefabException.cs" />
     <Compile Include="Game\DuplicateProtoScenarioModuleException.cs" />
+    <Compile Include="ReloadablePlugin\CommandDisplayFailureMessage.cs" />
+    <Compile Include="ReloadablePlugin\CommandLoadAssemblyDefinition.cs" />
+    <Compile Include="ReloadablePlugin\CommandUnloadPreviousPlugin.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\CommandInsertPluginIntoAssemblyLoader.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\CommandRemovePluginFromAssemblyLoader.cs" />
+    <Compile Include="ReloadablePlugin\Weaving\CommandReadAssemblyDefinition.cs" />
+    <Compile Include="ReloadablePlugin\Weaving\GetAllTypesInAssemblyDefinition.cs" />
+    <Compile Include="ReloadablePlugin\Weaving\Operations\CommandCheckForUnsupportedTypes.cs" />
     <Compile Include="ReloadablePlugin\Loaders\VesselModules\IVesselModuleSettings.cs" />
     <Compile Include="ReloadablePlugin\Weaving\IWeaverSettings.cs" />
     <Compile Include="ReloadablePlugin\Weaving\Operations\GameEventInterception\CommandClearGameEventProxyRegistryEntry.cs" />
@@ -170,8 +178,11 @@
     <Compile Include="ReloadablePlugin\Weaving\Operations\GameEventInterception\IGetGameEventTypes.cs" />
     <Compile Include="ReloadablePlugin\Weaving\Operations\GameEventInterception\IGetGenericParameterType.cs" />
     <Compile Include="ReloadablePlugin\Weaving\Operations\GameEventInterception\GameEventReferenceFactory.cs" />
+    <Compile Include="ReloadablePlugin\Weaving\Operations\IGetAllTypesInAssemblyDefinition.cs" />
+    <Compile Include="ReloadablePlugin\Weaving\Operations\IGetTypeIsUnsupported.cs" />
     <Compile Include="ReloadablePlugin\Weaving\Operations\Keys\MethodKeys.cs" />
     <Compile Include="ReloadablePlugin\Weaving\Operations\ProxyMethodAlreadyDefinedException.cs" />
+    <Compile Include="ReloadablePlugin\Weaving\Operations\GetTypeIsUnsupported.cs" />
     <Compile Include="ReloadablePlugin\Weaving\Operations\ReturnSpecialResultIfExecutingAssembly.cs" />
     <Compile Include="ReloadablePlugin\Weaving\Operations\CommandRewriteCall.cs" />
     <Compile Include="RoutineRunner.cs" />
@@ -190,7 +201,6 @@
     <Compile Include="Gui\Signals.cs" />
     <Compile Include="Gui\StrangeView.cs" />
     <Compile Include="CommandCreateAddonsForScene.cs" />
-    <Compile Include="ReloadablePlugin\CommandReloadPlugin.cs" />
     <Compile Include="ReloadablePlugin\Loaders\Addons\CommandDeinitializeAddonLoader.cs" />
     <Compile Include="ReloadablePlugin\Loaders\Addons\CommandInitializeAddonLoader.cs" />
     <Compile Include="ReloadablePlugin\Config\CommandStartReloadablePlugin.cs" />
@@ -263,8 +273,6 @@
     <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\IScenarioModuleUnloader.cs" />
     <Compile Include="ReloadablePlugin\Weaving\AssemblyDefinitionLoader.cs" />
     <Compile Include="FileSystem\IFilePathProvider.cs" />
-    <Compile Include="Game\old\GetLoadedAssemblyFileUrl.cs" />
-    <Compile Include="Game\old\IGetLoadedAssemblyFileUrl.cs" />
     <Compile Include="FileSystem\GetAssemblyFileLocation.cs" />
     <Compile Include="ReloadablePlugin\GetConfigurationFilePath.cs" />
     <Compile Include="ReloadablePlugin\Weaving\GetDebugSymbolsExistForDefinition.cs" />

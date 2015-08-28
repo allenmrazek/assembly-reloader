@@ -90,8 +90,9 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
             _loadersFinishedSignal.RemoveListener(OnLoadersFinished);
             _snapshotRepository.Clear();
 
-            Release();
+
             RunOnStarts();
+            Release();
         }
 
 

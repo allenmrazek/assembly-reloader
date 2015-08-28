@@ -16,6 +16,7 @@ using Object = UnityEngine.Object;
 
 namespace TestProject
 {
+
     //[KSPAddon(KSPAddon.Startup.MainMenu, true)]
     public class TestOnCrashEventRedirection : MonoBehaviour
     {

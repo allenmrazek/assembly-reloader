@@ -31,4 +31,13 @@ namespace AssemblyReloader.ReloadablePlugin
     }
 
 
+    public class SignalPluginCannotBeLoaded : Signal<string>
+    {
+        
+    }
+
+    public class SignalErrorWhileUnloading : Signal<string>
+    {
+        
+    }
 }
