@@ -4,6 +4,7 @@ using strange.extensions.context.impl;
 
 namespace AssemblyReloader.ReloadablePlugin.Config
 {
+// ReSharper disable once ClassNeverInstantiated.Global
     public class BootstrapReloadablePlugin : ContextView
     {
         public void Bootstrap(IFile file)

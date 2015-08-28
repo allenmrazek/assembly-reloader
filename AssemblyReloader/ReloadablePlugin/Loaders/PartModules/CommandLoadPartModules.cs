@@ -64,7 +64,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
             _log.Verbose("Creating PartModules");
 
             _createdSignal.AddListener(OnPartModuleCreated);
-            _partModuleLoader.Load(_handle, !_partModuleSettings.ReloadPartModuleInstancesImmediately);
+            _partModuleLoader.Load(_handle, !_partModuleSettings.CreatePartModulesImmediately);
             _createdSignal.RemoveListener(OnPartModuleCreated);
 
             _loadersFinishedSignal.AddListener(OnLoadersFinished);

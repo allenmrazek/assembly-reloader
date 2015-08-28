@@ -35,7 +35,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
 
         public override void Execute()
         {
-            if (!_scenarioModuleSettings.ReloadScenarioModulesImmediately)
+            if (!_scenarioModuleSettings.CreateScenarioModulesImmediately)
                 return;
 
             _log.Debug("Creating ScenarioModules");

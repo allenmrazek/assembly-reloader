@@ -2,7 +2,7 @@
 {
     public interface IScenarioModuleSettings
     {
-        bool ReloadScenarioModulesImmediately { get; }
-        bool SaveScenarioModuleBeforeDestroying { get; }
+        bool CreateScenarioModulesImmediately { get; }
+        bool SaveScenarioModulesBeforeDestruction { get; }
     }
 }

@@ -3,7 +3,7 @@
     public interface IPartModuleSettings
     {
         bool SaveAndReloadPartModuleConfigNodes { get; }
-        bool ReloadPartModuleInstancesImmediately { get; }
+        bool CreatePartModulesImmediately { get; }
         bool ResetPartModuleEvents { get; }
         bool ResetPartModuleActions { get; }
     }

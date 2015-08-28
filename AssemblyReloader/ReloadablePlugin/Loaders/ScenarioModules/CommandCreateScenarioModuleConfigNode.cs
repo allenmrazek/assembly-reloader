@@ -56,7 +56,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
                 throw new ArgumentException("ScenarioModule " + scenarioModule.GetType().FullName +
                 " does not have a corresponding ProtoScenarioModule reference");
 
-            if (_scenarioModuleSettings.SaveScenarioModuleBeforeDestroying)
+            if (_scenarioModuleSettings.SaveScenarioModulesBeforeDestruction)
                 CreateConfigNodeFromCurrentState(psm.Single(), scenarioModule);
             else
                 StoreLastConfigNodeGameUsed(psm.Single(), scenarioModule);

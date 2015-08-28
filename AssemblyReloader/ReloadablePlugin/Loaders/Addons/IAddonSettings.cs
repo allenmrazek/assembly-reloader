@@ -2,7 +2,7 @@
 {
     public interface IAddonSettings
     {
-        bool InstantlyAppliesToAllScenes { get; }
+        bool InstantAppliesToEveryScene { get; }
         bool StartAddonsForCurrentScene { get; }
     }
 }

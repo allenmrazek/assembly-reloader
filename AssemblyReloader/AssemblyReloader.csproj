@@ -80,7 +80,8 @@
     <Compile Include="Game\DuplicateLoadedAssemblyException.cs" />
     <Compile Include="Game\DuplicatePartPrefabException.cs" />
     <Compile Include="Game\DuplicateProtoScenarioModuleException.cs" />
-    <Compile Include="ReloadablePlugin\Weaving\IWeavingSettings.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\VesselModules\IVesselModuleSettings.cs" />
+    <Compile Include="ReloadablePlugin\Weaving\IWeaverSettings.cs" />
     <Compile Include="ReloadablePlugin\Weaving\Operations\GameEventInterception\CommandClearGameEventProxyRegistryEntry.cs" />
     <Compile Include="ReloadablePlugin\Weaving\Operations\GameEventInterception\DuplicateGameEventRegistryException.cs" />
     <Compile Include="ReloadablePlugin\Weaving\Operations\GameEventInterception\GameEventCallback.cs" />

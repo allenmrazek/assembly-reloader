@@ -12,22 +12,26 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.VesselModules
         private readonly IVesselModuleManager _vesselModuleManager;
         private readonly IGetTypesDerivedFrom<KSP::VesselModule> _vesselModules;
         private readonly IGetLoadedVessels _loadedVessels;
+        private readonly IVesselModuleSettings _settings;
         private readonly ILog _log;
 
         public VesselModuleLoader(
             IVesselModuleManager vesselModuleManager,
             IGetTypesDerivedFrom<KSP::VesselModule> vesselModules,
             IGetLoadedVessels loadedVessels,
+            IVesselModuleSettings settings,
             ILog log)
         {
             if (vesselModuleManager == null) throw new ArgumentNullException("vesselModuleManager");
             if (vesselModules == null) throw new ArgumentNullException("vesselModules");
             if (loadedVessels == null) throw new ArgumentNullException("loadedVessels");
+            if (settings == null) throw new ArgumentNullException("settings");
             if (log == null) throw new ArgumentNullException("log");
 
             _vesselModuleManager = vesselModuleManager;
             _vesselModules = vesselModules;
             _loadedVessels = loadedVessels;
+            _settings = settings;
             _log = log;
         }
 
@@ -44,7 +48,9 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.VesselModules
         {
             
             InsertVesselModuleWrapper(vesselModule);
-            CreateVesselModuleOnVessels(vesselModule);
+
+            if (_settings.CreateVesselModulesImmediately)
+                CreateVesselModuleOnVessels(vesselModule);
         }
 
 

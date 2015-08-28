@@ -21,30 +21,30 @@ namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations.GameEventIntercep
     {
         private readonly AssemblyDefinition _context;
         private readonly IGetGameEventTypes _gameEvents;
-        private readonly IWeavingSettings _weavingSettings;
+        private readonly IWeaverSettings _weaverSettings;
         private readonly ILog _log;
 
         public CommandRewriteGameEventCalls(
             AssemblyDefinition context, 
             IGetGameEventTypes gameEvents,
-            IWeavingSettings weavingSettings,
+            IWeaverSettings weaverSettings,
             ILog log)
         {
             if (context == null) throw new ArgumentNullException("context");
             if (gameEvents == null) throw new ArgumentNullException("gameEvents");
-            if (weavingSettings == null) throw new ArgumentNullException("weavingSettings");
+            if (weaverSettings == null) throw new ArgumentNullException("weaverSettings");
             if (log == null) throw new ArgumentNullException("log");
 
             _context = context;
             _gameEvents = gameEvents;
-            _weavingSettings = weavingSettings;
+            _weaverSettings = weaverSettings;
             _log = log;
         }
 
 
         public override void Execute()
         {
-            if (!_weavingSettings.InterceptGameEvents)
+            if (!_weaverSettings.InterceptGameEvents)
                 return;
 
             _log.Normal("Rewriting GameEvent calls");
@@ -112,7 +112,7 @@ namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations.GameEventIntercep
             // might optimize small methods at runtime by inlining them and so the caller info
             // is removed or potentially points to the wrong method
             if (!method.NoInlining)
-                if (_weavingSettings.DontInlineFunctionsThatCallGameEvents)
+                if (_weaverSettings.DontInlineFunctionsThatCallGameEvents)
                     method.NoInlining = true;
 
             while (instructionsWithTargetedCalls.Any())

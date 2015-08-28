@@ -1,18 +1,19 @@
 ﻿using AssemblyReloader.ReloadablePlugin.Loaders.Addons;
 using AssemblyReloader.ReloadablePlugin.Loaders.PartModules;
 using AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules;
+using AssemblyReloader.ReloadablePlugin.Loaders.VesselModules;
 using AssemblyReloader.ReloadablePlugin.Weaving;
 
 namespace AssemblyReloader.ReloadablePlugin.Config
 {
-    public class PluginConfiguration : IAddonSettings, IPartModuleSettings, IScenarioModuleSettings, IWeavingSettings
+    public class PluginConfiguration : IAddonSettings, IPartModuleSettings, IScenarioModuleSettings, IVesselModuleSettings, IWeaverSettings
     {
         // ReSharper disable FieldCanBeMadeReadOnly.Global
         // ReSharper disable UnusedMember.Global
 
         #region KSPAddon
 
-        public bool InstantlyAppliesToAllScenes { get; set; }
+        public bool InstantAppliesToEveryScene { get; set; }
         public bool StartAddonsForCurrentScene { get; set; }
 
         #endregion
@@ -21,7 +22,7 @@ namespace AssemblyReloader.ReloadablePlugin.Config
         #region PartModule
 
         public bool SaveAndReloadPartModuleConfigNodes { get; set; }
-        public bool ReloadPartModuleInstancesImmediately { get; set; }
+        public bool CreatePartModulesImmediately { get; set; }
         public bool ResetPartModuleActions { get; set; }
         public bool ResetPartModuleEvents { get; set; }
         
@@ -31,16 +32,22 @@ namespace AssemblyReloader.ReloadablePlugin.Config
 
         #region ScenarioModule
 
-        public bool ReloadScenarioModulesImmediately { get; set; }
-        public bool SaveScenarioModuleBeforeDestroying { get; set; }
+        public bool CreateScenarioModulesImmediately { get; set; }
+        public bool SaveScenarioModulesBeforeDestruction { get; set; }
 
         #endregion
 
 
+        #region VesselModule
+
+        public bool CreateVesselModulesImmediately { get; set; }
+
+        #endregion
+
         #region Intermediate Language
 
-        public bool InterceptGameEvents { get; private set; }
-        public bool DontInlineFunctionsThatCallGameEvents { get; private set; }
+        public bool InterceptGameEvents { get; set; }
+        public bool DontInlineFunctionsThatCallGameEvents { get; set; }
 
         #endregion
 
@@ -48,16 +55,18 @@ namespace AssemblyReloader.ReloadablePlugin.Config
         public PluginConfiguration()
         {
             // set defaults
-            InstantlyAppliesToAllScenes = true;
+            InstantAppliesToEveryScene = true;
             StartAddonsForCurrentScene = true;
 
             SaveAndReloadPartModuleConfigNodes = true;
-            ReloadPartModuleInstancesImmediately = true;
+            CreatePartModulesImmediately = true;
             ResetPartModuleActions = true;
             ResetPartModuleEvents = true;
 
-            ReloadScenarioModulesImmediately = true;
-            SaveScenarioModuleBeforeDestroying = true;
+            CreateVesselModulesImmediately = true;
+
+            CreateScenarioModulesImmediately = true;
+            SaveScenarioModulesBeforeDestruction = true;
 
             InterceptGameEvents = true;
             DontInlineFunctionsThatCallGameEvents = true;

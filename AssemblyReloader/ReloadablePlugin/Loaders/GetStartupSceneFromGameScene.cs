@@ -44,7 +44,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders
                     return KSPAddon.Startup.TrackingStation;
 
                 default:
-                    throw new NotImplementedException(scene.ToString() + " not implemented");
+                    throw new NotImplementedException(scene + " not implemented");
             }
         }
 

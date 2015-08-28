@@ -37,7 +37,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
 
             try
             {
-                _partModuleUnloader.Unload(_handle, !_partModuleSettings.ReloadPartModuleInstancesImmediately);
+                _partModuleUnloader.Unload(_handle, !_partModuleSettings.CreatePartModulesImmediately);
                 _log.Debug("Finished unloading PartModules");
             }
             catch (Exception e)

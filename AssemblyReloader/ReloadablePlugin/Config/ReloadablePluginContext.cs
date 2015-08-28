@@ -75,7 +75,8 @@ namespace AssemblyReloader.ReloadablePlugin.Config
                 .Bind<IAddonSettings>()
                 .Bind<IPartModuleSettings>()
                 .Bind<IScenarioModuleSettings>()
-                .Bind<IWeavingSettings>()
+                .Bind<IVesselModuleSettings>()
+                .Bind<IWeaverSettings>()
                 .Bind<PluginConfiguration>()
                 .To<PluginConfiguration>().ToSingleton();
 
