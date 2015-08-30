@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿extern alias Cecil96;
 using System.Linq;
-using System.Text;
-using Mono.Cecil;
 using Ploeh.AutoFixture;
 using WeavingTestData.GameEventsMock;
+using Cecil96::Mono.Cecil;
 
 namespace AssemblyReloaderTests.Fixtures
 {

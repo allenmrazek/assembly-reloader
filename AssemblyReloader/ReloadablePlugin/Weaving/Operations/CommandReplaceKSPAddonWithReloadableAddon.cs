@@ -1,14 +1,19 @@
 ﻿extern alias KSP;
+extern alias Cecil96;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using AssemblyReloader.ReloadablePlugin.Loaders.Addons;
-using Mono.Cecil;
-using Mono.Cecil.Cil;
 using ReeperCommon.Containers;
 using ReeperCommon.Logging;
 using strange.extensions.command.impl;
 using KSPAddon = KSP::KSPAddon;
+using AssemblyDefinition = Cecil96::Mono.Cecil.AssemblyDefinition;
+using TypeReference = Cecil96::Mono.Cecil.TypeReference;
+using TypeDefinition = Cecil96::Mono.Cecil.TypeDefinition;
+using OpCodes = Cecil96::Mono.Cecil.Cil.OpCodes;
+using CustomAttribute = Cecil96::Mono.Cecil.CustomAttribute;
+using CustomAttributeArgument = Cecil96::Mono.Cecil.CustomAttributeArgument;
 
 namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations
 {

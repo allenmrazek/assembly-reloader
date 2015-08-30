@@ -3,10 +3,8 @@ using System;
 using System.Collections;
 //using ReeperCommon.Logging;
 using ReeperLoader;
-using ReeperLoader.unused;
 using strange.extensions.context.impl;
 using UnityEngine;
-using KSPAddon = KSP::KSPAddon;
 using HighLogic = KSP::HighLogic;
 using PopupDialog = KSP::PopupDialog;
 

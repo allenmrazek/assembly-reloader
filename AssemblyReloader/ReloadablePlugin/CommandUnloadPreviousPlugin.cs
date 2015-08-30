@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using AssemblyReloader.Game;
-using Mono.Cecil;
 using ReeperCommon.Containers;
 using ReeperCommon.Logging;
 using strange.extensions.command.impl;
@@ -12,6 +9,7 @@ using UnityEngine;
 
 namespace AssemblyReloader.ReloadablePlugin
 {
+// ReSharper disable once ClassNeverInstantiated.Global
     public class CommandUnloadPreviousPlugin : Command
     {
         private readonly Maybe<ILoadedAssemblyHandle> _previousAssemblyHandle;

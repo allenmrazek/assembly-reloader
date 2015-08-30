@@ -6,6 +6,8 @@ using System.Reflection;
 using AssemblyReloader.Config.Keys;
 using AssemblyReloader.FileSystem;
 using ReeperAssemblyLibrary;
+using ReeperAssemblyLibrary.Factories;
+using ReeperAssemblyLibrary.Impl;
 using ReeperCommon.FileSystem;
 using ReeperCommon.FileSystem.Providers;
 using ReeperCommon.Logging;

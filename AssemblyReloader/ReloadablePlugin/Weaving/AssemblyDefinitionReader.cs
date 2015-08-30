@@ -1,10 +1,13 @@
-﻿using System;
+﻿extern alias Cecil96;
+using System;
 using System.IO;
-using Mono.Cecil;
 using ReeperCommon.Containers;
 using ReeperCommon.Extensions;
 using ReeperCommon.FileSystem;
 using ReeperCommon.Logging;
+using AssemblyDefinition = Cecil96::Mono.Cecil.AssemblyDefinition;
+using BaseAssemblyResolver = Cecil96::Mono.Cecil.BaseAssemblyResolver;
+using ReaderParameters = Cecil96::Mono.Cecil.ReaderParameters;
 
 namespace AssemblyReloader.ReloadablePlugin.Weaving
 {
@@ -61,7 +64,7 @@ namespace AssemblyReloader.ReloadablePlugin.Weaving
 
         private ReaderParameters ConfigureReaderParameters(IFile location)
         {
-            return new ReaderParameters(ReadingMode.Immediate)
+            return new ReaderParameters(Cecil96::Mono.Cecil.ReadingMode.Immediate)
             {
                 ReadSymbols = _getDebugSymbolsExistQuery.Get(location),
                 AssemblyResolver = _resolver

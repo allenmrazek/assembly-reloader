@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿extern alias Cecil96;
 using System.IO;
-using System.Linq;
-using System.Text;
 using AssemblyReloader.ReloadablePlugin.Weaving.Operations.GameEventInterception;
-using Mono.Cecil;
 using Ploeh.AutoFixture;
-using WeavingTestData.GameEventsMock;
+using AssemblyDefinition = Cecil96::Mono.Cecil.AssemblyDefinition;
+using ReaderParameters = Cecil96::Mono.Cecil.ReaderParameters;
 
 namespace AssemblyReloaderTests.Fixtures
 {

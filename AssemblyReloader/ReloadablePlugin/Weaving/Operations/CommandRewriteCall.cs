@@ -1,11 +1,14 @@
-﻿using System;
+﻿extern alias Cecil96;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Mono.Cecil;
-using Mono.Cecil.Cil;
 using ReeperCommon.Logging;
 using strange.extensions.command.impl;
+using Instruction = Cecil96::Mono.Cecil.Cil.Instruction;
+using MethodDefinition = Cecil96::Mono.Cecil.MethodDefinition;
+using AssemblyDefinition = Cecil96::Mono.Cecil.AssemblyDefinition;
+using TypeDefinition = Cecil96::Mono.Cecil.TypeDefinition;
 
 namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations
 {

@@ -1,14 +1,12 @@
-﻿using System;
+﻿extern alias Cecil96;
 using System.Linq;
-using System.Reflection;
-using AssemblyReloader.ReloadablePlugin.Weaving.Operations;
 using AssemblyReloaderTests.Fixtures;
-using Mono.Cecil;
-using Mono.Cecil.Cil;
-using Mono.Cecil.Rocks;
 using WeavingTestData.GameEventsMock;
 using Xunit;
 using Xunit.Extensions;
+using OpCodes = Cecil96::Mono.Cecil.Cil.OpCodes;
+using Cecil96::Mono.Cecil;
+using Cecil96::Mono.Cecil.Rocks;
 
 namespace AssemblyReloaderTests.InProgress
 {

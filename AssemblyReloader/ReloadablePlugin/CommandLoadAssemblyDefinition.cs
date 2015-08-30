@@ -1,10 +1,10 @@
-﻿using System;
+﻿extern alias Cecil96;
+using System;
 using System.Linq;
 using System.Reflection;
 using AssemblyReloader.Game;
 using AssemblyReloader.Gui;
 using AssemblyReloader.ReloadablePlugin.Weaving;
-using Mono.Cecil;
 using ReeperCommon.Containers;
 using ReeperCommon.Extensions;
 using ReeperCommon.Logging;
@@ -12,11 +12,12 @@ using strange.extensions.command.impl;
 
 namespace AssemblyReloader.ReloadablePlugin
 {
+// ReSharper disable once ClassNeverInstantiated.Global
     public class CommandLoadAssemblyDefinition : Command
     {
         private readonly IPluginInfo _pluginInfo;
         private readonly Maybe<ILoadedAssemblyHandle> _loadedHandle;
-        private readonly AssemblyDefinition _assemblyDefinition;
+        private readonly Cecil96::Mono.Cecil.AssemblyDefinition _assemblyDefinition;
         private readonly IAssemblyDefinitionLoader _definitionLoader;
         private readonly IGameAssemblyLoader _gameAssemblyLoader;
         private readonly SignalPluginCannotBeLoaded _failSignal;
@@ -26,7 +27,7 @@ namespace AssemblyReloader.ReloadablePlugin
         public CommandLoadAssemblyDefinition(
             IPluginInfo pluginInfo,
             Maybe<ILoadedAssemblyHandle> loadedHandle,
-            AssemblyDefinition assemblyDefinition,
+            Cecil96::Mono.Cecil.AssemblyDefinition assemblyDefinition,
             IAssemblyDefinitionLoader definitionLoader,
             IGameAssemblyLoader gameAssemblyLoader,
             SignalPluginCannotBeLoaded failSignal,

@@ -1,4 +1,5 @@
 ﻿extern alias KSP;
+extern alias Cecil96;
 using System.Collections.Generic;
 using System.Linq;
 using AssemblyReloader.Game;
@@ -9,12 +10,11 @@ using AssemblyReloader.ReloadablePlugin.Loaders;
 using AssemblyReloader.ReloadablePlugin.Loaders.Addons;
 using AssemblyReloader.ReloadablePlugin.Loaders.PartModules;
 using AssemblyReloader.ReloadablePlugin.Weaving.Operations.GameEventInterception;
-using Mono.Cecil;
-using ReeperAssemblyLibrary;
 using ReeperCommon.FileSystem;
 using ReeperCommon.Logging;
 using strange.extensions.context.api;
 using UnityEngine;
+using Cecil96::Mono.Cecil;
 
 namespace AssemblyReloader.Config
 {

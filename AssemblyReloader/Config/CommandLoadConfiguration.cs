@@ -1,4 +1,5 @@
 ﻿extern alias KSP;
+extern alias Cecil96;
 using System;
 using System.IO;
 using AssemblyReloader.ReloadablePlugin;
@@ -6,6 +7,7 @@ using ReeperCommon.FileSystem;
 using ReeperCommon.Logging;
 using ReeperCommon.Serialization;
 using strange.extensions.command.impl;
+using Cecil96::Mono.Cecil;
 
 namespace AssemblyReloader.Config
 {
@@ -21,6 +23,8 @@ namespace AssemblyReloader.Config
 
         public override void Execute()
         {
+            Log.Debug("Mono.Cecil: " + typeof (AssemblyDefinition).Assembly.FullName);
+
             var fullPath = Path.Get(Core);
 
             if (!File.Exists(fullPath))

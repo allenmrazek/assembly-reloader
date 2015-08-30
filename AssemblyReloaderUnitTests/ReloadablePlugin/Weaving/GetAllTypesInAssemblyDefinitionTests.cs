@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿extern alias Cecil96;
 using System.Linq;
-using System.Text;
-using AssemblyReloader.ReloadablePlugin.Weaving;
 using AssemblyReloaderTests.Fixtures;
-using Mono.Cecil;
 using WeavingTestData.NestedTypeData;
 using Xunit;
 using Xunit.Extensions;
+using Cecil96::Mono.Cecil;
 
 // ReSharper disable once CheckNamespace
 namespace AssemblyReloader.ReloadablePlugin.Weaving.Tests

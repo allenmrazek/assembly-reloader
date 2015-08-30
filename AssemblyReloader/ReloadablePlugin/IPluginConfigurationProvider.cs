@@ -1,5 +1,4 @@
-﻿using AssemblyReloader.Config;
-using AssemblyReloader.ReloadablePlugin.Config;
+﻿using AssemblyReloader.ReloadablePlugin.Config;
 using ReeperCommon.FileSystem;
 
 namespace AssemblyReloader.ReloadablePlugin

@@ -1,11 +1,16 @@
-﻿using System;
-using System.Reflection;
-using Mono.Cecil;
-using Mono.Cecil.Cil;
+﻿extern alias Cecil96;
+using System;
 using System.Linq;
+using System.Reflection;
 using ReeperCommon.Extensions;
-using MethodAttributes = Mono.Cecil.MethodAttributes;
-using ParameterAttributes = Mono.Cecil.ParameterAttributes;
+using MethodReference = Cecil96::Mono.Cecil.MethodReference;
+using MethodDefinition = Cecil96::Mono.Cecil.MethodDefinition;
+using ParameterDefinition = Cecil96::Mono.Cecil.ParameterDefinition;
+using ILProcessor = Cecil96::Mono.Cecil.Cil.ILProcessor;
+using Instruction = Cecil96::Mono.Cecil.Cil.Instruction;
+using OpCodes = Cecil96::Mono.Cecil.Cil.OpCodes;
+using MethodAttributes = Cecil96::Mono.Cecil.MethodAttributes;
+using ParameterAttributes = Cecil96::Mono.Cecil.ParameterAttributes;
 
 namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations
 {

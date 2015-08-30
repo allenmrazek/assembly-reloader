@@ -48,21 +48,25 @@
       <Aliases>KSP</Aliases>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Mono.Cecil, Version=0.9.5.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
-      <HintPath>..\packages\Mono.Cecil.0.9.5.1\lib\net35\Mono.Cecil.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Mono.Cecil.Mdb, Version=0.9.5.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
-      <HintPath>..\packages\Mono.Cecil.0.9.5.1\lib\net35\Mono.Cecil.Mdb.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Mono.Cecil.Pdb, Version=0.9.5.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
-      <HintPath>..\packages\Mono.Cecil.0.9.5.1\lib\net35\Mono.Cecil.Pdb.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Mono.Cecil.Rocks, Version=0.9.5.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
-      <HintPath>..\packages\Mono.Cecil.0.9.5.1\lib\net35\Mono.Cecil.Rocks.dll</HintPath>
+    <Reference Include="Mono.Cecil, Version=0.9.6.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
+      <HintPath>..\packages\Mono.Cecil.0.9.6.1\lib\net35\Mono.Cecil.dll</HintPath>
       <Private>True</Private>
+      <Aliases>Cecil96</Aliases>
+    </Reference>
+    <Reference Include="Mono.Cecil.Mdb, Version=0.9.6.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
+      <HintPath>..\packages\Mono.Cecil.0.9.6.1\lib\net35\Mono.Cecil.Mdb.dll</HintPath>
+      <Private>True</Private>
+      <Aliases>Cecil96</Aliases>
+    </Reference>
+    <Reference Include="Mono.Cecil.Pdb, Version=0.9.6.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
+      <HintPath>..\packages\Mono.Cecil.0.9.6.1\lib\net35\Mono.Cecil.Pdb.dll</HintPath>
+      <Private>True</Private>
+      <Aliases>Cecil96</Aliases>
+    </Reference>
+    <Reference Include="Mono.Cecil.Rocks, Version=0.9.6.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
+      <HintPath>..\packages\Mono.Cecil.0.9.6.1\lib\net35\Mono.Cecil.Rocks.dll</HintPath>
+      <Private>True</Private>
+      <Aliases>Cecil96</Aliases>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -73,7 +77,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyFileLocationNotFoundException.cs" />
-    <Compile Include="CommandNull.cs" />
     <Compile Include="Config\GUISkinNotFoundException.cs" />
     <Compile Include="Config\UnityInstantiationFailedException.cs" />
     <Compile Include="FileSystem\CannotInferFileTypeFromUrlException.cs" />
@@ -200,7 +203,7 @@
     <Compile Include="Config\Keys\TextureNameKey.cs" />
     <Compile Include="Gui\Signals.cs" />
     <Compile Include="Gui\StrangeView.cs" />
-    <Compile Include="CommandCreateAddonsForScene.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\CommandCreateAddonsForScene.cs" />
     <Compile Include="ReloadablePlugin\Loaders\Addons\CommandDeinitializeAddonLoader.cs" />
     <Compile Include="ReloadablePlugin\Loaders\Addons\CommandInitializeAddonLoader.cs" />
     <Compile Include="ReloadablePlugin\Config\CommandStartReloadablePlugin.cs" />
@@ -263,7 +266,7 @@
     <Compile Include="IGetRandomString.cs" />
     <Compile Include="FileSystem\ITemporaryFileFactory.cs" />
     <Compile Include="GetRandomString.cs" />
-    <Compile Include="FileSystem\TemporaryFileFactory.cs" />
+    <Compile Include="FileSystem\GetTemporaryFile.cs" />
     <Compile Include="Gui\IPluginInfo.cs" />
     <Compile Include="Gui\MainView.cs" />
     <Compile Include="ReloadablePlugin\Loaders\Addons\ReloadableAddonLoader.cs" />
@@ -296,7 +299,6 @@
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="ReloadablePlugin\Weaving\Operations\GetTypeDefinitionsInAssemblyDefinitionExcludingHelper.cs" />
     <Compile Include="ReloadablePlugin\Weaving\Operations\IGetInstructions.cs" />
-    <Compile Include="ReloadablePlugin\IReloadableTypeSystem.cs" />
     <Compile Include="ReloadablePlugin\Loaders\TypeIdentifier.cs" />
     <Compile Include="Game\IGameAssemblyLoader.cs" />
     <Compile Include="ReloadablePlugin\Loaders\IAvailablePart.cs" />
@@ -378,7 +380,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>call "$(SolutionDir)SetEnvironment.bat"
-call "$(SolutionDir)CopyToLocation.bat" "$(TargetDir)" "$(ProjectDir)GameData\$(ProjectName)"  /E /xo /LEV:1 $(TargetFileName)
+call "$(SolutionDir)CopyToLocation.bat" "$(TargetDir)" "$(ProjectDir)GameData\$(ProjectName)"  /E /xo /LEV:1 $(TargetName).dll
 call "$(SolutionDir)CreateMdb.bat" "$(TargetPath)" "$(ProjectDir)GameData\$(ProjectName)"
 
 REM Rename dll to reeper, .dll.mdb to .reeper.mdb

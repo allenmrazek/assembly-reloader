@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders
 {
+// ReSharper disable once ClassNeverInstantiated.Global
     public class GetMonoBehavioursInScene : IGetMonoBehavioursInScene
     {
         public IEnumerable<MonoBehaviour> Get(Type target)

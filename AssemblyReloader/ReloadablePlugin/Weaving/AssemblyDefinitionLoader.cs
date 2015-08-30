@@ -1,13 +1,15 @@
-﻿using System;
+﻿extern alias Cecil96;
+using System;
 using System.IO;
 using System.Reflection;
 using AssemblyReloader.FileSystem;
 using AssemblyReloader.Properties;
-using Mono.Cecil;
-using Mono.CompilerServices.SymbolWriter;
 using ReeperCommon.Containers;
 using ReeperCommon.Extensions;
 using ReeperCommon.Logging;
+using AssemblyDefinition = Cecil96::Mono.Cecil.AssemblyDefinition;
+using WriterParameters = Cecil96::Mono.Cecil.WriterParameters;
+using MonoSymbolFileException = Cecil96::Mono.CompilerServices.SymbolWriter.MonoSymbolFileException;
 
 namespace AssemblyReloader.ReloadablePlugin.Weaving
 {

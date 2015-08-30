@@ -1,5 +1,7 @@
-﻿using System;
-using Mono.Cecil;
+﻿extern alias Cecil96;
+using System;
+using TypeDefinition = Cecil96::Mono.Cecil.TypeDefinition;
+using MethodDefinition = Cecil96::Mono.Cecil.MethodDefinition;
 
 namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations
 {

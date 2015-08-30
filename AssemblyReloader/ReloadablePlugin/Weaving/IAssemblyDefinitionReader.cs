@@ -1,6 +1,6 @@
-﻿using Mono.Cecil;
+﻿extern alias Cecil96;
 using ReeperCommon.Containers;
-using ReeperCommon.FileSystem;
+using AssemblyDefinition = Cecil96::Mono.Cecil.AssemblyDefinition;
 
 namespace AssemblyReloader.ReloadablePlugin.Weaving
 {

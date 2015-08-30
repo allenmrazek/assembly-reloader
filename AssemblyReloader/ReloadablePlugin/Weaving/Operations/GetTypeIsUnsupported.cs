@@ -1,9 +1,10 @@
 ﻿extern alias KSP;
+extern alias Cecil96;
 using System;
 using System.Linq;
-using Mono.Cecil;
 using ReeperCommon.Containers;
 using strange.extensions.injector.api;
+using TypeDefinition = Cecil96::Mono.Cecil.TypeDefinition;
 
 namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations
 {

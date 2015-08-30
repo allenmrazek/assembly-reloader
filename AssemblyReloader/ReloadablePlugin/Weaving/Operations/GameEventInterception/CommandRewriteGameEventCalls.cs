@@ -1,22 +1,27 @@
 ﻿extern alias KSP;
+extern alias Cecil96;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.InteropServices;
-using Mono.Cecil;
-using Mono.Cecil.Cil;
-using Mono.Cecil.Rocks;
 using ReeperCommon.Containers;
 using ReeperCommon.Extensions;
 using ReeperCommon.Logging;
 using strange.extensions.command.impl;
-using EventReport = KSP::EventReport;
-using GameEvents = KSP::GameEvents;
 using EventVoid = KSP::EventVoid;
+using AssemblyDefinition = Cecil96::Mono.Cecil.AssemblyDefinition;
+using ModuleDefinition = Cecil96::Mono.Cecil.ModuleDefinition;
+using TypeReference = Cecil96::Mono.Cecil.TypeReference;
+using MethodReference = Cecil96::Mono.Cecil.MethodReference;
+using MethodDefinition = Cecil96::Mono.Cecil.MethodDefinition;
+using ILProcessor = Cecil96::Mono.Cecil.Cil.ILProcessor;
+using Instruction = Cecil96::Mono.Cecil.Cil.Instruction;
+using OpCodes = Cecil96::Mono.Cecil.Cil.OpCodes;
+
 
 namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations.GameEventInterception
 {
+// ReSharper disable once ClassNeverInstantiated.Global
     public class CommandRewriteGameEventCalls : Command
     {
         private readonly AssemblyDefinition _context;

@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using Contracts;
 using ReeperCommon.Containers;
 using ReeperCommon.Extensions;
 using ReeperCommon.Logging;
@@ -16,6 +17,43 @@ using Object = UnityEngine.Object;
 
 namespace TestProject
 {
+    //[KSPAddon(KSPAddon.Startup.Flight, false)]
+    public class Markus : MonoBehaviour
+    {
+        private void Start()
+        {
+            GameEvents.onVesselCreate.Add(OnVesselCreated);
+        }
+
+        private void OnDestroy()
+        {
+            GameEvents.onVesselCreate.Remove(OnVesselCreated);
+        }
+
+        private void OnVesselCreated(Vessel vessel)
+        {
+            StartCoroutine(CheckVessel(vessel));
+        }
+
+        private IEnumerator CheckVessel(Vessel vessel)
+        {
+            yield return new WaitForEndOfFrame();
+            Generate(vessel);
+
+        }
+
+        public void Generate(Vessel vessel)
+        {
+            Debug.LogWarning("Generating data for " + vessel.vesselName);
+            // etc
+        }
+    }
+        
+
+    public class BadContractShouldCauseFail : Contract
+    {
+        
+    }
 
     //[KSPAddon(KSPAddon.Startup.MainMenu, true)]
     public class TestOnCrashEventRedirection : MonoBehaviour
