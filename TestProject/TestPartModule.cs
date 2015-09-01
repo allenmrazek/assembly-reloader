@@ -1,13 +1,48 @@
 ﻿using System;
-using System.Diagnostics;
-using System.Linq;
 using System.Reflection;
+using ReeperCommon.Containers;
 using ReeperCommon.Serialization;
+using UnityEngine;
 
 namespace TestProject
 {
-    public class TestPartModule : PartModule
+    [Serializable]
+    public class TestSerialization : ISerializationCallbackReceiver
     {
+        public string Value1;
+        public string Value2;
+        public ConfigNode node;
+        public void OnBeforeSerialize()
+        {
+            UnityEngine.Debug.Log("TestSerialization.OnBeforeSerialize!");
+        }
+
+        public void OnAfterDeserialize()
+        {
+            UnityEngine.Debug.Log("TestSerialization/OnAfterDeserialize!");
+        }
+    }
+
+    [Serializable]
+    public class TestPartModule : PartModule, ISerializationCallbackReceiver
+    {
+
+        public ConfigNode TestConfig;
+        [SerializeField]
+        public TestSerialization TestTwo;
+        public string BasicTest;
+
+
+        public void OnBeforeSerialize()
+        {
+            UnityEngine.Debug.Log("TestPartModule.OnBeforeSerialize!");
+        }
+
+        public void OnAfterDeserialize()
+        {
+            UnityEngine.Debug.Log("TestPartModule.OnAfterDeserialize!");
+        }
+
         //private ConfigNode local = new ConfigNode();
 
         ////void Awake()
@@ -24,6 +59,17 @@ namespace TestProject
         {
             base.OnAwake();
 
+            print("Loading level: " + Application.loadedLevelName);
+
+            if (Application.loadedLevelName == "ksploading")
+            {
+                TestConfig = new ConfigNode("PrefabConfigNode");
+                TestTwo = new TestSerialization {node = TestConfig, Value1 = "value 1", Value2 = "value 2"};
+                BasicTest = "BasicTestString";
+            }
+
+            print("Current ConfigNode: " + (TestConfig.Return(cfg => cfg.ToString(), "null")) + TestTwo.Return(ts => ts.Value1 + ", " + ts.node, " (testtwo is null)"));
+            print("Basic test: " + BasicTest);
 #if MODIFIED
             print("TestPartModule awake (**MODIFIED** version)");
 #else

@@ -13,6 +13,7 @@ namespace AssemblyReloader
         private readonly GameObject _gameObject;
         private MonoBehaviour _monoBehaviour;
 
+
 // ReSharper disable once ClassNeverInstantiated.Local
         private class Runner : MonoBehaviour
         {
