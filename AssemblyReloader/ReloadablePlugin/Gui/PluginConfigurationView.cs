@@ -57,6 +57,7 @@ namespace AssemblyReloader.ReloadablePlugin.Gui
         internal readonly Signal ToggleCreateVesselModulesImmediately = new Signal();
 
         // WeaverSettings
+        internal readonly Signal ToggleWritePatchedAssemblyDataToDisk = new Signal();
         internal readonly Signal ToggleInterceptGameEvents = new Signal();
         internal readonly Signal ToggleDontInlineFunctionsThatCallGameEvents = new Signal();
 
@@ -159,6 +160,9 @@ namespace AssemblyReloader.ReloadablePlugin.Gui
 
         private void DrawWeaverSettings()
         {
+            DrawToggleSetting("Write patched assembly to disk", WeaverSettings.WritePatchedAssemblyDataToDisk,
+                ToggleWritePatchedAssemblyDataToDisk);
+
             DrawToggleSetting("Intercept GameEvents", WeaverSettings.InterceptGameEvents, ToggleInterceptGameEvents);
 
             if (!WeaverSettings.InterceptGameEvents)

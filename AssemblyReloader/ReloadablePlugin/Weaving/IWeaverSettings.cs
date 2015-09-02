@@ -4,5 +4,6 @@
     {
         bool InterceptGameEvents { get; }
         bool DontInlineFunctionsThatCallGameEvents { get; }
+        bool WritePatchedAssemblyDataToDisk { get; }
     }
 }

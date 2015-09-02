@@ -68,6 +68,8 @@ namespace AssemblyReloader.Config
             mediationBinder.BindView<ConfigurationView>().ToMediator<ConfigurationViewMediator>();
             mediationBinder.BindView<GameEventView>().ToMediator<GameEventMediator>();
 
+
+
             // set up command bindings
             commandBinder.Bind<SignalStart>()
                 .InSequence()

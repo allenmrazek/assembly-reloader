@@ -47,15 +47,21 @@ namespace AssemblyReloader.ReloadablePlugin.Gui
        
 
             View.CloseWindow.AddListener(OnCloseWindow);
+
             View.ToggleInstantAppliesToEveryScene.AddListener(OnToggleInstantlyAppliesToAllScenes);
             View.ToggleStartAddonsForCurrentScene.AddListener(OnToggleStartAddonsForCurrentScene);
+
             View.ToggleSaveAndReloadPartModuleConfigNodes.AddListener(OnToggleSaveAndReloadPartModuleConfigNodes);
             View.ToggleCreatePartModulesImmediately.AddListener(OnToggleCreatePartModulesImmediately);
             View.ToggleResetPartModuleActions.AddListener(OnToggleResetPartModuleActions);
             View.ToggleResetPartModuleEvents.AddListener(OnToggleToggleResetPartModuleEvents);
+
             View.ToggleCreateScenarioModulesImmediately.AddListener(OnToggleCreateScenarioModulesImmediately);
             View.ToggleSaveScenarioModulesBeforeDestruction.AddListener(OnToggleSaveScenarioModulesBeforeDestruction);
+
             View.ToggleCreateVesselModulesImmediately.AddListener(OnToggleCreateVesselModulesImmediately);
+
+            View.ToggleWritePatchedAssemblyDataToDisk.AddListener(OnToggleWritePatchedAssemblyDataToDisk);
             View.ToggleInterceptGameEvents.AddListener(OnToggleInterceptGameEvents);
             View.ToggleDontInlineFunctionsThatCallGameEvents.AddListener(OnToggleDontInlineFunctionsThatCallGameEvents);
 
@@ -69,15 +75,21 @@ namespace AssemblyReloader.ReloadablePlugin.Gui
             base.OnRemove();
 
             View.CloseWindow.RemoveListener(OnCloseWindow);
+
             View.ToggleInstantAppliesToEveryScene.RemoveListener(OnToggleInstantlyAppliesToAllScenes);
             View.ToggleStartAddonsForCurrentScene.RemoveListener(OnToggleStartAddonsForCurrentScene);
+
             View.ToggleSaveAndReloadPartModuleConfigNodes.RemoveListener(OnToggleSaveAndReloadPartModuleConfigNodes);
             View.ToggleCreatePartModulesImmediately.RemoveListener(OnToggleCreatePartModulesImmediately);
             View.ToggleResetPartModuleActions.RemoveListener(OnToggleResetPartModuleActions);
             View.ToggleResetPartModuleEvents.RemoveListener(OnToggleToggleResetPartModuleEvents);
+
             View.ToggleCreateScenarioModulesImmediately.RemoveListener(OnToggleCreateScenarioModulesImmediately);
             View.ToggleSaveScenarioModulesBeforeDestruction.RemoveListener(OnToggleSaveScenarioModulesBeforeDestruction);
+
             View.ToggleCreateVesselModulesImmediately.RemoveListener(OnToggleCreateVesselModulesImmediately);
+
+            View.ToggleWritePatchedAssemblyDataToDisk.RemoveListener(OnToggleWritePatchedAssemblyDataToDisk);
             View.ToggleInterceptGameEvents.RemoveListener(OnToggleInterceptGameEvents);
             View.ToggleDontInlineFunctionsThatCallGameEvents.RemoveListener(OnToggleDontInlineFunctionsThatCallGameEvents);
 
@@ -146,6 +158,11 @@ namespace AssemblyReloader.ReloadablePlugin.Gui
             Configuration.CreateVesselModulesImmediately = !Configuration.CreateVesselModulesImmediately;
         }
 
+
+        private void OnToggleWritePatchedAssemblyDataToDisk()
+        {
+            Configuration.WritePatchedAssemblyDataToDisk = !Configuration.WritePatchedAssemblyDataToDisk;
+        }
 
         private void OnToggleInterceptGameEvents()
         {

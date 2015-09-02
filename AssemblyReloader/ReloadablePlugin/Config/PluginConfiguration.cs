@@ -46,6 +46,7 @@ namespace AssemblyReloader.ReloadablePlugin.Config
 
         #region Intermediate Language
 
+        public bool WritePatchedAssemblyDataToDisk { get; set; }
         public bool InterceptGameEvents { get; set; }
         public bool DontInlineFunctionsThatCallGameEvents { get; set; }
 
@@ -68,6 +69,7 @@ namespace AssemblyReloader.ReloadablePlugin.Config
             CreateScenarioModulesImmediately = true;
             SaveScenarioModulesBeforeDestruction = true;
 
+            WritePatchedAssemblyDataToDisk = true;
             InterceptGameEvents = true;
             DontInlineFunctionsThatCallGameEvents = true;
         }

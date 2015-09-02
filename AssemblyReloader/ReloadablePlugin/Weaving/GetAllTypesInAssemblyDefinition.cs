@@ -9,6 +9,8 @@ using TypeDefinition = Cecil96::Mono.Cecil.TypeDefinition;
 
 namespace AssemblyReloader.ReloadablePlugin.Weaving
 {
+    // note: this will return ALL defined types, including any we defined ourselves (like helper type).
+    // You should probably use IGetTypeDefinitions
     [Implements(typeof(IGetAllTypesInAssemblyDefinition), InjectionBindingScope.CROSS_CONTEXT)]
     public class GetAllTypesInAssemblyDefinition : IGetAllTypesInAssemblyDefinition
     {

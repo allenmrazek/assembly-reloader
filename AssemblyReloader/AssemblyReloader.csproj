@@ -196,6 +196,7 @@
     <Compile Include="ReloadablePlugin\Weaving\Operations\ReturnSpecialResultIfExecutingAssembly.cs" />
     <Compile Include="ReloadablePlugin\Weaving\Operations\CommandRewriteCall.cs" />
     <Compile Include="ReloadablePlugin\Weaving\WovenRawAssemblyDataFactory.cs" />
+    <Compile Include="ReloadablePlugin\Weaving\WriteRawAssemblyDataToDisk.cs" />
     <Compile Include="RoutineRunner.cs" />
     <Compile Include="SignalContext.cs" />
     <Compile Include="Game\GameEventMediator.cs" />
@@ -226,7 +227,6 @@
     <Compile Include="ReloadablePlugin\Loaders\PartModules\FlightConfigNodeKeyValuePairComparer.cs" />
     <Compile Include="ReloadablePlugin\Loaders\Addons\ReloadableAddonAttribute.cs" />
     <Compile Include="ReloadablePlugin\Loaders\TypeCannotBeAbstractException.cs" />
-    <Compile Include="ReloadablePlugin\Weaving\old\AssemblyDefinitionWeaver.cs" />
     <Compile Include="ReloadablePlugin\Weaving\Operations\AssemblyCodeBase.cs" />
     <Compile Include="ReloadablePlugin\Weaving\Operations\AssemblyLocation.cs" />
     <Compile Include="ReloadablePlugin\Weaving\Operations\CommandInsertHelperType.cs" />
@@ -237,9 +237,6 @@
     <Compile Include="ReloadablePlugin\Weaving\Operations\Signals.cs" />
     <Compile Include="ReloadablePlugin\Weaving\IGetAssemblyDefinition.cs" />
     <Compile Include="ReloadablePlugin\Weaving\Operations\CommandChangeDefinitionIdentity.cs" />
-    <Compile Include="ReloadablePlugin\Weaving\old\AssemblyDefinitionReader.cs" />
-    <Compile Include="ReloadablePlugin\Weaving\old\IAssemblyDefinitionReader.cs" />
-    <Compile Include="ReloadablePlugin\Weaving\old\IAssemblyDefinitionLoader.cs" />
     <Compile Include="ReloadablePlugin\Loaders\Addons\GetAttributesOfType.cs" />
     <Compile Include="ReloadablePlugin\Loaders\Addons\IGetAttributesOfType.cs" />
     <Compile Include="ReloadablePlugin\Loaders\GetTypeIdentifier.cs" />
@@ -276,17 +273,13 @@
     <Compile Include="Gui\MainView.cs" />
     <Compile Include="ReloadablePlugin\Loaders\Addons\ReloadableAddonLoader.cs" />
     <Compile Include="ReloadablePlugin\Weaving\Signals.cs" />
-    <Compile Include="ReloadablePlugin\Weaving\old\WriteModifiedAssemblyDefinitionToDisk.cs" />
     <Compile Include="ReloadablePlugin\Loaders\Addons\IReloadableAddonLoader.cs" />
     <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\IScenarioModuleUnloader.cs" />
-    <Compile Include="ReloadablePlugin\Weaving\old\AssemblyDefinitionLoader.cs" />
     <Compile Include="FileSystem\IFilePathProvider.cs" />
     <Compile Include="FileSystem\GetAssemblyFileLocation.cs" />
     <Compile Include="ReloadablePlugin\GetConfigurationFilePath.cs" />
-    <Compile Include="ReloadablePlugin\Weaving\old\GetDebugSymbolsExistForDefinition.cs" />
     <Compile Include="FileSystem\IGetAssemblyFileLocation.cs" />
     <Compile Include="ReloadablePlugin\IGetConfigurationFilePath.cs" />
-    <Compile Include="ReloadablePlugin\Weaving\old\IGetDebugSymbolsExistForDefinition.cs" />
     <Compile Include="ReloadablePlugin\IPluginConfigurationProvider.cs" />
     <Compile Include="ReloadablePlugin\PluginConfigurationProvider.cs" />
     <Compile Include="ReloadablePlugin\Loaders\PartModules\PartModuleConfigNodeSnapshotRepository.cs" />

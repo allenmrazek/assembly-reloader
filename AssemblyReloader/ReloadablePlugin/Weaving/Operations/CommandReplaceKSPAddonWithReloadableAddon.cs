@@ -22,20 +22,31 @@ namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations
 // ReSharper disable once ClassNeverInstantiated.Global
     public class CommandReplaceKSPAddonWithReloadableAddon : Command
     {
-        [Inject]
-        public AssemblyDefinition Context { get; set; }
+        private readonly AssemblyDefinition _context;
+        private readonly IGetAllTypesInAssemblyDefinition _allTypesInAssembly;
+        private readonly ILog _log;
 
-        [Inject]
-        public ILog Log { get; set; }
+        public CommandReplaceKSPAddonWithReloadableAddon(
+            AssemblyDefinition context, 
+            IGetAllTypesInAssemblyDefinition allTypesInAssembly,
+            ILog log)
+        {
+            if (context == null) throw new ArgumentNullException("context");
+            if (allTypesInAssembly == null) throw new ArgumentNullException("allTypesInAssembly");
+            if (log == null) throw new ArgumentNullException("log");
 
+            _context = context;
+            _allTypesInAssembly = allTypesInAssembly;
+            _log = log;
+        }
 
         public override void Execute()
         {
-            Log.Debug("Replacing KSPAddon attributes with ReloadableAddonAttribute");
+            _log.Debug("Replacing KSPAddon attributes with ReloadableAddonAttribute");
 
             foreach (var decoratedType in GetAddonTypeDefinitions())
             {
-                Log.Verbose("Replacing KSPAddon attribute on " + decoratedType.FullName);
+                _log.Verbose("Replacing KSPAddon attribute on " + decoratedType.FullName);
 
                 var kspAddon = GetAddonAttribute(decoratedType).Single();
                 var reloadableAddon = CreateReloadableAttribute(kspAddon, decoratedType);
@@ -44,9 +55,9 @@ namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations
                 decoratedType.CustomAttributes.Remove(kspAddon);
             }
 
-            Log.Debug("Replacing KSPAddon references with ReloadableAddonAttribute references");
+            _log.Debug("Replacing KSPAddon references with ReloadableAddonAttribute references");
 
-            foreach (var type in Context.Modules.SelectMany(module => module.Types))
+            foreach (var type in _context.Modules.SelectMany(module => module.Types))
                 ReplaceKSPAddonReferencesWithReloadableAddon(type);
         }
 
@@ -102,9 +113,8 @@ namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations
 
         private IEnumerable<TypeDefinition> GetAddonTypeDefinitions()
         {
-            return Context.Modules.SelectMany(module =>
-                module.Types
-                    .Where(td => td.HasCustomAttributes && GetAddonAttribute(td).Any()));
+            return _allTypesInAssembly.Get(_context)
+                    .Where(td => td.HasCustomAttributes && GetAddonAttribute(td).Any());
         }
 
 

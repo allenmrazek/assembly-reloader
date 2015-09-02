@@ -1,6 +1,7 @@
 ﻿extern alias KSP;
 extern alias Cecil96;
 using System;
+using System.IO;
 using System.Reflection;
 using AssemblyReloader.Config;
 using AssemblyReloader.Config.Keys;
@@ -105,13 +106,13 @@ namespace AssemblyReloader.ReloadablePlugin.Config
 
 
 
-            injectionBinder.Bind<IGetTypeDefinitions>().To(new GetTypeDefinitionsInAssemblyDefinitionExcludingHelper()).ToSingleton();
+            injectionBinder.Bind<IGetTypeDefinitions>().To<GetTypeDefinitionsInAssemblyDefinitionExcludingHelper>().ToSingleton();
             injectionBinder.Bind<IGameEventRegistry>().To<GameEventRegistry>().ToSingleton();
 
             injectionBinder.Bind<AssemblyLocation>().ToSingleton();
             injectionBinder.Bind<AssemblyCodeBase>().ToSingleton();
 
-            //injectionBinder.Bind<SignalWeaveDefinition>().ToSingleton();
+            injectionBinder.Bind<SignalWeaveDefinition>().ToSingleton();
             injectionBinder.Bind<SignalPluginWasLoaded>().ToSingleton();
             injectionBinder.Bind<SignalPluginWasUnloaded>().ToSingleton();
             injectionBinder.Bind<SignalAboutToDestroyMonoBehaviour>().ToSingleton();
@@ -261,11 +262,28 @@ namespace AssemblyReloader.ReloadablePlugin.Config
 
         private void SetupReeperAssemblyLoader()
         {
-            injectionBinder.Bind<ITemporaryFileFactory>().To<TemporaryFileFactory>().CrossContext();
-            injectionBinder.Bind<IRawAssemblyDataFactory>().To<RawAssemblyDataFactory>().CrossContext();
+            injectionBinder.Bind<ITemporaryFileFactory>().To<TemporaryFileFactory>();
+            injectionBinder.Bind<IRawAssemblyDataFactory>().To<RawAssemblyDataFactory>().ToSingleton();
             injectionBinder.Bind<IRawAssemblyDataFactory>()
                 .To<WovenRawAssemblyDataFactory>()
-                .ToName(RawAssemblyDataKey.Woven).CrossContext();
+                .ToName(RawAssemblyDataKey.Woven);
+
+            injectionBinder.Bind<WriteRawAssemblyDataToDisk>().ToSingleton();
+
+            var writePatched =
+                new WriteRawAssemblyDataToDisk(
+                    injectionBinder.GetInstance<IRawAssemblyDataFactory>(RawAssemblyDataKey.Woven),
+                    injectionBinder.GetInstance<IWeaverSettings>(),
+                    ra => Path.GetFileName(ra.File.fullPath) + ".patched",
+                    injectionBinder.GetInstance<ILog>());
+            
+            injectionBinder.Unbind<IRawAssemblyDataFactory>(RawAssemblyDataKey.Woven);
+            injectionBinder.Unbind<WriteRawAssemblyDataToDisk>();
+
+            injectionBinder.Bind<IRawAssemblyDataFactory>()
+                .To(writePatched)
+                .ToName(RawAssemblyDataKey.Woven);
+
 
             injectionBinder.Bind<ReloadableReeperAssemblyLoader>().ToSingleton();
             var loader = injectionBinder.GetInstance<ReloadableReeperAssemblyLoader>();
@@ -276,7 +294,7 @@ namespace AssemblyReloader.ReloadablePlugin.Config
             injectionBinder
                 .Bind<IReeperAssemblyLoader>()
                 .Bind<IReeperAssemblyUnloader>()
-                .To(loader).CrossContext();
+                .To(loader);
         }
     }
 }
