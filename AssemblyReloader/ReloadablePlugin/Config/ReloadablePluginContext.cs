@@ -2,7 +2,8 @@
 extern alias Cecil96;
 using System;
 using System.Reflection;
-using AssemblyReloader.FileSystem;
+using AssemblyReloader.Config;
+using AssemblyReloader.Config.Keys;
 using AssemblyReloader.Game;
 using AssemblyReloader.Gui;
 using AssemblyReloader.ReloadablePlugin.Gui;
@@ -15,6 +16,7 @@ using AssemblyReloader.ReloadablePlugin.Weaving;
 using AssemblyReloader.ReloadablePlugin.Weaving.Operations;
 using AssemblyReloader.ReloadablePlugin.Weaving.Operations.GameEventInterception;
 using AssemblyReloader.ReloadablePlugin.Weaving.Operations.Keys;
+using ReeperAssemblyLibrary;
 using ReeperCommon.FileSystem;
 using ReeperCommon.Logging;
 using strange.extensions.context.api;
@@ -45,30 +47,13 @@ namespace AssemblyReloader.ReloadablePlugin.Config
             injectionBinder.Bind<IFile>().To(_reloadableFile);
             injectionBinder.Bind<IDirectory>().To(injectionBinder.GetInstance<IFile>().Directory);
 
+            injectionBinder.Bind<ReeperAssembly>()
+                .To(injectionBinder.GetInstance<IReeperAssemblyFactory>().Create(_reloadableFile.UrlFile.file));
+
             SetupNamedLogs();
 
 
-            injectionBinder.Bind<IGetTemporaryFile>().To<GetTemporaryFile>().ToSingleton();
             injectionBinder.Bind<IReloadablePlugin>().Bind<IPluginInfo>().To<ReloadablePlugin>().ToSingleton();
-            injectionBinder.Bind<IGetDebugSymbolsExistForDefinition>()
-                .To<GetDebugSymbolsExistForDefinition>()
-                .ToSingleton();
-
-            injectionBinder.Bind<AssemblyDefinitionLoader>().ToSingleton();
-            injectionBinder.Bind<SignalWeaveDefinition>().ToSingleton();
-
-            injectionBinder.Bind<IAssemblyDefinitionReader>().To(
-                new AssemblyDefinitionWeaver(
-                    injectionBinder.GetInstance<AssemblyDefinitionReader>(),
-                    injectionBinder.GetInstance<SignalWeaveDefinition>(),
-                    injectionBinder.GetInstance<ILog>()));
-
-
-            injectionBinder.Bind<IAssemblyDefinitionLoader>()
-                .To(new WriteModifiedAssemblyDefinitionToDisk(
-                    injectionBinder.GetInstance<AssemblyDefinitionLoader>(), injectionBinder.GetInstance<IDirectory>(),
-                    () => true, injectionBinder.GetInstance<ILog>()));
-
             injectionBinder.Bind<IMonoBehaviourDestroyer>().To<MonoBehaviourDestroyer>().ToSingleton();
 
             injectionBinder
@@ -119,13 +104,14 @@ namespace AssemblyReloader.ReloadablePlugin.Config
                 .ToName(MethodKeys.ScenarioRunnerGetLoadedModules);
 
 
+
             injectionBinder.Bind<IGetTypeDefinitions>().To(new GetTypeDefinitionsInAssemblyDefinitionExcludingHelper()).ToSingleton();
             injectionBinder.Bind<IGameEventRegistry>().To<GameEventRegistry>().ToSingleton();
 
             injectionBinder.Bind<AssemblyLocation>().ToSingleton();
             injectionBinder.Bind<AssemblyCodeBase>().ToSingleton();
 
-
+            //injectionBinder.Bind<SignalWeaveDefinition>().ToSingleton();
             injectionBinder.Bind<SignalPluginWasLoaded>().ToSingleton();
             injectionBinder.Bind<SignalPluginWasUnloaded>().ToSingleton();
             injectionBinder.Bind<SignalAboutToDestroyMonoBehaviour>().ToSingleton();
@@ -135,7 +121,7 @@ namespace AssemblyReloader.ReloadablePlugin.Config
             injectionBinder.Bind<SignalErrorWhileUnloading>().ToSingleton();
 
             SetupCommandBindings();
-
+            SetupReeperAssemblyLoader();
 
             mediationBinder.BindView<PluginConfigurationView>().ToMediator<PluginConfigurationViewMediator>();
 
@@ -164,9 +150,8 @@ namespace AssemblyReloader.ReloadablePlugin.Config
             // kicks off reload process
             commandBinder.Bind<SignalReloadPlugin>()
                 .InSequence()
-                .To<CommandReadAssemblyDefinition>()
                 .To<CommandUnloadPreviousPlugin>()
-                .To<CommandLoadAssemblyDefinition>();
+                .To<CommandLoadReloadablePlugin>();
 
 
             // begin rewriting il
@@ -272,6 +257,26 @@ namespace AssemblyReloader.ReloadablePlugin.Config
             injectionBinder.Bind<ILog>()
                 .To(injectionBinder.GetInstance<ILog>().CreateTag("ScenarioModuleConfigNodeUpdater"))
                 .ToName(LogKey.ScenarioModuleConfigNodeUpdater);
+        }
+
+        private void SetupReeperAssemblyLoader()
+        {
+            injectionBinder.Bind<ITemporaryFileFactory>().To<TemporaryFileFactory>().CrossContext();
+            injectionBinder.Bind<IRawAssemblyDataFactory>().To<RawAssemblyDataFactory>().CrossContext();
+            injectionBinder.Bind<IRawAssemblyDataFactory>()
+                .To<WovenRawAssemblyDataFactory>()
+                .ToName(RawAssemblyDataKey.Woven).CrossContext();
+
+            injectionBinder.Bind<ReloadableReeperAssemblyLoader>().ToSingleton();
+            var loader = injectionBinder.GetInstance<ReloadableReeperAssemblyLoader>();
+
+            AppDomain.CurrentDomain.AssemblyResolve += loader.Resolve;
+
+            injectionBinder.Unbind<ReloadableReeperAssemblyLoader>();
+            injectionBinder
+                .Bind<IReeperAssemblyLoader>()
+                .Bind<IReeperAssemblyUnloader>()
+                .To(loader).CrossContext();
         }
     }
 }

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using AssemblyReloader.Config.Keys;
 using ReeperCommon.FileSystem;
+using strange.extensions.implicitBind;
+using strange.extensions.injector;
 
 namespace AssemblyReloader.Config
 {

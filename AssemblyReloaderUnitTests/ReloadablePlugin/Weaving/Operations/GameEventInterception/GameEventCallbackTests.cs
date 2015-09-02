@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using AssemblyReloader.ReloadablePlugin.Weaving.Operations.GameEventInterception;
 using ReeperCommon.Containers;
 using Xunit;
+
 // ReSharper disable once CheckNamespace
-namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations.GameEventInterception.Tests
+namespace AssemblyReloaderTests.ReloadablePlugin.Weaving.Operations.GameEventInterception
 {
     public class GameEventCallbackTests
     {

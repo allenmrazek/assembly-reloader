@@ -1,6 +1,7 @@
 ﻿using AssemblyReloader.Game;
 using strange.extensions.command.impl;
 using strange.extensions.context.api;
+using strange.extensions.injector;
 using UnityEngine;
 
 namespace AssemblyReloader.Config

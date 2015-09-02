@@ -1,5 +1,6 @@
 ﻿extern alias KSP;
 using System;
+using strange.extensions.implicitBind;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
 {

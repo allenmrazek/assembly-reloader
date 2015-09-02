@@ -1,5 +1,6 @@
 ﻿using System;
 using AssemblyReloader.Game;
+using strange.extensions.implicitBind;
 using strange.extensions.injector.api;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using AssemblyReloader.Game;
+using ReeperAssemblyLibrary;
 using UnityEngine;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons

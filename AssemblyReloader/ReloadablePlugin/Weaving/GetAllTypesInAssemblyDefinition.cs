@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using AssemblyReloader.ReloadablePlugin.Weaving.Operations;
+using strange.extensions.implicitBind;
 using strange.extensions.injector.api;
 using AssemblyDefinition = Cecil96::Mono.Cecil.AssemblyDefinition;
 using TypeDefinition = Cecil96::Mono.Cecil.TypeDefinition;

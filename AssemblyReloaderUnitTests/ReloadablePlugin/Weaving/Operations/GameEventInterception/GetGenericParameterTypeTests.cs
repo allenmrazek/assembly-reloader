@@ -1,11 +1,11 @@
 ﻿using System;
-using System.Linq;
+using AssemblyReloader.ReloadablePlugin.Weaving.Operations.GameEventInterception;
 using AssemblyReloaderTests.Fixtures;
 using Xunit;
 using Xunit.Extensions;
 
 // ReSharper disable once CheckNamespace
-namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations.GameEventInterception.Tests
+namespace AssemblyReloaderTests.ReloadablePlugin.Weaving.Operations.GameEventInterception
 {
     class GenericClass<TT1>
     {

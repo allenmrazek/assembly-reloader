@@ -1,5 +1,6 @@
 ﻿using AssemblyReloader.Config;
 using ReeperCommon.Logging;
+using strange.extensions.injector;
 using strange.extensions.mediation.impl;
 
 namespace AssemblyReloader.Gui

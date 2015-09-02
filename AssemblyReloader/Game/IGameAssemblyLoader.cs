@@ -1,14 +1,10 @@
-﻿extern alias KSP;
-using System.Reflection;
-using ReeperCommon.FileSystem;
+﻿using System.Collections.Generic;
+using ReeperAssemblyLibrary;
 
 namespace AssemblyReloader.Game
 {
     public interface IGameAssemblyLoader
     {
-        ILoadedAssemblyHandle AddToLoadedAssemblies(Assembly assembly, IFile location);
-        void RemoveFromLoadedAssemblies(ILoadedAssemblyHandle handle);
-
-        KSP::AssemblyLoader.LoadedAssembyList LoadedAssemblies { get; set; }
+        IEnumerable<ILoadedAssemblyHandle> LoadedAssemblies { get; }
     }
 }

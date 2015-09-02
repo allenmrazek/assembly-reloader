@@ -1,18 +1,18 @@
 ﻿extern alias Cecil96;
 using System.Linq;
+using AssemblyReloader.ReloadablePlugin.Weaving;
 using AssemblyReloaderTests.Fixtures;
 using WeavingTestData.NestedTypeData;
 using Xunit;
 using Xunit.Extensions;
-using Cecil96::Mono.Cecil;
 
 // ReSharper disable once CheckNamespace
-namespace AssemblyReloader.ReloadablePlugin.Weaving.Tests
+namespace AssemblyReloaderTests.ReloadablePlugin.Weaving
 {
     public class GetAllTypesInAssemblyDefinitionTests
     {
         [Theory, AutoDomainData]
-        public void Get_WithSimpleNested_Test(GetAllTypesInAssemblyDefinition sut, AssemblyDefinition definition)
+        public void Get_WithSimpleNested_Test(GetAllTypesInAssemblyDefinition sut, Cecil96::Mono.Cecil.AssemblyDefinition definition)
         {
             var simple =
                 definition.MainModule.Types.Single(td => td.FullName == "WeavingTestData.NestedTypeData.SimpleNested").NestedTypes.First();
@@ -23,7 +23,7 @@ namespace AssemblyReloader.ReloadablePlugin.Weaving.Tests
         }
 
         [Theory, AutoDomainData]
-        public void Get_WithComplexNested_Test(GetAllTypesInAssemblyDefinition sut, AssemblyDefinition definition)
+        public void Get_WithComplexNested_Test(GetAllTypesInAssemblyDefinition sut, Cecil96::Mono.Cecil.AssemblyDefinition definition)
         {
             var complexBase =
                 definition.MainModule.Types.Single(td => td.FullName == "WeavingTestData.NestedTypeData.ComplexNested");

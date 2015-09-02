@@ -1,16 +1,16 @@
 ﻿extern alias Cecil96;
 using System.Linq;
+using AssemblyReloader.ReloadablePlugin.Weaving.Operations;
 using AssemblyReloaderTests.Fixtures;
 using Xunit;
 using Xunit.Extensions;
-using Cecil96::Mono.Cecil;
 
 // ReSharper disable once CheckNamespace
-namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations.Tests
+namespace AssemblyReloaderTests.ReloadablePlugin.Weaving.Operations
 {
     public class GetTypeIsUnsupportedTests
     {
-        private static TypeDefinition GetTestDefinition(AssemblyDefinition definition, string name)
+        private static Cecil96::Mono.Cecil.TypeDefinition GetTestDefinition(Cecil96::Mono.Cecil.AssemblyDefinition definition, string name)
         {
             const string targetNamespace = "WeavingTestData.UnsupportedTypes";
 
@@ -26,7 +26,7 @@ namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations.Tests
         [AutoDomainDataWithInlineData("Contracts.TestContract")]
         [AutoDomainDataWithInlineData("Contracts.TestContractFromInterface")]
         [AutoDomainDataWithInlineData("Contracts.TestContractNested/InnerContract")]
-        public void Get_Test(string testContractName, GetTypeIsUnsupported sut, AssemblyDefinition definition)
+        public void Get_Test(string testContractName, GetTypeIsUnsupported sut, Cecil96::Mono.Cecil.AssemblyDefinition definition)
         {
             var testContractDef = GetTestDefinition(definition, testContractName);
             Assert.NotNull(testContractDef);
@@ -41,7 +41,7 @@ namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations.Tests
         [AutoDomainDataWithInlineData("Contracts.TestContract")]
         [AutoDomainDataWithInlineData("Contracts.TestContractFromInterface")]
         [AutoDomainDataWithInlineData("Contracts.TestContractNested/InnerContract")]
-        public void Get_ReturnsAllBadTypeDefinitions(string typeName, GetTypeIsUnsupported sut, AssemblyDefinition definition)
+        public void Get_ReturnsAllBadTypeDefinitions(string typeName, GetTypeIsUnsupported sut, Cecil96::Mono.Cecil.AssemblyDefinition definition)
         {
             var searchedType = GetTestDefinition(definition, typeName);
             var result = definition.Modules.SelectMany(m => m.Types).SelectMany(td => td.NestedTypes.Union(new [] { td})).Where(sut.Get);
@@ -54,7 +54,7 @@ namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations.Tests
 
         [Theory, AutoDomainDataWithInlineData("Contracts.NotAContract")]
         public void Get_ReturnsFalseOnSupportedTypes(string typeName, GetTypeIsUnsupported sut,
-            AssemblyDefinition definition)
+            Cecil96::Mono.Cecil.AssemblyDefinition definition)
         {
             var validType = GetTestDefinition(definition, typeName);
             Assert.NotNull(validType);

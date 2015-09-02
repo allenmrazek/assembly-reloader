@@ -2,6 +2,7 @@
 using System;
 using System.Reflection;
 using AssemblyReloader.ReloadablePlugin.Weaving.Operations.Keys;
+using strange.extensions.injector;
 using ILProcessor = Cecil96::Mono.Cecil.Cil.ILProcessor;
 using OpCodes = Cecil96::Mono.Cecil.Cil.OpCodes;
 

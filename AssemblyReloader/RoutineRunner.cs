@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
 using strange.extensions.context.api;
+using strange.extensions.implicitBind;
+using strange.extensions.injector;
 using strange.extensions.injector.api;
 using UnityEngine;
 

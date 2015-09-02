@@ -1,5 +1,6 @@
 ﻿using System;
 using AssemblyReloader.Game;
+using ReeperAssemblyLibrary;
 using ReeperCommon.Containers;
 using ReeperCommon.Logging;
 

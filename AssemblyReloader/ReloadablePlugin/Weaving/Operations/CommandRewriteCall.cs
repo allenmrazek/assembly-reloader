@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using ReeperCommon.Logging;
 using strange.extensions.command.impl;
+using strange.extensions.injector;
 using Instruction = Cecil96::Mono.Cecil.Cil.Instruction;
 using MethodDefinition = Cecil96::Mono.Cecil.MethodDefinition;
 using AssemblyDefinition = Cecil96::Mono.Cecil.AssemblyDefinition;

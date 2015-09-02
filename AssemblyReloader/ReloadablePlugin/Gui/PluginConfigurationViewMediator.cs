@@ -6,6 +6,7 @@ using AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules;
 using AssemblyReloader.ReloadablePlugin.Loaders.VesselModules;
 using AssemblyReloader.ReloadablePlugin.Weaving;
 using ReeperCommon.Logging;
+using strange.extensions.injector;
 using strange.extensions.mediation.impl;
 
 namespace AssemblyReloader.ReloadablePlugin.Gui

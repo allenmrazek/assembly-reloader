@@ -1,5 +1,6 @@
 ﻿extern alias KSP;
 using AssemblyReloader.Game;
+using ReeperAssemblyLibrary;
 using ReeperCommon.Containers;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons

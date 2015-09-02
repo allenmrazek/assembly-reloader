@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Linq;
 using AssemblyReloader.Game;
+using ReeperAssemblyLibrary;
 using ReeperCommon.Containers;
 using ReeperCommon.Logging;
 using strange.extensions.command.impl;
@@ -68,6 +69,7 @@ namespace AssemblyReloader.ReloadablePlugin
                 _log.Error("Exception while unloading previous handle! " + e);
                 _failSignal.Dispatch("An exception occurred while unloading previous handle. See log");
                 Fail();
+                yield break;
             }
 
             // wait for OnDestroys to run (they're scheduled for end of frame)

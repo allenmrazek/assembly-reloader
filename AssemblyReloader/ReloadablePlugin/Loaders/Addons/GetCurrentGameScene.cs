@@ -1,4 +1,5 @@
 ﻿extern alias KSP;
+using strange.extensions.implicitBind;
 using UnityEngine;
 using GameScenes = KSP::GameScenes;
 

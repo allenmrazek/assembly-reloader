@@ -3,6 +3,7 @@ using AssemblyReloader.ReloadablePlugin.Gui;
 using ReeperCommon.Logging;
 using strange.extensions.command.impl;
 using strange.extensions.context.api;
+using strange.extensions.injector;
 using UnityEngine;
 
 namespace AssemblyReloader.ReloadablePlugin.Config

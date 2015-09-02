@@ -4,6 +4,7 @@ using System.Linq;
 using ReeperCommon.Containers;
 using ReeperCommon.Logging;
 using strange.extensions.command.impl;
+using strange.extensions.injector;
 using UnityEngine;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules

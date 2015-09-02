@@ -2,6 +2,7 @@
 using System;
 using System.Linq;
 using ReeperCommon.Containers;
+using strange.extensions.implicitBind;
 using strange.extensions.injector.api;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules

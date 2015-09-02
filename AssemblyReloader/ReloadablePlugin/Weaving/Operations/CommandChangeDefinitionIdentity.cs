@@ -1,6 +1,7 @@
 ﻿extern alias Cecil96;
 using ReeperCommon.Logging;
 using strange.extensions.command.impl;
+using strange.extensions.injector;
 using AssemblyDefinition = Cecil96::Mono.Cecil.AssemblyDefinition;
 
 namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations

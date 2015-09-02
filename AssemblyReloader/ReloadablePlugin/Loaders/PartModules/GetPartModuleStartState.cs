@@ -3,6 +3,7 @@ using System;
 using System.Linq;
 using AssemblyReloader.Game;
 using ReeperCommon.Containers;
+using strange.extensions.implicitBind;
 using strange.extensions.injector.api;
 using PartModule = KSP::PartModule;
 using Vessel = KSP::Vessel;

@@ -1,12 +1,12 @@
 ﻿using System.Reflection;
+using AssemblyReloader.ReloadablePlugin.Weaving.Operations.GameEventInterception;
 using AssemblyReloaderTests.Fixtures;
-using NSubstitute.Core;
 using Ploeh.AutoFixture.Xunit;
 using Xunit;
 using Xunit.Extensions;
 
 // ReSharper disable once CheckNamespace
-namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations.GameEventInterception.Tests
+namespace AssemblyReloaderTests.ReloadablePlugin.Weaving.Operations.GameEventInterception
 {
     public abstract class GameEventRegistryTests<T1, T2, T3>
     {

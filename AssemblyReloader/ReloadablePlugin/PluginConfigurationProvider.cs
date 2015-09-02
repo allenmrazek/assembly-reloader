@@ -6,6 +6,7 @@ using AssemblyReloader.Properties;
 using AssemblyReloader.ReloadablePlugin.Config;
 using ReeperCommon.Containers;
 using ReeperCommon.FileSystem;
+using strange.extensions.implicitBind;
 using ConfigNode = KSP::ConfigNode;
 
 namespace AssemblyReloader.ReloadablePlugin

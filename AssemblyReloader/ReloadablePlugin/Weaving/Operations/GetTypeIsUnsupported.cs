@@ -3,6 +3,7 @@ extern alias Cecil96;
 using System;
 using System.Linq;
 using ReeperCommon.Containers;
+using strange.extensions.implicitBind;
 using strange.extensions.injector.api;
 using TypeDefinition = Cecil96::Mono.Cecil.TypeDefinition;
 

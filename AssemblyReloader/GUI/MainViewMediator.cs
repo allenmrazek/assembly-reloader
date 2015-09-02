@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using AssemblyReloader.ReloadablePlugin;
 using ReeperCommon.Logging;
+using strange.extensions.injector;
 using strange.extensions.mediation.impl;
 
 namespace AssemblyReloader.Gui

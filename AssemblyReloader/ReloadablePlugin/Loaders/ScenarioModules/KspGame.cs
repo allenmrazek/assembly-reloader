@@ -2,6 +2,7 @@
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using strange.extensions.implicitBind;
 using strange.extensions.injector.api;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules

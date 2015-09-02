@@ -7,6 +7,7 @@ using AssemblyReloader.Properties;
 using ReeperCommon.Containers;
 using ReeperCommon.FileSystem;
 using ReeperCommon.Logging;
+using strange.extensions.implicitBind;
 
 namespace AssemblyReloader.FileSystem
 {
@@ -36,10 +37,10 @@ namespace AssemblyReloader.FileSystem
 
             var log = new DebugLog("Temp");
 
-            var results = _gameAssemblyLoader.LoadedAssemblies.Where(la => ReferenceEquals(la.assembly, target)).ToList();
+            var results = _gameAssemblyLoader.LoadedAssemblies.Where(la => ReferenceEquals(la.LoadedAssembly.assembly, target)).ToList();
 
             _gameAssemblyLoader.LoadedAssemblies.ToList()
-                .ForEach(k => log.Normal("LoadedAssembly URL of " + k.path + ": " + k.url));
+                .ForEach(k => log.Normal("LoadedAssembly URL of " + k.LoadedAssembly.path + ": " + k.LoadedAssembly.url));
 
             if (results.Count > 1)
                 throw new InvalidOperationException("Multiple targets found in assembly loader");
@@ -51,12 +52,12 @@ namespace AssemblyReloader.FileSystem
             }
 
             // oddly, the urls in AssemblyLoader don't specify the filename, only the directory
-            var url = new KSPUrlIdentifier(results.First().url + Path.DirectorySeparatorChar + results.First().dllName);
+            var url = new KSPUrlIdentifier(results.First().LoadedAssembly.url + Path.DirectorySeparatorChar + results.First().LoadedAssembly.dllName);
 
             log.Normal("Url: " + url.Url);
 
-            _gameAssemblyLoader.LoadedAssemblies.ToList().ForEach(lam => log.Normal("LoadedAssembly: " + lam.path));
-            _gameAssemblyLoader.LoadedAssemblies.Select(la => la.url).ToList().ForEach(a => log.Normal("Url: " + a));
+            _gameAssemblyLoader.LoadedAssemblies.ToList().ForEach(lam => log.Normal("LoadedAssembly: " + lam.LoadedAssembly.path));
+            _gameAssemblyLoader.LoadedAssemblies.Select(la => la.LoadedAssembly.url).ToList().ForEach(a => log.Normal("Url: " + a));
 
             var file = _fsFactory.GameData.File(url);
             if (!file.Any())

@@ -2,7 +2,9 @@
 using System;
 using System.Linq;
 using AssemblyReloader.Game;
+using ReeperAssemblyLibrary;
 using ReeperCommon.Logging;
+using strange.extensions.implicitBind;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.VesselModules
 {

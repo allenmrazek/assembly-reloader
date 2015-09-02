@@ -2,7 +2,9 @@
 using System;
 using System.Linq;
 using AssemblyReloader.Game;
+using ReeperAssemblyLibrary;
 using ReeperCommon.Logging;
+using strange.extensions.injector;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
 {

@@ -51,7 +51,7 @@ namespace AssemblyReloader.Config
                     "AssemblyReloader encountered an exception with the following message: " + e.Message + "\n\nAssemblyReloader has been disabled.", "Okay",
                     true, HighLogic.Skin);
 
-                Destroy(this);
+                Destroy(gameObject);
             }
 
             yield return 0;

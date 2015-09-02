@@ -6,6 +6,7 @@ using AssemblyReloader.Gui;
 using ReeperCommon.Repositories;
 using strange.extensions.command.impl;
 using strange.extensions.context.api;
+using strange.extensions.injector;
 using strange.extensions.injector.api;
 using UnityEngine;
 using Object = UnityEngine.Object;

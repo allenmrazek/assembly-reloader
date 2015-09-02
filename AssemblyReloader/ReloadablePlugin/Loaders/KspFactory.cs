@@ -2,6 +2,7 @@
 using System;
 using AssemblyReloader.Game;
 using AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules;
+using strange.extensions.implicitBind;
 using strange.extensions.injector.api;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders

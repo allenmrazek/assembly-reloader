@@ -7,6 +7,7 @@ using AssemblyReloader.ReloadablePlugin.Loaders.Addons;
 using ReeperCommon.Containers;
 using ReeperCommon.Logging;
 using strange.extensions.command.impl;
+using strange.extensions.injector;
 using KSPAddon = KSP::KSPAddon;
 using AssemblyDefinition = Cecil96::Mono.Cecil.AssemblyDefinition;
 using TypeReference = Cecil96::Mono.Cecil.TypeReference;

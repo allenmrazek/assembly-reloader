@@ -1,7 +1,9 @@
 ﻿extern alias KSP;
 extern alias Cecil96;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using AssemblyReloader.Config.Keys;
 using AssemblyReloader.Game;
 using AssemblyReloader.Gui;
 using AssemblyReloader.ReloadablePlugin;
@@ -9,12 +11,15 @@ using AssemblyReloader.ReloadablePlugin.Config;
 using AssemblyReloader.ReloadablePlugin.Loaders;
 using AssemblyReloader.ReloadablePlugin.Loaders.Addons;
 using AssemblyReloader.ReloadablePlugin.Loaders.PartModules;
+using AssemblyReloader.ReloadablePlugin.Weaving;
 using AssemblyReloader.ReloadablePlugin.Weaving.Operations.GameEventInterception;
+using ReeperAssemblyLibrary;
 using ReeperCommon.FileSystem;
 using ReeperCommon.Logging;
 using strange.extensions.context.api;
 using UnityEngine;
 using Cecil96::Mono.Cecil;
+using Object = UnityEngine.Object;
 
 namespace AssemblyReloader.Config
 {
@@ -137,6 +142,7 @@ namespace AssemblyReloader.Config
                     injectionBinder.GetInstance<ILog>().CreateTag("GameEventProxy")))
                 .CrossContext();
 
+
             // game events
             injectionBinder.Bind<SignalOnLevelWasLoaded>().ToSingleton().CrossContext();
         }
@@ -146,6 +152,9 @@ namespace AssemblyReloader.Config
         {
             base.Launch();
             injectionBinder.GetInstance<SignalStart>().Dispatch();
-        } 
+        }
+
+
+
     }
 }

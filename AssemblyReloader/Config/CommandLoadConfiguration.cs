@@ -8,6 +8,7 @@ using ReeperCommon.Logging;
 using ReeperCommon.Serialization;
 using strange.extensions.command.impl;
 using Cecil96::Mono.Cecil;
+using strange.extensions.injector;
 
 namespace AssemblyReloader.Config
 {

@@ -2,6 +2,7 @@
 using System;
 using ReeperCommon.Containers;
 using ReeperCommon.Logging;
+using strange.extensions.implicitBind;
 using strange.extensions.injector.api;
 using VesselModuleManager = KSP::VesselModuleManager;
 

@@ -2,6 +2,7 @@
 using ReeperCommon.Gui.Window;
 using ReeperCommon.Gui.Window.Buttons;
 using ReeperCommon.Gui.Window.Decorators;
+using strange.extensions.injector;
 using strange.extensions.signal.impl;
 using UnityEngine;
 

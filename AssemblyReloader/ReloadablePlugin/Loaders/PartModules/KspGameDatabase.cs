@@ -1,5 +1,6 @@
 ﻿extern alias KSP;
 using System.Collections.Generic;
+using strange.extensions.implicitBind;
 using strange.extensions.injector.api;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules

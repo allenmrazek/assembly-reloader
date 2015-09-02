@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using strange.extensions.implicitBind;
 using strange.extensions.injector.api;
 using EventVoid = KSP::EventVoid;
 using GameEvents = KSP::GameEvents;
