@@ -70,14 +70,7 @@ namespace AssemblyReloader.Config
 
 
 
-            // set up command bindings
-            commandBinder.Bind<SignalStart>()
-                .InSequence()
-                .To<CommandLoadConfiguration>()
-                .To<CommandConfigureGameEvents>()
-                .To<CommandConfigureGui>()
-                .To<CommandLaunchReloadablePluginContexts>()
-                .Once();
+            SetupCommandBindings();
         }
 
 
@@ -149,6 +142,21 @@ namespace AssemblyReloader.Config
             injectionBinder.Bind<SignalOnLevelWasLoaded>().ToSingleton().CrossContext();
         }
 
+
+
+        private void SetupCommandBindings()
+        {
+            commandBinder.Bind<SignalSaveWindow>()
+                .To<CommandSaveWindowState>();
+
+            commandBinder.Bind<SignalStart>()
+                .InSequence()
+                .To<CommandLoadConfiguration>()
+                .To<CommandConfigureGameEvents>()
+                .To<CommandConfigureGui>()
+                .To<CommandLaunchReloadablePluginContexts>()
+                .Once();
+        }
 
         public override void Launch()
         {

@@ -129,6 +129,11 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
             if (kspScenario.Any())
             {
                 psm.TargetScenes = kspScenario.Single().TargetScenes;
+                if (!psm.TargetScenes.Any())
+                {
+                    _log.Error("KSPScenario TargetScenes attribute is empty - cannot create " + smType.FullName + " because game state would be hosed on next save");
+                    throw new Exception("TargetScenes is empty");  // todo: better exception
+                }
             }
             else
             {

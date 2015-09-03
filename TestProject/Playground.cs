@@ -17,7 +17,121 @@ using Object = UnityEngine.Object;
 
 namespace TestProject
 {
+public class ModuleFreeIva : PartModule
+{
+    private class Hatch
+    {
+        [Persistent] public string attachNodeId = string.Empty;
+        [Persistent] public Vector3 position = Vector2.zero;
 
+        public override string ToString()
+        {
+            return "Hatch: " + attachNodeId + ", " + position;
+        }
+    }
+
+    [Persistent] private List<Hatch> _hatches = new List<Hatch>();
+
+    public override void OnStart(StartState state)
+    {
+        if (ReferenceEquals(part.partInfo.partPrefab, part))
+            print("This is the prefab part");
+
+        base.OnStart(state);
+
+        if (!_hatches.Any()) // editor does not seem to invoke OnLoad?
+            _hatches = new List<Hatch>(PartLoader.getPartInfoByName(part.partInfo.name).partPrefab.gameObject.GetComponent<ModuleFreeIva>()._hatches);
+
+        print("ModuleFreeIva OnStart, listing hatches");
+        ListHatches();
+    }
+
+    public override void OnLoad(ConfigNode node)
+    {
+        ConfigNode.LoadObjectFromConfig(this, node);
+
+        print("ModuleFreeIva OnLoad, listing hatches");
+        ListHatches();
+    }
+
+
+    public override void OnSave(ConfigNode node)
+    {
+        ConfigNode.CreateConfigFromObject(this, node);
+    }
+
+
+    private void ListHatches()
+    {
+        _hatches.ForEach(print);
+    }
+}
+
+
+
+    //[KSPAddon(KSPAddon.Startup.EditorAny, false)]
+    public class GenerateCraftThumbnails : MonoBehaviour
+    {
+        private Rect _window = new Rect(250f, 250f, 200f, 100f);
+
+        private static void GenerateThumbnails()
+        {
+
+            var path = Path.GetFullPath(KSPUtil.ApplicationRootPath + "saves" + Path.DirectorySeparatorChar + HighLogic.SaveFolder);
+            var destination = Path.DirectorySeparatorChar + "saves" + Path.DirectorySeparatorChar + HighLogic.SaveFolder + Path.DirectorySeparatorChar + "testThumbnails";
+
+            foreach (var craftFile in Directory.GetFiles(path, "*.craft", SearchOption.AllDirectories))
+            {
+                print("Generating thumbnail of: " + Path.GetFileName(craftFile));
+                print("Destination folder: " + destination);
+
+                CreateThumbnail(ShipConstruction.LoadShip(craftFile), destination);
+            }
+        }
+
+
+        private static void CreateThumbnail(ShipConstruct ship, string destinationFolder)
+        {
+            if (!Directory.Exists(destinationFolder))
+                Directory.CreateDirectory(destinationFolder);
+
+            CraftThumbnail.TakeSnaphot(ship, 512, destinationFolder, ship.shipName);
+
+            print("Took snapshot of " + ship.shipName + ", at " + destinationFolder + Path.DirectorySeparatorChar + ship.shipName);
+
+            if (ship.Parts.Count == 0)
+                return;
+
+            var top = ship.parts.First().transform;
+
+            while (top.transform.parent != null)
+                top = top.transform.parent;
+
+            //top.gameObject.SetActive(false);
+            DestroyImmediate(top.gameObject);
+
+            //foreach (var p in ship.Parts)
+            //{
+            //    //p.gameObject.SetActive(false);
+            //    //Destroy(p.gameObject);
+            //    DestroyImmediate(p.gameObject);
+            //}
+        }
+
+
+        private void OnGUI()
+        {
+            _window = KSPUtil.ClampRectToScreen(GUILayout.Window(GetInstanceID(), _window, DrawWindow, "Thumbnail test"));
+        }
+
+        private void DrawWindow(int winid)
+        {
+            if (GUILayout.Button("Press to generate thumbnails"))
+                GenerateThumbnails();
+
+            GUI.DragWindow();
+        }
+    }
 
     //public class BadContractShouldCauseFail : Contract
     //{
@@ -323,6 +437,10 @@ namespace TestProject
         {
             base.OnAwake();
             print("NoisyScenarioModule.Awake");
+
+            print("ProtoScenarioModule: " +
+                HighLogic.CurrentGame.scenarios.Single(psm => psm.moduleRef == this)
+                .GetData().ToString());
         }
 
         public override void OnLoad(ConfigNode node)

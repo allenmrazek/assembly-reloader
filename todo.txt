@@ -1,3 +1,19 @@
+
+- make sure ScenarioModules that should only be added to specific game type are and we don't accidentally create them where they shouldn't be
+
+- investigate: [Error]: Loaded Scenario definitions already contains a scenario with name 'NoisyScenarioModule'
+UnityEngine.Debug:LogError(Object)
+KSPScenarioType:GetAllScenarioTypesInAssemblies()
+GamePersistence:UpdateScenarioModules(Game)
+KSCPauseMenu:quickLoad(String, String)
+KSCPauseMenu:onLoadDialogDismiss(String)
+FileBrowser:FileDoubleClickCallback(Int32)
+GUILayoutx:SelectionList(Int32, GUIContent[], GUIStyle, DoubleClickCallback)
+GUILayoutx:SelectionList(Int32, GUIContent[], DoubleClickCallback)
+FileBrowser:OnGUI()
+KSCPauseMenu:OnGUI()
+
+
 - interception on nested types likely doesn't work
 
 - confirm that initial load of VesselModules works, since they aren't read from the LoadedAssembly.types list like I thought

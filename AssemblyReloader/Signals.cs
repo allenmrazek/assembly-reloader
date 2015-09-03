@@ -1,4 +1,5 @@
 ﻿using AssemblyReloader.Gui;
+using ReeperCommon.Gui.Window;
 using strange.extensions.signal.impl;
 
 namespace AssemblyReloader
@@ -20,4 +21,6 @@ namespace AssemblyReloader
     {
         
     }
+
+
 }

@@ -138,19 +138,13 @@ namespace AssemblyReloader.Gui
 
         }
 
-        public virtual void Serialize(IConfigNodeSerializer formatter, ConfigNode node)
+        public virtual void DuringSerialize(IConfigNodeSerializer formatter, ConfigNode node)
         {
-            if (node == null) throw new ArgumentNullException("node");
-
-            formatter.Serialize(this, node);
         }
 
 
-        public virtual void Deserialize(IConfigNodeSerializer formatter, ConfigNode node)
+        public virtual void DuringDeserialize(IConfigNodeSerializer formatter, ConfigNode node)
         {
-            if (node == null) throw new ArgumentNullException("node");
-
-            formatter.Deserialize(this, node);
         }
 
 

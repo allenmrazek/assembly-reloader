@@ -71,9 +71,19 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
 
                 var scenarioModule = KSP::ScenarioRunner.fetch.AddModule(config);
 
-                psm.moduleRef = scenarioModule != null
-                    ? Maybe<KSP::ScenarioModule>.With(scenarioModule)
-                    : Maybe<KSP::ScenarioModule>.None;
+                if (scenarioModule == null)
+                    _log.Error("Failed to AddModule " + psm.moduleName + " with config {0}", psmConfig.ToString());
+                else
+                {
+                    // ScenarioModule does NOT load target scenes itself from supplied ConfigNode, so we must be sure to copy it over
+                    scenarioModule.targetScenes = psm.TargetScenes.ToList();
+
+                    if (!scenarioModule.targetScenes.Any()) // shouldn't ever be hit, included as a precaution
+                        _log.Error(psm.moduleName +
+                            " target scenes not set correctly. Expect game state to be hosed on next save");
+                }
+
+                psm.moduleRef = scenarioModule.ToMaybe();
             }
             catch (Exception e) // wide net intended
             {

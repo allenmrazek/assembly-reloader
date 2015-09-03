@@ -77,6 +77,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyFileLocationNotFoundException.cs" />
+    <Compile Include="CommandSaveWindowState.cs" />
     <Compile Include="Config\GUISkinNotFoundException.cs" />
     <Compile Include="Config\ILoadedAssemblyUninstaller.cs" />
     <Compile Include="Config\IReeperAssemblyUnloader.cs" />
@@ -241,14 +242,12 @@
     <Compile Include="ReloadablePlugin\Loaders\Addons\IGetAttributesOfType.cs" />
     <Compile Include="ReloadablePlugin\Loaders\GetTypeIdentifier.cs" />
     <Compile Include="ReloadablePlugin\Config\ReloadablePluginContext.cs" />
-    <Compile Include="Game\old\ILoadedAssemblyHandle.cs" />
     <Compile Include="Gui\MainViewMediator.cs" />
     <Compile Include="GetSerializableFieldsRecursiveType.cs" />
     <Compile Include="ReloadablePlugin\ReloadablePlugin.cs" />
     <Compile Include="Config\Configuration.cs" />
     <Compile Include="ReloadablePlugin\Config\PluginConfiguration.cs" />
     <Compile Include="ReloadablePlugin\Loaders\MonoBehaviourDestroyer.cs" />
-    <Compile Include="Game\old\LoadedAssemblyHandle.cs" />
     <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\IProtoScenarioModule.cs" />
     <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\KspProtoScenarioModule.cs" />
     <Compile Include="ReloadablePlugin\Loaders\Addons\GetCurrentGameScene.cs" />

@@ -179,15 +179,15 @@ namespace AssemblyReloader.ReloadablePlugin.Gui
         }
 
 
-        public override void Serialize(IConfigNodeSerializer formatter, ConfigNode node)
+        public override void DuringSerialize(IConfigNodeSerializer formatter, ConfigNode node)
         {
-            base.Serialize(formatter, node);
+            base.DuringSerialize(formatter, node);
             Debug.LogWarning("PluginConfigurationView received Serialize");
         }
 
-        public override void Deserialize(IConfigNodeSerializer formatter, ConfigNode node)
+        public override void DuringDeserialize(IConfigNodeSerializer formatter, ConfigNode node)
         {
-            base.Deserialize(formatter, node);
+            base.DuringDeserialize(formatter, node);
             Debug.LogWarning("PluginConfigurationView received Deserialize");
         }
 
