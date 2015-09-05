@@ -13,7 +13,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
         private const string ActionNodeName = "ACTIONS";
         private const string EventNodeName = "EVENTS";
 
-        private readonly IGetPartIsPrefab _isPartPrefabQuery;
+        private readonly IQueryPartIsPrefab _isPartPrefabQuery;
         private readonly IPartModuleSettings _partModuleSettings;
         private readonly IPartModuleConfigNodeSnapshotRepository _configNodeSnapshots;
         private readonly SignalPartModuleCreated _partModuleCreatedSignal;
@@ -21,7 +21,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
 
 
         public PartModuleFactory(
-            IGetPartIsPrefab isPartPrefabQuery,
+            IQueryPartIsPrefab isPartPrefabQuery,
             IPartModuleSettings partModuleSettings,
             IPartModuleConfigNodeSnapshotRepository configNodeSnapshots,
             SignalPartModuleCreated partModuleCreatedSignal,

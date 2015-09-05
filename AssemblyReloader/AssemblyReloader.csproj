@@ -96,6 +96,8 @@
     <Compile Include="ReloadablePlugin\Config\CommandConfigureReeperLoader.cs" />
     <Compile Include="ReloadablePlugin\Loaders\CommandInsertPluginIntoAssemblyLoader.cs" />
     <Compile Include="ReloadablePlugin\Loaders\CommandRemovePluginFromAssemblyLoader.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\PartModules\IQueryPartIsPrefabClone.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\PartModules\QueryPartIsPrefabClone.cs" />
     <Compile Include="ReloadablePlugin\Weaving\FailedToWriteDefinitionToStreamException.cs" />
     <Compile Include="ReloadablePlugin\Weaving\GetAllTypesInAssemblyDefinition.cs" />
     <Compile Include="ReloadablePlugin\Weaving\Operations\CommandCheckForUnsupportedTypes.cs" />
@@ -130,7 +132,7 @@
     <Compile Include="ReloadablePlugin\Loaders\PartModules\CommandUnloadPartModules.cs" />
     <Compile Include="ReloadablePlugin\Loaders\PartModules\GetVesselFromPartModule.cs" />
     <Compile Include="ReloadablePlugin\Loaders\PartModules\IGetVesselFromPartModule.cs" />
-    <Compile Include="Game\IPartLoaderPrefabProvider.cs" />
+    <Compile Include="Game\IPartPrefabProvider.cs" />
     <Compile Include="ReloadablePlugin\Loaders\PartModules\IPartModuleDestroyer.cs" />
     <Compile Include="ReloadablePlugin\Loaders\PartModules\IPartModuleSettings.cs" />
     <Compile Include="ReloadablePlugin\Loaders\PartModules\PartModuleDescriptorFactory.cs" />
@@ -260,11 +262,11 @@
     <Compile Include="ReloadablePlugin\Loaders\PartModules\IGetConfigNodeForPart.cs" />
     <Compile Include="ReloadablePlugin\Loaders\VesselModules\IGetLoadedVessels.cs" />
     <Compile Include="ReloadablePlugin\Loaders\PartModules\IGetPartModuleConfigsFromPartConfig.cs" />
-    <Compile Include="ReloadablePlugin\Loaders\PartModules\IGetPartPrefabClones.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\PartModules\IGetClonesOfPrefab.cs" />
     <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\IGetProtoScenarioModules.cs" />
     <Compile Include="ReloadablePlugin\Loaders\VesselModules\GetLoadedVessels.cs" />
     <Compile Include="ReloadablePlugin\Loaders\PartModules\GetPartModuleConfigsFromPartConfig.cs" />
-    <Compile Include="ReloadablePlugin\Loaders\PartModules\GetPartPrefabClones.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\PartModules\GetClonesOfPrefab.cs" />
     <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\GetProtoScenarioModules.cs" />
     <Compile Include="IGetRandomString.cs" />
     <Compile Include="GetRandomString.cs" />
@@ -320,13 +322,13 @@
     <Compile Include="GetTypesDerivedFrom.cs" />
     <Compile Include="ReloadablePlugin\Weaving\Operations\IGetTypeDefinitions.cs" />
     <Compile Include="ReloadablePlugin\Weaving\Operations\GetMethodCallsInMethod.cs" />
-    <Compile Include="ReloadablePlugin\Loaders\PartModules\IGetIsPartPrefab.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\PartModules\IQueryPartIsPrefab.cs" />
     <Compile Include="ReloadablePlugin\Loaders\IGetTypeIdentifier.cs" />
     <Compile Include="ReloadablePlugin\Loaders\IGetStartupSceneFromGameScene.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReloadablePlugin\Loaders\GetStartupSceneFromGameScene.cs" />
     <Compile Include="Config\GetReloadableAssemblyFilesFromDirectoryRecursive.cs" />
-    <Compile Include="ReloadablePlugin\Loaders\PartModules\GetIsPartPrefab.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\PartModules\QueryPartIsPrefab.cs" />
     <Compile Include="ReloadablePlugin\Loaders\PartModules\IPartModuleConfigNodeSnapshotRepository.cs" />
   </ItemGroup>
   <ItemGroup>

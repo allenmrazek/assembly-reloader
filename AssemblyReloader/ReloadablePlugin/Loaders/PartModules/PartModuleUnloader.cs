@@ -13,7 +13,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
     {
         private readonly IGetTypesDerivedFrom<KSP::PartModule> _partModuleTypeQuery;
         private readonly IPartModuleDescriptorFactory _descriptorFactory;
-        private readonly IGetPartPrefabClones _loadedInstancesOfPrefabQuery;
+        private readonly IGetClonesOfPrefab _loadedInstancesOfPrefabQuery;
         private readonly IPartModuleDestroyer _partModuleDestroyer;
         private readonly ILog _log;
 
@@ -21,7 +21,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
         public PartModuleUnloader(
             IGetTypesDerivedFrom<KSP::PartModule> partModuleTypeQuery,
             IPartModuleDescriptorFactory descriptorFactory,
-            IGetPartPrefabClones loadedInstancesOfPrefabQuery,
+            IGetClonesOfPrefab loadedInstancesOfPrefabQuery,
             IPartModuleDestroyer partModuleDestroyer,
             [Name(LogKey.PartModuleUnloader)] ILog log)
         {

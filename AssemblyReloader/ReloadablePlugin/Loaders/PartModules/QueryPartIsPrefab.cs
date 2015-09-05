@@ -6,12 +6,12 @@ using strange.extensions.injector.api;
 namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
 {
 // ReSharper disable once ClassNeverInstantiated.Global
-    [Implements(typeof(IGetPartIsPrefab), InjectionBindingScope.CROSS_CONTEXT)]
-    public class GetPartIsPrefab : IGetPartIsPrefab
+    [Implements(typeof(IQueryPartIsPrefab), InjectionBindingScope.CROSS_CONTEXT)]
+    public class QueryPartIsPrefab : IQueryPartIsPrefab
     {
-        private readonly IPartLoaderPrefabProvider _prefabProvider;
+        private readonly IPartPrefabProvider _prefabProvider;
 
-        public GetPartIsPrefab(IPartLoaderPrefabProvider prefabProvider)
+        public QueryPartIsPrefab(IPartPrefabProvider prefabProvider)
         {
             if (prefabProvider == null) throw new ArgumentNullException("prefabProvider");
 

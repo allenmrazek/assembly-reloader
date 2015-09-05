@@ -21,7 +21,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
         private readonly SignalLoadersFinished _loadersFinishedSignal;
         private readonly SignalPartModuleCreated _createdSignal;
         private readonly IGetPartModuleStartState _startStateProvider;
-        private readonly IGetPartIsPrefab _partIsPrefabQuery;
+        private readonly IQueryPartIsPrefab _partIsPrefabQuery;
         private readonly ILog _log;
 
         private readonly List<KeyValuePair<IPart, KSP::PartModule>> _targets = new List<KeyValuePair<IPart, KSP::PartModule>>();
@@ -35,7 +35,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
             SignalLoadersFinished loadersFinishedSignal,
             SignalPartModuleCreated createdSignal,
             IGetPartModuleStartState startStateProvider,
-            IGetPartIsPrefab partIsPrefabQuery,
+            IQueryPartIsPrefab partIsPrefabQuery,
             ILog log)
         {
             if (partModuleLoader == null) throw new ArgumentNullException("partModuleLoader");

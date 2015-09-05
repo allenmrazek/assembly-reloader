@@ -7,7 +7,7 @@ using ReeperCommon.Extensions;
 
 namespace AssemblyReloader.Game
 {
-    public class KspPartLoader : IPartLoader, IPartLoaderPrefabProvider
+    public class KspPartLoader : IPartLoader, IPartPrefabProvider
     {
         private readonly IKspFactory _kspFactory;
 

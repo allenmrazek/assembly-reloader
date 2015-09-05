@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders
 {
-    public class KspPart : IPart
+    public class KspPart : IPart, IEquatable<KspPart>
     {
         private readonly KSP::Part _target;
         private readonly IKspFactory _kspFactory;
@@ -59,6 +59,21 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders
         public Maybe<IVessel> Vessel
         {
             get { return _target.vessel != null ? Maybe<IVessel>.With(_kspFactory.Create(_target.vessel)) : Maybe<IVessel>.None; }
+        }
+
+        public bool Equals(KspPart other)
+        {
+            return other != null && ReferenceEquals(_target, other._target);
+        }
+
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as KspPart);
+        }
+
+        public override int GetHashCode()
+        {
+            return _target.GetHashCode();
         }
 
         public override string ToString()

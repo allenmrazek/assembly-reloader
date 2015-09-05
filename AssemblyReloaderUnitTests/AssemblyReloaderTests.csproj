@@ -108,6 +108,7 @@
     <Compile Include="InProgress\TestReplacement.cs" />
     <Compile Include="InProgress\Test_InterceptGameEventsReal.cs" />
     <Compile Include="InProgress\Test_InterceptGameEventsProxy.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\KspPartTests.cs" />
     <Compile Include="ReloadablePlugin\Weaving\GetAllTypesInAssemblyDefinitionTests.cs" />
     <Compile Include="ReloadablePlugin\Weaving\Operations\GameEventInterception\GameEventCallbackTests.cs" />
     <Compile Include="ReloadablePlugin\Weaving\Operations\GameEventInterception\GameEventReferenceTests.cs" />

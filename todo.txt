@@ -1,3 +1,5 @@
+- TestPartModule is somehow being added to EVERYTHING ... needs fixing ;\
+  Test case: thumbnail test, load ZMAP (87 parts) ,press reload and see 87 OnStarts by TestPartModule
 
 - make sure ScenarioModules that should only be added to specific game type are and we don't accidentally create them where they shouldn't be
 

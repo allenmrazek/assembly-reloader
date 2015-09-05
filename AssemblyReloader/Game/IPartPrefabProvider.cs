@@ -2,7 +2,7 @@
 
 namespace AssemblyReloader.Game
 {
-    public interface IPartLoaderPrefabProvider
+    public interface IPartPrefabProvider
     {
         IPart GetPrefab(IPart from);
     }

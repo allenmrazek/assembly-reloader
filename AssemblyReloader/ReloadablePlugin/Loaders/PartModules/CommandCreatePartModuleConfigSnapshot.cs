@@ -12,7 +12,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
     public class CommandCreatePartModuleConfigNodeSnapshot : Command
     {
         private readonly MonoBehaviour _mbBeingDestroyed;
-        private readonly IGetPartIsPrefab _partIsPrefabQuery;
+        private readonly IQueryPartIsPrefab _partIsPrefabQuery;
         private readonly IPartModuleConfigNodeSnapshotRepository _snapshotRepository;
         private readonly IKspFactory _kspFactory;
         private readonly IGetUniqueFlightID _flightId;
@@ -22,7 +22,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
 
         public CommandCreatePartModuleConfigNodeSnapshot(
             MonoBehaviour mbBeingDestroyed,
-            IGetPartIsPrefab partIsPrefabQuery,
+            IQueryPartIsPrefab partIsPrefabQuery,
             IPartModuleConfigNodeSnapshotRepository snapshotRepository,
             IKspFactory kspFactory,
             IGetUniqueFlightID flightId,

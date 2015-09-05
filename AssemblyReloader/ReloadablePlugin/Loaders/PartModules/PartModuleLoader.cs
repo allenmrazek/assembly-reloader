@@ -14,7 +14,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
         private readonly IGetTypesDerivedFrom<KSP::PartModule> _partModuleTypeQuery;
         private readonly IPartModuleDescriptorFactory _descriptorFactory;
         private readonly IPartModuleFactory _partModuleFactory;
-        private readonly IGetPartPrefabClones _clonesOfPrefabQuery;
+        private readonly IGetClonesOfPrefab _prefabClonesQuery;
         private readonly ILog _log;
 
 
@@ -22,19 +22,19 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
             IGetTypesDerivedFrom<KSP::PartModule> partModuleTypeQuery,
             IPartModuleDescriptorFactory descriptorFactory,
             IPartModuleFactory partModuleFactory,
-            IGetPartPrefabClones clonesOfPrefabQuery,
+            IGetClonesOfPrefab prefabClonesQuery,
             [Name(LogKey.PartModuleLoader)] ILog log)
         {
             if (partModuleTypeQuery == null) throw new ArgumentNullException("partModuleTypeQuery");
             if (descriptorFactory == null) throw new ArgumentNullException("descriptorFactory");
             if (partModuleFactory == null) throw new ArgumentNullException("partModuleFactory");
-            if (clonesOfPrefabQuery == null) throw new ArgumentNullException("clonesOfPrefabQuery");
+            if (prefabClonesQuery == null) throw new ArgumentNullException("prefabClonesQuery");
             if (log == null) throw new ArgumentNullException("log");
 
             _partModuleTypeQuery = partModuleTypeQuery;
             _descriptorFactory = descriptorFactory;
             _partModuleFactory = partModuleFactory;
-            _clonesOfPrefabQuery = clonesOfPrefabQuery;
+            _prefabClonesQuery = prefabClonesQuery;
             _log = log;
         }
 
@@ -77,7 +77,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
             // todo: (?) if we're not in a scene that has PartModule instances, return an empty list
 
             // create partmodules for loaded instances of the prefab
-            foreach (var loadedInstance in _clonesOfPrefabQuery.Get(description.Prefab))
+            foreach (var loadedInstance in _prefabClonesQuery.Get(description.Prefab))
                 _partModuleFactory.Create(loadedInstance, description);
         }
     }

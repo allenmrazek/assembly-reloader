@@ -17,105 +17,130 @@ using Object = UnityEngine.Object;
 
 namespace TestProject
 {
-public class ModuleFreeIva : PartModule
-{
-    private class Hatch
-    {
-        [Persistent] public string attachNodeId = string.Empty;
-        [Persistent] public Vector3 position = Vector2.zero;
 
-        public override string ToString()
-        {
-            return "Hatch: " + attachNodeId + ", " + position;
-        }
-    }
-
-    [Persistent] private List<Hatch> _hatches = new List<Hatch>();
-
-    public override void OnStart(StartState state)
-    {
-        if (ReferenceEquals(part.partInfo.partPrefab, part))
-            print("This is the prefab part");
-
-        base.OnStart(state);
-
-        if (!_hatches.Any()) // editor does not seem to invoke OnLoad?
-            _hatches = new List<Hatch>(PartLoader.getPartInfoByName(part.partInfo.name).partPrefab.gameObject.GetComponent<ModuleFreeIva>()._hatches);
-
-        print("ModuleFreeIva OnStart, listing hatches");
-        ListHatches();
-    }
-
-    public override void OnLoad(ConfigNode node)
-    {
-        ConfigNode.LoadObjectFromConfig(this, node);
-
-        print("ModuleFreeIva OnLoad, listing hatches");
-        ListHatches();
-    }
-
-
-    public override void OnSave(ConfigNode node)
-    {
-        ConfigNode.CreateConfigFromObject(this, node);
-    }
-
-
-    private void ListHatches()
-    {
-        _hatches.ForEach(print);
-    }
-}
-
-
-
-    //[KSPAddon(KSPAddon.Startup.EditorAny, false)]
+    [KSPAddon(KSPAddon.Startup.EditorAny, false)]
     public class GenerateCraftThumbnails : MonoBehaviour
     {
         private Rect _window = new Rect(250f, 250f, 200f, 100f);
 
-        private static void GenerateThumbnails()
+        private static IEnumerable<Part> GetActiveParts()
         {
+            return FindObjectsOfType<Part>();
+        }
 
+
+        private static IEnumerable<ShipConstruct> CreateConstructs(IEnumerable<string> fullPaths)
+        {
+            return fullPaths.Select(ShipConstruction.LoadShip);
+        }
+
+
+        private static IEnumerable<Renderer> GetShipConstructRenderers(ShipConstruct ship)
+        {
+            //if (HighLogic.LoadedSceneIsEditor)
+            //    return ship.Parts.First().transform.root.GetComponent<Part>().GetComponentsInChildren<Renderer>(true);
+
+            return ship.parts.SelectMany(p => p.GetComponentsInChildren<Renderer>(true)).Distinct();
+        }
+
+
+        private static IEnumerator GenerateThumbnails()
+        {
+            var editorParts = GetActiveParts().ToList();
+
+            // hide bits user is working on so they don't show up in thumbnails
+            Do(editorParts, p => p.gameObject.SetActive(false));
+           
+            // create all ShipConstructs
             var path = Path.GetFullPath(KSPUtil.ApplicationRootPath + "saves" + Path.DirectorySeparatorChar + HighLogic.SaveFolder);
             var destination = Path.DirectorySeparatorChar + "saves" + Path.DirectorySeparatorChar + HighLogic.SaveFolder + Path.DirectorySeparatorChar + "testThumbnails";
 
-            foreach (var craftFile in Directory.GetFiles(path, "*.craft", SearchOption.AllDirectories))
-            {
-                print("Generating thumbnail of: " + Path.GetFileName(craftFile));
-                print("Destination folder: " + destination);
+            var ships = CreateConstructs(Directory.GetFiles(path, "*.craft", SearchOption.AllDirectories)).ToList();
 
-                CreateThumbnail(ShipConstruction.LoadShip(craftFile), destination);
-            }
+
+
+
+            // Some renderers might be disable by default; we don't want to turn on anything that should remain
+            // hidden. We'll take a snapshot of the current state of things
+
+
+            var renderStates =
+                ships.SelectMany(GetShipConstructRenderers).ToDictionary(r => r, r => r.enabled);
+
+            // hide all ShipConstruct renderers
+            Do(renderStates.Keys, r => r.enabled = false);
+
+            //Do(ships.SelectMany(sc => sc.parts), p => p.gameObject.SetActive(false));
+
+            // wait for Compound PartModules to start
+            yield return new WaitForEndOfFrame();
+            ships.ForEach(ship =>
+            {
+                // Restore render states for this ship only
+                Do(GetShipConstructRenderers(ship),
+                    r =>
+                    {
+                        if (!renderStates.ContainsKey(r))
+                        {
+                            print("Key not found: " + r.GetInstanceID());
+                            print("Part: " + r.GetComponentInParent<Part>().partInfo.name);
+                        }
+                        r.enabled = renderStates.ContainsKey(r) && renderStates[r];
+                        
+                    });
+                //Do(ship.parts, p => p.gameObject.SetActive(true));
+
+                print("Generating thumbnail of: " + ship.shipName);
+                CreateThumbnail(ship, destination);
+
+                // done with this ship
+                if (!ship.Parts.Any())
+                    return;
+
+                if (HighLogic.LoadedSceneIsEditor)
+                    DestroyImmediate(ship.Parts.First().transform.root.gameObject);
+                else Do(ship.parts, p => DestroyImmediate(p.gameObject));
+            });
+
+            // re-enable original editor parts
+            Do(editorParts, p => p.gameObject.SetActive(true));
+
+            //foreach (var craftFile in Directory.GetFiles(path, "*.craft", SearchOption.AllDirectories))
+            //{
+
+            //    print("Destination folder: " + destination);
+
+            //    CreateThumbnail(ShipConstruction.LoadShip(craftFile), destination);
+            //}
         }
 
+
+        private static void Do<T>(IEnumerable<T> items, Action<T> action)
+        {
+            foreach (var item in items)
+                action(item);
+        }
 
         private static void CreateThumbnail(ShipConstruct ship, string destinationFolder)
         {
             if (!Directory.Exists(destinationFolder))
                 Directory.CreateDirectory(destinationFolder);
 
-            CraftThumbnail.TakeSnaphot(ship, 512, destinationFolder, ship.shipName);
+            //CraftThumbnail.TakeSnaphot(ship, 512, destinationFolder, ship.shipName);
+            ShipConstruction.CaptureThumbnail(ship, destinationFolder, ship.shipName);
 
             print("Took snapshot of " + ship.shipName + ", at " + destinationFolder + Path.DirectorySeparatorChar + ship.shipName);
 
-            if (ship.Parts.Count == 0)
-                return;
+            //if (ship.Parts.Count == 0)
+            //    return;
 
-            var top = ship.parts.First().transform;
+            //var top = ship.parts.First().transform;
 
-            while (top.transform.parent != null)
-                top = top.transform.parent;
+            //while (top.transform.parent != null)
+            //    top = top.transform.parent;
 
-            //top.gameObject.SetActive(false);
-            DestroyImmediate(top.gameObject);
+            //DestroyImmediate(top.gameObject);
 
-            //foreach (var p in ship.Parts)
-            //{
-            //    //p.gameObject.SetActive(false);
-            //    //Destroy(p.gameObject);
-            //    DestroyImmediate(p.gameObject);
-            //}
         }
 
 
@@ -127,7 +152,7 @@ public class ModuleFreeIva : PartModule
         private void DrawWindow(int winid)
         {
             if (GUILayout.Button("Press to generate thumbnails"))
-                GenerateThumbnails();
+                StartCoroutine(GenerateThumbnails());
 
             GUI.DragWindow();
         }
@@ -438,9 +463,9 @@ public class ModuleFreeIva : PartModule
             base.OnAwake();
             print("NoisyScenarioModule.Awake");
 
-            print("ProtoScenarioModule: " +
-                HighLogic.CurrentGame.scenarios.Single(psm => psm.moduleRef == this)
-                .GetData().ToString());
+            //print("ProtoScenarioModule: " +
+            //    HighLogic.CurrentGame.scenarios.Single(psm => psm.moduleRef == this)
+            //    .GetData().ToString());
         }
 
         public override void OnLoad(ConfigNode node)
