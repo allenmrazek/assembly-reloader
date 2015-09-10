@@ -1,7 +1,6 @@
 ﻿extern alias KSP;
 using System;
 using System.Collections;
-//using ReeperCommon.Logging;
 using ReeperLoader;
 using strange.extensions.context.impl;
 using UnityEngine;
@@ -10,7 +9,6 @@ using PopupDialog = KSP::PopupDialog;
 
 namespace AssemblyReloader.Config
 {
-    //[KSPAddon(KSPAddon.Startup.Instantly, true)]
     [ReeperLoadTarget]
 // ReSharper disable once UnusedMember.Global
     public class BootstrapCore : ContextView

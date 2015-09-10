@@ -1,4 +1,9 @@
-﻿using System;
+﻿extern alias KSP;
+using ReeperCommon.Containers;
+using ReeperCommon.Serialization;
+using ReeperCommon.Serialization.Exceptions;
+using ConfigNode = KSP::ConfigNode;
+using System;
 using System.Collections.Generic;
 using AssemblyReloader.ReloadablePlugin;
 using ReeperCommon.Logging;
@@ -12,12 +17,18 @@ namespace AssemblyReloader.Gui
 // ReSharper disable UnusedAutoPropertyAccessor.Global
     public class MainViewMediator : Mediator
     {
+        private const string MainViewNodeName = "MainView";
+
         [Inject] public SignalCloseAllWindows CloseAllWindowsSignal { get; set; }
         [Inject] public SignalTogglePluginConfigurationView TogglePluginOptionsSignal { get; set; }
         [Inject] public SignalToggleConfigurationView ToggleConfigurationOptionsSignal { get; set; }
+        [Inject] public SignalSaveConfiguration SaveConfigurationSignal { get; set; }
+        [Inject] public SignalLoadConfiguration LoadConfigurationSignal { get; set; }
 
         [Inject] public MainView View { get; set; }
         [Inject] public IDictionary<IPluginInfo, IReloadablePlugin> Plugins { get; set; }
+
+        [Inject] public IConfigNodeSerializer Serializer { get; set; }
         [Inject] public ILog Log { get; set; }
 
 
@@ -33,6 +44,9 @@ namespace AssemblyReloader.Gui
             View.Close.AddListener(CloseWindow);
 
             CloseAllWindowsSignal.AddListener(OnCloseAllWindows);
+
+            SaveConfigurationSignal.AddListener(OnSaveConfiguration);
+            LoadConfigurationSignal.AddListener(OnLoadConfiguration);
         }
 
 
@@ -46,6 +60,9 @@ namespace AssemblyReloader.Gui
             View.Close.RemoveListener(CloseWindow);
 
             CloseAllWindowsSignal.RemoveListener(OnCloseAllWindows);
+
+            SaveConfigurationSignal.RemoveListener(OnSaveConfiguration);
+            LoadConfigurationSignal.RemoveListener(OnLoadConfiguration);
         }
 
 
@@ -92,7 +109,7 @@ namespace AssemblyReloader.Gui
         }
 
 
-        public void OnCloseAllWindows()
+        private void OnCloseAllWindows()
         {
             View.Visible = false;
         }
@@ -105,6 +122,44 @@ namespace AssemblyReloader.Gui
             IReloadablePlugin plugin;
 
             return Plugins.TryGetValue(info, out plugin) ? plugin : null;
+        }
+
+
+        private void OnSaveConfiguration(ConfigNode config)
+        {
+            if (config == null) throw new ArgumentNullException("config");
+
+            try
+            {
+                Log.Debug("Serializing MainView settings...");
+                Serializer.Serialize(View, config.AddNode("MainView"));
+                Log.Debug("MainView settings serialized");
+            }
+            catch (ReeperSerializationException rse)
+            {
+                Log.Error("Failed due to exception: " + rse);
+            }
+        }
+
+
+        private void OnLoadConfiguration(ConfigNode config)
+        {
+            if (config == null) throw new ArgumentNullException("config");
+
+            try
+            {
+                config.GetNode(MainViewNodeName).Do(n =>
+                {
+                    Log.Debug("Deserializing MainView settings...");
+                    Serializer.Deserialize(View, n);
+                    Log.Debug("MainView settings loaded");
+                })
+                .IfNull(() => Log.Warning("No MainView ConfigNode found; using default"));
+            }
+            catch (ReeperSerializationException rse)
+            {
+                Log.Error("Failed due to exception: " + rse);
+            }
         }
     }
 }

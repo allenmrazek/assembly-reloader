@@ -1,5 +1,5 @@
-﻿using AssemblyReloader.Gui;
-using ReeperCommon.Gui.Window;
+﻿extern alias KSP;
+using AssemblyReloader.Gui;
 using strange.extensions.signal.impl;
 
 namespace AssemblyReloader
@@ -22,5 +22,12 @@ namespace AssemblyReloader
         
     }
 
+    public class SignalSaveConfiguration : Signal<KSP::ConfigNode>
+    {
+    }
 
+    public class SignalLoadConfiguration : Signal<KSP::ConfigNode>
+    {
+
+    }
 }

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using AssemblyReloader.Config.Keys;
 using AssemblyReloader.FileSystem;
+using AssemblyReloader.ReloadablePlugin.Config;
 using ReeperAssemblyLibrary;
 using ReeperCommon.FileSystem;
 using ReeperCommon.FileSystem.Providers;
@@ -72,6 +73,8 @@ namespace AssemblyReloader
                         Assembly.GetExecutingAssembly(), 
                         typeof(IConfigNodeSerializer).Assembly 
                     }));
+
+            //serializerSelector.AddSerializer<PluginConfiguration>(new PluginConfigurationSurrogate());
 
             injectionBinder.Bind<IConfigNodeSerializer>().To(
                 new ConfigNodeSerializer(serializerSelector, new GetSerializableFieldsRecursiveType())).CrossContext();

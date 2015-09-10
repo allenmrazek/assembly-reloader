@@ -6,7 +6,12 @@ using AssemblyReloader.ReloadablePlugin.Weaving;
 
 namespace AssemblyReloader.ReloadablePlugin.Config
 {
-    public class PluginConfiguration : IAddonSettings, IPartModuleSettings, IScenarioModuleSettings, IVesselModuleSettings, IWeaverSettings
+    public class PluginConfiguration : 
+        IAddonSettings, 
+        IPartModuleSettings, 
+        IScenarioModuleSettings, 
+        IVesselModuleSettings, 
+        IWeaverSettings
     {
         // ReSharper disable FieldCanBeMadeReadOnly.Global
         // ReSharper disable UnusedMember.Global
@@ -73,7 +78,5 @@ namespace AssemblyReloader.ReloadablePlugin.Config
             InterceptGameEvents = true;
             DontInlineFunctionsThatCallGameEvents = true;
         }
-
-
     }
 }

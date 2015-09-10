@@ -2,6 +2,7 @@
 using ReeperCommon.Gui.Window;
 using ReeperCommon.Gui.Window.Buttons;
 using ReeperCommon.Gui.Window.Decorators;
+using ReeperCommon.Serialization;
 using strange.extensions.injector;
 using strange.extensions.signal.impl;
 using UnityEngine;
@@ -25,6 +26,7 @@ namespace AssemblyReloader.Gui
 
         internal readonly Signal CloseWindow = new Signal();
 
+        [ReeperPersistent] private string TestString = "Testvalue";
 
         protected override IWindowComponent Initialize()
         {

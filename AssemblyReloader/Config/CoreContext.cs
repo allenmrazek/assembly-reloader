@@ -1,9 +1,7 @@
 ﻿extern alias KSP;
 extern alias Cecil96;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using AssemblyReloader.Config.Keys;
 using AssemblyReloader.Game;
 using AssemblyReloader.Gui;
 using AssemblyReloader.ReloadablePlugin;
@@ -11,9 +9,7 @@ using AssemblyReloader.ReloadablePlugin.Config;
 using AssemblyReloader.ReloadablePlugin.Loaders;
 using AssemblyReloader.ReloadablePlugin.Loaders.Addons;
 using AssemblyReloader.ReloadablePlugin.Loaders.PartModules;
-using AssemblyReloader.ReloadablePlugin.Weaving;
 using AssemblyReloader.ReloadablePlugin.Weaving.Operations.GameEventInterception;
-using ReeperAssemblyLibrary;
 using ReeperCommon.FileSystem;
 using ReeperCommon.Logging;
 using strange.extensions.context.api;
@@ -138,8 +134,12 @@ namespace AssemblyReloader.Config
                 .CrossContext();
 
 
+            injectionBinder.Bind<SignalLoadConfiguration>().ToSingleton();
+            injectionBinder.Bind<SignalSaveConfiguration>().ToSingleton();
+
             // game events
             injectionBinder.Bind<SignalOnLevelWasLoaded>().ToSingleton().CrossContext();
+            injectionBinder.Bind<SignalApplicationQuitting>().ToSingleton().CrossContext();
         }
 
 
@@ -149,11 +149,14 @@ namespace AssemblyReloader.Config
             commandBinder.Bind<SignalSaveWindow>()
                 .To<CommandSaveWindowState>();
 
+            commandBinder.Bind<SignalApplicationQuitting>()
+                .To<CommandSaveCoreConfiguration>();
+
             commandBinder.Bind<SignalStart>()
-                .InSequence()
-                .To<CommandLoadConfiguration>()
+                .InSequence() 
                 .To<CommandConfigureGameEvents>()
                 .To<CommandConfigureGui>()
+                .To<CommandLoadCoreConfiguration>()
                 .To<CommandLaunchReloadablePluginContexts>()
                 .Once();
         }
@@ -163,8 +166,5 @@ namespace AssemblyReloader.Config
             base.Launch();
             injectionBinder.GetInstance<SignalStart>().Dispatch();
         }
-
-
-
     }
 }

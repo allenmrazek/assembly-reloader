@@ -8,13 +8,14 @@ namespace AssemblyReloader.Game
     {
         [Inject] public GameEventView View { get; set; }
         [Inject] public SignalOnLevelWasLoaded LevelWasLoadedSignal { get; set; }
-
+        [Inject] public SignalApplicationQuitting QuittingSignal { get; set; }
 
         public override void OnRegister()
         {
             base.OnRegister();
 
             View.LevelWasLoaded.AddListener(LevelWasLoaded);
+            View.ApplicationQuit.AddListener(ApplicationQuitting);
         }
 
         public override void OnRemove()
@@ -22,12 +23,19 @@ namespace AssemblyReloader.Game
             base.OnRemove();
 
             View.LevelWasLoaded.RemoveListener(LevelWasLoaded);
+            View.ApplicationQuit.RemoveListener(ApplicationQuitting);
         }
 
 
         private void LevelWasLoaded(KSP::KSPAddon.Startup scene)
         {
             LevelWasLoadedSignal.Dispatch(scene);
+        }
+
+
+        private void ApplicationQuitting()
+        {
+            QuittingSignal.Dispatch();
         }
     }
 }

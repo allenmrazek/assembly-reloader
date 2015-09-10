@@ -29,6 +29,7 @@ namespace AssemblyReloader.ReloadablePlugin.Gui
         [Inject] public SignalCloseAllWindows CloseAllWindowsSignal { get; set; }
         [Inject] public SignalTogglePluginConfigurationView TogglePluginConfigurationSignal { get; set; }
 
+        [Inject] public SignalSavePluginConfiguration SaveSignal { get; set; }
 
         public override void OnRegister()
         {
@@ -101,6 +102,7 @@ namespace AssemblyReloader.ReloadablePlugin.Gui
         private void OnCloseWindow()
         {
             View.Visible = false;
+            SaveSignal.Dispatch();
         }
 
 
@@ -110,6 +112,9 @@ namespace AssemblyReloader.ReloadablePlugin.Gui
                 return;
 
             View.Visible = !View.Visible;
+
+            if (!View.Visible)
+                SaveSignal.Dispatch();
         }
 
 

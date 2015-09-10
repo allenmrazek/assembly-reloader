@@ -201,6 +201,10 @@ namespace AssemblyReloader.ReloadablePlugin.Config
             commandBinder.Bind<SignalErrorWhileUnloading>()
                 .To<CommandDisplayFailureMessage>();
 
+
+            commandBinder.Bind<SignalSavePluginConfiguration>()
+                .To<CommandSavePluginConfiguration>();
+
             // GameEvent signals
             commandBinder.Bind<SignalOnLevelWasLoaded>()
                 .To<CommandCreateAddonsForScene>();

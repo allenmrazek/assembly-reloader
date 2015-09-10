@@ -78,9 +78,13 @@
   <ItemGroup>
     <Compile Include="AssemblyFileLocationNotFoundException.cs" />
     <Compile Include="CommandSaveWindowState.cs" />
+    <Compile Include="Config\CommandSaveCoreConfiguration.cs" />
     <Compile Include="Config\GUISkinNotFoundException.cs" />
     <Compile Include="Config\ILoadedAssemblyUninstaller.cs" />
     <Compile Include="Config\IReeperAssemblyUnloader.cs" />
+    <Compile Include="Config\Signals.cs" />
+    <Compile Include="ReloadablePlugin\Config\CommandSavePluginConfiguration.cs" />
+    <Compile Include="ReloadablePlugin\Config\PluginConfigurationSurrogate.cs" />
     <Compile Include="ReloadablePlugin\Config\RawAssemblyDataKey.cs" />
     <Compile Include="Config\LoadedAssemblyUninstaller.cs" />
     <Compile Include="Config\ReeperAssemblyNotInCacheException.cs" />
@@ -94,6 +98,7 @@
     <Compile Include="ReloadablePlugin\CommandLoadReloadablePlugin.cs" />
     <Compile Include="ReloadablePlugin\CommandUnloadPreviousPlugin.cs" />
     <Compile Include="ReloadablePlugin\Config\CommandConfigureReeperLoader.cs" />
+    <Compile Include="ReloadablePlugin\Config\Signals.cs" />
     <Compile Include="ReloadablePlugin\Loaders\CommandInsertPluginIntoAssemblyLoader.cs" />
     <Compile Include="ReloadablePlugin\Loaders\CommandRemovePluginFromAssemblyLoader.cs" />
     <Compile Include="ReloadablePlugin\Loaders\PartModules\IQueryPartIsPrefabClone.cs" />
@@ -117,7 +122,7 @@
     <Compile Include="ReeperCommonContext.cs" />
     <Compile Include="Config\CommandConfigureGameEvents.cs" />
     <Compile Include="Config\CommandConfigureGui.cs" />
-    <Compile Include="Config\CommandLoadConfiguration.cs" />
+    <Compile Include="Config\CommandLoadCoreConfiguration.cs" />
     <Compile Include="ReloadablePlugin\Config\CommandConfigurePluginGui.cs" />
     <Compile Include="ReloadablePlugin\Loaders\Addons\ReloadableAddonType.cs" />
     <Compile Include="ReloadablePlugin\Loaders\CommandDispatchLoadersFinished.cs" />
@@ -207,7 +212,6 @@
     <Compile Include="Game\Signals.cs" />
     <Compile Include="Gui\ConfigurationViewMediator.cs" />
     <Compile Include="Config\Keys\DirectoryKey.cs" />
-    <Compile Include="Config\SettingSerializer.cs" />
     <Compile Include="Signals.cs" />
     <Compile Include="Config\CommandLaunchReloadablePluginContexts.cs" />
     <Compile Include="Gui\ConfigurationView.cs" />
@@ -247,7 +251,7 @@
     <Compile Include="Gui\MainViewMediator.cs" />
     <Compile Include="GetSerializableFieldsRecursiveType.cs" />
     <Compile Include="ReloadablePlugin\ReloadablePlugin.cs" />
-    <Compile Include="Config\Configuration.cs" />
+    <Compile Include="Config\CoreConfiguration.cs" />
     <Compile Include="ReloadablePlugin\Config\PluginConfiguration.cs" />
     <Compile Include="ReloadablePlugin\Loaders\MonoBehaviourDestroyer.cs" />
     <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\IProtoScenarioModule.cs" />
