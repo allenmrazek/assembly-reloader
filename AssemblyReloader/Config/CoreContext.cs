@@ -134,8 +134,8 @@ namespace AssemblyReloader.Config
                 .CrossContext();
 
 
-            injectionBinder.Bind<SignalLoadConfiguration>().ToSingleton();
-            injectionBinder.Bind<SignalSaveConfiguration>().ToSingleton();
+            injectionBinder.Bind<SignalOnLoadConfiguration>().ToSingleton();
+            injectionBinder.Bind<SignalOnSaveConfiguration>().ToSingleton();
 
             // game events
             injectionBinder.Bind<SignalOnLevelWasLoaded>().ToSingleton().CrossContext();

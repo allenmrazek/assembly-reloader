@@ -22,8 +22,8 @@ namespace AssemblyReloader.Gui
         [Inject] public SignalCloseAllWindows CloseAllWindowsSignal { get; set; }
         [Inject] public SignalTogglePluginConfigurationView TogglePluginOptionsSignal { get; set; }
         [Inject] public SignalToggleConfigurationView ToggleConfigurationOptionsSignal { get; set; }
-        [Inject] public SignalSaveConfiguration SaveConfigurationSignal { get; set; }
-        [Inject] public SignalLoadConfiguration LoadConfigurationSignal { get; set; }
+        [Inject] public SignalOnSaveConfiguration SaveConfigurationSignal { get; set; }
+        [Inject] public SignalOnLoadConfiguration LoadConfigurationSignal { get; set; }
 
         [Inject] public MainView View { get; set; }
         [Inject] public IDictionary<IPluginInfo, IReloadablePlugin> Plugins { get; set; }

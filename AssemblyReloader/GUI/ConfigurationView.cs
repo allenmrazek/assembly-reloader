@@ -26,7 +26,7 @@ namespace AssemblyReloader.Gui
 
         internal readonly Signal CloseWindow = new Signal();
 
-        [ReeperPersistent] private string TestString = "Testvalue";
+        [ReeperPersistent] private string UnusedTestString = "Testvalue";
 
         protected override IWindowComponent Initialize()
         {

@@ -23,8 +23,6 @@ namespace AssemblyReloader.ReloadablePlugin.Config
             if (!typeof (PluginConfiguration).IsAssignableFrom(type))
                 throw new ArgumentException("This surrogate is for PluginConfiguration", "type");
 
-            Debug.Log("Found " + Properties.Length + " properties to serialize");
-
             foreach (var prop in Properties)
             {
 
@@ -47,7 +45,22 @@ namespace AssemblyReloader.ReloadablePlugin.Config
             if (!typeof(PluginConfiguration).IsAssignableFrom(type))
                 throw new ArgumentException("This surrogate is for PluginConfiguration", "type");
 
-            throw new NotImplementedException();
+            foreach (var prop in Properties)
+            {
+                var propertyToDeserialize = prop;
+                var currentValue = propertyToDeserialize.GetValue(target, null);
+
+                var result = serializer.ConfigNodeItemSerializerSelector
+                    .GetSerializer(prop.PropertyType)
+                    .SingleOrDefault()
+                    .Return(
+                        s => s.Deserialize(propertyToDeserialize.PropertyType, currentValue, propertyToDeserialize.Name, config, serializer),
+                        currentValue);
+             
+                propertyToDeserialize.SetValue(target, result, null);
+            }
+
+            return target;
         }
     }
 }

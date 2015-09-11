@@ -1,9 +1,12 @@
-﻿extern alias KSP;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using strange.extensions.signal.impl;
 
 namespace AssemblyReloader.ReloadablePlugin.Config
 {
-    public class SignalSavePluginConfiguration : Signal
+    public class SignalTriggerConfigurationSave : Signal
     {
     }
 }

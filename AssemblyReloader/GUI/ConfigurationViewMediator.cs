@@ -20,8 +20,8 @@ namespace AssemblyReloader.Gui
         [Inject] public SignalCloseAllWindows CloseAllWindows { get; set; }
         [Inject] public SignalToggleConfigurationView ToggleConfigurationViewSignal { get; set; }
         [Inject] public SignalSaveWindow SaveWindowState { get; set; }
-        [Inject] public SignalSaveConfiguration SaveConfigurationSignal { get; set; }
-        [Inject] public SignalLoadConfiguration LoadConfigurationSignal { get; set; }
+        [Inject] public SignalOnSaveConfiguration SaveConfigurationSignal { get; set; }
+        [Inject] public SignalOnLoadConfiguration LoadConfigurationSignal { get; set; }
 
         [Inject] public ConfigurationView View { get; set; }
         [Inject] public CoreConfiguration CoreConfiguration { get; set; }

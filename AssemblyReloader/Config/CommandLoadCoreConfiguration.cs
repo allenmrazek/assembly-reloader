@@ -17,7 +17,7 @@ namespace AssemblyReloader.Config
     public class CommandLoadCoreConfiguration : Command
     {
         private readonly CoreConfiguration _coreConfiguration;
-        private readonly SignalLoadConfiguration _loadConfigSignal;
+        private readonly SignalOnLoadConfiguration _loadConfigSignal;
         private readonly IGetConfigurationFilePath _configPath;
         private readonly IConfigNodeSerializer _serializer;
         private readonly IFile _core;
@@ -25,7 +25,7 @@ namespace AssemblyReloader.Config
 
         public CommandLoadCoreConfiguration(
             CoreConfiguration coreConfiguration,
-            SignalLoadConfiguration loadConfigSignal,
+            SignalOnLoadConfiguration loadConfigSignal,
             IGetConfigurationFilePath configPath,
             IConfigNodeSerializer serializer,
             IFile core,
@@ -68,7 +68,6 @@ namespace AssemblyReloader.Config
             try
             {
                 _log.Normal("Loading configuration...");
-                _log.Debug("Configuration: {0}", config.ToString());
                 _serializer.Deserialize(_coreConfiguration, config);
                 _loadConfigSignal.Dispatch(config);
                 _log.Normal("Configuration loaded successfully.");

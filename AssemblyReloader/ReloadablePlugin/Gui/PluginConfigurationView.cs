@@ -15,7 +15,6 @@ using strange.extensions.injector;
 using strange.extensions.signal.impl;
 using UnityEngine;
 using ConfigNode = KSP::ConfigNode;
-using GUIUtil = KSP::GUIUtil;
 
 namespace AssemblyReloader.ReloadablePlugin.Gui
 {
@@ -64,8 +63,6 @@ namespace AssemblyReloader.ReloadablePlugin.Gui
 
         protected override IWindowComponent Initialize()
         {
-            //Skin = HighLogic.Skin;
-            //Skin = UnityEngine.Object.Instantiate(AssetBase.GetGUISkin("OrbitMapSkin")) as GUISkin;
             Skin = WindowSkin;
             Draggable = true;
 
@@ -78,10 +75,10 @@ namespace AssemblyReloader.ReloadablePlugin.Gui
 
             var resizable = new Resizable(withButtons, ResizableHotzoneSize, MinWindowSize, ResizeCursorTexture)
             {
-                Title = PluginInfo.Name + " Configuration"
+                Title = PluginInfo.Name + " Configuration",
+                Dimensions = new Rect(0f, 0f, 300f, 300f)
             };
 
-            resizable.Dimensions = new Rect(0f, 0f, 300f, 300f);
             return resizable;
         }
 
@@ -100,7 +97,7 @@ namespace AssemblyReloader.ReloadablePlugin.Gui
         }
 
 
-        private void DrawSection(string heading, Action drawCallback)
+        private static void DrawSection(string heading, Action drawCallback)
         {
             GUILayout.Label(heading);
             GUILayout.BeginHorizontal();
@@ -178,18 +175,6 @@ namespace AssemblyReloader.ReloadablePlugin.Gui
             // no-op
         }
 
-
-        public override void DuringSerialize(IConfigNodeSerializer formatter, ConfigNode node)
-        {
-            base.DuringSerialize(formatter, node);
-            Debug.LogWarning("PluginConfigurationView received Serialize");
-        }
-
-        public override void DuringDeserialize(IConfigNodeSerializer formatter, ConfigNode node)
-        {
-            base.DuringDeserialize(formatter, node);
-            Debug.LogWarning("PluginConfigurationView received Deserialize");
-        }
 
         private static void DrawToggleSetting(string text, bool value, Signal signal)
         {

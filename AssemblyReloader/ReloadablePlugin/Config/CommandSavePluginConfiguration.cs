@@ -18,6 +18,7 @@ namespace AssemblyReloader.ReloadablePlugin.Config
         private readonly PluginConfiguration _pluginConfiguration;
         private readonly IConfigNodeSerializer _serializer;
         private readonly IGetConfigurationFilePath _configPath;
+        private readonly SignalOnSaveConfiguration _onSaveSignal;
         private readonly ILog _log;
 
         public CommandSavePluginConfiguration(
@@ -25,18 +26,21 @@ namespace AssemblyReloader.ReloadablePlugin.Config
             PluginConfiguration pluginConfiguration,
             IConfigNodeSerializer serializer,
             IGetConfigurationFilePath configPath, 
+            SignalOnSaveConfiguration onSaveSignal,
             ILog log)
         {
             if (plugin == null) throw new ArgumentNullException("plugin");
             if (pluginConfiguration == null) throw new ArgumentNullException("pluginConfiguration");
             if (serializer == null) throw new ArgumentNullException("serializer");
             if (configPath == null) throw new ArgumentNullException("configPath");
+            if (onSaveSignal == null) throw new ArgumentNullException("onSaveSignal");
             if (log == null) throw new ArgumentNullException("log");
 
             _plugin = plugin;
             _pluginConfiguration = pluginConfiguration;
             _serializer = serializer;
             _configPath = configPath;
+            _onSaveSignal = onSaveSignal;
             _log = log;
         }
 
@@ -46,10 +50,11 @@ namespace AssemblyReloader.ReloadablePlugin.Config
 
             try
             {
-                var cfg = new ConfigNode(_plugin.Name);
+                var cfg = new ConfigNode(PluginConfiguration.NodeName);
                 _serializer.Serialize(_pluginConfiguration, cfg);
 
-                cfg.Write(_configPath.Get(_plugin.Location) + ".write", "Test Header");
+                _onSaveSignal.Dispatch(cfg);
+                cfg.Write(_configPath.Get(_plugin.Location), _plugin.Name + " Configuration");
 
                 _log.Verbose("Serialized PluginConfiguration: {0}", cfg.ToString());
                 _log.Normal("Plugin configuration saved");

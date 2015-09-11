@@ -19,7 +19,7 @@ namespace AssemblyReloader.Config
         private static readonly string ConfigurationFileHeader = Assembly.GetExecutingAssembly().GetName().Name + " v" + Assembly.GetExecutingAssembly().GetName().Version;
 
         private readonly CoreConfiguration _coreConfiguration;
-        private readonly SignalSaveConfiguration _saveConfigSignal;
+        private readonly SignalOnSaveConfiguration _saveConfigSignal;
         private readonly IGetConfigurationFilePath _configPath;
         private readonly IConfigNodeSerializer _serializer;
         private readonly IFile _core;
@@ -27,7 +27,7 @@ namespace AssemblyReloader.Config
 
         public CommandSaveCoreConfiguration(
             CoreConfiguration coreConfiguration,
-            SignalSaveConfiguration saveConfigSignal,
+            SignalOnSaveConfiguration saveConfigSignal,
             IGetConfigurationFilePath configPath,
             IConfigNodeSerializer serializer,
             IFile core,

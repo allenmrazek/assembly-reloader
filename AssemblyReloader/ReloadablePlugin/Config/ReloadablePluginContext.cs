@@ -120,6 +120,9 @@ namespace AssemblyReloader.ReloadablePlugin.Config
             injectionBinder.Bind<SignalPartModuleCreated>().ToSingleton();
             injectionBinder.Bind<SignalPluginCannotBeLoaded>().ToSingleton();
             injectionBinder.Bind<SignalErrorWhileUnloading>().ToSingleton();
+            injectionBinder.Bind<SignalOnLoadConfiguration>().ToSingleton();
+            injectionBinder.Bind<SignalOnSaveConfiguration>().ToSingleton();
+
 
             SetupCommandBindings();
             SetupReeperAssemblyLoader();
@@ -143,7 +146,9 @@ namespace AssemblyReloader.ReloadablePlugin.Config
         {
             // only happens once: initial load of reloadable plugin
             commandBinder.Bind<SignalStart>()
+                .InSequence()
                 .To<CommandConfigurePluginGui>()
+                .To<CommandLoadPluginConfiguration>()
                 .To<CommandStartReloadablePlugin>()
                 .Once();
 
@@ -202,7 +207,10 @@ namespace AssemblyReloader.ReloadablePlugin.Config
                 .To<CommandDisplayFailureMessage>();
 
 
-            commandBinder.Bind<SignalSavePluginConfiguration>()
+            commandBinder.Bind<SignalTriggerConfigurationSave>()
+                .To<CommandSavePluginConfiguration>();
+
+            commandBinder.Bind<SignalApplicationQuitting>()
                 .To<CommandSavePluginConfiguration>();
 
             // GameEvent signals

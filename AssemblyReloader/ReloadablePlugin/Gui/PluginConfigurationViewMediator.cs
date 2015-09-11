@@ -1,4 +1,10 @@
-﻿using AssemblyReloader.Gui;
+﻿extern alias KSP;
+using System;
+using ReeperCommon.Containers;
+using ReeperCommon.Serialization;
+using ReeperCommon.Serialization.Exceptions;
+using ConfigNode = KSP::ConfigNode;
+using AssemblyReloader.Gui;
 using AssemblyReloader.ReloadablePlugin.Config;
 using AssemblyReloader.ReloadablePlugin.Loaders.Addons;
 using AssemblyReloader.ReloadablePlugin.Loaders.PartModules;
@@ -14,6 +20,8 @@ namespace AssemblyReloader.ReloadablePlugin.Gui
 // ReSharper disable once ClassNeverInstantiated.Global
     public class PluginConfigurationViewMediator : Mediator
     {
+        private const string ConfigurationNodeName = "PluginConfigurationView";
+
 // ReSharper disable MemberCanBePrivate.Global
         [Inject] public PluginConfigurationView View { get; set; }
         [Inject] public ILog Log { get; set; }
@@ -23,13 +31,18 @@ namespace AssemblyReloader.ReloadablePlugin.Gui
         [Inject] public IScenarioModuleSettings ScenarioModuleSettings { get; set; }
         [Inject] public IVesselModuleSettings VesselModuleSettings { get; set; }
         [Inject] public IWeaverSettings WeaverSettings { get; set; }
+        [Inject] public IConfigNodeSerializer Serializer { get; set; }
 
         [Inject] public PluginConfiguration Configuration { get; set; }
 
         [Inject] public SignalCloseAllWindows CloseAllWindowsSignal { get; set; }
         [Inject] public SignalTogglePluginConfigurationView TogglePluginConfigurationSignal { get; set; }
 
-        [Inject] public SignalSavePluginConfiguration SaveSignal { get; set; }
+        [Inject] public SignalOnLoadConfiguration LoadConfigurationSignal { get; set; }
+        [Inject] public SignalOnSaveConfiguration SaveConfigurationSignal { get; set; }
+
+        [Inject] public SignalTriggerConfigurationSave TriggerSaveSignal { get; set; }
+
 
         public override void OnRegister()
         {
@@ -68,6 +81,9 @@ namespace AssemblyReloader.ReloadablePlugin.Gui
 
             CloseAllWindowsSignal.AddListener(OnCloseWindow);
             TogglePluginConfigurationSignal.AddListener(OnTogglePluginConfigurationView);
+
+            LoadConfigurationSignal.AddListener(OnLoadConfiguration);
+            SaveConfigurationSignal.AddListener(OnSaveConfiguration);
         }
 
 
@@ -96,13 +112,16 @@ namespace AssemblyReloader.ReloadablePlugin.Gui
 
             CloseAllWindowsSignal.RemoveListener(OnCloseWindow);
             TogglePluginConfigurationSignal.RemoveListener(OnTogglePluginConfigurationView);
+
+            LoadConfigurationSignal.RemoveListener(OnLoadConfiguration);
+            SaveConfigurationSignal.RemoveListener(OnSaveConfiguration);
         }
 
 
         private void OnCloseWindow()
         {
             View.Visible = false;
-            SaveSignal.Dispatch();
+            TriggerSaveSignal.Dispatch();
         }
 
 
@@ -114,9 +133,46 @@ namespace AssemblyReloader.ReloadablePlugin.Gui
             View.Visible = !View.Visible;
 
             if (!View.Visible)
-                SaveSignal.Dispatch();
+                TriggerSaveSignal.Dispatch();
         }
 
+
+        private void OnLoadConfiguration(ConfigNode config)
+        {
+            if (config == null) throw new ArgumentNullException("config");
+
+            try
+            {
+                config
+                    .With(c => c.GetNode(ConfigurationNodeName))
+                    .Do(n =>
+                    {
+                        Log.Verbose("Deserializing PluginConfigurationView");
+                        Serializer.Deserialize(View, n);
+                        Log.Verbose("Successfully deserialized PluginConfigurationView");
+                    }).IfNull(() => Log.Warning("No serialized settings found for PluginConfigurationView"));
+            }
+            catch (ReeperSerializationException rse)
+            {
+                Log.Error("Failed to deserialize PluginConfigurationView: " + rse);
+            }
+        }
+
+        private void OnSaveConfiguration(ConfigNode config)
+        {
+            if (config == null) throw new ArgumentNullException("config");
+
+            try
+            {
+                Log.Verbose("Serializing PluginConfigurationView");
+                Serializer.Serialize(View, config.AddNode(ConfigurationNodeName));
+                Log.Verbose("Successfully serialized PluginConfigurationView");
+            }
+            catch (ReeperSerializationException rse)
+            {
+                Log.Error("Failed to serialize PluginConfigurationView: " + rse);
+            }
+        }
 
         private void OnToggleInstantlyAppliesToAllScenes()
         {

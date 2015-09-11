@@ -82,7 +82,7 @@
     <Compile Include="Config\GUISkinNotFoundException.cs" />
     <Compile Include="Config\ILoadedAssemblyUninstaller.cs" />
     <Compile Include="Config\IReeperAssemblyUnloader.cs" />
-    <Compile Include="Config\Signals.cs" />
+    <Compile Include="ReloadablePlugin\Config\CommandLoadPluginConfiguration.cs" />
     <Compile Include="ReloadablePlugin\Config\CommandSavePluginConfiguration.cs" />
     <Compile Include="ReloadablePlugin\Config\PluginConfigurationSurrogate.cs" />
     <Compile Include="ReloadablePlugin\Config\RawAssemblyDataKey.cs" />
@@ -285,8 +285,8 @@
     <Compile Include="ReloadablePlugin\GetConfigurationFilePath.cs" />
     <Compile Include="FileSystem\IGetAssemblyFileLocation.cs" />
     <Compile Include="ReloadablePlugin\IGetConfigurationFilePath.cs" />
-    <Compile Include="ReloadablePlugin\IPluginConfigurationProvider.cs" />
-    <Compile Include="ReloadablePlugin\PluginConfigurationProvider.cs" />
+    <Compile Include="ReloadablePlugin\old\IPluginConfigurationProvider.cs" />
+    <Compile Include="ReloadablePlugin\old\PluginConfigurationProvider.cs" />
     <Compile Include="ReloadablePlugin\Loaders\PartModules\PartModuleConfigNodeSnapshotRepository.cs" />
     <Compile Include="ReloadablePlugin\Loaders\DictionaryOfQueues.cs" />
     <Compile Include="ReloadablePlugin\Signals.cs" />

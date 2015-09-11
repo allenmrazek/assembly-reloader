@@ -13,6 +13,8 @@ namespace AssemblyReloader.ReloadablePlugin.Config
         IVesselModuleSettings, 
         IWeaverSettings
     {
+        public const string NodeName = "PluginConfiguration";
+
         // ReSharper disable FieldCanBeMadeReadOnly.Global
         // ReSharper disable UnusedMember.Global
 

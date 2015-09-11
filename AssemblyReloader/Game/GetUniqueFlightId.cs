@@ -5,6 +5,7 @@ using strange.extensions.injector.api;
 namespace AssemblyReloader.Game
 {
     [Implements(typeof(IGetUniqueFlightID), InjectionBindingScope.CROSS_CONTEXT)]
+// ReSharper disable once UnusedMember.Global
     public class GetUniqueFlightId : IGetUniqueFlightID
     {
         private static uint _internalCounter = 1;

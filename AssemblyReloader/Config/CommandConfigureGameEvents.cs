@@ -17,7 +17,6 @@ namespace AssemblyReloader.Config
 
         public override void Execute()
         {
-            //var eventView = AddonLoader.Instance.gameObject.AddComponent<GameEventView>();
             var eventView = new GameObject("AssemblyReloader.GameEventView", typeof (GameEventView));
             eventView.transform.parent = gameObject.transform;
 

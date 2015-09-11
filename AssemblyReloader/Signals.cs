@@ -22,11 +22,11 @@ namespace AssemblyReloader
         
     }
 
-    public class SignalSaveConfiguration : Signal<KSP::ConfigNode>
+    public class SignalOnSaveConfiguration : Signal<KSP::ConfigNode>
     {
     }
 
-    public class SignalLoadConfiguration : Signal<KSP::ConfigNode>
+    public class SignalOnLoadConfiguration : Signal<KSP::ConfigNode>
     {
 
     }

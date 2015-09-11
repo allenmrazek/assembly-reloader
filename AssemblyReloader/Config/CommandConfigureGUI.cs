@@ -1,5 +1,6 @@
 ﻿extern alias KSP;
 using System;
+using System.Collections;
 using System.Linq;
 using AssemblyReloader.Config.Keys;
 using AssemblyReloader.Gui;
@@ -18,19 +19,33 @@ namespace AssemblyReloader.Config
     {
         private const string GuiSkinPrefabName = "KSP window 4";
 
+        private readonly GameObject _contextView;
+        private readonly IResourceRepository _resources;
+        private readonly IRoutineRunner _runner;
 
-        [Inject(ContextKeys.CONTEXT_VIEW)]
-        public GameObject gameObject { get; set; }
 
-        [Inject]
-        public IResourceRepository Resources { get; set; }
+        public CommandConfigureGui(
+            [Name(ContextKeys.CONTEXT_VIEW)] GameObject contextView,
+            IResourceRepository resources,
+            IRoutineRunner runner)
+        {
+            if (contextView == null) throw new ArgumentNullException("contextView");
+            if (resources == null) throw new ArgumentNullException("resources");
+            if (runner == null) throw new ArgumentNullException("runner");
+
+            _contextView = contextView;
+            _resources = resources;
+            _runner = runner;
+        }
 
 
         public override void Execute()
         {
             BindSignals();
             SetupTexturesAndSkin();
-            CreateViews();
+
+            Retain();
+            _runner.StartCoroutine(CreateViews());
         }
 
 
@@ -42,20 +57,23 @@ namespace AssemblyReloader.Config
         }
 
 
-        private void CreateViews()
+        private IEnumerator CreateViews()
         {
             var mainView = new GameObject("MainView");
             var configView = new GameObject("ConfigurationView");
 
             // views will bubble up the transform hierarchy looking for a context to attach to.
             // For config and mainview, this will be the core context
-            configView.transform.parent = mainView.transform.parent = gameObject.transform;
+            configView.transform.parent = mainView.transform.parent = _contextView.transform;
 
             Object.DontDestroyOnLoad(mainView);
             Object.DontDestroyOnLoad(configView);
 
             mainView.AddComponent<MainView>();
-            configView.AddComponent<ConfigurationView>(); 
+            configView.AddComponent<ConfigurationView>();
+
+            yield return 0; // wait until next frame so the views can initialize
+            Release();
         }
 
 
@@ -75,9 +93,9 @@ namespace AssemblyReloader.Config
                 .To(defaultSkin)
                 .CrossContext();
 
-            BindTextureToName(Resources, "Resources/btnClose", TextureNameKey.CloseButton).CrossContext();
-            BindTextureToName(Resources, "Resources/btnWrench", TextureNameKey.SettingsButton).CrossContext();
-            BindTextureToName(Resources, "Resources/cursor", TextureNameKey.ResizeCursor).CrossContext();
+            BindTextureToName(_resources, "Resources/btnClose", TextureNameKey.CloseButton).CrossContext();
+            BindTextureToName(_resources, "Resources/btnWrench", TextureNameKey.SettingsButton).CrossContext();
+            BindTextureToName(_resources, "Resources/cursor", TextureNameKey.ResizeCursor).CrossContext();
         }
 
 
