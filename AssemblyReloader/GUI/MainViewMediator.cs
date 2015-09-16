@@ -18,6 +18,7 @@ namespace AssemblyReloader.Gui
     public class MainViewMediator : Mediator
     {
         private const string MainViewNodeName = "MainView";
+        private MainView _view;
 
         [Inject] public SignalCloseAllWindows CloseAllWindowsSignal { get; set; }
         [Inject] public SignalTogglePluginConfigurationView TogglePluginOptionsSignal { get; set; }
@@ -25,7 +26,13 @@ namespace AssemblyReloader.Gui
         [Inject] public SignalOnSaveConfiguration SaveConfigurationSignal { get; set; }
         [Inject] public SignalOnLoadConfiguration LoadConfigurationSignal { get; set; }
 
-        [Inject] public MainView View { get; set; }
+        [Inject]
+        public MainView View
+        {
+            get { return _view; }
+            set { _view = value; }
+        }
+
         [Inject] public IDictionary<IPluginInfo, IReloadablePlugin> Plugins { get; set; }
 
         [Inject] public IConfigNodeSerializer Serializer { get; set; }
@@ -132,7 +139,7 @@ namespace AssemblyReloader.Gui
             try
             {
                 Log.Debug("Serializing MainView settings...");
-                Serializer.Serialize(View, config.AddNode("MainView"));
+                Serializer.WriteObjectToConfigNode(ref _view, config.AddNode("MainView"));
                 Log.Debug("MainView settings serialized");
             }
             catch (ReeperSerializationException rse)
@@ -151,7 +158,7 @@ namespace AssemblyReloader.Gui
                 config.GetNode(MainViewNodeName).Do(n =>
                 {
                     Log.Debug("Deserializing MainView settings...");
-                    Serializer.Deserialize(View, n);
+                    Serializer.LoadObjectFromConfigNode(ref _view, n);
                     Log.Debug("MainView settings loaded");
                 })
                 .IfNull(() => Log.Warning("No MainView ConfigNode found; using default"));

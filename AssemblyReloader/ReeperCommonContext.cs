@@ -5,8 +5,8 @@ using System.Linq;
 using System.Reflection;
 using AssemblyReloader.Config.Keys;
 using AssemblyReloader.FileSystem;
-using AssemblyReloader.ReloadablePlugin.Config;
 using ReeperAssemblyLibrary;
+using ReeperCommon.Containers;
 using ReeperCommon.FileSystem;
 using ReeperCommon.FileSystem.Providers;
 using ReeperCommon.Logging;
@@ -14,9 +14,6 @@ using ReeperCommon.Repositories;
 using ReeperCommon.Serialization;
 using strange.extensions.context.api;
 using UnityEngine;
-using PartModule = KSP::PartModule;
-using ScenarioModule = KSP::ScenarioModule;
-using VesselModule = KSP::VesselModule;
 
 namespace AssemblyReloader
 {
@@ -67,17 +64,7 @@ namespace AssemblyReloader
 
 
 
-            var serializerSelector =
-                new DefaultConfigNodeItemSerializerSelector(new SurrogateProvider(new[] 
-                    { 
-                        Assembly.GetExecutingAssembly(), 
-                        typeof(IConfigNodeSerializer).Assembly 
-                    }));
-
-            //serializerSelector.AddSerializer<PluginConfiguration>(new PluginConfigurationSurrogate());
-
-            injectionBinder.Bind<IConfigNodeSerializer>().To(
-                new ConfigNodeSerializer(serializerSelector, new GetSerializableFieldsRecursiveType())).CrossContext();
+            injectionBinder.Bind<IConfigNodeSerializer>().To(ConfigureConfigNodeSerializer()).CrossContext();
         }
 
 
@@ -143,6 +130,30 @@ namespace AssemblyReloader
                             return resourceNames.Count == 1 ? resourceNames.First() : s;
                         }, currentAssemblyResource)
                         )));
+        }
+
+
+        private static IConfigNodeSerializer ConfigureConfigNodeSerializer()
+        {
+            var assembliesToScanForSurrogates = new[]
+            {typeof (IConfigNodeSerializer).Assembly, Assembly.GetExecutingAssembly()};
+
+            var supportedTypeQuery = new GetSurrogateSupportedTypes();
+            var surrogateQuery = new GetSerializationSurrogates(supportedTypeQuery);
+            var serializableFieldQuery = new GetSerializableFieldsRecursiveType();
+
+            var standardSerializerSelector =
+                new SerializerSelector(
+                    new CompositeSurrogateProvider(
+                        new GenericSurrogateProvider(surrogateQuery, supportedTypeQuery, assembliesToScanForSurrogates),
+                        new SurrogateProvider(surrogateQuery, supportedTypeQuery, assembliesToScanForSurrogates)));
+
+            var preferNativeSelector = new PreferNativeSerializer(standardSerializerSelector);
+            var includePersistentFieldsSelector = new SerializerSelectorDecorator(
+                preferNativeSelector,
+                s => Maybe<IConfigNodeItemSerializer>.With(new FieldSerializer(s, serializableFieldQuery)));
+
+            return new ConfigNodeSerializer(includePersistentFieldsSelector);
         }
 
 

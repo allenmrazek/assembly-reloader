@@ -16,6 +16,7 @@ namespace AssemblyReloader.Gui
     public class ConfigurationViewMediator : Mediator
     {
         private const string ConfigurationViewNodeName = "ConfigurationView";
+        private ConfigurationView _view;
 
         [Inject] public SignalCloseAllWindows CloseAllWindows { get; set; }
         [Inject] public SignalToggleConfigurationView ToggleConfigurationViewSignal { get; set; }
@@ -23,7 +24,13 @@ namespace AssemblyReloader.Gui
         [Inject] public SignalOnSaveConfiguration SaveConfigurationSignal { get; set; }
         [Inject] public SignalOnLoadConfiguration LoadConfigurationSignal { get; set; }
 
-        [Inject] public ConfigurationView View { get; set; }
+        [Inject]
+        public ConfigurationView View
+        {
+            get { return _view; }
+            set { _view = value; }
+        }
+
         [Inject] public CoreConfiguration CoreConfiguration { get; set; }
         [Inject] public IConfigNodeSerializer Serializer { get; set; }
         [Inject] public ILog Log { get; set; }
@@ -81,7 +88,11 @@ namespace AssemblyReloader.Gui
             try
             {
                 Log.Debug("Saving ConfigurationView settings...");
-                Serializer.Serialize(View, config.AddNode(ConfigurationViewNodeName));
+                var serialized = Serializer.CreateConfigNodeFromObject(View);
+                serialized.name = ConfigurationViewNodeName;
+
+                config.AddNode(serialized);
+
                 Log.Debug("Settings saved");
             }
             catch (ReeperSerializationException rse)
@@ -98,7 +109,7 @@ namespace AssemblyReloader.Gui
             try
             {
                 Log.Normal("Loading ConfigurationView settings...");
-                Serializer.Deserialize(View, config.GetNode(ConfigurationViewNodeName));
+                Serializer.LoadObjectFromConfigNode(ref _view, config.GetNode(ConfigurationViewNodeName));
                 Log.Normal("Settings loaded");
             }
             catch (ReeperSerializationException rse)

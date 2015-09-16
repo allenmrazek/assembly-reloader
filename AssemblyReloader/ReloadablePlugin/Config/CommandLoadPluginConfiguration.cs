@@ -15,7 +15,7 @@ namespace AssemblyReloader.ReloadablePlugin.Config
     public class CommandLoadPluginConfiguration : Command
     {
         private readonly IPluginInfo _plugin;
-        private readonly PluginConfiguration _configuration;
+        private PluginConfiguration _configuration;
         private readonly IConfigNodeSerializer _serializer;
         private readonly IGetConfigurationFilePath _configPath;
         private readonly SignalOnLoadConfiguration _loadConfigurationSignal;
@@ -69,7 +69,7 @@ namespace AssemblyReloader.ReloadablePlugin.Config
                     return;
                 }
 
-                _serializer.Deserialize(_configuration, config.Single());
+                _serializer.LoadObjectFromConfigNode(ref _configuration, config.Single());
 
                 _loadConfigurationSignal.Dispatch(config.Single());
 

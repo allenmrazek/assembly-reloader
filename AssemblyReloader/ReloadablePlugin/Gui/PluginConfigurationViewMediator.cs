@@ -21,9 +21,14 @@ namespace AssemblyReloader.ReloadablePlugin.Gui
     public class PluginConfigurationViewMediator : Mediator
     {
         private const string ConfigurationNodeName = "PluginConfigurationView";
+        private PluginConfigurationView _view;
 
 // ReSharper disable MemberCanBePrivate.Global
-        [Inject] public PluginConfigurationView View { get; set; }
+        [Inject] public PluginConfigurationView View {
+            get { return _view; }
+            set { _view = value; }
+        }
+
         [Inject] public ILog Log { get; set; }
         [Inject] public IPluginInfo PluginInfo { get; set; }
         [Inject] public IAddonSettings AddonSettings { get; set; }
@@ -148,7 +153,7 @@ namespace AssemblyReloader.ReloadablePlugin.Gui
                     .Do(n =>
                     {
                         Log.Verbose("Deserializing PluginConfigurationView");
-                        Serializer.Deserialize(View, n);
+                        Serializer.LoadObjectFromConfigNode(ref _view, n);
                         Log.Verbose("Successfully deserialized PluginConfigurationView");
                     }).IfNull(() => Log.Warning("No serialized settings found for PluginConfigurationView"));
             }
@@ -165,7 +170,7 @@ namespace AssemblyReloader.ReloadablePlugin.Gui
             try
             {
                 Log.Verbose("Serializing PluginConfigurationView");
-                Serializer.Serialize(View, config.AddNode(ConfigurationNodeName));
+                Serializer.WriteObjectToConfigNode(ref _view, config.AddNode(ConfigurationNodeName));
                 Log.Verbose("Successfully serialized PluginConfigurationView");
             }
             catch (ReeperSerializationException rse)

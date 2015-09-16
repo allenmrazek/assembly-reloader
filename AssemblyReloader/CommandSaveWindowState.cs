@@ -31,11 +31,10 @@ namespace AssemblyReloader
         {
             _log.Normal("Command Save window: " + _window.Title);
 
-            var cfg = new KSP::ConfigNode("TestNode");
+            var cfg = _serializer.CreateConfigNodeFromObject(_window);
 
-            _serializer.Serialize(_window, cfg);
 
-            _log.Normal("SerializeD: {0}", cfg.ToString());
+            _log.Normal("Serialized: {0}", cfg.ToString());
         }
     }
 }

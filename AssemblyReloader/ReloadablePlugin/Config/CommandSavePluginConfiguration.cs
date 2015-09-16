@@ -15,7 +15,7 @@ namespace AssemblyReloader.ReloadablePlugin.Config
     public class CommandSavePluginConfiguration : Command
     {
         private readonly IPluginInfo _plugin;
-        private readonly PluginConfiguration _pluginConfiguration;
+        private PluginConfiguration _pluginConfiguration;
         private readonly IConfigNodeSerializer _serializer;
         private readonly IGetConfigurationFilePath _configPath;
         private readonly SignalOnSaveConfiguration _onSaveSignal;
@@ -51,7 +51,7 @@ namespace AssemblyReloader.ReloadablePlugin.Config
             try
             {
                 var cfg = new ConfigNode(PluginConfiguration.NodeName);
-                _serializer.Serialize(_pluginConfiguration, cfg);
+                _serializer.WriteObjectToConfigNode(ref _pluginConfiguration, cfg);
 
                 _onSaveSignal.Dispatch(cfg);
                 cfg.Write(_configPath.Get(_plugin.Location), _plugin.Name + " Configuration");

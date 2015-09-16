@@ -13,11 +13,11 @@ namespace AssemblyReloader.ReloadablePlugin.Config
     {
         private static readonly PropertyInfo[] Properties = typeof (PluginConfiguration).GetProperties(BindingFlags.Public | BindingFlags.Instance);
 
-        public void Serialize(Type type, object target, string uniqueKey, ConfigNode config, IConfigNodeSerializer serializer)
+        public void Serialize(Type type, ref object target, string key, ConfigNode config, IConfigNodeSerializer serializer)
         {
             if (type == null) throw new ArgumentNullException("type");
             if (target == null) throw new ArgumentNullException("target");
-            if (uniqueKey == null) throw new ArgumentNullException("uniqueKey");
+            if (key == null) throw new ArgumentNullException("key");
             if (config == null) throw new ArgumentNullException("config");
             if (serializer == null) throw new ArgumentNullException("serializer");
             if (!typeof (PluginConfiguration).IsAssignableFrom(type))
@@ -25,21 +25,25 @@ namespace AssemblyReloader.ReloadablePlugin.Config
 
             foreach (var prop in Properties)
             {
-
                 var propertyToSerialize = prop;
 
-                serializer.ConfigNodeItemSerializerSelector
-                    .GetSerializer(prop.PropertyType)
-                    .Do(
-                        s => s.Serialize(propertyToSerialize.PropertyType, propertyToSerialize.GetValue(target, null), propertyToSerialize.Name, config, serializer));
+                var itemSerializer = serializer.SerializerSelector.GetSerializer(prop.PropertyType);
+
+                if (!itemSerializer.Any())
+                    continue;
+
+                var propertyValue = propertyToSerialize.GetValue(target, null);
+
+                itemSerializer.Single().Serialize(propertyToSerialize.PropertyType, ref propertyValue, propertyToSerialize.Name, config, serializer);
             }
         }
 
-        public object Deserialize(Type type, object target, string uniqueKey, ConfigNode config, IConfigNodeSerializer serializer)
+
+        public void Deserialize(Type type, ref object target, string key, ConfigNode config, IConfigNodeSerializer serializer)
         {
             if (type == null) throw new ArgumentNullException("type");
             if (target == null) throw new ArgumentNullException("target");
-            if (uniqueKey == null) throw new ArgumentNullException("uniqueKey");
+            if (key == null) throw new ArgumentNullException("key");
             if (config == null) throw new ArgumentNullException("config");
             if (serializer == null) throw new ArgumentNullException("serializer");
             if (!typeof(PluginConfiguration).IsAssignableFrom(type))
@@ -49,18 +53,18 @@ namespace AssemblyReloader.ReloadablePlugin.Config
             {
                 var propertyToDeserialize = prop;
                 var currentValue = propertyToDeserialize.GetValue(target, null);
+                var itemSerializer = serializer.SerializerSelector.GetSerializer(prop.PropertyType);
 
-                var result = serializer.ConfigNodeItemSerializerSelector
-                    .GetSerializer(prop.PropertyType)
-                    .SingleOrDefault()
-                    .Return(
-                        s => s.Deserialize(propertyToDeserialize.PropertyType, currentValue, propertyToDeserialize.Name, config, serializer),
-                        currentValue);
-             
-                propertyToDeserialize.SetValue(target, result, null);
+                if (!itemSerializer.Any())
+                    continue;
+
+                itemSerializer
+                    .Single()
+                    .Deserialize(propertyToDeserialize.PropertyType, ref currentValue, propertyToDeserialize.Name,
+                        config, serializer);
+
+                propertyToDeserialize.SetValue(target, currentValue, null);
             }
-
-            return target;
         }
     }
 }

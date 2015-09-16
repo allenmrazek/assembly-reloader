@@ -16,7 +16,7 @@ namespace AssemblyReloader.Config
 // ReSharper disable once ClassNeverInstantiated.Global
     public class CommandLoadCoreConfiguration : Command
     {
-        private readonly CoreConfiguration _coreConfiguration;
+        private CoreConfiguration _coreConfiguration;
         private readonly SignalOnLoadConfiguration _loadConfigSignal;
         private readonly IGetConfigurationFilePath _configPath;
         private readonly IConfigNodeSerializer _serializer;
@@ -68,7 +68,7 @@ namespace AssemblyReloader.Config
             try
             {
                 _log.Normal("Loading configuration...");
-                _serializer.Deserialize(_coreConfiguration, config);
+                _serializer.LoadObjectFromConfigNode(ref _coreConfiguration, config);
                 _loadConfigSignal.Dispatch(config);
                 _log.Normal("Configuration loaded successfully.");
             }

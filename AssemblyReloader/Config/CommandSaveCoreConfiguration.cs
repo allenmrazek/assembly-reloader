@@ -18,7 +18,7 @@ namespace AssemblyReloader.Config
     {
         private static readonly string ConfigurationFileHeader = Assembly.GetExecutingAssembly().GetName().Name + " v" + Assembly.GetExecutingAssembly().GetName().Version;
 
-        private readonly CoreConfiguration _coreConfiguration;
+        private CoreConfiguration _coreConfiguration;
         private readonly SignalOnSaveConfiguration _saveConfigSignal;
         private readonly IGetConfigurationFilePath _configPath;
         private readonly IConfigNodeSerializer _serializer;
@@ -59,7 +59,7 @@ namespace AssemblyReloader.Config
             {
                 try
                 {
-                    _serializer.Serialize(_coreConfiguration, cfg);
+                    _serializer.WriteObjectToConfigNode(ref _coreConfiguration, cfg);
                 }
                 catch (ReeperSerializationException rse)
                 {
