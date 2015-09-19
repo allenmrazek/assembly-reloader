@@ -22,7 +22,7 @@ namespace TestProject
         {
             GUILayout.BeginVertical();
 
-            if (GUILayout.Button("Destroy This"))
+            if (GUILayout.Button("Destroy This2"))
                 Destroy(this);
 
             GUILayout.EndVertical();
@@ -54,7 +54,7 @@ namespace TestProject
 
         private void OnPluginReloadRequested()
         {
-            print("TestReloadProject.OnAssemblyReloadRequested received!");
+            print("TestReloadProject.OnPluginReloadRequested received!");
         }
 
         private void OnDestroy()

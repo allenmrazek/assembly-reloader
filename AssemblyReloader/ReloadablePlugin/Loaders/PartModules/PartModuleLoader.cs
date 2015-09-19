@@ -1,9 +1,9 @@
 ﻿extern alias KSP;
 using System;
 using System.Linq;
-using AssemblyReloader.Game;
 using ReeperAssemblyLibrary;
 using ReeperCommon.Logging;
+using strange.extensions.implicitBind;
 using strange.extensions.injector;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules

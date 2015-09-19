@@ -30,7 +30,6 @@ namespace AssemblyReloader.Gui
 
         protected override IWindowComponent Initialize()
         {
-            //Skin = HighLogic.Skin;
             Skin = WindowSkin;
             Draggable = true;
 
@@ -40,11 +39,6 @@ namespace AssemblyReloader.Gui
 
             withButtons.AddButton(new BasicTitleBarButton(TitleBarButtonStyle, CloseButtonTexture,
                 () => CloseWindow.Dispatch()));
-
-            //var resizable = new Resizable(withButtons, ResizableHotzoneSize, MinWindowSize, ResizeCursorTexture)
-            //{
-            //    Title = "Assembly Reloader"
-            //};
 
             return withButtons;
         }

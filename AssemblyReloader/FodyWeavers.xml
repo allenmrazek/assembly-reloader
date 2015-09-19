@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Weavers>
-  <Costura DisableCompression='true'>
+  <Costura DisableCompression="true">
     <ExcludeAssemblies>
       Assembly-CSharp
       Assembly-CSharp-firstpass
@@ -8,7 +8,7 @@
       TDx.TDxInput
       TrackIRUnity
       Mono.Security
+      NLog
     </ExcludeAssemblies>
   </Costura>
-  
 </Weavers>

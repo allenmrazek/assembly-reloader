@@ -1,12 +1,11 @@
 ﻿using System;
-using AssemblyReloader.Game;
 using ReeperAssemblyLibrary;
 using ReeperCommon.Logging;
 using strange.extensions.command.impl;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
 {
-// ReSharper disable once UnusedMember.Global
+// ReSharper disable once ClassNeverInstantiated.Global
     public class CommandUnloadPartModules : Command
     {
         private readonly ILoadedAssemblyHandle _handle;

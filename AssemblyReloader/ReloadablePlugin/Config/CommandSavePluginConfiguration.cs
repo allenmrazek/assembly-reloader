@@ -56,7 +56,6 @@ namespace AssemblyReloader.ReloadablePlugin.Config
                 _onSaveSignal.Dispatch(cfg);
                 cfg.Write(_configPath.Get(_plugin.Location), _plugin.Name + " Configuration");
 
-                _log.Verbose("Serialized PluginConfiguration: {0}", cfg.ToString());
                 _log.Normal("Plugin configuration saved");
             }
             catch (ReeperSerializationException re)

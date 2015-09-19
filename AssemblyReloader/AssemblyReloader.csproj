@@ -77,7 +77,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyFileLocationNotFoundException.cs" />
-    <Compile Include="CommandSaveWindowState.cs" />
     <Compile Include="Config\CommandSaveCoreConfiguration.cs" />
     <Compile Include="Config\GUISkinNotFoundException.cs" />
     <Compile Include="Config\ILoadedAssemblyUninstaller.cs" />
@@ -90,17 +89,11 @@
     <Compile Include="Config\ReeperAssemblyNotInCacheException.cs" />
     <Compile Include="Config\ReloadableReeperAssemblyLoader.cs" />
     <Compile Include="Config\UnityInstantiationFailedException.cs" />
-    <Compile Include="FileSystem\CannotInferFileTypeFromUrlException.cs" />
-    <Compile Include="Game\DuplicateLoadedAssemblyException.cs" />
-    <Compile Include="Game\DuplicatePartPrefabException.cs" />
     <Compile Include="Game\DuplicateProtoScenarioModuleException.cs" />
     <Compile Include="ReloadablePlugin\CommandDisplayFailureMessage.cs" />
     <Compile Include="ReloadablePlugin\CommandLoadReloadablePlugin.cs" />
     <Compile Include="ReloadablePlugin\CommandUnloadPreviousPlugin.cs" />
-    <Compile Include="ReloadablePlugin\Config\CommandConfigureReeperLoader.cs" />
     <Compile Include="ReloadablePlugin\Config\Signals.cs" />
-    <Compile Include="ReloadablePlugin\Loaders\CommandInsertPluginIntoAssemblyLoader.cs" />
-    <Compile Include="ReloadablePlugin\Loaders\CommandRemovePluginFromAssemblyLoader.cs" />
     <Compile Include="ReloadablePlugin\Loaders\PartModules\IQueryPartIsPrefabClone.cs" />
     <Compile Include="ReloadablePlugin\Loaders\PartModules\QueryPartIsPrefabClone.cs" />
     <Compile Include="ReloadablePlugin\Weaving\FailedToWriteDefinitionToStreamException.cs" />
@@ -112,7 +105,6 @@
     <Compile Include="ReloadablePlugin\Weaving\Operations\GameEventInterception\DuplicateGameEventRegistryException.cs" />
     <Compile Include="ReloadablePlugin\Weaving\Operations\GameEventInterception\GameEventCallback.cs" />
     <Compile Include="ReloadablePlugin\Weaving\Operations\GameEventInterception\GameEventProxy.cs" />
-    <Compile Include="Game\LoadedAssemblyHandleNotFoundException.cs" />
     <Compile Include="Game\PrefabNotFoundException.cs" />
     <Compile Include="ReloadablePlugin\Config\BootstrapReloadablePlugin.cs" />
     <Compile Include="ReloadablePlugin\Gui\PluginConfigurationView.cs" />
@@ -219,9 +211,9 @@
     <Compile Include="Config\Keys\TextureNameKey.cs" />
     <Compile Include="Gui\Signals.cs" />
     <Compile Include="Gui\StrangeView.cs" />
-    <Compile Include="ReloadablePlugin\Loaders\CommandCreateAddonsForScene.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\Addons\CommandCreateAddonsForScene.cs" />
     <Compile Include="ReloadablePlugin\Loaders\Addons\CommandDeinitializeAddonLoader.cs" />
-    <Compile Include="ReloadablePlugin\Loaders\Addons\CommandInitializeAddonLoader.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\Addons\CommandInitializeAddonLoaderWithNewHandle.cs" />
     <Compile Include="ReloadablePlugin\Config\CommandStartReloadablePlugin.cs" />
     <Compile Include="ReloadablePlugin\IReloadablePlugin.cs" />
     <Compile Include="ReloadablePlugin\Loaders\MonoBehaviourFactory.cs" />
@@ -242,7 +234,6 @@
     <Compile Include="ReloadablePlugin\Weaving\Operations\CommandRewriteAssemblyLocationCalls.cs" />
     <Compile Include="ReloadablePlugin\Weaving\Operations\NoConstructorArgumentFoundsException.cs" />
     <Compile Include="ReloadablePlugin\Weaving\Operations\Signals.cs" />
-    <Compile Include="ReloadablePlugin\Weaving\IGetAssemblyDefinition.cs" />
     <Compile Include="ReloadablePlugin\Weaving\Operations\CommandChangeDefinitionIdentity.cs" />
     <Compile Include="ReloadablePlugin\Loaders\Addons\GetAttributesOfType.cs" />
     <Compile Include="ReloadablePlugin\Loaders\Addons\IGetAttributesOfType.cs" />
@@ -280,13 +271,10 @@
     <Compile Include="ReloadablePlugin\Weaving\Signals.cs" />
     <Compile Include="ReloadablePlugin\Loaders\Addons\IReloadableAddonLoader.cs" />
     <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\IScenarioModuleUnloader.cs" />
-    <Compile Include="FileSystem\IFilePathProvider.cs" />
-    <Compile Include="FileSystem\GetAssemblyFileLocation.cs" />
+    <Compile Include="GetAssemblyFileLocation.cs" />
     <Compile Include="ReloadablePlugin\GetConfigurationFilePath.cs" />
-    <Compile Include="FileSystem\IGetAssemblyFileLocation.cs" />
+    <Compile Include="IGetAssemblyFileLocation.cs" />
     <Compile Include="ReloadablePlugin\IGetConfigurationFilePath.cs" />
-    <Compile Include="ReloadablePlugin\old\IPluginConfigurationProvider.cs" />
-    <Compile Include="ReloadablePlugin\old\PluginConfigurationProvider.cs" />
     <Compile Include="ReloadablePlugin\Loaders\PartModules\PartModuleConfigNodeSnapshotRepository.cs" />
     <Compile Include="ReloadablePlugin\Loaders\DictionaryOfQueues.cs" />
     <Compile Include="ReloadablePlugin\Signals.cs" />
@@ -392,6 +380,10 @@ ren *.dll *.reeper
 ren *.dll.mdb *.
 ren *.dll *.reeper.mdb
 
+REM Dependencies
+REM call "$(SolutionDir)CopyToLocation.bat" "$(TargetDir)" "$(ProjectDir)GameData\$(ProjectName)" /E /xo *.nlog
+
+
 REM Solution GameData to KSP GameData
 
 echo Copying to GameData
@@ -406,12 +398,12 @@ exit 0</PostBuildEvent>
     <PreBuildEvent>call "$(SolutionDir)SetEnvironment.bat"
 call "$(SolutionDir)CleanDirectories.bat" "$(ProjectDir)GameData\$(ProjectName)" "%25ksp%25\$(ProjectName)"</PreBuildEvent>
   </PropertyGroup>
-  <Import Project="..\packages\Fody.1.28.3\build\Fody.targets" Condition="Exists('..\packages\Fody.1.28.3\build\Fody.targets')" />
+  <Import Project="..\packages\Fody.1.29.2\build\portable-net+sl+win+wpa+wp\Fody.targets" Condition="Exists('..\packages\Fody.1.29.2\build\portable-net+sl+win+wpa+wp\Fody.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\Fody.1.28.3\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Fody.1.28.3\build\Fody.targets'))" />
+    <Error Condition="!Exists('..\packages\Fody.1.29.2\build\portable-net+sl+win+wpa+wp\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Fody.1.29.2\build\portable-net+sl+win+wpa+wp\Fody.targets'))" />
   </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

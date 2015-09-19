@@ -8,6 +8,7 @@ using GameScenes = KSP::GameScenes;
 namespace AssemblyReloader.ReloadablePlugin.Loaders.VesselModules
 {
     [Implements(typeof(IGetCurrentSceneIsFlight), InjectionBindingScope.CROSS_CONTEXT)]
+// ReSharper disable once UnusedMember.Global
     public class GetCurrentSceneIsFlight : IGetCurrentSceneIsFlight
     {
         private readonly IGetCurrentGameScene _gameScene;

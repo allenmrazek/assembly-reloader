@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using AssemblyReloader.Game;
 using ReeperAssemblyLibrary;
 using ReeperCommon.Containers;
 using ReeperCommon.Logging;
@@ -8,6 +7,7 @@ using strange.extensions.command.impl;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
 {
+// ReSharper disable once ClassNeverInstantiated.Global
     public class CommandDeinitializeAddonLoader : Command
     {
         private readonly ILog _log;

@@ -4,7 +4,6 @@ using System;
 using System.IO;
 using System.Reflection;
 using AssemblyReloader.Config;
-using AssemblyReloader.Config.Keys;
 using AssemblyReloader.Game;
 using AssemblyReloader.Gui;
 using AssemblyReloader.ReloadablePlugin.Gui;
@@ -77,6 +76,15 @@ namespace AssemblyReloader.ReloadablePlugin.Config
             injectionBinder.Bind<IPartModuleUnloader>().To<PartModuleUnloader>().ToSingleton();
             injectionBinder.Bind<IPartModuleDestroyer>().To<PartModuleDestroyer>().ToSingleton();
 
+            injectionBinder.Bind<IScenarioModuleLoader>().To<ScenarioModuleLoader>().ToSingleton();
+            injectionBinder.Bind<IScenarioModuleUnloader>().To<ScenarioModuleUnloader>().ToSingleton();
+            injectionBinder.Bind<IScenarioModuleFactory>().To<ScenarioModuleFactory>().ToSingleton();
+            injectionBinder.Bind<IScenarioModuleDestroyer>().To<ScenarioModuleDestroyer>().ToSingleton();
+
+            injectionBinder.Bind<IVesselModuleLoader>().To<VesselModuleLoader>().ToSingleton();
+            injectionBinder.Bind<IVesselModuleUnloader>().To<VesselModuleUnloader>().ToSingleton();
+            injectionBinder.Bind<IVesselModuleManager>().To<KspVesselModuleManager>().ToSingleton();
+
             injectionBinder.Bind<MethodInfo>()
                 .To(typeof(Assembly).GetProperty("CodeBase", BindingFlags.Public | BindingFlags.Instance).GetGetMethod())
                 .ToName(MethodKeys.AssemblyCodeBase);
@@ -106,7 +114,6 @@ namespace AssemblyReloader.ReloadablePlugin.Config
 
 
 
-            injectionBinder.Bind<IGetTypeDefinitions>().To<GetTypeDefinitionsInAssemblyDefinitionExcludingHelper>().ToSingleton();
             injectionBinder.Bind<IGameEventRegistry>().To<GameEventRegistry>().ToSingleton();
 
             injectionBinder.Bind<AssemblyLocation>().ToSingleton();
@@ -179,7 +186,7 @@ namespace AssemblyReloader.ReloadablePlugin.Config
             // other signals
             commandBinder.Bind<SignalPluginWasLoaded>()
                 .To<CommandSetupGameEventProxyRegistryEntry>()
-                .To<CommandInitializeAddonLoader>()
+                .To<CommandInitializeAddonLoaderWithNewHandle>()
                 .To<CommandLoadPartModules>()
                 .To<CommandLoadVesselModules>()
                 .To<CommandLoadScenarioModules>()

@@ -8,6 +8,7 @@ using strange.extensions.injector.api;
 namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
 {
     [Implements(typeof(IGetProtoScenarioModules), InjectionBindingScope.CROSS_CONTEXT)]
+// ReSharper disable once UnusedMember.Global
     public class GetProtoScenarioModules : IGetProtoScenarioModules
     {
         private readonly IGetTypeIdentifier _getTypeIdentifier;
@@ -38,12 +39,6 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
                 .Where(psm => psm != null)
                 .Where(psm => psm.moduleName == _getTypeIdentifier.Get(type).Identifier)
                 .Where(psm => psm.TargetScenes.Contains(_getCurrentGameScene.Get()));
-
-            //return HighLogic.CurrentGame.scenarios
-            //    .Where(psm => psm != null)
-            //    .Where(psm => psm.moduleName == _getTypeIdentifier.Get(type).Identifier)
-            //    .Where(psm => psm.targetScenes.Contains(_getCurrentGameScene.Get()))
-            //    .Select(psm => _kspFactory.Create(psm));
         }
     }
 }

@@ -24,7 +24,7 @@ namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations
         [Inject] public ILog Log { get; set; }
 
 
-        public RewriteCall(
+        protected RewriteCall(
             MethodInfo targetMethod,
             IGetInstructionsInMethod callsToInterceptedMethodQuery,
             IGetTypeDefinitions typeDefinitionQuery)

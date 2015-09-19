@@ -7,6 +7,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
 {
 // ReSharper disable once ClassNeverInstantiated.Global
     [Implements(typeof(IQueryPartIsPrefab), InjectionBindingScope.CROSS_CONTEXT)]
+// ReSharper disable once UnusedMember.Global
     public class QueryPartIsPrefab : IQueryPartIsPrefab
     {
         private readonly IPartPrefabProvider _prefabProvider;

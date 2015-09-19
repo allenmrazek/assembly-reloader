@@ -17,7 +17,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders
         }
 
 
-        public void DestroyMonoBehaviour(MonoBehaviour target)
+        public void Destroy(MonoBehaviour target)
         {
             if (target == null)
                 return; // Unity overloads this operator to check for existing of unmanaged side

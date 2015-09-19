@@ -1,16 +1,14 @@
 ﻿extern alias KSP;
 using System;
 using System.Linq;
-using AssemblyReloader.Game;
 using AssemblyReloader.ReloadablePlugin.Loaders.Addons;
 using ReeperAssemblyLibrary;
 using ReeperCommon.Logging;
-using strange.extensions.implicitBind;
 using strange.extensions.injector;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
 {
-    [Implements(typeof(IScenarioModuleLoader))]
+// ReSharper disable once ClassNeverInstantiated.Global
     public class ScenarioModuleLoader : IScenarioModuleLoader
     {
         private static readonly KSP::GameScenes[] ValidScenarioModuleScenes =

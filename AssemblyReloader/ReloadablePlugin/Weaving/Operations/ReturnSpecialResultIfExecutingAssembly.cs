@@ -66,7 +66,7 @@ namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations
 
             var getExecutingAssembly = HelperDefinition.Module.Import(typeof(Assembly).GetMethod("GetExecutingAssembly", BindingFlags.Public | BindingFlags.Static));
             var refRequals =
-                HelperDefinition.Module.Import(typeof(System.Object).GetMethod("ReferenceEquals",
+                HelperDefinition.Module.Import(typeof(Object).GetMethod("ReferenceEquals",
                     BindingFlags.Public | BindingFlags.Static));
             var importedRealCall = HelperDefinition.Module.Import(TargetMethod);
 

@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using AssemblyReloader.Config.Keys;
-using AssemblyReloader.FileSystem;
 using ReeperAssemblyLibrary;
 using ReeperCommon.Containers;
 using ReeperCommon.FileSystem;

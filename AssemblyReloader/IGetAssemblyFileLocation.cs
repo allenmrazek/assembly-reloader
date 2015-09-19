@@ -2,7 +2,7 @@
 using ReeperCommon.Containers;
 using ReeperCommon.FileSystem;
 
-namespace AssemblyReloader.FileSystem
+namespace AssemblyReloader
 {
     public interface IGetAssemblyFileLocation
     {

@@ -7,7 +7,6 @@ using AssemblyReloader.ReloadablePlugin.Loaders.Addons;
 using ReeperCommon.Containers;
 using ReeperCommon.Logging;
 using strange.extensions.command.impl;
-using strange.extensions.injector;
 using KSPAddon = KSP::KSPAddon;
 using AssemblyDefinition = Cecil96::Mono.Cecil.AssemblyDefinition;
 using TypeReference = Cecil96::Mono.Cecil.TypeReference;
@@ -42,6 +41,8 @@ namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations
 
         public override void Execute()
         {
+            // todo: move all this logic out of the command?
+
             _log.Debug("Replacing KSPAddon attributes with ReloadableAddonAttribute");
 
             foreach (var decoratedType in GetAddonTypeDefinitions())
@@ -60,6 +61,7 @@ namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations
             foreach (var type in _context.Modules.SelectMany(module => module.Types))
                 ReplaceKSPAddonReferencesWithReloadableAddon(type);
         }
+
 
 
 // ReSharper disable once InconsistentNaming

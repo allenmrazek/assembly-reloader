@@ -1,6 +1,4 @@
-﻿using System;
-using AssemblyReloader.Game;
-using ReeperAssemblyLibrary;
+﻿using ReeperAssemblyLibrary;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
 {

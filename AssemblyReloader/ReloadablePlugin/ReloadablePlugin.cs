@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Linq;
-using AssemblyReloader.Game;
 using ReeperAssemblyLibrary;
 using ReeperCommon.Containers;
 using ReeperCommon.FileSystem;
 
 namespace AssemblyReloader.ReloadablePlugin
 {
+// ReSharper disable once ClassNeverInstantiated.Global
     public class ReloadablePlugin : IReloadablePlugin
     {
         private readonly IFile _reloadableFile;
@@ -78,9 +78,7 @@ namespace AssemblyReloader.ReloadablePlugin
 
         public void Reload()
         {
-
             _reloadPluginSignal.Dispatch(_loaded);
-
         }
     }
 }

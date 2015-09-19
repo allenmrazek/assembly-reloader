@@ -10,6 +10,7 @@ using TypeDefinition = Cecil96::Mono.Cecil.TypeDefinition;
 namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations
 {
     [Implements(typeof(IGetTypeIsUnsupported), InjectionBindingScope.CROSS_CONTEXT)]
+// ReSharper disable once ClassNeverInstantiated.Global
     public class GetTypeIsUnsupported : IGetTypeIsUnsupported
     {
         private static readonly Type[] Unsupported = new[]
@@ -23,7 +24,7 @@ namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations
             typeof(KSP::Experience.ExperienceTrait),
 
             typeof(KSP::Strategies.Strategy),
-            typeof(KSP::Strategies.StrategyEffect),
+            typeof(KSP::Strategies.StrategyEffect)
 
         };
 

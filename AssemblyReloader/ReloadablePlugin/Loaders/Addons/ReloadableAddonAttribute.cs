@@ -10,7 +10,9 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
     public sealed class ReloadableAddonAttribute : Attribute
     {
+// ReSharper disable once FieldCanBeMadeReadOnly.Global
         public bool once;
+// ReSharper disable once FieldCanBeMadeReadOnly.Global
         public KSPAddon.Startup startup;
 
         public ReloadableAddonAttribute(KSPAddon.Startup startup, bool once)
@@ -19,6 +21,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
             this.startup = startup;
         }
 
+// ReSharper disable UnusedMember.Global
         public enum Startup
         {
             Instantly = -2,

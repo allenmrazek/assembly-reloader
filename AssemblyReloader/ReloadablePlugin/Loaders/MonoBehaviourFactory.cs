@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders
 {
+// ReSharper disable once ClassNeverInstantiated.Global
     public class MonoBehaviourFactory : IMonoBehaviourFactory
     {
         public MonoBehaviour Create(Type addonType)

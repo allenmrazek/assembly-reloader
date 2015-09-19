@@ -14,6 +14,7 @@ using strange.extensions.command.impl;
 namespace AssemblyReloader.Config
 {
 // ReSharper disable once UnusedMember.Global
+// ReSharper disable once ClassNeverInstantiated.Global
     public class CommandSaveCoreConfiguration : Command
     {
         private static readonly string ConfigurationFileHeader = Assembly.GetExecutingAssembly().GetName().Name + " v" + Assembly.GetExecutingAssembly().GetName().Version;
@@ -71,7 +72,6 @@ namespace AssemblyReloader.Config
                 cfg.Write(_configPath.Get(_core), ConfigurationFileHeader);
 
                 _log.Normal("Configuration saved");
-                _log.Debug("Configuration: {0}", cfg.ToString());
             }
             catch (ReeperSerializationException re)
             {

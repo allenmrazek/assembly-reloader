@@ -10,11 +10,9 @@ using AssemblyReloader.ReloadablePlugin.Weaving;
 using ReeperCommon.Gui.Window;
 using ReeperCommon.Gui.Window.Buttons;
 using ReeperCommon.Gui.Window.Decorators;
-using ReeperCommon.Serialization;
 using strange.extensions.injector;
 using strange.extensions.signal.impl;
 using UnityEngine;
-using ConfigNode = KSP::ConfigNode;
 
 namespace AssemblyReloader.ReloadablePlugin.Gui
 {

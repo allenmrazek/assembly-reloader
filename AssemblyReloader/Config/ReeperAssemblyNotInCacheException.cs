@@ -20,8 +20,8 @@ namespace AssemblyReloader.Config
             
         }
 
-        public ReeperAssemblyNotInCacheException(ReeperAssembly assembly)
-            : base(assembly.File.name + " not found in cache")
+        public ReeperAssemblyNotInCacheException(ILoadedAssemblyHandle assembly)
+            : base(assembly.LoadedAssembly.name + " not found in cache")
         {
             
         }

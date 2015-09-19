@@ -12,6 +12,7 @@ using HighLogic = KSP::HighLogic;
 namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
 {
     [Implements(typeof(IGetPartModuleStartState), InjectionBindingScope.CROSS_CONTEXT)]
+// ReSharper disable once UnusedMember.Global
     public class GetPartModuleStartState : IGetPartModuleStartState
     {
         public KSP::PartModule.StartState Get(Maybe<IVessel> vessel)

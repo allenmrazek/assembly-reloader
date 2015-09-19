@@ -1,5 +1,4 @@
-﻿using AssemblyReloader.Game;
-using ReeperAssemblyLibrary;
+﻿using ReeperAssemblyLibrary;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
 {

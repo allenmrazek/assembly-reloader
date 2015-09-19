@@ -3,9 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using AssemblyReloader.Game;
+using strange.extensions.implicitBind;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
 {
+// ReSharper disable once ClassNeverInstantiated.Global
     public class PartModuleDescriptorFactory : IPartModuleDescriptorFactory
     {
         private readonly IPartLoader _partLoader;
@@ -35,9 +37,6 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
         // Note: returns IEnumerable because there may be multiple duplicate PartModules on one part
         private IEnumerable<PartModuleDescriptor> CreatePartModuleInfo(IPart prefab, KSP::ConfigNode partConfig, Type pmType)
         {
-            var configNodes = _getPartModuleConfig.Get(partConfig, _getTypeIdentifier.Get(pmType).Identifier).ToList();
-
-
             return
                 _getPartModuleConfig.Get(partConfig, _getTypeIdentifier.Get(pmType).Identifier)
                     .Select(config => new PartModuleDescriptor(prefab, config, pmType, _getTypeIdentifier.Get(pmType)));

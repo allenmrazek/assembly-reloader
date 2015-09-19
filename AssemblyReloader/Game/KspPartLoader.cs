@@ -32,7 +32,7 @@ namespace AssemblyReloader.Game
 
 
         /// <summary>
-        /// Note: this is necessary because in some cases, the prefab reported by Part.partInfo.partPrefab
+        /// Note: this is necessary because in some cases the prefab reported by Part.partInfo.partPrefab
         /// is NOT the same as the one in PartLoader (specifically, the editor)
         /// </summary>
         /// <param name="from"></param>

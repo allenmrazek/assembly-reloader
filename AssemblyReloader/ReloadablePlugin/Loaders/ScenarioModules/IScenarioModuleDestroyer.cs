@@ -1,6 +1,4 @@
-﻿using AssemblyReloader.Game;
-
-namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
+﻿namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
 {
     public interface IScenarioModuleDestroyer
     {

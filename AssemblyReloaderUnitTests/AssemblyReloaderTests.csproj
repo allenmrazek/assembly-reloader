@@ -139,6 +139,10 @@
       <Project>{fecfa8fc-cf80-4685-a2ba-1566e0f3c26e}</Project>
       <Name>ReeperCommon</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\StrangeIoC\StrangeIoC\strange.csproj">
+      <Project>{953cd566-42b5-4f0a-856d-63d059e36fc0}</Project>
+      <Name>strange</Name>
+    </ProjectReference>
     <ProjectReference Include="..\AssemblyReloader\AssemblyReloader.csproj">
       <Project>{70f9f908-ccc3-41b4-944d-ea3de3ef55bd}</Project>
       <Name>AssemblyReloader</Name>

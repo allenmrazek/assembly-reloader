@@ -6,6 +6,7 @@ using UnityEngine;
 
 namespace AssemblyReloader.ReloadablePlugin
 {
+// ReSharper disable once ClassNeverInstantiated.Global
     public class CommandSendReloadRequestedMessageToTarget : Command
     {
         public const string MessageMethodName = "OnPluginReloadRequested";

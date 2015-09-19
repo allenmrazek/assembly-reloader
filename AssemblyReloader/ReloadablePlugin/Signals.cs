@@ -1,11 +1,12 @@
-﻿using AssemblyReloader.Game;
-using ReeperAssemblyLibrary;
+﻿using ReeperAssemblyLibrary;
 using ReeperCommon.Containers;
 using strange.extensions.signal.impl;
 
+// ReSharper disable ClassNeverInstantiated.Global
 namespace AssemblyReloader.ReloadablePlugin
 {
     // prompt a plugin reload
+
     public class SignalReloadPlugin : Signal<Maybe<ILoadedAssemblyHandle>>
     {
         

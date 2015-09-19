@@ -2,11 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using AssemblyReloader.Game;
 using strange.extensions.implicitBind;
 using strange.extensions.injector.api;
-using DestroyAfterTime = KSP::DestroyAfterTime;
-using ShipConstruct = KSP::ShipConstruct;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
 {

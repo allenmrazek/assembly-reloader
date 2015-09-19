@@ -1,11 +1,6 @@
 ﻿extern alias Cecil96;
 using System;
-using System.Linq;
-using System.Reflection;
-using AssemblyReloader.Game;
-using AssemblyReloader.Gui;
 using ReeperAssemblyLibrary;
-using ReeperCommon.Containers;
 using ReeperCommon.Logging;
 using strange.extensions.command.impl;
 
@@ -57,73 +52,8 @@ namespace AssemblyReloader.ReloadablePlugin
                 _failSignal.Dispatch("Exception while loading plugin: " + e);
                 Fail();
             }
-            //throw new NotImplementedException();
-
-            //var loadedAssembly = _definitionLoader.Get(_assemblyDefinition);
-
-            //if (!loadedAssembly.Any() || loadedAssembly.Single().IsNull())
-            //{
-            //    _log.Error("Failed to load assembly definition!");
-            //    _failSignal.Dispatch("Failed to load " + _assemblyDefinition.Name + " definition");
-            //    Fail();
-            //    return;
-            //}
-
-            //if (_loadedHandle.Any())
-            //    if (!RemovePreviousVersionFromAssemblyLoader())
-            //        return;
-
-            //if (!InsertIntoAssemblyLoader(loadedAssembly.Single()))
-            //    return;
-
 
             _log.Verbose("Plugin loaded successfully!");
         }
-
-
-        //private bool RemovePreviousVersionFromAssemblyLoader()
-        //{
-        //    try
-        //    {
-        //        _gameAssemblyLoader.RemoveFromLoadedAssemblies(_loadedHandle.Single());
-        //        return true;
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        _log.Error("Exception: " + e);
-        //        _failSignal.Dispatch("Exception occurred while removing plugin from AssemblyLoader: " + e);
-        //        Fail();
-        //    }
-
-        //    return false;
-        //}
-
-
-        //private bool InsertIntoAssemblyLoader(Assembly assembly)
-        //{
-        //    try
-        //    {
-        //        var handle = _gameAssemblyLoader.AddToLoadedAssemblies(assembly,
-        //            _pluginInfo.Location);
-
-        //        _pluginLoadedSignal.Dispatch(handle);
-
-        //        return true;
-        //    }
-        //    catch (DuplicateLoadedAssemblyException e)
-        //    {
-        //        _log.Error("Exception while inserting " + _pluginInfo.Name + " into AssemblyLoader: " + e);
-        //        _failSignal.Dispatch("Duplicate loaded assembly already exists in AssemblyLoader!");
-        //        Fail();
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        _log.Error("Exception: " + e);
-        //        _failSignal.Dispatch("Exception occurred while loading plugin: " + e);
-        //        Fail();
-        //    }
-
-        //    return false;
-        //}
     }
 }

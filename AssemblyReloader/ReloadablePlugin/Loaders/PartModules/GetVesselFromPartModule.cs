@@ -8,6 +8,7 @@ using strange.extensions.injector.api;
 namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
 {
     [Implements(typeof(IGetVesselFromPartModule), InjectionBindingScope.CROSS_CONTEXT)]
+// ReSharper disable once UnusedMember.Global
     public class GetVesselFromPartModule : IGetVesselFromPartModule
     {
         private readonly IKspFactory _kspFactory;

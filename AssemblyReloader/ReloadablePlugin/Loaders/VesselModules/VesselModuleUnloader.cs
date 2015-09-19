@@ -1,14 +1,12 @@
 ﻿extern alias KSP;
 using System;
 using System.Linq;
-using AssemblyReloader.Game;
 using ReeperAssemblyLibrary;
 using ReeperCommon.Logging;
-using strange.extensions.implicitBind;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.VesselModules
 {
-    [Implements(typeof(IVesselModuleUnloader))]
+// ReSharper disable once ClassNeverInstantiated.Global
     public class VesselModuleUnloader : IVesselModuleUnloader
     {
         private readonly IGetTypesDerivedFrom<KSP::VesselModule> _vesselModules;
@@ -70,7 +68,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.VesselModules
 
                 // ReSharper disable once ForCanBeConvertedToForeach
                 for (int i = 0; i < modules.Length; ++i)
-                    _mbDestroyer.DestroyMonoBehaviour(modules[i]);
+                    _mbDestroyer.Destroy(modules[i]);
             }
         }
 

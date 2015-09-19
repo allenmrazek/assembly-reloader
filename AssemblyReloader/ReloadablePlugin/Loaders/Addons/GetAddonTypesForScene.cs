@@ -2,13 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using AssemblyReloader.Game;
 using ReeperAssemblyLibrary;
 using UnityEngine;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
 {
+// ReSharper disable once ClassNeverInstantiated.Global
     public class GetAddonTypesForScene : IGetAddonTypesForScene
     {
         private readonly IGetAttributesOfType<ReloadableAddonAttribute> _getAttributes;

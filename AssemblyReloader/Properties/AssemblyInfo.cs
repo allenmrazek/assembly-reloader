@@ -1,11 +1,11 @@
 ﻿extern alias KSP;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using ReeperLoader;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
+
 [assembly: AssemblyTitle("AssemblyReloader")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
@@ -37,3 +37,6 @@ using ReeperLoader;
 [assembly: AssemblyFileVersion("1.0.0.0")]
 //[assembly: KSPAssemblyDependency("AssemblyReloaderBootstrap", 1, 0)]
 //[assembly: KSPAssemblyDependency("ReeperCommon", 1, 0)]
+//[assembly: RemoveReference("System.Xml, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089")]
+//[assembly: RemoveReference("mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089")]
+//[assembly: RemoveReference("mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089")] // custom weaver apparently adds it? 

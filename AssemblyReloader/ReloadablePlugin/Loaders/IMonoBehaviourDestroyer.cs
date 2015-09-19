@@ -4,7 +4,6 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders
 {
     public interface IMonoBehaviourDestroyer 
     {
-        void DestroyMonoBehaviour(MonoBehaviour target);
-
+        void Destroy(MonoBehaviour target);
     }
 }

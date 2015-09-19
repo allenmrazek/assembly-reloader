@@ -146,9 +146,6 @@ namespace AssemblyReloader.Config
 
         private void SetupCommandBindings()
         {
-            commandBinder.Bind<SignalSaveWindow>()
-                .To<CommandSaveWindowState>();
-
             commandBinder.Bind<SignalApplicationQuitting>()
                 .To<CommandSaveCoreConfiguration>();
 

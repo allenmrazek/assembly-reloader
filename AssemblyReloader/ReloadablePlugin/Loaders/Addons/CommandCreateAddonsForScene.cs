@@ -1,11 +1,10 @@
 ﻿extern alias KSP;
 using System;
-using AssemblyReloader.ReloadablePlugin.Loaders.Addons;
 using ReeperCommon.Logging;
 using strange.extensions.command.impl;
 using KSPAddon = KSP::KSPAddon;
 
-namespace AssemblyReloader.ReloadablePlugin.Loaders
+namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
 {
     public class CommandCreateAddonsForScene : Command
     {

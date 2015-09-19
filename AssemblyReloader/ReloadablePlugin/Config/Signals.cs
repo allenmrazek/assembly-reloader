@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using strange.extensions.signal.impl;
+﻿using strange.extensions.signal.impl;
 
 namespace AssemblyReloader.ReloadablePlugin.Config
 {
+// ReSharper disable once ClassNeverInstantiated.Global
     public class SignalTriggerConfigurationSave : Signal
     {
     }

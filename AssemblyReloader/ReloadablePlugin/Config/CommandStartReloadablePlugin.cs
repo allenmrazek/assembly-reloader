@@ -1,5 +1,4 @@
-﻿using AssemblyReloader.Game;
-using ReeperAssemblyLibrary;
+﻿using ReeperAssemblyLibrary;
 using ReeperCommon.Containers;
 using ReeperCommon.FileSystem;
 using ReeperCommon.Logging;

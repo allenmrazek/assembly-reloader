@@ -7,6 +7,7 @@ using strange.extensions.injector.api;
 namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
 {
     [Implements(typeof(IGetCurrentGame), InjectionBindingScope.CROSS_CONTEXT)]
+// ReSharper disable once UnusedMember.Global
     public class GetCurrentGame : IGetCurrentGame
     {
         private readonly IKspFactory _kspFactory;

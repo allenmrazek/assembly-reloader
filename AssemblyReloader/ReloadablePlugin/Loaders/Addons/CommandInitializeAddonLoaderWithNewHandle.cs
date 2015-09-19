@@ -1,5 +1,4 @@
 ﻿using System;
-using AssemblyReloader.Game;
 using ReeperAssemblyLibrary;
 using ReeperCommon.Containers;
 using ReeperCommon.Logging;
@@ -7,11 +6,11 @@ using ReeperCommon.Logging;
 namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
 {
 // ReSharper disable once ClassNeverInstantiated.Global
-    public class CommandInitializeAddonLoader : CommandCreateAddonsForScene
+    public class CommandInitializeAddonLoaderWithNewHandle : CommandCreateAddonsForScene
     {
         private readonly ILoadedAssemblyHandle _handle;
 
-        public CommandInitializeAddonLoader(
+        public CommandInitializeAddonLoaderWithNewHandle(
             IReloadableAddonLoader addonLoader, 
             IGetCurrentStartupScene getCurrentScene, 
             ILoadedAssemblyHandle handle,

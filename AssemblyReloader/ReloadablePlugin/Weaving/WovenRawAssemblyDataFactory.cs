@@ -10,6 +10,7 @@ using Cecil96::Mono.Cecil;
 
 namespace AssemblyReloader.ReloadablePlugin.Weaving
 {
+// ReSharper disable once ClassNeverInstantiated.Global
     public class WovenRawAssemblyDataFactory : IRawAssemblyDataFactory
     {
         private readonly BaseAssemblyResolver _resolver;
@@ -87,24 +88,27 @@ namespace AssemblyReloader.ReloadablePlugin.Weaving
         {
             using (var assemblyFile = _tempFileFactory.Create())
             {
+                var symbolPath = assemblyFile.Path + ".mdb";
+
                 _log.Debug("Writing assembly to: " + assemblyFile.Path);
 
                 definition.Write(assemblyFile.Path,
                     new WriterParameters {WriteSymbols = definition.MainModule.HasSymbols});
 
-                if (definition.MainModule.HasSymbols && !File.Exists(assemblyFile.Path + ".mdb"))
+                if (definition.MainModule.HasSymbols && !File.Exists(symbolPath))
                     throw new FileNotFoundException("Symbol file was not created successfully",
                         Path.GetFileName(assemblyFile.Path + ".mdb"));
 
                 var rawAssemblyStream = new MemoryStream(File.ReadAllBytes(assemblyFile.Path));
-                var rawSymbolStream = new MemoryStream(File.ReadAllBytes(assemblyFile.Path + ".mdb"));
+                var rawSymbolStream = File.Exists(symbolPath) ? new MemoryStream(File.ReadAllBytes(symbolPath)) : null;
 
-                File.Delete(assemblyFile.Path + ".mdb");
+                if (definition.MainModule.HasSymbols && File.Exists(symbolPath))
+                    File.Delete(symbolPath);
 
                 if (rawAssemblyStream.Length == 0)
                     throw new FailedToWriteDefinitionToStreamException(definition);
 
-                if (definition.MainModule.HasSymbols && rawSymbolStream.Length == 0)
+                if (definition.MainModule.HasSymbols && (rawSymbolStream == null || rawSymbolStream.Length == 0))
                     _log.Warning("Failed to write " + definition.MainModule.Name + " symbols to stream");
 
                 return new RawAssemblyData(assembly, rawAssemblyStream,

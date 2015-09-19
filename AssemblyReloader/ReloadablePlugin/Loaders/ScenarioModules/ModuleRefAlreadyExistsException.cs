@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using AssemblyReloader.Game;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
 {

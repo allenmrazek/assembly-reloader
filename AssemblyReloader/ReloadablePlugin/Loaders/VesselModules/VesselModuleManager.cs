@@ -2,13 +2,11 @@
 using System;
 using ReeperCommon.Containers;
 using ReeperCommon.Logging;
-using strange.extensions.implicitBind;
-using strange.extensions.injector.api;
 using VesselModuleManager = KSP::VesselModuleManager;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.VesselModules
 {
-    [Implements(typeof(IVesselModuleManager), InjectionBindingScope.CROSS_CONTEXT)]
+// ReSharper disable once UnusedMember.Global
     public class KspVesselModuleManager : IVesselModuleManager
     {
         private readonly IKspFactory _kspFactory;

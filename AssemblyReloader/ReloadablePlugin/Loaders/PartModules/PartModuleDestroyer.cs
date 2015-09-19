@@ -4,7 +4,7 @@ using strange.extensions.implicitBind;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
 {
-    [Implements(typeof(IPartModuleDestroyer))]
+// ReSharper disable once ClassNeverInstantiated.Global
     public class PartModuleDestroyer : IPartModuleDestroyer
     {
         private readonly SignalAboutToDestroyMonoBehaviour _mbDestructionSignal;

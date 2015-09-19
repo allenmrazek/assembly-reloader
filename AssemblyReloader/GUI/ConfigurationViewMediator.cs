@@ -20,7 +20,6 @@ namespace AssemblyReloader.Gui
 
         [Inject] public SignalCloseAllWindows CloseAllWindows { get; set; }
         [Inject] public SignalToggleConfigurationView ToggleConfigurationViewSignal { get; set; }
-        [Inject] public SignalSaveWindow SaveWindowState { get; set; }
         [Inject] public SignalOnSaveConfiguration SaveConfigurationSignal { get; set; }
         [Inject] public SignalOnLoadConfiguration LoadConfigurationSignal { get; set; }
 
@@ -65,19 +64,13 @@ namespace AssemblyReloader.Gui
 
         private void CloseConfigurationWindow()
         {
-            Log.Debug("Received close configuration window");
-
             View.Visible = false;
-            SaveWindowState.Dispatch(View);
         }
 
 
         private void OnToggleConfigurationWindow()
         {
             View.Visible = !View.Visible;
-
-            if (!View.Visible)
-                SaveWindowState.Dispatch(View);
         }
 
 

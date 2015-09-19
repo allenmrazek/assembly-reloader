@@ -1,13 +1,13 @@
 ﻿extern alias KSP;
 using System;
 using System.Linq;
-using AssemblyReloader.Game;
 using ReeperAssemblyLibrary;
 using ReeperCommon.Logging;
 using strange.extensions.injector;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
 {
+// ReSharper disable once ClassNeverInstantiated.Global
     public class ReloadableAddonUnloader : IReloadableAddonUnloader
     {
         private readonly IGetAddonTypesForScene _addonTypeQuery;
@@ -54,7 +54,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
                 {
                     _log.Verbose("Destroying addon instance: " + activeInstances[idx].name + ", " +
                                  activeInstances[idx].GetType().FullName);
-                    _addonDestroyer.DestroyMonoBehaviour(activeInstances[idx]);
+                    _addonDestroyer.Destroy(activeInstances[idx]);
                 }
             }
 

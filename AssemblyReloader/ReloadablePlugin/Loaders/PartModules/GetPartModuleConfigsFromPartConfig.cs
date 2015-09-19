@@ -5,6 +5,7 @@ using System.Linq;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
 {
+// ReSharper disable once ClassNeverInstantiated.Global
     public class GetPartModuleConfigsFromPartConfig : IGetPartModuleConfigsFromPartConfig
     {
         public IEnumerable<KSP::ConfigNode> Get(KSP::ConfigNode partConfig, string moduleName)

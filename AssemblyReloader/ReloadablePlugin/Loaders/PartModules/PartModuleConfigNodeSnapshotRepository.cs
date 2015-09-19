@@ -1,9 +1,11 @@
 ﻿extern alias KSP;
 using System.Collections.Generic;
 using ReeperCommon.Containers;
+using strange.extensions.implicitBind;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
 {
+    [Implements(typeof(IPartModuleConfigNodeSnapshotRepository))]
 // ReSharper disable once ClassNeverInstantiated.Global
     public class PartModuleConfigNodeSnapshotRepository : IPartModuleConfigNodeSnapshotRepository
     {

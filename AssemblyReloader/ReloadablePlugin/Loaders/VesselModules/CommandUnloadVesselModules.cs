@@ -1,11 +1,11 @@
 ﻿using System;
-using AssemblyReloader.Game;
 using ReeperAssemblyLibrary;
 using ReeperCommon.Logging;
 using strange.extensions.command.impl;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.VesselModules
 {
+// ReSharper disable once ClassNeverInstantiated.Global
     public class CommandUnloadVesselModules : Command
     {
         private readonly ILoadedAssemblyHandle _handle;

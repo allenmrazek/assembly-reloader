@@ -1,5 +1,4 @@
 ﻿using System;
-using AssemblyReloader.Game;
 using ReeperAssemblyLibrary;
 using ReeperCommon.Logging;
 using strange.extensions.command.impl;

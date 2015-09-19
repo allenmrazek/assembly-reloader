@@ -12,6 +12,7 @@ namespace AssemblyReloader.ReloadablePlugin.Weaving
     // note: this will return ALL defined types, including any we defined ourselves (like helper type).
     // You should probably use IGetTypeDefinitions
     [Implements(typeof(IGetAllTypesInAssemblyDefinition), InjectionBindingScope.CROSS_CONTEXT)]
+// ReSharper disable once ClassNeverInstantiated.Global
     public class GetAllTypesInAssemblyDefinition : IGetAllTypesInAssemblyDefinition
     {
         public IEnumerable<TypeDefinition> Get(AssemblyDefinition definition)

@@ -1,14 +1,13 @@
 ﻿extern alias KSP;
 using System.Linq;
 using System.Reflection;
-using ReeperCommon.Containers;
 using ReeperCommon.Serialization;
-using UnityEngine;
 using ConfigNode = KSP::ConfigNode;
 using System;
 
 namespace AssemblyReloader.ReloadablePlugin.Config
 {
+// ReSharper disable once UnusedMember.Global
     public class PluginConfigurationSurrogate : IConfigNodeItemSerializer<PluginConfiguration>
     {
         private static readonly PropertyInfo[] Properties = typeof (PluginConfiguration).GetProperties(BindingFlags.Public | BindingFlags.Instance);

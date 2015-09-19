@@ -8,6 +8,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders
 {
     [Implements(InjectionBindingScope.CROSS_CONTEXT, typeof(IGetCurrentStartupScene))]
 // ReSharper disable once UnusedMember.Global
+// ReSharper disable once ClassNeverInstantiated.Global
     public class GetCurrentStartupScene : IGetCurrentStartupScene
     {
         private readonly IGetStartupSceneFromGameScene _query;

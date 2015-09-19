@@ -8,6 +8,7 @@ using OpCodes = Cecil96::Mono.Cecil.Cil.OpCodes;
 
 namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations
 {
+// ReSharper disable once ClassNeverInstantiated.Global
     public class CommandRewriteAssemblyLocationCalls : ReturnSpecialResultIfExecutingAssembly
     {
         private readonly AssemblyLocation _assemblyLocation;

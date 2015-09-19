@@ -11,6 +11,7 @@ using TypeAttributes = Cecil96::Mono.Cecil.TypeAttributes;
 
 namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations
 {
+// ReSharper disable once ClassNeverInstantiated.Global
     public class CommandInsertHelperType : Command
     {
         public const string @Namespace = "AssemblyReloaderInjected";
