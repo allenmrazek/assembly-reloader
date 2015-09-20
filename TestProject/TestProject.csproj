@@ -95,7 +95,7 @@ ren *.dll *.reloadable.mdb
 REM Solution GameData to KSP GameData
 
 echo Copying to GameData
-call "$(SolutionDir)CopyToLocation.bat" "$(ProjectDir)GameData\$(ProjectName)" "%25ksp%25\$(ProjectName)" /E /xo
+call "$(SolutionDir)CopyToLocation.bat" "$(ProjectDir)GameData\$(ProjectName)" "%25ksp%25$(ProjectName)" /E /xo
 echo Files copied to GameData successfully
 
 REM return with no error; robocopy success will set ERRORLEVEL nonzero which will trick VS into thinking the build failed

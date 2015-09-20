@@ -31,7 +31,7 @@ REM CreateMdb - Given a fully qualified path to an assembly, generate MDB with s
 REM
 :CreateMdb
 if exist %~1 (
-call "%unity%\Editor\Data\MonoBleedingEdge\bin\cli.bat" "%unity%\Editor\Data\MonoBleedingEdge\lib\mono\4.0\pdb2mdb.exe" "%~1"
+call "%unity%Editor\Data\MonoBleedingEdge\bin\cli.bat" "%unity%Editor\Data\MonoBleedingEdge\lib\mono\4.0\pdb2mdb.exe" "%~1"
 
 IF NOT EXIST "%~1".mdb (
 echo ERROR: failed to generate %~1.mdb
@@ -67,7 +67,7 @@ goto:eof
 
 :CheckUnity
 echo Verifying Unity directory set...
-IF NOT EXIST "%unity%\Editor\Data\MonoBleedingEdge\lib\mono\4.0\pdb2mdb.exe" (
+IF NOT EXIST "%unity%Editor\Data\MonoBleedingEdge\lib\mono\4.0\pdb2mdb.exe" (
 echo ERROR: Failed to find pdb2mdb.exe; check Unity path
 exit -1
 )

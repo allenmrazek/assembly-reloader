@@ -344,7 +344,6 @@
     <ProjectReference Include="..\..\ReeperLoader\ReeperLoader\ReeperLoader.csproj">
       <Project>{5192d8ef-1d16-4307-9c18-13bd523f767f}</Project>
       <Name>ReeperLoader</Name>
-      <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\..\StrangeIoC\StrangeIoC\strange.csproj">
       <Project>{953cd566-42b5-4f0a-856d-63d059e36fc0}</Project>
@@ -362,33 +361,117 @@
     <EmbeddedResource Include="Resources\cursor.png" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="FodyWeavers.xml" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>call "$(SolutionDir)SetEnvironment.bat"
-call "$(SolutionDir)CopyToLocation.bat" "$(TargetDir)" "$(ProjectDir)GameData\$(ProjectName)"  /E /xo /LEV:1 $(TargetName).dll
-call "$(SolutionDir)CreateMdb.bat" "$(TargetPath)" "$(ProjectDir)GameData\$(ProjectName)"
+    <PostBuildEvent>
 
-REM Rename dll to reeper, .dll.mdb to .reeper.mdb
-cd "$(ProjectDir)GameData\$(ProjectName)"
-ren *.dll *.reeper
-ren *.dll.mdb *.
-ren *.dll *.reeper.mdb
+echo ------------------ Installing %25ProjectName%25 ---------------------
 
-REM Dependencies
-REM call "$(SolutionDir)CopyToLocation.bat" "$(TargetDir)" "$(ProjectDir)GameData\$(ProjectName)" /E /xo *.nlog
+call "$(SolutionDir)SetEnvironment.bat"
+
+set ProjectGameData=$(ProjectDir)GameData\$(ProjectName)\
 
 
+call:CreateSymbolsForDependencies
+call:CopyDependencies
+call "$(SolutionDir)CopyToLocation.bat" "$(TargetDir)" "%25ProjectGameData%25" $(TargetName).* /xf *.config *.pdb
+
+REM ----------------------------------------------------------
+REM Create debug symbols for AssemblyReloader
+REM ----------------------------------------------------------
+echo Creating debug symbols for $(TargetFileName)
+echo Symbol destination: %25ProjectGameData%25
+cd "$(TargetDir)"
+call "$(SolutionDir)CreateMdb.bat" "$(TargetFileName)" "%25ProjectGameData%25"
+
+
+cd "%25ProjectGameData%25"
+if exist "%25ProjectGameData%25$(TargetName).reeper" (
+del "%25ProjectGameData%25$(TargetName).reeper"
+
+if exist "%25ProjectGameData%25$(TargetName).reeper.mdb" (
+del "%25ProjectGameData%25$(TargetName).reeper.mdb"
+)
+)
+call:RenameAssemblyToReeper $(TargetName)
+goto:CopyIntoGameDir
+
+
+REM ----------------------------------------------------------
+REM Copy dependencies into Project GameData
+REM ----------------------------------------------------------
+:CopyDependencies
+echo copy dependencies to project GameData...
+call "$(SolutionDir)CopyToLocation.bat" "$(TargetDir)" "%25ProjectGameData%25" ReeperCommon.* /xf *.pdb
+call "$(SolutionDir)CopyToLocation.bat" "$(TargetDir)" "%25ProjectGameData%25" StrangeIoC.* /xf *.pdb
+call "$(SolutionDir)CopyToLocation.bat" "$(TargetDir)" "%25ProjectGameData%25" ReeperAssemblyLibrary.* /xf *.pdb
+call "$(SolutionDir)CopyToLocation.bat" "$(TargetDir)" "%25ProjectGameData%25" ReeperLoader.* /xf *.pdb
+call "$(SolutionDir)CopyToLocation.bat" "$(TargetDir)" "%25ProjectGameData%25" Mono.Cecil.* /xf *.pdb
+goto:eof
+
+
+REM ----------------------------------------------------------
+REM Merge dependencies into AssemblyReloader.dll (unused currently)
+REM ----------------------------------------------------------
+:MergeDependencies
+echo merge dependencies...
+cd "(TargetDir)"
+"$(SolutionDir)packages\ILRepack.2.0.4\tools\ILRepack.exe" /verbose /out:$(TargetFileName) $(TargetFileName) ReeperCommon.dll StrangeIoC.dll Mono.Cecil.dll Mono.Cecil.Mdb.dll Mono.Cecil.Pdb.dll Mono.Cecil.Rocks.dll
+
+goto:eof
+
+
+:MergeMonoCecil96
+echo Merging Mono.Cecil 0.9.6...
+cd "%25ProjectGameData%25"
+"$(SolutionDir)packages\ILRepack.2.0.4\tools\ILRepack.exe" /verbose /out:$(TargetFileName) $(TargetFileName) Mono.Cecil.dll Mono.Cecil.Mdb.dll Mono.Cecil.Pdb.dll Mono.Cecil.Rocks.dll
+echo Success
+goto:eof
+
+
+REM ----------------------------------------------------------
+REM Create debug symbols for dependencies
+REM ----------------------------------------------------------
+:CreateSymbolsForDependencies
+echo Creating symbols for dependencies...
+cd "%25TargetDir%25"
+call "$(SolutionDir)CreateMdb.bat" "$(TargetDir)ReeperCommon.dll" "%25ProjectGameData%25"
+call "$(SolutionDir)CreateMdb.bat" "$(TargetDir)StrangeIoC.dll" "%25ProjectGameData%25"
+call "$(SolutionDir)CreateMdb.bat" "$(TargetDir)ReeperAssemblyLibrary.dll" "%25ProjectGameData%25"
+call "$(SolutionDir)CreateMdb.bat" "$(TargetDir)ReeperLoader.dll" "%25ProjectGameData%25"
+goto:eof
+
+
+REM ----------------------------------------------------------
+REM Rename DLL to REEPER so ReeperLoader will be used to load it 
+REM ----------------------------------------------------------
+:RenameAssemblyToReeper
+echo renaming %25~1.dll to %25~1.reeper...
+ren %25~1.dll *.reeper
+if EXIST "%25~1.dll.mdb" (
+echo renaming %25~1.dll.mdb to %25~1.reeper.mdb...
+ren %25~1.dll.mdb *.
+ren %25~1.dll *.reeper.mdb
+)
+echo Done!
+goto:eof
+
+
+REM ----------------------------------------------------------
+REM Copy Project GameData into KSP Project GameData
+REM ----------------------------------------------------------
+:CopyIntoGameDir
 REM Solution GameData to KSP GameData
 
 echo Copying to GameData
-call "$(SolutionDir)CopyToLocation.bat" "$(ProjectDir)GameData\$(ProjectName)" "%25ksp%25\$(ProjectName)" /E /xo
+call "$(SolutionDir)CopyToLocation.bat" "%25ProjectGameData%25" "%25ksp%25$(ProjectName)" /E /xo
+
+
 echo Files copied to GameData successfully
+
 
 REM return with no error; robocopy success will set ERRORLEVEL nonzero which will trick VS into thinking the build failed
 exit 0</PostBuildEvent>
@@ -396,15 +479,8 @@ exit 0</PostBuildEvent>
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <PropertyGroup>
     <PreBuildEvent>call "$(SolutionDir)SetEnvironment.bat"
-call "$(SolutionDir)CleanDirectories.bat" "$(ProjectDir)GameData\$(ProjectName)" "%25ksp%25\$(ProjectName)"</PreBuildEvent>
+call "$(SolutionDir)CleanDirectories.bat" "$(SolutionDir)$(ProjectName)\GameData\$(ProjectName)" "%25ksp%25$(ProjectName)"</PreBuildEvent>
   </PropertyGroup>
-  <Import Project="..\packages\Fody.1.29.2\build\portable-net+sl+win+wpa+wp\Fody.targets" Condition="Exists('..\packages\Fody.1.29.2\build\portable-net+sl+win+wpa+wp\Fody.targets')" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\Fody.1.29.2\build\portable-net+sl+win+wpa+wp\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Fody.1.29.2\build\portable-net+sl+win+wpa+wp\Fody.targets'))" />
-  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

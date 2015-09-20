@@ -46,10 +46,9 @@ namespace AssemblyReloader.ReloadablePlugin
             }
             catch (Exception e)
             {
-                _log.Error("Exception while loading plugin: " + _reeperAssembly.File.name);
-                _log.Error("Exception: " + e);
+                _log.Error("Exception while loading plugin: " + e);
 
-                _failSignal.Dispatch("Exception while loading plugin: " + e);
+                _failSignal.Dispatch("Exception while loading plugin! See the log for details. " + e.TargetSite.Name);
                 Fail();
             }
 

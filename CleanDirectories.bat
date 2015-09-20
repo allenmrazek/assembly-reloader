@@ -2,7 +2,7 @@ REM Post-Build script that cleans up binaries (dll, mdb, reeper, reloadable) in 
 REM
 REM Usage [directory]... 
 
-set TargetExtensions=dll,mdb,reeper,reloadable
+set TargetExtensions=dll,mdb,reeper,reloadable,pdb
 echo Cleaning solution GameData...
 
 :NextParameter

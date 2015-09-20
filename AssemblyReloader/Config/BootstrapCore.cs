@@ -5,22 +5,21 @@ using ReeperLoader;
 using strange.extensions.context.impl;
 using UnityEngine;
 using HighLogic = KSP::HighLogic;
+using KSPAddon = KSP::KSPAddon;
 using PopupDialog = KSP::PopupDialog;
 
 namespace AssemblyReloader.Config
 {
+    /// <summary>
+    /// Note: Uses ReeperLoader because Mono.Cecil 0.9.5 doesn't have support for reading symbols
+    /// </summary>
     [ReeperLoadTarget]
+    //[KSP::KSPAddon(KSPAddon.Startup.Instantly, true)]
 // ReSharper disable once UnusedMember.Global
     public class BootstrapCore : ContextView
     {
-        //private static Logger logger = LogManager.GetCurrentClassLogger();
-
         private IEnumerator Start()
         {
-            //logger.Debug("Boostrapping...");
-
-            //new DebugLog("Test").Normal("Test log output");
-
             // avoid duplicates if GameDatabase is reloaded
             // todo: update GameDatabase urls with new data
             if (FindObjectsOfType<BootstrapCore>().Length > 1)
