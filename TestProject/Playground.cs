@@ -17,8 +17,17 @@ using Object = UnityEngine.Object;
 
 namespace TestProject
 {
+    [KSPAddon(KSPAddon.Startup.Flight, false)]
+    public class ExpressionSystemFinder : MonoBehaviour
+    {
+        private void Start()
+        {
+            print("ExpressionSystemFinder.Start");
+        }
+    }
 
-    [KSPAddon(KSPAddon.Startup.EditorAny, false)]
+
+    //[KSPAddon(KSPAddon.Startup.EditorAny, false)]
     public class GenerateCraftThumbnails : MonoBehaviour
     {
         private Rect _window = new Rect(250f, 250f, 200f, 100f);
