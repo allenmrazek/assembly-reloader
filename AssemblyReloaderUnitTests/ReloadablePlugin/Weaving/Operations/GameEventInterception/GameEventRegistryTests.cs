@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Linq;
+using System.Reflection;
 using AssemblyReloader.ReloadablePlugin.Weaving.Operations.GameEventInterception;
 using AssemblyReloaderTests.Fixtures;
 using Ploeh.AutoFixture.Xunit;
@@ -18,7 +19,8 @@ namespace AssemblyReloaderTests.ReloadablePlugin.Weaving.Operations.GameEventInt
 
             sut.Add(evt, callback);
 
-            Assert.True(sut.Count > 0);
+            Assert.True(sut.Count == 1);
+            Assert.True(sut.Count() == 1);
             Assert.True(sut.Remove(evt, callback));
         }
 
@@ -34,7 +36,8 @@ namespace AssemblyReloaderTests.ReloadablePlugin.Weaving.Operations.GameEventInt
 
             sut.Add(evt1, callback1);
 
-            Assert.True(sut.Count > 0);
+            Assert.True(sut.Count == 1);
+            Assert.True(sut.Count() == 1);
             Assert.True(sut.Remove(evt2, callback2));
         }
 
@@ -48,27 +51,10 @@ namespace AssemblyReloaderTests.ReloadablePlugin.Weaving.Operations.GameEventInt
 
             sut.Add(evt, callback1);
 
-            Assert.True(sut.Count > 0);
+            Assert.True(sut.Count == 1);
+            Assert.True(sut.Count() == 1);
             Assert.True(sut.Remove(evt, callback2));
         }
-
-        //[Fact()]
-        //public void RemoveTest()
-        //{
-        //    Assert.True(false, "not implemented yet");
-        //}
-
-        //[Fact()]
-        //public void ClearCallbacksTest()
-        //{
-        //    Assert.True(false, "not implemented yet");
-        //}
-
-        //[Fact()]
-        //public void GetEnumeratorTest()
-        //{
-        //    Assert.True(false, "not implemented yet");
-        //}
 
 
         private void OnVoidCallback()

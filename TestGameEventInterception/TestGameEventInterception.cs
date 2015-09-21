@@ -1,46 +1,52 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿extern alias KSP;
 using UnityEngine;
 
 namespace TestGameEventInterception
 {
-    public class TestGameEventInterception
+    // Can we trick the interception logic?
+    public class EventVoid
     {
-        private EventVoid EventVoidShouldNotBeIntercepted = new EventVoid("DoNotIntercept");
-        private EventData<string> EventDataTShouldNotBeIntercepted = new EventData<string>("DoNotInterceptT");
+        public delegate void OnEvent();
 
-        private EventData<string, int> EventDataT1T2ShouldNotBeIntercepted =
-            new EventData<string, int>("DoNotInterceptT1T2");
-        
-        TestGameEventInterception()
+        public void Add(OnEvent evt)
         {
             
+        }
+
+        public void Remove(OnEvent evt)
+        {
+            
+        }
+    }
+
+    public class TestGameEventInterception
+    {
+        private readonly EventVoid NotAGameEvent = new EventVoid();
+
+        TestGameEventInterception()
+        {
+            AddCallbacks();
+            RemoveCallbacks();
         }
 
 
         private void AddCallbacks()
         {
-            GameEvents.onGamePause.Add(OnGamePaused); // EventVoid
-            GameEvents.onVesselChange.Add(OnVesselChange); // EventData<T>
-            GameEvents.onEditorLoad.Add(OnEditorLoad); // EventData<T1, T2>
+            KSP::GameEvents.onGamePause.Add(OnGamePaused); // EventVoid
+            KSP::GameEvents.onVesselChange.Add(OnVesselChange); // EventData<T>
+            KSP::GameEvents.onEditorLoad.Add(OnEditorLoad); // EventData<T1, T2>
 
-            EventVoidShouldNotBeIntercepted.Add(Callback);
-            EventDataTShouldNotBeIntercepted.Add(Callback);
-            EventDataT1T2ShouldNotBeIntercepted.Add(Callback);
+            NotAGameEvent.Add(() => { });
         }
 
 
         private void RemoveCallbacks()
         {
-            GameEvents.onGamePause.Remove(OnGamePaused); // EventVoid
-            GameEvents.onVesselChange.Remove(OnVesselChange); // EventData<T>
-            GameEvents.onEditorLoad.Remove(OnEditorLoad); // EventData<T1, T2>
+            KSP::GameEvents.onGamePause.Remove(OnGamePaused); // EventVoid
+            KSP::GameEvents.onVesselChange.Remove(OnVesselChange); // EventData<T>
+            KSP::GameEvents.onEditorLoad.Remove(OnEditorLoad); // EventData<T1, T2>
 
-            EventVoidShouldNotBeIntercepted.Remove(Callback);
-            EventDataTShouldNotBeIntercepted.Remove(Callback);
-            EventDataT1T2ShouldNotBeIntercepted.Remove(Callback);
+            NotAGameEvent.Remove(() => { });
         }
 
 
@@ -49,46 +55,32 @@ namespace TestGameEventInterception
             
         }
 
-        private void OnVesselChange(Vessel v)
+        private void OnVesselChange(KSP::Vessel v)
         {
             
         }
 
 
-        private void OnEditorLoad(ShipConstruct construct, CraftBrowser.LoadType ty)
+        private void OnEditorLoad(KSP::ShipConstruct construct, KSP::CraftBrowser.LoadType ty)
         {
             
         }
-
-
-
-        private void Callback()
-        {
-            
-        }
-
-        private void Callback(string s)
-        {
-            
-        }
-
-        private void Callback(string s, int i)
-        {
-            
-        }
-
     }
 
 
     /// <summary>
     /// Make sure a hanging GameEvent is removed upon reload
     /// </summary>
-    [KSPAddon(KSPAddon.Startup.Instantly, true)]
+    [KSP::KSPAddon(KSP::KSPAddon.Startup.Instantly, true)]
     public class TestGameEventProxyRemoval : MonoBehaviour
     {
+        private readonly EventVoid _customEvent = new EventVoid();
+
         private void Start()
         {
-            GameEvents.onGamePause.Add(OnGamePause); // do not unregister; ART should catch this
+            print("TestGameEventProxyRemoval - Start");
+            KSP::GameEvents.onGamePause.Add(OnGamePause); // do not unregister; ART should catch this
+            //_customEvent.Add(OnGamePause); // and also this
         }
 
         private void OnGamePause()

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using AssemblyReloader.Game;
@@ -51,6 +52,9 @@ namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations.GameEventIntercep
 
 
             _log.Verbose("Removing game event proxy registry");
+
+            if (_gameEventRegistry.Count > 0)
+                _log.Warning("Found {0} unremoved callbacks", _gameEventRegistry.Count.ToString(CultureInfo.InvariantCulture));
 
             foreach (var kvp in _gameEventRegistry)
                 _log.Warning(string.Format("{0} {1} was not removed", kvp.Key, kvp.Value));

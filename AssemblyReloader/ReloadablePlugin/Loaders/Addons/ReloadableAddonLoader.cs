@@ -51,6 +51,10 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
 
                     try
                     {
+                        if (!_loadedOnce.Contains(addonType.Type))
+                            if (onceOnly)
+                                _loadedOnce.Add(addonType.Type);
+
                         _mbFactory.Create(addonType.Type);
                     }
                     catch (Exception e)

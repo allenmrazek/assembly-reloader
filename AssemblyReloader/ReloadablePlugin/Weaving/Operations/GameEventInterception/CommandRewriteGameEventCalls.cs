@@ -9,11 +9,8 @@ using ReeperCommon.Extensions;
 using ReeperCommon.Logging;
 using strange.extensions.command.impl;
 using EventVoid = KSP::EventVoid;
-using AssemblyDefinition = Cecil96::Mono.Cecil.AssemblyDefinition;
-using ModuleDefinition = Cecil96::Mono.Cecil.ModuleDefinition;
-using TypeReference = Cecil96::Mono.Cecil.TypeReference;
-using MethodReference = Cecil96::Mono.Cecil.MethodReference;
-using MethodDefinition = Cecil96::Mono.Cecil.MethodDefinition;
+using Cecil96::Mono.Cecil;
+using Cecil96::Mono.Cecil.Rocks;
 using ILProcessor = Cecil96::Mono.Cecil.Cil.ILProcessor;
 using Instruction = Cecil96::Mono.Cecil.Cil.Instruction;
 using OpCodes = Cecil96::Mono.Cecil.Cil.OpCodes;
@@ -55,8 +52,10 @@ namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations.GameEventIntercep
             _log.Normal("Rewriting GameEvent calls");
 
 
-            foreach (var method in _context.Modules.SelectMany(module => module.Types).SelectMany(td => td.Methods))
-                ReplaceGameEventCallsInMethod(method);
+            foreach (var method in _context.Modules
+                .SelectMany(module => module.Types)
+                .SelectMany(td => td.Methods))
+                    ReplaceGameEventCallsInMethod(method);
 
             // todo: IScalarModule.OnMoving?
 
@@ -66,8 +65,10 @@ namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations.GameEventIntercep
 
         private void ReplaceGameEventCallsInMethod(MethodDefinition method)
         {
+            method.Body.SimplifyMacros();
+
             for (int i = 0; i < 4; ++i) // up to 3 generic arguments (0 is for EventVoid)
-                foreach (var evt in _gameEvents.Get(i))
+                foreach (var evt in _gameEvents.Get(i)) // note to self: these are GameEvent TYPE instances, with generic params filled in
                 {
                     var typeThatOwnsMethodsToIntercept = method.Module.Import(evt);
                     var calls = GetCallsToDeclaredType(method, typeThatOwnsMethodsToIntercept);
@@ -76,6 +77,8 @@ namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations.GameEventIntercep
 
                     RewriteInstructions(method, calls, typeThatOwnsMethodsToIntercept, evt);
                 }
+
+            method.Body.OptimizeMacros();
         }
 
 
@@ -86,27 +89,20 @@ namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations.GameEventIntercep
             foreach (var instr in method.Body.Instructions)
             {
                 var instruction = instr;
-                //if (instr.OpCode != OpCodes.Callvirt) continue;
 
-                //instr.With(i => i.Operand as MethodReference)
-
+                
                 instr
                     .If(i => i.OpCode == OpCodes.Callvirt)
                     .With(i => i.Operand as MethodReference)
-                    .If(mr => mr.DeclaringType.FullName == declaredType.FullName)
+                    .If(mr => mr.DeclaringType.FullName == declaredType.FullName && mr.Module.Name == declaredType.Module.Name)
                     .Do(mr => calls.Push(instruction))
                     .Do(mr => _log.Debug("Added target instruction in " + mr.FullName));
-
-                //var methodOperand = instr.Operand as MethodReference;
-
-                //if (methodOperand == null) continue;
-
-                //if (methodOperand.DeclaringType.FullName == declaredType.FullName)
-                //    calls.Push(instr);
             }
 
             return calls;
         }
+
+
 
 
         private void RewriteInstructions(MethodDefinition method, Stack<Instruction> instructionsWithTargetedCalls, TypeReference typeThatOwnsInterceptedMethods, Type gameEventType)

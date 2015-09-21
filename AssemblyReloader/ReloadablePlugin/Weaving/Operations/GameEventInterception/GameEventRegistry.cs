@@ -9,7 +9,7 @@ using ReeperCommon.Logging;
 namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations.GameEventInterception
 {
 // ReSharper disable once ClassNeverInstantiated.Global
-    public class GameEventRegistry : IGameEventRegistry
+    public class GameEventRegistry : IGameEventRegistry 
     {
         private const string GameEventAddMethodName = "Add";
         private const string GameEventRemoveMethodName = "Remove";
