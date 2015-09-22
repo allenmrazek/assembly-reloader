@@ -22,5 +22,11 @@
             print("TestScenarioModule.OnLoad - unmodified");
 #endif
         }
+
+
+        private void Start()
+        {
+            print("TestScenarioModule.Start");
+        }
     }
 }

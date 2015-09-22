@@ -8,7 +8,6 @@ using strange.extensions.injector.api;
 namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
 {
 // ReSharper disable once ClassNeverInstantiated.Global
-    [Implements(typeof(IGetConfigNodeForPart), InjectionBindingScope.CROSS_CONTEXT)]
 // ReSharper disable once UnusedMember.Global
     public class GetConfigNodeForPart : IGetConfigNodeForPart
     {

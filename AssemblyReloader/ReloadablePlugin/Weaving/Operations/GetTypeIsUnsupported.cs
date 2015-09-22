@@ -13,8 +13,12 @@ namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations
 // ReSharper disable once ClassNeverInstantiated.Global
     public class GetTypeIsUnsupported : IGetTypeIsUnsupported
     {
-        private static readonly Type[] Unsupported = new[]
+        private static readonly Type[] Unsupported =
         {
+            typeof(KSP::Part),
+
+            typeof(KSP::ScienceExperiment),
+
             typeof(KSP::Contracts.ContractPredicate),
             typeof(KSP::Contracts.IContractParameterHost),
             typeof(KSP::Contracts.Agents.Agent),

@@ -15,6 +15,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
         private readonly IPartModuleDescriptorFactory _descriptorFactory;
         private readonly IPartModuleFactory _partModuleFactory;
         private readonly IGetClonesOfPrefab _prefabClonesQuery;
+        private readonly IPartModuleSettings _partModuleSettings;
         private readonly ILog _log;
 
 
@@ -23,18 +24,21 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
             IPartModuleDescriptorFactory descriptorFactory,
             IPartModuleFactory partModuleFactory,
             IGetClonesOfPrefab prefabClonesQuery,
+            IPartModuleSettings partModuleSettings,
             [Name(LogKey.PartModuleLoader)] ILog log)
         {
             if (partModuleTypeQuery == null) throw new ArgumentNullException("partModuleTypeQuery");
             if (descriptorFactory == null) throw new ArgumentNullException("descriptorFactory");
             if (partModuleFactory == null) throw new ArgumentNullException("partModuleFactory");
             if (prefabClonesQuery == null) throw new ArgumentNullException("prefabClonesQuery");
+            if (partModuleSettings == null) throw new ArgumentNullException("partModuleSettings");
             if (log == null) throw new ArgumentNullException("log");
 
             _partModuleTypeQuery = partModuleTypeQuery;
             _descriptorFactory = descriptorFactory;
             _partModuleFactory = partModuleFactory;
             _prefabClonesQuery = prefabClonesQuery;
+            _partModuleSettings = partModuleSettings;
             _log = log;
         }
 
@@ -45,7 +49,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
         }
 
 
-        public void Load(ILoadedAssemblyHandle handle, bool prefabOnly)
+        public void Load(ILoadedAssemblyHandle handle)
         {
             if (handle == null) throw new ArgumentNullException("handle");
 
@@ -57,12 +61,12 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
             _log.Verbose(string.Format("Found {0} PartModule descriptions", descriptions.Count));
 
             foreach (var description in descriptions)
-                CreatePartModulesFromDescription(description, prefabOnly);
+                CreatePartModulesFromDescription(description);
         }
 
 
 
-        private void CreatePartModulesFromDescription(PartModuleDescriptor description, bool prefabOnly)
+        private void CreatePartModulesFromDescription(PartModuleDescriptor description)
         {
             if (description == null) throw new ArgumentNullException("description");
 
@@ -71,7 +75,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
             // create prefab's PartModule
             _partModuleFactory.Create(description.Prefab, description);
 
-            if (prefabOnly)
+            if (!_partModuleSettings.CreatePartModulesImmediately)
                 return;
 
             // todo: (?) if we're not in a scene that has PartModule instances, return an empty list

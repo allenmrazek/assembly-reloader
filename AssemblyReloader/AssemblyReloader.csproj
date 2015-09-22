@@ -94,6 +94,7 @@
     <Compile Include="ReloadablePlugin\CommandLoadReloadablePlugin.cs" />
     <Compile Include="ReloadablePlugin\CommandUnloadPreviousPlugin.cs" />
     <Compile Include="ReloadablePlugin\Config\Signals.cs" />
+    <Compile Include="ReloadablePlugin\CommandReinstallReloadablePlugin.cs" />
     <Compile Include="ReloadablePlugin\Loaders\PartModules\IQueryPartIsPrefabClone.cs" />
     <Compile Include="ReloadablePlugin\Loaders\PartModules\QueryPartIsPrefabClone.cs" />
     <Compile Include="ReloadablePlugin\Weaving\FailedToWriteDefinitionToStreamException.cs" />

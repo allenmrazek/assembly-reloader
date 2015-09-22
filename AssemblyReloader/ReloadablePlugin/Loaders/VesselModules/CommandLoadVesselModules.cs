@@ -30,9 +30,9 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.VesselModules
 
         public override void Execute()
         {
-            _log.Verbose("Loading VesselModules");
+            _log.Verbose("Loading VesselModule wrappers");
             _vesselModuleLoader.Load(_loadedAssembly);
-            _log.Verbose("Done loading VesselModules");
+            _log.Verbose("Done loading VesselModule wrappers");
         }
     }
 }

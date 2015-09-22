@@ -1,6 +1,9 @@
 ﻿extern alias KSP;
 using System;
 using System.Collections;
+using System.Linq;
+using AssemblyReloader.Game;
+using ReeperCommon.Containers;
 using ReeperLoader;
 using strange.extensions.context.impl;
 using UnityEngine;
@@ -20,12 +23,25 @@ namespace AssemblyReloader.Config
         private IEnumerator Start()
         {
             // avoid duplicates if GameDatabase is reloaded
-            // todo: update GameDatabase urls with new data
-            if (FindObjectsOfType<BootstrapCore>().Length > 1)
+            if (null != FindObjectsOfType<BootstrapCore>()
+                .SingleOrDefault(c => !ReferenceEquals(c, this))
+                .Do(otherCore =>
             {
-                print("AssemblyReloader.BootstrapCore - already exists. Exiting");
+                print("AssemblyReloader.BootstrapCore - already exists. Dispatching GameDatabase reload event and exiting");
+                try
+                {
+                    ((CoreContext) otherCore.context).injectionBinder.GetInstance<SignalGameDatabaseReloadTriggered>()
+                        .Dispatch();
+                }
+                catch (Exception e)
+                {
+                    Debug.LogError("Failed to dispatch SignalGameDatabaseReloadTriggered");
+                    Debug.LogException(e);
+                }
+            }))
+            {
                 Destroy(gameObject);
-                yield return null;
+                yield break;
             }
 
             DontDestroyOnLoad(this);

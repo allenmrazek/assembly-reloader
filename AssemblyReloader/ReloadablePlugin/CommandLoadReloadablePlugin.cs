@@ -6,6 +6,7 @@ using strange.extensions.command.impl;
 
 namespace AssemblyReloader.ReloadablePlugin
 {
+
 // ReSharper disable once ClassNeverInstantiated.Global
     public class CommandLoadReloadablePlugin : Command
     {

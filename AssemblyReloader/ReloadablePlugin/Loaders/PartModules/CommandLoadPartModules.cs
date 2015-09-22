@@ -16,9 +16,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
     {
         private readonly IPartModuleLoader _partModuleLoader;
         private readonly ILoadedAssemblyHandle _handle;
-        private readonly IPartModuleSettings _partModuleSettings;
         private readonly IPartModuleConfigNodeSnapshotRepository _snapshotRepository;
-        private readonly SignalLoadersFinished _loadersFinishedSignal;
         private readonly SignalPartModuleCreated _createdSignal;
         private readonly IGetPartModuleStartState _startStateProvider;
         private readonly IQueryPartIsPrefab _partIsPrefabQuery;
@@ -30,9 +28,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
         public CommandLoadPartModules(
             IPartModuleLoader partModuleLoader, 
             ILoadedAssemblyHandle handle,
-            IPartModuleSettings partModuleSettings,
             IPartModuleConfigNodeSnapshotRepository snapshotRepository,
-            SignalLoadersFinished loadersFinishedSignal,
             SignalPartModuleCreated createdSignal,
             IGetPartModuleStartState startStateProvider,
             IQueryPartIsPrefab partIsPrefabQuery,
@@ -40,9 +36,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
         {
             if (partModuleLoader == null) throw new ArgumentNullException("partModuleLoader");
             if (handle == null) throw new ArgumentNullException("handle");
-            if (partModuleSettings == null) throw new ArgumentNullException("partModuleSettings");
             if (snapshotRepository == null) throw new ArgumentNullException("snapshotRepository");
-            if (loadersFinishedSignal == null) throw new ArgumentNullException("loadersFinishedSignal");
             if (createdSignal == null) throw new ArgumentNullException("createdSignal");
             if (startStateProvider == null) throw new ArgumentNullException("startStateProvider");
             if (partIsPrefabQuery == null) throw new ArgumentNullException("partIsPrefabQuery");
@@ -50,9 +44,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
 
             _partModuleLoader = partModuleLoader;
             _handle = handle;
-            _partModuleSettings = partModuleSettings;
             _snapshotRepository = snapshotRepository;
-            _loadersFinishedSignal = loadersFinishedSignal;
             _createdSignal = createdSignal;
             _startStateProvider = startStateProvider;
             _partIsPrefabQuery = partIsPrefabQuery;
@@ -65,11 +57,11 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
             _log.Verbose("Creating PartModules");
 
             _createdSignal.AddListener(OnPartModuleCreated);
-            _partModuleLoader.Load(_handle, !_partModuleSettings.CreatePartModulesImmediately);
+            _partModuleLoader.Load(_handle);
             _createdSignal.RemoveListener(OnPartModuleCreated);
 
-            _loadersFinishedSignal.AddListener(OnLoadersFinished);
-            Retain();
+            _snapshotRepository.Clear();
+            RunOnStarts();
         }
 
 
@@ -85,16 +77,6 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
             _targets.Add(new KeyValuePair<IPart, KSP::PartModule>(part, pm));
         }
 
-
-        private void OnLoadersFinished()
-        {
-            _loadersFinishedSignal.RemoveListener(OnLoadersFinished);
-            _snapshotRepository.Clear();
-
-
-            RunOnStarts();
-            Release();
-        }
 
 
         private void RunOnStarts()

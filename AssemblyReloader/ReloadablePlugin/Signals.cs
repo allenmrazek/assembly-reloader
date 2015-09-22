@@ -33,6 +33,12 @@ namespace AssemblyReloader.ReloadablePlugin
     }
 
 
+    // Restore LoadedAssembly object to AssemblyLoader
+    public class SignalReinstallPlugin : Signal<Maybe<ILoadedAssemblyHandle>>
+    {
+        
+    }
+
     public class SignalPluginCannotBeLoaded : Signal<string>
     {
         

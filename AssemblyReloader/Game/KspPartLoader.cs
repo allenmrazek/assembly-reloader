@@ -7,6 +7,7 @@ using ReeperCommon.Extensions;
 
 namespace AssemblyReloader.Game
 {
+// ReSharper disable once ClassNeverInstantiated.Global
     public class KspPartLoader : IPartLoader, IPartPrefabProvider
     {
         private readonly IKspFactory _kspFactory;

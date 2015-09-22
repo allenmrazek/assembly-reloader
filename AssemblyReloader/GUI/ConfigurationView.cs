@@ -12,16 +12,11 @@ namespace AssemblyReloader.Gui
 // ReSharper disable once ClassNeverInstantiated.Global
     public class ConfigurationView : StrangeView
     {
-        [Inject(StyleKey.TitleBarButtonStyle)]
-        public GUIStyle TitleBarButtonStyle { get; set; }
-        [Inject(TextureNameKey.CloseButton)]
-        public Texture2D CloseButtonTexture { get; set; }
-        [Inject(TextureNameKey.SettingsButton)]
-        public Texture2D SettingsButtonTexture { get; set; }
-        [Inject(TextureNameKey.ResizeCursor)]
-        public Texture2D ResizeCursorTexture { get; set; }
-        [Inject]
-        public GUISkin WindowSkin { get; set; }
+        [Inject(StyleKey.TitleBarButtonStyle)] public GUIStyle TitleBarButtonStyle { get; set; }
+        [Inject(TextureNameKey.CloseButton)] public Texture2D CloseButtonTexture { get; set; }
+        [Inject(TextureNameKey.SettingsButton)] public Texture2D SettingsButtonTexture { get; set; }
+        [Inject(TextureNameKey.ResizeCursor)] public Texture2D ResizeCursorTexture { get; set; }
+        [Inject] public GUISkin WindowSkin { get; set; }
 
 
         internal readonly Signal CloseWindow = new Signal();
@@ -48,6 +43,7 @@ namespace AssemblyReloader.Gui
         protected override void DrawWindow()
         {
             GUILayout.Label("This is the CoreConfiguration view");
+            GUILayout.Label("Still under construction");
         }
 
         protected override void FinalizeWindow()

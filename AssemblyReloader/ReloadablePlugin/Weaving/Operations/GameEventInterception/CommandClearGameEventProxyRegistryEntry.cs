@@ -41,16 +41,13 @@ namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations.GameEventIntercep
 
         public override void Execute()
         {
-            _pluginWasUnloaded.AddListener(PluginWasUnloaded);
+            _pluginWasUnloaded.AddOnce(PluginWasUnloaded);
             Retain();
         }
 
 
         private void PluginWasUnloaded()
         {
-            _pluginWasUnloaded.RemoveListener(PluginWasUnloaded);
-
-
             _log.Verbose("Removing game event proxy registry");
 
             if (_gameEventRegistry.Count > 0)

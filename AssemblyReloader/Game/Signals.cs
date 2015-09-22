@@ -14,4 +14,11 @@ namespace AssemblyReloader.Game
     {
         
     }
+
+// ReSharper disable once UnusedMember.Global
+// ReSharper disable once ClassNeverInstantiated.Global
+    public class SignalGameDatabaseReloadTriggered : Signal
+    {
+        
+    }
 }

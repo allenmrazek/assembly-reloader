@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using AssemblyReloader.Game;
 using ReeperAssemblyLibrary;
 using ReeperCommon.Containers;
 using ReeperCommon.FileSystem;
@@ -11,6 +12,8 @@ namespace AssemblyReloader.ReloadablePlugin
     {
         private readonly IFile _reloadableFile;
         private readonly SignalReloadPlugin _reloadPluginSignal;
+        private readonly SignalReinstallPlugin _reinstallPluginSignal;
+        private readonly SignalGameDatabaseReloadTriggered _assemblyLoaderWipedSignal;
         private readonly SignalPluginWasLoaded _pluginWasLoadedSignal;
         private readonly SignalPluginWasUnloaded _pluginWasUnloadedSignal;
 
@@ -20,21 +23,28 @@ namespace AssemblyReloader.ReloadablePlugin
         public ReloadablePlugin(
             IFile reloadableFile,
             SignalReloadPlugin reloadPluginSignal,
+            SignalReinstallPlugin reinstallPluginSignal,
+            SignalGameDatabaseReloadTriggered assemblyLoaderWipedSignal,
             SignalPluginWasLoaded pluginWasLoadedSignal,
             SignalPluginWasUnloaded pluginWasUnloadedSignal)
         {
             if (reloadableFile == null) throw new ArgumentNullException("reloadableFile");
             if (reloadPluginSignal == null) throw new ArgumentNullException("reloadPluginSignal");
+            if (reinstallPluginSignal == null) throw new ArgumentNullException("reinstallPluginSignal");
+            if (assemblyLoaderWipedSignal == null) throw new ArgumentNullException("assemblyLoaderWipedSignal");
             if (pluginWasLoadedSignal == null) throw new ArgumentNullException("pluginWasLoadedSignal");
             if (pluginWasUnloadedSignal == null) throw new ArgumentNullException("pluginWasUnloadedSignal");
 
             _reloadableFile = reloadableFile;
             _reloadPluginSignal = reloadPluginSignal;
+            _reinstallPluginSignal = reinstallPluginSignal;
+            _assemblyLoaderWipedSignal = assemblyLoaderWipedSignal;
             _pluginWasLoadedSignal = pluginWasLoadedSignal;
             _pluginWasUnloadedSignal = pluginWasUnloadedSignal;
 
             _pluginWasLoadedSignal.AddListener(OnPluginLoaded);
             _pluginWasUnloadedSignal.AddListener(OnPluginUnloaded);
+            _assemblyLoaderWipedSignal.AddListener(OnReloadablePluginHandleWipedByReload);
         }
 
 
@@ -42,6 +52,7 @@ namespace AssemblyReloader.ReloadablePlugin
         {
             _pluginWasLoadedSignal.RemoveListener(OnPluginLoaded);
             _pluginWasUnloadedSignal.RemoveListener(OnPluginUnloaded);
+            _assemblyLoaderWipedSignal.RemoveListener(OnReloadablePluginHandleWipedByReload);
         }
 
 
@@ -73,6 +84,12 @@ namespace AssemblyReloader.ReloadablePlugin
                 throw new Exception("Received OnPluginUnloaded but no previous version was loaded");
 
             _loaded = Maybe<ILoadedAssemblyHandle>.None;
+        }
+
+
+        private void OnReloadablePluginHandleWipedByReload()
+        {
+            _reinstallPluginSignal.Dispatch(_loaded);
         }
 
 

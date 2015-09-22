@@ -184,6 +184,16 @@ namespace AssemblyReloader.ReloadablePlugin.Config
 
 
             // other signals
+            // note: order of Starts:
+//[LOG 22:53:37.336] TestAddonInFlight.Start
+//[LOG 22:53:37.361] TestPartModule.OnStart - unmodified
+//[LOG 22:53:37.394] TestVesselModule.Start - unmodified
+//[LOG 22:53:37.504] [ScenarioDestructibles]: Loading... 0 objects registered
+//[LOG 22:53:37.509] [ScenarioUpgradeableFacilities]: Loading... 0 objects registered
+//[LOG 22:53:37.512] TestScenarioModule.OnAwake - unmodified
+//[LOG 22:53:37.514] TestScenarioModule.OnLoad - unmodified
+//[LOG 22:53:37.535] TestScenarioModule.Start
+// todo: delay ScenarioModule loading by one frame?
             commandBinder.Bind<SignalPluginWasLoaded>()
                 .To<CommandSetupGameEventProxyRegistryEntry>()
                 .To<CommandInitializeAddonLoaderWithNewHandle>()
@@ -194,12 +204,14 @@ namespace AssemblyReloader.ReloadablePlugin.Config
 
 
             commandBinder.Bind<SignalUnloadPlugin>()
-                .To<CommandDeinitializeAddonLoader>()
                 .To<CommandUnloadVesselModules>()
                 .To<CommandUnloadPartModules>()
+                .To<CommandDeinitializeAddonLoader>()
                 .To<CommandUnloadScenarioModules>()
                 .To<CommandClearGameEventProxyRegistryEntry>(); // waits for SignalPluginWasUnloaded and checks for dangling GameEvent callbacks
 
+            commandBinder.Bind<SignalReinstallPlugin>()
+                .To<CommandReinstallReloadablePlugin>();
 
             commandBinder.Bind<SignalAboutToDestroyMonoBehaviour>()
                 .To<CommandCreatePartModuleConfigNodeSnapshot>()
@@ -219,6 +231,7 @@ namespace AssemblyReloader.ReloadablePlugin.Config
 
             commandBinder.Bind<SignalApplicationQuitting>()
                 .To<CommandSavePluginConfiguration>();
+
 
             // GameEvent signals
             commandBinder.Bind<SignalOnLevelWasLoaded>()

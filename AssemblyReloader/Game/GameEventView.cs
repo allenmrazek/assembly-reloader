@@ -1,6 +1,8 @@
 ﻿extern alias KSP;
+using ReeperCommon.Containers;
 using strange.extensions.mediation.impl;
 using strange.extensions.signal.impl;
+using UnityEngine;
 using KSPAddon = KSP::KSPAddon;
 
 namespace AssemblyReloader.Game
@@ -9,6 +11,7 @@ namespace AssemblyReloader.Game
     {
         internal readonly Signal<KSPAddon.Startup> LevelWasLoaded = new Signal<KSPAddon.Startup>();
         internal readonly Signal ApplicationQuit = new Signal();
+        internal readonly Signal GameDatabaseReload = new Signal();
 
 // ReSharper disable once UnusedMember.Local
         private void OnLevelWasLoaded(int level)

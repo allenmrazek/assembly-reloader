@@ -25,7 +25,6 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
         public override void Execute()
         {
             AddonLoader.Handle = Maybe<ILoadedAssemblyHandle>.With(_handle);
-
             base.Execute();
         }
     }

@@ -4,6 +4,7 @@ using strange.extensions.mediation.impl;
 
 namespace AssemblyReloader.Game
 {
+// ReSharper disable once ClassNeverInstantiated.Global
     public class GameEventMediator : Mediator
     {
         [Inject] public GameEventView View { get; set; }

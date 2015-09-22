@@ -60,6 +60,9 @@ namespace AssemblyReloader.Config
             injectionBinder.Bind<IEnumerable<IReloadablePlugin>>().To(pluginInfoMapping.Values);
             injectionBinder.Bind<IDictionary<IPluginInfo, IReloadablePlugin>>().To(pluginInfoMapping);
 
+            injectionBinder.Bind<SignalOnLoadConfiguration>().ToSingleton();
+            injectionBinder.Bind<SignalOnSaveConfiguration>().ToSingleton();
+
             mediationBinder.BindView<MainView>().ToMediator<MainViewMediator>();
             mediationBinder.BindView<ConfigurationView>().ToMediator<ConfigurationViewMediator>();
             mediationBinder.BindView<GameEventView>().ToMediator<GameEventMediator>();
@@ -133,13 +136,12 @@ namespace AssemblyReloader.Config
                     injectionBinder.GetInstance<ILog>().CreateTag("GameEventProxy")))
                 .CrossContext();
 
-
-            injectionBinder.Bind<SignalOnLoadConfiguration>().ToSingleton();
-            injectionBinder.Bind<SignalOnSaveConfiguration>().ToSingleton();
+            injectionBinder.Bind<IGetConfigNodeForPart>().To<GetConfigNodeForPart>().ToSingleton().CrossContext();
 
             // game events
             injectionBinder.Bind<SignalOnLevelWasLoaded>().ToSingleton().CrossContext();
             injectionBinder.Bind<SignalApplicationQuitting>().ToSingleton().CrossContext();
+            injectionBinder.Bind<SignalGameDatabaseReloadTriggered>().ToSingleton().CrossContext();
         }
 
 
