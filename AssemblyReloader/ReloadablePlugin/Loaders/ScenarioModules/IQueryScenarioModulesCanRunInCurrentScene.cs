@@ -1,6 +1,6 @@
 ﻿namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
 {
-    public interface IGetCurrentSceneIsValidForScenarioModules
+    public interface IQueryScenarioModulesCanRunInCurrentScene
     {
         bool Get();
     }

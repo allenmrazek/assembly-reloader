@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Linq;
+using AssemblyReloader.Config;
 using AssemblyReloader.Game;
 using ReeperAssemblyLibrary;
 using ReeperCommon.Containers;
@@ -14,6 +15,7 @@ namespace AssemblyReloader.ReloadablePlugin
     public class CommandUnloadPreviousPlugin : Command
     {
         private readonly Maybe<ILoadedAssemblyHandle> _previousAssemblyHandle;
+        private readonly IReeperAssemblyUnloader _assemblyUnloader;
         private readonly IRoutineRunner _coroutineRunner;
         private readonly SignalUnloadPlugin _unloadPluginSignal;
         private readonly SignalPluginWasUnloaded _pluginWasUnloadedSignal;
@@ -22,12 +24,14 @@ namespace AssemblyReloader.ReloadablePlugin
 
         public CommandUnloadPreviousPlugin(
             Maybe<ILoadedAssemblyHandle> previousAssemblyHandle,
+            IReeperAssemblyUnloader assemblyUnloader,
             IRoutineRunner coroutineRunner,
             SignalUnloadPlugin unloadPluginSignal,
             SignalPluginWasUnloaded pluginWasUnloadedSignal,
             SignalErrorWhileUnloading failSignal,
             ILog log)
         {
+            if (assemblyUnloader == null) throw new ArgumentNullException("assemblyUnloader");
             if (coroutineRunner == null) throw new ArgumentNullException("coroutineRunner");
             if (unloadPluginSignal == null) throw new ArgumentNullException("unloadPluginSignal");
             if (pluginWasUnloadedSignal == null) throw new ArgumentNullException("pluginWasUnloadedSignal");
@@ -35,6 +39,7 @@ namespace AssemblyReloader.ReloadablePlugin
             if (log == null) throw new ArgumentNullException("log");
 
             _previousAssemblyHandle = previousAssemblyHandle;
+            _assemblyUnloader = assemblyUnloader;
             _coroutineRunner = coroutineRunner;
             _unloadPluginSignal = unloadPluginSignal;
             _pluginWasUnloadedSignal = pluginWasUnloadedSignal;
@@ -78,8 +83,16 @@ namespace AssemblyReloader.ReloadablePlugin
 
             try
             {
+                _assemblyUnloader.Unload(_previousAssemblyHandle.Single());
                 _pluginWasUnloadedSignal.Dispatch();
+                _log.Verbose("Plugin was unloaded");
                 Release();
+            }
+            catch (ReeperAssemblyNotInCacheException e) // this could be serious since the cache is outdated somehow
+            {
+                _log.Error("Exception while unloading previous handle: " + e);
+                _failSignal.Dispatch("Assembly handle not found in cache. See log"); 
+                Fail();
             }
             catch (Exception e)
             {

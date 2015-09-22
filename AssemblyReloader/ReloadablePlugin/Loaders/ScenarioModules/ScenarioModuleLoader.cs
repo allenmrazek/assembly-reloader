@@ -141,7 +141,6 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
                              " does not have KSPScenario attribute. It is recommended to " +
                              "utilize it rather than the legacy ScenarioModule installation of " +
                              "modifying the game's ProtoScenarioModules directly.");
-
             }
 
             if (!psm.TargetScenes.Contains(_gameSceneQuery.Get())) return;

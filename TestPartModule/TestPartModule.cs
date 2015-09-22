@@ -11,7 +11,7 @@ namespace TestPartModule
         {
             base.OnStart(state);
 #if MODIFIED
-            print("TestPartModule.OnStart - *modified*");
+            print("TestPartModule.OnStart - *modified* success");
 #else
             print("TestPartModule.OnStart - unmodified");
 #endif

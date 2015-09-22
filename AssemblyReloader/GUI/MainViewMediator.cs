@@ -162,6 +162,9 @@ namespace AssemblyReloader.Gui
                     Log.Debug("MainView settings loaded");
                 })
                 .IfNull(() => Log.Warning("No MainView ConfigNode found; using default"));
+
+                _view.Visible = true; // always show the main window 
+                                      // todo: add hotkey to hide/show main window
             }
             catch (ReeperSerializationException rse)
             {

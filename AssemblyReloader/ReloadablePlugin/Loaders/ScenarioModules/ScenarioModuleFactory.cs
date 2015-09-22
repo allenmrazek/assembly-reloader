@@ -68,13 +68,13 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
                 psmConfig.ClearData();
                 config.CopyTo(psmConfig);
 
-                var scenarioModule = KSP::ScenarioRunner.fetch.AddModule(config);
+                var scenarioModule = runner.AddModule(config);
 
                 if (scenarioModule == null)
                     _log.Error("Failed to AddModule " + psm.moduleName + " with config {0}", psmConfig.ToString());
                 else
                 {
-                    // ScenarioModule does NOT load target scenes itself from supplied ConfigNode, so we must be sure to copy it over
+                    // ScenarioModule does NOT load target scenes itself (to its own field) from supplied ConfigNode, so we must be sure to copy it over
                     scenarioModule.targetScenes = psm.TargetScenes.ToList();
 
                     if (!scenarioModule.targetScenes.Any()) // shouldn't ever be hit, included as a precaution

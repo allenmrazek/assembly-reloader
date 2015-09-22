@@ -106,7 +106,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
                         else _log.Warning("Did not find EVENTS node on snapshot");
                     }
 
-                    _log.Debug("will use configNode: {0}", config.ToString());
+                    _log.Debug("Using ConfigNode: {0}", config.ToString());
 
                     try
                     {

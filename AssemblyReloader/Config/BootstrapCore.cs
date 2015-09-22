@@ -5,16 +5,15 @@ using ReeperLoader;
 using strange.extensions.context.impl;
 using UnityEngine;
 using HighLogic = KSP::HighLogic;
-using KSPAddon = KSP::KSPAddon;
 using PopupDialog = KSP::PopupDialog;
 
 namespace AssemblyReloader.Config
 {
     /// <summary>
-    /// Note: Uses ReeperLoader because Mono.Cecil 0.9.5 doesn't have support for reading symbols
+    /// Note: Uses ReeperLoader because Mono.Cecil 0.9.5 doesn't have support for a particular method
+    /// used for reading debug symbols
     /// </summary>
     [ReeperLoadTarget]
-    //[KSP::KSPAddon(KSPAddon.Startup.Instantly, true)]
 // ReSharper disable once UnusedMember.Global
     public class BootstrapCore : ContextView
     {
@@ -24,13 +23,14 @@ namespace AssemblyReloader.Config
             // todo: update GameDatabase urls with new data
             if (FindObjectsOfType<BootstrapCore>().Length > 1)
             {
+                print("AssemblyReloader.BootstrapCore - already exists. Exiting");
                 Destroy(gameObject);
                 yield return null;
             }
 
             DontDestroyOnLoad(this);
             enabled = false;
-            yield return new WaitForSeconds(10f);
+            //yield return new WaitForSeconds(10f); // uncomment this when debugging on startup and need time to attach debugger
             enabled = true;
 
 

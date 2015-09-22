@@ -71,13 +71,11 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
                 var config = new KSP::ConfigNode(psm.GetData().name);
 
                 // todo: copy TargetScenes values?
-                _log.Debug("psm " + psm.moduleName + " target scenes: " +
-                           string.Join(", ", scenarioModule.targetScenes.Select(gs => gs.ToString()).ToArray()));
+                // this isn't done atm 
 
                 scenarioModule.Save(config);
                 _configRepository.Store(_typeIdentifierQuery.Get(scenarioModule.GetType()), config);
                 _log.Verbose("Stored updated ConfigNode for " + psm.moduleName);
-                _log.Debug("ConfigNode that was saved: {0}", config.ToString());
             }
             catch (Exception e)
             {
@@ -93,7 +91,6 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
         {
             _configRepository.Store(_typeIdentifierQuery.Get(scenarioModule.GetType()), psm.GetData().CreateCopy());
             _log.Verbose("Stored last game ConfigNode for " + psm.moduleName);
-            _log.Debug("ConfigNode that was saved: {0}", psm.GetData().ToString());
         }
 
 

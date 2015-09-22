@@ -22,9 +22,8 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
 
         public Maybe<IGame> Get()
         {
-            return KSP::HighLogic.CurrentGame != null
-            ? Maybe<IGame>.With(_kspFactory.Create(KSP::HighLogic.CurrentGame)) 
-            : Maybe<IGame>.None;
+            return KSP::HighLogic.CurrentGame
+                .Return(g => _kspFactory.Create(g).ToMaybe(), Maybe<IGame>.None);
         }
     }
 }

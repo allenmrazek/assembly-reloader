@@ -9,14 +9,14 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
     public class CommandUnloadScenarioModules : Command
     {
         private readonly ILoadedAssemblyHandle _loadedHandle;
-        private readonly IGetCurrentSceneIsValidForScenarioModules _scenarioModulesExistInSceneQuery;
+        private readonly IQueryScenarioModulesCanRunInCurrentScene _scenarioModulesExistInSceneQuery;
         private readonly IScenarioModuleUnloader _scenarioModuleUnloader;
         private readonly ILog _log;
 
 
         public CommandUnloadScenarioModules(
             ILoadedAssemblyHandle loadedHandle,
-            IGetCurrentSceneIsValidForScenarioModules scenarioModulesExistInSceneQuery,
+            IQueryScenarioModulesCanRunInCurrentScene scenarioModulesExistInSceneQuery,
             IScenarioModuleUnloader scenarioModuleUnloader,
             ILog log)
         {

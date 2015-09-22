@@ -141,10 +141,10 @@
     <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\CommandCreateScenarioModuleConfigNode.cs" />
     <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\ConfigNodeDoesNotSpecifyTypeException.cs" />
     <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\GetCurrentGame.cs" />
-    <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\GetCurrentSceneIsValidForScenarioModules.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\QueryScenarioModulesCanRunInCurrentScene.cs" />
     <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\IGame.cs" />
     <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\IGetCurrentGame.cs" />
-    <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\IGetCurrentSceneIsValidForScenarioModules.cs" />
+    <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\IQueryScenarioModulesCanRunInCurrentScene.cs" />
     <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\IScenarioModuleConfigNodeRepository.cs" />
     <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\IScenarioModuleDestroyer.cs" />
     <Compile Include="ReloadablePlugin\Loaders\ScenarioModules\IScenarioModuleFactory.cs" />

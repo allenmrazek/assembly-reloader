@@ -8,6 +8,12 @@ using strange.extensions.injector;
 
 namespace AssemblyReloader.Config
 {
+    /// 
+    /// AssemblyUnloader is logically linked to the loader because the loader keepts a list of 
+    /// "active" ReeperAssemblies that will eventually be used to resolve references between reloadable 
+    /// assemblies. It makes sense to compose the unload functionality here too to keep that list 
+    /// up to date
+    /// 
 // ReSharper disable once ClassNeverInstantiated.Global
     public class ReloadableReeperAssemblyLoader : ReeperAssemblyLoader, IReeperAssemblyUnloader
     {
@@ -29,15 +35,15 @@ namespace AssemblyReloader.Config
         {
             if (loadedHandle == null) throw new ArgumentNullException("loadedHandle");
 
-            if (!_cache.ContainsValue(loadedHandle.LoadedAssembly.assembly))
-                throw new ReeperAssemblyNotInCacheException(loadedHandle); // todo: better exception
+            if (!Cache.ContainsValue(loadedHandle.LoadedAssembly.assembly))
+                throw new ReeperAssemblyNotInCacheException(loadedHandle);
 
-            var matchingEntry = _cache.Single(kvp => ReferenceEquals(kvp.Value, loadedHandle.LoadedAssembly.assembly));
+            var matchingEntry = Cache.Single(kvp => ReferenceEquals(kvp.Value, loadedHandle.LoadedAssembly.assembly));
 
             if (!_uninstaller.Uninstall(loadedHandle.LoadedAssembly.assembly))
                 throw new Exception("Failed to uninstall " + loadedHandle.LoadedAssembly.name); // todo: better exception
 
-            _cache.Remove(matchingEntry.Key);
+            Cache.Remove(matchingEntry.Key);
         }
     }
 }

@@ -8,9 +8,9 @@ using GameScenes = KSP::GameScenes;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
 {
-    [Implements(typeof(IGetCurrentSceneIsValidForScenarioModules), InjectionBindingScope.CROSS_CONTEXT)]
+    [Implements(typeof(IQueryScenarioModulesCanRunInCurrentScene), InjectionBindingScope.CROSS_CONTEXT)]
 // ReSharper disable once UnusedMember.Global
-    public class GetCurrentSceneIsValidForScenarioModules : IGetCurrentSceneIsValidForScenarioModules
+    public class QueryScenarioModulesCanRunInCurrentScene : IQueryScenarioModulesCanRunInCurrentScene
     {
         private static readonly GameScenes[] ValidScenes =
         {
@@ -23,7 +23,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
 
         private readonly IGetCurrentGameScene _gameSceneQuery;
 
-        public GetCurrentSceneIsValidForScenarioModules(IGetCurrentGameScene gameSceneQuery)
+        public QueryScenarioModulesCanRunInCurrentScene(IGetCurrentGameScene gameSceneQuery)
         {
             if (gameSceneQuery == null) throw new ArgumentNullException("gameSceneQuery");
             _gameSceneQuery = gameSceneQuery;
