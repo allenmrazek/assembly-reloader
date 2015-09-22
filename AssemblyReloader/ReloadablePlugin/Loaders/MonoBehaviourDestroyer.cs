@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using ReeperCommon.Logging;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -8,12 +10,17 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders
     public class MonoBehaviourDestroyer : IMonoBehaviourDestroyer
     {
         private readonly SignalAboutToDestroyMonoBehaviour _mbDestructionSignal;
+        private readonly ILog _log;
 
-        public MonoBehaviourDestroyer(SignalAboutToDestroyMonoBehaviour mbDestructionSignal)
+        public MonoBehaviourDestroyer(
+            SignalAboutToDestroyMonoBehaviour mbDestructionSignal,
+            ILog log)
         {
             if (mbDestructionSignal == null) throw new ArgumentNullException("mbDestructionSignal");
+            if (log == null) throw new ArgumentNullException("log");
 
             _mbDestructionSignal = mbDestructionSignal;
+            _log = log;
         }
 
 
