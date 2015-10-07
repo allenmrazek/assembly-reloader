@@ -60,6 +60,13 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
                 return;
             }
 
+            if (partModule.part == null)
+            {
+                _log.Warning("A PartModule of type " + partModule.GetType().FullName +
+                             " does not appear to be attached to a Part. ConfigNode snapshot will not be created.");
+                return;
+            }
+
             var part = _kspFactory.Create(partModule.part);
 
             if (_partIsPrefabQuery.Get(part))

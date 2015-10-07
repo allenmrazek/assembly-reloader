@@ -60,30 +60,38 @@ namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations
 
             foreach (var type in _context.Modules.SelectMany(module => module.Types))
                 ReplaceKSPAddonReferencesWithReloadableAddon(type);
+    
         }
 
 
 
 // ReSharper disable once InconsistentNaming
-        private static void ReplaceKSPAddonReferencesWithReloadableAddon(TypeDefinition type)
+        private void ReplaceKSPAddonReferencesWithReloadableAddon(TypeDefinition type)
         {
             if (type == null) throw new ArgumentNullException("type");
 
             var kspAddonReference = type.Module.Import(typeof (KSPAddon));
             var reloadableAddonReference = type.Module.Import(typeof (ReloadableAddonAttribute));
 
-            foreach (var method in type.Methods)
+            foreach (var method in type.Methods.Where(m => m.HasBody))
             {
-                method.Body.Instructions
-                    .Where(inst => inst.OpCode == OpCodes.Ldtoken)
-                    .Where(
-                        inst =>
-                            inst.Operand is TypeReference &&
-                            ((TypeReference) inst.Operand).FullName == kspAddonReference.FullName)
-                    .ToList()
-                    .ForEach(
-                        inst =>
-                            inst.Operand = reloadableAddonReference);
+                try
+                {
+                    method.Body.Instructions
+                        .Where(inst => inst.OpCode == OpCodes.Ldtoken)
+                        .Where(
+                            inst =>
+                                inst.Operand is TypeReference &&
+                                ((TypeReference) inst.Operand).FullName == kspAddonReference.FullName)
+                        .ToList()
+                        .ForEach(
+                            inst =>
+                                inst.Operand = reloadableAddonReference);
+                }
+                catch (Exception e) // todo: handle better
+                {
+                    _log.Error("Exception occurred while replacing references inside " + method.FullName + ": " + e);
+                }
             }
         }
 

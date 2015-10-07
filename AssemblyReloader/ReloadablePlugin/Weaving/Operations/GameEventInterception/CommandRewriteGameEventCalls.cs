@@ -54,7 +54,8 @@ namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations.GameEventIntercep
 
             foreach (var method in _context.Modules
                 .SelectMany(module => module.Types)
-                .SelectMany(td => td.Methods))
+                .SelectMany(td => td.Methods)
+                .Where(md => md.HasBody))
                     ReplaceGameEventCallsInMethod(method);
 
             // todo: IScalarModule.OnMoving?
@@ -84,13 +85,16 @@ namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations.GameEventIntercep
 
         private Stack<Instruction> GetCallsToDeclaredType(MethodDefinition method, TypeReference declaredType)
         {
-            var calls = new Stack<Instruction>();
+            if (method == null) throw new ArgumentNullException("method");
+            if (declaredType == null) throw new ArgumentNullException("declaredType");
+            if (!method.HasBody) throw new ArgumentException("MethodDefinition must have a body", "method");
 
+            var calls = new Stack<Instruction>();
+            
             foreach (var instr in method.Body.Instructions)
             {
                 var instruction = instr;
 
-                
                 instr
                     .If(i => i.OpCode == OpCodes.Callvirt)
                     .With(i => i.Operand as MethodReference)
@@ -107,6 +111,13 @@ namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations.GameEventIntercep
 
         private void RewriteInstructions(MethodDefinition method, Stack<Instruction> instructionsWithTargetedCalls, TypeReference typeThatOwnsInterceptedMethods, Type gameEventType)
         {
+            if (method == null) throw new ArgumentNullException("method");
+            if (instructionsWithTargetedCalls == null) throw new ArgumentNullException("instructionsWithTargetedCalls");
+            if (typeThatOwnsInterceptedMethods == null)
+                throw new ArgumentNullException("typeThatOwnsInterceptedMethods");
+            if (!method.HasBody)
+                throw new ArgumentException("MethodDefinition must contain a body", "method");
+
             var processor = method.Body.GetILProcessor();
 
             // this to help make StackTrace in GameEventProxy more informative, else the compiler
