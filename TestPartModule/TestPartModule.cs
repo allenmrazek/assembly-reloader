@@ -16,5 +16,11 @@ namespace TestPartModule
             print("TestPartModule.OnStart - unmodified");
 #endif
         }
+
+        public override void OnInitialize()
+        {
+            base.OnInitialize();
+            print("TestPartModule.OnInitialize");
+        }
     }
 }

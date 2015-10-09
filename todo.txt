@@ -40,6 +40,8 @@ KSCPauseMenu:OnGUI()
 
 - bugfix: set AssemblyLoader.LoadedAssembly dataPath, used by GetPathByType?
 
+- insert stock bug: apparently PartModule.OnInitialize is not run for the first part placed in the editor (wtf?)
+
 
 - todo: ScienceExperiments (?)
 - todo: Contracts

@@ -20,6 +20,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
         private readonly SignalPartModuleCreated _createdSignal;
         private readonly IGetPartModuleStartState _startStateProvider;
         private readonly IQueryPartIsPrefab _partIsPrefabQuery;
+        private readonly SignalLoadersFinished _loadersFinished;
         private readonly ILog _log;
 
         private readonly List<KeyValuePair<IPart, KSP::PartModule>> _targets = new List<KeyValuePair<IPart, KSP::PartModule>>();
@@ -32,6 +33,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
             SignalPartModuleCreated createdSignal,
             IGetPartModuleStartState startStateProvider,
             IQueryPartIsPrefab partIsPrefabQuery,
+            SignalLoadersFinished loadersFinished,
             ILog log)
         {
             if (partModuleLoader == null) throw new ArgumentNullException("partModuleLoader");
@@ -40,6 +42,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
             if (createdSignal == null) throw new ArgumentNullException("createdSignal");
             if (startStateProvider == null) throw new ArgumentNullException("startStateProvider");
             if (partIsPrefabQuery == null) throw new ArgumentNullException("partIsPrefabQuery");
+            if (loadersFinished == null) throw new ArgumentNullException("loadersFinished");
             if (log == null) throw new ArgumentNullException("log");
 
             _partModuleLoader = partModuleLoader;
@@ -48,6 +51,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
             _createdSignal = createdSignal;
             _startStateProvider = startStateProvider;
             _partIsPrefabQuery = partIsPrefabQuery;
+            _loadersFinished = loadersFinished;
             _log = log;
         }
 
@@ -61,7 +65,9 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
             _createdSignal.RemoveListener(OnPartModuleCreated);
 
             _snapshotRepository.Clear();
-            RunOnStarts();
+
+            _loadersFinished.AddOnce(InitializeModules);
+            Retain();
         }
 
 
@@ -78,6 +84,46 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
         }
 
 
+        private void InitializeModules()
+        {
+            try
+            {
+                RunOnInitialize();
+                RunOnStarts();
+                Release();
+            }
+            catch (Exception e)
+            {
+                Release();
+                throw;
+            }
+        }
+
+
+        // note to self: these are NOT run for prefab parts
+        private void RunOnInitialize()
+        {
+            var toBeInitialized = _targets.Where(kvp => !_partIsPrefabQuery.Get(kvp.Key)).ToList();
+
+            if (!toBeInitialized.Any())
+                return;
+
+            _log.Verbose("Running PartModule OnInitialize for " + toBeInitialized.Count + " targets");
+
+            foreach (var pm in toBeInitialized)
+            {
+                try // never trust the user ;)
+                {
+                    pm.Value.OnInitialize();
+                }
+                catch (Exception e) // wide net intended
+                {
+                    _log.Warning("PartModule " + pm.Value.GetType().FullName + " on " + pm.Key.FlightID +
+                                 " threw an exception in OnInitialize: " + e);
+                }
+            }
+        }
+
 
         private void RunOnStarts()
         {
@@ -86,7 +132,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
             var defaultGuid = Guid.NewGuid();
 
             var groupedByVessel = _targets
-                .GroupBy(target => target.Key.Vessel.Any() ? target.Key.Vessel.Single().ID : defaultGuid, target => target)
+                .GroupBy(target => target.Key.Vessel.Return(v => v.ID, defaultGuid), target => target)
                 .ToList();
 
             foreach (var group in groupedByVessel)

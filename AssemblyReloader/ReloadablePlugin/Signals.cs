@@ -6,7 +6,6 @@ using strange.extensions.signal.impl;
 namespace AssemblyReloader.ReloadablePlugin
 {
     // prompt a plugin reload
-
     public class SignalReloadPlugin : Signal<Maybe<ILoadedAssemblyHandle>>
     {
         
