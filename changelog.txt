@@ -1,0 +1,10 @@
+1.0.1
+
+- PartModule.OnInitialize now called correctly for reloaded PartModules
+- KSPAddons now created after all loaders have run
+- EveryScene addons no longer created twice
+
+1.0.1
+
+- Added check against KSPAddon-marked PartModules
+- Fixed a bug that tried to access opcodes in method definitions with no bodies defined

@@ -24,4 +24,13 @@ namespace TestAddon
             print("TestAddonInFlight.Start");
         }
     }
+
+    [KSPAddon(KSPAddon.Startup.EveryScene, false)]
+    public class TestAddonEveryScene : MonoBehaviour
+    {
+        private void Start()
+        {
+            print("TestAddonEveryScene.Start");
+        }
+    }
 }

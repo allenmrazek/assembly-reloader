@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using ReeperAssemblyLibrary;
 using UnityEngine;
+using KSPAddon = KSP::KSPAddon;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
 {
@@ -11,11 +12,15 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
     public class GetAddonTypesForScene : IGetAddonTypesForScene
     {
         private readonly IGetAttributesOfType<ReloadableAddonAttribute> _getAttributes;
+        private readonly IAddonSettings _addonSettings;
 
-        public GetAddonTypesForScene(IGetAttributesOfType<ReloadableAddonAttribute> getAttributes)
+        public GetAddonTypesForScene(IGetAttributesOfType<ReloadableAddonAttribute> getAttributes,
+            IAddonSettings addonSettings)
         {
             if (getAttributes == null) throw new ArgumentNullException("getAttributes");
+            if (addonSettings == null) throw new ArgumentNullException("addonSettings");
             _getAttributes = getAttributes;
+            _addonSettings = addonSettings;
         }
 
 
@@ -28,8 +33,21 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
                 .Where(
                     t =>
                         _getAttributes.Get(t)
-                            .Any(attr => attr.startup == scene || attr.startup == KSP::KSPAddon.Startup.EveryScene))
+                            .Any(attr => KSPAddonStartupMatchesScene(attr.startup, scene)))
                 .Select(t => new ReloadableAddonType(t, _getAttributes.Get(t).Single()));
+        }
+
+
+// ReSharper disable once InconsistentNaming
+        private bool KSPAddonStartupMatchesScene(KSPAddon.Startup startup, KSPAddon.Startup scene)
+        {
+            if (startup == KSPAddon.Startup.Instantly && _addonSettings.InstantAppliesToEveryScene)
+                return true;
+
+            if (startup == KSPAddon.Startup.EveryScene)
+                return true;
+
+            return startup == scene;
         }
     }
 }

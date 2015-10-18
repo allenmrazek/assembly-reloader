@@ -65,6 +65,8 @@ namespace AssemblyReloader.ReloadablePlugin.Config
                 .Bind<PluginConfiguration>()
                 .To<PluginConfiguration>().ToSingleton();
 
+            injectionBinder.Bind<IGetAddonTypesForScene>().To<GetAddonTypesForScene>().ToSingleton();
+
             injectionBinder.Bind<IReloadableAddonLoader>().To<ReloadableAddonLoader>().ToSingleton();
             injectionBinder.Bind<IReloadableAddonUnloader>().To<ReloadableAddonUnloader>().ToSingleton();
 

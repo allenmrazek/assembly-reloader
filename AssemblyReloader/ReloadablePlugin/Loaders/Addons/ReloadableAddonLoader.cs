@@ -41,6 +41,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
                 return;
             }
 
+
             foreach (var addonType in _getAddonTypesForScene.Get(scene, Handle.Single()))
             {
                 var onceOnly = addonType.Attribute.once;
@@ -65,7 +66,6 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
                 else
                     _log.Debug("Skipping creation of " + addonType.Type.FullName + " because it has already been loaded.");
             }
-
         }
 
 

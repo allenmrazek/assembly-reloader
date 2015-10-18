@@ -42,6 +42,7 @@ KSCPauseMenu:OnGUI()
 
 - insert stock bug: apparently PartModule.OnInitialize is not run for the first part placed in the editor (wtf?)
 
+- add separate options to disable creating reloaded addons for current scene, yet still be able to create Instantly addons?
 
 - todo: ScienceExperiments (?)
 - todo: Contracts
