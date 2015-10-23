@@ -50,7 +50,10 @@ namespace AssemblyReloader.ReloadablePlugin
                 _log.Error("Exception while loading plugin: " + e);
 
                 _failSignal.Dispatch("Exception while loading plugin! See the log for details. " + e.TargetSite.Name);
+
+                _log.Error("Plugin was NOT loaded successfully!");
                 Fail();
+                return;
             }
 
             _log.Verbose("Plugin loaded successfully!");
