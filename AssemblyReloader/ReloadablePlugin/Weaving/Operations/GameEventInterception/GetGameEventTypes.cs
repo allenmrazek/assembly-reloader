@@ -25,13 +25,6 @@ namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations.GameEventIntercep
                 .Where(fi => fi.FieldType.GetGenericArguments().Length == genericParamCount)
                 .Select(fi => fi.FieldType)
                 .Distinct();
-
-            //return _gameEventTypes
-            //    .SelectMany(owner => owner.GetFields(BindingFlags.Public | BindingFlags.Static))
-            //    .Where(fi => fi.FieldType.GetGenericArguments().Length == genericParamCount &&
-            //        _validTypes.Any(vt => vt == (fi.FieldType.IsGenericType ? fi.FieldType.GetGenericTypeDefinition() : fi.FieldType)))
-            //    .Select(fi => fi.FieldType)
-            //    .Distinct(); // there can be many GameEvents sharing the same generic type instance
         }
     }
 }

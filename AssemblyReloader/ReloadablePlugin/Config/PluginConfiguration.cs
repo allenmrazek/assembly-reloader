@@ -21,7 +21,7 @@ namespace AssemblyReloader.ReloadablePlugin.Config
         #region KSPAddon
 
         public bool InstantAppliesToEveryScene { get; set; }
-        public bool StartAddonsForCurrentScene { get; set; }
+        public bool CreateAddonsForCurrentSceneOnReload { get; set; }
 
         #endregion
 
@@ -64,7 +64,7 @@ namespace AssemblyReloader.ReloadablePlugin.Config
         {
             // set defaults
             InstantAppliesToEveryScene = true;
-            StartAddonsForCurrentScene = true;
+            CreateAddonsForCurrentSceneOnReload = true;
 
             SaveAndReloadPartModuleConfigNodes = true;
             CreatePartModulesImmediately = true;

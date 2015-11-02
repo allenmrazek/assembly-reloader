@@ -116,7 +116,7 @@ namespace AssemblyReloader.ReloadablePlugin.Gui
             DrawToggleSetting("KSPAddon.Startup.Instant applies to every scene", AddonSettings.InstantAppliesToEveryScene,
                 ToggleInstantAppliesToEveryScene);
 
-            DrawToggleSetting("Start KSPAddons for current scene", AddonSettings.StartAddonsForCurrentScene,
+            DrawToggleSetting("Start KSPAddons for current scene on reload", AddonSettings.CreateAddonsForCurrentSceneOnReload,
                 ToggleStartAddonsForCurrentScene);
         }
 

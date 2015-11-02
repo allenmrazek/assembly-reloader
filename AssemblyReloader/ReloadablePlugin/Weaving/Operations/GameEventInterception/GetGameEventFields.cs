@@ -23,7 +23,7 @@ namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations.GameEventIntercep
         };
 
 
-        private readonly Type[] _gameEventTypes =
+        private readonly Type[] _gameEventContainers =
         {
             typeof (GameEvents),
             typeof (GameEvents.Contract),
@@ -34,7 +34,7 @@ namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations.GameEventIntercep
 
         public IEnumerable<FieldInfo> Get()
         {
-            return _gameEventTypes
+            return _gameEventContainers
                 .SelectMany(owner => owner.GetFields(BindingFlags.Public | BindingFlags.Static))
                 .Where(
                     fi =>

@@ -9,6 +9,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
     public class CommandInitializeAddonLoaderWithNewHandle : CommandCreateAddonsForScene
     {
         private readonly ILoadedAssemblyHandle _handle;
+        private readonly IAddonSettings _settings;
         private readonly SignalLoadersFinished _finished;
 
         public CommandInitializeAddonLoaderWithNewHandle(
@@ -17,18 +18,23 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
             ILoadedAssemblyHandle handle,
             IAddonSettings settings,
             SignalLoadersFinished finished,
-            ILog log) : base(addonLoader, getCurrentScene, settings, log)
+            ILog log) : base(addonLoader, getCurrentScene, log)
         {
             if (handle == null) throw new ArgumentNullException("handle");
+            if (settings == null) throw new ArgumentNullException("settings");
             if (finished == null) throw new ArgumentNullException("finished");
 
             _handle = handle;
+            _settings = settings;
             _finished = finished;
         }
 
         public override void Execute()
         {
             AddonLoader.Handle = Maybe<ILoadedAssemblyHandle>.With(_handle);
+
+            if (!_settings.CreateAddonsForCurrentSceneOnReload)
+                return;
 
             _finished.AddOnce(CreateAddons); // wait until all loaders have a chance to run before creating addons
             Retain();
@@ -37,6 +43,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
         private void CreateAddons()
         {
             base.Execute();
+            Release();
         }
     }
 }

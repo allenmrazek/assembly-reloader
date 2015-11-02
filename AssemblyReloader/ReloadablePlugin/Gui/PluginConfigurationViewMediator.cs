@@ -186,7 +186,7 @@ namespace AssemblyReloader.ReloadablePlugin.Gui
 
         private void OnToggleStartAddonsForCurrentScene()
         {
-            Configuration.StartAddonsForCurrentScene = !Configuration.StartAddonsForCurrentScene;
+            Configuration.CreateAddonsForCurrentSceneOnReload = !Configuration.CreateAddonsForCurrentSceneOnReload;
         }
 
         private void OnToggleSaveAndReloadPartModuleConfigNodes()

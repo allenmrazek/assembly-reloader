@@ -3,6 +3,6 @@
     public interface IAddonSettings
     {
         bool InstantAppliesToEveryScene { get; }
-        bool StartAddonsForCurrentScene { get; }
+        bool CreateAddonsForCurrentSceneOnReload { get; }
     }
 }
