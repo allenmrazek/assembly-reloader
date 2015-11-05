@@ -14,16 +14,15 @@ namespace AssemblyReloader.Gui
     // ReSharper disable once ClassNeverInstantiated.Global
     public class MainView : StrangeView
     {
-        [Inject(StyleKey.TitleBarButtonStyle)]
-        public GUIStyle TitleBarButtonStyle { get; set; }
-        [Inject(TextureNameKey.CloseButton)]
-        public Texture2D CloseButtonTexture { get; set; }
-        [Inject(TextureNameKey.SettingsButton)]
-        public Texture2D SettingsButtonTexture { get; set; }
-        [Inject(TextureNameKey.ResizeCursor)]
-        public Texture2D ResizeCursorTexture { get; set; }
-        [Inject]
-        public GUISkin WindowSkin { get; set; }
+// ReSharper disable UnusedAutoPropertyAccessor.Global
+// ReSharper disable MemberCanBePrivate.Global
+
+        [Inject(StyleKey.TitleBarButtonStyle)] public GUIStyle TitleBarButtonStyle { get; set; }
+        [Inject(TextureNameKey.CloseButton)] public Texture2D CloseButtonTexture { get; set; }
+        [Inject(TextureNameKey.SettingsButton)] public Texture2D SettingsButtonTexture { get; set; }
+        [Inject(TextureNameKey.ResizeCursor)] public Texture2D ResizeCursorTexture { get; set; }
+
+        [Inject] public GUISkin WindowSkin { get; set; }
 
 
         private IPluginInfo[] _plugins; // backing field to avoid creating garbage every OnGUI with foreach

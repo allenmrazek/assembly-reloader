@@ -21,12 +21,14 @@ namespace AssemblyReloader.Gui
         private MainView _view;
 
         [Inject] public SignalCloseAllWindows CloseAllWindowsSignal { get; set; }
+        [Inject] public SignalApplicationLauncherButtonToggle OnAppLauncherToggle { get; set; }
         [Inject] public SignalTogglePluginConfigurationView TogglePluginOptionsSignal { get; set; }
         [Inject] public SignalToggleConfigurationView ToggleConfigurationOptionsSignal { get; set; }
         [Inject] public SignalOnSaveConfiguration SaveConfigurationSignal { get; set; }
         [Inject] public SignalOnLoadConfiguration LoadConfigurationSignal { get; set; }
+        [Inject] public SignalMainViewVisibilityChanged ViewVisibilityChangedSignal { get; set; }
 
-        [Inject]
+        [Inject] // intended: can't ref auto-implemented accessors
         public MainView View
         {
             get { return _view; }
@@ -54,6 +56,8 @@ namespace AssemblyReloader.Gui
 
             SaveConfigurationSignal.AddListener(OnSaveConfiguration);
             LoadConfigurationSignal.AddListener(OnLoadConfiguration);
+
+            OnAppLauncherToggle.AddListener(OnAppButtonToggle);
         }
 
 
@@ -70,6 +74,8 @@ namespace AssemblyReloader.Gui
 
             SaveConfigurationSignal.RemoveListener(OnSaveConfiguration);
             LoadConfigurationSignal.RemoveListener(OnLoadConfiguration);
+
+            OnAppLauncherToggle.RemoveListener(OnAppButtonToggle);
         }
 
 
@@ -113,12 +119,14 @@ namespace AssemblyReloader.Gui
         {
             // we should close all open windows if the main window is closed
             CloseAllWindowsSignal.Dispatch();
+            DispatchVisibilityState();
         }
 
 
         private void OnCloseAllWindows()
         {
             View.Visible = false;
+            DispatchVisibilityState();
         }
 
 
@@ -163,13 +171,30 @@ namespace AssemblyReloader.Gui
                 })
                 .IfNull(() => Log.Warning("No MainView ConfigNode found; using default"));
 
-                _view.Visible = true; // always show the main window 
-                                      // todo: add hotkey to hide/show main window
+                DispatchVisibilityState(); // dispatch event to sync AppButton toggle status with main window visibility
             }
             catch (ReeperSerializationException rse)
             {
                 Log.Error("Failed due to exception: " + rse);
             }
+        }
+
+
+        private void OnAppButtonToggle(bool b)
+        {
+            if (!b)
+            {
+                CloseWindow(); // call instead of just setting because this is tied to more actions (closing all windows)
+            }
+            else View.Visible = true;
+
+            DispatchVisibilityState();
+        }
+
+
+        private void DispatchVisibilityState()
+        {
+            ViewVisibilityChangedSignal.Dispatch(View.Visible);
         }
     }
 }

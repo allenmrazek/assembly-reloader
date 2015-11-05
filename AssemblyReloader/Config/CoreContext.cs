@@ -65,9 +65,9 @@ namespace AssemblyReloader.Config
 
             mediationBinder.BindView<MainView>().ToMediator<MainViewMediator>();
             mediationBinder.BindView<ConfigurationView>().ToMediator<ConfigurationViewMediator>();
+            mediationBinder.BindView<ApplicationLauncherView>().ToMediator<ApplicationLauncherMediator>();
             mediationBinder.BindView<GameEventView>().ToMediator<GameEventMediator>();
-
-
+            
 
             SetupCommandBindings();
         }
@@ -138,8 +138,8 @@ namespace AssemblyReloader.Config
             injectionBinder.Bind<SignalOnLevelWasLoaded>().ToSingleton().CrossContext();
             injectionBinder.Bind<SignalApplicationQuitting>().ToSingleton().CrossContext();
             injectionBinder.Bind<SignalGameDatabaseReloadTriggered>().ToSingleton().CrossContext();
-        }
 
+        }
 
 
         private void SetupCommandBindings()
@@ -155,6 +155,7 @@ namespace AssemblyReloader.Config
                 .To<CommandLaunchReloadablePluginContexts>()
                 .Once();
         }
+
 
         public override void Launch()
         {

@@ -13,9 +13,6 @@ namespace AssemblyReloader.Config
         // ReSharper disable UnusedMember.Global
         // ReSharper disable InconsistentNaming
 
-        //[ReeperPersistent] public Setting<bool> ReloadAllReloadablesUponWindowFocus = false;
-        //[ReeperPersistent] public Setting<bool> StartKSPAddonsForCurrentScene = false;
-
         [ReeperPersistent] public string PlaceholderValue = "Placeholder string";
     }
 }

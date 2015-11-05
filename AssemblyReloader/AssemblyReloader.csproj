@@ -77,10 +77,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyFileLocationNotFoundException.cs" />
+    <Compile Include="Config\CommandDebugPrint.cs" />
     <Compile Include="Config\CommandSaveCoreConfiguration.cs" />
     <Compile Include="Config\GUISkinNotFoundException.cs" />
     <Compile Include="Config\ILoadedAssemblyUninstaller.cs" />
     <Compile Include="Config\IReeperAssemblyUnloader.cs" />
+    <Compile Include="Gui\ApplicationLauncherMediator.cs" />
+    <Compile Include="Gui\ApplicationLauncherView.cs" />
     <Compile Include="ReloadablePlugin\Config\CommandLoadPluginConfiguration.cs" />
     <Compile Include="ReloadablePlugin\Config\CommandSavePluginConfiguration.cs" />
     <Compile Include="ReloadablePlugin\Config\PluginConfigurationSurrogate.cs" />

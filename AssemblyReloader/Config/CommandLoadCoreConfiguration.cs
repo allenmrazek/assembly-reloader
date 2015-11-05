@@ -48,8 +48,6 @@ namespace AssemblyReloader.Config
 
         public override void Execute()
         {
-            _log.Debug("Mono.Cecil: " + typeof(AssemblyDefinition).Assembly.FullName);
-
             var fullPath = _configPath.Get(_core);
 
             if (!File.Exists(fullPath))

@@ -54,6 +54,8 @@ namespace AssemblyReloader.Config
             injectionBinder.Bind<SignalCloseAllWindows>().ToSingleton().CrossContext();
             injectionBinder.Bind<SignalTogglePluginConfigurationView>().ToSingleton().CrossContext();
             injectionBinder.Bind<SignalToggleConfigurationView>().ToSingleton();
+            injectionBinder.Bind<SignalApplicationLauncherButtonToggle>().ToSingleton().CrossContext();
+            injectionBinder.Bind<SignalMainViewVisibilityChanged>().ToSingleton().CrossContext();
         }
 
 
@@ -61,16 +63,22 @@ namespace AssemblyReloader.Config
         {
             var mainView = new GameObject("MainView");
             var configView = new GameObject("ConfigurationView");
+            var appLauncherView = new GameObject("ApplicationLauncherView");
 
+          
             // views will bubble up the transform hierarchy looking for a context to attach to.
             // For config and mainview, this will be the core context
-            configView.transform.parent = mainView.transform.parent = _contextView.transform;
+            configView.transform.parent = 
+            mainView.transform.parent =
+            appLauncherView.transform.parent = _contextView.transform;
 
             Object.DontDestroyOnLoad(mainView);
             Object.DontDestroyOnLoad(configView);
+            Object.DontDestroyOnLoad(appLauncherView);
 
             mainView.AddComponent<MainView>();
             configView.AddComponent<ConfigurationView>();
+            appLauncherView.AddComponent<ApplicationLauncherView>();
 
             yield return 0; // wait until next frame so the views can initialize
             Release();
