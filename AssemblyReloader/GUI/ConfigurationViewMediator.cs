@@ -16,19 +16,14 @@ namespace AssemblyReloader.Gui
     public class ConfigurationViewMediator : Mediator
     {
         private const string ConfigurationViewNodeName = "ConfigurationView";
-        private ConfigurationView _view;
 
         [Inject] public SignalCloseAllWindows CloseAllWindows { get; set; }
         [Inject] public SignalToggleConfigurationView ToggleConfigurationViewSignal { get; set; }
         [Inject] public SignalOnSaveConfiguration SaveConfigurationSignal { get; set; }
         [Inject] public SignalOnLoadConfiguration LoadConfigurationSignal { get; set; }
 
-        [Inject]
-        public ConfigurationView View
-        {
-            get { return _view; }
-            set { _view = value; }
-        }
+        private ConfigurationView _view;
+        [Inject] public ConfigurationView View { get { return _view; } set { _view = value; } }
 
         [Inject] public CoreConfiguration CoreConfiguration { get; set; }
         [Inject] public IConfigNodeSerializer Serializer { get; set; }

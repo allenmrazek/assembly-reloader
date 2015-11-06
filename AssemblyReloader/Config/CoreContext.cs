@@ -83,6 +83,8 @@ namespace AssemblyReloader.Config
             assemblyResolver.AddSearchDirectory(injectionBinder.GetInstance<IDirectory>().FullPath);
             injectionBinder.Bind<BaseAssemblyResolver>().To(assemblyResolver).CrossContext();
 
+            injectionBinder.Bind<IRoutineRunner>().To<RoutineRunner>().ToSingleton().CrossContext();
+
             injectionBinder.Bind<IGetCurrentStartupScene>().To<GetCurrentStartupScene>()
                 .ToSingleton()
                 .CrossContext();
@@ -138,7 +140,6 @@ namespace AssemblyReloader.Config
             injectionBinder.Bind<SignalOnLevelWasLoaded>().ToSingleton().CrossContext();
             injectionBinder.Bind<SignalApplicationQuitting>().ToSingleton().CrossContext();
             injectionBinder.Bind<SignalGameDatabaseReloadTriggered>().ToSingleton().CrossContext();
-
         }
 
 

@@ -11,9 +11,11 @@ using UnityEngine;
 
 namespace AssemblyReloader.Gui
 {
-    // ReSharper disable once ClassNeverInstantiated.Global
+
+// ReSharper disable once ClassNeverInstantiated.Global
     public class MainView : StrangeView
     {
+
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable MemberCanBePrivate.Global
 

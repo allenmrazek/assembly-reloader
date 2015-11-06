@@ -3,6 +3,7 @@ using System;
 using ReeperCommon.Extensions;
 using ReeperCommon.Gui;
 using ReeperCommon.Gui.Window;
+using ReeperCommon.Gui.Window.Decorators;
 using ReeperCommon.Serialization;
 using strange.extensions.mediation.impl;
 using UnityEngine;
@@ -26,7 +27,8 @@ namespace AssemblyReloader.Gui
         [ReeperPersistent] private string _title = string.Empty;
         [ReeperPersistent] private bool _draggable = false;
         [ReeperPersistent] private bool _visible = true;
-        private IWindowComponent _logic;
+        
+        public IWindowComponent Decorated; 
 
 
         protected override void Start()
@@ -34,12 +36,12 @@ namespace AssemblyReloader.Gui
             base.Start();
 
             _id = new WindowID(GetInstanceID());
-            _logic = this; // just in case something goes wrong during init
+            Decorated = this; // just in case something goes wrong during init
 
             if (!registeredWithContext)
                 throw new Exception("Failed to register with context");
 
-            _logic = Initialize();
+            Decorated = Initialize() ?? this;
         }
 
 
@@ -56,18 +58,18 @@ namespace AssemblyReloader.Gui
         private void OnGUI()
         {
             
-            if (_logic.IsNull() || !_logic.Visible) return;
+            if (Decorated.IsNull() || !Decorated.Visible) return;
 
             try
             {
-                _logic.OnWindowPreDraw();
+                Decorated.OnWindowPreDraw();
 
-                if (!_logic.Skin.IsNull())
-                    GUI.skin = _logic.Skin;
+                if (!Decorated.Skin.IsNull())
+                    GUI.skin = Decorated.Skin;
 
 
-                _logic.Dimensions = GUILayout.Window(_logic.Id.Value, _logic.Dimensions, DrawWindow,
-                    _logic.Title, Skin.window);
+                Decorated.Dimensions = GUILayout.Window(Decorated.Id.Value, Decorated.Dimensions, DrawWindow,
+                    Decorated.Title, Skin.window);
             }
             catch (Exception e)
             {
@@ -81,8 +83,8 @@ namespace AssemblyReloader.Gui
         {
             try
             {
-                _logic.OnWindowDraw(winid);
-                _logic.OnWindowFinalize(winid);
+                Decorated.OnWindowDraw(winid);
+                Decorated.OnWindowFinalize(winid);
             }
             catch (Exception e)
             {
@@ -95,9 +97,9 @@ namespace AssemblyReloader.Gui
 // ReSharper disable once UnusedMember.Local
         private void Update()
         {
-            if (_logic.IsNull()) return;
+            if (Decorated.IsNull()) return;
 
-            _logic.OnUpdate();
+            Decorated.OnUpdate();
         }
 
 
@@ -140,6 +142,16 @@ namespace AssemblyReloader.Gui
 
         public virtual void DuringSerialize(IConfigNodeSerializer formatter, ConfigNode node)
         {
+            // this is kind of ugly, but since this object is actually decorated by others and we want
+            // to capture their data as well and store it in our own (native) ConfigNode, we'll need some
+            // special handling to make sure we don't end up in a loop 
+            var current = Decorated;
+
+            while (current is WindowDecorator)
+            {
+                formatter.WriteObjectToConfigNode(ref current, node);
+                current = ((WindowDecorator)current).Decorated;
+            }
         }
 
 

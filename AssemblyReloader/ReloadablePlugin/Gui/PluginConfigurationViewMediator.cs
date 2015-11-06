@@ -153,7 +153,7 @@ namespace AssemblyReloader.ReloadablePlugin.Gui
                     .Do(n =>
                     {
                         Log.Verbose("Deserializing PluginConfigurationView");
-                        Serializer.LoadObjectFromConfigNode(ref _view, n);
+                        Serializer.LoadObjectFromConfigNode(ref _view.Decorated, n);
                         Log.Verbose("Successfully deserialized PluginConfigurationView");
                     }).IfNull(() => Log.Warning("No serialized settings found for PluginConfigurationView"));
             }
@@ -170,7 +170,7 @@ namespace AssemblyReloader.ReloadablePlugin.Gui
             try
             {
                 Log.Verbose("Serializing PluginConfigurationView");
-                Serializer.WriteObjectToConfigNode(ref _view, config.AddNode(ConfigurationNodeName));
+                Serializer.WriteObjectToConfigNode(ref _view.Decorated, config.AddNode(ConfigurationNodeName));
                 Log.Verbose("Successfully serialized PluginConfigurationView");
             }
             catch (ReeperSerializationException rse)

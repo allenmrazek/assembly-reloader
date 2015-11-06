@@ -1,19 +1,13 @@
 ﻿extern alias KSP;
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using AssemblyReloader.Config.Keys;
 using ReeperCommon.Containers;
-using ReeperCommon.Gui.Window;
 using strange.extensions.injector;
 using strange.extensions.mediation.impl;
 using strange.extensions.signal.impl;
 using UnityEngine;
 using ApplicationLauncher = KSP::ApplicationLauncher;
 using ApplicationLauncherButton = KSP::ApplicationLauncherButton;
-using RUIToggleButton = KSP::RUIToggleButton;
 
 namespace AssemblyReloader.Gui
 {
@@ -50,21 +44,24 @@ namespace AssemblyReloader.Gui
             { }, () => { }, delegate { }, () => { }, ButtonTexture);
         }
 
+
         private void OnFalse()
         {
             Toggle.Dispatch(false);
         }
+
 
         private void OnTrue()
         {
             Toggle.Dispatch(true);
         }
 
+
         public void SetToggleState(bool tf)
         {
             if (tf)
-                _button.SetTrue(false);
-            else _button.SetFalse(false);
+                _button.Do(b => b.SetTrue(false));
+            else _button.Do(b => b.SetFalse(false));
         }
     }
 }

@@ -18,7 +18,6 @@ namespace AssemblyReloader.Gui
     public class MainViewMediator : Mediator
     {
         private const string MainViewNodeName = "MainView";
-        private MainView _view;
 
         [Inject] public SignalCloseAllWindows CloseAllWindowsSignal { get; set; }
         [Inject] public SignalApplicationLauncherButtonToggle OnAppLauncherToggle { get; set; }
@@ -27,6 +26,8 @@ namespace AssemblyReloader.Gui
         [Inject] public SignalOnSaveConfiguration SaveConfigurationSignal { get; set; }
         [Inject] public SignalOnLoadConfiguration LoadConfigurationSignal { get; set; }
         [Inject] public SignalMainViewVisibilityChanged ViewVisibilityChangedSignal { get; set; }
+
+        private MainView _view;
 
         [Inject] // intended: can't ref auto-implemented accessors
         public MainView View

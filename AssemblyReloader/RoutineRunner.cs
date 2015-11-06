@@ -8,8 +8,6 @@ using UnityEngine;
 
 namespace AssemblyReloader
 {
-    [Implements(typeof(IRoutineRunner), InjectionBindingScope.CROSS_CONTEXT)]
-// ReSharper disable once UnusedMember.Global
     public class RoutineRunner : IRoutineRunner
     {
         private readonly GameObject _gameObject;

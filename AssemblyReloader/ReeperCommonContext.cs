@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using AssemblyReloader.Config.Keys;
+using AssemblyReloader.Gui;
 using ReeperAssemblyLibrary;
 using ReeperCommon.Containers;
 using ReeperCommon.FileSystem;
@@ -147,9 +148,16 @@ namespace AssemblyReloader
                         new GenericSurrogateProvider(surrogateQuery, supportedTypeQuery, assembliesToScanForSurrogates),
                         new SurrogateProvider(surrogateQuery, supportedTypeQuery, assembliesToScanForSurrogates)));
 
+
             var preferNativeSelector = new PreferNativeSerializer(standardSerializerSelector);
+
+            var selectorOrder = new CompositeSerializerSelector(
+                preferNativeSelector,          // always prefer native serializer first 
+                standardSerializerSelector);   // otherwise, find any surrogate
+
+            
             var includePersistentFieldsSelector = new SerializerSelectorDecorator(
-                preferNativeSelector,
+                selectorOrder,
                 s => Maybe<IConfigNodeItemSerializer>.With(new FieldSerializer(s, serializableFieldQuery)));
 
             return new ConfigNodeSerializer(includePersistentFieldsSelector);

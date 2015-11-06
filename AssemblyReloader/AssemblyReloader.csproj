@@ -84,6 +84,8 @@
     <Compile Include="Config\IReeperAssemblyUnloader.cs" />
     <Compile Include="Gui\ApplicationLauncherMediator.cs" />
     <Compile Include="Gui\ApplicationLauncherView.cs" />
+    <Compile Include="Gui\StrangeViewSurrogate.cs" />
+    <Compile Include="Gui\WindowSerializerSelector.cs" />
     <Compile Include="ReloadablePlugin\Config\CommandLoadPluginConfiguration.cs" />
     <Compile Include="ReloadablePlugin\Config\CommandSavePluginConfiguration.cs" />
     <Compile Include="ReloadablePlugin\Config\PluginConfigurationSurrogate.cs" />
