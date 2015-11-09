@@ -84,8 +84,6 @@
     <Compile Include="Config\IReeperAssemblyUnloader.cs" />
     <Compile Include="Gui\ApplicationLauncherMediator.cs" />
     <Compile Include="Gui\ApplicationLauncherView.cs" />
-    <Compile Include="Gui\StrangeViewSurrogate.cs" />
-    <Compile Include="Gui\WindowSerializerSelector.cs" />
     <Compile Include="ReloadablePlugin\Config\CommandLoadPluginConfiguration.cs" />
     <Compile Include="ReloadablePlugin\Config\CommandSavePluginConfiguration.cs" />
     <Compile Include="ReloadablePlugin\Config\PluginConfigurationSurrogate.cs" />
@@ -119,7 +117,7 @@
     <Compile Include="LogKey.cs" />
     <Compile Include="ReeperCommonContext.cs" />
     <Compile Include="Config\CommandConfigureGameEvents.cs" />
-    <Compile Include="Config\CommandConfigureGui.cs" />
+    <Compile Include="Config\CommandCreateGui.cs" />
     <Compile Include="Config\CommandLoadCoreConfiguration.cs" />
     <Compile Include="ReloadablePlugin\Config\CommandConfigurePluginGui.cs" />
     <Compile Include="ReloadablePlugin\Loaders\Addons\ReloadableAddonType.cs" />
@@ -369,6 +367,9 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\btnScale.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

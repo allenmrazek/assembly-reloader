@@ -16,9 +16,12 @@ namespace AssemblyReloader.Gui
         [Inject(TextureNameKey.CloseButton)] public Texture2D ButtonTexture { get; set; }
         [Inject] public IRoutineRunner CoroutineRunner { get; set; }
 
+
         internal readonly Signal<bool> Toggle = new Signal<bool>();
+        internal readonly Signal ButtonCreated = new Signal();
 
         private ApplicationLauncherButton _button;
+
 
         protected override void Start()
         {
@@ -41,8 +44,14 @@ namespace AssemblyReloader.Gui
                 yield return 0;
             
             _button = ApplicationLauncher.Instance.AddApplication(OnTrue, OnFalse, () =>
-            { }, () => { }, delegate { }, () => { }, ButtonTexture);
+                    { }, () => { }, delegate { }, () => { }, ButtonTexture);
+
+            yield return new WaitForEndOfFrame(); // the button won't respect toggle state immediately for some reason,
+                                                  // so a slight delay is necessary while it finishes doing whatever internal setup
+
+            ButtonCreated.Dispatch();
         }
+
 
 
         private void OnFalse()

@@ -26,6 +26,7 @@ namespace AssemblyReloader.Gui
 
         [Inject] public GUISkin WindowSkin { get; set; }
 
+   
 
         private IPluginInfo[] _plugins; // backing field to avoid creating garbage every OnGUI with foreach
         public IEnumerable<IPluginInfo> Plugins {
@@ -41,6 +42,7 @@ namespace AssemblyReloader.Gui
 
         private Vector2 _scroll = default(Vector2);
         private bool _firstLayout = true;
+        private WindowScale _scaleDecorator;
 
         protected override IWindowComponent Initialize()
         {
@@ -52,9 +54,9 @@ namespace AssemblyReloader.Gui
             if (Plugins == null)
                 Plugins = Enumerable.Empty<IPluginInfo>();
 
-            var scaling = new Scaling(this, Vector2.one);
+            _scaleDecorator = new WindowScale(this, Vector2.one);
 
-            var clamp = new ClampToScreen(scaling);
+            var clamp = new ClampToScreen(_scaleDecorator);
 
             var withButtons = new TitleBarButtons(clamp, TitleBarButtons.ButtonAlignment.Right, TitleBarButtonOffset);
 
@@ -139,6 +141,12 @@ namespace AssemblyReloader.Gui
             
             if (Width < windowSize.x)
                 Width = windowSize.x;
+        }
+
+
+        public void SetScale(float scale)
+        {
+            _scaleDecorator.Scale = new Vector2(scale, scale);
         }
     }
 }

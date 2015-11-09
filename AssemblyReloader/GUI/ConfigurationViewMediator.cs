@@ -21,6 +21,7 @@ namespace AssemblyReloader.Gui
         [Inject] public SignalToggleConfigurationView ToggleConfigurationViewSignal { get; set; }
         [Inject] public SignalOnSaveConfiguration SaveConfigurationSignal { get; set; }
         [Inject] public SignalOnLoadConfiguration LoadConfigurationSignal { get; set; }
+        [Inject] public SignalInterfaceScaleChanged InterfaceScaleChangedSignal { get; set; }
 
         private ConfigurationView _view;
         [Inject] public ConfigurationView View { get { return _view; } set { _view = value; } }
@@ -34,12 +35,16 @@ namespace AssemblyReloader.Gui
             base.OnRegister();
 
             View.CloseWindow.AddListener(CloseConfigurationWindow);
+            View.InterfaceScaleChanged.AddListener(OnUserChangedInterfaceScale);
+
             CloseAllWindows.AddListener(CloseConfigurationWindow);
             ToggleConfigurationViewSignal.AddListener(OnToggleConfigurationWindow);
+            InterfaceScaleChangedSignal.AddListener(OnInterfaceScaleChanged);
 
             SaveConfigurationSignal.AddListener(OnSaveConfiguration);
             LoadConfigurationSignal.AddListener(OnLoadConfiguration);
 
+            //View.InterfaceScale = CoreConfiguration.InterfaceScale;
             View.Visible = false; // initially start closed
         }
 
@@ -49,11 +54,27 @@ namespace AssemblyReloader.Gui
             base.OnRemove();
 
             View.CloseWindow.RemoveListener(CloseConfigurationWindow);
+            View.InterfaceScaleChanged.RemoveListener(OnUserChangedInterfaceScale);
+
             CloseAllWindows.RemoveListener(CloseConfigurationWindow);
             ToggleConfigurationViewSignal.RemoveListener(OnToggleConfigurationWindow);
 
             SaveConfigurationSignal.RemoveListener(OnSaveConfiguration);
             LoadConfigurationSignal.RemoveListener(OnLoadConfiguration);
+        }
+
+
+        private void OnInterfaceScaleChanged(float f)
+        {
+            View.SetScale(f);
+        }
+
+
+        // This called when slider in configuration view is changed
+        private void OnUserChangedInterfaceScale(float newScale)
+        {
+            CoreConfiguration.InterfaceScale = newScale;
+            InterfaceScaleChangedSignal.Dispatch(newScale);
         }
 
 

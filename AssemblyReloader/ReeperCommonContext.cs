@@ -34,7 +34,13 @@ namespace AssemblyReloader
 
             
 
-            // cross context bindings
+            MapCrossContextBindings();
+        }
+
+
+        private void MapCrossContextBindings()
+        {
+            injectionBinder.Bind<IUrlDirProvider>().To<KSPGameDataUrlDirProvider>().ToSingleton().CrossContext();
 
             // note: these required as dependencies of KspAssemblyLoader, which is in turn a dependency of
             // GetAssemblyFileLocation, so they need to be initialized here instead of the more logical
@@ -47,7 +53,6 @@ namespace AssemblyReloader
                 .To(new ReeperAssemblyFactory("reloadable", "mdb"))
                 .CrossContext();
 
-            injectionBinder.Bind<IUrlDirProvider>().To<KSPGameDataUrlDirProvider>().ToSingleton();
             injectionBinder.Bind<IUrlDir>().To(new KSPUrlDir(injectionBinder.GetInstance<IUrlDirProvider>().Get())).CrossContext();
             injectionBinder.Bind<IFileSystemFactory>().To<KSPFileSystemFactory>().ToSingleton().CrossContext();
 
@@ -62,11 +67,8 @@ namespace AssemblyReloader
                 .To(ConfigureResourceRepository(injectionBinder.GetInstance<IDirectory>()))
                 .CrossContext();
 
-
-
             injectionBinder.Bind<IConfigNodeSerializer>().To(ConfigureConfigNodeSerializer()).CrossContext();
         }
-
 
 
         private static IResourceRepository ConfigureResourceRepository(IDirectory dllDirectory)

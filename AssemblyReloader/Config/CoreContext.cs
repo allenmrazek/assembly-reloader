@@ -151,8 +151,9 @@ namespace AssemblyReloader.Config
             commandBinder.Bind<SignalStart>()
                 .InSequence() 
                 .To<CommandConfigureGameEvents>()
-                .To<CommandConfigureGui>()
+                .To<CommandCreateGui>()
                 .To<CommandLoadCoreConfiguration>()
+                //.To<CommandConfigureGui>()
                 .To<CommandLaunchReloadablePluginContexts>()
                 .Once();
         }

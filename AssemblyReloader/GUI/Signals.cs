@@ -20,4 +20,14 @@ namespace AssemblyReloader.Gui
     {
         
     }
+
+    public class SignalApplicationLauncherButtonCreated : Signal
+    {
+        
+    }
+
+    public class SignalInterfaceScaleChanged : Signal<float>
+    {
+        
+    }
 }

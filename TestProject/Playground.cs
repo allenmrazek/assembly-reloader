@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
 using Contracts;
 using ReeperCommon.Containers;
 using ReeperCommon.Extensions;
@@ -17,7 +18,162 @@ using Object = UnityEngine.Object;
 
 namespace TestProject
 {
-    [KSPAddon(KSPAddon.Startup.Flight, false)]
+    //[KSPAddon(KSPAddon.Startup.SpaceCentre, false)]
+    //public class MissionControlNewTab : MonoBehaviour
+    //{
+    //    private void Start()
+    //    {
+    //        GameEvents.onGUIMissionControlSpawn.Add(OnMissionControlSpawned);
+    //    }
+
+    //    private void OnDestroy()
+    //    {
+    //        GameEvents.onGUIMissionControlSpawn.Remove(OnMissionControlSpawned);
+    //    }
+
+
+    //    private void OnMissionControlSpawned()
+    //    {
+    //        StartCoroutine(EditMissionControl());
+
+    //    }
+
+        
+    //    private IEnumerator EditMissionControl()
+    //    {
+    //        yield return 0;
+
+    //        var mc = UIManager.instance.transform.Find("panel_MC").GetComponentInChildren<RomfarerPanelManager>().gameObject;
+    //        if (mc == null)
+    //            Debug.LogError("Didn't find MissionControl");
+
+    //        var tabGroup = mc.GetComponentsInChildren<CMPanelTabGroup>().Single();
+    //        var manager = mc.transform.Find("panel_main/placement/anchor/subCategories/panel_missions/panelManager").GetComponent<UIPanelManager>();
+
+    //        if (tabGroup == null) Debug.LogError("Didn't find tabs");
+    //        if (manager == null) Debug.LogError("Didnt find panel manager");
+
+    //        var tab = CloneTab(tabGroup);
+    //        var panel = ClonePanel(manager);
+
+
+    //        manager.AddChild(panel.gameObject);
+
+    //        tab.panel = panel;
+    //        var drawer = panel.gameObject.AddComponent<PanelDrawer>();
+
+    //        var background = manager.GetComponentInParent<BTButton>();
+
+            
+    //        if (background == null)
+    //            Debug.LogError("Didn't find background");
+
+    //        var uiCam = UIManager.instance.uiCameras.FirstOrDefault(uic => (uic.mask & (1 << panel.gameObject.layer)) != 0);
+    //        if (uiCam == null)
+    //            Debug.LogError("Couldn't find a UICamera");
+
+    //        var screenPos = uiCam.camera.WorldToScreenPoint(panel.transform.position);
+
+    //        drawer.Rect = new Rect(screenPos.x, Screen.height - screenPos.y, background.width, background.height);
+    //    }
+
+
+    //    private UIPanel ClonePanel(UIPanelManager manager)
+    //    {
+    //        var panelToClone = manager.transform.Find("panel_active").GetComponent<UIPanel>();
+    //        var cloned =
+    //            Instantiate(panelToClone.gameObject, panelToClone.transform.position, panelToClone.transform.rotation) as
+    //                GameObject;
+
+    //        // this clone has a bunch of stuff we don't need...
+    //        foreach (Transform t in cloned.transform)
+    //            Destroy(t.gameObject);
+
+    //        cloned.gameObject.SetActive(false);
+    //        DestroyImmediate(cloned.GetComponent<ScrollListResizer>());
+
+    //        cloned.transform.parent = manager.transform;
+
+    //        return cloned.GetComponent<UIPanel>();
+    //    }
+
+
+    //    private BTPanelTab CloneTab(CMPanelTabGroup group)
+    //    {
+
+    //        var tabToClone = group.transform.GetComponentsInChildren<BTPanelTab>().First();
+    //        var tabs = group.GetComponentsInChildren<BTPanelTab>()
+    //            .OrderBy(t => t.transform.position.x)
+    //            .ToList();
+
+    //        // clone this tab
+    //        var cloned =
+    //            GameObject.Instantiate(tabToClone.gameObject, tabToClone.transform.position,
+    //                tabToClone.transform.rotation) as GameObject;
+
+    //        cloned.transform.parent = group.transform;
+    //        cloned.transform.Translate(400f, 0f, 0f, Space.Self); // debug purposes
+    //        cloned.GetComponentInChildren<SpriteText>().Text = "New";
+
+    //        tabToClone.gameObject.AddComponent<FixText>();
+    //        cloned.AddComponent<FixText>();
+
+    //        cloned.transform.position = tabs.Last().transform.position + GetTabSpacing(tabs);
+
+    //        return cloned.GetComponent<BTPanelTab>();
+    //    }
+
+    //    private static Vector3 GetTabSpacing(IEnumerable<BTPanelTab> tabs)
+    //    {
+    //        var lTabs = tabs.ToList();
+
+    //        var first = lTabs.Take(1).Single();
+    //        var second = lTabs.Skip(1).Take(1).Single();
+
+    //        return second.transform.position - first.transform.position;
+    //    }
+    //}
+
+
+    //class FixText : MonoBehaviour
+    //{
+    //    private System.Collections.IEnumerator Start()
+    //    {
+    //        yield return 0;
+
+    //        var st = transform.GetComponentInChildren<SpriteText>();
+
+    //        st.UpdateMesh();
+    //        Destroy(this);
+    //    }
+    //}
+
+
+    //class PanelDrawer : MonoBehaviour
+    //{
+    //    public Rect Rect = new Rect(300f, 300f, 128f, 128f);
+    //    private Texture2D _texture = new Texture2D(1, 1);
+
+    //    private void Start()
+    //    {
+    //        _texture.SetPixels(new[] {Color.red});
+    //        _texture.Apply();
+
+    //    }
+    //    private void OnGUI()
+    //    {
+    //        // display area we can draw in
+    //        if (Event.current.type == EventType.Repaint)
+    //            GUI.DrawTexture(Rect, _texture, ScaleMode.StretchToFill, false);
+
+    //        GUILayout.BeginArea(Rect);
+    //        GUILayout.Label("Hello, world!");
+    //        GUILayout.EndArea();
+    //    }
+    //}
+
+
+    //[KSPAddon(KSPAddon.Startup.Flight, false)]
     public class ExpressionSystemFinder : MonoBehaviour
     {
         private void Start()

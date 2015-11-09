@@ -1,4 +1,5 @@
 ﻿extern alias KSP;
+using System.Diagnostics;
 using ReeperCommon.Containers;
 using ReeperCommon.Serialization;
 using ReeperCommon.Serialization.Exceptions;
@@ -20,12 +21,18 @@ namespace AssemblyReloader.Gui
         private const string MainViewNodeName = "MainView";
 
         [Inject] public SignalCloseAllWindows CloseAllWindowsSignal { get; set; }
-        [Inject] public SignalApplicationLauncherButtonToggle OnAppLauncherToggle { get; set; }
+        [Inject] public SignalApplicationLauncherButtonToggle AppLauncherToggleSignal { get; set; }
+        [Inject] public SignalApplicationLauncherButtonCreated AppLauncherButtonCreatedSignal { get; set; }
+        [Inject] public SignalInterfaceScaleChanged InterfaceScaleChangedSignal { get; set; }
+
         [Inject] public SignalTogglePluginConfigurationView TogglePluginOptionsSignal { get; set; }
         [Inject] public SignalToggleConfigurationView ToggleConfigurationOptionsSignal { get; set; }
         [Inject] public SignalOnSaveConfiguration SaveConfigurationSignal { get; set; }
         [Inject] public SignalOnLoadConfiguration LoadConfigurationSignal { get; set; }
         [Inject] public SignalMainViewVisibilityChanged ViewVisibilityChangedSignal { get; set; }
+        
+
+
 
         private MainView _view;
 
@@ -58,7 +65,9 @@ namespace AssemblyReloader.Gui
             SaveConfigurationSignal.AddListener(OnSaveConfiguration);
             LoadConfigurationSignal.AddListener(OnLoadConfiguration);
 
-            OnAppLauncherToggle.AddListener(OnAppButtonToggle);
+            AppLauncherToggleSignal.AddListener(OnAppButtonToggle);
+            InterfaceScaleChangedSignal.AddListener(OnInterfaceScaleChanged);
+            AppLauncherButtonCreatedSignal.AddOnce(OnAppLauncherButtonCreated);
         }
 
 
@@ -76,7 +85,8 @@ namespace AssemblyReloader.Gui
             SaveConfigurationSignal.RemoveListener(OnSaveConfiguration);
             LoadConfigurationSignal.RemoveListener(OnLoadConfiguration);
 
-            OnAppLauncherToggle.RemoveListener(OnAppButtonToggle);
+            AppLauncherToggleSignal.RemoveListener(OnAppButtonToggle);
+            InterfaceScaleChangedSignal.RemoveListener(OnInterfaceScaleChanged);
         }
 
 
@@ -181,6 +191,12 @@ namespace AssemblyReloader.Gui
         }
 
 
+        private void OnAppLauncherButtonCreated()
+        {
+            DispatchVisibilityState(); // sync AppLauncher button toggle status up with current state
+        }
+
+
         private void OnAppButtonToggle(bool b)
         {
             if (!b)
@@ -197,5 +213,12 @@ namespace AssemblyReloader.Gui
         {
             ViewVisibilityChangedSignal.Dispatch(View.Visible);
         }
+
+
+        private void OnInterfaceScaleChanged(float f)
+        {
+            View.SetScale(f);
+        }
+
     }
 }

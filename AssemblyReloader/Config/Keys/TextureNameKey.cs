@@ -6,6 +6,6 @@
         CloseButton,
         SettingsButton,
         ResizeCursor,
-
+        RescaleCursor,
     }
 }

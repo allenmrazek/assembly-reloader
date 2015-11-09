@@ -15,7 +15,7 @@ using Object = UnityEngine.Object;
 namespace AssemblyReloader.Config
 {
 // ReSharper disable once ClassNeverInstantiated.Global
-    public class CommandConfigureGui : Command
+    public class CommandCreateGui : Command
     {
         private const string GuiSkinPrefabName = "KSP window 4";
 
@@ -24,7 +24,7 @@ namespace AssemblyReloader.Config
         private readonly IRoutineRunner _runner;
 
 
-        public CommandConfigureGui(
+        public CommandCreateGui(
             [Name(ContextKeys.CONTEXT_VIEW)] GameObject contextView,
             IResourceRepository resources,
             IRoutineRunner runner)
@@ -56,6 +56,8 @@ namespace AssemblyReloader.Config
             injectionBinder.Bind<SignalToggleConfigurationView>().ToSingleton();
             injectionBinder.Bind<SignalApplicationLauncherButtonToggle>().ToSingleton().CrossContext();
             injectionBinder.Bind<SignalMainViewVisibilityChanged>().ToSingleton().CrossContext();
+            injectionBinder.Bind<SignalApplicationLauncherButtonCreated>().ToSingleton().CrossContext();
+            injectionBinder.Bind<SignalInterfaceScaleChanged>().ToSingleton().CrossContext();
         }
 
 
@@ -81,8 +83,10 @@ namespace AssemblyReloader.Config
             appLauncherView.AddComponent<ApplicationLauncherView>();
 
             yield return 0; // wait until next frame so the views can initialize
+
             Release();
         }
+
 
 
         private void SetupTexturesAndSkin()
@@ -104,6 +108,7 @@ namespace AssemblyReloader.Config
             BindTextureToName(_resources, "Resources/btnClose", TextureNameKey.CloseButton).CrossContext();
             BindTextureToName(_resources, "Resources/btnWrench", TextureNameKey.SettingsButton).CrossContext();
             BindTextureToName(_resources, "Resources/cursor", TextureNameKey.ResizeCursor).CrossContext();
+            BindTextureToName(_resources, "Resources/btnScale", TextureNameKey.RescaleCursor).CrossContext();
         }
 
 

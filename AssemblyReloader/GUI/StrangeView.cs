@@ -70,6 +70,8 @@ namespace AssemblyReloader.Gui
 
                 Decorated.Dimensions = GUILayout.Window(Decorated.Id.Value, Decorated.Dimensions, DrawWindow,
                     Decorated.Title, Skin.window);
+
+                Decorated.OnWindowPostDraw();
             }
             catch (Exception e)
             {
@@ -135,6 +137,10 @@ namespace AssemblyReloader.Gui
         }
 
 
+        public virtual void OnWindowPostDraw()
+        {
+            
+        }
         public virtual void OnUpdate()
         {
 
@@ -145,6 +151,9 @@ namespace AssemblyReloader.Gui
             // this is kind of ugly, but since this object is actually decorated by others and we want
             // to capture their data as well and store it in our own (native) ConfigNode, we'll need some
             // special handling to make sure we don't end up in a loop 
+            //
+            // it's kinda unsafe to just mash them all into the one ConfigNode but doing it the "right" way
+            // ends up in a whole lot of mostly empty nodes
             var current = Decorated;
 
             while (current is WindowDecorator)
@@ -157,6 +166,13 @@ namespace AssemblyReloader.Gui
 
         public virtual void DuringDeserialize(IConfigNodeSerializer formatter, ConfigNode node)
         {
+            var current = Decorated;
+
+            while (current is WindowDecorator)
+            {
+                formatter.LoadObjectFromConfigNode(ref current, node);
+                current = ((WindowDecorator)current).Decorated;
+            }
         }
 
 
