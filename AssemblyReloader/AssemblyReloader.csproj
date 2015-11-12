@@ -43,10 +43,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Assembly-CSharp">
+    <Reference Include="Assembly-CSharp, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Kerbal Space Program\KSP_Data\Managed\Assembly-CSharp.dll</HintPath>
       <Aliases>KSP</Aliases>
-      <Private>False</Private>
     </Reference>
     <Reference Include="Mono.Cecil, Version=0.9.6.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
       <HintPath>..\packages\Mono.Cecil.0.9.6.1\lib\net35\Mono.Cecil.dll</HintPath>
@@ -77,6 +77,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyFileLocationNotFoundException.cs" />
+    <Compile Include="Config\CommandConfigureCecilAssemblyResolver.cs" />
+    <Compile Include="Config\CommandBootstrapReloadablePluginContexts.cs" />
     <Compile Include="Config\CommandDebugPrint.cs" />
     <Compile Include="Config\CommandSaveCoreConfiguration.cs" />
     <Compile Include="Config\GUISkinNotFoundException.cs" />
@@ -89,7 +91,6 @@
     <Compile Include="ReloadablePlugin\Config\PluginConfigurationSurrogate.cs" />
     <Compile Include="ReloadablePlugin\Config\RawAssemblyDataKey.cs" />
     <Compile Include="Config\LoadedAssemblyUninstaller.cs" />
-    <Compile Include="Config\ReeperAssemblyNotInCacheException.cs" />
     <Compile Include="Config\ReloadableReeperAssemblyLoader.cs" />
     <Compile Include="Config\UnityInstantiationFailedException.cs" />
     <Compile Include="Game\DuplicateProtoScenarioModuleException.cs" />
@@ -371,6 +372,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Resources\btnScale.png" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\AppButton.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>
@@ -383,8 +387,16 @@ set ProjectGameData=$(ProjectDir)GameData\$(ProjectName)\
 
 
 call:CreateSymbolsForDependencies
+
+if $(Configuration) == Release (
+echo Merging dependencies for release build...
+call:MergeDependencies
+) else (
+echo Copying dependencies
 call:CopyDependencies
-call "$(SolutionDir)CopyToLocation.bat" "$(TargetDir)" "%25ProjectGameData%25" $(TargetName).* /xf *.config *.pdb
+)
+
+call "$(SolutionDir)CopyToLocation.bat" "$(TargetDir)" "%25ProjectGameData%25" $(TargetName).* /xf *.config *.pdb *.mdb
 
 REM ----------------------------------------------------------
 REM Create debug symbols for AssemblyReloader
@@ -412,31 +424,28 @@ REM Copy dependencies into Project GameData
 REM ----------------------------------------------------------
 :CopyDependencies
 echo copy dependencies to project GameData...
-call "$(SolutionDir)CopyToLocation.bat" "$(TargetDir)" "%25ProjectGameData%25" ReeperCommon.* /xf *.pdb
-call "$(SolutionDir)CopyToLocation.bat" "$(TargetDir)" "%25ProjectGameData%25" StrangeIoC.* /xf *.pdb
 call "$(SolutionDir)CopyToLocation.bat" "$(TargetDir)" "%25ProjectGameData%25" ReeperAssemblyLibrary.* /xf *.pdb
 call "$(SolutionDir)CopyToLocation.bat" "$(TargetDir)" "%25ProjectGameData%25" ReeperLoader.* /xf *.pdb
 call "$(SolutionDir)CopyToLocation.bat" "$(TargetDir)" "%25ProjectGameData%25" Mono.Cecil.* /xf *.pdb
+
+call "$(SolutionDir)CopyToLocation.bat" "$(TargetDir)" "%25ProjectGameData%25" ReeperCommon.* /xf *.pdb
+call "$(SolutionDir)CopyToLocation.bat" "$(TargetDir)" "%25ProjectGameData%25" StrangeIoC.* /xf *.pdb
 goto:eof
 
 
 REM ----------------------------------------------------------
-REM Merge dependencies into AssemblyReloader.dll (unused currently)
+REM Merge dependencies into AssemblyReloader.dll (used in release builds), except for those unlikely to be shared by other projects
 REM ----------------------------------------------------------
 :MergeDependencies
 echo merge dependencies...
 cd "(TargetDir)"
-"$(SolutionDir)packages\ILRepack.2.0.4\tools\ILRepack.exe" /verbose /out:$(TargetFileName) $(TargetFileName) ReeperCommon.dll StrangeIoC.dll Mono.Cecil.dll Mono.Cecil.Mdb.dll Mono.Cecil.Pdb.dll Mono.Cecil.Rocks.dll
 
-goto:eof
+"$(SolutionDir)packages\ILRepack.2.0.4\tools\ILRepack.exe" /verbose /internalize /out:$(TargetFileName) $(TargetFileName) ReeperCommon.dll ReeperAssemblyLibrary.dll StrangeIoC.dll
 
+"$(SolutionDir)packages\ILRepack.2.0.4\tools\ILRepack.exe" /verbose /internalize /out:ReeperLoader.dll ReeperLoader.dll ReeperCommon.dll ReeperAssemblyLibrary.dll StrangeIoC.dll
 
-:MergeMonoCecil96
-echo Merging Mono.Cecil 0.9.6...
-cd "%25ProjectGameData%25"
-"$(SolutionDir)packages\ILRepack.2.0.4\tools\ILRepack.exe" /verbose /out:$(TargetFileName) $(TargetFileName) Mono.Cecil.dll Mono.Cecil.Mdb.dll Mono.Cecil.Pdb.dll Mono.Cecil.Rocks.dll
-echo Success
-goto:eof
+call "$(SolutionDir)CopyToLocation.bat" "$(TargetDir)" "%25ProjectGameData%25" Mono.Cecil.* /xf *.pdb
+call "$(SolutionDir)CopyToLocation.bat" "$(TargetDir)" "%25ProjectGameData%25" ReeperLoader.* /xf *.pdb
 
 
 REM ----------------------------------------------------------
@@ -445,10 +454,10 @@ REM ----------------------------------------------------------
 :CreateSymbolsForDependencies
 echo Creating symbols for dependencies...
 cd "%25TargetDir%25"
-call "$(SolutionDir)CreateMdb.bat" "$(TargetDir)ReeperCommon.dll" "%25ProjectGameData%25"
-call "$(SolutionDir)CreateMdb.bat" "$(TargetDir)StrangeIoC.dll" "%25ProjectGameData%25"
-call "$(SolutionDir)CreateMdb.bat" "$(TargetDir)ReeperAssemblyLibrary.dll" "%25ProjectGameData%25"
-call "$(SolutionDir)CreateMdb.bat" "$(TargetDir)ReeperLoader.dll" "%25ProjectGameData%25"
+call "$(SolutionDir)CreateMdb.bat" "$(TargetDir)ReeperCommon.dll" "$(TargetDir)"
+call "$(SolutionDir)CreateMdb.bat" "$(TargetDir)StrangeIoC.dll" "$(TargetDir)"
+call "$(SolutionDir)CreateMdb.bat" "$(TargetDir)ReeperAssemblyLibrary.dll" "$(TargetDir)"
+call "$(SolutionDir)CreateMdb.bat" "$(TargetDir)ReeperLoader.dll" "$(TargetDir)"
 goto:eof
 
 
@@ -478,9 +487,10 @@ call "$(SolutionDir)CopyToLocation.bat" "%25ProjectGameData%25" "%25ksp%25$(Proj
 
 
 echo Files copied to GameData successfully
-
+echo reached here
 
 REM return with no error; robocopy success will set ERRORLEVEL nonzero which will trick VS into thinking the build failed
+set ERRORLEVEL=0
 exit 0</PostBuildEvent>
   </PropertyGroup>
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

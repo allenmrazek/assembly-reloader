@@ -88,12 +88,6 @@ namespace AssemblyReloader.ReloadablePlugin
                 _log.Verbose("Plugin was unloaded");
                 Release();
             }
-            catch (ReeperAssemblyNotInCacheException e) // this could be serious since the cache is outdated somehow
-            {
-                _log.Error("Exception while unloading previous handle: " + e);
-                _failSignal.Dispatch("Assembly handle not found in cache. See log"); 
-                Fail();
-            }
             catch (Exception e)
             {
                 _log.Error("Exception while dispatching plugin unloaded signal! " + e);

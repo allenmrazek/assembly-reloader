@@ -13,14 +13,14 @@ namespace AssemblyReloader.ReloadablePlugin.Weaving
 // ReSharper disable once ClassNeverInstantiated.Global
     public class WovenRawAssemblyDataFactory : IRawAssemblyDataFactory
     {
-        private readonly BaseAssemblyResolver _resolver;
+        private readonly IAssemblyResolver _resolver;
         private readonly SignalWeaveDefinition _weaveSignal;
         private readonly IRawAssemblyDataFactory _rawFactory;
         private readonly ITemporaryFileFactory _tempFileFactory;
         private readonly ILog _log;
 
         public WovenRawAssemblyDataFactory(
-            BaseAssemblyResolver resolver,
+            IAssemblyResolver resolver,
             SignalWeaveDefinition weaveSignal, 
             IRawAssemblyDataFactory rawFactory,
             ITemporaryFileFactory tempFileFactory,

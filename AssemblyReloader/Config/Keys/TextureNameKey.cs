@@ -7,5 +7,6 @@
         SettingsButton,
         ResizeCursor,
         RescaleCursor,
+        AppLauncherButton,
     }
 }

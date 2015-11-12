@@ -322,8 +322,6 @@ namespace AssemblyReloader.ReloadablePlugin.Config
             injectionBinder.Bind<ReloadableReeperAssemblyLoader>().ToSingleton();
             var loader = injectionBinder.GetInstance<ReloadableReeperAssemblyLoader>();
 
-            AppDomain.CurrentDomain.AssemblyResolve += loader.Resolve;
-
             injectionBinder.Unbind<ReloadableReeperAssemblyLoader>();
             injectionBinder
                 .Bind<IReeperAssemblyLoader>()

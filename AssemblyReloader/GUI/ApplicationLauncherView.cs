@@ -13,7 +13,7 @@ namespace AssemblyReloader.Gui
 {
     public class ApplicationLauncherView : View
     {
-        [Inject(TextureNameKey.CloseButton)] public Texture2D ButtonTexture { get; set; }
+        [Inject(TextureNameKey.AppLauncherButton)] public Texture2D ButtonTexture { get; set; }
         [Inject] public IRoutineRunner CoroutineRunner { get; set; }
 
 

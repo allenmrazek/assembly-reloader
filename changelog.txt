@@ -3,6 +3,9 @@
 - PartModule.OnInitialize now called correctly for reloaded PartModules
 - KSPAddons now created after all loaders have run
 - EveryScene addons no longer created twice
+- Fixed some serialization issues
+- Added ApplicationLauncher button
+- Fixed an issue that prevented Cecil from correctly resolving assemblies referenced by a reloadable plugin outside of the reloadable plugin's folder
 
 1.0.1
 

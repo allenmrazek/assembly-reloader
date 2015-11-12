@@ -3,6 +3,7 @@ using System.Linq;
 using System;
 using AssemblyReloader.ReloadablePlugin.Config;
 using ReeperAssemblyLibrary;
+using ReeperCommon.Containers;
 using ReeperCommon.Logging;
 using strange.extensions.injector;
 
@@ -35,15 +36,8 @@ namespace AssemblyReloader.Config
         {
             if (loadedHandle == null) throw new ArgumentNullException("loadedHandle");
 
-            if (!Cache.ContainsValue(loadedHandle.LoadedAssembly.assembly))
-                throw new ReeperAssemblyNotInCacheException(loadedHandle);
-
-            var matchingEntry = Cache.Single(kvp => ReferenceEquals(kvp.Value, loadedHandle.LoadedAssembly.assembly));
-
             if (!_uninstaller.Uninstall(loadedHandle.LoadedAssembly.assembly))
                 throw new Exception("Failed to uninstall " + loadedHandle.LoadedAssembly.name); // todo: better exception
-
-            Cache.Remove(matchingEntry.Key);
         }
     }
 }

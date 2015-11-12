@@ -1,5 +1,6 @@
 ﻿extern alias KSP;
 extern alias Cecil96;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using AssemblyReloader.Game;
@@ -10,11 +11,10 @@ using AssemblyReloader.ReloadablePlugin.Loaders;
 using AssemblyReloader.ReloadablePlugin.Loaders.Addons;
 using AssemblyReloader.ReloadablePlugin.Loaders.PartModules;
 using AssemblyReloader.ReloadablePlugin.Weaving.Operations.GameEventInterception;
-using ReeperCommon.FileSystem;
+using ReeperAssemblyLibrary;
 using ReeperCommon.Logging;
 using strange.extensions.context.api;
 using UnityEngine;
-using Cecil96::Mono.Cecil;
 using Object = UnityEngine.Object;
 
 namespace AssemblyReloader.Config
@@ -33,32 +33,32 @@ namespace AssemblyReloader.Config
             MapCrossContextBindings(); // these bindings will be shared by the reloadable plugin contexts we're about to create
 
             // bootstrap reloadable plugin contexts
-            var pluginContexts =
-                injectionBinder.GetInstance<GetReloadableAssemblyFilesFromDirectoryRecursive>().Get()
-                    .Select(reloadableFile =>
-                    {
-                        injectionBinder.GetInstance<ILog>().Normal("Bootstrapping context for " + reloadableFile.Url);
+            //var pluginContexts =
+            //    injectionBinder.GetInstance<GetReloadableAssemblyFilesFromDirectoryRecursive>().Get()
+            //        .Select(reloadableFile =>
+            //        {
+            //            injectionBinder.GetInstance<ILog>().Normal("Bootstrapping context for " + reloadableFile.Url);
 
-                        var reloadablePluginBootstrap = new GameObject("ContextView." + reloadableFile.Name);
-                        reloadablePluginBootstrap.transform.parent = ((GameObject)contextView).transform;
-                        Object.DontDestroyOnLoad(reloadablePluginBootstrap);
+            //            var reloadablePluginBootstrap = new GameObject("ContextView." + reloadableFile.Name);
+            //            reloadablePluginBootstrap.transform.parent = ((GameObject)contextView).transform;
+            //            Object.DontDestroyOnLoad(reloadablePluginBootstrap);
 
-                        var pluginContextView = reloadablePluginBootstrap.AddComponent<BootstrapReloadablePlugin>();
+            //            var pluginContextView = reloadablePluginBootstrap.AddComponent<BootstrapReloadablePlugin>();
 
-                        pluginContextView.Bootstrap(reloadableFile);
+            //            pluginContextView.Bootstrap(reloadableFile);
 
-                        return pluginContextView.context as ReloadablePluginContext;
-                    })
-                    .ToList();
+            //            return pluginContextView.context as ReloadablePluginContext;
+            //        })
+            //        .ToList();
 
-            var pluginInfoMapping = pluginContexts.ToDictionary(context => context.Info, context => context.Plugin);
+            //var pluginInfoMapping = pluginContexts.ToDictionary(context => context.Info, context => context.Plugin);
 
 
-            // core context bindings
-            injectionBinder.Bind<IEnumerable<ReloadablePluginContext>>().To(pluginContexts);
-            injectionBinder.Bind<IEnumerable<IPluginInfo>>().To(pluginInfoMapping.Keys);
-            injectionBinder.Bind<IEnumerable<IReloadablePlugin>>().To(pluginInfoMapping.Values);
-            injectionBinder.Bind<IDictionary<IPluginInfo, IReloadablePlugin>>().To(pluginInfoMapping);
+            //// core context bindings
+            //injectionBinder.Bind<IEnumerable<ReloadablePluginContext>>().To(pluginContexts);
+            //injectionBinder.Bind<IEnumerable<IPluginInfo>>().To(pluginInfoMapping.Keys);
+            //injectionBinder.Bind<IEnumerable<IReloadablePlugin>>().To(pluginInfoMapping.Values);
+            //injectionBinder.Bind<IDictionary<IPluginInfo, IReloadablePlugin>>().To(pluginInfoMapping);
 
             injectionBinder.Bind<SignalOnLoadConfiguration>().ToSingleton();
             injectionBinder.Bind<SignalOnSaveConfiguration>().ToSingleton();
@@ -75,13 +75,14 @@ namespace AssemblyReloader.Config
 
         private void MapCrossContextBindings()
         {
+            var reeperResolver = new ReeperAssemblyResolver();
+            AppDomain.CurrentDomain.AssemblyResolve += reeperResolver.Resolve;
+            injectionBinder.Bind<IReeperAssemblyResolver>().ToValue(reeperResolver).CrossContext();
+
             injectionBinder.Bind<IGetConfigurationFilePath>()
                 .To(new GetConfigurationFilePath())
                 .CrossContext();
 
-            var assemblyResolver = new DefaultAssemblyResolver();
-            assemblyResolver.AddSearchDirectory(injectionBinder.GetInstance<IDirectory>().FullPath);
-            injectionBinder.Bind<BaseAssemblyResolver>().To(assemblyResolver).CrossContext();
 
             injectionBinder.Bind<IRoutineRunner>().To<RoutineRunner>().ToSingleton().CrossContext();
 
@@ -150,10 +151,11 @@ namespace AssemblyReloader.Config
 
             commandBinder.Bind<SignalStart>()
                 .InSequence() 
+                .To<CommandConfigureCecilAssemblyResolver>()
+                .To<CommandBootstrapReloadablePluginContexts>()
                 .To<CommandConfigureGameEvents>()
                 .To<CommandCreateGui>()
                 .To<CommandLoadCoreConfiguration>()
-                //.To<CommandConfigureGui>()
                 .To<CommandLaunchReloadablePluginContexts>()
                 .Once();
         }

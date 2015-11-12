@@ -109,6 +109,7 @@ namespace AssemblyReloader.Config
             BindTextureToName(_resources, "Resources/btnWrench", TextureNameKey.SettingsButton).CrossContext();
             BindTextureToName(_resources, "Resources/cursor", TextureNameKey.ResizeCursor).CrossContext();
             BindTextureToName(_resources, "Resources/btnScale", TextureNameKey.RescaleCursor).CrossContext();
+            BindTextureToName(_resources, "Resources/AppButton", TextureNameKey.AppLauncherButton).CrossContext();
         }
 
 
