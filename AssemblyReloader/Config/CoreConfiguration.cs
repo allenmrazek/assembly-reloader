@@ -14,7 +14,5 @@ namespace AssemblyReloader.Config
         // ReSharper disable InconsistentNaming
 
         [ReeperPersistent] public string PlaceholderValue = "Placeholder string";
-
-        [ReeperPersistent] public float InterfaceScale = 1f;
     }
 }

@@ -35,7 +35,6 @@ namespace AssemblyReloader.Gui
             base.OnRegister();
 
             View.CloseWindow.AddListener(CloseConfigurationWindow);
-            View.InterfaceScaleChanged.AddListener(OnUserChangedInterfaceScale);
 
             CloseAllWindows.AddListener(CloseConfigurationWindow);
             ToggleConfigurationViewSignal.AddListener(OnToggleConfigurationWindow);
@@ -44,7 +43,6 @@ namespace AssemblyReloader.Gui
             SaveConfigurationSignal.AddListener(OnSaveConfiguration);
             LoadConfigurationSignal.AddListener(OnLoadConfiguration);
 
-            //View.InterfaceScale = CoreConfiguration.InterfaceScale;
             View.Visible = false; // initially start closed
         }
 
@@ -54,7 +52,6 @@ namespace AssemblyReloader.Gui
             base.OnRemove();
 
             View.CloseWindow.RemoveListener(CloseConfigurationWindow);
-            View.InterfaceScaleChanged.RemoveListener(OnUserChangedInterfaceScale);
 
             CloseAllWindows.RemoveListener(CloseConfigurationWindow);
             ToggleConfigurationViewSignal.RemoveListener(OnToggleConfigurationWindow);
@@ -67,14 +64,6 @@ namespace AssemblyReloader.Gui
         private void OnInterfaceScaleChanged(float f)
         {
             View.SetScale(f);
-        }
-
-
-        // This called when slider in configuration view is changed
-        private void OnUserChangedInterfaceScale(float newScale)
-        {
-            CoreConfiguration.InterfaceScale = newScale;
-            InterfaceScaleChangedSignal.Dispatch(newScale);
         }
 
 

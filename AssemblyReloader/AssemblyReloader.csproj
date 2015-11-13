@@ -396,7 +396,7 @@ echo Copying dependencies
 call:CopyDependencies
 )
 
-call "$(SolutionDir)CopyToLocation.bat" "$(TargetDir)" "%25ProjectGameData%25" $(TargetName).* /xf *.config *.pdb *.mdb
+call "$(SolutionDir)CopyToLocation.bat" "$(TargetDir)" "%25ProjectGameData%25" $(TargetName).* /xf *.config *.pdb
 
 REM ----------------------------------------------------------
 REM Create debug symbols for AssemblyReloader

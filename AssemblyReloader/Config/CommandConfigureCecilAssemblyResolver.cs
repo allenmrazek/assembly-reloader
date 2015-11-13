@@ -1,7 +1,9 @@
 ﻿extern alias Cecil96;
 using System;
+using System.Linq;
 using AssemblyReloader.Config.Keys;
 using ReeperCommon.FileSystem;
+using ReeperCommon.Logging;
 using strange.extensions.command.impl;
 using strange.extensions.injector;
 using BaseAssemblyResolver = Cecil96::Mono.Cecil.BaseAssemblyResolver;
@@ -21,11 +23,14 @@ namespace AssemblyReloader.Config
     public class CommandConfigureCecilAssemblyResolver : Command
     {
         private readonly IDirectory _gameData;
+        private readonly ILog _log;
 
-        public CommandConfigureCecilAssemblyResolver([Name(DirectoryKey.GameData)] IDirectory gameData)
+        public CommandConfigureCecilAssemblyResolver([Name(DirectoryKey.GameData)] IDirectory gameData, ILog log)
         {
             if (gameData == null) throw new ArgumentNullException("gameData");
+            if (log == null) throw new ArgumentNullException("log");
             _gameData = gameData;
+            _log = log;
         }
 
 
@@ -33,7 +38,7 @@ namespace AssemblyReloader.Config
         {
             var assemblyResolver = new DefaultAssemblyResolver();
 
-            foreach (var dir in _gameData.RecursiveDirectories())
+            foreach (var dir in _gameData.RecursiveDirectories().Union(new [] { _gameData })) // GD doesn't include itself in RecursiveDirectories()
                 assemblyResolver.AddSearchDirectory(dir.FullPath);
 
             // todo: also search legacy locations?

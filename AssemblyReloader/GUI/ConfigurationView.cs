@@ -25,12 +25,7 @@ namespace AssemblyReloader.Gui
         [Inject] public GUISkin WindowSkin { get; set; }
 
 
-        private const float MinimumInterfaceScale = 0.25f;
-        private const float MaximumInterfaceScale = 5f;
-        private const float InterfaceScaleAdjustmentInterval = 0.1f;
-
         internal readonly Signal CloseWindow = new Signal();
-        internal readonly Signal<float> InterfaceScaleChanged = new Signal<float>();
 
         private WindowScale _scale;
 
@@ -68,22 +63,7 @@ namespace AssemblyReloader.Gui
         {
             GUILayout.Label("This is the CoreConfiguration view");
             GUILayout.Label("Still under construction");
-            GUILayout.Space(25f);
 
-            GUILayout.Label("GUI Scale");
-            GUILayout.BeginHorizontal();
-            {
-                if (GUILayout.Button("Decrease")) OnScaleButtonClick(false);
-                if (GUILayout.Button("Increase")) OnScaleButtonClick(true);
-            }
-            GUILayout.EndHorizontal();
-        }
-
-
-        private void OnScaleButtonClick(bool increase)
-        {
-            var adjustment = increase ? InterfaceScaleAdjustmentInterval : -InterfaceScaleAdjustmentInterval;
-            InterfaceScaleChanged.Dispatch(Mathf.Clamp(_scale.Scale.x + adjustment, MinimumInterfaceScale, MaximumInterfaceScale));
         }
 
 
