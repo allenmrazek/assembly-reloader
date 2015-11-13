@@ -49,7 +49,6 @@ namespace AssemblyReloader.Gui
 
         private void OnMainViewVisibilityChanged(bool isVisible)
         {
-            UnityEngine.Debug.LogWarning("AppLMediator: received visibility change: " + isVisible);
             View.SetToggleState(isVisible);
         }
     }

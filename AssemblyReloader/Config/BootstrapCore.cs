@@ -7,6 +7,7 @@ using ReeperCommon.Containers;
 using ReeperLoader;
 using strange.extensions.context.impl;
 using UnityEngine;
+using AssemblyLoader = KSP::AssemblyLoader;
 using HighLogic = KSP::HighLogic;
 using PopupDialog = KSP::PopupDialog;
 
@@ -48,7 +49,6 @@ namespace AssemblyReloader.Config
             enabled = false;
             //yield return new WaitForSeconds(10f); // uncomment this when debugging on startup and need time to attach debugger
             enabled = true;
-
 
             try
             {

@@ -138,7 +138,9 @@ namespace AssemblyReloader
         private static IConfigNodeSerializer ConfigureConfigNodeSerializer()
         {
             var assembliesToScanForSurrogates = new[]
-            {typeof (IConfigNodeSerializer).Assembly, Assembly.GetExecutingAssembly()};
+            {typeof (IConfigNodeSerializer).Assembly, Assembly.GetExecutingAssembly()}
+            .Distinct() // in release mode, ReeperCommon gets mashed into executing assembly
+            .ToArray();
 
             var supportedTypeQuery = new GetSurrogateSupportedTypes();
             var surrogateQuery = new GetSerializationSurrogates(supportedTypeQuery);

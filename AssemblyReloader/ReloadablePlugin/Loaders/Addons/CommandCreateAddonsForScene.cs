@@ -1,8 +1,10 @@
 ﻿extern alias KSP;
 using System;
 using System.Collections.Generic;
+using System.Net.Mime;
 using ReeperCommon.Logging;
 using strange.extensions.command.impl;
+using UnityEngine;
 using KSPAddon = KSP::KSPAddon;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
@@ -31,7 +33,13 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
 
         public override void Execute()
         {
-            _log.Verbose("Creating addons for current scene");
+            CreateAddons(_getCurrentScene.Get());
+        }
+
+
+        protected void CreateAddons(KSPAddon.Startup scene)
+        {
+            _log.Verbose("Creating addons for current scene: " + _getCurrentScene.Get());
             _addonLoader.CreateAddons(_getCurrentScene.Get());
         }
 

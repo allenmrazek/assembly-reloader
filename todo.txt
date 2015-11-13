@@ -1,4 +1,4 @@
-- Add AR to applicationlauncher, especially in main menu
+- implement VesselModule.order, which is apparently used now (in 1.0.5)
 
 - make sure ScenarioModules that should only be added to specific game type are and we don't accidentally create them where they shouldn't be
 

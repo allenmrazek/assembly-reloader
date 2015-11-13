@@ -37,7 +37,7 @@ namespace AssemblyReloader.Config
             if (loadedHandle == null) throw new ArgumentNullException("loadedHandle");
 
             if (!_uninstaller.Uninstall(loadedHandle.LoadedAssembly.assembly))
-                throw new Exception("Failed to uninstall " + loadedHandle.LoadedAssembly.name); // todo: better exception
+                Log.Error("Failed to uninstall " + loadedHandle.LoadedAssembly.name + "; was it removed by the plugin itself?");
         }
     }
 }
