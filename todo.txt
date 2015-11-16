@@ -1,5 +1,8 @@
 - implement VesselModule.order, which is apparently used now (in 1.0.5)
 
+- Catch calls to Assembly.GetName(), specifically those like Assembly.GetExecutingAssembly().GetName() because the name gets mangled
+
+
 - make sure ScenarioModules that should only be added to specific game type are and we don't accidentally create them where they shouldn't be
 
 - investigate: [Error]: Loaded Scenario definitions already contains a scenario with name 'NoisyScenarioModule'
