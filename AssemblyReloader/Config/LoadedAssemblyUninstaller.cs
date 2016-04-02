@@ -1,9 +1,6 @@
-﻿extern alias KSP;
-using strange.extensions.implicitBind;
-using strange.extensions.injector.api;
-using AssemblyLoader = KSP::AssemblyLoader;
-using System;
+﻿using System;
 using System.Reflection;
+using strange.extensions.injector.api;
 
 namespace AssemblyReloader.Config
 {

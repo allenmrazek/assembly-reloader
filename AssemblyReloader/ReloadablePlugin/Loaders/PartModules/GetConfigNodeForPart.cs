@@ -1,9 +1,6 @@
-﻿extern alias KSP;
-using System;
+﻿using System;
 using System.Linq;
 using ReeperCommon.Containers;
-using strange.extensions.implicitBind;
-using strange.extensions.injector.api;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
 {
@@ -20,12 +17,12 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
         }
 
 
-        public Maybe<KSP::ConfigNode> Get(IAvailablePart availablePart)
+        public Maybe<ConfigNode> Get(IAvailablePart availablePart)
         {
             var found = _gameDatabase.GetConfigs("PART")
                 .FirstOrDefault(u => u.name.Replace('_', '.') == availablePart.Name);
 
-            return found == null ? Maybe<KSP::ConfigNode>.None : Maybe<KSP::ConfigNode>.With(found.config);
+            return found == null ? Maybe<ConfigNode>.None : Maybe<ConfigNode>.With(found.config);
         }
     }
 }

@@ -1,11 +1,6 @@
-﻿extern alias KSP;
-using System;
-using System.Collections.Generic;
-using System.Net.Mime;
+﻿using System;
 using ReeperCommon.Logging;
 using strange.extensions.command.impl;
-using UnityEngine;
-using KSPAddon = KSP::KSPAddon;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
 {

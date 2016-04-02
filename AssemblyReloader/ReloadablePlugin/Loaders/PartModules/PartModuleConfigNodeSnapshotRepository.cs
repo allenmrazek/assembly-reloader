@@ -1,7 +1,5 @@
-﻿extern alias KSP;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using ReeperCommon.Containers;
-using strange.extensions.implicitBind;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
 {
@@ -9,21 +7,21 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
 // ReSharper disable once ClassNeverInstantiated.Global
     public class PartModuleConfigNodeSnapshotRepository : IPartModuleConfigNodeSnapshotRepository
     {
-        private readonly DictionaryOfQueues<KeyValuePair<uint, TypeIdentifier>, KSP::ConfigNode> _storedNodes = new
-            DictionaryOfQueues<KeyValuePair<uint, TypeIdentifier>, KSP::ConfigNode>(new FlightConfigNodeKeyValuePairComparer());
+        private readonly DictionaryOfQueues<KeyValuePair<uint, TypeIdentifier>, ConfigNode> _storedNodes = new
+            DictionaryOfQueues<KeyValuePair<uint, TypeIdentifier>, ConfigNode>(new FlightConfigNodeKeyValuePairComparer());
 
 
-        public void Store(uint flightid, TypeIdentifier key, KSP::ConfigNode data)
+        public void Store(uint flightid, TypeIdentifier key, ConfigNode data)
         {
             _storedNodes.Store(new KeyValuePair<uint, TypeIdentifier>(flightid, key), data);
         }
 
-        public Maybe<KSP::ConfigNode> Retrieve(uint flightid, TypeIdentifier key)
+        public Maybe<ConfigNode> Retrieve(uint flightid, TypeIdentifier key)
         {
             return _storedNodes.Retrieve(new KeyValuePair<uint, TypeIdentifier>(flightid, key));
         }
 
-        public Maybe<KSP::ConfigNode> Peek(uint flightid, TypeIdentifier key)
+        public Maybe<ConfigNode> Peek(uint flightid, TypeIdentifier key)
         {
             return _storedNodes.Peek(new KeyValuePair<uint, TypeIdentifier>(flightid, key));
         }

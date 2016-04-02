@@ -1,9 +1,5 @@
-﻿extern alias KSP;
-using ReeperCommon.Containers;
-using strange.extensions.mediation.impl;
+﻿using strange.extensions.mediation.impl;
 using strange.extensions.signal.impl;
-using UnityEngine;
-using KSPAddon = KSP::KSPAddon;
 
 namespace AssemblyReloader.Game
 {

@@ -1,9 +1,7 @@
-﻿extern alias KSP;
-using System;
+﻿using System;
 using System.Linq;
 using ReeperCommon.Containers;
 using ReeperCommon.Logging;
-using strange.extensions.injector;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
 {
@@ -38,8 +36,8 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
             _log.Debug("Destroying ScenarioModule " + protoScenarioModule.moduleName);
             _aboutToDestroySignal.Dispatch(target);
 
-            KSP::ScenarioRunner.RemoveModule(target);
-            protoScenarioModule.moduleRef = Maybe<KSP::ScenarioModule>.None;
+            ScenarioRunner.RemoveModule(target);
+            protoScenarioModule.moduleRef = Maybe<ScenarioModule>.None;
         }
     }
 }

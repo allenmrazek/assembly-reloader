@@ -1,7 +1,6 @@
-﻿extern alias KSP;
-using System;
+﻿using System;
 using strange.extensions.command.impl;
-using HighLogic = KSP::HighLogic;
+using UnityEngine;
 
 namespace AssemblyReloader.ReloadablePlugin
 {
@@ -19,7 +18,7 @@ namespace AssemblyReloader.ReloadablePlugin
 
         public override void Execute()
         {
-            KSP::PopupDialog.SpawnPopupDialog("Failure", _message, "Accept", true, HighLogic.Skin);
+            PopupDialog.SpawnPopupDialog(new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), "Failure", _message, "Accept", true, HighLogic.UISkin);
         }
     }
 }

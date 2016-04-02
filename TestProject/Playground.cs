@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using Contracts;
+using KSP.UI.Screens;
 using ReeperCommon.Containers;
 using ReeperCommon.Extensions;
 using ReeperCommon.Logging;
@@ -379,8 +380,8 @@ namespace TestProject
     [KSPAddon(KSPAddon.Startup.MainMenu, false)]
     public class GameEventTester : MonoBehaviour
     {
-        private readonly List<EventData<ShipConstruct, CraftBrowser.LoadType>.OnEvent> _callbacks =
-            new List<EventData<ShipConstruct, CraftBrowser.LoadType>.OnEvent>();
+        private readonly List<EventData<ShipConstruct, CraftBrowserDialog.LoadType>.OnEvent> _callbacks =
+            new List<EventData<ShipConstruct, CraftBrowserDialog.LoadType>.OnEvent>();
  
         private void Start()
         {
@@ -419,17 +420,17 @@ namespace TestProject
 
         private void AddNewEventData()
         {
-            RegisterCallback(new EventData<ShipConstruct, CraftBrowser.LoadType>.OnEvent(EditorLoadCallback));
+            RegisterCallback(new EventData<ShipConstruct, CraftBrowserDialog.LoadType>.OnEvent(EditorLoadCallback));
 
             // see if it's picked up
             print("Firing event to see if it works");
-            GameEvents.onEditorLoad.Fire(null, CraftBrowser.LoadType.Normal);
+            GameEvents.onEditorLoad.Fire(null, CraftBrowserDialog.LoadType.Normal);
         }
 
 
         private void RemoveNewEventData()
         {
-            UnregisterCallback(new EventData<ShipConstruct, CraftBrowser.LoadType>.OnEvent(EditorLoadCallback));
+            UnregisterCallback(new EventData<ShipConstruct, CraftBrowserDialog.LoadType>.OnEvent(EditorLoadCallback));
         }
 
         private void AddIndirect()
@@ -446,13 +447,13 @@ namespace TestProject
 
 
 
-        private void RegisterCallback(EventData<ShipConstruct, CraftBrowser.LoadType>.OnEvent cb)
+        private void RegisterCallback(EventData<ShipConstruct, CraftBrowserDialog.LoadType>.OnEvent cb)
         {
             _callbacks.Add(cb);
             GameEvents.onEditorLoad.Add(cb);
         }
 
-        private void UnregisterCallback(EventData<ShipConstruct, CraftBrowser.LoadType>.OnEvent cb)
+        private void UnregisterCallback(EventData<ShipConstruct, CraftBrowserDialog.LoadType>.OnEvent cb)
         {
             print("Checking " + _callbacks.Count + " callbacks for presence of specific one");
 
@@ -481,7 +482,7 @@ namespace TestProject
 
         }
 
-        private void EditorLoadCallback(ShipConstruct ship, CraftBrowser.LoadType lt)
+        private void EditorLoadCallback(ShipConstruct ship, CraftBrowserDialog.LoadType lt)
         {
             print("EditorLoadCallback called");
         }

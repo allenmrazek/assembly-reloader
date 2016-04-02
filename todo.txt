@@ -1,3 +1,8 @@
+- VesselModules now store persistent data with 1.1, needs solution similar to Partmodules now
+
+- plugin that fails type check will still be loaded (see: TarsierSpaceTech)
+- set PartModule.moduleName
+
 - implement VesselModule.order, which is apparently used now (in 1.0.5)
 
 - Catch calls to Assembly.GetName(), specifically those like Assembly.GetExecutingAssembly().GetName() because the name gets mangled

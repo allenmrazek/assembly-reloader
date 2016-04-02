@@ -1,13 +1,11 @@
-﻿extern alias KSP;
-using System.Collections;
+﻿using System.Collections;
 using AssemblyReloader.Config.Keys;
+using KSP.UI.Screens;
 using ReeperCommon.Containers;
 using strange.extensions.injector;
 using strange.extensions.mediation.impl;
 using strange.extensions.signal.impl;
 using UnityEngine;
-using ApplicationLauncher = KSP::ApplicationLauncher;
-using ApplicationLauncherButton = KSP::ApplicationLauncherButton;
 
 namespace AssemblyReloader.Gui
 {

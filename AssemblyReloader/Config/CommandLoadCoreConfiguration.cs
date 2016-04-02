@@ -1,5 +1,4 @@
-﻿extern alias KSP;
-extern alias Cecil96;
+﻿extern alias Cecil96;
 using System;
 using System.IO;
 using AssemblyReloader.ReloadablePlugin;
@@ -9,7 +8,7 @@ using ReeperCommon.Serialization;
 using ReeperCommon.Serialization.Exceptions;
 using strange.extensions.command.impl;
 using Cecil96::Mono.Cecil;
-using HighLogic = KSP::HighLogic;
+using UnityEngine;
 
 namespace AssemblyReloader.Config
 {
@@ -56,7 +55,7 @@ namespace AssemblyReloader.Config
                 return;
             }
 
-            var config = KSP::ConfigNode.Load(fullPath);
+            var config = ConfigNode.Load(fullPath);
             if (config == null || !config.HasData || (config = config.GetNode(CoreConfiguration.NodeName)) == null)
             {
                 _log.Error("Failed to load ConfigNode at " + fullPath);
@@ -73,8 +72,8 @@ namespace AssemblyReloader.Config
             catch (ReeperSerializationException rse)
             {
                 _log.Error("Error while deserializing core configuration: object might be in inconsistent state. " + rse);
-                KSP::PopupDialog.SpawnPopupDialog("Core Configuration Exception",
-                    "The core configuration wasn't deserialized correctly.", "Accept", true, HighLogic.Skin);
+                PopupDialog.SpawnPopupDialog(new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), "Core Configuration Exception",
+                    "The core configuration wasn't deserialized correctly.", "Accept", true, HighLogic.UISkin);
             }
         }
     }

@@ -160,7 +160,7 @@ namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations.GameEventIntercep
         //---------------------------------------------------------------------
 
 // ReSharper disable once UnusedMember.Global
-        public static void Register(KSP::EventVoid evt, KSP::EventVoid.OnEvent callback)
+        public static void Register(EventVoid evt, EventVoid.OnEvent callback)
         {
             RegisterCallback(Assembly.GetCallingAssembly(), evt, callback, new StackFrame(1));
         }
@@ -168,36 +168,21 @@ namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations.GameEventIntercep
 
 
 // ReSharper disable once UnusedMember.Global
-        public static void Unregister(KSP::EventVoid evt, KSP::EventVoid.OnEvent callback)
+        public static void Unregister(EventVoid evt, EventVoid.OnEvent callback)
         {
             UnregisterCallback(Assembly.GetCallingAssembly(), evt, callback, new StackFrame(1));
         }
 
 
 // ReSharper disable once UnusedMember.Global
-        public static void Register<T>(KSP::EventData<T> evt, KSP::EventData<T>.OnEvent callback)
+        public static void Register<T>(EventData<T> evt, EventData<T>.OnEvent callback)
         {
             RegisterCallback(Assembly.GetCallingAssembly(), evt, callback, new StackFrame(1));
         }
 
 
 // ReSharper disable once UnusedMember.Global
-        public static void Unregister<T>(KSP::EventData<T> evt, KSP::EventData<T>.OnEvent callback)
-        {
-            UnregisterCallback(Assembly.GetCallingAssembly(), evt, callback, new StackFrame(1));
-        }
-
-
-
-// ReSharper disable once UnusedMember.Global
-        public static void Register<T1, T2>(KSP::EventData<T1, T2> evt, KSP::EventData<T1, T2>.OnEvent callback)
-        {
-            RegisterCallback(Assembly.GetCallingAssembly(), evt, callback, new StackFrame(1));
-        }
-
-
-// ReSharper disable once UnusedMember.Global
-        public static void Unregister<T1, T2>(KSP::EventData<T1, T2> evt, KSP::EventData<T1, T2>.OnEvent callback)
+        public static void Unregister<T>(EventData<T> evt, EventData<T>.OnEvent callback)
         {
             UnregisterCallback(Assembly.GetCallingAssembly(), evt, callback, new StackFrame(1));
         }
@@ -205,14 +190,29 @@ namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations.GameEventIntercep
 
 
 // ReSharper disable once UnusedMember.Global
-        public static void Register<T1, T2, T3>(KSP::EventData<T1, T2, T3> evt, KSP::EventData<T1, T2, T3>.OnEvent callback)
+        public static void Register<T1, T2>(EventData<T1, T2> evt, EventData<T1, T2>.OnEvent callback)
         {
             RegisterCallback(Assembly.GetCallingAssembly(), evt, callback, new StackFrame(1));
         }
 
 
 // ReSharper disable once UnusedMember.Global
-        public static void Unregister<T1, T2, T3>(KSP::EventData<T1, T2, T3> evt, KSP::EventData<T1, T2, T3>.OnEvent callback)
+        public static void Unregister<T1, T2>(EventData<T1, T2> evt, EventData<T1, T2>.OnEvent callback)
+        {
+            UnregisterCallback(Assembly.GetCallingAssembly(), evt, callback, new StackFrame(1));
+        }
+
+
+
+// ReSharper disable once UnusedMember.Global
+        public static void Register<T1, T2, T3>(EventData<T1, T2, T3> evt, EventData<T1, T2, T3>.OnEvent callback)
+        {
+            RegisterCallback(Assembly.GetCallingAssembly(), evt, callback, new StackFrame(1));
+        }
+
+
+// ReSharper disable once UnusedMember.Global
+        public static void Unregister<T1, T2, T3>(EventData<T1, T2, T3> evt, EventData<T1, T2, T3>.OnEvent callback)
         {
             UnregisterCallback(Assembly.GetCallingAssembly(), evt, callback, new StackFrame(1));
         }

@@ -1,7 +1,5 @@
-﻿extern alias KSP;
-using strange.extensions.implicitBind;
+﻿using strange.extensions.implicitBind;
 using UnityEngine;
-using GameScenes = KSP::GameScenes;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
 {

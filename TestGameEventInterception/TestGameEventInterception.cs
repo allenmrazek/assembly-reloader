@@ -1,5 +1,4 @@
-﻿extern alias KSP;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace TestGameEventInterception
 {
@@ -32,9 +31,9 @@ namespace TestGameEventInterception
 
         private void AddCallbacks()
         {
-            KSP::GameEvents.onGamePause.Add(OnGamePaused); // EventVoid
-            KSP::GameEvents.onVesselChange.Add(OnVesselChange); // EventData<T>
-            KSP::GameEvents.onEditorLoad.Add(OnEditorLoad); // EventData<T1, T2>
+            GameEvents.onGamePause.Add(OnGamePaused); // EventVoid
+            GameEvents.onVesselChange.Add(OnVesselChange); // EventData<T>
+            GameEvents.onEditorLoad.Add(OnEditorLoad); // EventData<T1, T2>
 
             NotAGameEvent.Add(() => { });
         }
@@ -42,9 +41,9 @@ namespace TestGameEventInterception
 
         private void RemoveCallbacks()
         {
-            KSP::GameEvents.onGamePause.Remove(OnGamePaused); // EventVoid
-            KSP::GameEvents.onVesselChange.Remove(OnVesselChange); // EventData<T>
-            KSP::GameEvents.onEditorLoad.Remove(OnEditorLoad); // EventData<T1, T2>
+            GameEvents.onGamePause.Remove(OnGamePaused); // EventVoid
+            GameEvents.onVesselChange.Remove(OnVesselChange); // EventData<T>
+            GameEvents.onEditorLoad.Remove(OnEditorLoad); // EventData<T1, T2>
 
             NotAGameEvent.Remove(() => { });
         }
@@ -55,13 +54,13 @@ namespace TestGameEventInterception
             
         }
 
-        private void OnVesselChange(KSP::Vessel v)
+        private void OnVesselChange(Vessel v)
         {
             
         }
 
 
-        private void OnEditorLoad(KSP::ShipConstruct construct, KSP::CraftBrowser.LoadType ty)
+        private void OnEditorLoad(ShipConstruct construct, KSP.UI.Screens.CraftBrowserDialog.LoadType ty)
         {
             
         }
@@ -71,7 +70,7 @@ namespace TestGameEventInterception
     /// <summary>
     /// Make sure a hanging GameEvent is removed upon reload
     /// </summary>
-    [KSP::KSPAddon(KSP::KSPAddon.Startup.Instantly, true)]
+    [KSPAddon(KSPAddon.Startup.Instantly, true)]
     public class TestGameEventProxyRemoval : MonoBehaviour
     {
         private readonly EventVoid _customEvent = new EventVoid();
@@ -79,7 +78,7 @@ namespace TestGameEventInterception
         private void Start()
         {
             print("TestGameEventProxyRemoval - Start");
-            KSP::GameEvents.onGamePause.Add(OnGamePause); // do not unregister; ART should catch this
+            GameEvents.onGamePause.Add(OnGamePause); // do not unregister; ART should catch this
             //_customEvent.Add(OnGamePause); // and also this
         }
 

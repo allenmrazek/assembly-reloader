@@ -1,5 +1,4 @@
-﻿extern alias KSP;
-using System;
+﻿using System;
 using System.Collections;
 using System.Linq;
 using AssemblyReloader.Game;
@@ -7,9 +6,6 @@ using ReeperCommon.Containers;
 using ReeperLoader;
 using strange.extensions.context.impl;
 using UnityEngine;
-using AssemblyLoader = KSP::AssemblyLoader;
-using HighLogic = KSP::HighLogic;
-using PopupDialog = KSP::PopupDialog;
 
 namespace AssemblyReloader.Config
 {
@@ -60,9 +56,9 @@ namespace AssemblyReloader.Config
             {
                 Debug.LogError("AssemblyReloader: Encountered an uncaught exception while creating core context: " + e);
 
-                PopupDialog.SpawnPopupDialog("AssemblyReloader unhandled exception",
+                PopupDialog.SpawnPopupDialog(new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), "AssemblyReloader unhandled exception",
                     "AssemblyReloader encountered an exception with the following message: " + e.Message + "\n\nAssemblyReloader has been disabled.", "Okay",
-                    true, HighLogic.Skin);
+                    true, HighLogic.UISkin);
 
                 Destroy(gameObject);
             }

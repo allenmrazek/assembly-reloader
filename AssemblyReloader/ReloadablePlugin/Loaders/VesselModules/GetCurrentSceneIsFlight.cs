@@ -1,9 +1,6 @@
-﻿extern alias KSP;
-using System;
+﻿using System;
 using AssemblyReloader.ReloadablePlugin.Loaders.Addons;
-using strange.extensions.implicitBind;
 using strange.extensions.injector.api;
-using GameScenes = KSP::GameScenes;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.VesselModules
 {

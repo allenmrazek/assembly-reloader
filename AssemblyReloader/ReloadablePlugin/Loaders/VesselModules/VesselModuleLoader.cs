@@ -65,7 +65,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.VesselModules
             }
 
             _log.Debug("Inserting " + vesselModule + " wrapper");
-            _vesselModuleManager.AddWrapper(new KSP::VesselModuleManager.VesselModuleWrapper(vesselModule.Type)
+            _vesselModuleManager.AddWrapper(new VesselModuleManager.VesselModuleWrapper(vesselModule.Type)
             {
                 active = true,
                 order = 0

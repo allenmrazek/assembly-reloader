@@ -1,6 +1,5 @@
-﻿extern alias KSP;
-using strange.extensions.signal.impl;
-using KSPAddon = KSP::KSPAddon;
+﻿using strange.extensions.signal.impl;
+
 
 namespace AssemblyReloader.Game
 {

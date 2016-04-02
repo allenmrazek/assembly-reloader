@@ -1,13 +1,11 @@
-﻿extern alias KSP;
-using AssemblyReloader.Gui;
+﻿using AssemblyReloader.Gui;
 using ReeperCommon.Extensions;
 using ReeperCommon.Serialization.Exceptions;
-using ConfigNode = KSP::ConfigNode;
 using System;
 using ReeperCommon.Logging;
 using ReeperCommon.Serialization;
 using strange.extensions.command.impl;
-using HighLogic = KSP::HighLogic;
+using UnityEngine;
 
 namespace AssemblyReloader.ReloadablePlugin.Config
 {
@@ -61,14 +59,14 @@ namespace AssemblyReloader.ReloadablePlugin.Config
             catch (ReeperSerializationException re)
             {
                 _log.Error("Exception while serializing data: " + re);
-                KSP::PopupDialog.SpawnPopupDialog("ReeperSerialization Error",
-                    "Failed to serialize plugin configuration. See log.", "Okay", true, HighLogic.Skin);
+                PopupDialog.SpawnPopupDialog(new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), "ReeperSerialization Error",
+                    "Failed to serialize plugin configuration. See log.", "Okay", true, HighLogic.UISkin);
             }
             catch (Exception e)
             {
                 _log.Error("General exception while saving plugin configuration! " + e);
-                KSP::PopupDialog.SpawnPopupDialog("General Exception",
-                    "Failed to save plugin configuration. See log.", "Okay", true, HighLogic.Skin);
+                PopupDialog.SpawnPopupDialog(new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), "General Exception",
+                    "Failed to save plugin configuration. See log.", "Okay", true, HighLogic.UISkin);
             }
         }
     }

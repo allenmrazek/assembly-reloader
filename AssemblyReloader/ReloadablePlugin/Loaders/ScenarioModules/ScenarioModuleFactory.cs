@@ -1,9 +1,7 @@
-﻿extern alias KSP;
-using System;
+﻿using System;
 using System.Linq;
 using ReeperCommon.Containers;
 using ReeperCommon.Logging;
-using strange.extensions.injector;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
 {
@@ -53,11 +51,11 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
         }
 
 
-        private void CreateScenarioModule(IProtoScenarioModule psm, KSP::ConfigNode config)
+        private void CreateScenarioModule(IProtoScenarioModule psm, ConfigNode config)
         {
             if (config == null) throw new ArgumentNullException("config");
 
-            var runner = KSP::ScenarioRunner.fetch;
+            var runner = ScenarioRunner.fetch;
 
             if (runner == null)
                 throw new ScenarioRunnerNotFound();

@@ -1,10 +1,8 @@
-﻿extern alias KSP;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using ReeperAssemblyLibrary;
 using UnityEngine;
-using KSPAddon = KSP::KSPAddon;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
 {
@@ -24,7 +22,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
         }
 
 
-        public IEnumerable<ReloadableAddonType> Get(KSP::KSPAddon.Startup scene, ILoadedAssemblyHandle handle)
+        public IEnumerable<ReloadableAddonType> Get(KSPAddon.Startup scene, ILoadedAssemblyHandle handle)
         {
             if (handle == null) throw new ArgumentNullException("handle");
 

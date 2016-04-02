@@ -45,6 +45,9 @@
     <Reference Include="Assembly-CSharp">
       <HintPath>..\..\..\Kerbal Space Program\KSP_Data\Managed\Assembly-CSharp.dll</HintPath>
     </Reference>
+    <Reference Include="KSPUtil">
+      <HintPath>..\..\..\Kerbal Space Program\KSP_Data\Managed\KSPUtil.dll</HintPath>
+    </Reference>
     <Reference Include="Mono.Cecil, Version=0.9.6.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
       <HintPath>..\packages\Mono.Cecil.0.9.6.1\lib\net35\Mono.Cecil.dll</HintPath>
       <Private>True</Private>
@@ -89,6 +92,9 @@
     <Reference Include="System.Core" />
     <Reference Include="UnityEngine">
       <HintPath>..\..\..\Kerbal Space Program\KSP_Data\Managed\UnityEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>..\..\..\Kerbal Space Program\KSP_Data\Managed\UnityEngine.UI.dll</HintPath>
     </Reference>
     <Reference Include="xunit, Version=1.9.2.1705, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
       <HintPath>..\packages\xunit.1.9.2\lib\net20\xunit.dll</HintPath>

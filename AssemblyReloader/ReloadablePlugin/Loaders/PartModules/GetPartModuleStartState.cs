@@ -1,13 +1,9 @@
-﻿extern alias KSP;
-using System;
+﻿using System;
 using System.Linq;
 using AssemblyReloader.Game;
 using ReeperCommon.Containers;
 using strange.extensions.implicitBind;
 using strange.extensions.injector.api;
-using PartModule = KSP::PartModule;
-using Vessel = KSP::Vessel;
-using HighLogic = KSP::HighLogic;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
 {
@@ -15,13 +11,13 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
 // ReSharper disable once UnusedMember.Global
     public class GetPartModuleStartState : IGetPartModuleStartState
     {
-        public KSP::PartModule.StartState Get(Maybe<IVessel> vessel)
+        public PartModule.StartState Get(Maybe<IVessel> vessel)
         {
-            var state = KSP::PartModule.StartState.None;
+            var state = PartModule.StartState.None;
 
-            if (KSP::HighLogic.LoadedSceneIsEditor)
+            if (HighLogic.LoadedSceneIsEditor)
             {
-                state |= KSP::PartModule.StartState.Editor;
+                state |= PartModule.StartState.Editor;
             }
             else
             {
@@ -32,7 +28,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
 
                 if (HighLogic.LoadedSceneIsFlight)
                 {
-                    if (v.Situation == KSP::Vessel.Situations.PRELAUNCH)
+                    if (v.Situation == Vessel.Situations.PRELAUNCH)
                     {
                         state |= PartModule.StartState.PreLaunch;
                         state |= PartModule.StartState.Landed;

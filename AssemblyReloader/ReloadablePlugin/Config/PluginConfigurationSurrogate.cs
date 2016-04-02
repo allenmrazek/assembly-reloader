@@ -1,8 +1,6 @@
-﻿extern alias KSP;
-using System.Linq;
+﻿using System.Linq;
 using System.Reflection;
 using ReeperCommon.Serialization;
-using ConfigNode = KSP::ConfigNode;
 using System;
 
 namespace AssemblyReloader.ReloadablePlugin.Config

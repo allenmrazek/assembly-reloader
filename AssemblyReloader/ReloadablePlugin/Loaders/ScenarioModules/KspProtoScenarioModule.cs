@@ -1,5 +1,4 @@
-﻿extern alias KSP;
-using System;
+﻿using System;
 using System.Linq;
 using ReeperCommon.Containers;
 
@@ -7,11 +6,10 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
 {
     public class KspProtoScenarioModule : IProtoScenarioModule
     {
-        private readonly KSP::ProtoScenarioModule _psm;
+        private readonly ProtoScenarioModule _psm;
 
 
-        public KspProtoScenarioModule(
-            KSP::ProtoScenarioModule psm)
+        public KspProtoScenarioModule(ProtoScenarioModule psm)
         {
             if (psm == null) throw new ArgumentNullException("psm");
 
@@ -19,9 +17,9 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
         }
 
 
-        public Maybe<KSP::ScenarioModule> moduleRef
+        public Maybe<ScenarioModule> moduleRef
         {
-            get { return _psm.moduleRef != null ? Maybe<KSP::ScenarioModule>.With(_psm.moduleRef) : Maybe<KSP::ScenarioModule>.None; }
+            get { return _psm.moduleRef != null ? Maybe<ScenarioModule>.With(_psm.moduleRef) : Maybe<ScenarioModule>.None; }
             set { _psm.moduleRef = value.SingleOrDefault(); }
         }
 
@@ -32,20 +30,20 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
         }
 
 
-        public KSP::GameScenes[] TargetScenes
+        public GameScenes[] TargetScenes
         {
             get { return _psm.targetScenes.ToArray(); }
             set { _psm.SetTargetScenes(value); }
         }
 
 
-        public Maybe<KSP::ScenarioModule> Load()
+        public Maybe<ScenarioModule> Load()
         {
-            return _psm.Load(KSP::ScenarioRunner.fetch) != null ? moduleRef : Maybe<KSP::ScenarioModule>.None;
+            return _psm.Load(ScenarioRunner.fetch) != null ? moduleRef : Maybe<ScenarioModule>.None;
         }
 
 
-        public KSP::ConfigNode GetData()
+        public ConfigNode GetData()
         {
             return _psm.GetData();
         }
@@ -53,7 +51,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
 
         public override bool Equals(object obj)
         {
-            var other = obj as KSP::ProtoScenarioModule;
+            var other = obj as ProtoScenarioModule;
             if (other == null) return false;
 
             return _psm.moduleName == other.moduleName && _psm.moduleRef == other.moduleRef;

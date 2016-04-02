@@ -46,7 +46,10 @@
     <Reference Include="Assembly-CSharp, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Kerbal Space Program\KSP_Data\Managed\Assembly-CSharp.dll</HintPath>
-      <Aliases>KSP</Aliases>
+      <Aliases>KSP,global</Aliases>
+    </Reference>
+    <Reference Include="KSPUtil">
+      <HintPath>..\..\..\Kerbal Space Program\KSP_Data\Managed\KSPUtil.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Cecil, Version=0.9.6.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
       <HintPath>..\packages\Mono.Cecil.0.9.6.1\lib\net35\Mono.Cecil.dll</HintPath>
@@ -72,7 +75,9 @@
     <Reference Include="System.Core" />
     <Reference Include="UnityEngine">
       <HintPath>..\..\..\Kerbal Space Program\KSP_Data\Managed\UnityEngine.dll</HintPath>
-      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>..\..\..\Kerbal Space Program\KSP_Data\Managed\UnityEngine.UI.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -342,9 +347,8 @@
       <Name>ReeperAssemblyLibrary</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\ReeperCommon\ReeperCommon\ReeperCommon.csproj">
-      <Project>{FECFA8FC-CF80-4685-A2BA-1566E0F3C26E}</Project>
+      <Project>{fecfa8fc-cf80-4685-a2ba-1566e0f3c26e}</Project>
       <Name>ReeperCommon</Name>
-      <Private>True</Private>
     </ProjectReference>
     <ProjectReference Include="..\..\ReeperLoader\ReeperLoader\ReeperLoader.csproj">
       <Project>{5192d8ef-1d16-4307-9c18-13bd523f767f}</Project>

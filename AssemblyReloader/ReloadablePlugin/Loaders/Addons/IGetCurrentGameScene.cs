@@ -1,7 +1,4 @@
-﻿extern alias KSP;
-using GameScenes = KSP::GameScenes;
-
-namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
+﻿namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
 {
     public interface IGetCurrentGameScene
     {

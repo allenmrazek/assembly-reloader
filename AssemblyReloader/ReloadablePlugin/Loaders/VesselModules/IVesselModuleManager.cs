@@ -1,6 +1,4 @@
-﻿extern alias KSP;
-using ReeperCommon.Containers;
-using VesselModuleManager = KSP::VesselModuleManager;
+﻿using ReeperCommon.Containers;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.VesselModules
 {

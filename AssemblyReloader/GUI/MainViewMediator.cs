@@ -1,9 +1,7 @@
-﻿extern alias KSP;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using ReeperCommon.Containers;
 using ReeperCommon.Serialization;
 using ReeperCommon.Serialization.Exceptions;
-using ConfigNode = KSP::ConfigNode;
 using System;
 using System.Collections.Generic;
 using AssemblyReloader.ReloadablePlugin;

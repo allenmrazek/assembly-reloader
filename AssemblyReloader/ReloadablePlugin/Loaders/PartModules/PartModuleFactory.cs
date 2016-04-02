@@ -1,10 +1,7 @@
-﻿extern alias KSP;
-using System;
+﻿using System;
 using System.Linq;
 using System.Reflection;
 using ReeperCommon.Logging;
-using strange.extensions.implicitBind;
-using strange.extensions.injector;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
 {
@@ -51,7 +48,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
 
             _log.Debug("Creating PartModule " + descriptor.Identifier + " on " + part.FlightID);
 
-            var result = part.GameObject.AddComponent(descriptor.Type) as KSP::PartModule;
+            var result = part.GameObject.AddComponent(descriptor.Type) as PartModule;
 
             if (result == null)
                 throw new Exception("Failed to add " + descriptor.Type.FullName + " to " + part.PartName);
@@ -63,7 +60,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
             // get called so we must do it ourselves
             if (_isPartPrefabQuery.Get(part))
             {
-                var method = typeof (KSP::PartModule).GetMethod("Awake",
+                var method = typeof (PartModule).GetMethod("Awake",
                     BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.FlattenHierarchy);
 
                 if (method != null)
@@ -77,7 +74,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
 
 
         // todo: clean this up, zomg cyclomatic complexity batman
-        private void LoadConfigNodeFor(IPart part, KSP::PartModule partModule, PartModuleDescriptor descriptor)
+        private void LoadConfigNodeFor(IPart part, PartModule partModule, PartModuleDescriptor descriptor)
         {
             if (_partModuleSettings.SaveAndReloadPartModuleConfigNodes && !_isPartPrefabQuery.Get(part))
             {
@@ -137,7 +134,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
         private void LoadFailed(
             string message, 
             IPart part, 
-            KSP::ConfigNode config, 
+            ConfigNode config, 
             PartModuleDescriptor descriptor, 
             Exception e)
         {

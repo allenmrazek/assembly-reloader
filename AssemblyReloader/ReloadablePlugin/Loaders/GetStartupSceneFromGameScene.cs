@@ -1,8 +1,6 @@
-﻿extern alias KSP;
-using System;
+﻿using System;
 using strange.extensions.implicitBind;
-using KSPAddon = KSP::KSPAddon;
-using GameScenes = KSP::GameScenes;
+
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders
 {

@@ -1,5 +1,5 @@
 set ksp=D:\For New Computer\Kerbal Space Program\GameData\
-set unity=C:\Program Files (x86)\Unity464\
+set unity=F:\Unity\Unity422
 
 if not exist "%ksp%" (
 	echo ERROR: KSP directory not correctly set. Edit SetEnvironment.bat

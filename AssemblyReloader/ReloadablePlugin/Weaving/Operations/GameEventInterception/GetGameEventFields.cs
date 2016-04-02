@@ -1,12 +1,8 @@
-﻿extern alias KSP;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using strange.extensions.implicitBind;
 using strange.extensions.injector.api;
-using EventVoid = KSP::EventVoid;
-using GameEvents = KSP::GameEvents;
 
 namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations.GameEventInterception
 {
@@ -16,10 +12,10 @@ namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations.GameEventIntercep
         private readonly Type[] _validTypes =
         {
             typeof (EventVoid),
-            typeof (KSP::EventData<>),
-            typeof (KSP::EventData<,>),
-            typeof (KSP::EventData<,,>),
-            typeof (KSP::EventData<,,,>)
+            typeof (EventData<>),
+            typeof (EventData<,>),
+            typeof (EventData<,,>),
+            typeof (EventData<,,,>)
         };
 
 

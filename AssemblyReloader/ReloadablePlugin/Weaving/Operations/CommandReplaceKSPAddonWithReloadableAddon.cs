@@ -1,5 +1,4 @@
-﻿extern alias KSP;
-extern alias Cecil96;
+﻿extern alias Cecil96;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +6,6 @@ using AssemblyReloader.ReloadablePlugin.Loaders.Addons;
 using ReeperCommon.Containers;
 using ReeperCommon.Logging;
 using strange.extensions.command.impl;
-using KSPAddon = KSP::KSPAddon;
 using AssemblyDefinition = Cecil96::Mono.Cecil.AssemblyDefinition;
 using TypeReference = Cecil96::Mono.Cecil.TypeReference;
 using TypeDefinition = Cecil96::Mono.Cecil.TypeDefinition;

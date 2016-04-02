@@ -1,5 +1,4 @@
-﻿extern alias KSP;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using AssemblyReloader.Config.Keys;
@@ -10,8 +9,7 @@ using ReeperCommon.Serialization;
 using strange.extensions.injector;
 using strange.extensions.signal.impl;
 using UnityEngine;
-using ConfigNode = KSP::ConfigNode;
-using HighLogic = KSP::HighLogic;
+
 
 namespace AssemblyReloader.Gui
 {

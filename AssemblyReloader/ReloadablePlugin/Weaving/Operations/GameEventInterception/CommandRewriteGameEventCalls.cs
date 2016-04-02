@@ -8,7 +8,6 @@ using ReeperCommon.Containers;
 using ReeperCommon.Extensions;
 using ReeperCommon.Logging;
 using strange.extensions.command.impl;
-using EventVoid = KSP::EventVoid;
 using Cecil96::Mono.Cecil;
 using Cecil96::Mono.Cecil.Rocks;
 using ILProcessor = Cecil96::Mono.Cecil.Cil.ILProcessor;

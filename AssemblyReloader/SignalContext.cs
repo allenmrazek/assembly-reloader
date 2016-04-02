@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Collections.Generic;
+using System.Reflection;
 using strange.extensions.command.api;
 using strange.extensions.command.impl;
 using strange.extensions.context.api;
@@ -20,7 +21,7 @@ namespace AssemblyReloader
             base.mapBindings();
             implicitBinder.ScanForAnnotatedClasses(new []
             {
-                new AnnotatedAssembly(Assembly.GetExecutingAssembly(), new [] { "AssemblyReloader" })
+                new KeyValuePair<Assembly, string[]>(Assembly.GetExecutingAssembly(), new [] { "AssemblyReloader" }), 
             });
         }
 

@@ -1,6 +1,4 @@
-﻿extern alias KSP;
-using System;
-using KSPAddon = KSP::KSPAddon;
+﻿using System;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
 {

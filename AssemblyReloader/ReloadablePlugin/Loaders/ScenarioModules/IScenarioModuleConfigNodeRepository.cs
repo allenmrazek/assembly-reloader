@@ -1,11 +1,10 @@
-﻿extern alias KSP;
-using ReeperCommon.Containers;
+﻿using ReeperCommon.Containers;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
 {
     public interface IScenarioModuleConfigNodeRepository
     {
-        void Store(TypeIdentifier identifier, KSP::ConfigNode config);
-        Maybe<KSP::ConfigNode> Retrieve(TypeIdentifier smType);
+        void Store(TypeIdentifier identifier, ConfigNode config);
+        Maybe<ConfigNode> Retrieve(TypeIdentifier smType);
     }
 }

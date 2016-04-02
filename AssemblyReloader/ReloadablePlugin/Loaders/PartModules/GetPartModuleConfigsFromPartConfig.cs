@@ -1,5 +1,4 @@
-﻿extern alias KSP;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -8,7 +7,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
 // ReSharper disable once ClassNeverInstantiated.Global
     public class GetPartModuleConfigsFromPartConfig : IGetPartModuleConfigsFromPartConfig
     {
-        public IEnumerable<KSP::ConfigNode> Get(KSP::ConfigNode partConfig, string moduleName)
+        public IEnumerable<ConfigNode> Get(ConfigNode partConfig, string moduleName)
         {
             if (partConfig == null) throw new ArgumentNullException("partConfig");
             if (moduleName == null) throw new ArgumentNullException("moduleName");

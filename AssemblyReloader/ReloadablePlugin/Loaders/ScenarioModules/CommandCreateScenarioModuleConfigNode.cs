@@ -1,10 +1,8 @@
-﻿extern alias KSP;
-using System;
+﻿using System;
 using System.Linq;
 using ReeperCommon.Containers;
 using ReeperCommon.Logging;
 using strange.extensions.command.impl;
-using strange.extensions.injector;
 using UnityEngine;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
@@ -46,7 +44,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
 
         public override void Execute()
         {
-            var scenarioModule = _mbToBeDestroyed as KSP::ScenarioModule;
+            var scenarioModule = _mbToBeDestroyed as ScenarioModule;
 
             if (scenarioModule == null)
                 return;
@@ -64,11 +62,11 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
         }
 
 
-        private void CreateConfigNodeFromCurrentState(IProtoScenarioModule psm, KSP::ScenarioModule scenarioModule)
+        private void CreateConfigNodeFromCurrentState(IProtoScenarioModule psm, ScenarioModule scenarioModule)
         {
             try
             {
-                var config = new KSP::ConfigNode(psm.GetData().name);
+                var config = new ConfigNode(psm.GetData().name);
 
                 // todo: copy TargetScenes values?
                 // this isn't done atm 
@@ -87,14 +85,14 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
         }
 
 
-        private void StoreLastConfigNodeGameUsed(IProtoScenarioModule psm, KSP::ScenarioModule scenarioModule)
+        private void StoreLastConfigNodeGameUsed(IProtoScenarioModule psm, ScenarioModule scenarioModule)
         {
             _configRepository.Store(_typeIdentifierQuery.Get(scenarioModule.GetType()), psm.GetData().CreateCopy());
             _log.Verbose("Stored last game ConfigNode for " + psm.moduleName);
         }
 
 
-        private Maybe<IProtoScenarioModule> GetProtoScenarioModuleFor(KSP::ScenarioModule scenarioModule)
+        private Maybe<IProtoScenarioModule> GetProtoScenarioModuleFor(ScenarioModule scenarioModule)
         {
             var psmWithThisRef =
                 _protoScenarioModuleQuery.Get(scenarioModule.GetType())
