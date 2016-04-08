@@ -1,5 +1,4 @@
-﻿extern alias KSP;
-using System;
+﻿using System;
 using System.Linq;
 using ReeperAssemblyLibrary;
 using ReeperCommon.Logging;
@@ -9,7 +8,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.VesselModules
 // ReSharper disable once ClassNeverInstantiated.Global
     public class VesselModuleUnloader : IVesselModuleUnloader
     {
-        private readonly IGetTypesDerivedFrom<KSP::VesselModule> _vesselModules;
+        private readonly IGetTypesDerivedFrom<VesselModule> _vesselModules;
         private readonly IGetLoadedVessels _loadedVessels;
         private readonly IVesselModuleManager _vesselModuleManager;
         private readonly IMonoBehaviourDestroyer _mbDestroyer;
@@ -17,7 +16,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.VesselModules
 
 
         public VesselModuleUnloader(
-            IGetTypesDerivedFrom<KSP::VesselModule> vesselModules,
+            IGetTypesDerivedFrom<VesselModule> vesselModules,
             IGetLoadedVessels loadedVessels,
             IVesselModuleManager vesselModuleManager,
             IMonoBehaviourDestroyer mbDestroyer,
@@ -57,7 +56,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.VesselModules
             foreach (var modules in _loadedVessels.Get()
                 .Select(vessel => vessel.gameObject.GetComponents(vesselModule.Type)
                 .Where(c => c != null && c.GetType().IsSubclassOf(vesselModule.Type))
-                .Cast<KSP::VesselModule>()
+                .Cast<VesselModule>()
                 .ToArray()))
             {
                 if (!modules.Any())

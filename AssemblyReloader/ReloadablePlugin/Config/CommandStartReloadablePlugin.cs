@@ -3,7 +3,6 @@ using ReeperCommon.Containers;
 using ReeperCommon.FileSystem;
 using ReeperCommon.Logging;
 using strange.extensions.command.impl;
-using strange.extensions.injector;
 
 namespace AssemblyReloader.ReloadablePlugin.Config
 {

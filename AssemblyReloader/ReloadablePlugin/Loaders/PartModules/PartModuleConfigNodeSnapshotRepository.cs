@@ -30,5 +30,10 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
         {
             _storedNodes.Clear();
         }
+
+        public int Count()
+        {
+            return _storedNodes.Count();
+        }
     }
 }

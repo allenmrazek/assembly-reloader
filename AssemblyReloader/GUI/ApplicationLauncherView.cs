@@ -2,7 +2,6 @@
 using AssemblyReloader.Config.Keys;
 using KSP.UI.Screens;
 using ReeperCommon.Containers;
-using strange.extensions.injector;
 using strange.extensions.mediation.impl;
 using strange.extensions.signal.impl;
 using UnityEngine;

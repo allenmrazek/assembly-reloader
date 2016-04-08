@@ -1,5 +1,4 @@
-﻿extern alias KSP;
-using System;
+﻿using System;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.VesselModules
 {
@@ -12,7 +11,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.VesselModules
         {
             if (vmType == null) throw new ArgumentNullException("vmType");
 
-            if (!vmType.IsSubclassOf(typeof(KSP::VesselModule)))
+            if (!vmType.IsSubclassOf(typeof(VesselModule)))
                 throw new ArgumentException(vmType.FullName + " is not a VesselModule", "vmType");
 
             Type = vmType;

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using strange.extensions.injector;
-using strange.extensions.mediation.impl;
+﻿using strange.extensions.mediation.impl;
 
 namespace AssemblyReloader.Gui
 {

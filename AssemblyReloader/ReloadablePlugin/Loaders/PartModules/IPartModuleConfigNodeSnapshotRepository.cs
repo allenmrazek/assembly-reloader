@@ -8,5 +8,6 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
         Maybe<ConfigNode> Retrieve(uint flightid, TypeIdentifier key);
         Maybe<ConfigNode> Peek(uint flightid, TypeIdentifier key);
         void Clear();
+        int Count();
     }
 }

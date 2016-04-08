@@ -68,5 +68,11 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders
         {
             _items.Clear();
         }
+
+
+        public int Count()
+        {
+            return _items.Sum(kvp => kvp.Value.Count);
+        }
     }
 }

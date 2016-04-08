@@ -21,11 +21,13 @@ namespace AssemblyReloader.Gui
         
     }
 
+    // ReSharper disable once ClassNeverInstantiated.Global
     public class SignalApplicationLauncherButtonCreated : Signal
     {
         
     }
 
+    // ReSharper disable once ClassNeverInstantiated.Global
     public class SignalInterfaceScaleChanged : Signal<float>
     {
         

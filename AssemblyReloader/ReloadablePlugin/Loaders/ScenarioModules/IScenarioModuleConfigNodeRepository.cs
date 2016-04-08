@@ -6,5 +6,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
     {
         void Store(TypeIdentifier identifier, ConfigNode config);
         Maybe<ConfigNode> Retrieve(TypeIdentifier smType);
+        void Clear();
+        int Count();
     }
 }

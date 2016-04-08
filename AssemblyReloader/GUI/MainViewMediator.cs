@@ -1,12 +1,10 @@
-﻿using System.Diagnostics;
-using ReeperCommon.Containers;
-using ReeperCommon.Serialization;
-using ReeperCommon.Serialization.Exceptions;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using AssemblyReloader.ReloadablePlugin;
+using ReeperCommon.Containers;
 using ReeperCommon.Logging;
-using strange.extensions.injector;
+using ReeperCommon.Serialization;
+using ReeperCommon.Serialization.Exceptions;
 using strange.extensions.mediation.impl;
 
 namespace AssemblyReloader.Gui

@@ -1,11 +1,8 @@
 ﻿extern alias KSP;
-using System.Linq;
 using System;
 using AssemblyReloader.ReloadablePlugin.Config;
 using ReeperAssemblyLibrary;
-using ReeperCommon.Containers;
 using ReeperCommon.Logging;
-using strange.extensions.injector;
 
 namespace AssemblyReloader.Config
 {

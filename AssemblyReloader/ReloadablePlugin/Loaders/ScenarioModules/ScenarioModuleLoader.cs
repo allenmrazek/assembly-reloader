@@ -1,5 +1,4 @@
-﻿extern alias KSP;
-using System;
+﻿using System;
 using System.Linq;
 using AssemblyReloader.ReloadablePlugin.Loaders.Addons;
 using ReeperAssemblyLibrary;
@@ -11,28 +10,28 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
 // ReSharper disable once ClassNeverInstantiated.Global
     public class ScenarioModuleLoader : IScenarioModuleLoader
     {
-        private static readonly KSP::GameScenes[] ValidScenarioModuleScenes =
+        private static readonly GameScenes[] ValidScenarioModuleScenes =
         {
-            KSP::GameScenes.EDITOR, 
-            KSP::GameScenes.FLIGHT,
-            KSP::GameScenes.SPACECENTER, 
-            KSP::GameScenes.TRACKSTATION
+            GameScenes.EDITOR, 
+            GameScenes.FLIGHT,
+            GameScenes.SPACECENTER, 
+            GameScenes.TRACKSTATION
         };
 
-        private readonly IGetTypesDerivedFrom<KSP::ScenarioModule> _smTypeQuery;
+        private readonly IGetTypesDerivedFrom<ScenarioModule> _smTypeQuery;
         private readonly IGetProtoScenarioModules _protoScenarioModuleQuery;
         private readonly IGetCurrentGameScene _gameSceneQuery;
-        private readonly IGetAttributesOfType<KSP::KSPScenario> _scenarioAttributeQuery;
+        private readonly IGetAttributesOfType<KSPScenario> _scenarioAttributeQuery;
         private readonly IScenarioModuleFactory _smFactory;
         private readonly IGetTypeIdentifier _typeIdentifierQuery;
         private readonly ILog _log;
 
 
         public ScenarioModuleLoader(
-            IGetTypesDerivedFrom<KSP::ScenarioModule> smTypeQuery,
+            IGetTypesDerivedFrom<ScenarioModule> smTypeQuery,
             IGetProtoScenarioModules protoScenarioModuleQuery,
             IGetCurrentGameScene gameSceneQuery,
-            IGetAttributesOfType<KSP::KSPScenario> scenarioAttributeQuery,
+            IGetAttributesOfType<KSPScenario> scenarioAttributeQuery,
             IScenarioModuleFactory smFactory,
             IGetTypeIdentifier typeIdentifierQuery,
             [Name(LogKey.ScenarioModuleLoader)] ILog log)
@@ -70,6 +69,8 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
 
             foreach (var smType in _smTypeQuery.Get(handle.LoadedAssembly.assembly))
                 LoadInstanceForEachProtoScenarioModule(smType);
+
+
         }
 
 

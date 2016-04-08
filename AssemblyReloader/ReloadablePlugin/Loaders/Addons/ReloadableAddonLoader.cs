@@ -5,7 +5,6 @@ using System.Linq;
 using ReeperAssemblyLibrary;
 using ReeperCommon.Containers;
 using ReeperCommon.Logging;
-using strange.extensions.injector;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
 {
@@ -33,7 +32,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
         }
 
 
-        public void CreateAddons(KSP::KSPAddon.Startup scene)
+        public void CreateAddons(KSPAddon.Startup scene)
         {
             if (!Handle.Any())
             {

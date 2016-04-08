@@ -1,7 +1,4 @@
 ﻿using System;
-using ReeperCommon.Containers;
-using ReeperCommon.Serialization;
-using ReeperCommon.Serialization.Exceptions;
 using AssemblyReloader.Gui;
 using AssemblyReloader.ReloadablePlugin.Config;
 using AssemblyReloader.ReloadablePlugin.Loaders.Addons;
@@ -9,8 +6,10 @@ using AssemblyReloader.ReloadablePlugin.Loaders.PartModules;
 using AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules;
 using AssemblyReloader.ReloadablePlugin.Loaders.VesselModules;
 using AssemblyReloader.ReloadablePlugin.Weaving;
+using ReeperCommon.Containers;
 using ReeperCommon.Logging;
-using strange.extensions.injector;
+using ReeperCommon.Serialization;
+using ReeperCommon.Serialization.Exceptions;
 using strange.extensions.mediation.impl;
 
 namespace AssemblyReloader.ReloadablePlugin.Gui

@@ -1,5 +1,4 @@
-﻿extern alias KSP;
-using System;
+﻿using System;
 using AssemblyReloader.Config.Keys;
 using AssemblyReloader.Gui;
 using AssemblyReloader.ReloadablePlugin.Loaders.Addons;
@@ -10,7 +9,6 @@ using AssemblyReloader.ReloadablePlugin.Weaving;
 using ReeperCommon.Gui.Window;
 using ReeperCommon.Gui.Window.Buttons;
 using ReeperCommon.Gui.Window.Decorators;
-using strange.extensions.injector;
 using strange.extensions.signal.impl;
 using UnityEngine;
 

@@ -1,5 +1,4 @@
 ﻿using ReeperCommon.Serialization;
-using strange.extensions.implicitBind;
 using strange.extensions.injector.api;
 
 namespace AssemblyReloader.Config

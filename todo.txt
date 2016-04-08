@@ -1,11 +1,5 @@
 - VesselModules now store persistent data with 1.1, needs solution similar to Partmodules now
 
-- plugin that fails type check will still be loaded (see: TarsierSpaceTech)
-- set PartModule.moduleName
-
-- implement VesselModule.order, which is apparently used now (in 1.0.5)
-
-- Catch calls to Assembly.GetName(), specifically those like Assembly.GetExecutingAssembly().GetName() because the name gets mangled
 
 
 - make sure ScenarioModules that should only be added to specific game type are and we don't accidentally create them where they shouldn't be
@@ -23,7 +17,6 @@ FileBrowser:OnGUI()
 KSCPauseMenu:OnGUI()
 
 
-- interception on nested types likely doesn't work
 
 - intercept calls to AddonLoader.StartAddons ?
 
@@ -31,25 +24,10 @@ KSCPauseMenu:OnGUI()
 - Insert tracking code (especially for ScenarioModules, MonoBehaviours marked with KSPAddon (or KSPAddon-derived), etc) so we can intelligently destroy them on reload
 
 
-- Verify that reloadable plugins aren't already loaded by the game (for example: TestProject.dll existing alongside TestProject.dll.reloadable in GameData which will break the whole thing unless TestProject.dll is uninstalled first)
 
-- check for changed reloadable dependencies; reload them also
 
 - resolve reloadable dependencies
 
-- update moduleRef and associated configs for unloaded/packed PartModule instances
-
-- clear module snapshots on GameDatabase reload
-
-- bugfix: reloading database might change GameData dir instance, causing us to point to an old "snapshot" of disk contents
-
-- bugfix: reloading while in editor with parts that have UI elements sometimes causes duplicate PartModules to exist on the ship
-
-- bugfix: module info isn't updated (it's created by PartLoader and then never touched afterwards, might cause NRE if PartModule implements IModuleInfo)
-
-- bugfix: set AssemblyLoader.LoadedAssembly dataPath, used by GetPathByType?
-
-- insert stock bug: apparently PartModule.OnInitialize is not run for the first part placed in the editor (wtf?)
 
 - add separate options to disable creating reloaded addons for current scene, yet still be able to create Instantly addons?
 

@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using AssemblyReloader.Config.Keys;
+﻿using AssemblyReloader.Config.Keys;
 using ReeperCommon.Gui.Window;
 using ReeperCommon.Gui.Window.Buttons;
 using ReeperCommon.Gui.Window.Decorators;
-using ReeperCommon.Serialization;
-using strange.extensions.injector;
 using strange.extensions.signal.impl;
 using UnityEngine;
-
 
 namespace AssemblyReloader.Gui
 {

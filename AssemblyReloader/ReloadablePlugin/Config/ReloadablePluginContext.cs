@@ -1,5 +1,4 @@
-﻿extern alias KSP;
-extern alias Cecil96;
+﻿extern alias Cecil96;
 using System;
 using System.IO;
 using System.Reflection;
@@ -86,6 +85,9 @@ namespace AssemblyReloader.ReloadablePlugin.Config
             injectionBinder.Bind<IVesselModuleLoader>().To<VesselModuleLoader>().ToSingleton();
             injectionBinder.Bind<IVesselModuleUnloader>().To<VesselModuleUnloader>().ToSingleton();
             injectionBinder.Bind<IVesselModuleManager>().To<KspVesselModuleManager>().ToSingleton();
+            injectionBinder.Bind<IVesselModuleConfigNodeRepository>()
+                .To<VesselModuleConfigNodeRepository>()
+                .ToSingleton();
 
             injectionBinder.Bind<MethodInfo>()
                 .To(typeof(Assembly).GetProperty("CodeBase", BindingFlags.Public | BindingFlags.Instance).GetGetMethod())
@@ -106,7 +108,7 @@ namespace AssemblyReloader.ReloadablePlugin.Config
                 .ToName(MethodKeys.AssemblyLocation);
 
             injectionBinder.Bind<MethodInfo>()
-                .To(typeof(KSP::ScenarioRunner).GetMethod("GetLoadedModules", BindingFlags.Public | BindingFlags.Static))
+                .To(typeof(ScenarioRunner).GetMethod("GetLoadedModules", BindingFlags.Public | BindingFlags.Static))
                 .ToName(MethodKeys.ScenarioRunnerGetLoadedModules);
 
             injectionBinder.Bind<IGetInstructionsInMethod>()
@@ -202,7 +204,8 @@ namespace AssemblyReloader.ReloadablePlugin.Config
                 .To<CommandLoadPartModules>()
                 .To<CommandLoadVesselModules>()
                 .To<CommandLoadScenarioModules>()
-                .To<CommandDispatchLoadersFinished>();
+                .To<CommandDispatchLoadersFinished>()
+                .To<CommandClearConfigNodeSnapshots>();
 
 
             commandBinder.Bind<SignalUnloadPlugin>()
@@ -218,6 +221,7 @@ namespace AssemblyReloader.ReloadablePlugin.Config
             commandBinder.Bind<SignalAboutToDestroyMonoBehaviour>()
                 .To<CommandCreatePartModuleConfigNodeSnapshot>()
                 .To<CommandCreateScenarioModuleConfigNode>()
+                .To<CommandCreateVesselModuleConfigNodeSnapshot>()
                 .To<CommandSendReloadRequestedMessageToTarget>();
 
 

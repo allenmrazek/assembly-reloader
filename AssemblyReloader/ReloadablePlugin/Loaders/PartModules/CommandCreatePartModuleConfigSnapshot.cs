@@ -1,5 +1,4 @@
-﻿extern alias KSP;
-using System;
+﻿using System;
 using AssemblyReloader.Game;
 using ReeperCommon.Logging;
 using strange.extensions.command.impl;
@@ -49,10 +48,10 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
 
         public override void Execute()
         {
-            if (!_mbBeingDestroyed.GetType().IsSubclassOf(typeof(KSP::PartModule)))
+            if (!_mbBeingDestroyed.GetType().IsSubclassOf(typeof(PartModule)))
                 return;
 
-            var partModule = _mbBeingDestroyed as KSP::PartModule;
+            var partModule = _mbBeingDestroyed as PartModule;
 
             if (partModule == null)
             {
