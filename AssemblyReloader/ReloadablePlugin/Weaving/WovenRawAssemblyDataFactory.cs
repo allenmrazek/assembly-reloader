@@ -2,11 +2,11 @@
 using System;
 using System.IO;
 using System.Linq;
+using Cecil96::Mono.Cecil;
 using ReeperAssemblyLibrary;
 using ReeperCommon.Containers;
-using ReeperCommon.FileSystem;
 using ReeperCommon.Logging;
-using Cecil96::Mono.Cecil;
+using ReeperKSP.FileSystem;
 
 namespace AssemblyReloader.ReloadablePlugin.Weaving
 {

@@ -2,13 +2,10 @@
 using System;
 using System.Linq;
 using AssemblyReloader.Config.Keys;
-using ReeperCommon.FileSystem;
+using Cecil96::Mono.Cecil;
 using ReeperCommon.Logging;
+using ReeperKSP.FileSystem;
 using strange.extensions.command.impl;
-using strange.extensions.injector;
-using BaseAssemblyResolver = Cecil96::Mono.Cecil.BaseAssemblyResolver;
-using DefaultAssemblyResolver = Cecil96::Mono.Cecil.DefaultAssemblyResolver;
-using IAssemblyResolver = Cecil96::Mono.Cecil.IAssemblyResolver;
 
 namespace AssemblyReloader.Config
 {

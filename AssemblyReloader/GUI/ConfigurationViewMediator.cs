@@ -1,8 +1,8 @@
 ﻿using System;
 using AssemblyReloader.Config;
 using ReeperCommon.Logging;
-using ReeperCommon.Serialization;
-using ReeperCommon.Serialization.Exceptions;
+using ReeperKSP.Serialization;
+using ReeperKSP.Serialization.Exceptions;
 using strange.extensions.mediation.impl;
 
 namespace AssemblyReloader.Gui

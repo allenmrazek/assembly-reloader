@@ -3,7 +3,7 @@ using System.Linq;
 using AssemblyReloader.Game;
 using ReeperAssemblyLibrary;
 using ReeperCommon.Containers;
-using ReeperCommon.FileSystem;
+using ReeperKSP.FileSystem;
 
 namespace AssemblyReloader.ReloadablePlugin
 {

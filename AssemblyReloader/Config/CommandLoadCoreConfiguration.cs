@@ -2,12 +2,11 @@
 using System;
 using System.IO;
 using AssemblyReloader.ReloadablePlugin;
-using ReeperCommon.FileSystem;
 using ReeperCommon.Logging;
-using ReeperCommon.Serialization;
-using ReeperCommon.Serialization.Exceptions;
+using ReeperKSP.FileSystem;
+using ReeperKSP.Serialization;
+using ReeperKSP.Serialization.Exceptions;
 using strange.extensions.command.impl;
-using Cecil96::Mono.Cecil;
 using UnityEngine;
 
 namespace AssemblyReloader.Config

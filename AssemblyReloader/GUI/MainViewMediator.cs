@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using AssemblyReloader.ReloadablePlugin;
 using ReeperCommon.Containers;
 using ReeperCommon.Logging;
-using ReeperCommon.Serialization;
-using ReeperCommon.Serialization.Exceptions;
+using ReeperKSP.Serialization;
+using ReeperKSP.Serialization.Exceptions;
 using strange.extensions.mediation.impl;
 
 namespace AssemblyReloader.Gui

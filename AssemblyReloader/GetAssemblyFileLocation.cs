@@ -5,9 +5,7 @@ using System.Reflection;
 using AssemblyReloader.Game;
 using AssemblyReloader.Properties;
 using ReeperCommon.Containers;
-using ReeperCommon.FileSystem;
-using ReeperCommon.Logging;
-using strange.extensions.implicitBind;
+using ReeperKSP.FileSystem;
 
 namespace AssemblyReloader
 {

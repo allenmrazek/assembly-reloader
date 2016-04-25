@@ -15,9 +15,10 @@ using AssemblyReloader.ReloadablePlugin.Weaving;
 using AssemblyReloader.ReloadablePlugin.Weaving.Operations;
 using AssemblyReloader.ReloadablePlugin.Weaving.Operations.GameEventInterception;
 using AssemblyReloader.ReloadablePlugin.Weaving.Operations.Keys;
+using Cecil96::Mono.Cecil.Cil;
 using ReeperAssemblyLibrary;
-using ReeperCommon.FileSystem;
 using ReeperCommon.Logging;
+using ReeperKSP.FileSystem;
 using strange.extensions.context.api;
 using UnityEngine;
 
@@ -95,7 +96,7 @@ namespace AssemblyReloader.ReloadablePlugin.Config
 
             injectionBinder.Bind<IGetInstructionsInMethod>()
                 .To(new GetMethodCallsInMethod(injectionBinder.GetInstance<MethodInfo>(MethodKeys.AssemblyCodeBase),
-                    Cecil96::Mono.Cecil.Cil.OpCodes.Callvirt))
+                    OpCodes.Callvirt))
                 .ToName(MethodKeys.AssemblyCodeBase);
 
             injectionBinder.Bind<MethodInfo>()
@@ -104,7 +105,7 @@ namespace AssemblyReloader.ReloadablePlugin.Config
 
             injectionBinder.Bind<IGetInstructionsInMethod>()
                 .To(new GetMethodCallsInMethod(injectionBinder.GetInstance<MethodInfo>(MethodKeys.AssemblyLocation),
-                    Cecil96::Mono.Cecil.Cil.OpCodes.Callvirt))
+                    OpCodes.Callvirt))
                 .ToName(MethodKeys.AssemblyLocation);
 
             injectionBinder.Bind<MethodInfo>()
@@ -113,7 +114,7 @@ namespace AssemblyReloader.ReloadablePlugin.Config
 
             injectionBinder.Bind<IGetInstructionsInMethod>()
                 .To(new GetMethodCallsInMethod(injectionBinder.GetInstance<MethodInfo>(MethodKeys.ScenarioRunnerGetLoadedModules),
-                    Cecil96::Mono.Cecil.Cil.OpCodes.Call))
+                    OpCodes.Call))
                 .ToName(MethodKeys.ScenarioRunnerGetLoadedModules);
 
 

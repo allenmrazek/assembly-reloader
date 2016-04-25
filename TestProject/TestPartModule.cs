@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Reflection;
-using ReeperCommon.Containers;
-using ReeperCommon.Serialization;
 using UnityEngine;
 
 namespace TestProject
@@ -14,12 +11,12 @@ namespace TestProject
         public ConfigNode node;
         public void OnBeforeSerialize()
         {
-            UnityEngine.Debug.Log("TestSerialization.OnBeforeSerialize!");
+            Debug.Log("TestSerialization.OnBeforeSerialize!");
         }
 
         public void OnAfterDeserialize()
         {
-            UnityEngine.Debug.Log("TestSerialization/OnAfterDeserialize!");
+            Debug.Log("TestSerialization/OnAfterDeserialize!");
         }
     }
 

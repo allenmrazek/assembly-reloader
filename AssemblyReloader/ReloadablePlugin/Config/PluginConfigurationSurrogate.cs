@@ -1,7 +1,7 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Reflection;
-using ReeperCommon.Serialization;
-using System;
+using ReeperKSP.Serialization;
 
 namespace AssemblyReloader.ReloadablePlugin.Config
 {

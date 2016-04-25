@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using AssemblyReloader.Config.Keys;
-using ReeperCommon.Gui.Window;
-using ReeperCommon.Gui.Window.Buttons;
-using ReeperCommon.Gui.Window.Decorators;
+using ReeperKSP.Gui.Window;
+using ReeperKSP.Gui.Window.Buttons;
+using ReeperKSP.Gui.Window.Decorators;
 using strange.extensions.signal.impl;
 using UnityEngine;
 

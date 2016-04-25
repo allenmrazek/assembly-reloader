@@ -345,24 +345,6 @@
     <EmbeddedResource Include="Resources\btnClose.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\ReeperAssemblyLibrary\ReeperAssemblyLibrary\ReeperAssemblyLibrary.csproj">
-      <Project>{9ad53029-b93d-434f-9e17-b8374640bebf}</Project>
-      <Name>ReeperAssemblyLibrary</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\ReeperCommon\ReeperCommon\ReeperCommon.csproj">
-      <Project>{fecfa8fc-cf80-4685-a2ba-1566e0f3c26e}</Project>
-      <Name>ReeperCommon</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\ReeperLoader\ReeperLoader\ReeperLoader.csproj">
-      <Project>{5192d8ef-1d16-4307-9c18-13bd523f767f}</Project>
-      <Name>ReeperLoader</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\StrangeIoC\StrangeIoC\strange.csproj">
-      <Project>{953cd566-42b5-4f0a-856d-63d059e36fc0}</Project>
-      <Name>strange</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Resources\panelCompact.png" />
     <EmbeddedResource Include="Resources\panelExpanded.png" />
   </ItemGroup>
@@ -381,6 +363,28 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\AppButton.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\ReeperAssemblyLibrary\ReeperAssemblyLibrary\ReeperAssemblyLibrary.csproj">
+      <Project>{9ad53029-b93d-434f-9e17-b8374640bebf}</Project>
+      <Name>ReeperAssemblyLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ReeperCommon\ReeperCommon\ReeperCommon.csproj">
+      <Project>{fecfa8fc-cf80-4685-a2ba-1566e0f3c26e}</Project>
+      <Name>ReeperCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ReeperKSP\ReeperKSP\ReeperKSP.csproj">
+      <Project>{13e7b9e2-7789-497f-9f94-5f4c72b2b32a}</Project>
+      <Name>ReeperKSP</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ReeperLoader\ReeperLoader\ReeperLoader.csproj">
+      <Project>{5192d8ef-1d16-4307-9c18-13bd523f767f}</Project>
+      <Name>ReeperLoader</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StrangeIoC\StrangeIoC\strange.csproj">
+      <Project>{953cd566-42b5-4f0a-856d-63d059e36fc0}</Project>
+      <Name>strange</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
@@ -434,6 +438,7 @@ echo copy dependencies to project GameData...
 call "$(SolutionDir)CopyToLocation.bat" "$(TargetDir)" "%25ProjectGameData%25" ReeperAssemblyLibrary.* /xf *.pdb
 call "$(SolutionDir)CopyToLocation.bat" "$(TargetDir)" "%25ProjectGameData%25" ReeperLoader.* /xf *.pdb
 call "$(SolutionDir)CopyToLocation.bat" "$(TargetDir)" "%25ProjectGameData%25" Mono.Cecil.* /xf *.pdb
+call "$(SolutionDir)CopyToLocation.bat" "$(TargetDir)" "%25ProjectGameData%25" ReeperKSP.* /xf *.pdb
 
 call "$(SolutionDir)CopyToLocation.bat" "$(TargetDir)" "%25ProjectGameData%25" ReeperCommon.* /xf *.pdb
 call "$(SolutionDir)CopyToLocation.bat" "$(TargetDir)" "%25ProjectGameData%25" StrangeIoC.* /xf *.pdb
@@ -445,9 +450,9 @@ REM Merge dependencies into AssemblyReloader.dll (used in release builds), excep
 REM ----------------------------------------------------------
 :MergeDependencies
 echo merge dependencies...
-cd "(TargetDir)"
+cd "$(TargetDir)"
 
-"$(SolutionDir)packages\ILRepack.2.0.4\tools\ILRepack.exe" /verbose /internalize /out:$(TargetFileName) $(TargetFileName) ReeperCommon.dll ReeperAssemblyLibrary.dll StrangeIoC.dll
+"$(SolutionDir)packages\ILRepack.2.0.4\tools\ILRepack.exe" /verbose /internalize /out:$(TargetFileName) $(TargetFileName) ReeperCommon.dll ReeperAssemblyLibrary.dll StrangeIoC.dll ReeperKSP.dll
 
 "$(SolutionDir)packages\ILRepack.2.0.4\tools\ILRepack.exe" /verbose /internalize /out:ReeperLoader.dll ReeperLoader.dll ReeperCommon.dll ReeperAssemblyLibrary.dll StrangeIoC.dll
 
@@ -465,6 +470,7 @@ call "$(SolutionDir)CreateMdb.bat" "$(TargetDir)ReeperCommon.dll" "$(TargetDir)"
 call "$(SolutionDir)CreateMdb.bat" "$(TargetDir)StrangeIoC.dll" "$(TargetDir)"
 call "$(SolutionDir)CreateMdb.bat" "$(TargetDir)ReeperAssemblyLibrary.dll" "$(TargetDir)"
 call "$(SolutionDir)CreateMdb.bat" "$(TargetDir)ReeperLoader.dll" "$(TargetDir)"
+call "$(SolutionDir)CreateMdb.bat" "$(TargetDir)ReeperKSP.dll" "$(TargetDir)"
 goto:eof
 
 

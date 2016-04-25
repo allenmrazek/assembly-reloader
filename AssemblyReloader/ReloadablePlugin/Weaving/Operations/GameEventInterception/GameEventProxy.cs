@@ -1,17 +1,12 @@
 ﻿extern alias KSP;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Reflection;
-using AssemblyReloader.Game;
 using ReeperAssemblyLibrary;
 using ReeperCommon.Containers;
-using ReeperCommon.Extensions;
 using ReeperCommon.Logging;
-using ReeperCommon.Serialization.Exceptions;
-using GameEvents = KSP::GameEvents;
+using ReeperKSP.Serialization.Exceptions;
 
 namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations.GameEventInterception
 {

@@ -8,8 +8,8 @@ using AssemblyReloader.ReloadablePlugin.Loaders.VesselModules;
 using AssemblyReloader.ReloadablePlugin.Weaving;
 using ReeperCommon.Containers;
 using ReeperCommon.Logging;
-using ReeperCommon.Serialization;
-using ReeperCommon.Serialization.Exceptions;
+using ReeperKSP.Serialization;
+using ReeperKSP.Serialization.Exceptions;
 using strange.extensions.mediation.impl;
 
 namespace AssemblyReloader.ReloadablePlugin.Gui
