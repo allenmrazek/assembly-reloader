@@ -452,11 +452,11 @@ REM ----------------------------------------------------------
 echo merge dependencies...
 cd "$(TargetDir)"
 
-"$(SolutionDir)packages\ILRepack.2.0.4\tools\ILRepack.exe" /verbose /internalize /out:$(TargetFileName) $(TargetFileName) ReeperCommon.dll ReeperAssemblyLibrary.dll StrangeIoC.dll ReeperKSP.dll
+"$(SolutionDir)packages\ILRepack.2.0.4\tools\ILRepack.exe" /verbose /internalize /out:$(TargetFileName) $(TargetFileName) ReeperCommon.dll ReeperAssemblyLibrary.dll StrangeIoC.dll ReeperKSP.dll Mono.Cecil.dll Mono.Cecil.Mdb.dll Mono.Cecil.Pdb.dll Mono.Cecil.Rocks.dll
 
 "$(SolutionDir)packages\ILRepack.2.0.4\tools\ILRepack.exe" /verbose /internalize /out:ReeperLoader.dll ReeperLoader.dll ReeperCommon.dll ReeperAssemblyLibrary.dll StrangeIoC.dll
 
-call "$(SolutionDir)CopyToLocation.bat" "$(TargetDir)" "%25ProjectGameData%25" Mono.Cecil.* /xf *.pdb
+REM call "$(SolutionDir)CopyToLocation.bat" "$(TargetDir)" "%25ProjectGameData%25" Mono.Cecil.* /xf *.pdb
 call "$(SolutionDir)CopyToLocation.bat" "$(TargetDir)" "%25ProjectGameData%25" ReeperLoader.* /xf *.pdb
 
 
