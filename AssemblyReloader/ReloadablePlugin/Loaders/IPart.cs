@@ -1,5 +1,4 @@
-﻿extern alias KSP;
-using AssemblyReloader.Game;
+﻿using AssemblyReloader.Game;
 using ReeperCommon.Containers;
 using UnityEngine;
 
@@ -7,10 +6,10 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders
 {
     public interface IPart
     {
-        void RemoveModule(KSP::PartModule pm);
+        void RemoveModule(PartModule pm);
 
         GameObject GameObject { get; }
-        KSP::PartModuleList Modules { get; }
+        PartModuleList Modules { get; }
         string Name { get; }
         string PartName { get; }
         IAvailablePart PartInfo { get; }

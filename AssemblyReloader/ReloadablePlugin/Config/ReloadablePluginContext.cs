@@ -92,16 +92,21 @@ namespace AssemblyReloader.ReloadablePlugin.Config
 
             injectionBinder.Bind<MethodInfo>()
                 .To(typeof(Assembly).GetProperty("CodeBase", BindingFlags.Public | BindingFlags.Instance).GetGetMethod())
-                .ToName(MethodKeys.AssemblyCodeBase);
+                .ToName(MethodKeys.AssemblyCodeBase)
+                .ToInject(false);
+
 
             injectionBinder.Bind<IGetInstructionsInMethod>()
                 .To(new GetMethodCallsInMethod(injectionBinder.GetInstance<MethodInfo>(MethodKeys.AssemblyCodeBase),
                     OpCodes.Callvirt))
-                .ToName(MethodKeys.AssemblyCodeBase);
+                .ToName(MethodKeys.AssemblyCodeBase)
+                .ToInject(false);
+
 
             injectionBinder.Bind<MethodInfo>()
                 .To(typeof (Assembly).GetProperty("Location", BindingFlags.Public | BindingFlags.Instance).GetGetMethod())
-                .ToName(MethodKeys.AssemblyLocation);
+                .ToName(MethodKeys.AssemblyLocation)
+                .ToInject(false);
 
             injectionBinder.Bind<IGetInstructionsInMethod>()
                 .To(new GetMethodCallsInMethod(injectionBinder.GetInstance<MethodInfo>(MethodKeys.AssemblyLocation),
@@ -110,13 +115,13 @@ namespace AssemblyReloader.ReloadablePlugin.Config
 
             injectionBinder.Bind<MethodInfo>()
                 .To(typeof(ScenarioRunner).GetMethod("GetLoadedModules", BindingFlags.Public | BindingFlags.Static))
-                .ToName(MethodKeys.ScenarioRunnerGetLoadedModules);
+                .ToName(MethodKeys.ScenarioRunnerGetLoadedModules)
+                .ToInject(false);
 
             injectionBinder.Bind<IGetInstructionsInMethod>()
                 .To(new GetMethodCallsInMethod(injectionBinder.GetInstance<MethodInfo>(MethodKeys.ScenarioRunnerGetLoadedModules),
                     OpCodes.Call))
                 .ToName(MethodKeys.ScenarioRunnerGetLoadedModules);
-
 
 
             injectionBinder.Bind<IGameEventRegistry>().To<GameEventRegistry>().ToSingleton();

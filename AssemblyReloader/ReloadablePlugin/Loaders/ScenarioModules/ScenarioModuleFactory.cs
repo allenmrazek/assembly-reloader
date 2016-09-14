@@ -55,7 +55,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
         {
             if (config == null) throw new ArgumentNullException("config");
 
-            var runner = ScenarioRunner.fetch;
+            var runner = ScenarioRunner.Instance;
 
             if (runner == null)
                 throw new ScenarioRunnerNotFound();

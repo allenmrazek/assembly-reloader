@@ -1,6 +1,4 @@
-﻿extern alias KSP;
-using System.Collections.Generic;
-using strange.extensions.implicitBind;
+﻿using System.Collections.Generic;
 using strange.extensions.injector.api;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
@@ -9,9 +7,9 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
 // ReSharper disable once UnusedMember.Global
     public class KspGameDatabase : IGameDatabase
     {
-        public IEnumerable<KSP::UrlDir.UrlConfig> GetConfigs(string typeName)
+        public IEnumerable<UrlDir.UrlConfig> GetConfigs(string typeName)
         {
-            return KSP::GameDatabase.Instance.GetConfigs(typeName);
+            return GameDatabase.Instance.GetConfigs(typeName);
         }
     }
 }

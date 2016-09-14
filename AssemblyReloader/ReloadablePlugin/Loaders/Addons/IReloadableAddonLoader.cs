@@ -1,12 +1,11 @@
-﻿extern alias KSP;
-using ReeperAssemblyLibrary;
+﻿using ReeperAssemblyLibrary;
 using ReeperCommon.Containers;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
 {
     public interface IReloadableAddonLoader
     {
-        void CreateAddons(KSP::KSPAddon.Startup scene);
+        void CreateAddons(KSPAddon.Startup scene);
         Maybe<ILoadedAssemblyHandle> Handle { get; set; }
     }
 }

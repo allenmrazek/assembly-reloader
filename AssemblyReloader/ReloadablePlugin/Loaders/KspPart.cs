@@ -1,5 +1,4 @@
-﻿extern alias KSP;
-using System;
+﻿using System;
 using AssemblyReloader.Game;
 using ReeperCommon.Containers;
 using UnityEngine;
@@ -8,10 +7,10 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders
 {
     public class KspPart : IPart, IEquatable<KspPart>
     {
-        private readonly KSP::Part _target;
+        private readonly Part _target;
         private readonly IKspFactory _kspFactory;
 
-        public KspPart(KSP::Part target, IKspFactory kspFactory)
+        public KspPart(Part target, IKspFactory kspFactory)
         {
             if (target == null) throw new ArgumentNullException("target");
             if (kspFactory == null) throw new ArgumentNullException("kspFactory");
@@ -20,7 +19,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders
             _kspFactory = kspFactory;
         }
 
-        public void RemoveModule(KSP::PartModule pm)
+        public void RemoveModule(PartModule pm)
         {
             if (pm == null) throw new ArgumentNullException("pm");
             _target.RemoveModule(pm);
@@ -31,7 +30,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders
             get { return _target.gameObject; }
         }
 
-        public KSP::PartModuleList Modules
+        public PartModuleList Modules
         {
             get { return _target.Modules; }
         }

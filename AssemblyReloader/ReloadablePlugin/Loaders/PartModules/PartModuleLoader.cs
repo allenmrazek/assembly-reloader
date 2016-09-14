@@ -1,17 +1,14 @@
-﻿extern alias KSP;
-using System;
+﻿using System;
 using System.Linq;
 using ReeperAssemblyLibrary;
 using ReeperCommon.Logging;
-using strange.extensions.implicitBind;
-using strange.extensions.injector;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
 {
 // ReSharper disable once ClassNeverInstantiated.Global
     public class PartModuleLoader : IPartModuleLoader
     {
-        private readonly IGetTypesDerivedFrom<KSP::PartModule> _partModuleTypeQuery;
+        private readonly IGetTypesDerivedFrom<PartModule> _partModuleTypeQuery;
         private readonly IPartModuleDescriptorFactory _descriptorFactory;
         private readonly IPartModuleFactory _partModuleFactory;
         private readonly IGetClonesOfPrefab _prefabClonesQuery;
@@ -20,7 +17,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
 
 
         public PartModuleLoader(
-            IGetTypesDerivedFrom<KSP::PartModule> partModuleTypeQuery,
+            IGetTypesDerivedFrom<PartModule> partModuleTypeQuery,
             IPartModuleDescriptorFactory descriptorFactory,
             IPartModuleFactory partModuleFactory,
             IGetClonesOfPrefab prefabClonesQuery,

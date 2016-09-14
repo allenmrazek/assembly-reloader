@@ -615,7 +615,7 @@ namespace TestProject
 
     public class NoisyVesselModule : VesselModule
     {
-        public override void OnAwake()
+        protected override void OnAwake()
         {
             print("NoisyVesselModule.Awake");
         }

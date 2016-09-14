@@ -1,23 +1,21 @@
-﻿extern alias KSP;
-using System;
+﻿using System;
 using System.Linq;
 using ReeperAssemblyLibrary;
 using ReeperCommon.Logging;
-using strange.extensions.injector;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
 {
 // ReSharper disable once ClassNeverInstantiated.Global
     public class ScenarioModuleUnloader : IScenarioModuleUnloader
     {
-        private readonly IGetTypesDerivedFrom<KSP::ScenarioModule> _smTypeQuery;
+        private readonly IGetTypesDerivedFrom<ScenarioModule> _smTypeQuery;
         private readonly IGetProtoScenarioModules _psmQuery;
         private readonly IScenarioModuleDestroyer _smDestroyer;
         private readonly ILog _log;
 
 
         public ScenarioModuleUnloader(
-            IGetTypesDerivedFrom<KSP::ScenarioModule> smTypeQuery,
+            IGetTypesDerivedFrom<ScenarioModule> smTypeQuery,
             IGetProtoScenarioModules psmQuery,
             IScenarioModuleDestroyer smDestroyer,
             [Name(LogKey.ScenarioModuleUnloader)] ILog log)

@@ -1,5 +1,4 @@
-﻿extern alias KSP;
-extern alias Cecil96;
+﻿extern alias Cecil96;
 using System;
 using System.Collections.Generic;
 using System.Linq;

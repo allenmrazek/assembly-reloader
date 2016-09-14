@@ -1,11 +1,13 @@
-﻿extern alias KSP;
-extern alias Cecil96;
+﻿extern alias Cecil96;
 using System;
 using System.Linq;
+using Cecil96::Mono.Cecil;
+using Contracts;
+using Contracts.Agents;
+using Experience;
 using ReeperCommon.Containers;
-using strange.extensions.implicitBind;
 using strange.extensions.injector.api;
-using TypeDefinition = Cecil96::Mono.Cecil.TypeDefinition;
+using Strategies;
 
 namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations
 {
@@ -15,20 +17,20 @@ namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations
     {
         private static readonly Type[] Unsupported =
         {
-            typeof(KSP::Part),
+            typeof(Part),
 
-            typeof(KSP::ScienceExperiment),
+            typeof(ScienceExperiment),
 
-            typeof(KSP::Contracts.ContractPredicate),
-            typeof(KSP::Contracts.IContractParameterHost),
-            typeof(KSP::Contracts.Agents.Agent),
-            typeof(KSP::Contracts.Agents.AgentMentality),
+            typeof(ContractPredicate),
+            typeof(IContractParameterHost),
+            typeof(Agent),
+            typeof(AgentMentality),
 
-            typeof(KSP::Experience.ExperienceEffect),
-            typeof(KSP::Experience.ExperienceTrait),
+            typeof(ExperienceEffect),
+            typeof(ExperienceTrait),
 
-            typeof(KSP::Strategies.Strategy),
-            typeof(KSP::Strategies.StrategyEffect)
+            typeof(Strategy),
+            typeof(StrategyEffect)
 
         };
 

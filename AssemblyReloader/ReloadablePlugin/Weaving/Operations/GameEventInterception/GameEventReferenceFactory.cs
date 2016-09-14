@@ -1,10 +1,6 @@
-﻿extern alias KSP;
-using System;
-using System.Diagnostics;
+﻿using System;
 using System.Linq;
-using System.Reflection;
 using ReeperCommon.Containers;
-using strange.extensions.implicitBind;
 using strange.extensions.injector.api;
 
 namespace AssemblyReloader.ReloadablePlugin.Weaving.Operations.GameEventInterception

@@ -43,40 +43,39 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Assembly-CSharp, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Assembly-CSharp, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Kerbal Space Program\KSP_Data\Managed\Assembly-CSharp.dll</HintPath>
-      <Aliases>KSP,global</Aliases>
-    </Reference>
-    <Reference Include="KSPUtil">
-      <HintPath>..\..\..\Kerbal Space Program\KSP_Data\Managed\KSPUtil.dll</HintPath>
+      <Aliases>global</Aliases>
     </Reference>
     <Reference Include="Mono.Cecil, Version=0.9.6.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
-      <HintPath>..\packages\Mono.Cecil.0.9.6.1\lib\net35\Mono.Cecil.dll</HintPath>
+      <HintPath>..\packages\Mono.Cecil.0.9.6.4\lib\net35\Mono.Cecil.dll</HintPath>
       <Private>True</Private>
-      <Aliases>Cecil96</Aliases>
+      <Aliases>global,Cecil96</Aliases>
     </Reference>
     <Reference Include="Mono.Cecil.Mdb, Version=0.9.6.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
-      <HintPath>..\packages\Mono.Cecil.0.9.6.1\lib\net35\Mono.Cecil.Mdb.dll</HintPath>
+      <HintPath>..\packages\Mono.Cecil.0.9.6.4\lib\net35\Mono.Cecil.Mdb.dll</HintPath>
       <Private>True</Private>
-      <Aliases>Cecil96</Aliases>
+      <Aliases>global,Cecil96</Aliases>
     </Reference>
     <Reference Include="Mono.Cecil.Pdb, Version=0.9.6.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
-      <HintPath>..\packages\Mono.Cecil.0.9.6.1\lib\net35\Mono.Cecil.Pdb.dll</HintPath>
+      <HintPath>..\packages\Mono.Cecil.0.9.6.4\lib\net35\Mono.Cecil.Pdb.dll</HintPath>
       <Private>True</Private>
-      <Aliases>Cecil96</Aliases>
+      <Aliases>global,Cecil96</Aliases>
     </Reference>
     <Reference Include="Mono.Cecil.Rocks, Version=0.9.6.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
-      <HintPath>..\packages\Mono.Cecil.0.9.6.1\lib\net35\Mono.Cecil.Rocks.dll</HintPath>
+      <HintPath>..\packages\Mono.Cecil.0.9.6.4\lib\net35\Mono.Cecil.Rocks.dll</HintPath>
       <Private>True</Private>
-      <Aliases>Cecil96</Aliases>
+      <Aliases>global,Cecil96</Aliases>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="UnityEngine">
+    <Reference Include="UnityEngine, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Kerbal Space Program\KSP_Data\Managed\UnityEngine.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.UI">
+    <Reference Include="UnityEngine.UI, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Kerbal Space Program\KSP_Data\Managed\UnityEngine.UI.dll</HintPath>
     </Reference>
   </ItemGroup>
@@ -397,7 +396,7 @@ call "$(SolutionDir)SetEnvironment.bat"
 set ProjectGameData=$(ProjectDir)GameData\$(ProjectName)\
 
 
-call:CreateSymbolsForDependencies
+REM call:CreateSymbolsForDependencies
 
 if $(Configuration) == Release (
 echo Merging dependencies for release build...
@@ -407,15 +406,15 @@ echo Copying dependencies
 call:CopyDependencies
 )
 
-call "$(SolutionDir)CopyToLocation.bat" "$(TargetDir)" "%25ProjectGameData%25" $(TargetName).* /xf *.config *.pdb
+call "$(SolutionDir)CopyToLocation.bat" "$(TargetDir)" "%25ProjectGameData%25" $(TargetName).* /xf *.config *.pdb *.mdb
 
 REM ----------------------------------------------------------
 REM Create debug symbols for AssemblyReloader
 REM ----------------------------------------------------------
-echo Creating debug symbols for $(TargetFileName)
-echo Symbol destination: %25ProjectGameData%25
-cd "$(TargetDir)"
-call "$(SolutionDir)CreateMdb.bat" "$(TargetFileName)" "%25ProjectGameData%25"
+REM echo Creating debug symbols for $(TargetFileName)
+REM echo Symbol destination: %25ProjectGameData%25
+REM cd "$(TargetDir)"
+REM call "$(SolutionDir)CreateMdb.bat" "$(TargetFileName)" "%25ProjectGameData%25"
 
 
 cd "%25ProjectGameData%25"
@@ -457,7 +456,7 @@ cd "$(TargetDir)"
 "$(SolutionDir)packages\ILRepack.2.0.4\tools\ILRepack.exe" /verbose /internalize /out:ReeperLoader.dll ReeperLoader.dll ReeperCommon.dll ReeperAssemblyLibrary.dll StrangeIoC.dll
 
 REM call "$(SolutionDir)CopyToLocation.bat" "$(TargetDir)" "%25ProjectGameData%25" Mono.Cecil.* /xf *.pdb
-call "$(SolutionDir)CopyToLocation.bat" "$(TargetDir)" "%25ProjectGameData%25" ReeperLoader.* /xf *.pdb
+call "$(SolutionDir)CopyToLocation.bat" "$(TargetDir)" "%25ProjectGameData%25" ReeperLoader.* /xf *.pdb *.mdb
 
 
 REM ----------------------------------------------------------

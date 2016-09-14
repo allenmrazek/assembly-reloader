@@ -1,8 +1,6 @@
-﻿extern alias KSP;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using strange.extensions.implicitBind;
 using strange.extensions.injector.api;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
@@ -33,7 +31,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
         {
             if (prefab == null) throw new ArgumentNullException("prefab");
 
-            var loadedParts = UnityEngine.Object.FindObjectsOfType<KSP::Part>();
+            var loadedParts = UnityEngine.Object.FindObjectsOfType<Part>();
 
             return loadedParts
                 .Select(p => _kspFactory.Create(p))

@@ -39,7 +39,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.ScenarioModules
 
         public Maybe<ScenarioModule> Load()
         {
-            return _psm.Load(ScenarioRunner.fetch) != null ? moduleRef : Maybe<ScenarioModule>.None;
+            return _psm.Load(ScenarioRunner.Instance) != null ? moduleRef : Maybe<ScenarioModule>.None;
         }
 
 

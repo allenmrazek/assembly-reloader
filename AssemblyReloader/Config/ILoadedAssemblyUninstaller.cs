@@ -1,5 +1,4 @@
-﻿extern alias KSP;
-using System.Reflection;
+﻿using System.Reflection;
 
 namespace AssemblyReloader.Config
 {

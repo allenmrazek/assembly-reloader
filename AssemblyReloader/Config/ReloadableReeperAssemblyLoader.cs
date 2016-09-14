@@ -1,5 +1,4 @@
-﻿extern alias KSP;
-using System;
+﻿using System;
 using AssemblyReloader.ReloadablePlugin.Config;
 using ReeperAssemblyLibrary;
 using ReeperCommon.Logging;

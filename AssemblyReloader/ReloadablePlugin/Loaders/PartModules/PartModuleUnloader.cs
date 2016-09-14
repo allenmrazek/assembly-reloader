@@ -1,17 +1,14 @@
-﻿extern alias KSP;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using ReeperAssemblyLibrary;
 using ReeperCommon.Logging;
-using strange.extensions.implicitBind;
-using strange.extensions.injector;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
 {
     public class PartModuleUnloader : IPartModuleUnloader
     {
-        private readonly IGetTypesDerivedFrom<KSP::PartModule> _partModuleTypeQuery;
+        private readonly IGetTypesDerivedFrom<PartModule> _partModuleTypeQuery;
         private readonly IPartModuleDescriptorFactory _descriptorFactory;
         private readonly IGetClonesOfPrefab _loadedInstancesOfPrefabQuery;
         private readonly IPartModuleDestroyer _partModuleDestroyer;
@@ -19,7 +16,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
 
 
         public PartModuleUnloader(
-            IGetTypesDerivedFrom<KSP::PartModule> partModuleTypeQuery,
+            IGetTypesDerivedFrom<PartModule> partModuleTypeQuery,
             IPartModuleDescriptorFactory descriptorFactory,
             IGetClonesOfPrefab loadedInstancesOfPrefabQuery,
             IPartModuleDestroyer partModuleDestroyer,
@@ -73,7 +70,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
 
             foreach (var targetPart in targetList)
             {
-                var partModule = targetPart.GameObject.GetComponent(descriptor.Type) as KSP::PartModule;
+                var partModule = targetPart.GameObject.GetComponent(descriptor.Type) as PartModule;
 
                 if (partModule == null)
                 {

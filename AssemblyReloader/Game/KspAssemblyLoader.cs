@@ -1,8 +1,6 @@
-﻿extern alias KSP;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using ReeperAssemblyLibrary;
-using strange.extensions.implicitBind;
 using strange.extensions.injector.api;
 
 namespace AssemblyReloader.Game
@@ -16,8 +14,8 @@ namespace AssemblyReloader.Game
         {
             get
             {
-                return KSP::AssemblyLoader.loadedAssemblies
-                    .Select<KSP::AssemblyLoader.LoadedAssembly, ILoadedAssemblyHandle>(la => new LoadedAssemblyHandle(la));
+                return AssemblyLoader.loadedAssemblies
+                    .Select<AssemblyLoader.LoadedAssembly, ILoadedAssemblyHandle>(la => new LoadedAssemblyHandle(la));
             }
         }
     }

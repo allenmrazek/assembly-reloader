@@ -1,8 +1,6 @@
-﻿extern alias KSP;
-using System;
+﻿using System;
 using AssemblyReloader.Game;
 using ReeperCommon.Containers;
-using strange.extensions.implicitBind;
 using strange.extensions.injector.api;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
@@ -21,7 +19,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.PartModules
         }
 
 
-        public Maybe<IVessel> Get(KSP::PartModule partModule)
+        public Maybe<IVessel> Get(PartModule partModule)
         {
             if (partModule == null) throw new ArgumentNullException("partModule");
 

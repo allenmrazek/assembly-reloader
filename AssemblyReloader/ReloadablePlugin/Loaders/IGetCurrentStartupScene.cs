@@ -1,10 +1,8 @@
-﻿extern alias KSP;
-
-namespace AssemblyReloader.ReloadablePlugin.Loaders
+﻿namespace AssemblyReloader.ReloadablePlugin.Loaders
 {
 // ReSharper disable once InconsistentNaming
     public interface IGetCurrentStartupScene
     {
-        KSP::KSPAddon.Startup Get();
+        KSPAddon.Startup Get();
     }
 }

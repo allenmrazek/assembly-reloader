@@ -17,13 +17,13 @@ namespace TestVesselModule
         }
 
 
-        public override void OnSave(ConfigNode node)
+        protected override void OnSave(ConfigNode node)
         {
             base.OnSave(node);
             node.AddValue("created", "inside TestVesselModule.OnSave");
         }
 
-        public override void OnLoad(ConfigNode node)
+        protected override void OnLoad(ConfigNode node)
         {
             base.OnLoad(node);
             print("TestVesselModule.OnLoad: " + node.ToString());

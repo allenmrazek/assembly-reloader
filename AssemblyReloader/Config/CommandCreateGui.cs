@@ -1,13 +1,13 @@
-﻿extern alias KSP;
-using System;
+﻿using System;
 using System.Collections;
 using System.Linq;
 using AssemblyReloader.Config.Keys;
 using AssemblyReloader.Gui;
+using ReeperCommon.Containers;
+using ReeperCommon.Logging;
 using ReeperCommon.Repositories;
 using strange.extensions.command.impl;
 using strange.extensions.context.api;
-using strange.extensions.injector;
 using strange.extensions.injector.api;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -74,10 +74,6 @@ namespace AssemblyReloader.Config
             mainView.transform.parent =
             appLauncherView.transform.parent = _contextView.transform;
 
-            Object.DontDestroyOnLoad(mainView);
-            Object.DontDestroyOnLoad(configView);
-            Object.DontDestroyOnLoad(appLauncherView);
-
             mainView.AddComponent<MainView>();
             configView.AddComponent<ConfigurationView>();
             appLauncherView.AddComponent<ApplicationLauncherView>();
@@ -88,14 +84,12 @@ namespace AssemblyReloader.Config
         }
 
 
-
+  
         private void SetupTexturesAndSkin()
         {
-            var skinPrefab = KSP::AssetBase.GetGUISkin(GuiSkinPrefabName);
-            if (skinPrefab == null)
-                throw new GuiSkinNotFoundException("KSP window 4");
+            var skinPrefab = Resources.FindObjectsOfTypeAll<GUISkin>().Single(sk => sk.name == "KSPSkin");
 
-            var defaultSkin = Object.Instantiate(skinPrefab) as GUISkin;
+            var defaultSkin = Object.Instantiate(skinPrefab);
             if (defaultSkin == null) throw new UnityInstantiationFailedException("GUISkin");
 
             defaultSkin.label.wordWrap = false;
@@ -115,7 +109,7 @@ namespace AssemblyReloader.Config
 
         private static GUIStyle ConfigureTitleBarButtonStyle()
         {
-            var style = new GUIStyle(KSP::HighLogic.Skin.button) { border = new RectOffset(), padding = new RectOffset() };
+            var style = new GUIStyle(HighLogic.Skin.button) { border = new RectOffset(), padding = new RectOffset() };
             style.fixedHeight = style.fixedWidth = 16f;
             style.margin = new RectOffset();
 

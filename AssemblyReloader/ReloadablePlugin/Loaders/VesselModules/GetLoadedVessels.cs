@@ -1,9 +1,7 @@
-﻿extern alias KSP;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using AssemblyReloader.Game;
-using strange.extensions.implicitBind;
 using strange.extensions.injector.api;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.VesselModules
@@ -27,7 +25,7 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.VesselModules
 
         public IEnumerable<IVessel> Get()
         {
-            return _inFlightScene.Get() ? KSP::FlightGlobals.Vessels.Where(v => v.loaded).Select(v => _kspFactory.Create(v))
+            return _inFlightScene.Get() ? FlightGlobals.Vessels.Where(v => v.loaded).Select(v => _kspFactory.Create(v))
                 : Enumerable.Empty<IVessel>();
         }
     }

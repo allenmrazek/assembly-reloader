@@ -1,9 +1,7 @@
-﻿extern alias KSP;
-using System;
+﻿using System;
 using System.Linq;
 using ReeperAssemblyLibrary;
 using ReeperCommon.Logging;
-using strange.extensions.injector;
 
 namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
 {
@@ -39,8 +37,8 @@ namespace AssemblyReloader.ReloadablePlugin.Loaders.Addons
 
             int counter = 0;
 
-            foreach (var activeInstances in Enum.GetValues(typeof(KSP::KSPAddon.Startup))
-                .Cast<KSP::KSPAddon.Startup>()
+            foreach (var activeInstances in Enum.GetValues(typeof(KSPAddon.Startup))
+                .Cast<KSPAddon.Startup>()
                 .SelectMany(scene => _addonTypeQuery.Get(scene, handle))
                 .Select(kvp => kvp.Type)
                 .OrderBy(kvp => kvp.FullName)
